@@ -1,0 +1,91 @@
+---
+aligned_with:
+  dataSpec: FOCUS
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+  dataSpecVersion: '1.3'
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+api_specs:
+- filename: cloud-custodian-mailer-asyncapi.yml
+  format: yaml
+  label: Cloud Custodian C7n-Mailer
+  slug: cloud-custodian-c7n-mailer
+  spec_type: AsyncAPI
+  url: https://raw.githubusercontent.com/api-evangelist/cloud-custodian/refs/heads/main/asyncapi/cloud-custodian-mailer-asyncapi.yml
+billing_model:
+  billingCurrency: USD
+  billingFrequency: Monthly
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Cloud Custodian API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+focus_columns:
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Cloud Custodian
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Cloud Custodian
+  PublisherName: Cloud Custodian
+  ServiceCategory: Developer Tools / API
+  ServiceName: Cloud Custodian
+layout: finops
+meters:
+- aggregation: sum
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
+name: Cloud Custodian Finops
+provider_name: Cloud Custodian
+provider_slug: cloud-custodian
+publisher_name: Cloud Custodian
+service_category: API
+slug: cloud-custodian-finops
+source_filename: cloud-custodian-finops.yml
+source_heading: FinOps Profile
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Cloud Custodian\nproviderId: cloud-custodian\npublisherName: Cloud Custodian\nserviceCategory: API\ncreated: '2026-05-04'\nmodified: '2026-05-04'\ntags:\n  - Cloud Security\n  - Compliance\n  - Cost Optimization\n  - Multi-Cloud\n  - Policy as Code\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Cloud Custodian API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Cloud Custodian\n  ServiceCategory: Developer Tools / API\n  ProviderName: Cloud Custodian\n  PublisherName: Cloud Custodian\n  InvoiceIssuerName: Cloud Custodian\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the\
+  \ network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Cloud Custodian\n    baseURL: ''\n    tags:\n      - Cloud Security\n      - Policy as Code\n    serviceName: Cloud Custodian\n    serviceCategory: API\n  - name: Cloud Custodian AWS Provider\n    baseURL: ''\n    tags:\n      - AWS\n      - Cloud Security\n      - Compliance\n      - Policy as Code\n    serviceName: Cloud Custodian AWS Provider\n    serviceCategory: API\n  - name: Cloud Custodian Azure Provider\n    baseURL: ''\n    tags:\n      - Azure\n      - Cloud Security\n      - Compliance\n      - Policy as Code\n    serviceName: Cloud Custodian Azure Provider\n    serviceCategory: API\n  - name: Cloud Custodian GCP Provider\n  \
+  \  baseURL: ''\n    tags:\n      - Cloud Security\n      - Compliance\n      - GCP\n      - Policy as Code\n    serviceName: Cloud Custodian GCP Provider\n    serviceCategory: API\n  - name: Cloud Custodian C7n-Org\n    baseURL: ''\n    tags:\n      - Cloud Security\n      - Multi-Account\n      - Orchestration\n    serviceName: Cloud Custodian C7n-Org\n    serviceCategory: API\n  - name: Cloud Custodian C7n-Mailer\n    baseURL: ''\n    tags:\n      - Alerting\n      - Email\n      - Notifications\n      - Slack\n    serviceName: Cloud Custodian C7n-Mailer\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cloud-custodian/refs/heads/main/finops/cloud-custodian-finops.yml
+sources: []
+specification: FinOps Framework
+tags:
+- Cloud Security
+- Compliance
+- Cost Optimization
+- Multi-Cloud
+- Policy as Code
+- FinOps
+- Cost Management
+- FOCUS
+---

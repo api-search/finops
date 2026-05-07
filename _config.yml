@@ -1,0 +1,31 @@
+name: APIs.io FinOps
+description: Browse FOCUS-aligned FinOps profiles for API providers across the APIs.io network.
+image: https://apis.io/assets/branding/apisio-social-card.png
+url: https://finops.apis.io
+
+node: website
+nav_active: more
+
+keywords:
+  - APIs
+  - Search
+  - Discovery
+  - FinOps
+
+exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md", "scripts"]
+include: [".well-known"]
+
+github_org: api-search
+github_repo: finops
+
+collections:
+  finops:
+    output: true
+    permalink: /finops/:path/
+
+defaults:
+  - scope:
+      path: ""
+      type: finops
+    values:
+      layout: finops

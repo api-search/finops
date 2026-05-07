@@ -1,0 +1,47 @@
+---
+layout: default
+meta_title: "API FinOps Profiles | APIs.io"
+meta_description: "Browse FOCUS-aligned FinOps profiles for API providers across the APIs.io network."
+---
+
+<style>
+  .page-hero { text-align: center; padding: 2rem 0 1.5rem; }
+  .page-hero h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+  .page-hero p { color: #666; margin-bottom: 1.5rem; }
+  .filter-bar { max-width: 960px; margin: 0 auto 1.5rem; }
+  .item-list { max-width: 960px; margin: 0 auto; }
+  .item-row { background: white; border: 1px solid #e3e7ee; border-left: 3px solid #16a34a; border-radius: 8px; padding: 0.75rem 1.25rem; margin-bottom: 0.4rem; transition: all 0.15s; }
+  .item-row:hover { border-color: #16a34a; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .item-row h3 { font-size: 0.95rem; font-weight: 600; margin: 0; }
+  .item-row h3 a { color: #1a1a2e; text-decoration: none; }
+  .item-row h3 a:hover { color: #16a34a; }
+  .item-provider { font-size: 0.8rem; color: #6c757d; }
+  .item-stats { font-size: 0.8rem; color: #999; }
+</style>
+
+<div class="page-hero">
+  <h1>FinOps Profiles</h1>
+  <p>Browse <strong>{{ site.finops | size }}</strong> FinOps profile documents across the APIs.io network</p>
+  <div class="filter-bar">
+    <input type="text" class="form-control" id="item-filter" placeholder="Filter..." style="max-width: 400px; margin: 0 auto;">
+  </div>
+</div>
+
+<div class="item-list" id="item-list">
+  {% for p in site.finops %}
+  <div class="item-row" data-name="{{ p.name | downcase }} {{ p.provider_name | downcase }}">
+    <h3><a href="{{ p.url }}">{{ p.name }}</a></h3>
+    <div class="item-provider"><a href="https://providers.apis.io/providers/{{ p.provider_slug }}/">{{ p.provider_name }}</a></div>
+    <div class="item-stats">{{ p.service_category }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+document.getElementById('item-filter').addEventListener('input', function() {
+  var q = this.value.toLowerCase();
+  document.querySelectorAll('.item-row').forEach(function(item) {
+    item.style.display = item.getAttribute('data-name').indexOf(q) !== -1 ? '' : 'none';
+  });
+});
+</script>

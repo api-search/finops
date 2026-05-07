@@ -1,0 +1,90 @@
+---
+layout: default
+---
+<style>
+  .hero { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1px solid #bbf7d0; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; }
+  .overline { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #16a34a; font-weight: 600; margin-bottom: 0.5rem; }
+  .overline a { color: #16a34a; text-decoration: none; }
+  .overline a:hover { text-decoration: underline; }
+  .title { font-size: 2rem; font-weight: 700; margin-bottom: 0.75rem; color: #1a1a2e; }
+  .desc { color: #4a5568; line-height: 1.6; font-size: 1.05rem; }
+  .section-title { font-size: 1.1rem; font-weight: 700; color: #1a1a2e; margin: 2rem 0 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e3e7ee; }
+  .stat-badges { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .stat-badge { background: white; border: 1px solid #e3e7ee; border-radius: 8px; padding: 0.5rem 1rem; font-size: 0.85rem; }
+  .stat-badge strong { color: #16a34a; }
+  .focus-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; background: white; border: 1px solid #e3e7ee; border-radius: 10px; padding: 1rem; }
+  .focus-row { display: contents; }
+  .focus-key { font-weight: 600; color: #4a5568; font-size: 0.85rem; padding: 0.4rem 0; }
+  .focus-val { font-family: monospace; font-size: 0.85rem; color: #1a1a2e; padding: 0.4rem 0; border-bottom: 1px solid #f0f2f5; }
+  .meter-row { background: white; border: 1px solid #e3e7ee; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.5rem; }
+  .meter-name { font-weight: 600; color: #1a1a2e; font-family: monospace; font-size: 0.9rem; }
+  .meter-meta { font-size: 0.8rem; color: #6c757d; margin-top: 0.25rem; }
+  .charge-chip { display: inline-block; padding: 0.15em 0.6em; background: #dcfce7; color: #15803d; border-radius: 999px; font-size: 0.75rem; margin: 0.15rem; }
+  .tag-sm { display: inline-block; padding: 0.2em 0.6em; background: #eef2f7; color: #4a5568; border-radius: 999px; font-size: 0.75rem; }
+</style>
+
+<nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
+  <ol class="breadcrumb" style="font-size: 0.85rem;">
+    <li class="breadcrumb-item"><a href="https://apis.io/">Home</a></li>
+    <li class="breadcrumb-item"><a href="https://providers.apis.io/providers/{{ page.provider_slug }}/">{{ page.provider_name }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">FinOps</li>
+  </ol>
+</nav>
+
+<div class="hero">
+  <div class="overline">
+    <a href="https://providers.apis.io/providers/{{ page.provider_slug }}/">{{ page.provider_name }}</a> &middot; FinOps Profile
+  </div>
+  <h1 class="title">{{ page.name }}</h1>
+  {% if page.description %}<p class="desc">{{ page.description }}</p>{% endif %}
+  <div class="stat-badges" style="margin-top: 1rem;">
+    {% if page.service_category %}<span class="stat-badge">Category: <strong>{{ page.service_category }}</strong></span>{% endif %}
+    {% if page.billing_model.pricingCategory %}<span class="stat-badge">Pricing: <strong>{{ page.billing_model.pricingCategory }}</strong></span>{% endif %}
+    {% if page.billing_model.billingFrequency %}<span class="stat-badge">Billing: <strong>{{ page.billing_model.billingFrequency }}</strong></span>{% endif %}
+    {% if page.aligned_with.dataSpec %}<span class="stat-badge">{{ page.aligned_with.dataSpec }} v{{ page.aligned_with.dataSpecVersion }}</span>{% endif %}
+  </div>
+</div>
+
+{% if page.tags.size > 0 %}
+<div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-bottom: 1rem;">
+  {% for tag in page.tags %}<span class="tag-sm">{{ tag }}</span>{% endfor %}
+</div>
+{% endif %}
+
+{% if page.aligned_with %}
+<h3 class="section-title">Framework Alignment</h3>
+<div class="focus-grid">
+  {% if page.aligned_with.framework %}<div class="focus-key">Framework</div><div class="focus-val"><a href="{{ page.aligned_with.frameworkUrl }}" target="_blank">{{ page.aligned_with.framework }}</a></div>{% endif %}
+  {% if page.aligned_with.dataSpec %}<div class="focus-key">Data Spec</div><div class="focus-val"><a href="{{ page.aligned_with.dataSpecUrl }}" target="_blank">{{ page.aligned_with.dataSpec }} v{{ page.aligned_with.dataSpecVersion }}</a></div>{% endif %}
+</div>
+{% endif %}
+
+{% if page.billing_model.chargeCategories.size > 0 %}
+<h3 class="section-title">Charge Categories</h3>
+<div>{% for c in page.billing_model.chargeCategories %}<span class="charge-chip">{{ c }}</span>{% endfor %}</div>
+{% endif %}
+
+{% if page.focus_columns %}
+<h3 class="section-title">FOCUS Columns</h3>
+<div class="focus-grid">
+  {% for k in page.focus_columns %}
+  <div class="focus-key">{{ k[0] }}</div><div class="focus-val">{{ k[1] }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if page.meters.size > 0 %}
+<h3 class="section-title">Meters</h3>
+{% for m in page.meters %}
+<div class="meter-row">
+  <div class="meter-name">{{ m.name }}</div>
+  {% if m.unit %}<div class="meter-meta">Unit: {{ m.unit }}{% if m.timeFrame %} · {{ m.timeFrame }}{% endif %}</div>{% endif %}
+  {% if m.description %}<div class="limit-notes">{{ m.description }}</div>{% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+{% if page.sources.size > 0 %}
+<h3 class="section-title">Sources</h3>
+<ul>{% for s in page.sources %}<li><a href="{{ s }}" target="_blank" rel="noopener">{{ s }}</a></li>{% endfor %}</ul>
+{% endif %}
