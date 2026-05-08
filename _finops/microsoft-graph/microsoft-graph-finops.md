@@ -426,6 +426,18 @@ api_specs:
   slug: microsoft-graph-users
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-graph/refs/heads/main/openapi/users-openapi-original.yml
+- filename: sites-openapi-original.yml
+  format: yaml
+  label: Sites
+  slug: sites
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/microsoft-graph/refs/heads/main/openapi/sites-openapi-original.yml
+- filename: sites-openapi-original.yml
+  format: yaml
+  label: Sites
+  slug: sites
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/microsoft-graph/refs/heads/main/openapi/sites-openapi-original.yml
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly

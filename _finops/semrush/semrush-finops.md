@@ -5,6 +5,13 @@ aligned_with:
   dataSpecVersion: '1.3'
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
+api_specs:
+- filename: semrush-openapi.yml
+  format: yaml
+  label: Semrush
+  slug: semrush
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/semrush/refs/heads/main/openapi/semrush-openapi.yml
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly

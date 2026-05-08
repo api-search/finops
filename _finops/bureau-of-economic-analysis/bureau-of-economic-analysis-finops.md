@@ -5,6 +5,13 @@ aligned_with:
   dataSpecVersion: '1.3'
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
+api_specs:
+- filename: bureau-of-economic-analysis-bea-api-openapi.yml
+  format: yaml
+  label: Bureau of Economic Analysis (BEA) Data API
+  slug: bureau-of-economic-analysis-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/bureau-of-economic-analysis/refs/heads/main/openapi/bureau-of-economic-analysis-bea-api-openapi.yml
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly

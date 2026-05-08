@@ -6,6 +6,24 @@ aligned_with:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
 api_specs:
+- filename: stripe-accounts-api-openapi.yml
+  format: yaml
+  label: Stripe Accounts API
+  slug: stripe-accounts-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-accounts-api-openapi.yml
+- filename: stripe-apple-pay-api-openapi.yml
+  format: yaml
+  label: Stripe Apple Pay API
+  slug: stripe-apple-pay-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-apple-pay-api-openapi.yml
+- filename: stripe-application-fees-api-openapi.yml
+  format: yaml
+  label: Stripe Application Fees API
+  slug: stripe-application-fees-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-application-fees-api-openapi.yml
 - filename: stripe-application-secrets-api-openapi.yml
   format: yaml
   label: Stripe Application Secrets API

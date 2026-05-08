@@ -12,6 +12,36 @@ api_specs:
   slug: anthropic-messages-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/anthropic/refs/heads/main/openapi/anthropic-messages-api-openapi.yml
+- filename: anthropic-models-api-openapi.yml
+  format: yaml
+  label: Anthropic Models API
+  slug: anthropic-models-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/anthropic/refs/heads/main/openapi/anthropic-models-api-openapi.yml
+- filename: anthropic-message-batches-api-openapi.yml
+  format: yaml
+  label: Anthropic Message Batches API
+  slug: anthropic-message-batches-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/anthropic/refs/heads/main/openapi/anthropic-message-batches-api-openapi.yml
+- filename: anthropic-files-api-openapi.yml
+  format: yaml
+  label: Anthropic Files API
+  slug: anthropic-files-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/anthropic/refs/heads/main/openapi/anthropic-files-api-openapi.yml
+- filename: anthropic-admin-api-openapi.yml
+  format: yaml
+  label: Anthropic Admin API
+  slug: anthropic-admin-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/anthropic/refs/heads/main/openapi/anthropic-admin-api-openapi.yml
+- filename: anthropic-prompts-api-openapi.yml
+  format: yaml
+  label: Anthropic Prompts API
+  slug: anthropic-prompts-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/anthropic/refs/heads/main/openapi/anthropic-prompts-api-openapi.yml
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
