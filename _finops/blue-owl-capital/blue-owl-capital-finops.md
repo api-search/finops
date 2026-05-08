@@ -7,58 +7,74 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Contract
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Fund Fees (Management + Incentive)
-description: 'FOCUS-aligned FinOps placeholder for Blue Owl Capital: not a developer-facing platform. Spend with Blue Owl is captured as fund-level fees (management fee + incentive fee) across its Credit, Real Assets, and GP Strategic Capital platforms.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Blue Owl Capital API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Blue Owl Capital Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Blue Owl Capital
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Blue Owl Capital
-  PublisherName: Blue Owl Capital Inc.
-  ServiceCategory: Alternative Asset Management
+  PublisherName: Blue Owl Capital
+  ServiceCategory: Developer Tools / API
   ServiceName: Blue Owl Capital
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - platform
-  - fund
-  name: management_fees
-  unit: USD
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - platform
-  - fund
-  name: incentive_fees
-  unit: USD
-- aggregation: avg
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - platform
-  name: aum_under_management
-  unit: USD
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Blue Owl Capital Finops
 provider_name: Blue Owl Capital
 provider_slug: blue-owl-capital
-publisher_name: Blue Owl Capital Inc.
-service_category: Alternative Asset Management
+publisher_name: Blue Owl Capital
+service_category: API
 slug: blue-owl-capital-finops
 source_filename: blue-owl-capital-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.blueowl.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Blue Owl Capital\nproviderId: blue-owl-capital\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Alternative Asset Management\n  - Private Credit\ndescription: 'FOCUS-aligned FinOps placeholder for Blue Owl Capital: not a developer-facing platform.\n  Spend with Blue Owl is captured as fund-level fees (management fee + incentive fee) across its\n  Credit, Real Assets, and GP Strategic Capital platforms.'\nsources:\n  - https://www.blueowl.com\nnotes: Blue Owl has no public API billing surface; this artifact exists for symmetry and should be\n  revisited only if a developer offering launches.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
-  \ Blue Owl Capital Inc.\nserviceCategory: Alternative Asset Management\nbillingModel:\n  pricingCategory: Fund Fees (Management + Incentive)\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Blue Owl Capital\n  ServiceCategory: Alternative Asset Management\n  ProviderName: Blue Owl Capital\n  PublisherName: Blue Owl Capital Inc.\n  InvoiceIssuerName: Blue Owl Capital Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: management_fees\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - platform\n      - fund\n  - name: incentive_fees\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - platform\n      - fund\n  - name: aum_under_management\n    unit: USD\n    aggregation: avg\n    dimensions:\n      - platform\nprinciples:\n  - name: Visibility\n    description: Use LP capital-account statements and quarterly fund reports from Blue Owl\n      Investor\
-  \ Relations.\n  - name: Allocation\n    description: Map fund commitments to consuming entities through the LP reporting pack.\n  - name: Optimization\n    description: Negotiate side-letter fee discounts at commitment time; consolidate commitments\n      across affiliates to reach fee-tier breakpoints.\n  - name: Accountability\n    description: Designate an LP-relations owner per fund commitment; review quarterly fund\n      performance and fee burn.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Blue Owl Capital\nproviderId: blue-owl-capital\npublisherName: Blue Owl Capital\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Alternative Asset Management\n  - Private Credit\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Blue Owl Capital API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Blue Owl Capital\n  ServiceCategory: Developer Tools / API\n  ProviderName: Blue Owl Capital\n  PublisherName: Blue Owl Capital\n  InvoiceIssuerName: Blue Owl Capital\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n  \
+  \  unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Blue Owl Capital API\n    baseURL: https://api.blueowl.com\n    tags:\n      - Alternative Asset Management\n      - Private Credit\n    serviceName: Blue Owl Capital API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/blue-owl-capital/refs/heads/main/finops/blue-owl-capital-finops.yml
-sources:
-- https://www.blueowl.com
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Alternative Asset Management
 - Private Credit
+- FinOps
+- Cost Management
+- FOCUS
 ---

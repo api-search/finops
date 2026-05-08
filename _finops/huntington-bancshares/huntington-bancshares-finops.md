@@ -14,79 +14,77 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/huntington-bancshares/refs/heads/main/openapi/huntington-bank-treasury-management-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly account analysis
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Bundled (Commercial Banking Contract)
-description: 'FOCUS-aligned FinOps for Huntington Bank treasury APIs: API access is bundled with the commercial banking treasury management contract. Cost surface is account-analysis fees, per-transaction fees (ACH, wire, RTP), and ERP-integration service charges rather than per-call API consumption.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Huntington Bancshares API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: The Huntington National Bank
+  InvoiceIssuerName: Huntington Bancshares
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Huntington Bancshares
-  PublisherName: The Huntington National Bank
-  ServiceCategory: Banking & Treasury Management
-  ServiceName: Huntington Treasury Management API
+  PublisherName: Huntington Bancshares
+  ServiceCategory: Developer Tools / API
+  ServiceName: Huntington Bancshares
 layout: finops
 meters:
 - aggregation: sum
-  description: Monthly account-analysis charges from the treasury management agreement; the primary cost surface for API-enabled treasury workflows.
-  dimensions:
-  - account
-  - service_code
-  name: account_analysis_fees
-  unit: month
-- aggregation: sum
-  description: ACH origination and receipt transaction count submitted via the API.
-  dimensions:
-  - direction
-  - account
-  name: ach_transactions
-  unit: transaction
-- aggregation: sum
-  description: Wire-transfer count submitted via the API; typically priced per wire at the contracted rate.
-  dimensions:
-  - type
-  - account
-  name: wire_transactions
-  unit: transaction
-- aggregation: sum
-  description: Real-Time Payments / FedNow transactions submitted via the API.
-  dimensions:
-  - account
-  name: rtp_transactions
-  unit: transaction
-- aggregation: sum
-  description: API call volume across the 500+ interfaces; not directly billed but useful for capacity and quota monitoring.
+  description: Count of billable API requests
   dimensions:
   - api
-  - consumer_key
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Huntington Bancshares Finops
 provider_name: Huntington Bancshares
 provider_slug: huntington-bancshares
-publisher_name: The Huntington National Bank
-service_category: Banking & Treasury Management
+publisher_name: Huntington Bancshares
+service_category: API
 slug: huntington-bancshares-finops
 source_filename: huntington-bancshares-finops.yml
 source_heading: FinOps Profile
-source_url: https://hnbdevportal.huntington.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Huntington Bancshares\nproviderId: huntington-bancshares\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Banking\n  - Treasury\n  - Payments\ndescription: 'FOCUS-aligned FinOps for Huntington Bank treasury APIs: API access is bundled with\n  the commercial banking treasury management contract. Cost surface is account-analysis fees, per-transaction\n  fees (ACH, wire, RTP), and ERP-integration service charges rather than per-call API consumption.'\nnotes: Per-call API pricing is not published; cost flows through the broader Huntington commercial\n  banking relationship.\nsources:\n  - https://hnbdevportal.huntington.com/\n  - https://www.huntington.com/Commercial/treasury-management\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n \
-  \ dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: The Huntington National Bank\nserviceCategory: Banking & Treasury Management\nbillingModel:\n  pricingCategory: Bundled (Commercial Banking Contract)\n  billingFrequency: Monthly account analysis\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Huntington Treasury Management API\n  ServiceCategory: Banking & Treasury Management\n  ProviderName: Huntington Bancshares\n  PublisherName: The Huntington National Bank\n  InvoiceIssuerName: The Huntington National Bank\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: account_analysis_fees\n    description: Monthly account-analysis charges from the treasury management agreement; the primary\n      cost surface for API-enabled treasury workflows.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - account\n      - service_code\n  - name:\
-  \ ach_transactions\n    description: ACH origination and receipt transaction count submitted via the API.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - direction\n      - account\n  - name: wire_transactions\n    description: Wire-transfer count submitted via the API; typically priced per wire at the contracted\n      rate.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - type\n      - account\n  - name: rtp_transactions\n    description: Real-Time Payments / FedNow transactions submitted via the API.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - account\n  - name: api_requests\n    description: API call volume across the 500+ interfaces; not directly billed but useful for capacity\n      and quota monitoring.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - consumer_key\nprinciples:\n  - name: Visibility\n    description: Reconcile monthly account-analysis statements against API transaction\
-  \ logs. Use\n      the developer portal usage view (when surfaced) to track per-consumer-key call volume against\n      Apigee quotas.\n  - name: Allocation\n    description: Tag API consumer keys per ERP system / business unit. Map account-analysis service\n      codes back to the consuming team for chargeback.\n  - name: Optimization\n    description: Batch ACH origination where possible; minimize same-day wire usage in favor of standard\n      ACH or RTP for predictable lower fees; cache reference data (account balances, payee lists)\n      to reduce redundant API calls; review unused services on the account-analysis statement quarterly.\n  - name: Accountability\n    description: Designate a treasury-operations owner accountable for per-transaction fee variance.\n      Establish SLAs with Huntington partner enablement for quota raises and incident response.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Huntington Bancshares\nproviderId: huntington-bancshares\npublisherName: Huntington Bancshares\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Banking\n  - ERP Integration\n  - Open Banking\n  - Payments\n  - Treasury\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Huntington Bancshares API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n   \
+  \ description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the\
+  \ FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Huntington Bancshares\n  ServiceCategory: Developer Tools / API\n  ProviderName: Huntington Bancshares\n  PublisherName: Huntington Bancshares\n  InvoiceIssuerName: Huntington Bancshares\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
+  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Huntington Bank Treasury Management API\n    baseURL: https://api.huntington.com\n    tags:\n      - Banking\n      - ERP Integration\n      - Open Banking\n      - Payments\n      - Treasury\n    serviceName: Huntington Bank Treasury Management API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/huntington-bancshares/refs/heads/main/finops/huntington-bancshares-finops.yml
-sources:
-- https://hnbdevportal.huntington.com/
-- https://www.huntington.com/Commercial/treasury-management
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Banking
-- Treasury
+- ERP Integration
+- Open Banking
 - Payments
+- Treasury
+- FinOps
+- Cost Management
+- FOCUS
 ---

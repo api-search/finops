@@ -69,55 +69,79 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Pay As You Go (Per Country)
-description: FOCUS-aligned FinOps for Sinch.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Sinch API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Sinch
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Sinch
   PublisherName: Sinch
-  ServiceCategory: Communications
+  ServiceCategory: Developer Tools / API
   ServiceName: Sinch
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - direction
-  - country
-  - channel
-  name: sms_messages
-  unit: message
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  name: voice_minutes
-  unit: minute
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  name: rcs_messages
-  unit: message
-- aggregation: sum
-  name: email_messages
-  unit: email
-- aggregation: sum
-  name: verify_attempts
-  unit: attempt
-- aggregation: max
-  name: phone_numbers
-  unit: number-month
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Sinch Finops
 provider_name: Sinch
 provider_slug: sinch
 publisher_name: Sinch
-service_category: Communications
+service_category: API
 slug: sinch-finops
 source_filename: sinch-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.sinch.com/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Sinch\nproviderId: sinch\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Communications\ndescription: FOCUS-aligned FinOps for Sinch.\nsources:\n  - https://www.sinch.com/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Sinch\nserviceCategory: Communications\nbillingModel:\n  pricingCategory: Pay As You Go (Per Country)\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Sinch\n  ServiceCategory: Communications\n  ProviderName: Sinch\n  PublisherName: Sinch\n  BillingCurrency: USD\nmeters:\n  - name: sms_messages\n    unit: message\n    aggregation: sum\n    dimensions:\n      - direction\n\
-  \      - country\n      - channel\n  - name: voice_minutes\n    unit: minute\n    aggregation: sum\n  - name: rcs_messages\n    unit: message\n    aggregation: sum\n  - name: email_messages\n    unit: email\n    aggregation: sum\n  - name: verify_attempts\n    unit: attempt\n    aggregation: sum\n  - name: phone_numbers\n    unit: number-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track Sinch consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sinch\nproviderId: sinch\npublisherName: Sinch\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Communications\n  - Messaging\n  - SMS\n  - Voice\n  - Verification\n  - CPaaS\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sinch API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sinch\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sinch\n  PublisherName: Sinch\n  InvoiceIssuerName: Sinch\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n  \
+  \    - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Sinch SMS API\n    baseURL: https://us.sms.api.sinch.com\n    tags:\n      - SMS\n      - Messaging\n      - Batch Messaging\n    serviceName: Sinch SMS API\n    serviceCategory: API\n  - name: Sinch Conversation API\n    baseURL: https://us.conversation.api.sinch.com\n    tags:\n      - Conversation\n      - Omnichannel\n      - WhatsApp\n      - Messaging\n    serviceName: Sinch Conversation API\n    serviceCategory: API\n  - name: Sinch Voice API\n    baseURL: https://calling.api.sinch.com\n    tags:\n      - Voice\n      - Calling\n      - IVR\n      - Telephony\n    serviceName: Sinch Voice API\n    serviceCategory: API\n  - name: Sinch Verification API\n    baseURL: https://verification.api.sinch.com\n    tags:\n\
+  \      - Verification\n      - Identity\n      - OTP\n      - Authentication\n    serviceName: Sinch Verification API\n    serviceCategory: API\n  - name: Sinch Numbers API\n    baseURL: https://numbers.api.sinch.com\n    tags:\n      - Numbers\n      - Phone Numbers\n      - Provisioning\n    serviceName: Sinch Numbers API\n    serviceCategory: API\n  - name: Sinch Fax API\n    baseURL: https://fax.api.sinch.com\n    tags:\n      - Fax\n      - Document\n      - HIPAA\n    serviceName: Sinch Fax API\n    serviceCategory: API\n  - name: Sinch Elastic SIP Trunking API\n    baseURL: https://sip.api.sinch.com\n    tags:\n      - SIP\n      - Voice\n      - Trunking\n      - Telephony\n    serviceName: Sinch Elastic SIP Trunking API\n    serviceCategory: API\n  - name: Sinch Brands API\n    baseURL: https://brands.api.sinch.com\n    tags:\n      - Brands\n      - Messaging\n      - Compliance\n    serviceName: Sinch Brands API\n    serviceCategory: API\n  - name: Sinch Provisioning API\n \
+  \   baseURL: https://provisioning.api.sinch.com\n    tags:\n      - Provisioning\n      - Configuration\n      - Management\n    serviceName: Sinch Provisioning API\n    serviceCategory: API\n  - name: Sinch Registration API\n    baseURL: https://registration.api.sinch.com\n    tags:\n      - Registration\n      - Sender ID\n      - Compliance\n      - Messaging\n    serviceName: Sinch Registration API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sinch/refs/heads/main/finops/sinch-finops.yml
-sources:
-- https://www.sinch.com/pricing/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Communications
+- Messaging
+- SMS
+- Voice
+- Verification
+- CPaaS
+- FinOps
+- Cost Management
+- FOCUS
 ---

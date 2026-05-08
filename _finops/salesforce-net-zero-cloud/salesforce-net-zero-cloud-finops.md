@@ -14,76 +14,80 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/salesforce-net-zero-cloud/refs/heads/main/openapi/salesforce-net-zero-cloud-rest-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Tiered Subscription
-description: FOCUS-aligned FinOps artifact for Salesforce Net Zero Cloud. Pricing is gated; meters and principles describe the expected billing surface. Salesforce publishes per-edition pricing on its product pages, but those pages are not retrievable via automated fetch (HTTP 403). All editions are sold via Salesforce Sales; API access is included with the underlying CRM license rather than priced as a discrete API SKU. Treat this artifact as a contact-sales placeholder until pricing pages can be reconciled manually.
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Salesforce Net Zero Cloud API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Salesforce, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Salesforce Net Zero Cloud
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Salesforce Net Zero Cloud
-  PublisherName: Salesforce, Inc.
-  ServiceCategory: Sustainability / ESG
+  PublisherName: Salesforce Net Zero Cloud
+  ServiceCategory: Developer Tools / API
   ServiceName: Salesforce Net Zero Cloud
-  ServiceSubcategory: Sustainability Reporting
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - edition
-  - license_type
-  - org
-  name: user_subscription
-  unit: seat-month
-- aggregation: sum
-  dimensions:
-  - edition
-  - org
-  - named_credential
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
-- aggregation: max
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - org
-  - object
-  name: data_storage
-  unit: GB-month
-- aggregation: max
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - org
-  name: file_storage
-  unit: GB-month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Salesforce Net Zero Cloud Finops
 provider_name: Salesforce Net Zero Cloud
 provider_slug: salesforce-net-zero-cloud
-publisher_name: Salesforce, Inc.
-service_category: Sustainability / ESG
+publisher_name: Salesforce Net Zero Cloud
+service_category: API
 slug: salesforce-net-zero-cloud-finops
 source_filename: salesforce-net-zero-cloud-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.salesforce.com/sustainability/net-zero-cloud/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Salesforce Net Zero Cloud\nproviderId: salesforce-net-zero-cloud\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n- CRM\n- ESG\n- Net Zero\n- Salesforce\n- Sustainability\n- FinOps\n- FOCUS\ndescription: FOCUS-aligned FinOps artifact for Salesforce Net Zero Cloud. Pricing is gated; meters and\n  principles describe the expected billing surface. Salesforce publishes per-edition pricing on its product\n  pages, but those pages are not retrievable via automated fetch (HTTP 403). All editions are sold via\n  Salesforce Sales; API access is included with the underlying CRM license rather than priced as a discrete\n  API SKU. Treat this artifact as a contact-sales placeholder until pricing pages can be reconciled manually.\nsources:\n- https://www.salesforce.com/sustainability/net-zero-cloud/pricing/\n- https://focus.finops.org/focus-specification/v1-3/\n\
-  - https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Salesforce, Inc.\nserviceCategory: Sustainability / ESG\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n  - Purchase\n  - Usage\n  - Tax\n  - Adjustment\n  - Credit\nfocusColumns:\n  ServiceName: Salesforce Net Zero Cloud\n  ServiceCategory: Sustainability / ESG\n  ServiceSubcategory: Sustainability Reporting\n  ProviderName: Salesforce Net Zero Cloud\n  PublisherName: Salesforce, Inc.\n  InvoiceIssuerName: Salesforce, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n- name: user_subscription\n  unit: seat-month\n  aggregation: sum\n  dimensions:\n  - edition\n  - license_type\n  - org\n- name: api_requests\n  unit: request\n\
-  \  aggregation: sum\n  dimensions:\n  - edition\n  - org\n  - named_credential\n- name: data_storage\n  unit: GB-month\n  aggregation: max\n  dimensions:\n  - org\n  - object\n- name: file_storage\n  unit: GB-month\n  aggregation: max\n  dimensions:\n  - org\nprinciples:\n- name: Visibility\n  description: Monitor Setup > System Overview for licensed users, API requests over the trailing 24 hours,\n    and data/file storage. Use the Event Monitoring (Shield) API for per-user request telemetry where\n    licensed.\n- name: Allocation\n  description: Tag each consuming integration with a Connected App / Named Credential and attribute API\n    consumption by Connected App in Event Monitoring.\n- name: Optimization\n  description: Reduce API consumption by using Composite, SOQL Query, and Bulk API 2.0 instead of per-record\n    REST calls; right-size editions at renewal; archive to Big Objects to reduce data-storage overage.\n- name: Accountability\n  description: CRM platform owner is accountable\
-  \ for per-org consumption and renewal terms; integration\n    owners are accountable for staying within the org-wide 24-hour API quota.\nnotes: Salesforce publishes per-edition pricing on its product pages, but those pages are not retrievable\n  via automated fetch (HTTP 403). All editions are sold via Salesforce Sales; API access is included with\n  the underlying CRM license rather than priced as a discrete API SKU. Treat this artifact as a contact-sales\n  placeholder until pricing pages can be reconciled manually.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Salesforce Net Zero Cloud\nproviderId: salesforce-net-zero-cloud\npublisherName: Salesforce Net Zero Cloud\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Carbon Accounting\n  - Carbon Emissions\n  - Climate\n  - Environmental\n  - ESG\n  - Net Zero\n  - Sustainability\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Salesforce Net Zero Cloud API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams\
+  \ in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n\
+  \      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Salesforce Net Zero Cloud\n  ServiceCategory: Developer Tools / API\n  ProviderName: Salesforce Net Zero Cloud\n  PublisherName: Salesforce Net Zero Cloud\n  InvoiceIssuerName: Salesforce Net Zero Cloud\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n     \
+  \ - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Net Zero Cloud REST API\n    baseURL: https://yourinstance.my.salesforce.com/services/data/v59.0/\n    tags:\n      - Carbon Emissions\n      - Emissions Tracking\n      - REST\n      - Sustainability\n    serviceName: Net Zero Cloud REST API\n    serviceCategory: API\n  - name: Carbon Accounting API\n    baseURL: https://yourinstance.my.salesforce.com/services/data/v59.0/\n    tags:\n      - Carbon Accounting\n      - Emission Factors\n      - Footprint Calculation\n    serviceName: Carbon Accounting API\n    serviceCategory: API\n \
+  \ - name: Sustainability Data API\n    baseURL: https://yourinstance.my.salesforce.com/services/data/v59.0/\n    tags:\n      - Energy Consumption\n      - Sustainability Data\n      - Waste Management\n      - Water Usage\n    serviceName: Sustainability Data API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/salesforce-net-zero-cloud/refs/heads/main/finops/salesforce-net-zero-cloud-finops.yml
-sources:
-- https://www.salesforce.com/sustainability/net-zero-cloud/pricing/
-- https://focus.finops.org/focus-specification/v1-3/
-- https://www.finops.org/framework/
+sources: []
 specification: FinOps Framework
 tags:
-- CRM
+- Carbon Accounting
+- Carbon Emissions
+- Climate
+- Environmental
 - ESG
 - Net Zero
-- Salesforce
 - Sustainability
 - FinOps
+- Cost Management
 - FOCUS
 ---

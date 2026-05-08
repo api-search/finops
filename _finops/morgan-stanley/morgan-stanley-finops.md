@@ -7,67 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  - Adjustment
   - Tax
-  pricingCategory: Bundled with Client Agreement
-description: 'FOCUS-aligned FinOps profile for Morgan Stanley APIs: an institutional, invitation-only platform whose costs are bundled into the underlying client services agreement (advisory, brokerage, custody, equity comp). There is no public per-call price; consumption is governed by entitlement and scheme fees rather than developer-platform metering.'
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Morgan Stanley API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Morgan Stanley & Co. LLC
+  ChargeCategory: Usage
+  InvoiceIssuerName: Morgan Stanley
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Morgan Stanley
-  PublisherName: Morgan Stanley & Co. LLC
-  ServiceCategory: Financial Services
-  ServiceName: Morgan Stanley API
+  PublisherName: Morgan Stanley
+  ServiceCategory: Developer Tools / API
+  ServiceName: Morgan Stanley
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - account
-  - product
-  name: advisory_fees
-  unit: month
-- aggregation: count
-  dimensions:
-  - account
-  - asset_class
-  - venue
-  name: trade_execution
-  unit: trade
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - exchange
-  - feed
-  name: market_data_entitlements
-  unit: month
-- aggregation: max
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - employer
-  name: equity_comp_seats
-  unit: seat
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Morgan Stanley Finops
 provider_name: Morgan Stanley
 provider_slug: morgan-stanley
-publisher_name: Morgan Stanley & Co. LLC
-service_category: Financial Services
+publisher_name: Morgan Stanley
+service_category: API
 slug: morgan-stanley-finops
 source_filename: morgan-stanley-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.morganstanley.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Morgan Stanley\nproviderId: morgan-stanley\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Financial\n  - Investment Banking\n  - Wealth Management\ndescription: 'FOCUS-aligned FinOps profile for Morgan Stanley APIs: an institutional, invitation-only\n  platform whose costs are bundled into the underlying client services agreement (advisory, brokerage,\n  custody, equity comp). There is no public per-call price; consumption is governed by entitlement and\n  scheme fees rather than developer-platform metering.'\nsources:\n  - https://developer.morganstanley.com/\n  - https://developer.morganstanley.com/terms\nnotes: No public usage / billing API. Reconciliation set to false; meters are modeled against expected\n  invoice line items.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n\
-  \  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Morgan Stanley & Co. LLC\nserviceCategory: Financial Services\nbillingModel:\n  pricingCategory: Bundled with Client Agreement\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\n    - Tax\nfocusColumns:\n  ServiceName: Morgan Stanley API\n  ServiceCategory: Financial Services\n  ProviderName: Morgan Stanley\n  PublisherName: Morgan Stanley & Co. LLC\n  InvoiceIssuerName: Morgan Stanley & Co. LLC\n  BillingCurrency: USD\nmeters:\n  - name: advisory_fees\n    unit: month\n    aggregation: sum\n    dimensions:\n      - account\n      - product\n  - name: trade_execution\n    unit: trade\n    aggregation: count\n    dimensions:\n      - account\n      - asset_class\n      - venue\n  - name: market_data_entitlements\n    unit: month\n    aggregation: sum\n    dimensions:\n      - exchange\n      - feed\n\
-  \  - name: equity_comp_seats\n    unit: seat\n    aggregation: max\n    dimensions:\n      - employer\nprinciples:\n  - name: Visibility\n    description: Reconcile Morgan Stanley client statements (custody, advisory, equity comp) against expected\n      activity; the developer platform surfaces functional usage but not direct cost.\n  - name: Allocation\n    description: Allocate by client account / employer plan and underlying product (Wealth Management,\n      Institutional Securities, Morgan Stanley at Work).\n  - name: Optimization\n    description: Optimization happens at the relationship level (advisory tier, execution venue, market-data\n      entitlement scope) rather than at the API call.\n  - name: Accountability\n    description: The client relationship owner is the budget owner; the integration team monitors API\n      call patterns to ensure they stay within the contracted entitlement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Morgan Stanley\nproviderId: morgan-stanley\npublisherName: Morgan Stanley\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Financial\n  - Investment Banking\n  - Wealth Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Morgan Stanley API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Morgan Stanley\n  ServiceCategory: Developer Tools / API\n  ProviderName: Morgan Stanley\n  PublisherName: Morgan Stanley\n  InvoiceIssuerName: Morgan Stanley\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n\
+  \    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Morgan Stanley API\n    baseURL: ''\n    tags:\n      - Financial\n      - Investment Banking\n      - Wealth Management\n    serviceName: Morgan Stanley API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/morgan-stanley/refs/heads/main/finops/morgan-stanley-finops.yml
-sources:
-- https://developer.morganstanley.com/
-- https://developer.morganstanley.com/terms
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Financial
 - Investment Banking
 - Wealth Management
+- FinOps
+- Cost Management
+- FOCUS
 ---

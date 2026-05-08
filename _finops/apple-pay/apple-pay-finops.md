@@ -20,73 +20,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/apple-pay/refs/heads/main/openapi/apple-pay-payment-token-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual (Developer Program)
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
-  pricingCategory: No-Charge (Free for Merchants) + Annual Membership Prerequisite
-description: 'FOCUS-aligned FinOps view for Apple Pay: Apple does not charge merchants directly. Direct Apple-billed cost is limited to the annual Apple Developer Program fee ($99/year individual or organization, $299/year enterprise). All transaction-level economics live with the merchant''s payment processor (Stripe, Adyen, Braintree, etc.) — Apple Pay is a tokenization layer on top, not a separately metered service.'
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Apple Pay API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Apple Inc.
-  PricingCategory: Subscription (prerequisite only)
-  ProviderName: Apple
-  PublisherName: Apple Inc.
-  ServiceCategory: Payments / Digital Wallet
+  ChargeCategory: Usage
+  InvoiceIssuerName: Apple Pay
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Apple Pay
+  PublisherName: Apple Pay
+  ServiceCategory: Developer Tools / API
   ServiceName: Apple Pay
 layout: finops
 meters:
 - aggregation: sum
-  description: Annual Apple Developer Program membership required for Merchant ID and certificates
+  description: Count of billable API requests
   dimensions:
-  - membership_type
-  - team_id
-  name: developer_program_membership
-  unit: year
-- aggregation: sum
-  description: Count of completed Apple Pay transactions (telemetry; billed by underlying processor, not Apple)
-  dimensions:
-  - merchant_id
-  - country
-  - card_brand
-  name: apple_pay_transactions
-  unit: transaction
-- aggregation: sum
-  description: Calls to apple-pay-gateway.apple.com for merchant session creation
-  dimensions:
-  - merchant_id
-  - environment
-  name: merchant_validation_calls
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: Processor-billed fees on Apple Pay transactions (allocated to the same FinOps domain as other card spend)
+  description: Bytes returned over the network in API responses
   dimensions:
-  - processor
-  - merchant_id
-  name: processor_fees
-  unit: transaction
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Apple Pay Finops
 provider_name: Apple Pay
 provider_slug: apple-pay
-publisher_name: Apple Inc.
-service_category: Payments / Digital Wallet
+publisher_name: Apple Pay
+service_category: API
 slug: apple-pay-finops
 source_filename: apple-pay-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.apple.com/apple-pay/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Apple Pay\nproviderId: apple-pay\npublisherName: Apple Inc.\nserviceCategory: Payments / Digital Wallet\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Payments\n  - Apple\ndescription: 'FOCUS-aligned FinOps view for Apple Pay: Apple does not charge merchants directly. Direct\n  Apple-billed cost is limited to the annual Apple Developer Program fee ($99/year individual or organization,\n  $299/year enterprise). All transaction-level economics live with the merchant''s payment processor (Stripe,\n  Adyen, Braintree, etc.) — Apple Pay is a tokenization layer on top, not a separately metered service.'\n\
-  sources:\n  - https://developer.apple.com/apple-pay/\n  - https://developer.apple.com/programs/\nbillingModel:\n  pricingCategory: No-Charge (Free for Merchants) + Annual Membership Prerequisite\n  billingFrequency: Annual (Developer Program)\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\nfocusColumns:\n  ServiceName: Apple Pay\n  ServiceCategory: Payments / Digital Wallet\n  ProviderName: Apple\n  PublisherName: Apple Inc.\n  InvoiceIssuerName: Apple Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingCategory: Subscription (prerequisite only)\nmeters:\n  - name: developer_program_membership\n    description: Annual Apple Developer Program membership required for Merchant ID and certificates\n    unit: year\n    aggregation: sum\n    dimensions:\n      - membership_type\n      - team_id\n  - name: apple_pay_transactions\n    description: Count of completed Apple Pay transactions (telemetry; billed by underlying processor,\n      not Apple)\n  \
-  \  unit: transaction\n    aggregation: sum\n    dimensions:\n      - merchant_id\n      - country\n      - card_brand\n  - name: merchant_validation_calls\n    description: Calls to apple-pay-gateway.apple.com for merchant session creation\n    unit: request\n    aggregation: sum\n    dimensions:\n      - merchant_id\n      - environment\n  - name: processor_fees\n    description: Processor-billed fees on Apple Pay transactions (allocated to the same FinOps domain\n      as other card spend)\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - processor\n      - merchant_id\nprinciples:\n  - name: Visibility\n    description: Track Apple Pay transaction volume in App Store Connect and via the merchant's payment\n      processor dashboards (Stripe, Adyen, Braintree). Apple-side charges are limited to the developer\n      program invoice.\n  - name: Allocation\n    description: Allocate the developer program fee to the engineering org owning the Apple ecosystem\n      footprint;\
-  \ allocate transaction processor fees per merchant ID / business unit.\n  - name: Optimization\n    description: Use the Apple Developer Enterprise Program only when distributing in-house apps; otherwise\n      consolidate teams under a single Organization membership. Negotiate processor blended rates that\n      include Apple Pay token volume.\n  - name: Accountability\n    description: Mobile / Web Engineering owns the Apple Developer Program account and Merchant ID lifecycle;\n      Finance / Payments team owns processor contracts and chargeback monitoring.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Apple Pay\nproviderId: apple-pay\npublisherName: Apple Pay\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Apple\n  - Contactless Payments\n  - Digital Wallet\n  - E-Commerce\n  - Mobile Payments\n  - Payments\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Apple Pay API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
+  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
+  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Apple Pay\n  ServiceCategory: Developer Tools / API\n  ProviderName: Apple Pay\n  PublisherName: Apple Pay\n  InvoiceIssuerName: Apple Pay\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Apple Pay JS API\n    baseURL: https://apple-pay-gateway.apple.com\n    tags:\n      - Javascript\n      - Safari\n      - Web Payments\n    serviceName: Apple Pay JS API\n    serviceCategory: API\n  - name: PassKit Framework (Apple Pay)\n    baseURL: Native Framework\n    tags:\n      - iOS\n      - Mobile\n      - Native\n      - Swift\n    serviceName: PassKit Framework (Apple Pay)\n    serviceCategory: API\n  - name: Apple Pay Payment Token API\n    baseURL: Merchant Server\n    tags:\n      - Encryption\n      - Payment Processing\n      - Server-Side\n    serviceName: Apple Pay Payment Token API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K\
+  \ Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/apple-pay/refs/heads/main/finops/apple-pay-finops.yml
-sources:
-- https://developer.apple.com/apple-pay/
-- https://developer.apple.com/programs/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Payments
 - Apple
+- Contactless Payments
+- Digital Wallet
+- E-Commerce
+- Mobile Payments
+- Payments
+- FinOps
+- Cost Management
+- FOCUS
 ---

@@ -13,41 +13,79 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/porter/refs/heads/main/openapi/porter-bundle-openapi.yml
 billing_model:
-  billingCurrency: N/A
-  billingFrequency: N/A
-  chargeCategories: []
-  pricingCategory: Open Source (No Charge)
-description: FOCUS-aligned FinOps placeholder for Porter. As a CNCF Sandbox open-source project, Porter has no direct billing surface; any FinOps treatment lives in the underlying Kubernetes cluster, container registry, and storage providers the bundles deploy onto. There are no Porter invoices, meters, or seat fees to allocate.
+  billingCurrency: USD
+  billingFrequency: Monthly
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Porter API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
-  BillingCurrency: N/A
-  InvoiceIssuerName: N/A
-  ProviderName: The Porter Authors
-  PublisherName: The Linux Foundation
-  ServiceCategory: DevOps Tooling
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Porter
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Porter
+  PublisherName: Porter
+  ServiceCategory: Developer Tools / API
   ServiceName: Porter
-  ServiceSubcategory: Application Packaging (CNAB)
 layout: finops
-meters: []
+meters:
+- aggregation: sum
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Porter Finops
 provider_name: Porter
 provider_slug: porter
-publisher_name: The Porter Authors / The Linux Foundation
-service_category: DevOps Tooling
+publisher_name: Porter
+service_category: API
 slug: porter-finops
 source_filename: porter-finops.yml
 source_heading: FinOps Profile
-source_url: https://porter.sh/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Porter\nproviderId: porter\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Cloud Native\n  - CNAB\n  - Kubernetes\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps placeholder for Porter. As a CNCF Sandbox open-source\n  project, Porter has no direct billing surface; any FinOps treatment lives in\n  the underlying Kubernetes cluster, container registry, and storage providers\n  the bundles deploy onto. There are no Porter invoices, meters, or seat fees\n  to allocate.\nsources:\n  - https://porter.sh/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: The Porter Authors / The Linux Foundation\nserviceCategory: DevOps Tooling\nbillingModel:\n\
-  \  pricingCategory: Open Source (No Charge)\n  billingFrequency: N/A\n  billingCurrency: N/A\n  chargeCategories: []\nfocusColumns:\n  ServiceName: Porter\n  ServiceCategory: DevOps Tooling\n  ServiceSubcategory: Application Packaging (CNAB)\n  ProviderName: The Porter Authors\n  PublisherName: The Linux Foundation\n  InvoiceIssuerName: N/A\n  BillingCurrency: N/A\nmeters: []\nprinciples:\n  - name: Visibility\n    description: Cost is realized in the underlying Kubernetes cluster, OCI registry, and storage that Porter bundles deploy onto; observe those provider invoices, not Porter itself.\n  - name: Allocation\n    description: Allocate by the target Kubernetes namespace and registry repo that bundle installs land in; tag bundles with team labels so downstream cluster cost-allocation tools can attribute spend.\n  - name: Optimization\n    description: Optimization happens at the bundle target (cluster sizing, registry storage classes, image layer reuse). Porter itself contributes no\
-  \ recurring cost.\n  - name: Accountability\n    description: Bundle authors are accountable for what their bundles install; cluster and registry owners are accountable for the resulting consumption.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\nnotes: >-\n  Porter is a CNCF Sandbox project with no commercial billing surface.\n  Marked reconciled=false because there is no provider invoice, meter, or\n  pricing structure to align to FOCUS.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Porter\nproviderId: porter\npublisherName: Porter\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud Native\n  - CNAB\n  - DevOps\n  - Kubernetes\n  - Package Manager\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Porter API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Porter\n  ServiceCategory: Developer Tools / API\n  ProviderName: Porter\n  PublisherName: Porter\n  InvoiceIssuerName: Porter\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n\
+  \      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Porter Bundle API\n    baseURL: https://porter.sh\n    tags:\n      - Cloud Native\n      - CNAB\n      - DevOps\n      - Kubernetes\n      - Package Manager\n    serviceName: Porter Bundle API\n    serviceCategory: API\n  - name: Porter Mixins API\n    baseURL: https://porter.sh\n    tags:\n      - CNAB\n      - DevOps\n      - Extensions\n      - Mixins\n      - Plugins\n    serviceName: Porter Mixins API\n    serviceCategory: API\n  - name: Porter Plugins API\n    baseURL: https://porter.sh\n    tags:\n      - Cloud Native\n      - CNAB\n      - DevOps\n      - Extensions\n      - Plugins\n    serviceName: Porter Plugins API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests\
+  \ / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/porter/refs/heads/main/finops/porter-finops.yml
-sources:
-- https://porter.sh/
+sources: []
 specification: FinOps Framework
 tags:
 - Cloud Native
 - CNAB
+- DevOps
 - Kubernetes
+- Package Manager
 - FinOps
+- Cost Management
 - FOCUS
 ---

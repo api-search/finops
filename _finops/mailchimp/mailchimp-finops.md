@@ -21,47 +21,77 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Tiered by Contact Count
-description: FOCUS-aligned FinOps for Mailchimp.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Mailchimp API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Mailchimp
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Mailchimp
   PublisherName: Mailchimp
-  ServiceCategory: Email Marketing
+  ServiceCategory: Developer Tools / API
   ServiceName: Mailchimp
 layout: finops
 meters:
-- aggregation: max
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - audience
-  name: contacts
-  unit: contact
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  name: email_sends
-  unit: email
-- aggregation: max
-  name: user_seats
-  unit: seat-month
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  name: automation_runs
-  unit: run
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Mailchimp Finops
 provider_name: Mailchimp
 provider_slug: mailchimp
 publisher_name: Mailchimp
-service_category: Email Marketing
+service_category: API
 slug: mailchimp-finops
 source_filename: mailchimp-finops.yml
 source_heading: FinOps Profile
-source_url: https://mailchimp.com/pricing/marketing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Mailchimp\nproviderId: mailchimp\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Email Marketing\ndescription: FOCUS-aligned FinOps for Mailchimp.\nsources:\n  - https://mailchimp.com/pricing/marketing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Mailchimp\nserviceCategory: Email Marketing\nbillingModel:\n  pricingCategory: Tiered by Contact Count\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Mailchimp\n  ServiceCategory: Email Marketing\n  ProviderName: Mailchimp\n  PublisherName: Mailchimp\n  BillingCurrency: USD\nmeters:\n  - name: contacts\n    unit: contact\n    aggregation: max\n\
-  \    dimensions:\n      - audience\n  - name: email_sends\n    unit: email\n    aggregation: sum\n  - name: user_seats\n    unit: seat-month\n    aggregation: max\n  - name: automation_runs\n    unit: run\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Track Mailchimp consumption monthly via admin/billing exports.\n  - name: Allocation\n    description: Tag seats/usage to teams or cost centers for chargeback.\n  - name: Optimization\n    description: Right-size tier and seat count quarterly; reclaim inactive seats.\n  - name: Accountability\n    description: Set spend alerts and renew at observed active utilization.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Mailchimp\nproviderId: mailchimp\npublisherName: Mailchimp\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Campaigns\n  - Email Marketing\n  - Marketing Automation\n  - Newsletters\n  - Transactional Email\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Mailchimp API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Mailchimp\n  ServiceCategory: Developer Tools / API\n  ProviderName: Mailchimp\n  PublisherName: Mailchimp\n  InvoiceIssuerName: Mailchimp\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n  \
+  \  aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Mailchimp Marketing API\n    baseURL: https://server.api.mailchimp.com/3.0\n    tags:\n      - Audiences\n      - Automation\n      - Campaigns\n      - Email Marketing\n    serviceName: Mailchimp Marketing API\n    serviceCategory: API\n  - name: Mailchimp Transactional API\n    baseURL: https://mandrillapp.com/api/1.0\n    tags:\n      - Email Delivery\n      - Messaging\n      - Transactional Email\n    serviceName: Mailchimp Transactional API\n    serviceCategory: API\n  - name: Mailchimp Open Commerce\n    baseURL: https://api.example.com\n    tags:\n      - E-Commerce\n      - GraphQL\n      - Headless Commerce\n    serviceName: Mailchimp Open Commerce\n    serviceCategory:\
+  \ API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/mailchimp/refs/heads/main/finops/mailchimp-finops.yml
-sources:
-- https://mailchimp.com/pricing/marketing/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Campaigns
 - Email Marketing
+- Marketing Automation
+- Newsletters
+- Transactional Email
+- FinOps
+- Cost Management
+- FOCUS
 ---

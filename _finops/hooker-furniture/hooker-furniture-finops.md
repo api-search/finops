@@ -7,38 +7,74 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: N/A
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Not Applicable (no public API)
-description: 'No FinOps surface for Hooker Furnishings APIs: there is no public developer API and no published API consumption pricing. This artifact is preserved as a trimmed scaffold pending any future Hooker Furnishings developer offering.'
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Hooker Furniture API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Hooker Furnishings Corporation
+  ChargeCategory: Usage
+  InvoiceIssuerName: Hooker Furniture
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Hooker Furniture
-  PublisherName: Hooker Furnishings Corporation
-  ServiceCategory: Furniture & Home Products
+  PublisherName: Hooker Furniture
+  ServiceCategory: Developer Tools / API
   ServiceName: Hooker Furniture
 layout: finops
-meters: []
+meters:
+- aggregation: sum
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Hooker Furniture Finops
 provider_name: Hooker Furniture
 provider_slug: hooker-furniture
-publisher_name: Hooker Furnishings Corporation
-service_category: Furniture & Home Products
+publisher_name: Hooker Furniture
+service_category: API
 slug: hooker-furniture-finops
 source_filename: hooker-furniture-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.hookerfurnishings.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Hooker Furniture\nproviderId: hooker-furniture\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Furniture\ndescription: 'No FinOps surface for Hooker Furnishings APIs: there is no public developer API and\n  no published API consumption pricing. This artifact is preserved as a trimmed scaffold pending\n  any future Hooker Furnishings developer offering.'\nnotes: No public developer API; no consumption-based billing model exists for reconciliation.\nsources:\n  - https://www.hookerfurnishings.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Hooker Furnishings Corporation\nserviceCategory: Furniture & Home Products\nbillingModel:\n\
-  \  pricingCategory: Not Applicable (no public API)\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Hooker Furniture\n  ServiceCategory: Furniture & Home Products\n  ProviderName: Hooker Furniture\n  PublisherName: Hooker Furnishings Corporation\n  InvoiceIssuerName: Hooker Furnishings Corporation\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters: []\nprinciples:\n  - name: Visibility\n    description: Not applicable - there is no public Hooker Furnishings API to track consumption\n      of.\n  - name: Allocation\n    description: Not applicable - no API spend exists to allocate.\n  - name: Optimization\n    description: Not applicable until a public developer API is published.\n  - name: Accountability\n    description: Not applicable until a public developer API is published.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Hooker Furniture\nproviderId: hooker-furniture\npublisherName: Hooker Furniture\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Furniture\n  - Home Products\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Hooker Furniture API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Hooker Furniture\n  ServiceCategory: Developer Tools / API\n  ProviderName: Hooker Furniture\n  PublisherName: Hooker Furniture\n  InvoiceIssuerName: Hooker Furniture\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Hooker Furniture API\n    baseURL: https://api.hookerfurniture.com\n    tags:\n      - Furniture\n      - Home Products\n    serviceName: Hooker Furniture API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/hooker-furniture/refs/heads/main/finops/hooker-furniture-finops.yml
-sources:
-- https://www.hookerfurnishings.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Furniture
+- Home Products
+- FinOps
+- Cost Management
+- FOCUS
 ---

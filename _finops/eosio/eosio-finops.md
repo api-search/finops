@@ -13,74 +13,77 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/eosio/refs/heads/main/openapi/eosio-nodeos-chain-api-openapi.yml
 billing_model:
-  billingCurrency: EOS (on-chain), USD (infra)
-  billingFrequency: Continuous (on-chain)
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
-  pricingCategory: Open Source + On-Chain Resource Markets
-description: 'FinOps view of EOSIO/Antelope: no vendor invoice. Direct costs are (a) infrastructure to run a self-hosted nodeos and (b) on-chain CPU/NET/RAM purchased through PowerUp, REX, or RAM market to submit transactions. There is no SaaS billing surface from the upstream project.'
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the EOSIO API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
-  BillingCurrency: EOS
-  InvoiceIssuerName: N/A (open source / on-chain)
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: EOSIO
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: EOSIO
-  PublisherName: EOS Network Foundation
-  ServiceCategory: Blockchain Infrastructure
+  PublisherName: EOSIO
+  ServiceCategory: Developer Tools / API
   ServiceName: EOSIO
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - account
-  - action
-  name: cpu_microseconds_consumed
-  unit: microseconds
-- aggregation: sum
-  dimensions:
-  - account
-  - action
-  name: net_bytes_consumed
-  unit: bytes
-- aggregation: max
-  dimensions:
-  - account
-  name: ram_bytes_held
-  unit: bytes
-- aggregation: sum
-  dimensions:
-  - account
-  - resource_type
-  name: powerup_purchases
-  unit: EOS
-- aggregation: sum
-  dimensions:
-  - environment
+  - api
+  - endpoint
+  - tier
   - region
-  name: node_compute_hours
-  unit: instance-hour
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Eosio Finops
 provider_name: EOSIO
 provider_slug: eosio
-publisher_name: EOS Network Foundation
-service_category: Blockchain Infrastructure
+publisher_name: EOSIO
+service_category: API
 slug: eosio-finops
 source_filename: eosio-finops.yml
 source_heading: FinOps Profile
-source_url: https://eosnetwork.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: EOSIO\nproviderId: eosio\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Blockchain\n  - Antelope\n  - EOS\n  - Open Source\ndescription: 'FinOps view of EOSIO/Antelope: no vendor invoice. Direct costs are (a) infrastructure to\n  run a self-hosted nodeos and (b) on-chain CPU/NET/RAM purchased through PowerUp, REX, or RAM market\n  to submit transactions. There is no SaaS billing surface from the upstream project.'\nsources:\n  - https://eosnetwork.com/\n  - https://github.com/AntelopeIO/leap\nnotes: No vendor invoice exists for the EOSIO/Antelope protocol. Cost is split between infrastructure\n  (compute/storage) and on-chain resources (CPU/NET/RAM market prices, denominated in EOS).\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n\
-  \  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: EOS Network Foundation\nserviceCategory: Blockchain Infrastructure\nbillingModel:\n  pricingCategory: Open Source + On-Chain Resource Markets\n  billingFrequency: Continuous (on-chain)\n  billingCurrency: EOS (on-chain), USD (infra)\n  chargeCategories:\n    - Usage\n    - Purchase\nfocusColumns:\n  ServiceName: EOSIO\n  ServiceCategory: Blockchain Infrastructure\n  ProviderName: EOSIO\n  PublisherName: EOS Network Foundation\n  InvoiceIssuerName: N/A (open source / on-chain)\n  BillingCurrency: EOS\nmeters:\n  - name: cpu_microseconds_consumed\n    unit: microseconds\n    aggregation: sum\n    dimensions:\n      - account\n      - action\n  - name: net_bytes_consumed\n    unit: bytes\n    aggregation: sum\n    dimensions:\n      - account\n      - action\n  - name: ram_bytes_held\n    unit: bytes\n    aggregation: max\n    dimensions:\n      - account\n  - name: powerup_purchases\n\
-  \    unit: EOS\n    aggregation: sum\n    dimensions:\n      - account\n      - resource_type\n  - name: node_compute_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - environment\n      - region\nprinciples:\n  - name: Visibility\n    description: Use get_account, get_powerup_state, and history APIs to track on-chain CPU/NET/RAM consumption\n      per account; monitor self-hosted nodeos cost via your cloud bill.\n  - name: Allocation\n    description: Use one EOS account per workload or team so on-chain resource burn is attributable;\n      tag self-hosted node compute by environment.\n  - name: Optimization\n    description: Prefer PowerUp rentals over staking when usage is bursty; batch actions per transaction\n      to amortize NET overhead; right-size nodeos hardware (history nodes are RAM-heavy).\n  - name: Accountability\n    description: Treasury or platform team owns nodeos infrastructure; product teams own their on-chain\n      account budgets and\
-  \ PowerUp top-ups.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: EOSIO\nproviderId: eosio\npublisherName: EOSIO\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Antelope\n  - Blockchain\n  - EOS\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the EOSIO API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n     \
+  \ feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n\
+  \      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: EOSIO\n  ServiceCategory: Developer Tools / API\n  ProviderName: EOSIO\n  PublisherName: EOSIO\n  InvoiceIssuerName: EOSIO\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name:\
+  \ compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: EOSIO Nodeos Chain API\n    baseURL: ''\n    tags:\n      - Antelope\n      - Blockchain\n      - Chain\n      - JSON-RPC\n    serviceName: EOSIO Nodeos Chain API\n    serviceCategory: API\n  - name: EOSIO Nodeos History API\n    baseURL: ''\n    tags:\n      - Antelope\n      - Blockchain\n      - History\n      - JSON-RPC\n    serviceName: EOSIO Nodeos History API\n    serviceCategory: API\n  - name: EOSIO Nodeos Producer API\n    baseURL: ''\n    tags:\n      - Antelope\n      - Block Production\n      - Blockchain\n      - JSON-RPC\n    serviceName: EOSIO Nodeos Producer API\n    serviceCategory: API\n  - name: EOSIO Nodeos Net API\n    baseURL: ''\n    tags:\n      - Antelope\n      - Blockchain\n      - JSON-RPC\n      - Networking\n    serviceName: EOSIO Nodeos Net\
+  \ API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/eosio/refs/heads/main/finops/eosio-finops.yml
-sources:
-- https://eosnetwork.com/
-- https://github.com/AntelopeIO/leap
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Blockchain
 - Antelope
+- Blockchain
 - EOS
-- Open Source
+- FinOps
+- Cost Management
+- FOCUS
 ---

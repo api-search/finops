@@ -14,67 +14,76 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/agave/refs/heads/main/openapi/agave-unified-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Custom Contract
-description: FOCUS-aligned FinOps shape for Agave's Unified Construction API. Agave is sold as a custom contract scoped by systems integrated, companies, modules, and customizations; there is no public rate card.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Agave API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
+  ChargeCategory: Usage
   InvoiceIssuerName: Agave
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Agave
   PublisherName: Agave
-  ServiceCategory: Construction Tech / Integration
-  ServiceName: Agave Unified Construction API
+  ServiceCategory: Developer Tools / API
+  ServiceName: Agave
 layout: finops
 meters:
 - aggregation: sum
-  description: Annual or multi-year custom contract fee
+  description: Count of billable API requests
   dimensions:
-  - module
-  - source_system
-  - company_count
-  name: contract_subscription
-  unit: contract
-- aggregation: count
-  description: Distinct ERP / construction-platform integrations covered by the contract
-  dimensions:
-  - source_system
-  - deployment_type
-  name: source_system_connections
-  unit: connection
-- aggregation: sum
-  description: API requests Agave makes downstream to integrated source systems on the customer's behalf
-  dimensions:
-  - source_system
-  - module
-  name: integration_requests
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Agave Finops
 provider_name: Agave
 provider_slug: agave
 publisher_name: Agave
-service_category: Construction Tech / Integration
+service_category: API
 slug: agave-finops
 source_filename: agave-finops.yml
 source_heading: FinOps Profile
-source_url: https://useagave.com/contractors/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Agave\nproviderId: agave\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Agave\nserviceCategory: Construction Tech / Integration\ntags:\n  - Accounting\n  - Construction\n  - Integration\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for Agave's Unified Construction API. Agave is sold as a custom\n  contract scoped by systems integrated, companies, modules, and customizations; there is no public\n  rate card.\nnotes: No public pricing; meters reflect the contract dimensions Agave uses to scope quotes (modules,\n  companies, source systems) plus integration request volume that customers should track\
-  \ for unit\n  economics.\nsources:\n  - https://useagave.com/contractors/pricing\n  - https://docs.agaveapi.com/\nbillingModel:\n  pricingCategory: Custom Contract\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: Agave Unified Construction API\n  ServiceCategory: Construction Tech / Integration\n  ProviderName: Agave\n  PublisherName: Agave\n  InvoiceIssuerName: Agave\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: contract_subscription\n    description: Annual or multi-year custom contract fee\n    unit: contract\n    aggregation: sum\n    dimensions:\n      - module\n      - source_system\n      - company_count\n  - name: source_system_connections\n    description: Distinct ERP / construction-platform integrations covered by the contract\n    unit: connection\n    aggregation: count\n    dimensions:\n      - source_system\n      - deployment_type\n  - name: integration_requests\n\
-  \    description: API requests Agave makes downstream to integrated source systems on the customer's behalf\n    unit: request\n    aggregation: sum\n    dimensions:\n      - source_system\n      - module\nprinciples:\n  - name: Visibility\n    description: Track Agave costs at contract-renewal granularity since pricing is annual and custom;\n      pair with Agave's webhook/event logs to monitor sync volume per source system.\n  - name: Allocation\n    description: Allocate cost by module (Core / AP / AR / Workforce / Forecast) and by company entity\n      since both factor directly into Agave's scoping formula.\n  - name: Optimization\n    description: Optimize by consolidating which source ERPs are connected, deferring optional modules\n      until they're justified, and minimizing customizations against Agave defaults to keep quotes lean.\n  - name: Accountability\n    description: Construction operations or IT integration owners typically hold the Agave budget; align\n      renewal\
-  \ review with the underlying ERP contracts whose data Agave is syncing.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Agave\nproviderId: agave\npublisherName: Agave\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Accounting\n  - Construction\n  - Integration\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Agave API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Agave\n  ServiceCategory: Developer Tools / API\n  ProviderName: Agave\n  PublisherName: Agave\n  InvoiceIssuerName: Agave\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n\
+  \  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Agave Unified Construction API\n    baseURL: https://api.agaveapi.com\n    tags:\n      - Accounting\n      - Budgets\n      - Construction\n      - Contracts\n      - Integration\n      - Projects\n    serviceName: Agave Unified Construction API\n    serviceCategory: API\n  - name: Agave Link Component\n    baseURL: https://api.agaveapi.com\n    tags:\n      - Authentication\n      - Construction\n      - Front-End\n      - OAuth\n    serviceName: Agave Link Component\n    serviceCategory: API\n  - name: Agave File Manager Component\n    baseURL: https://api.agaveapi.com\n    tags:\n      - Construction\n      - Documents\n      - Files\n      - Front-End\n    serviceName: Agave File Manager Component\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per\
+  \ 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/agave/refs/heads/main/finops/agave-finops.yml
-sources:
-- https://useagave.com/contractors/pricing
-- https://docs.agaveapi.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Accounting
 - Construction
 - Integration
 - FinOps
+- Cost Management
 - FOCUS
 ---

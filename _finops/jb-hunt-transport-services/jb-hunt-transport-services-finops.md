@@ -14,67 +14,80 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/jb-hunt-transport-services/refs/heads/main/openapi/jb-hunt-360-connect-api.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  - Adjustment
+  - Purchase
   - Tax
-  pricingCategory: Per-Load + Accessorial
-description: 'FOCUS-aligned FinOps placeholder for J.B. Hunt 360 Connect: API access is bundled with the underlying freight relationship; the billable surface is the freight contract (linehaul, fuel surcharge, accessorials, demurrage), not API calls.'
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the J.B. Hunt Transport Services API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: J.B. Hunt Transport Services, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: J.B. Hunt Transport Services
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: J.B. Hunt Transport Services
-  PublisherName: J.B. Hunt Transport Services, Inc.
-  ServiceCategory: Logistics / Transportation
-  ServiceName: J.B. Hunt 360
+  PublisherName: J.B. Hunt Transport Services
+  ServiceCategory: Developer Tools / API
+  ServiceName: J.B. Hunt Transport Services
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - mode
-  - origin_region
-  - destination_region
-  name: linehaul_charge
-  unit: load
-- aggregation: sum
-  dimensions:
-  - mode
-  name: fuel_surcharge
-  unit: load
-- aggregation: sum
-  dimensions:
-  - accessorial_type
-  name: accessorials
-  unit: event
-- aggregation: sum
-  dimensions:
+  - api
   - endpoint
-  - partner
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Jb Hunt Transport Services Finops
 provider_name: J.B. Hunt Transport Services
 provider_slug: jb-hunt-transport-services
-publisher_name: J.B. Hunt Transport Services, Inc.
-service_category: Logistics / Transportation
+publisher_name: J.B. Hunt Transport Services
+service_category: API
 slug: jb-hunt-transport-services-finops
 source_filename: jb-hunt-transport-services-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.jbhunt.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: J.B. Hunt Transport Services\nproviderId: jb-hunt-transport-services\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Logistics\n  - Freight\n  - Transportation\ndescription: 'FOCUS-aligned FinOps placeholder for J.B. Hunt 360 Connect: API access is bundled with\n  the underlying freight relationship; the billable surface is the freight contract (linehaul, fuel\n  surcharge, accessorials, demurrage), not API calls.'\nnotes: J.B. Hunt does not publish a public API rate card. Meters below model the economic surface a\n  shipper or partner sees on a J.B. Hunt invoice.\nsources:\n  - https://www.jbhunt.com/\n  - https://apiportal.jbhunt.com/docs/services\n  - https://developer.jbhunt.com/connect-360\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec:\
-  \ FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: J.B. Hunt Transport Services, Inc.\nserviceCategory: Logistics / Transportation\nbillingModel:\n  pricingCategory: Per-Load + Accessorial\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Adjustment\n    - Tax\nfocusColumns:\n  ServiceName: J.B. Hunt 360\n  ServiceCategory: Logistics / Transportation\n  ProviderName: J.B. Hunt Transport Services\n  PublisherName: J.B. Hunt Transport Services, Inc.\n  InvoiceIssuerName: J.B. Hunt Transport Services, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: linehaul_charge\n    unit: load\n    aggregation: sum\n    dimensions:\n      - mode\n      - origin_region\n      - destination_region\n  - name: fuel_surcharge\n    unit: load\n    aggregation: sum\n    dimensions:\n      - mode\n  - name: accessorials\n    unit: event\n    aggregation: sum\n    dimensions:\n      - accessorial_type\n\
-  \  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - partner\nprinciples:\n  - name: Visibility\n    description: Use the J.B. Hunt 360 platform's invoice and shipment APIs to extract per-load cost\n      and accessorials; reconcile against carrier invoices monthly.\n  - name: Allocation\n    description: Tag shipments with cost center, business unit, and customer order so freight cost\n      is allocated to the revenue line that drove the load.\n  - name: Optimization\n    description: Use 360 quoting to compare rates, consolidate LTL into FTL where possible, plan appointments\n      to avoid detention/demurrage accessorials.\n  - name: Accountability\n    description: Logistics manager owns load-level cost and accessorial overruns; weekly review of\n      anomalies in the 360 platform.\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: J.B. Hunt Transport Services\nproviderId: jb-hunt-transport-services\npublisherName: J.B. Hunt Transport Services\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Freight\n  - Intermodal\n  - Logistics\n  - Shipping\n  - Supply Chain\n  - Transportation\n  - Trucking\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the J.B. Hunt Transport Services API surface. Provides a\n  FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the\n  provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance\
+  \ teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n\
+  \      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: J.B. Hunt Transport Services\n  ServiceCategory: Developer Tools / API\n  ProviderName: J.B. Hunt Transport Services\n  PublisherName: J.B. Hunt Transport Services\n  InvoiceIssuerName: J.B. Hunt Transport Services\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n\
+  \      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: J.B. Hunt 360 Connect API\n    baseURL: https://api.jbhunt.com\n    tags:\n      - Documents\n      - Freight\n      - Orders\n      - Quotes\n      - Scheduling\n      - Tracking\n    serviceName: J.B. Hunt 360 Connect API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    url: https://apievangelist.com\n\
+  \    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/jb-hunt-transport-services/refs/heads/main/finops/jb-hunt-transport-services-finops.yml
-sources:
-- https://www.jbhunt.com/
-- https://apiportal.jbhunt.com/docs/services
-- https://developer.jbhunt.com/connect-360
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Logistics
 - Freight
+- Intermodal
+- Logistics
+- Shipping
+- Supply Chain
 - Transportation
+- Trucking
+- FinOps
+- Cost Management
+- FOCUS
 ---

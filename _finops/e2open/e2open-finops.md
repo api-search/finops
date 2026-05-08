@@ -16,70 +16,71 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription + Usage
-description: 'FOCUS-aligned FinOps for e2open: per-module SaaS subscription plus per-transaction meters (bookings, shipments, customs filings) governed by the contract. Public per-call pricing is not published.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the e2open API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: E2open, LLC
+  ChargeCategory: Usage
+  InvoiceIssuerName: e2open
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: e2open
-  PublisherName: E2open, LLC
-  ServiceCategory: Supply Chain
-  ServiceName: e2open Connected Network
+  PublisherName: e2open
+  ServiceCategory: Developer Tools / API
+  ServiceName: e2open
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - module
-  - tenant
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - carrier
-  - lane
-  name: ocean_bookings
-  unit: transaction
-- aggregation: sum
-  dimensions:
-  - mode
+  - api
   - region
-  name: shipments_tracked
-  unit: shipment
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - country
-  name: customs_filings
-  unit: filing
-- aggregation: sum
-  dimensions:
-  - module
-  name: module_seats
-  unit: seat
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: E2Open Finops
 provider_name: e2open
 provider_slug: e2open
-publisher_name: E2open, LLC
-service_category: Supply Chain
+publisher_name: e2open
+service_category: API
 slug: e2open-finops
 source_filename: e2open-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.e2open.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: e2open\nproviderId: e2open\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Supply Chain\n  - Logistics\ndescription: 'FOCUS-aligned FinOps for e2open: per-module SaaS subscription plus per-transaction meters\n  (bookings, shipments, customs filings) governed by the contract. Public per-call pricing is not published.'\nnotes: e2open does not publish public API pricing. Reconcile FOCUS columns and per-meter rates against\n  the master subscription agreement.\nsources:\n  - https://www.e2open.com/\n  - https://apidocs.inttra.com/\n  - https://marketplace.e2open.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: E2open, LLC\nserviceCategory:\
-  \ Supply Chain\nbillingModel:\n  pricingCategory: Subscription + Usage\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: e2open Connected Network\n  ServiceCategory: Supply Chain\n  ProviderName: e2open\n  PublisherName: E2open, LLC\n  InvoiceIssuerName: E2open, LLC\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - module\n      - tenant\n  - name: ocean_bookings\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - carrier\n      - lane\n  - name: shipments_tracked\n    unit: shipment\n    aggregation: sum\n    dimensions:\n      - mode\n      - region\n  - name: customs_filings\n    unit: filing\n    aggregation: sum\n    dimensions:\n      - country\n  - name: module_seats\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - module\nprinciples:\n  - name: Visibility\n   \
-  \ description: Use the e2open Marketplace usage reports and per-module dashboards to see consumption;\n      pull invoice line items into FOCUS-formatted tables.\n  - name: Allocation\n    description: Tag bookings/shipments/filings with originating business unit; charge back module subscriptions\n      to owning logistics team.\n  - name: Optimization\n    description: Consolidate ocean carriers through INTTRA to leverage volume; reduce module count at\n      renewal where capabilities overlap.\n  - name: Accountability\n    description: Supply-chain operations owns the e2open subscription and reviews monthly usage against\n      forecast.\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: e2open\nproviderId: e2open\npublisherName: e2open\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the e2open API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n\
+  \  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n\
+  \      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: e2open\n  ServiceCategory: Developer Tools / API\n  ProviderName: e2open\n  PublisherName: e2open\n  InvoiceIssuerName: e2open\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description:\
+  \ Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: E2open Supply Chain Platform API\n    baseURL: https://api.e2open.com\n    tags:\n      - JSON\n      - Logistics\n      - REST\n      - Supply Chain\n      - Trade Management\n      - Visibility\n    serviceName: E2open Supply Chain Platform API\n    serviceCategory: API\n  - name: INTTRA Ocean Execution API\n    baseURL: https://api.inttra.com\n    tags:\n      - Booking\n      - JSON\n      - Logistics\n      - Ocean Shipping\n      - REST\n      - Supply Chain\n      - Track and Trace\n    serviceName: INTTRA Ocean Execution API\n    serviceCategory: API\n  - name: E2open Transportation Management API\n    baseURL: https://api.e2open.com\n    tags:\n      - Appointment Scheduling\n      - Carrier Integration\n      - Logistics\n      - Supply Chain\n      - Transportation\n    serviceName: E2open Transportation\
+  \ Management API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/e2open/refs/heads/main/finops/e2open-finops.yml
-sources:
-- https://www.e2open.com/
-- https://apidocs.inttra.com/
-- https://marketplace.e2open.com/
+sources: []
 specification: FinOps Framework
 tags:
 - FinOps
+- Cost Management
 - FOCUS
-- Supply Chain
-- Logistics
 ---

@@ -44,43 +44,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/rapidapi/refs/heads/main/openapi/rapidapi-gateway-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Subscription
-description: FOCUS-aligned FinOps shape for RapidAPI Enterprise Hub. Commercial terms are negotiated; no public price list, so meters and unit economics below are placeholders to be confirmed at contract time.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the RapidAPI API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: RapidAPI (Nokia)
+  ChargeCategory: Usage
+  InvoiceIssuerName: RapidAPI
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: RapidAPI
-  PublisherName: RapidAPI (Nokia)
-  ServiceCategory: API Management
-  ServiceName: RapidAPI Enterprise Hub
+  PublisherName: RapidAPI
+  ServiceCategory: Developer Tools / API
+  ServiceName: RapidAPI
 layout: finops
 meters:
 - aggregation: sum
-  description: Annual contract fee for RapidAPI Enterprise Hub
-  name: enterprise_subscription
-  unit: contract
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Rapidapi Finops
 provider_name: RapidAPI
 provider_slug: rapidapi
-publisher_name: RapidAPI (Nokia)
-service_category: API Management
+publisher_name: RapidAPI
+service_category: API
 slug: rapidapi-finops
 source_filename: rapidapi-finops.yml
 source_heading: FinOps Profile
-source_url: https://rapidapi.com/products/enterprise-hub
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: RapidAPI\nproviderId: rapidapi\npublisherName: RapidAPI (Nokia)\nserviceCategory: API Management\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - API Marketplace\n  - API Management\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for RapidAPI Enterprise Hub. Commercial terms are negotiated;\n  no public price list, so meters and unit economics below are placeholders to be confirmed at\n  contract time.\nsources:\n  - https://rapidapi.com/products/enterprise-hub\nnotes: RapidAPI Enterprise Hub is contact-sales; no usage/billing API is publicly documented for\n  reconciliation, so meter list is intentionally\
-  \ minimal and FOCUS columns reflect the assumed\n  enterprise contract structure rather than a fetched billing surface.\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: RapidAPI Enterprise Hub\n  ServiceCategory: API Management\n  ProviderName: RapidAPI\n  PublisherName: RapidAPI (Nokia)\n  InvoiceIssuerName: RapidAPI (Nokia)\n  BillingCurrency: USD\nmeters:\n  - name: enterprise_subscription\n    description: Annual contract fee for RapidAPI Enterprise Hub\n    unit: contract\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Until a contract is signed, no usage telemetry is exposed; once provisioned,\n      Enterprise Hub admins can pull traffic analytics from the in-product dashboard.\n  - name: Allocation\n    description: Allocate by API key and consumer team within the Enterprise Hub admin console.\n  - name: Optimization\n    description:\
-  \ Negotiate volume tiers, on-prem vs SaaS, and hub consolidation at renewal; no\n      public discount schedule.\n  - name: Accountability\n    description: Procurement and platform team co-own the Enterprise Hub contract; cost is fixed\n      annual rather than usage-driven.\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: RapidAPI\nproviderId: rapidapi\npublisherName: RapidAPI\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Marketplace\n  - API Management\n  - API Testing\n  - API Gateway\n  - API Design\n  - Enterprise\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the RapidAPI API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: RapidAPI\n  ServiceCategory: Developer Tools / API\n  ProviderName: RapidAPI\n  PublisherName: RapidAPI\n  InvoiceIssuerName: RapidAPI\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: RapidAPI REST Platform API\n    baseURL: ''\n    tags:\n      - API Management\n      - Platform\n      - Administration\n      - Marketplace\n      - Enterprise\n    serviceName: RapidAPI REST Platform API\n    serviceCategory: API\n  - name: RapidAPI GraphQL Platform API\n    baseURL: ''\n    tags:\n      - GraphQL\n      - Platform\n      - API Management\n      - Enterprise\n      - Administration\n    serviceName: RapidAPI GraphQL Platform API\n    serviceCategory: API\n  - name: RapidAPI Hub API\n    baseURL: ''\n    tags:\n      - API Discovery\n      - API Marketplace\n      - API Testing\n      - Integration\n      - Search\n    serviceName: RapidAPI Hub API\n    serviceCategory: API\n\
+  \  - name: RapidAPI Testing API\n    baseURL: ''\n    tags:\n      - API Testing\n      - Monitoring\n      - Quality Assurance\n      - Automation\n      - CI/CD\n    serviceName: RapidAPI Testing API\n    serviceCategory: API\n  - name: RapidAPI Studio API\n    baseURL: ''\n    tags:\n      - API Design\n      - API Development\n      - OpenAPI\n      - Studio\n    serviceName: RapidAPI Studio API\n    serviceCategory: API\n  - name: RapidAPI Gateway API\n    baseURL: ''\n    tags:\n      - API Gateway\n      - Traffic Management\n      - Security\n      - Enterprise\n      - Routing\n    serviceName: RapidAPI Gateway API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/rapidapi/refs/heads/main/finops/rapidapi-finops.yml
-sources:
-- https://rapidapi.com/products/enterprise-hub
+sources: []
 specification: FinOps Framework
 tags:
 - API Marketplace
 - API Management
+- API Testing
+- API Gateway
+- API Design
+- Enterprise
 - FinOps
+- Cost Management
 - FOCUS
 ---

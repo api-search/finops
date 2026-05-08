@@ -25,94 +25,76 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Pay-As-You-Go + Subscription + Enterprise Contract
-description: 'FOCUS-aligned FinOps for NetApp: hybrid storage and data services billed via cloud marketplaces (CVO, FSx for ONTAP, Azure NetApp Files), SaaS subscriptions (BlueXP, Cloud Insights), savings-share (Spot by NetApp), and direct enterprise hardware/software contracts.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the NetApp API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: NetApp, Inc.
-  PricingCategory: Pay-As-You-Go
+  ChargeCategory: Usage
+  InvoiceIssuerName: NetApp
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: NetApp
-  PublisherName: NetApp, Inc.
-  ServiceCategory: Storage
+  PublisherName: NetApp
+  ServiceCategory: Developer Tools / API
   ServiceName: NetApp
-  ServiceSubcategory: Cloud Data Management
 layout: finops
 meters:
-- aggregation: avg
-  description: Cloud Volumes ONTAP licensed capacity (TB-month) or node-hours.
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - cloud
-  - region
+  - api
+  - endpoint
   - tier
-  name: cvo_capacity
-  unit: TB-month
-- aggregation: avg
-  description: AWS FSx for NetApp ONTAP capacity and IOPS.
-  dimensions:
   - region
-  - storage_class
-  name: fsx_ontap_capacity
-  unit: GB-month
-- aggregation: avg
-  description: Azure NetApp Files capacity by service level (Standard/Premium/Ultra).
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
+  - api
   - region
-  - service_level
-  name: anf_capacity
-  unit: TB-month
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: BlueXP service subscriptions (tiering, backup, replication, ransomware).
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - service
-  - tenant
-  name: bluexp_subscription
-  unit: month
-- aggregation: sum
-  description: Cloud Insights tier subscription (Basic / Standard / Premium).
-  dimensions:
+  - api
+  - endpoint
   - tier
-  - tenant
-  name: cloud_insights_subscription
-  unit: month
-- aggregation: sum
-  description: Percentage-of-savings billed by Spot by NetApp.
-  dimensions:
-  - product
-  - account
-  name: spot_savings_share
-  unit: USD
-- aggregation: sum
-  description: Hardware + ONTAP + support contracted purchases.
-  dimensions:
-  - sku
-  - region
-  name: enterprise_contract
-  unit: month
+  name: compute_seconds
+  unit: second
 name: Netapp Finops
 provider_name: NetApp
 provider_slug: netapp
-publisher_name: NetApp, Inc.
-service_category: Storage + Data Management
+publisher_name: NetApp
+service_category: API
 slug: netapp-finops
 source_filename: netapp-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.netapp.com/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: NetApp\nproviderId: netapp\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Cloud\n  - Storage\n  - Data Management\nnotes: NetApp pricing is non-public; FinOps shape captured here is based on the documented product portfolio\n  and typical cloud-marketplace billing patterns rather than published per-SKU rates. Reconcile against\n  marketplace listings and the customer's NetApp Master License Agreement.\ndescription: 'FOCUS-aligned FinOps for NetApp: hybrid storage and data services billed via cloud marketplaces\n  (CVO, FSx for ONTAP, Azure NetApp Files), SaaS subscriptions (BlueXP, Cloud Insights), savings-share\n  (Spot by NetApp), and direct enterprise hardware/software contracts.'\nsources:\n  - https://www.netapp.com/pricing/\n  - https://docs.netapp.com/us-en/cloud-manager-automation/\nalignedWith:\n  framework:\
-  \ FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: NetApp, Inc.\nserviceCategory: Storage + Data Management\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Subscription + Enterprise Contract\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: NetApp\n  ServiceCategory: Storage\n  ServiceSubcategory: Cloud Data Management\n  ProviderName: NetApp\n  PublisherName: NetApp, Inc.\n  InvoiceIssuerName: NetApp, Inc.\n  BillingCurrency: USD\n  PricingCategory: Pay-As-You-Go\nmeters:\n  - name: cvo_capacity\n    description: Cloud Volumes ONTAP licensed capacity (TB-month) or node-hours.\n    unit: TB-month\n    aggregation: avg\n    dimensions:\n      - cloud\n      - region\n      - tier\n  - name: fsx_ontap_capacity\n\
-  \    description: AWS FSx for NetApp ONTAP capacity and IOPS.\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - region\n      - storage_class\n  - name: anf_capacity\n    description: Azure NetApp Files capacity by service level (Standard/Premium/Ultra).\n    unit: TB-month\n    aggregation: avg\n    dimensions:\n      - region\n      - service_level\n  - name: bluexp_subscription\n    description: BlueXP service subscriptions (tiering, backup, replication, ransomware).\n    unit: month\n    aggregation: sum\n    dimensions:\n      - service\n      - tenant\n  - name: cloud_insights_subscription\n    description: Cloud Insights tier subscription (Basic / Standard / Premium).\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\n      - tenant\n  - name: spot_savings_share\n    description: Percentage-of-savings billed by Spot by NetApp.\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - product\n      - account\n  - name: enterprise_contract\n\
-  \    description: Hardware + ONTAP + support contracted purchases.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - sku\n      - region\nprinciples:\n  - name: Visibility\n    description: Use BlueXP Digital Wallet for license inventory; Cloud Insights for telemetry; Spot\n      Eco for commitment visibility; cloud-marketplace billing exports for CVO / FSx / ANF charges.\n  - name: Allocation\n    description: Tag NetApp resources at the cloud layer (AWS/Azure/GCP tags) so cost attribution flows\n      through to FOCUS exports; use BlueXP Connector / project boundaries per business unit.\n  - name: Optimization\n    description: Use BlueXP tiering to move cold blocks to object storage; right-size ONTAP service levels\n      (Standard vs Premium vs Ultra); use Spot Ocean to optimize Kubernetes compute; review BYOL vs marketplace\n      tradeoffs per workload.\n  - name: Accountability\n    description: Assign per-workload license owners in BlueXP; review BlueXP Digital Wallet\
-  \ quarterly\n      for unused capacity; reconcile cloud-marketplace bills against NetApp ELA commitments.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: NetApp\nproviderId: netapp\npublisherName: NetApp\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud\n  - Data Management\n  - Hybrid Cloud\n  - Infrastructure\n  - Storage\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the NetApp API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: NetApp\n  ServiceCategory: Developer Tools / API\n  ProviderName: NetApp\n  PublisherName: NetApp\n  InvoiceIssuerName: NetApp\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: NetApp Cloud Manager API\n    baseURL: https://cloudmanager.cloud.netapp.com\n    tags:\n      - Automation\n      - Cloud Management\n      - ONTAP\n    serviceName: NetApp Cloud Manager API\n    serviceCategory: API\n  - name: NetApp ONTAP REST API\n    baseURL: https://<cluster-management-ip>/api\n    tags:\n      - ONTAP\n      - REST API\n      - Storage Management\n    serviceName: NetApp ONTAP REST API\n    serviceCategory: API\n  - name: NetApp Cloud Volumes Service API\n    baseURL: https://cloudvolumesgcp-api.netapp.com\n    tags:\n      - AWS\n      - Azure\n      - Cloud Volumes\n      - GCP\n    serviceName: NetApp Cloud Volumes Service API\n    serviceCategory: API\n  - name: NetApp Astra Control API\n\
+  \    baseURL: https://astra.netapp.io/accounts\n    tags:\n      - Application Management\n      - Container Storage\n      - Data Protection\n      - Kubernetes\n    serviceName: NetApp Astra Control API\n    serviceCategory: API\n  - name: NetApp StorageGRID API\n    baseURL: https://<storagegrid-endpoint>/api/v3\n    tags:\n      - Grid Management\n      - Object Storage\n      - S3\n    serviceName: NetApp StorageGRID API\n    serviceCategory: API\n  - name: NetApp Element API\n    baseURL: https://<mvip>/json-rpc\n    tags:\n      - Element\n      - HCI\n      - JSON-RPC\n      - Storage\n    serviceName: NetApp Element API\n    serviceCategory: API\n  - name: NetApp Cloud Insights API\n    baseURL: https://<tenant>.cloudinsights.netapp.com/rest/v1\n    tags:\n      - Analytics\n      - Monitoring\n      - Observability\n    serviceName: NetApp Cloud Insights API\n    serviceCategory: API\n  - name: NetApp BlueXP Automation API\n    baseURL: https://cloudmanager.cloud.netapp.com\n\
+  \    tags:\n      - BlueXP\n      - Cloud Automation\n      - Hybrid Cloud\n      - Storage Management\n    serviceName: NetApp BlueXP Automation API\n    serviceCategory: API\n  - name: NetApp Active IQ Unified Manager API\n    baseURL: https://<aiqum-host>/api\n    tags:\n      - Active IQ\n      - Monitoring\n      - Storage Analytics\n      - Unified Manager\n    serviceName: NetApp Active IQ Unified Manager API\n    serviceCategory: API\n  - name: NetApp Active IQ Digital Advisor API\n    baseURL: https://api.activeiq.netapp.com\n    tags:\n      - Active IQ\n      - Digital Advisor\n      - Health\n      - Monitoring\n      - Upgrades\n    serviceName: NetApp Active IQ Digital Advisor API\n    serviceCategory: API\n  - name: NetApp SnapCenter API\n    baseURL: https://<snapcenter-host>:8146/api\n    tags:\n      - Backup\n      - Clone\n      - Data Protection\n      - Restore\n      - SnapCenter\n    serviceName: NetApp SnapCenter API\n    serviceCategory: API\n  - name: NetApp\
+  \ E-Series SANtricity Web Services API\n    baseURL: https://<web-services-proxy-host>/devmgr/v2\n    tags:\n      - E-Series\n      - SANtricity\n      - Storage\n      - Web Services\n    serviceName: NetApp E-Series SANtricity Web Services API\n    serviceCategory: API\n  - name: Azure NetApp Files REST API\n    baseURL: https://management.azure.com\n    tags:\n      - Azure\n      - Cloud Volumes\n      - Microsoft Azure\n      - Storage\n    serviceName: Azure NetApp Files REST API\n    serviceCategory: API\n  - name: NetApp ONTAP Tools for VMware vSphere API\n    baseURL: https://<ontap-tools-host>:8443\n    tags:\n      - ONTAP\n      - Virtualization\n      - VMware\n      - vSphere\n    serviceName: NetApp ONTAP Tools for VMware vSphere API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n\
+  \  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/netapp/refs/heads/main/finops/netapp-finops.yml
-sources:
-- https://www.netapp.com/pricing/
-- https://docs.netapp.com/us-en/cloud-manager-automation/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Cloud
-- Storage
 - Data Management
+- Hybrid Cloud
+- Infrastructure
+- Storage
+- FinOps
+- Cost Management
+- FOCUS
 ---

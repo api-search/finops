@@ -5,135 +5,80 @@ aligned_with:
   dataSpecVersion: '1.3'
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
-api_specs:
-- filename: gong-calls-openapi.yml
-  format: yaml
-  label: Gong Calls API
-  slug: gong-calls-api
-  spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gong/refs/heads/main/openapi/gong-calls-openapi.yml
-- filename: gong-users-openapi.yml
-  format: yaml
-  label: Gong Users API
-  slug: gong-users-api
-  spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gong/refs/heads/main/openapi/gong-users-openapi.yml
-- filename: gong-stats-openapi.yml
-  format: yaml
-  label: Gong Stats API
-  slug: gong-stats-api
-  spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gong/refs/heads/main/openapi/gong-stats-openapi.yml
-- filename: gong-crm-openapi.yml
-  format: yaml
-  label: Gong CRM API
-  slug: gong-crm-api
-  spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gong/refs/heads/main/openapi/gong-crm-openapi.yml
-- filename: gong-engage-openapi.yml
-  format: yaml
-  label: Gong Engage API
-  slug: gong-engage-api
-  spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gong/refs/heads/main/openapi/gong-engage-openapi.yml
-- filename: gong-settings-openapi.yml
-  format: yaml
-  label: Gong Settings API
-  slug: gong-settings-api
-  spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gong/refs/heads/main/openapi/gong-settings-openapi.yml
-- filename: gong-library-openapi.yml
-  format: yaml
-  label: Gong Library API
-  slug: gong-library-api
-  spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gong/refs/heads/main/openapi/gong-library-openapi.yml
-- filename: gong-permissions-openapi.yml
-  format: yaml
-  label: Gong Permissions API
-  slug: gong-permissions-api
-  spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gong/refs/heads/main/openapi/gong-permissions-openapi.yml
-- filename: gong-data-privacy-openapi.yml
-  format: yaml
-  label: Gong Data Privacy API
-  slug: gong-data-privacy-api
-  spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gong/refs/heads/main/openapi/gong-data-privacy-openapi.yml
-- filename: gong-auditing-openapi.yml
-  format: yaml
-  label: Gong Auditing API
-  slug: gong-auditing-api
-  spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gong/refs/heads/main/openapi/gong-auditing-openapi.yml
-- filename: gong-meetings-openapi.yml
-  format: yaml
-  label: Gong Meetings API
-  slug: gong-meetings-api
-  spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gong/refs/heads/main/openapi/gong-meetings-openapi.yml
-- filename: gong-engagement-openapi.yml
-  format: yaml
-  label: Gong Engagement API
-  slug: gong-engagement-api
-  spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gong/refs/heads/main/openapi/gong-engagement-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Per-Seat Subscription + Platform Fee
-description: 'FOCUS-aligned FinOps framing for Gong: per-seat subscription plus platform fee scaled by user-band tier. Specific rates are sales-led and not publicly posted.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Gong API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Gong.io, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Gong
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Gong
-  PublisherName: Gong.io, Inc.
-  ServiceCategory: Revenue Intelligence
+  PublisherName: Gong
+  ServiceCategory: Developer Tools / API
   ServiceName: Gong
 layout: finops
 meters:
-- aggregation: max
-  description: Active Gong-licensed seats (typically sales reps, sales managers, customer-success)
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - role
-  - team
-  - product_module
-  name: licensed_seats
-  unit: seat
-- aggregation: sum
-  description: Annual platform fee scaled by user-band tier
-  name: platform_fee
-  unit: year
-- aggregation: sum
-  description: Calls recorded and transcribed (capacity-shaping, not direct billing)
-  name: calls_recorded
-  unit: call
-- aggregation: sum
-  description: API request volume against tenant quota
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Gong Finops
 provider_name: Gong
 provider_slug: gong
-publisher_name: Gong.io, Inc.
-service_category: Revenue Intelligence (SaaS)
+publisher_name: Gong
+service_category: API
 slug: gong-finops
 source_filename: gong-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.gong.io/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Gong\nproviderId: gong\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Revenue Intelligence\n  - SaaS\ndescription: 'FOCUS-aligned FinOps framing for Gong: per-seat subscription plus platform fee scaled by\n  user-band tier. Specific rates are sales-led and not publicly posted.'\nnotes: Reconcile when Gong publishes a public rate card.\nsources:\n  - https://www.gong.io/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Gong.io, Inc.\nserviceCategory: Revenue Intelligence (SaaS)\nbillingModel:\n  pricingCategory: Per-Seat Subscription + Platform Fee\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n\
-  \    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Gong\n  ServiceCategory: Revenue Intelligence\n  ProviderName: Gong\n  PublisherName: Gong.io, Inc.\n  InvoiceIssuerName: Gong.io, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: licensed_seats\n    description: Active Gong-licensed seats (typically sales reps, sales managers, customer-success)\n    unit: seat\n    aggregation: max\n    dimensions:\n      - role\n      - team\n      - product_module\n  - name: platform_fee\n    description: Annual platform fee scaled by user-band tier\n    unit: year\n    aggregation: sum\n  - name: calls_recorded\n    description: Calls recorded and transcribed (capacity-shaping, not direct billing)\n    unit: call\n    aggregation: sum\n  - name: api_requests\n    description: API request volume against tenant quota\n    unit: request\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Use the Gong Admin API and console to track licensed-seat utilization and per-team\
-  \ adoption;\n      reconcile annual invoice against active seats.\n  - name: Allocation\n    description: Allocate seat cost to the owning sales / customer-success team; platform fee to revenue\n      operations.\n  - name: Optimization\n    description: Reclaim dormant seats quarterly; right-size product-module mix (Capture vs Engage vs\n      Forecast); avoid over-provisioning ahead of hiring plans.\n  - name: Accountability\n    description: Revenue Operations owns Gong spend and renewal; sales managers own per-team seat hygiene.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Gong\nproviderId: gong\npublisherName: Gong\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Sales\n  - Revenue Intelligence\n  - Conversation\n  - Analytics\n  - AI\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Gong API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
+  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
+  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Gong\n  ServiceCategory: Developer Tools / API\n  ProviderName: Gong\n  PublisherName: Gong\n  InvoiceIssuerName: Gong\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
+  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Gong Calls API\n    baseURL: https://api.gong.io/v2\n    tags:\n      - Calls\n      - Conversation Intelligence\n    serviceName: Gong Calls API\n    serviceCategory: API\n  - name: Gong Users API\n    baseURL: https://api.gong.io/v2\n    tags:\n      - Users\n    serviceName: Gong Users API\n    serviceCategory: API\n  - name: Gong CRM Integration API\n    baseURL: https://api.gong.io/v2\n    tags:\n      - CRM\n      - Integration\n    serviceName: Gong CRM Integration API\n    serviceCategory: API\n  - name: Gong Engagement Data API\n    baseURL: https://api.gong.io/v2\n    tags:\n      - Engagement\n      - Analytics\n    serviceName: Gong Engagement Data API\n    serviceCategory: API\n  - name: Gong Library API\n    baseURL: https://api.gong.io/v2\n\
+  \    tags:\n      - Library\n    serviceName: Gong Library API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/gong/refs/heads/main/finops/gong-finops.yml
-sources:
-- https://www.gong.io/pricing/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Sales
 - Revenue Intelligence
-- SaaS
+- Conversation
+- Analytics
+- AI
+- FinOps
+- Cost Management
+- FOCUS
 ---

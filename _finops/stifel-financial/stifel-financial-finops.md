@@ -7,46 +7,78 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Contract-Negotiated Services
-description: Stifel Financial bills under client agreements (advisory fees, brokerage commissions, deal fees), not under a public API meter. This artifact captures publisher and category surface only; meters are placeholders.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Stifel Financial API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Stifel, Nicolaus & Company, Incorporated
+  ChargeCategory: Usage
+  InvoiceIssuerName: Stifel Financial
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Stifel Financial
-  PublisherName: Stifel, Nicolaus & Company, Incorporated
-  ServiceCategory: Financial Services
+  PublisherName: Stifel Financial
+  ServiceCategory: Developer Tools / API
   ServiceName: Stifel Financial
 layout: finops
 meters:
 - aggregation: sum
-  description: Negotiated advisory, brokerage, and integration fees on the underlying client agreement
-  name: contract_services
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Stifel Financial Finops
 provider_name: Stifel Financial
 provider_slug: stifel-financial
-publisher_name: Stifel, Nicolaus & Company, Incorporated
-service_category: Financial Services
+publisher_name: Stifel Financial
+service_category: API
 slug: stifel-financial-finops
 source_filename: stifel-financial-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.stifel.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Stifel Financial\nproviderId: stifel-financial\npublisherName: Stifel, Nicolaus & Company, Incorporated\nserviceCategory: Financial Services\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Finance\n  - Wealth Management\n  - Investment Banking\ndescription: Stifel Financial bills under client agreements (advisory fees, brokerage commissions, deal\n  fees), not under a public API meter. This artifact captures publisher and category surface only; meters\n  are placeholders.\nsources:\n  - https://www.stifel.com\nnotes: 'Reconciliation marked false: Stifel Financial does not publish a public billing/pricing\
-  \ schedule\n  for programmatic access. All commercial terms are private to the client agreement.'\nbillingModel:\n  pricingCategory: Contract-Negotiated Services\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Stifel Financial\n  ServiceCategory: Financial Services\n  ProviderName: Stifel Financial\n  PublisherName: Stifel, Nicolaus & Company, Incorporated\n  InvoiceIssuerName: Stifel, Nicolaus & Company, Incorporated\n  BillingCurrency: USD\nmeters:\n  - name: contract_services\n    description: Negotiated advisory, brokerage, and integration fees on the underlying client agreement\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Visibility into Stifel-related spend is via client statements and the relationship\n      manager, not a usage API.\n  - name: Allocation\n    description: Allocation is by account or trading desk per the client\
-  \ agreement.\n  - name: Optimization\n    description: Optimization levers are commercial (renegotiating fee schedules, rebalancing AUM tiers)\n      rather than technical.\n  - name: Accountability\n    description: Account ownership rests with the contracting institution's treasury or operations team.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Stifel Financial\nproviderId: stifel-financial\npublisherName: Stifel Financial\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Finance\n  - Wealth Management\n  - Investment Banking\n  - Open Banking\n  - Financial Services\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Stifel Financial API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n \
+  \   description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Stifel Financial\n  ServiceCategory: Developer Tools / API\n  ProviderName: Stifel Financial\n  PublisherName: Stifel Financial\n  InvoiceIssuerName: Stifel Financial\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
+  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Stifel Bank Finicity Integration\n    baseURL: ''\n    tags:\n      - Open Banking\n      - Financial Data\n      - Account Aggregation\n      - Finicity\n    serviceName: Stifel Bank Finicity Integration\n    serviceCategory: API\n  - name: Stifel Bank Plaid Integration\n    baseURL: ''\n    tags:\n      - Open Banking\n      - Financial Data\n      - Account Aggregation\n      - Plaid\n    serviceName: Stifel Bank Plaid Integration\n    serviceCategory: API\n  - name: Stifel Wealth Tracker\n    baseURL: ''\n    tags:\n      - Wealth Management\n      - Portfolio Management\n      - Client Portal\n    serviceName:\
+  \ Stifel Wealth Tracker\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/stifel-financial/refs/heads/main/finops/stifel-financial-finops.yml
-sources:
-- https://www.stifel.com
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Finance
 - Wealth Management
 - Investment Banking
+- Open Banking
+- Financial Services
+- FinOps
+- Cost Management
+- FOCUS
 ---

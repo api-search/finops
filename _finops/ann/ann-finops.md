@@ -9,60 +9,78 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Adjustment
+  - Usage
+  - Purchase
+  - Tax
   - Credit
-  pricingCategory: Take Rate
-description: FOCUS-aligned FinOps placeholder for Ann Taylor's affiliate program. The cash flow is reverse-direction (publisher earns commission, not pays a fee); the publisher's FinOps cost surface is the affiliate-network platform fee plus revenue-share, not Ann Taylor's API.
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the ANN Inc. API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: FlexOffers (or CJ Affiliate, depending on network)
-  ProviderName: Ann Taylor
-  PublisherName: Ann Taylor / Sycamore Partners
-  ServiceCategory: Affiliate Marketing
-  ServiceName: Ann Taylor Affiliate Program
+  ChargeCategory: Usage
+  InvoiceIssuerName: ANN Inc.
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: ANN Inc.
+  PublisherName: ANN Inc.
+  ServiceCategory: Developer Tools / API
+  ServiceName: ANN Inc.
 layout: finops
 meters:
 - aggregation: sum
-  description: Gross sales attributed via affiliate links
+  description: Count of billable API requests
   dimensions:
-  - publisher
-  - sub_id
-  - channel
-  name: attributed_sales
-  unit: USD
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Commission paid out to publisher (negative cost / revenue from FinOps view)
+  description: Bytes returned over the network in API responses
   dimensions:
-  - publisher
-  - period
-  name: commissions_earned
-  unit: USD
-- aggregation: count
-  description: Affiliate link click volume
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - publisher
-  - link
-  name: clicks
-  unit: click
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Ann Finops
 provider_name: ANN Inc.
 provider_slug: ann
-publisher_name: Ann Taylor (operated by Sycamore Partners portfolio companies)
-service_category: Affiliate Marketing
+publisher_name: ANN Inc.
+service_category: API
 slug: ann-finops
 source_filename: ann-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.flexoffers.com/affiliate-programs/ann-taylor-affiliate-program/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: ANN Inc.\nproviderId: ann\npublisherName: Ann Taylor (operated by Sycamore Partners portfolio companies)\nserviceCategory: Affiliate Marketing\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Affiliate Marketing\n  - Retail\ndescription: >-\n  FOCUS-aligned FinOps placeholder for Ann Taylor's affiliate program. The\n  cash flow is reverse-direction (publisher earns commission, not pays a\n  fee); the publisher's FinOps cost surface is the affiliate-network platform\n  fee plus revenue-share, not Ann Taylor's API.\nnotes: >-\n  Affiliate revenue is not an API charge category in the conventional FinOps\n\
-  \  sense; it is a marketing channel commission settled via FlexOffers / CJ.\nsources:\n  - https://www.flexoffers.com/affiliate-programs/ann-taylor-affiliate-program/\nbillingModel:\n  pricingCategory: Take Rate\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Ann Taylor Affiliate Program\n  ServiceCategory: Affiliate Marketing\n  ProviderName: Ann Taylor\n  PublisherName: Ann Taylor / Sycamore Partners\n  InvoiceIssuerName: FlexOffers (or CJ Affiliate, depending on network)\n  BillingCurrency: USD\nmeters:\n  - name: attributed_sales\n    description: Gross sales attributed via affiliate links\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - publisher\n      - sub_id\n      - channel\n  - name: commissions_earned\n    description: Commission paid out to publisher (negative cost / revenue from FinOps view)\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - publisher\n     \
-  \ - period\n  - name: clicks\n    description: Affiliate link click volume\n    unit: click\n    aggregation: count\n    dimensions:\n      - publisher\n      - link\nprinciples:\n  - name: Visibility\n    description: >-\n      Use the FlexOffers / CJ publisher dashboard for click, conversion, and\n      payout reporting. Ann Taylor itself does not expose publisher-level\n      telemetry.\n  - name: Allocation\n    description: >-\n      Allocate affiliate revenue and any platform fees to the marketing\n      sub-channel and content team that owns the link.\n  - name: Optimization\n    description: >-\n      Optimization levers are creative selection, deep-link strategy, and\n      catalog feed freshness; not request-rate tuning.\n  - name: Accountability\n    description: >-\n      Marketing and content teams own this revenue line; finance / FinOps\n      handles 1099 reconciliation through the network.\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: ANN Inc.\nproviderId: ann\npublisherName: ANN Inc.\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Ann Taylor\n  - Fashion\n  - KnitWell\n  - LOFT\n  - Lou And Grey\n  - Retail\n  - Sycamore Partners\n  - Women's Apparel\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the ANN Inc. API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: ANN Inc.\n  ServiceCategory: Developer Tools / API\n  ProviderName: ANN Inc.\n  PublisherName: ANN Inc.\n  InvoiceIssuerName: ANN Inc.\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n \
+  \   unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Ann Taylor Affiliate Program\n    baseURL: https://www.anntaylor.com\n    tags:\n      - Affiliate Marketing\n      - Fashion\n      - Retail\n      - Women's Apparel\n    serviceName: Ann Taylor Affiliate Program\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/ann/refs/heads/main/finops/ann-finops.yml
-sources:
-- https://www.flexoffers.com/affiliate-programs/ann-taylor-affiliate-program/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Affiliate Marketing
+- Ann Taylor
+- Fashion
+- KnitWell
+- LOFT
+- Lou And Grey
 - Retail
+- Sycamore Partners
+- Women's Apparel
+- FinOps
+- Cost Management
+- FOCUS
 ---

@@ -20,94 +20,72 @@ api_specs:
   url: https://docs.cloud.f5.com/docs/api/swagger
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual (Subscription/FCP), One-Time (Perpetual), Monthly (Distributed Cloud usage)
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
-  - Adjustment
+  - Purchase
   - Tax
-  chargeFrequency: Recurring (Subscription/FCP/Distributed Cloud) or One-Time (Perpetual)
-  pricingCategory: Subscription / Perpetual / Flex Consumption + SaaS Usage
-description: 'FOCUS-aligned FinOps for F5 Networks: cost is dominated by the BIG-IP / NGINX Plus / App Protect license model (Subscription, Perpetual, FCP) plus consumption against F5 Distributed Cloud services (CDN, WAF, Bot Defense, API Security). API access itself has no per-call charge.'
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the F5 Networks API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: F5, Inc.
-  PricingCategory: Subscription / Perpetual / FCP / Usage
-  PricingUnit: instance | request | GB | transaction
-  ProviderName: F5
-  PublisherName: F5, Inc.
-  ServiceCategory: Application Delivery / Multi-Cloud Security
+  ChargeCategory: Usage
+  InvoiceIssuerName: F5 Networks
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: F5 Networks
+  PublisherName: F5 Networks
+  ServiceCategory: Developer Tools / API
   ServiceName: F5 Networks
 layout: finops
 meters:
-- aggregation: max
-  description: Count of licensed BIG-IP instances (hardware or VE).
-  dimensions:
-  - environment
-  - region
-  - form_factor
-  name: bigip_instances
-  unit: instance
-- aggregation: max
-  description: Count of licensed NGINX Plus instances.
-  dimensions:
-  - environment
-  - region
-  name: nginx_plus_instances
-  unit: instance
-- aggregation: max
-  description: App Protect / Advanced WAF entitled instances.
-  dimensions:
-  - product
-  name: app_protect_instances
-  unit: instance
 - aggregation: sum
-  description: F5 Distributed Cloud HTTP/L7 requests (CDN, WAF, API Security, Bot Defense).
+  description: Count of billable API requests
   dimensions:
-  - service
-  - tenant
-  - namespace
+  - api
+  - endpoint
+  - tier
   - region
-  name: distributed_cloud_requests
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: F5 Distributed Cloud egress data.
+  description: Bytes returned over the network in API responses
   dimensions:
-  - service
-  - tenant
+  - api
   - region
-  name: distributed_cloud_egress
+  - consumer
+  name: data_egress
   unit: GB
 - aggregation: sum
-  description: Annual FCP commitment $; trues up to actual usage.
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - year
-  - service
-  name: fcp_commitment
-  unit: USD
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: F5 Networks Finops
 provider_name: F5 Networks
 provider_slug: f5-networks
-publisher_name: F5, Inc.
-service_category: Application Delivery / Multi-Cloud Security
+publisher_name: F5 Networks
+service_category: API
 slug: f5-networks-finops
 source_filename: f5-networks-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.f5.com/products/get-f5
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: F5 Networks\nproviderId: f5-networks\npublisherName: F5, Inc.\nserviceCategory: Application Delivery / Multi-Cloud Security\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - API Gateway\n  - Application Delivery\n  - Automation\n  - Edge Computing\n  - Kubernetes\n  - Load Balancing\n  - Multi-Cloud\n  - NGINX\n  - Security\n  - WAF\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for F5 Networks: cost is dominated by the BIG-IP / NGINX Plus / App\n  Protect license model (Subscription, Perpetual, FCP) plus consumption against F5 Distributed Cloud\n  services (CDN, WAF, Bot Defense, API Security). API access itself has no per-call\
-  \ charge.'\nnotes: F5 publishes no list prices for the full portfolio. Reconcile against active quotes and Distributed\n  Cloud consumption reports.\nsources:\n  - https://www.f5.com/products/get-f5\n  - https://www.f5.com/cloud\n  - https://docs.cloud.f5.com/docs/\nprinciples:\n  - name: Visibility\n    description: Track BIG-IP / NGINX Plus / BIG-IQ instance entitlement; pull Distributed Cloud usage\n      reports from the F5 Customer 360 portal; reconcile FCP true-up reports each quarter.\n  - name: Allocation\n    description: Allocate license cost by environment / business unit (BIG-IP partitions, NGINX Plus per-instance,\n      Distributed Cloud per-tenant/per-namespace). Tag VE instances and Distributed Cloud sites with team/product.\n  - name: Optimization\n    description: Right-size BIG-IP VE flavors; consolidate NGINX Plus instances onto NGINX One Console\n      for fleet management; choose FCP for variable demand workloads; cache aggressively at Distributed\n      Cloud edge\
-  \ to lower egress and request meters; tune App Protect policies to avoid false-positive\n      bot challenges that drive bot-management volume.\n  - name: Accountability\n    description: Network/platform team owns BIG-IP and NGINX entitlement; security team owns App Protect\n      / Distributed Cloud Bot Defense; product teams own per-VS / per-namespace consumption. Annual license\n      review; quarterly FCP true-up; monthly Distributed Cloud usage review.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
-  \ capabilities:\n      - FinOps Practice Operations\n      - Invoicing and Chargeback\n      - Onboarding Workloads\nbillingModel:\n  pricingCategory: Subscription / Perpetual / Flex Consumption + SaaS Usage\n  billingFrequency: Annual (Subscription/FCP), One-Time (Perpetual), Monthly (Distributed Cloud usage)\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\n    - Tax\n  chargeFrequency: Recurring (Subscription/FCP/Distributed Cloud) or One-Time (Perpetual)\nfocusColumns:\n  ServiceName: F5 Networks\n  ServiceCategory: Application Delivery / Multi-Cloud Security\n  ProviderName: F5\n  PublisherName: F5, Inc.\n  InvoiceIssuerName: F5, Inc.\n  PricingCategory: Subscription / Perpetual / FCP / Usage\n  PricingUnit: instance | request | GB | transaction\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: bigip_instances\n    description: Count of licensed BIG-IP instances (hardware or VE).\n    unit: instance\n    aggregation:\
-  \ max\n    dimensions:\n      - environment\n      - region\n      - form_factor\n  - name: nginx_plus_instances\n    description: Count of licensed NGINX Plus instances.\n    unit: instance\n    aggregation: max\n    dimensions:\n      - environment\n      - region\n  - name: app_protect_instances\n    description: App Protect / Advanced WAF entitled instances.\n    unit: instance\n    aggregation: max\n    dimensions:\n      - product\n  - name: distributed_cloud_requests\n    description: F5 Distributed Cloud HTTP/L7 requests (CDN, WAF, API Security, Bot Defense).\n    unit: request\n    aggregation: sum\n    dimensions:\n      - service\n      - tenant\n      - namespace\n      - region\n  - name: distributed_cloud_egress\n    description: F5 Distributed Cloud egress data.\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - service\n      - tenant\n      - region\n  - name: fcp_commitment\n    description: Annual FCP commitment $; trues up to actual usage.\n    unit: USD\n\
-  \    aggregation: sum\n    dimensions:\n      - year\n      - service\napis:\n  - name: F5 BIG-IP iControl REST API\n    baseURL: https://{{bigip_host}}/mgmt/tm\n    serviceName: F5 BIG-IP iControl REST API\n    serviceCategory: API\n  - name: F5 Distributed Cloud API\n    baseURL: https://{{tenant}}.console.ves.volterra.io/api\n    serviceName: F5 Distributed Cloud API\n    serviceCategory: API\n  - name: F5 NGINX Management Suite API\n    baseURL: https://{{nms-host}}/api\n    serviceName: F5 NGINX Management Suite API\n    serviceCategory: API\n  - name: F5 Essential App Protect API\n    baseURL: https://api.f5.com/app-protect\n    serviceName: F5 Essential App Protect API\n    serviceCategory: API\n  - name: F5 BIG-IQ Centralized Management API\n    baseURL: https://{{bigiq_host}}/mgmt\n    serviceName: F5 BIG-IQ Centralized Management API\n    serviceCategory: API\n  - name: F5 BIG-IP Application Services 3 Extension API\n    baseURL: https://{{bigip_host}}/mgmt/shared/appsvcs\n \
-  \   serviceName: F5 BIG-IP Application Services 3 Extension API\n    serviceCategory: API\n  - name: F5 Declarative Onboarding API\n    baseURL: https://{{bigip_host}}/mgmt/shared/declarative-onboarding\n    serviceName: F5 Declarative Onboarding API\n    serviceCategory: API\n  - name: F5 Telemetry Streaming API\n    baseURL: https://{{bigip_host}}/mgmt/shared/telemetry\n    serviceName: F5 Telemetry Streaming API\n    serviceCategory: API\n  - name: F5 NGINX Plus API\n    baseURL: https://{{nginx_host}}/api\n    serviceName: F5 NGINX Plus API\n    serviceCategory: API\n  - name: F5 NGINX One Console API\n    baseURL: https://{{nginx-one-host}}/api\n    serviceName: F5 NGINX One Console API\n    serviceCategory: API\n  - name: F5 NGINX Ingress Controller API\n    baseURL: https://{{kubernetes_host}}\n    serviceName: F5 NGINX Ingress Controller API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per BIG-IP instance / year\n    metric: total_license_cost / bigip_instances\n \
-  \   target: model-dependent\n  - name: Cost per 1M Distributed Cloud requests\n    metric: distributed_cloud_cost / (distributed_cloud_requests / 1000000)\n    target: tier-dependent\n  - name: FCP true-up variance\n    metric: (actual_usage - committed) / committed\n    target: minimize positive variance\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: F5 Networks\nproviderId: f5-networks\npublisherName: F5 Networks\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Gateway\n  - Application Delivery\n  - Automation\n  - Edge Computing\n  - Kubernetes\n  - Load Balancing\n  - Multi-Cloud\n  - NGINX\n  - Security\n  - WAF\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the F5 Networks API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n\
+  \      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n   \
+  \   - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: F5 Networks\n  ServiceCategory: Developer Tools / API\n  ProviderName: F5 Networks\n  PublisherName: F5 Networks\n  InvoiceIssuerName: F5 Networks\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
+  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: F5 BIG-IP iControl REST API\n    baseURL: https://{{bigip_host}}/mgmt/tm\n    tags:\n      - ADC\n      - Application Delivery\n      - Load Balancing\n      - Network Management\n      - Security\n    serviceName: F5 BIG-IP iControl REST API\n    serviceCategory: API\n  - name: F5 Distributed Cloud API\n    baseURL: https://{{tenant}}.console.ves.volterra.io/api\n    tags:\n      - API Security\n      - CDN\n      - Edge Computing\n      - Multi-Cloud\n      - WAF\n    serviceName: F5 Distributed Cloud API\n    serviceCategory: API\n  - name: F5 NGINX Management Suite API\n    baseURL: https://{{nms-host}}/api\n\
+  \    tags:\n      - API Gateway\n      - Application Delivery\n      - Configuration Management\n      - Monitoring\n      - NGINX\n    serviceName: F5 NGINX Management Suite API\n    serviceCategory: API\n  - name: F5 Essential App Protect API\n    baseURL: https://api.f5.com/app-protect\n    tags:\n      - API Protection\n      - Bot Defense\n      - DDoS Protection\n      - Security\n      - WAF\n    serviceName: F5 Essential App Protect API\n    serviceCategory: API\n  - name: F5 BIG-IQ Centralized Management API\n    baseURL: https://{{bigiq_host}}/mgmt\n    tags:\n      - Analytics\n      - Centralized Management\n      - Device Management\n      - Licensing\n      - Monitoring\n    serviceName: F5 BIG-IQ Centralized Management API\n    serviceCategory: API\n  - name: F5 BIG-IP Application Services 3 Extension API\n    baseURL: https://{{bigip_host}}/mgmt/shared/appsvcs\n    tags:\n      - Application Delivery\n      - Application Services\n      - Automation\n      - Declarative\n\
+  \      - Infrastructure as Code\n    serviceName: F5 BIG-IP Application Services 3 Extension API\n    serviceCategory: API\n  - name: F5 Declarative Onboarding API\n    baseURL: https://{{bigip_host}}/mgmt/shared/declarative-onboarding\n    tags:\n      - Automation\n      - Declarative\n      - Device Configuration\n      - Infrastructure as Code\n      - Onboarding\n    serviceName: F5 Declarative Onboarding API\n    serviceCategory: API\n  - name: F5 Telemetry Streaming API\n    baseURL: https://{{bigip_host}}/mgmt/shared/telemetry\n    tags:\n      - Analytics\n      - Monitoring\n      - Observability\n      - Streaming\n      - Telemetry\n    serviceName: F5 Telemetry Streaming API\n    serviceCategory: API\n  - name: F5 NGINX Plus API\n    baseURL: https://{{nginx_host}}/api\n    tags:\n      - Dynamic Configuration\n      - Load Balancing\n      - Monitoring\n      - NGINX\n      - Reverse Proxy\n    serviceName: F5 NGINX Plus API\n    serviceCategory: API\n  - name: F5 NGINX One\
+  \ Console API\n    baseURL: https://{{nginx-one-host}}/api\n    tags:\n      - Configuration Management\n      - Fleet Management\n      - Monitoring\n      - NGINX\n      - Security\n    serviceName: F5 NGINX One Console API\n    serviceCategory: API\n  - name: F5 NGINX Ingress Controller API\n    baseURL: https://{{kubernetes_host}}\n    tags:\n      - Containers\n      - Ingress Controller\n      - Kubernetes\n      - Load Balancing\n      - NGINX\n    serviceName: F5 NGINX Ingress Controller API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/f5-networks/refs/heads/main/finops/f5-networks-finops.yml
-sources:
-- https://www.f5.com/products/get-f5
-- https://www.f5.com/cloud
-- https://docs.cloud.f5.com/docs/
+sources: []
 specification: FinOps Framework
 tags:
 - API Gateway

@@ -13,54 +13,78 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/sap-api-management/refs/heads/main/openapi/sap-api-management-portal-openapi.yml
 billing_model:
-  billingCurrency: USD/EUR/varies
-  billingFrequency: Per-Invoice
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Enterprise Contract
-description: FOCUS-aligned FinOps placeholder for SAP API Management. The service is consumed via BTP entitlements and SAP does not publish a public rate card.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the SAP API Management API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: SAP SE
+  ChargeCategory: Usage
+  InvoiceIssuerName: SAP API Management
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: SAP API Management
-  PublisherName: SAP SE
-  ServiceCategory: API Management
+  PublisherName: SAP API Management
+  ServiceCategory: Developer Tools / API
   ServiceName: SAP API Management
 layout: finops
 meters:
 - aggregation: sum
-  description: Consumption against the customer's negotiated SAP / Concur contract; reconcile to actual provider-published meters once available.
+  description: Count of billable API requests
   dimensions:
-  - service
+  - api
+  - endpoint
+  - tier
   - region
-  name: contracted_consumption
-  unit: varies
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Sap Api Management Finops
 provider_name: SAP API Management
 provider_slug: sap-api-management
-publisher_name: SAP SE
-service_category: API Management
+publisher_name: SAP API Management
+service_category: API
 slug: sap-api-management-finops
 source_filename: sap-api-management-finops.yml
 source_heading: FinOps Profile
-source_url: https://help.sap.com/docs/integration-suite
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: SAP API Management\nproviderId: sap-api-management\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - API Management\n  - Developer Portal\n  - Enterprise\n  - SAP\n  - BTP\ndescription: FOCUS-aligned FinOps placeholder for SAP API Management. The service is consumed via BTP entitlements and SAP does not publish a public rate card.\nsources:\n  - https://help.sap.com/docs/integration-suite\n  - https://www.sap.com/products/business-technology-platform/integration-suite/api-management.html\nnotes: Provider does not publish a public, machine-readable rate card; meters and FOCUS columns below are placeholders to be reconciled once contract or partner-portal terms are available.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
-  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: SAP SE\nserviceCategory: API Management\nbillingModel:\n  pricingCategory: Enterprise Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD/EUR/varies\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: SAP API Management\n  ServiceCategory: API Management\n  ProviderName: SAP API Management\n  PublisherName: SAP SE\n  InvoiceIssuerName: SAP SE\n  BillingCurrency: USD\nmeters:\n  - name: contracted_consumption\n    description: Consumption against the customer's negotiated SAP / Concur contract; reconcile to actual\n      provider-published meters once available.\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - service\n      - region\nprinciples:\n  - name: Visibility\n    description: Use SAP for Me, the BTP Cockpit, or the SAP Concur admin console (as applicable) to\n      view consumption against entitlements;\
-  \ line items appear on the SAP / Concur invoice.\n  - name: Allocation\n    description: Allocate by SAP global account / subaccount or by Concur entity; map to internal cost\n      centers via the relevant cockpit before chargeback.\n  - name: Optimization\n    description: Track CPEA/BTPEA balance burn or per-employee subscription utilization; right-size service\n      plans and prune unused entitlements at renewal.\n  - name: Accountability\n    description: Designate a single billing owner and reconcile invoices monthly with usage reports from\n      the relevant SAP / Concur cockpit.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: SAP API Management\nproviderId: sap-api-management\npublisherName: SAP API Management\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Management\n  - Developer Portal\n  - Enterprise\n  - SAP\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the SAP API Management API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: SAP API Management\n  ServiceCategory: Developer Tools / API\n  ProviderName: SAP API Management\n  PublisherName: SAP API Management\n  InvoiceIssuerName: SAP API Management\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network\
+  \ in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: SAP API Management API\n    baseURL: ''\n    tags:\n      - API Management\n      - Developer Portal\n      - SAP BTP\n    serviceName: SAP API Management API\n    serviceCategory: API\n  - name: SAP API Management API Portal API\n    baseURL: ''\n    tags:\n      - API Lifecycle\n      - API Portal\n      - API Proxy\n      - REST\n    serviceName: SAP API Management API Portal API\n    serviceCategory: API\n  - name: SAP API Business Hub Enterprise API\n    baseURL: ''\n    tags:\n      - API Catalog\n      - Developer Portal\n      - SAP BTP\n      - Self Service\n    serviceName: SAP API Business Hub Enterprise API\n    serviceCategory: API\n\
+  \  - name: SAP API Management Analytics API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Metrics\n      - Monitoring\n      - Reporting\n    serviceName: SAP API Management Analytics API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sap-api-management/refs/heads/main/finops/sap-api-management-finops.yml
-sources:
-- https://help.sap.com/docs/integration-suite
-- https://www.sap.com/products/business-technology-platform/integration-suite/api-management.html
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - API Management
 - Developer Portal
 - Enterprise
 - SAP
-- BTP
+- FinOps
+- Cost Management
+- FOCUS
 ---

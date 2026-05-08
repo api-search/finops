@@ -7,39 +7,70 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Contract
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contact Sales
-description: FOCUS-aligned FinOps placeholder for Southwest Airlines. There is no public developer billing surface; partner integrations are contracted and invoiced outside any per-call FinOps regime.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Southwest Airlines API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Southwest Airlines Co.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Southwest Airlines
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Southwest Airlines
-  PublisherName: Southwest Airlines Co.
-  ServiceCategory: Travel & Distribution
+  PublisherName: Southwest Airlines
+  ServiceCategory: Developer Tools / API
   ServiceName: Southwest Airlines
 layout: finops
 meters:
 - aggregation: sum
-  description: Placeholder meter; actual billable units are defined per partnership agreement (e.g. distribution segments, loyalty transactions).
-  name: contracted_partnership
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Southwest Airlines Finops
 provider_name: Southwest Airlines
 provider_slug: southwest-airlines
-publisher_name: Southwest Airlines Co.
-service_category: Travel & Distribution
+publisher_name: Southwest Airlines
+service_category: API
 slug: southwest-airlines-finops
 source_filename: southwest-airlines-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.southwest.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Southwest Airlines\nproviderId: southwest-airlines\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Fortune 500\n  - Airlines\n  - Aviation\n  - Travel\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps placeholder for Southwest Airlines. There is no\n  public developer billing surface; partner integrations are contracted and invoiced\n  outside any per-call FinOps regime.\nsources:\n  - https://www.southwest.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Southwest Airlines Co.\nserviceCategory: Travel & Distribution\nbillingModel:\n  pricingCategory: Contact Sales\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n\
-  \    - Purchase\nfocusColumns:\n  ServiceName: Southwest Airlines\n  ServiceCategory: Travel & Distribution\n  ProviderName: Southwest Airlines\n  PublisherName: Southwest Airlines Co.\n  InvoiceIssuerName: Southwest Airlines Co.\n  BillingCurrency: USD\nmeters:\n  - name: contracted_partnership\n    description: Placeholder meter; actual billable units are defined per partnership\n      agreement (e.g. distribution segments, loyalty transactions).\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: No public usage API or cost dashboard. Visibility relies on contract\n      reporting deliverables agreed in the partnership.\n  - name: Allocation\n    description: Spend on Southwest partnership integrations is allocated against\n      the contracting business unit (corporate travel, distribution, loyalty).\n  - name: Optimization\n    description: Optimization is contractual rather than technical — renegotiating\n      volume tiers, segment commitments,\
-  \ or distribution mix.\n  - name: Accountability\n    description: Owned by the contracting team's procurement / vendor manager;\n      Southwest does not expose self-serve cost controls.\nnotes: No public per-call billing or FinOps surface; entry exists for catalog\n  completeness only.\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Southwest Airlines\nproviderId: southwest-airlines\npublisherName: Southwest Airlines\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Fortune 500\n  - Airlines\n  - Aviation\n  - Travel\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Southwest Airlines API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
+  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Southwest Airlines\n  ServiceCategory: Developer Tools / API\n  ProviderName: Southwest Airlines\n  PublisherName: Southwest Airlines\n  InvoiceIssuerName: Southwest Airlines\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network\
+  \ in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Southwest Airlines Flight API\n    baseURL: https://www.southwest.com/api\n    tags:\n      - Airlines\n      - Flight Booking\n      - Flight Search\n      - Travel\n    serviceName: Southwest Airlines Flight API\n    serviceCategory: API\n  - name: Southwest Airlines Rapid Rewards API\n    baseURL: ''\n    tags:\n      - Loyalty\n      - Rewards\n      - Airlines\n    serviceName: Southwest Airlines Rapid Rewards API\n    serviceCategory: API\n  - name: Southwest Airlines In-Flight Network API\n    baseURL: https://getconnected.southwestwifi.com\n    tags:\n      - In-Flight\n      - Airlines\n      - Flight Status\n      - Real-Time\n    serviceName:\
+  \ Southwest Airlines In-Flight Network API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/southwest-airlines/refs/heads/main/finops/southwest-airlines-finops.yml
-sources:
-- https://www.southwest.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Fortune 500
@@ -47,5 +78,6 @@ tags:
 - Aviation
 - Travel
 - FinOps
+- Cost Management
 - FOCUS
 ---

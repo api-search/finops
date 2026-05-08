@@ -16,64 +16,76 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
-  pricingCategory: Tiered Subscription
-description: FOCUS-aligned FinOps for Retool. Spend is per-builder subscription plus per-end-user (internal and external) charges and plan-bound workflow-run quotas. The Management and SCIM APIs are administrative and not separately metered.
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Retool API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Retool, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Retool
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Retool
-  PublisherName: Retool, Inc.
-  ServiceCategory: Internal Tools
+  PublisherName: Retool
+  ServiceCategory: Developer Tools / API
   ServiceName: Retool
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
+  - endpoint
   - tier
-  name: builder_seats
-  unit: seat
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - tier
-  name: internal_end_users
-  unit: user
-- aggregation: sum
-  dimensions:
-  - portal
-  name: external_users
-  unit: user
-- aggregation: sum
-  dimensions:
-  - workflow
-  name: workflow_runs
-  unit: run
-- aggregation: max
-  name: retool_database
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Retool Finops
 provider_name: Retool
 provider_slug: retool
-publisher_name: Retool, Inc.
-service_category: Internal Tools
+publisher_name: Retool
+service_category: API
 slug: retool-finops
 source_filename: retool-finops.yml
 source_heading: FinOps Profile
-source_url: https://retool.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Retool\nproviderId: retool\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Internal Tools\n  - Low Code\ndescription: FOCUS-aligned FinOps for Retool. Spend is per-builder subscription plus per-end-user (internal\n  and external) charges and plan-bound workflow-run quotas. The Management and SCIM APIs are administrative\n  and not separately metered.\nsources:\n  - https://retool.com/pricing\n  - https://docs.retool.com/org-users/concepts/retool-api\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Retool, Inc.\nserviceCategory: Internal Tools\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n\
-  \  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\nfocusColumns:\n  ServiceName: Retool\n  ServiceCategory: Internal Tools\n  ProviderName: Retool\n  PublisherName: Retool, Inc.\n  InvoiceIssuerName: Retool, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: builder_seats\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - tier\n  - name: internal_end_users\n    unit: user\n    aggregation: sum\n    dimensions:\n      - tier\n  - name: external_users\n    unit: user\n    aggregation: sum\n    dimensions:\n      - portal\n  - name: workflow_runs\n    unit: run\n    aggregation: sum\n    dimensions:\n      - workflow\n  - name: retool_database\n    unit: GB\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Visibility comes from the Retool admin billing page and the Management API's user/group\n      endpoints; export builder, internal-user, and external-user counts to your finance pipeline.\n  - name: Allocation\n    description:\
-  \ Allocate builder seats to the engineering or ops team that owns the apps, internal end-users\n      to the consuming line of business, and external users to the customer-facing product the portal\n      serves.\n  - name: Optimization\n    description: Optimization levers are seat hygiene (reclaim inactive builders), promoting builders\n      to internal end-users when they stop editing, sizing the Business external-user tier to the active\n      portal population, and consolidating workflows to stay under the plan's run quota.\n  - name: Accountability\n    description: Owner is the Retool admin / platform team that controls user provisioning (often via\n      the SCIM 2.0 API and SSO) and assigns workspaces to consuming teams.\nnotes: Per-builder + per-end-user subscription with workflow-run and database quotas; the Management\n  and SCIM APIs are administrative, not separately metered. Generic per-request meters and unit economics\n  removed.\nmaintainers:\n  - FN: Kin Lane\n    email:\
-  \ kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Retool\nproviderId: retool\npublisherName: Retool\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Admin Panel\n  - Dashboard\n  - Internal Tools\n  - Low Code\n  - No Code\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Retool API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Retool\n  ServiceCategory: Developer Tools / API\n  ProviderName: Retool\n  PublisherName: Retool\n  InvoiceIssuerName: Retool\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Retool Management API\n    baseURL: ''\n    tags:\n      - Administration\n      - Apps\n      - Groups\n      - Permissions\n      - Users\n    serviceName: Retool Management API\n    serviceCategory: API\n  - name: Retool SCIM 2.0 API\n    baseURL: ''\n    tags:\n      - Enterprise\n      - Identity\n      - Okta\n      - Provisioning\n      - SCIM\n      - SSO\n    serviceName: Retool SCIM 2.0 API\n    serviceCategory: API\n  - name: Retool Platform\n    baseURL: ''\n    tags:\n      - AI\n      - Dashboard\n      - Internal Tools\n      - Low Code\n      - Mobile\n      - Workflows\n    serviceName: Retool Platform\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost\
+  \ / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/retool/refs/heads/main/finops/retool-finops.yml
-sources:
-- https://retool.com/pricing
-- https://docs.retool.com/org-users/concepts/retool-api
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Admin Panel
+- Dashboard
 - Internal Tools
 - Low Code
+- No Code
+- FinOps
+- Cost Management
+- FOCUS
 ---

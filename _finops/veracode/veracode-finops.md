@@ -32,44 +32,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/veracode/refs/heads/main/openapi/veracode-reporting-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Subscription
-description: 'FOCUS-aligned FinOps stub for Veracode: enterprise application-security SaaS subscription with no public pricing or usage/billing API. API access is bundled with the platform subscription.'
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Veracode API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Veracode, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Veracode
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Veracode
-  PublisherName: Veracode, Inc.
-  ServiceCategory: Application Security
-  ServiceName: Veracode Application Security Platform
+  PublisherName: Veracode
+  ServiceCategory: Developer Tools / API
+  ServiceName: Veracode
 layout: finops
 meters:
 - aggregation: sum
-  description: Annual Veracode platform subscription line; entitlements for SAST / DAST / SCA scans and seats are scoped in the order form.
-  name: platform_subscription
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Veracode Finops
 provider_name: Veracode
 provider_slug: veracode
-publisher_name: Veracode, Inc.
-service_category: Application Security
+publisher_name: Veracode
+service_category: API
 slug: veracode-finops
 source_filename: veracode-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.veracode.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Veracode\nproviderId: veracode\npublisherName: Veracode, Inc.\nserviceCategory: Application Security\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Application Security\n  - DevSecOps\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps stub for Veracode: enterprise application-security SaaS subscription\n  with no public pricing or usage/billing API. API access is bundled with the platform subscription.'\nsources:\n  - https://www.veracode.com/pricing\n  - https://docs.veracode.com/r/About_Veracode_API_Best_Practices\nnotes: No public pricing. Meters are not invented; API call counts are operational telemetry\
-  \ rather than\n  billable units. Reconciliation deferred pending customer-portal billing data.\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Veracode Application Security Platform\n  ServiceCategory: Application Security\n  ProviderName: Veracode\n  PublisherName: Veracode, Inc.\n  InvoiceIssuerName: Veracode, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: platform_subscription\n    description: Annual Veracode platform subscription line; entitlements for SAST / DAST / SCA scans\n      and seats are scoped in the order form.\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Veracode exposes scan and finding telemetry via the Reporting, Findings, and Summary\n      Report REST APIs; there is no public cost / usage API. Track entitlement consumption (scan-counts,\n      seats) against the order-form scope.\n  - name: Allocation\n\
-  \    description: Allocation is contract-level (which application portfolios and teams are entitled).\n      Internal chargeback typically rides on application ownership tags applied in the Veracode platform.\n  - name: Optimization\n    description: Optimization levers include scoping which apps are scanned, scan cadence, and avoiding\n      wasted polling (the docs require 2-minute minimum spacing on status checks and cap retries at 5).\n  - name: Accountability\n    description: Accountability sits with the AppSec team that owns the Veracode tenant; finance owns\n      the annual subscription line.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Veracode\nproviderId: veracode\npublisherName: Veracode\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Application Security\n  - SAST\n  - DAST\n  - SCA\n  - Security Testing\n  - DevSecOps\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Veracode API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
+  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
+  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Veracode\n  ServiceCategory: Developer Tools / API\n  ProviderName: Veracode\n  PublisherName: Veracode\n  InvoiceIssuerName: Veracode\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Veracode Applications REST API\n    baseURL: https://api.veracode.com\n    tags:\n      - Applications\n      - Portfolio\n      - Policy\n      - Sandboxes\n    serviceName: Veracode Applications REST API\n    serviceCategory: API\n  - name: Veracode Findings REST API\n    baseURL: https://api.veracode.com\n    tags:\n      - Findings\n      - Vulnerabilities\n      - SAST\n      - DAST\n      - SCA\n    serviceName: Veracode Findings REST API\n    serviceCategory: API\n  - name: Veracode Identity REST API\n    baseURL: https://api.veracode.com\n    tags:\n      - Identity\n      - Users\n      - Teams\n      - Access Control\n    serviceName: Veracode Identity REST API\n    serviceCategory: API\n\
+  \  - name: Veracode Reporting REST API\n    baseURL: https://api.veracode.com\n    tags:\n      - Reporting\n      - Analytics\n      - Findings\n      - Compliance\n    serviceName: Veracode Reporting REST API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/veracode/refs/heads/main/finops/veracode-finops.yml
-sources:
-- https://www.veracode.com/pricing
-- https://docs.veracode.com/r/About_Veracode_API_Best_Practices
+sources: []
 specification: FinOps Framework
 tags:
 - Application Security
+- SAST
+- DAST
+- SCA
+- Security Testing
 - DevSecOps
 - FinOps
+- Cost Management
 - FOCUS
 ---

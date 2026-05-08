@@ -7,73 +7,77 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per Pay Cycle / Monthly
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
-  pricingCategory: Subscription + Per-Employee Per-Payroll
-description: FinOps definition for Paychex. APIs are bundled with the underlying payroll / HR / benefits product subscription; no standalone API rate card. Meters reflect typical payroll-SaaS billing (employees, payrolls run, benefits administration).
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Paychex API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Paychex, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Paychex
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Paychex
-  PublisherName: Paychex, Inc.
-  ServiceCategory: Payroll / HR
+  PublisherName: Paychex
+  ServiceCategory: Developer Tools / API
   ServiceName: Paychex
 layout: finops
 meters:
 - aggregation: sum
-  description: Active employees included in a payroll run
+  description: Count of billable API requests
   dimensions:
-  - company
-  - pay_cycle
-  name: employees_paid
-  unit: employee
-- aggregation: count
-  description: Number of payroll runs in the billing period
-  dimensions:
-  - company
-  - frequency
-  name: payrolls_run
-  unit: payroll
-- aggregation: max
-  description: Employees enrolled in administered benefits
-  dimensions:
-  - company
-  - plan
-  name: benefits_seats
-  unit: seat-month
-- aggregation: count
-  description: API requests against Paychex Developer APIs (bundled, not separately metered in public pricing)
-  dimensions:
-  - client_id
-  - product
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Paychex Finops
 provider_name: Paychex
 provider_slug: paychex
-publisher_name: Paychex, Inc.
-service_category: Payroll / HR
+publisher_name: Paychex
+service_category: API
 slug: paychex-finops
 source_filename: paychex-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.paychex.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Paychex\nproviderId: paychex\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nnotes: No public per-API price. Paychex bills clients for the underlying payroll / HR / benefits\n  product; API access is bundled. Structural FinOps placeholder reflecting the SaaS payroll\n  shape.\ntags:\n  - FinOps\n  - FOCUS\n  - Payroll\n  - HR\n  - Benefits\ndescription: FinOps definition for Paychex. APIs are bundled with the underlying payroll\n  / HR / benefits product subscription; no standalone API rate card. Meters reflect typical\n  payroll-SaaS billing (employees, payrolls run, benefits administration).\nsources:\n  - https://developer.paychex.com/\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n\
-  \  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Paychex, Inc.\nserviceCategory: Payroll / HR\nbillingModel:\n  pricingCategory: Subscription + Per-Employee Per-Payroll\n  billingFrequency: Per Pay Cycle / Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\nfocusColumns:\n  ServiceName: Paychex\n  ServiceCategory: Payroll / HR\n  ProviderName: Paychex\n  PublisherName: Paychex, Inc.\n  InvoiceIssuerName: Paychex, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: employees_paid\n    description: Active employees included in a payroll run\n    unit: employee\n    aggregation: sum\n    dimensions:\n      - company\n      - pay_cycle\n  - name: payrolls_run\n    description: Number of payroll runs in the billing period\n    unit: payroll\n    aggregation: count\n    dimensions:\n      - company\n      - frequency\n  - name: benefits_seats\n    description: Employees enrolled in administered\
-  \ benefits\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - company\n      - plan\n  - name: api_requests\n    description: API requests against Paychex Developer APIs (bundled, not separately metered\n      in public pricing)\n    unit: request\n    aggregation: count\n    dimensions:\n      - client_id\n      - product\nprinciples:\n  - name: Visibility\n    description: Visibility comes from the Paychex client portal and the monthly invoice;\n      API requests are not separately billed line items in public pricing.\n  - name: Allocation\n    description: Allocate by Paychex client number and by integrated app (client_id) when\n      using the developer APIs.\n  - name: Optimization\n    description: Optimize by reducing manual payroll adjustments (which can carry per-action\n      fees), automating onboarding/offboarding through the API, and rationalizing benefits\n      plans.\n  - name: Accountability\n    description: Payroll / HR director accountable for the\
-  \ Paychex contract; integration\n      owner accountable for API consumer behavior.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Paychex\nproviderId: paychex\npublisherName: Paychex\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Payroll\n  - Human Resources\n  - HR\n  - Benefits\n  - Time and Attendance\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Paychex API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Paychex\n  ServiceCategory: Developer Tools / API\n  ProviderName: Paychex\n  PublisherName: Paychex\n  InvoiceIssuerName: Paychex\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Paychex Developer APIs\n    baseURL: ''\n    tags:\n      - Payroll\n      - Human Resources\n      - HR\n      - Benefits\n      - Time and Attendance\n    serviceName: Paychex Developer APIs\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/paychex/refs/heads/main/finops/paychex-finops.yml
-sources:
-- https://developer.paychex.com/
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Payroll
+- Human Resources
 - HR
 - Benefits
+- Time and Attendance
+- FinOps
+- Cost Management
+- FOCUS
 ---

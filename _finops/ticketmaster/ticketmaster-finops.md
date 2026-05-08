@@ -20,58 +20,80 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/ticketmaster/refs/heads/main/openapi/ticketmaster-commerce-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: N/A
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Free / Approval-Gated
-description: 'FOCUS-aligned FinOps for the Ticketmaster Discovery and Commerce APIs: free public access with a 5,000-request daily quota, no published per-call price, and partner-tier access provisioned by approval rather than invoice.'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Ticketmaster API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
+  InvoiceIssuerName: Ticketmaster
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Ticketmaster
-  PublisherName: Ticketmaster L.L.C.
-  ServiceCategory: Events & Ticketing Data
-  ServiceName: Ticketmaster Discovery API
+  PublisherName: Ticketmaster
+  ServiceCategory: Developer Tools / API
+  ServiceName: Ticketmaster
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - api_key
+  - api
   - endpoint
-  name: discovery_api_requests
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - api_key
-  - endpoint
-  name: commerce_api_requests
-  unit: request
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - partner_account
-  name: discovery_feed_consumption
-  unit: feed-pull
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Ticketmaster Finops
 provider_name: Ticketmaster
 provider_slug: ticketmaster
-publisher_name: Ticketmaster L.L.C.
-service_category: Events & Ticketing Data
+publisher_name: Ticketmaster
+service_category: API
 slug: ticketmaster-finops
 source_filename: ticketmaster-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.ticketmaster.com/products-and-docs/apis/getting-started/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Ticketmaster\nproviderId: ticketmaster\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Events\n  - Tickets\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for the Ticketmaster Discovery and Commerce APIs: free public access\n  with a 5,000-request daily quota, no published per-call price, and partner-tier access provisioned\n  by approval rather than invoice.'\nsources:\n  - https://developer.ticketmaster.com/products-and-docs/apis/getting-started/\n  - https://developer.ticketmaster.com/support/faq/\n  - https://focus.finops.org/focus-specification/v1-3/\nnotes: Ticketmaster's developer APIs are not directly billed. FinOps focus is on quota consumption against\n  the 5K/day limit and the partner-feed entitlement, not invoice cost.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n\
-  \  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Ticketmaster L.L.C.\nserviceCategory: Events & Ticketing Data\nbillingModel:\n  pricingCategory: Free / Approval-Gated\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Ticketmaster Discovery API\n  ServiceCategory: Events & Ticketing Data\n  ProviderName: Ticketmaster\n  PublisherName: Ticketmaster L.L.C.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: discovery_api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_key\n      - endpoint\n  - name: commerce_api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_key\n      - endpoint\n  - name: discovery_feed_consumption\n    unit: feed-pull\n    aggregation: sum\n    dimensions:\n      - partner_account\nprinciples:\n  - name: Visibility\n    description: Track per-key\
-  \ consumption against the 5,000/day Discovery quota using the Rate-Limit,\n      Rate-Limit-Available, and Rate-Limit-Reset response headers.\n  - name: Allocation\n    description: Issue distinct API keys per consuming application or environment so quota burn can be\n      attributed to a specific product team.\n  - name: Optimization\n    description: Cache event and venue lookups, prefer the Discovery Feed for high-volume needs, and\n      batch attraction queries to stay under the 5 rps throughput ceiling.\n  - name: Accountability\n    description: Designate a partner-relations owner responsible for the Ticketmaster developer account,\n      quota-increase requests, and compliance with branding and ToS.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Ticketmaster\nproviderId: ticketmaster\npublisherName: Ticketmaster\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Commerce\n  - Concerts\n  - Entertainment\n  - Events\n  - Sports\n  - Tickets\n  - Venues\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Ticketmaster API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
+  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
+  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Ticketmaster\n  ServiceCategory: Developer Tools / API\n  ProviderName: Ticketmaster\n  PublisherName: Ticketmaster\n  InvoiceIssuerName: Ticketmaster\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API\
+  \ responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Ticketmaster Discovery API\n    baseURL: https://app.ticketmaster.com/discovery/v2\n    tags:\n      - Attractions\n      - Classifications\n      - Events\n      - Search\n      - Venues\n    serviceName: Ticketmaster Discovery API\n    serviceCategory: API\n  - name: Ticketmaster Commerce API\n    baseURL: https://app.ticketmaster.com/commerce/v2\n    tags:\n      - Commerce\n      - Inventory\n      - Orders\n      - Tickets\n    serviceName: Ticketmaster Commerce API\n    serviceCategory: API\n  - name: Ticketmaster Partner API\n    baseURL: https://app.ticketmaster.com/partners/v1\n    tags:\n      - Commerce\n      - Partner\n      - Reservations\n\
+  \      - Tickets\n    serviceName: Ticketmaster Partner API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/ticketmaster/refs/heads/main/finops/ticketmaster-finops.yml
-sources:
-- https://developer.ticketmaster.com/products-and-docs/apis/getting-started/
-- https://developer.ticketmaster.com/support/faq/
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
+- Commerce
+- Concerts
+- Entertainment
 - Events
+- Sports
 - Tickets
+- Venues
 - FinOps
+- Cost Management
 - FOCUS
 ---

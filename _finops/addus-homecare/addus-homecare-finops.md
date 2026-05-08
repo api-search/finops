@@ -7,38 +7,74 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Not Applicable
-  chargeCategories: []
-  pricingCategory: Not Applicable (Healthcare Services Provider)
-description: FOCUS-aligned FinOps scaffold for Addus HomeCare. Addus is a clinical services company; there is no commercial API line item to allocate. FinOps relevance is internal — to Addus's own IT, EVV, scheduling, and clearinghouse spend rather than an external billable surface.
+  billingFrequency: Monthly
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Addus HomeCare API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Addus HealthCare, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Addus HomeCare
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Addus HomeCare
-  PublisherName: Addus HealthCare, Inc.
-  ServiceCategory: Home Care / Hospice / Home Health Services
+  PublisherName: Addus HomeCare
+  ServiceCategory: Developer Tools / API
   ServiceName: Addus HomeCare
 layout: finops
-meters: []
+meters:
+- aggregation: sum
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Addus Homecare Finops
 provider_name: Addus HomeCare
 provider_slug: addus-homecare
-publisher_name: Addus HealthCare, Inc.
-service_category: Home Care / Hospice / Home Health Services
+publisher_name: Addus HomeCare
+service_category: API
 slug: addus-homecare-finops
 source_filename: addus-homecare-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.addus.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Addus HomeCare\nproviderId: addus-homecare\npublisherName: Addus HealthCare, Inc.\nserviceCategory: Home Care / Hospice / Home Health Services\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Home Care\n  - Healthcare Services\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps scaffold for Addus HomeCare. Addus is a clinical services company;\n  there is no commercial API line item to allocate. FinOps relevance is internal — to Addus's own IT,\n  EVV, scheduling, and clearinghouse spend rather than an external billable surface.\nsources:\n  - https://www.addus.com\nnotes: No commercial API invoice exists. Reconciled\
-  \ flag is false because there is no provider invoice\n  to map to FOCUS columns.\nbillingModel:\n  pricingCategory: Not Applicable (Healthcare Services Provider)\n  billingFrequency: Not Applicable\n  billingCurrency: USD\n  chargeCategories: []\nfocusColumns:\n  ServiceName: Addus HomeCare\n  ServiceCategory: Home Care / Hospice / Home Health Services\n  ProviderName: Addus HomeCare\n  PublisherName: Addus HealthCare, Inc.\n  InvoiceIssuerName: Addus HealthCare, Inc.\n  BillingCurrency: USD\nmeters: []\nprinciples:\n  - name: Visibility\n    description: There is no Addus API invoice. Visibility applies to internal IT spend on EVV (Electronic\n      Visit Verification), scheduling, payer EDI, and clearinghouse fees that support clinical operations.\n  - name: Allocation\n    description: Allocate IT and integration cost to branch / region and service line (personal care,\n      hospice, home health) rather than to API call volume.\n  - name: Optimization\n    description: Optimization\
-  \ is operational — caregiver utilization, EVV compliance, payer-mix, and\n      consolidation of integration vendors — not API-level optimization.\n  - name: Accountability\n    description: Branch and regional operations leadership own field-cost lines; the corporate revenue-cycle\n      and IT teams own the integration and clearinghouse cost lines. There is no external API consumer\n      accountable for spend.\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Addus HomeCare\nproviderId: addus-homecare\npublisherName: Addus HomeCare\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Home Care\n  - Healthcare Services\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Addus HomeCare API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Addus HomeCare\n  ServiceCategory: Developer Tools / API\n  ProviderName: Addus HomeCare\n  PublisherName: Addus HomeCare\n  InvoiceIssuerName: Addus HomeCare\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
+  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Addus HomeCare API\n    baseURL: https://api.addus.com\n    tags:\n      - Home Care\n      - Healthcare Services\n    serviceName: Addus HomeCare API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/addus-homecare/refs/heads/main/finops/addus-homecare-finops.yml
-sources:
-- https://www.addus.com
+sources: []
 specification: FinOps Framework
 tags:
 - Home Care
 - Healthcare Services
 - FinOps
+- Cost Management
 - FOCUS
 ---

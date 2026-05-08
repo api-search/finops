@@ -20,46 +20,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/sabre/refs/heads/main/openapi/sabre-hotels-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Contract
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Enterprise GDS Contract / Contact Sales
-description: 'FOCUS-aligned FinOps placeholder for Sabre: GDS / NDC API access is sold under enterprise contracts with no public unit pricing or invoice schema. Meters and FOCUS columns reflect a contracted-spend posture rather than usage-based billing.'
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Sabre API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Sabre GLBL Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Sabre
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Sabre
-  PublisherName: Sabre GLBL Inc.
-  ServiceCategory: Travel / GDS
+  PublisherName: Sabre
+  ServiceCategory: Developer Tools / API
   ServiceName: Sabre
 layout: finops
 meters:
 - aggregation: sum
-  name: contracted_segments
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  name: shopping_calls
-  unit: varies
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Sabre Finops
 provider_name: Sabre
 provider_slug: sabre
-publisher_name: Sabre GLBL Inc.
-service_category: Travel / GDS
+publisher_name: Sabre
+service_category: API
 slug: sabre-finops
 source_filename: sabre-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.sabre.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Sabre\nproviderId: sabre\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Travel\n  - GDS\n  - B2B\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps placeholder for Sabre: GDS / NDC API access is sold under enterprise\n  contracts with no public unit pricing or invoice schema. Meters and FOCUS columns reflect a contracted-spend\n  posture rather than usage-based billing.'\nsources:\n  - https://developer.sabre.com/\nnotes: Sabre publishes no public per-call prices, plan tiers, billing meters, or FOCUS-friendly invoice\n  mappings. This file is a Contact-Sales placeholder.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Sabre GLBL Inc.\nserviceCategory:\
-  \ Travel / GDS\nbillingModel:\n  pricingCategory: Enterprise GDS Contract / Contact Sales\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Sabre\n  ServiceCategory: Travel / GDS\n  ProviderName: Sabre\n  PublisherName: Sabre GLBL Inc.\n  InvoiceIssuerName: Sabre GLBL Inc.\n  BillingCurrency: USD\nmeters:\n  - name: contracted_segments\n    unit: varies\n    aggregation: sum\n  - name: shopping_calls\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Visibility comes from Sabre's contracted reporting (segment / booking statements, PCC\n      activity reports). Combine those with internal app-side telemetry to attribute API consumption.\n  - name: Allocation\n    description: Allocate by PCC, agency branch, line of business, or product (air / hotel / car), aligned\n      to the Sabre contract's billing dimensions.\n  - name: Optimization\n    description: Optimize shopping-to-booking\
-  \ conversion, cache low-volatility content where contractually\n      permitted, and consolidate PCCs where billing dimensions align to reduce contracted minimums.\n  - name: Accountability\n    description: Operations and procurement jointly own the Sabre contract; reconcile segment / booking\n      meters against monthly statements and review at contract renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sabre\nproviderId: sabre\npublisherName: Sabre\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Travel\n  - GDS\n  - Airlines\n  - Hotels\n  - Car Rental\n  - Booking\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sabre API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sabre\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sabre\n  PublisherName: Sabre\n  InvoiceIssuerName: Sabre\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n  \
+  \    - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Sabre Bargain Finder Max API\n    baseURL: ''\n    tags:\n      - Travel\n      - Airlines\n      - GDS\n      - Air Shopping\n      - REST\n    serviceName: Sabre Bargain Finder Max API\n    serviceCategory: API\n  - name: Sabre Air Booking API\n    baseURL: ''\n    tags:\n      - Travel\n      - Airlines\n      - GDS\n      - Booking\n      - PNR\n      - REST\n    serviceName: Sabre Air Booking API\n    serviceCategory: API\n  - name: Sabre Hotels API\n    baseURL: ''\n    tags:\n      - Travel\n      - Hotels\n      - GDS\n      - Booking\n      - REST\n    serviceName: Sabre Hotels API\n    serviceCategory: API\n  - name: Sabre Cars API\n    baseURL: ''\n    tags:\n      - Travel\n      - Car Rental\n      - GDS\n      - Booking\n\
+  \      - REST\n    serviceName: Sabre Cars API\n    serviceCategory: API\n  - name: Sabre Destination Content API\n    baseURL: ''\n    tags:\n      - Travel\n      - Destination\n      - Content\n      - REST\n    serviceName: Sabre Destination Content API\n    serviceCategory: API\n  - name: Sabre Booking Management API\n    baseURL: ''\n    tags:\n      - Travel\n      - Booking\n      - GDS\n      - REST\n    serviceName: Sabre Booking Management API\n    serviceCategory: API\n  - name: Sabre Rail API\n    baseURL: ''\n    tags:\n      - Travel\n      - Rail\n      - GDS\n      - Booking\n    serviceName: Sabre Rail API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sabre/refs/heads/main/finops/sabre-finops.yml
-sources:
-- https://developer.sabre.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Travel
 - GDS
-- B2B
+- Airlines
+- Hotels
+- Car Rental
+- Booking
 - FinOps
+- Cost Management
 - FOCUS
 ---

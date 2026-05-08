@@ -38,76 +38,84 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/checkpoint/refs/heads/main/openapi/checkpoint-harmony-email-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription
-description: 'FOCUS-aligned FinOps for Check Point: enterprise license + subscription model where API access is bundled into the underlying product license. Spend is tracked as discrete contractual line items (term subscriptions, support, professional services) rather than per-API-request usage.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Check Point API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Check Point Software Technologies Ltd.
-  PricingCategory: Subscription
+  ChargeCategory: Usage
+  InvoiceIssuerName: Check Point
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Check Point
-  PublisherName: Check Point Software Technologies Ltd.
-  ServiceCategory: Security
+  PublisherName: Check Point
+  ServiceCategory: Developer Tools / API
   ServiceName: Check Point
 layout: finops
 meters:
 - aggregation: sum
-  description: Per-product term subscription line (Quantum, CloudGuard, Harmony, Infinity, Spark)
+  description: Count of billable API requests
   dimensions:
-  - product
-  - sku
-  - region
-  name: product_subscription
-  unit: month
-- aggregation: max
-  description: Throughput tier (Mbps / Gbps) attached to a Quantum gateway license
-  dimensions:
-  - gateway
-  - blade_set
-  name: gateway_throughput
-  unit: Mbps
-- aggregation: sum
-  description: Endpoints, mailboxes, cloud assets, or users covered under Harmony / CloudGuard subscriptions
-  dimensions:
-  - product
-  - environment
-  name: protected_assets
-  unit: asset
-- aggregation: sum
-  description: Premium / Diamond / Elite support contract line
-  dimensions:
+  - api
+  - endpoint
   - tier
-  name: support_subscription
-  unit: month
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Checkpoint Finops
 provider_name: Check Point
 provider_slug: checkpoint
-publisher_name: Check Point Software Technologies Ltd.
-service_category: Security
+publisher_name: Check Point
+service_category: API
 slug: checkpoint-finops
 source_filename: checkpoint-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.checkpoint.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Check Point\nproviderId: checkpoint\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Cloud Security\n  - Cybersecurity\n  - Network Security\n  - Security\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Check Point: enterprise license + subscription model where API\n  access is bundled into the underlying product license. Spend is tracked as discrete contractual line\n  items (term subscriptions, support, professional services) rather than per-API-request usage.'\nnotes: Check Point does not expose a metered usage API for billing. FinOps shape below reflects the\n  channel-quoted enterprise license model.\nsources:\n  - https://www.checkpoint.com/\n  - https://www.checkpoint.com/products/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
-  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Check Point Software Technologies Ltd.\nserviceCategory: Security\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Check Point\n  ServiceCategory: Security\n  ProviderName: Check Point\n  PublisherName: Check Point Software Technologies Ltd.\n  InvoiceIssuerName: Check Point Software Technologies Ltd.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingCategory: Subscription\nmeters:\n  - name: product_subscription\n    description: Per-product term subscription line (Quantum, CloudGuard, Harmony, Infinity, Spark)\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\n      - sku\n      - region\n  - name: gateway_throughput\n    description: Throughput tier (Mbps / Gbps) attached to a Quantum gateway license\n\
-  \    unit: Mbps\n    aggregation: max\n    dimensions:\n      - gateway\n      - blade_set\n  - name: protected_assets\n    description: Endpoints, mailboxes, cloud assets, or users covered under Harmony / CloudGuard\n      subscriptions\n    unit: asset\n    aggregation: sum\n    dimensions:\n      - product\n      - environment\n  - name: support_subscription\n    description: Premium / Diamond / Elite support contract line\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\nprinciples:\n  - name: Visibility\n    description: Track Check Point spend through Infinity Portal license inventory and the Check Point\n      User Center; reconcile against partner invoices for term renewals.\n  - name: Allocation\n    description: Tag licenses by gateway, business unit, and environment in the Infinity Portal so\n      cyber-security spend can be charged back to consuming organizations.\n  - name: Optimization\n    description: Right-size gateways before renewal, consolidate\
-  \ blades into Infinity bundles where\n      eligible, and align license terms (1Y vs 3Y) with refresh cycles to capture multi-year discounts.\n  - name: Accountability\n    description: Security architecture owns license posture; finance owns renewal calendar; SOC owns\n      consumption telemetry and ensures unused entitlements are surfaced before renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Check Point\nproviderId: checkpoint\npublisherName: Check Point\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud Security\n  - Cybersecurity\n  - Endpoint Security\n  - Firewall\n  - Identity Awareness\n  - Mobile Security\n  - Network Security\n  - Security\n  - Threat Prevention\n  - WAF\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Check Point API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and\
+  \ finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud\
+  \ Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Check Point\n  ServiceCategory: Developer Tools / API\n  ProviderName: Check Point\n  PublisherName: Check Point\n  InvoiceIssuerName: Check Point\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n\
+  \  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Check Point Management API\n    baseURL: https://management.example.com/web_api\n    tags:\n      - Firewall\n      - Management\n      - Network Security\n    serviceName: Check Point Management API\n    serviceCategory: API\n  - name: Check Point Gaia API\n    baseURL: https://gateway.example.com/gaia_api\n    tags:\n      - Gaia\n      - Operating System\n    serviceName: Check Point Gaia API\n    serviceCategory: API\n  - name: Check Point CloudGuard API\n    baseURL: https://api.dome9.com/v2\n    tags:\n      - Cloud Security\n      - Compliance\n      - Posture Management\n\
+  \    serviceName: Check Point CloudGuard API\n    serviceCategory: API\n  - name: Check Point Identity Awareness API\n    baseURL: https://gateway.example.com/_IA_MU_Agent\n    tags:\n      - Identity\n      - Network Security\n    serviceName: Check Point Identity Awareness API\n    serviceCategory: API\n  - name: Check Point Spark Management API\n    baseURL: ''\n    tags:\n      - SMB\n      - Spark\n    serviceName: Check Point Spark Management API\n    serviceCategory: API\n  - name: Check Point Zero Touch API\n    baseURL: ''\n    tags:\n      - Deployment\n      - Zero Touch\n    serviceName: Check Point Zero Touch API\n    serviceCategory: API\n  - name: Check Point Harmony Email API\n    baseURL: https://smart-api.avanan.net/v2.0\n    tags:\n      - Email Security\n      - Harmony\n    serviceName: Check Point Harmony Email API\n    serviceCategory: API\n  - name: Check Point Threat Hunting API\n    baseURL: ''\n    tags:\n      - Threat Hunting\n      - Threat Intelligence\n\
+  \    serviceName: Check Point Threat Hunting API\n    serviceCategory: API\n  - name: Check Point CloudGuard WAF API\n    baseURL: ''\n    tags:\n      - WAF\n      - Web Security\n    serviceName: Check Point CloudGuard WAF API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/checkpoint/refs/heads/main/finops/checkpoint-finops.yml
-sources:
-- https://www.checkpoint.com/
-- https://www.checkpoint.com/products/
+sources: []
 specification: FinOps Framework
 tags:
 - Cloud Security
 - Cybersecurity
+- Endpoint Security
+- Firewall
+- Identity Awareness
+- Mobile Security
 - Network Security
 - Security
+- Threat Prevention
+- WAF
 - FinOps
+- Cost Management
 - FOCUS
 ---

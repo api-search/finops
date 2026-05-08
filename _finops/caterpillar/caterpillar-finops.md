@@ -9,65 +9,78 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription (Cat Connect / VisionLink Bundled)
-description: FOCUS-aligned FinOps scaffold for Caterpillar's Cat Digital Marketplace APIs. The dominant invoice line is the customer's Cat Connect / VisionLink subscription sold through the Cat Dealer network; API access is bundled within that. Meters track per-asset and per-API consumption to support internal allocation.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Caterpillar API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Caterpillar Cat Dealer
+  ChargeCategory: Usage
+  InvoiceIssuerName: Caterpillar
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Caterpillar
-  PublisherName: Caterpillar Inc.
-  ServiceCategory: Equipment Telematics
-  ServiceName: Cat Digital Marketplace API
+  PublisherName: Caterpillar
+  ServiceCategory: Developer Tools / API
+  ServiceName: Caterpillar
 layout: finops
 meters:
-- aggregation: count
-  dimensions:
-  - product_family
-  - subscription_class
-  name: connected_assets
-  unit: asset
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - api_product
-  - subscription
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - api_product
-  - asset
-  name: telematics_records_delivered
-  unit: record
-- aggregation: count
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - subscription_class
-  name: subscription_seats
-  unit: seat
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Caterpillar Finops
 provider_name: Caterpillar
 provider_slug: caterpillar
-publisher_name: Caterpillar Inc.
-service_category: Equipment Telematics + Fleet Data
+publisher_name: Caterpillar
+service_category: API
 slug: caterpillar-finops
 source_filename: caterpillar-finops.yml
 source_heading: FinOps Profile
-source_url: https://digital.cat.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Caterpillar\nproviderId: caterpillar\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Telematics\n  - Heavy Equipment\n  - Manufacturing\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps scaffold for Caterpillar''s Cat Digital Marketplace APIs. The dominant\n  invoice line is the customer''s Cat Connect / VisionLink subscription sold through the Cat Dealer\n  network; API access is bundled within that. Meters track per-asset and per-API consumption to support\n  internal allocation.'\nnotes: Most spend comes from the upstream Cat Connect / VisionLink subscription; API consumption is bundled.\n  Per-call invoicing not externally surfaced.\nsources:\n  - https://digital.cat.com/\n  - https://digital.cat.com/api-catalog-overview\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n\
-  \  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Caterpillar Inc.\nserviceCategory: Equipment Telematics + Fleet Data\nbillingModel:\n  pricingCategory: Subscription (Cat Connect / VisionLink Bundled)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: Cat Digital Marketplace API\n  ServiceCategory: Equipment Telematics\n  ProviderName: Caterpillar\n  PublisherName: Caterpillar Inc.\n  InvoiceIssuerName: Caterpillar Cat Dealer\n  BillingCurrency: USD\nmeters:\n  - name: connected_assets\n    unit: asset\n    aggregation: count\n    dimensions:\n      - product_family\n      - subscription_class\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_product\n      - subscription\n  - name: telematics_records_delivered\n    unit: record\n    aggregation: sum\n    dimensions:\n\
-  \      - api_product\n      - asset\n  - name: subscription_seats\n    unit: seat\n    aggregation: count\n    dimensions:\n      - subscription_class\nprinciples:\n  - name: Visibility\n    description: Combine Cat Digital portal usage reports with the Cat Connect / VisionLink customer dashboard\n      to see assets, subscription class, and API call volume in one view.\n  - name: Allocation\n    description: Allocate Cat Connect subscription cost to the operating unit / fleet that owns the assets;\n      attribute API integration cost to the consuming product team via subscription tag.\n  - name: Optimization\n    description: Right-size subscription class per asset (Essentials vs. Advanced); avoid polling APIs\n      faster than VisionLink's data-refresh cadence; consolidate dealer accounts to reach volume tiers.\n  - name: Accountability\n    description: Fleet manager owns the Cat Connect subscription cost; integration platform owner reconciles\n      API consumption against the negotiated\
-  \ entitlement.\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Caterpillar\nproviderId: caterpillar\npublisherName: Caterpillar\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Construction\n  - Engines\n  - Fortune 500\n  - Heavy Equipment\n  - Locomotives\n  - Manufacturing\n  - Mining\n  - Telematics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Caterpillar API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Caterpillar\n  ServiceCategory: Developer Tools / API\n  ProviderName: Caterpillar\n  PublisherName: Caterpillar\n  InvoiceIssuerName: Caterpillar\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over\
+  \ the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Cat Digital Marketplace API\n    baseURL: ''\n    tags:\n      - Assets\n      - Construction\n      - Heavy Equipment\n      - Telematics\n      - VisionLink\n    serviceName: Cat Digital Marketplace API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/caterpillar/refs/heads/main/finops/caterpillar-finops.yml
-sources:
-- https://digital.cat.com/
-- https://digital.cat.com/api-catalog-overview
+sources: []
 specification: FinOps Framework
 tags:
-- Telematics
+- Construction
+- Engines
+- Fortune 500
 - Heavy Equipment
+- Locomotives
 - Manufacturing
+- Mining
+- Telematics
 - FinOps
+- Cost Management
 - FOCUS
 ---

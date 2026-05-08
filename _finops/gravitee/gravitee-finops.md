@@ -22,72 +22,75 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  - Adjustment
+  - Tax
   - Credit
-  pricingCategory: Tiered Subscription
-description: 'FOCUS-aligned FinOps for Gravitee: flat-rate monthly subscription per platform tier (with included gateways, brokers, and unlimited API calls / events) plus optional add-on packages. Cost grows with platform tier and add-ons, not with per-call traffic.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Gravitee API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Gravitee.io, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Gravitee
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Gravitee
-  PublisherName: Gravitee.io, Inc.
-  ServiceCategory: API Management
+  PublisherName: Gravitee
+  ServiceCategory: Developer Tools / API
   ServiceName: Gravitee
 layout: finops
 meters:
 - aggregation: sum
-  description: Monthly Gravitee platform subscription fee per tier
+  description: Count of billable API requests
   dimensions:
-  - product
+  - api
+  - endpoint
   - tier
-  name: platform_subscription
-  unit: month
-- aggregation: max
-  description: Production gateway count consumed per subscription
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - product
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
   - tier
-  name: production_gateways
-  unit: gateway
-- aggregation: max
-  description: Third-party federated event brokers consumed (Event Management tiers)
-  dimensions:
-  - tier
-  name: federated_brokers
-  unit: broker
-- aggregation: max
-  description: Optional Agent Management / Enterprise Auth add-on packages
-  dimensions:
-  - addon_name
-  name: addon_packages
-  unit: package
-- aggregation: max
-  description: APIs managed in the platform (operational metric — unlimited per subscription)
-  name: managed_apis
-  unit: api
+  name: compute_seconds
+  unit: second
 name: Gravitee Finops
 provider_name: Gravitee
 provider_slug: gravitee
-publisher_name: Gravitee.io, Inc.
-service_category: API Management
+publisher_name: Gravitee
+service_category: API
 slug: gravitee-finops
 source_filename: gravitee-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.gravitee.io/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Gravitee\nproviderId: gravitee\npublisherName: Gravitee.io, Inc.\nserviceCategory: API Management\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - API Management\n  - API Gateway\n  - Event Streaming\ndescription: 'FOCUS-aligned FinOps for Gravitee: flat-rate monthly subscription per platform tier\n  (with included gateways, brokers, and unlimited API calls / events) plus optional add-on packages.\n  Cost grows with platform tier and add-ons, not with per-call traffic.'\nsources:\n  - https://www.gravitee.io/pricing\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n\
-  \  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Gravitee\n  ServiceCategory: API Management\n  ProviderName: Gravitee\n  PublisherName: Gravitee.io, Inc.\n  InvoiceIssuerName: Gravitee.io, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: platform_subscription\n    description: Monthly Gravitee platform subscription fee per tier\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\n      - tier\n  - name: production_gateways\n    description: Production gateway count consumed per subscription\n    unit: gateway\n    aggregation: max\n    dimensions:\n      - product\n      - tier\n  - name: federated_brokers\n    description: Third-party federated event brokers consumed (Event Management tiers)\n    unit: broker\n    aggregation: max\n    dimensions:\n      - tier\n  - name: addon_packages\n    description: Optional Agent Management / Enterprise Auth add-on packages\n\
-  \    unit: package\n    aggregation: max\n    dimensions:\n      - addon_name\n  - name: managed_apis\n    description: APIs managed in the platform (operational metric — unlimited per subscription)\n    unit: api\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Use Gravitee's Analytics / Monitoring views and the Management API to track gateway\n      utilization, API call volume, and consumer growth even though calls are not directly billed.\n  - name: Allocation\n    description: Map Gravitee environments / organizations to consuming business units; allocate the\n      flat subscription fee proportionally based on managed-API count or gateway-traffic share.\n  - name: Optimization\n    description: Right-size the subscription tier (Planet vs Galaxy vs Universe) to gateway and\n      broker need; consolidate dev / test environments into a single non-prod tier; defer\n      Agent / Enterprise Auth add-ons until adoption justifies them.\n  - name: Accountability\n\
-  \    description: Designate a platform owner for the Gravitee contract and review tier-fit annually\n      against actual gateway / broker usage and feature consumption.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Gravitee\nproviderId: gravitee\npublisherName: Gravitee\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Gateway\n  - API Management\n  - GraphQL\n  - Open Source\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Gravitee API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Gravitee\n  ServiceCategory: Developer Tools / API\n  ProviderName: Gravitee\n  PublisherName: Gravitee\n  InvoiceIssuerName: Gravitee\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n   \
+  \   - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Gravitee API Management\n    baseURL: ''\n    tags:\n      - API Gateway\n      - API Management\n    serviceName: Gravitee API Management\n    serviceCategory: API\n  - name: Gravitee Management API\n    baseURL: https://www.gravitee.io/\n    tags:\n      - Administration\n      - Configuration\n      - Management\n      - REST API\n    serviceName: Gravitee Management API\n    serviceCategory: API\n  - name: Gravitee Access Management API\n    baseURL: https://www.gravitee.io/\n    tags:\n      - Access Management\n      - Identity\n      - OAuth2\n      - REST API\n    serviceName: Gravitee Access Management API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests\
+  \ / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/gravitee/refs/heads/main/finops/gravitee-finops.yml
-sources:
-- https://www.gravitee.io/pricing
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- API Management
 - API Gateway
-- Event Streaming
+- API Management
+- GraphQL
+- Open Source
+- FinOps
+- Cost Management
+- FOCUS
 ---

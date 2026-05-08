@@ -29,88 +29,75 @@ billing_model:
   billingFrequency: Monthly
   chargeCategories:
   - Usage
+  - Purchase
   - Tax
-  - Adjustment
-  - Refund
   - Credit
-  pricingCategory: Pay-As-You-Go
-description: 'FOCUS-aligned FinOps for AWS API Gateway: pay-as-you-go per-million-call pricing per API type, plus data transfer out, optional cache hours, optional portal subscription, and a 12-month free tier. Cost is driven by call volume and the chosen API type (HTTP cheaper than REST).'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Amazon API Gateway API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Amazon Web Services, Inc.
-  ProviderName: AWS
-  PublisherName: Amazon Web Services, Inc.
-  RegionId: varies
-  ServiceCategory: API Management
+  ChargeCategory: Usage
+  InvoiceIssuerName: Amazon API Gateway
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Amazon API Gateway
+  PublisherName: Amazon API Gateway
+  ServiceCategory: Developer Tools / API
   ServiceName: Amazon API Gateway
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
+  - endpoint
+  - tier
   - region
-  - api_id
-  - stage
-  name: rest_api_calls
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
+  - api
   - region
-  - api_id
-  - stage
-  name: http_api_calls
-  unit: request
-- aggregation: sum
-  dimensions:
-  - region
-  - api_id
-  name: websocket_messages
-  unit: message
-- aggregation: sum
-  dimensions:
-  - region
-  - api_id
-  name: websocket_connection_minutes
-  unit: minute
-- aggregation: sum
-  dimensions:
-  - region
-  name: data_transfer_out
+  - consumer
+  name: data_egress
   unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - region
-  - cache_size
-  name: cache_hours
-  unit: hour
-- aggregation: sum
-  dimensions:
-  - portal_id
-  name: portal_subscription
-  unit: month
-- aggregation: sum
-  name: portal_product_addon
-  unit: product-month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Aws Api Gateway Finops
 provider_name: Amazon API Gateway
 provider_slug: aws-api-gateway
-publisher_name: Amazon Web Services, Inc.
-service_category: API Management / Serverless
+publisher_name: Amazon API Gateway
+service_category: API
 slug: aws-api-gateway-finops
 source_filename: aws-api-gateway-finops.yml
 source_heading: FinOps Profile
-source_url: https://aws.amazon.com/api-gateway/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: AWS API Gateway\nproviderId: aws-api-gateway\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - API Management\n  - Serverless\n  - AWS\ndescription: 'FOCUS-aligned FinOps for AWS API Gateway: pay-as-you-go per-million-call pricing per\n  API type, plus data transfer out, optional cache hours, optional portal subscription, and a\n  12-month free tier. Cost is driven by call volume and the chosen API type (HTTP cheaper than REST).'\nsources:\n  - https://aws.amazon.com/api-gateway/pricing/\n  - https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Amazon Web Services,\
-  \ Inc.\nserviceCategory: API Management / Serverless\nbillingModel:\n  pricingCategory: Pay-As-You-Go\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Tax\n    - Adjustment\n    - Refund\n    - Credit\nfocusColumns:\n  ServiceName: Amazon API Gateway\n  ServiceCategory: API Management\n  ProviderName: AWS\n  PublisherName: Amazon Web Services, Inc.\n  InvoiceIssuerName: Amazon Web Services, Inc.\n  BillingCurrency: USD\n  RegionId: varies\nmeters:\n  - name: rest_api_calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - region\n      - api_id\n      - stage\n  - name: http_api_calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - region\n      - api_id\n      - stage\n  - name: websocket_messages\n    unit: message\n    aggregation: sum\n    dimensions:\n      - region\n      - api_id\n  - name: websocket_connection_minutes\n    unit: minute\n    aggregation: sum\n    dimensions:\n      - region\n      -\
-  \ api_id\n  - name: data_transfer_out\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - region\n  - name: cache_hours\n    unit: hour\n    aggregation: sum\n    dimensions:\n      - region\n      - cache_size\n  - name: portal_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - portal_id\n  - name: portal_product_addon\n    unit: product-month\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Use CloudWatch Metrics (Count, IntegrationLatency, 4XXError, 5XXError, CacheHitCount)\n      per APIName + Stage; the Cost Explorer \"Amazon API Gateway\" service shows usage-type breakdown.\n      Tag stages with cost allocation tags for FOCUS-aligned reporting.\n  - name: Allocation\n    description: Tag REST API stages and HTTP APIs with team / product / environment cost allocation\n      tags; Cost & Usage Reports map UsageType (e.g. ApiGatewayRequest, ApiGatewayHttpApiRequest)\n      to FOCUS ServiceSubcategory.\n  - name: Optimization\n\
-  \    description: Migrate suitable workloads from REST API ($3.50/M) to HTTP API ($1.00/M) for ~70%\n      savings; turn off caching where hit rate is low; right-size cache to the smallest tier that\n      yields useful hit rate; avoid edge-optimized for in-region traffic.\n  - name: Accountability\n    description: Platform team typically owns API Gateway; product teams own per-API cost via tags and\n      usage-plan-bound API keys for chargeback.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Amazon API Gateway\nproviderId: aws-api-gateway\npublisherName: Amazon API Gateway\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Gateway\n  - AWS\n  - Cloud\n  - REST\n  - WebSocket\n  - Serverless\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Amazon API Gateway API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
+  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Amazon API Gateway\n  ServiceCategory: Developer Tools / API\n  ProviderName: Amazon API Gateway\n  PublisherName: Amazon API Gateway\n  InvoiceIssuerName: Amazon API Gateway\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned\
+  \ over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Amazon API Gateway V1 (REST)\n    baseURL: https://apigateway.{region}.amazonaws.com\n    tags:\n      - API Gateway\n      - AWS\n      - REST\n    serviceName: Amazon API Gateway V1 (REST)\n    serviceCategory: API\n  - name: Amazon API Gateway V2 (HTTP and WebSocket)\n    baseURL: https://apigateway.{region}.amazonaws.com\n    tags:\n      - API Gateway\n      - AWS\n      - HTTP\n      - WebSocket\n    serviceName: Amazon API Gateway V2 (HTTP and WebSocket)\n    serviceCategory: API\n  - name: Amazon API Gateway Management API\n    baseURL: https://{api-id}.execute-api.{region}.amazonaws.com/{stage}\n    tags:\n      - API Gateway\n\
+  \      - AWS\n      - Callback\n      - WebSocket\n    serviceName: Amazon API Gateway Management API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/aws-api-gateway/refs/heads/main/finops/aws-api-gateway-finops.yml
-sources:
-- https://aws.amazon.com/api-gateway/pricing/
-- https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- API Management
+- API Gateway
+- Cloud
+- REST
+- WebSocket
 - Serverless
+- FinOps
+- Cost Management
+- FOCUS
 ---

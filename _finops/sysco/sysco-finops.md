@@ -14,42 +14,77 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/sysco/refs/heads/main/openapi/sysco-food-distribution-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Custom / Contact Sales
-description: FinOps placeholder for Sysco. No public API billing surface; consumption costs are reflected on customer invoices for goods and services rather than as metered API line items.
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Sysco API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Sysco Corporation
+  ChargeCategory: Usage
+  InvoiceIssuerName: Sysco
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Sysco
-  PublisherName: Sysco Corporation
-  ServiceCategory: Foodservice Distribution
+  PublisherName: Sysco
+  ServiceCategory: Developer Tools / API
   ServiceName: Sysco
 layout: finops
 meters:
 - aggregation: sum
-  name: custom_engagement
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Sysco Finops
 provider_name: Sysco
 provider_slug: sysco
-publisher_name: Sysco Corporation
-service_category: Foodservice Distribution
+publisher_name: Sysco
+service_category: API
 slug: sysco-finops
 source_filename: sysco-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.sysco.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sysco\nproviderId: sysco\npublisherName: Sysco Corporation\nserviceCategory: Foodservice Distribution\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Foodservice\n  - Distribution\n  - FinOps\n  - FOCUS\ndescription: FinOps placeholder for Sysco. No public API billing surface; consumption costs are\n  reflected on customer invoices for goods and services rather than as metered API line items.\nsources:\n  - https://www.sysco.com/\nnotes: No public billing telemetry surface documented for API consumption. Meter list collapsed\n  to custom-engagement pending direct provider confirmation.\nbillingModel:\n  pricingCategory:\
-  \ Custom / Contact Sales\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Sysco\n  ServiceCategory: Foodservice Distribution\n  ProviderName: Sysco\n  PublisherName: Sysco Corporation\n  InvoiceIssuerName: Sysco Corporation\n  BillingCurrency: USD\nmeters:\n  - name: custom_engagement\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Customer order and invoice visibility is delivered through Sysco Shop and the\n      customer's account team, not a public usage API.\n  - name: Allocation\n    description: Cost allocation is performed in the customer's own AP and procurement systems\n      against Sysco invoices.\n  - name: Optimization\n    description: Optimization is addressed through Sysco's account managers, contract pricing,\n      and order-pattern reviews.\n  - name: Accountability\n    description: Spend accountability sits with the customer's procurement or foodservice\
-  \ operations\n      team holding the Sysco account.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sysco\nproviderId: sysco\npublisherName: Sysco\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Food Distribution\n  - Food Service\n  - Supply Chain\n  - Fortune 100\n  - Wholesale\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sysco API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sysco\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sysco\n  PublisherName: Sysco\n  InvoiceIssuerName: Sysco\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n  \
+  \    - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Sysco Food Distribution API\n    baseURL: https://api.sysco.com\n    tags:\n      - Food Distribution\n      - Ordering\n      - Restaurant\n      - Supply Chain\n      - Product Catalog\n      - Delivery Tracking\n    serviceName: Sysco Food Distribution API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sysco/refs/heads/main/finops/sysco-finops.yml
-sources:
-- https://www.sysco.com/
+sources: []
 specification: FinOps Framework
 tags:
-- Foodservice
-- Distribution
+- Food Distribution
+- Food Service
+- Supply Chain
+- Fortune 100
+- Wholesale
 - FinOps
+- Cost Management
 - FOCUS
 ---

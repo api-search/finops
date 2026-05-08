@@ -75,44 +75,74 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Subscription + Credit-Based
-description: FOCUS-aligned FinOps for ElevenLabs.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the elevenlabs API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ProviderName: ElevenLabs
-  PublisherName: ElevenLabs
-  ServiceCategory: Voice AI
-  ServiceName: ElevenLabs
+  ChargeCategory: Usage
+  InvoiceIssuerName: elevenlabs
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: elevenlabs
+  PublisherName: elevenlabs
+  ServiceCategory: Developer Tools / API
+  ServiceName: elevenlabs
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - operation
-  name: credits_used
-  unit: credit
-- aggregation: max
-  name: voice_clones
-  unit: voice
-- aggregation: max
-  name: workspace_seats
-  unit: seat-month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Elevenlabs Finops
 provider_name: elevenlabs
 provider_slug: elevenlabs
-publisher_name: ElevenLabs
-service_category: Voice AI
+publisher_name: elevenlabs
+service_category: API
 slug: elevenlabs-finops
 source_filename: elevenlabs-finops.yml
 source_heading: FinOps Profile
-source_url: https://elevenlabs.io/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: ElevenLabs\nproviderId: elevenlabs\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Voice AI\ndescription: FOCUS-aligned FinOps for ElevenLabs.\nsources:\n  - https://elevenlabs.io/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: ElevenLabs\nserviceCategory: Voice AI\nbillingModel:\n  pricingCategory: Subscription + Credit-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: ElevenLabs\n  ServiceCategory: Voice AI\n  ProviderName: ElevenLabs\n  PublisherName: ElevenLabs\n  BillingCurrency: USD\nmeters:\n  - name: credits_used\n    unit: credit\n    aggregation: sum\n    dimensions:\n\
-  \      - operation\n  - name: voice_clones\n    unit: voice\n    aggregation: max\n  - name: workspace_seats\n    unit: seat-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track ElevenLabs consumption monthly via admin/billing exports.\n  - name: Allocation\n    description: Tag usage to teams or cost centers for chargeback.\n  - name: Optimization\n    description: Right-size models/tiers; use caching and batching.\n  - name: Accountability\n    description: Set hard spend limits; quarterly review.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: elevenlabs\nproviderId: elevenlabs\npublisherName: elevenlabs\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the elevenlabs API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can\
+  \ be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing\
+  \ and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: elevenlabs\n  ServiceCategory: Developer Tools / API\n  ProviderName: elevenlabs\n  PublisherName: elevenlabs\n  InvoiceIssuerName: elevenlabs\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name:\
+  \ compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: ElevenLabs Text to Speech API\n    baseURL: https://api.elevenlabs.io\n    tags:\n      - AI\n      - Audio\n      - Speech Synthesis\n      - Text to Speech\n      - Voice\n    serviceName: ElevenLabs Text to Speech API\n    serviceCategory: API\n  - name: ElevenLabs Speech to Text API\n    baseURL: https://api.elevenlabs.io\n    tags:\n      - AI\n      - Audio\n      - Speech to Text\n      - Transcription\n    serviceName: ElevenLabs Speech to Text API\n    serviceCategory: API\n  - name: ElevenLabs Voice Cloning API\n    baseURL: https://api.elevenlabs.io\n    tags:\n      - AI\n      - Audio\n      - Voice\n      - Voice Cloning\n    serviceName: ElevenLabs Voice Cloning API\n    serviceCategory: API\n  - name: ElevenLabs Voices API\n    baseURL: https://api.elevenlabs.io\n\
+  \    tags:\n      - AI\n      - Voice Library\n      - Voice Management\n      - Voices\n    serviceName: ElevenLabs Voices API\n    serviceCategory: API\n  - name: ElevenLabs Sound Effects API\n    baseURL: https://api.elevenlabs.io\n    tags:\n      - AI\n      - Audio Generation\n      - Sound Effects\n    serviceName: ElevenLabs Sound Effects API\n    serviceCategory: API\n  - name: ElevenLabs Audio Isolation API\n    baseURL: https://api.elevenlabs.io\n    tags:\n      - Audio Isolation\n      - Audio Processing\n      - Noise Removal\n    serviceName: ElevenLabs Audio Isolation API\n    serviceCategory: API\n  - name: ElevenLabs Dubbing API\n    baseURL: https://api.elevenlabs.io\n    tags:\n      - Audio\n      - Dubbing\n      - Localization\n      - Translation\n      - Video\n    serviceName: ElevenLabs Dubbing API\n    serviceCategory: API\n  - name: ElevenLabs Voice Changer API\n    baseURL: https://api.elevenlabs.io\n    tags:\n      - Audio Processing\n      - Voice Changer\n\
+  \      - Voice Conversion\n    serviceName: ElevenLabs Voice Changer API\n    serviceCategory: API\n  - name: ElevenLabs Music Generation API\n    baseURL: https://api.elevenlabs.io\n    tags:\n      - AI\n      - Audio Generation\n      - Music\n    serviceName: ElevenLabs Music Generation API\n    serviceCategory: API\n  - name: ElevenLabs Conversational AI API\n    baseURL: https://api.elevenlabs.io\n    tags:\n      - AI\n      - Conversational AI\n      - Real-Time\n      - Voice Agents\n    serviceName: ElevenLabs Conversational AI API\n    serviceCategory: API\n  - name: ElevenLabs Studio API\n    baseURL: https://api.elevenlabs.io\n    tags:\n      - Content Management\n      - Projects\n      - Studio\n    serviceName: ElevenLabs Studio API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\
+  \ []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/elevenlabs/refs/heads/main/finops/elevenlabs-finops.yml
-sources:
-- https://elevenlabs.io/pricing
+sources: []
 specification: FinOps Framework
 tags:
 - FinOps
+- Cost Management
 - FOCUS
-- Voice AI
 ---

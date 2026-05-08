@@ -6,46 +6,75 @@ aligned_with:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
-  billingCurrency: USD (varies by contract)
-  billingFrequency: Per-Contract
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Contract / Negotiated
-description: 'FOCUS-aligned FinOps shape for SLB (Schlumberger) digital platform APIs: enterprise software licensed via SLB Digital Platform Partner Program / direct sales. Costs are negotiated under the master agreement; no public unit pricing.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the SLB (Schlumberger) API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: SLB (Schlumberger Limited)
+  ChargeCategory: Usage
+  InvoiceIssuerName: SLB (Schlumberger)
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: SLB (Schlumberger)
-  PublisherName: SLB (Schlumberger Limited)
-  ServiceCategory: Energy Services
+  PublisherName: SLB (Schlumberger)
+  ServiceCategory: Developer Tools / API
   ServiceName: SLB (Schlumberger)
 layout: finops
 meters:
 - aggregation: sum
-  name: contracted_consumption
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Schlumberger Finops
 provider_name: SLB (Schlumberger)
 provider_slug: schlumberger
-publisher_name: SLB (Schlumberger Limited)
-service_category: Energy Services
+publisher_name: SLB (Schlumberger)
+service_category: API
 slug: schlumberger-finops
 source_filename: schlumberger-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.slb.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: SLB (Schlumberger)\nproviderId: schlumberger\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n- FinOps\n- FOCUS\n- Energy\n- Enterprise\ndescription: 'FOCUS-aligned FinOps shape for SLB (Schlumberger) digital platform APIs: enterprise software\n  licensed via SLB Digital Platform Partner Program / direct sales. Costs are negotiated under the master\n  agreement; no public unit pricing.'\nnotes: SLB (Schlumberger) is an energy services and software vendor; platform / digital APIs (e.g. DELFI,\n  OSDU-aligned services) are sold via the SLB Digital Platform Partner Program and enterprise sales engagement.\n  There is no public self-service pricing page.\nsources:\n- https://www.slb.com/\n- https://software.slb.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n\
-  \  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: SLB (Schlumberger Limited)\nserviceCategory: Energy Services\nbillingModel:\n  pricingCategory: Contract / Negotiated\n  billingFrequency: Per-Contract\n  billingCurrency: USD (varies by contract)\n  chargeCategories:\n  - Purchase\n  - Usage\n  - Adjustment\nfocusColumns:\n  ServiceName: SLB (Schlumberger)\n  ServiceCategory: Energy Services\n  ProviderName: SLB (Schlumberger)\n  PublisherName: SLB (Schlumberger Limited)\n  InvoiceIssuerName: SLB (Schlumberger Limited)\n  BillingCurrency: USD\nmeters:\n- name: contracted_consumption\n  unit: varies\n  aggregation: sum\nprinciples:\n- name: Visibility\n  description: Consumption visibility comes from the SLB (Schlumberger) account / partner reporting surface\n    (invoices, account dashboards) rather than a public usage API.\n- name: Allocation\n  description: Allocate cost through the SLB (Schlumberger) contract structure (entitlement,\
-  \ project,\n    business unit) and reconcile against internal cost centers.\n- name: Optimization\n  description: 'Optimization levers are commercial: renegotiation cadence, commitment sizing, and consolidation\n    of SLB (Schlumberger) entitlements.'\n- name: Accountability\n  description: Assign a contract owner who reconciles SLB (Schlumberger) invoices against contracted entitlements\n    each billing cycle.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n  url: https://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: SLB (Schlumberger)\nproviderId: schlumberger\npublisherName: SLB (Schlumberger)\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Energy\n  - Oilfield Services\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the SLB (Schlumberger) API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: SLB (Schlumberger)\n  ServiceCategory: Developer Tools / API\n  ProviderName: SLB (Schlumberger)\n  PublisherName: SLB (Schlumberger)\n  InvoiceIssuerName: SLB (Schlumberger)\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n  \
+  \  aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: SLB (Schlumberger) API\n    baseURL: https://api.slb.com\n    tags:\n      - Energy\n      - Oilfield Services\n    serviceName: SLB (Schlumberger) API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/schlumberger/refs/heads/main/finops/schlumberger-finops.yml
-sources:
-- https://www.slb.com/
-- https://software.slb.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Energy
-- Enterprise
+- Oilfield Services
+- FinOps
+- Cost Management
+- FOCUS
 ---

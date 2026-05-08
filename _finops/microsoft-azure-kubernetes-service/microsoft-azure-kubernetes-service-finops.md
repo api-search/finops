@@ -31,81 +31,75 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Pay-As-You-Go + Committed Use
-description: 'FOCUS-aligned FinOps for Azure Kubernetes Service: tier-priced cluster-management hourly fee (Free 0, Standard $0.10, Premium $0.60 per cluster-hour) plus pass-through Azure VM, disk, and network costs for worker nodes.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Azure Kubernetes Service API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Corporation
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Compute
+  InvoiceIssuerName: Azure Kubernetes Service
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Azure Kubernetes Service
+  PublisherName: Azure Kubernetes Service
+  ServiceCategory: Developer Tools / API
   ServiceName: Azure Kubernetes Service
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
+  - endpoint
   - tier
   - region
-  - cluster
-  name: cluster_management_hours
-  unit: cluster-hour
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - vm_sku
+  - api
   - region
-  - nodepool
-  - cluster
-  name: worker_node_vm_hours
-  unit: instance-hour
-- aggregation: avg
-  dimensions:
-  - disk_sku
-  - region
-  - cluster
-  name: managed_disk_gb_month
-  unit: GB-month
-- aggregation: sum
-  dimensions:
-  - region
-  - cluster
-  name: load_balancer_hours
-  unit: instance-hour
-- aggregation: sum
-  dimensions:
-  - region
-  - cluster
+  - consumer
   name: data_egress
   unit: GB
-- aggregation: avg
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - cluster
-  name: container_storage_gb_month
-  unit: GB-month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Azure Kubernetes Service Finops
 provider_name: Azure Kubernetes Service
 provider_slug: microsoft-azure-kubernetes-service
-publisher_name: Microsoft Corporation
-service_category: Compute / Container Orchestration
+publisher_name: Azure Kubernetes Service
+service_category: API
 slug: microsoft-azure-kubernetes-service-finops
 source_filename: microsoft-azure-kubernetes-service-finops.yml
 source_heading: FinOps Profile
-source_url: https://azure.microsoft.com/en-us/pricing/details/kubernetes-service/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Azure Kubernetes Service\nproviderId: microsoft-azure-kubernetes-service\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Kubernetes\n  - Containers\n  - Microsoft Azure\ndescription: 'FOCUS-aligned FinOps for Azure Kubernetes Service: tier-priced cluster-management hourly\n  fee (Free 0, Standard $0.10, Premium $0.60 per cluster-hour) plus pass-through Azure VM, disk, and\n  network costs for worker nodes.'\nsources:\n  - https://azure.microsoft.com/en-us/pricing/details/kubernetes-service/\n  - https://learn.microsoft.com/en-us/azure/aks/cost-analysis\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Microsoft Corporation\nserviceCategory:\
-  \ Compute / Container Orchestration\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Committed Use\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Azure Kubernetes Service\n  ServiceCategory: Compute\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: cluster_management_hours\n    unit: cluster-hour\n    aggregation: sum\n    dimensions:\n      - tier\n      - region\n      - cluster\n  - name: worker_node_vm_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - vm_sku\n      - region\n      - nodepool\n      - cluster\n  - name: managed_disk_gb_month\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - disk_sku\n      - region\n      - cluster\n  - name: load_balancer_hours\n    unit: instance-hour\n\
-  \    aggregation: sum\n    dimensions:\n      - region\n      - cluster\n  - name: data_egress\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - region\n      - cluster\n  - name: container_storage_gb_month\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - cluster\nprinciples:\n  - name: Visibility\n    description: Use AKS Cost Analysis (built-in cost view powered by OpenCost) to break down spend\n      by namespace, deployment, and label; export Azure Cost Management to a Log Analytics workspace\n      for deeper analysis.\n  - name: Allocation\n    description: Use Kubernetes namespaces and labels (team, cost-center, environment) propagated\n      to AKS Cost Analysis tags; place per-team workloads in isolated node pools where chargeback\n      requires hard separation.\n  - name: Optimization\n    description: Right-size requests/limits with VPA recommendations; use Cluster Autoscaler / Karpenter;\n      mix Reserved Instances and Spot node pools; consolidate\
-  \ dev/test on Free tier; pick Standard\n      over Premium when LTS is not required.\n  - name: Accountability\n    description: Assign cluster owners; alert on cost-per-namespace anomalies; review node-pool\n      sizing monthly; periodically delete idle clusters and orphaned PVCs.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Azure Kubernetes Service\nproviderId: microsoft-azure-kubernetes-service\npublisherName: Azure Kubernetes Service\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Azure\n  - Cloud\n  - Containers\n  - DevOps\n  - Kubernetes\n  - Orchestration\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Azure Kubernetes Service API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
+  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
+  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Azure Kubernetes Service\n  ServiceCategory: Developer Tools / API\n  ProviderName: Azure Kubernetes Service\n  PublisherName: Azure Kubernetes Service\n  InvoiceIssuerName: Azure Kubernetes Service\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n\
+  \      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Azure Kubernetes Service REST API\n    baseURL: https://management.azure.com\n    tags:\n      - Containers\n      - Kubernetes\n      - Management\n    serviceName: Azure Kubernetes Service REST API\n    serviceCategory: API\n  - name: Azure Kubernetes Service Managed Clusters API\n    baseURL: https://management.azure.com\n    tags:\n      - Clusters\n      - Kubernetes\n      - Management\n    serviceName: Azure Kubernetes Service Managed Clusters API\n    serviceCategory: API\n  - name: Azure Kubernetes Service Agent Pools API\n    baseURL: https://management.azure.com\n\
+  \    tags:\n      - Agent Pools\n      - Kubernetes\n      - Node Pools\n    serviceName: Azure Kubernetes Service Agent Pools API\n    serviceCategory: API\n  - name: Azure Kubernetes Service Maintenance Configurations API\n    baseURL: https://management.azure.com\n    tags:\n      - Configuration\n      - Kubernetes\n      - Maintenance\n    serviceName: Azure Kubernetes Service Maintenance Configurations API\n    serviceCategory: API\n  - name: Azure Kubernetes Service Snapshots API\n    baseURL: https://management.azure.com\n    tags:\n      - Backup\n      - Kubernetes\n      - Snapshots\n    serviceName: Azure Kubernetes Service Snapshots API\n    serviceCategory: API\n  - name: Azure Kubernetes Service Private Endpoint Connections API\n    baseURL: https://management.azure.com\n    tags:\n      - Kubernetes\n      - Networking\n      - Private Endpoints\n    serviceName: Azure Kubernetes Service Private Endpoint Connections API\n    serviceCategory: API\n  - name: Azure Kubernetes\
+  \ Service Trusted Access Role Bindings API\n    baseURL: https://management.azure.com\n    tags:\n      - Kubernetes\n      - Security\n      - Trusted Access\n    serviceName: Azure Kubernetes Service Trusted Access Role Bindings API\n    serviceCategory: API\n  - name: Azure Kubernetes Service kubectl API\n    baseURL: https://{cluster-name}.{region}.azmk8s.io\n    tags:\n      - Cluster Management\n      - Kubectl\n      - Kubernetes\n    serviceName: Azure Kubernetes Service kubectl API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-kubernetes-service/refs/heads/main/finops/microsoft-azure-kubernetes-service-finops.yml
-sources:
-- https://azure.microsoft.com/en-us/pricing/details/kubernetes-service/
-- https://learn.microsoft.com/en-us/azure/aks/cost-analysis
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Kubernetes
+- Azure
+- Cloud
 - Containers
-- Microsoft Azure
+- DevOps
+- Kubernetes
+- Orchestration
+- FinOps
+- Cost Management
+- FOCUS
 ---

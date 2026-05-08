@@ -15,51 +15,79 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Per-Instance + Workspace Subscription + Usage
-description: FOCUS-aligned FinOps for Render.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Render API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Render
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Render
   PublisherName: Render
-  ServiceCategory: Hosting
+  ServiceCategory: Developer Tools / API
   ServiceName: Render
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - plan
-  - service_type
-  name: instance_hours
-  unit: instance-hour
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  name: bandwidth
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
-- aggregation: max
-  name: workspace_seats
-  unit: seat-month
 - aggregation: sum
-  name: build_minutes
-  unit: minute
-- aggregation: max
-  name: managed_postgres
-  unit: instance-month
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Render Finops
 provider_name: Render
 provider_slug: render
 publisher_name: Render
-service_category: Hosting
+service_category: API
 slug: render-finops
 source_filename: render-finops.yml
 source_heading: FinOps Profile
-source_url: https://render.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Render\nproviderId: render\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Hosting\ndescription: FOCUS-aligned FinOps for Render.\nsources:\n  - https://render.com/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Render\nserviceCategory: Hosting\nbillingModel:\n  pricingCategory: Per-Instance + Workspace Subscription + Usage\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Render\n  ServiceCategory: Hosting\n  ProviderName: Render\n  PublisherName: Render\n  BillingCurrency: USD\nmeters:\n  - name: instance_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      -\
-  \ plan\n      - service_type\n  - name: bandwidth\n    unit: GB\n    aggregation: sum\n  - name: workspace_seats\n    unit: seat-month\n    aggregation: max\n  - name: build_minutes\n    unit: minute\n    aggregation: sum\n  - name: managed_postgres\n    unit: instance-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track Render consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Render\nproviderId: render\npublisherName: Render\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud\n  - Platform\n  - Deployment\n  - Infrastructure\n  - DevOps\n  - Web Services\n  - Databases\n  - Hosting\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Render API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
+  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
+  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Render\n  ServiceCategory: Developer Tools / API\n  ProviderName: Render\n  PublisherName: Render\n  InvoiceIssuerName: Render\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n\
+  \    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Render API\n    baseURL: https://api.render.com/v1\n    tags:\n      - Cloud\n      - Platform\n      - Deployment\n      - Infrastructure\n      - DevOps\n    serviceName: Render API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/render/refs/heads/main/finops/render-finops.yml
-sources:
-- https://render.com/pricing
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Cloud
+- Platform
+- Deployment
+- Infrastructure
+- DevOps
+- Web Services
+- Databases
 - Hosting
+- FinOps
+- Cost Management
+- FOCUS
 ---

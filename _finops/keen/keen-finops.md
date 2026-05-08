@@ -42,70 +42,74 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Adjustment
+  - Tax
   - Credit
-  pricingCategory: Tiered Subscription + Overage
-description: 'FOCUS-aligned FinOps for Keen: tiered subscription (Team/Business/Custom) with per-unit overages on events, queries, cached queries, and cached datasets.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Keen API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Keen IO, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Keen
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Keen
-  PublisherName: Keen IO, Inc.
-  ServiceCategory: Analytics
+  PublisherName: Keen
+  ServiceCategory: Developer Tools / API
   ServiceName: Keen
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - project
-  - collection
-  name: events_recorded
-  unit: event
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - project
-  - query_type
-  name: queries_executed
-  unit: query
-- aggregation: max
-  dimensions:
-  - project
-  name: cached_queries
-  unit: cached_query
-- aggregation: max
-  dimensions:
-  - project
-  name: cached_datasets
-  unit: cached_dataset
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - plan
-  name: subscription_fees
-  unit: month
-- aggregation: sum
-  name: s3_streaming_addon
-  unit: month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Keen Finops
 provider_name: Keen
 provider_slug: keen
-publisher_name: Keen IO, Inc.
-service_category: Analytics
+publisher_name: Keen
+service_category: API
 slug: keen-finops
 source_filename: keen-finops.yml
 source_heading: FinOps Profile
-source_url: https://keen.io/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Keen\nproviderId: keen\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Analytics\n  - Event Analytics\n  - Embedded Analytics\ndescription: 'FOCUS-aligned FinOps for Keen: tiered subscription (Team/Business/Custom) with per-unit\n  overages on events, queries, cached queries, and cached datasets.'\nsources:\n  - https://keen.io/pricing/\n  - https://keen.io/docs/api/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Keen IO, Inc.\nserviceCategory: Analytics\nbillingModel:\n  pricingCategory: Tiered Subscription + Overage\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    -\
-  \ Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Keen\n  ServiceCategory: Analytics\n  ProviderName: Keen\n  PublisherName: Keen IO, Inc.\n  InvoiceIssuerName: Keen IO, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: events_recorded\n    unit: event\n    aggregation: sum\n    dimensions:\n      - project\n      - collection\n  - name: queries_executed\n    unit: query\n    aggregation: sum\n    dimensions:\n      - project\n      - query_type\n  - name: cached_queries\n    unit: cached_query\n    aggregation: max\n    dimensions:\n      - project\n  - name: cached_datasets\n    unit: cached_dataset\n    aggregation: max\n    dimensions:\n      - project\n  - name: subscription_fees\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n  - name: s3_streaming_addon\n    unit: month\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Use Keen's project usage dashboard and the Account API to monitor monthly event and query\n      consumption\
-  \ against included quotas.\n  - name: Allocation\n    description: Separate consuming teams into distinct Keen projects (each with its own keys) so events\n      and queries roll up cleanly to a chargeback dimension.\n  - name: Optimization\n    description: Move recurring dashboards to cached queries and cached datasets to bypass ad-hoc query\n      limits and avoid query overage charges; commit annually for a 10% discount.\n  - name: Accountability\n    description: Project owners reconcile event/query overages monthly and tune retention and dashboard\n      patterns before the next billing cycle.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Keen\nproviderId: keen\npublisherName: Keen\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Custom Events\n  - Data Collection\n  - Embedded Analytics\n  - Event Analytics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Keen API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Keen\n  ServiceCategory: Developer Tools / API\n  ProviderName: Keen\n  PublisherName: Keen\n  InvoiceIssuerName: Keen\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Keen Event Collection API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Data Collection\n      - Events\n      - Ingestion\n    serviceName: Keen Event Collection API\n    serviceCategory: API\n  - name: Keen Query API\n    baseURL: ''\n    tags:\n      - Aggregation\n      - Analytics\n      - Queries\n      - Reporting\n    serviceName: Keen Query API\n    serviceCategory: API\n  - name: Keen Cached Queries API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Caching\n      - Performance\n      - Queries\n    serviceName: Keen Cached Queries API\n    serviceCategory: API\n  - name: Keen Saved Queries API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Queries\n      - Saved Queries\n    serviceName:\
+  \ Keen Saved Queries API\n    serviceCategory: API\n  - name: Keen Data Extraction API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Data\n      - Events\n      - Export\n    serviceName: Keen Data Extraction API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/keen/refs/heads/main/finops/keen-finops.yml
-sources:
-- https://keen.io/pricing/
-- https://keen.io/docs/api/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Analytics
-- Event Analytics
+- Custom Events
+- Data Collection
 - Embedded Analytics
+- Event Analytics
+- FinOps
+- Cost Management
+- FOCUS
 ---

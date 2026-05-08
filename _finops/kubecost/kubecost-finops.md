@@ -44,68 +44,78 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/kubecost/refs/heads/main/openapi/kubecost-savings-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
-  - Adjustment
+  - Tax
   - Credit
-  pricingCategory: Freemium + Subscription
-description: 'FOCUS-aligned FinOps for Kubecost: Apptio-licensed Kubernetes cost-allocation and optimization tooling. Foundations is free; Enterprise tiers are subscription contracts. The product itself emits the FinOps signal — its Allocation, Assets, Cloud Cost, Budget, Forecast, and Savings APIs are the data plane that downstream FinOps tooling consumes.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Kubecost API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Apptio, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Kubecost
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Kubecost
-  PublisherName: International Business Machines Corporation (Apptio)
-  ServiceCategory: Cloud Cost Management
+  PublisherName: Kubecost
+  ServiceCategory: Developer Tools / API
   ServiceName: Kubecost
 layout: finops
 meters:
-- aggregation: max
-  dimensions:
-  - cluster
-  - cloud_provider
-  - region
-  name: cluster_cores
-  unit: core
-- aggregation: count
-  name: monitored_clusters
-  unit: cluster
-- aggregation: max
-  name: metric_retention_days
-  unit: day
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
   - api
-  - window
-  - aggregation
-  name: allocation_queries
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
-- aggregation: count
-  name: gpu_optimization_enabled
-  unit: cluster
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Kubecost Finops
 provider_name: Kubecost
 provider_slug: kubecost
-publisher_name: International Business Machines Corporation (Apptio)
-service_category: Cloud Cost Management
+publisher_name: Kubecost
+service_category: API
 slug: kubecost-finops
 source_filename: kubecost-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.apptio.com/pricing?src=kc-com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Kubecost\nproviderId: kubecost\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Cloud Cost\n  - Kubernetes\n  - Cost Management\ndescription: 'FOCUS-aligned FinOps for Kubecost: Apptio-licensed Kubernetes cost-allocation and optimization\n  tooling. Foundations is free; Enterprise tiers are subscription contracts. The product itself emits\n  the FinOps signal — its Allocation, Assets, Cloud Cost, Budget, Forecast, and Savings APIs are the\n  data plane that downstream FinOps tooling consumes.'\nsources:\n  - https://www.apptio.com/pricing?src=kc-com\n  - https://docs.kubecost.com/apis/monitoring-apis/api-allocation\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
-  publisherName: International Business Machines Corporation (Apptio)\nserviceCategory: Cloud Cost Management\nbillingModel:\n  pricingCategory: Freemium + Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Kubecost\n  ServiceCategory: Cloud Cost Management\n  ProviderName: Kubecost\n  PublisherName: International Business Machines Corporation (Apptio)\n  InvoiceIssuerName: Apptio, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: cluster_cores\n    unit: core\n    aggregation: max\n    dimensions:\n      - cluster\n      - cloud_provider\n      - region\n  - name: monitored_clusters\n    unit: cluster\n    aggregation: count\n  - name: metric_retention_days\n    unit: day\n    aggregation: max\n  - name: allocation_queries\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - window\n      - aggregation\n  - name: gpu_optimization_enabled\n\
-  \    unit: cluster\n    aggregation: count\nprinciples:\n  - name: Visibility\n    description: Use the Allocation, Assets, and Cloud Cost APIs to expose Kubernetes spend by namespace,\n      label, deployment, controller, and cloud asset; reconcile against AWS/Azure/GCP bills via the bill-reconciliation\n      pipeline.\n  - name: Allocation\n    description: Drive cost allocation off Kubernetes labels and annotations; align label keys with the\n      organization's chargeback dimensions (team, product, environment).\n  - name: Optimization\n    description: Use the Savings API to surface right-sizing, abandoned workload, and request/limit recommendations;\n      drive Forecast API into the FinOps planning loop.\n  - name: Accountability\n    description: Set Budget API alerts per namespace owner; review weekly Allocation deltas in the FinOps\n      practice cadence; tie Foundations vs Enterprise feature differences (RBAC, retention) to the maturity\n      stage of the consuming team.\n\
-  maintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Kubecost\nproviderId: kubecost\npublisherName: Kubecost\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud Cost\n  - Cost Monitoring\n  - Kubernetes\n  - Optimization\n  - Spending\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Kubecost API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Kubecost\n  ServiceCategory: Developer Tools / API\n  ProviderName: Kubecost\n  PublisherName: Kubecost\n  InvoiceIssuerName: Kubecost\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
+  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Kubecost Allocation API\n    baseURL: ''\n    tags:\n      - Cost Allocation\n      - Kubernetes\n      - Monitoring\n    serviceName: Kubecost Allocation API\n    serviceCategory: API\n  - name: Kubecost Assets API\n    baseURL: ''\n    tags:\n      - Assets\n      - Kubernetes\n      - Monitoring\n    serviceName: Kubecost Assets API\n    serviceCategory: API\n  - name: Kubecost Cloud Cost API\n    baseURL: ''\n    tags:\n      - AWS\n      - Azure\n      - Cloud Cost\n      - GCP\n      - Monitoring\n    serviceName: Kubecost Cloud Cost API\n    serviceCategory: API\n  - name: Kubecost Budget API\n    baseURL: ''\n    tags:\n      - Budget\n      - Governance\n      - Spending\n    serviceName: Kubecost\
+  \ Budget API\n    serviceCategory: API\n  - name: Kubecost Forecast API\n    baseURL: ''\n    tags:\n      - Cost Prediction\n      - Forecast\n      - Governance\n    serviceName: Kubecost Forecast API\n    serviceCategory: API\n  - name: Kubecost Savings API\n    baseURL: ''\n    tags:\n      - Optimization\n      - Right-Sizing\n      - Savings\n    serviceName: Kubecost Savings API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/kubecost/refs/heads/main/finops/kubecost-finops.yml
-sources:
-- https://www.apptio.com/pricing?src=kc-com
-- https://docs.kubecost.com/apis/monitoring-apis/api-allocation
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Cloud Cost
+- Cost Monitoring
 - Kubernetes
+- Optimization
+- Spending
+- FinOps
 - Cost Management
+- FOCUS
 ---

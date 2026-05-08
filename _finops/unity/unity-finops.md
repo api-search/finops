@@ -158,69 +158,83 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/unity/refs/heads/main/openapi/unity-monetize-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual (Engine) + Monthly (UGS)
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
-  pricingCategory: Subscription + Pay-As-You-Go
-description: FOCUS-aligned FinOps for Unity. Two distinct cost surfaces - revenue-tier-gated Unity Engine seat subscriptions and pay-as-you-go Unity Gaming Services with per-service free tiers and paid overage. Numeric pricing and MAU thresholds were not reconcilable from primary unity.com sources during this pass; meters and FOCUS columns are scoped to known service shape only.
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Unity API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Unity Technologies
+  ChargeCategory: Usage
+  InvoiceIssuerName: Unity
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Unity
-  PublisherName: Unity Technologies
-  ServiceCategory: Game Development Platform
+  PublisherName: Unity
+  ServiceCategory: Developer Tools / API
   ServiceName: Unity
 layout: finops
 meters:
-- aggregation: max
-  description: Unity Engine seats by tier (Personal / Pro / Industry / Enterprise); seat eligibility is gated by company revenue thresholds.
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
+  - endpoint
   - tier
-  - billing_term
-  name: engine_seats
-  unit: seat
-- aggregation: max
-  description: Monthly active users counted by Unity Gaming Services for relevant services (e.g. Cloud Save, Authentication, Lobby).
-  dimensions:
-  - service
-  - project
-  name: ugs_monthly_active_users
-  unit: mau
-- aggregation: sum
-  description: Multiplay Hosting compute consumption (cloud, bare metal, or hybrid).
-  dimensions:
   - region
-  - instance_type
-  name: multiplay_compute
-  unit: instance-hour
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Voice / text chat usage via Vivox.
+  description: Bytes returned over the network in API responses
   dimensions:
-  - channel_type
-  name: vivox_minutes
-  unit: minute
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Unity Finops
 provider_name: Unity
 provider_slug: unity
-publisher_name: Unity Technologies
-service_category: Game Development Platform
+publisher_name: Unity
+service_category: API
 slug: unity-finops
 source_filename: unity-finops.yml
 source_heading: FinOps Profile
-source_url: https://unity.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Unity\nproviderId: unity\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Game Development\n  - Cloud Gaming\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for Unity. Two distinct cost surfaces - revenue-tier-gated Unity\n  Engine seat subscriptions and pay-as-you-go Unity Gaming Services with per-service free tiers and\n  paid overage. Numeric pricing and MAU thresholds were not reconcilable from primary unity.com\n  sources during this pass; meters and FOCUS columns are scoped to known service shape only.\nsources:\n  - https://unity.com\n  - https://docs.unity.com/ugs/manual/overview\nnotes: unity.com/pricing, store.unity.com, and the UGS pricing-and-billing page returned 403 during\n  reconciliation. Treat dollar values as pending; meter shape (per seat for Engine, per MAU / call\n  for UGS) is reconciled.\nalignedWith:\n\
-  \  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Unity Technologies\nserviceCategory: Game Development Platform\nbillingModel:\n  pricingCategory: Subscription + Pay-As-You-Go\n  billingFrequency: Annual (Engine) + Monthly (UGS)\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: Unity\n  ServiceCategory: Game Development Platform\n  ProviderName: Unity\n  PublisherName: Unity Technologies\n  InvoiceIssuerName: Unity Technologies\n  BillingCurrency: USD\nmeters:\n  - name: engine_seats\n    description: Unity Engine seats by tier (Personal / Pro / Industry / Enterprise); seat eligibility\n      is gated by company revenue thresholds.\n    unit: seat\n    aggregation: max\n    dimensions:\n      - tier\n      - billing_term\n  - name: ugs_monthly_active_users\n    description:\
-  \ Monthly active users counted by Unity Gaming Services for relevant services (e.g.\n      Cloud Save, Authentication, Lobby).\n    unit: mau\n    aggregation: max\n    dimensions:\n      - service\n      - project\n  - name: multiplay_compute\n    description: Multiplay Hosting compute consumption (cloud, bare metal, or hybrid).\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - region\n      - instance_type\n  - name: vivox_minutes\n    description: Voice / text chat usage via Vivox.\n    unit: minute\n    aggregation: sum\n    dimensions:\n      - channel_type\nprinciples:\n  - name: Visibility\n    description: Use the Unity Cloud / UGS dashboard and the Unity pricing estimator to see consumption\n      per service; the estimator is non-binding so reconcile against actual invoice line items.\n  - name: Allocation\n    description: Use a separate Unity project per game / environment so MAU and Multiplay spend can\n      be attributed; segment Engine seats per studio\
-  \ or business unit.\n  - name: Optimization\n    description: Stay inside per-service free tiers via auth-only flows where possible, batch Cloud\n      Save writes, right-size Multiplay fleets and use lower-cost regions, and choose the engine\n      tier that matches your revenue band rather than over-buying.\n  - name: Accountability\n    description: Assign an owner per Unity project to monitor MAU growth, with payment-details-on-file\n      checks ahead of expected free-tier exhaustion to avoid the UGS access block.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Unity\nproviderId: unity\npublisherName: Unity\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Game Development\n  - Real-Time 3D\n  - Multiplayer\n  - Game Services\n  - Cloud Gaming\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Unity API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the\
+  \ consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Unity\n  ServiceCategory: Developer Tools / API\n  ProviderName: Unity\n  PublisherName: Unity\n  InvoiceIssuerName: Unity\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Unity Player Authentication API\n    baseURL: ''\n    tags:\n      - Authentication\n      - Identity\n      - Players\n      - OAuth\n      - Sign-In\n    serviceName: Unity Player Authentication API\n    serviceCategory: API\n  - name: Unity Cloud Code API\n    baseURL: ''\n    tags:\n      - Cloud\n      - Code Execution\n      - Serverless\n      - Functions\n    serviceName: Unity Cloud Code API\n    serviceCategory: API\n  - name: Unity Cloud Save API\n    baseURL: ''\n    tags:\n      - Cloud Storage\n      - Game State\n      - Player Data\n      - Persistence\n    serviceName: Unity Cloud Save API\n    serviceCategory: API\n  - name: Unity Economy API\n    baseURL: ''\n    tags:\n      - Economy\n      - In-App\
+  \ Purchases\n      - Virtual Currency\n      - Inventory\n    serviceName: Unity Economy API\n    serviceCategory: API\n  - name: Unity Leaderboards API\n    baseURL: ''\n    tags:\n      - Leaderboards\n      - Rankings\n      - Scores\n      - Competitive Gaming\n    serviceName: Unity Leaderboards API\n    serviceCategory: API\n  - name: Unity Remote Config API\n    baseURL: ''\n    tags:\n      - Configuration\n      - Feature Flags\n      - Remote Config\n      - A/B Testing\n    serviceName: Unity Remote Config API\n    serviceCategory: API\n  - name: Unity Analytics API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Events\n      - Telemetry\n      - Player Behavior\n    serviceName: Unity Analytics API\n    serviceCategory: API\n  - name: Unity Lobby API\n    baseURL: ''\n    tags:\n      - Lobby\n      - Matchmaking\n      - Multiplayer\n      - Game Sessions\n    serviceName: Unity Lobby API\n    serviceCategory: API\n  - name: Unity Matchmaker API\n    baseURL: ''\n\
+  \    tags:\n      - Matchmaking\n      - Multiplayer\n      - Skill-Based Matching\n    serviceName: Unity Matchmaker API\n    serviceCategory: API\n  - name: Unity Relay API\n    baseURL: ''\n    tags:\n      - Multiplayer\n      - Networking\n      - Relay\n      - Peer-to-Peer\n    serviceName: Unity Relay API\n    serviceCategory: API\n  - name: Unity Multiplay Game Server Hosting API\n    baseURL: ''\n    tags:\n      - Game Servers\n      - Hosting\n      - Multiplayer\n      - Infrastructure\n    serviceName: Unity Multiplay Game Server Hosting API\n    serviceCategory: API\n  - name: Unity Cloud Content Delivery API\n    baseURL: ''\n    tags:\n      - Assets\n      - CDN\n      - Content Delivery\n      - Game Updates\n    serviceName: Unity Cloud Content Delivery API\n    serviceCategory: API\n  - name: Unity Triggers API\n    baseURL: ''\n    tags:\n      - Automation\n      - Events\n      - Triggers\n      - Cloud Code\n    serviceName: Unity Triggers API\n    serviceCategory:\
+  \ API\n  - name: Unity Scheduler API\n    baseURL: ''\n    tags:\n      - Automation\n      - Cron\n      - Scheduler\n      - Cloud Code\n    serviceName: Unity Scheduler API\n    serviceCategory: API\n  - name: Unity Friends API\n    baseURL: ''\n    tags:\n      - Friends\n      - Multiplayer\n      - Social\n      - Player Relationships\n    serviceName: Unity Friends API\n    serviceCategory: API\n  - name: Unity Vivox Voice and Text Chat API\n    baseURL: ''\n    tags:\n      - Communication\n      - Text Chat\n      - Voice Chat\n      - Real-Time Audio\n    serviceName: Unity Vivox Voice and Text Chat API\n    serviceCategory: API\n  - name: Unity Moderation API\n    baseURL: ''\n    tags:\n      - Moderation\n      - Safety\n      - Trust\n      - Community Health\n    serviceName: Unity Moderation API\n    serviceCategory: API\n  - name: Unity User Generated Content API\n    baseURL: ''\n    tags:\n      - Community\n      - Content\n      - UGC\n      - Player Content\n    serviceName:\
+  \ Unity User Generated Content API\n    serviceCategory: API\n  - name: Unity Push Notifications API\n    baseURL: ''\n    tags:\n      - Messaging\n      - Mobile\n      - Push Notifications\n      - iOS\n      - Android\n    serviceName: Unity Push Notifications API\n    serviceCategory: API\n  - name: Unity Build Automation API\n    baseURL: ''\n    tags:\n      - Build\n      - CI/CD\n      - DevOps\n      - Automation\n    serviceName: Unity Build Automation API\n    serviceCategory: API\n  - name: Unity Version Control API\n    baseURL: ''\n    tags:\n      - DevOps\n      - Source Control\n      - Version Control\n      - Branching\n    serviceName: Unity Version Control API\n    serviceCategory: API\n  - name: Unity Access API\n    baseURL: ''\n    tags:\n      - Access Control\n      - Permissions\n      - Security\n      - IAM\n    serviceName: Unity Access API\n    serviceCategory: API\n  - name: Unity SCIM API\n    baseURL: ''\n    tags:\n      - Identity\n      - Provisioning\n\
+  \      - SCIM\n      - SSO\n    serviceName: Unity SCIM API\n    serviceCategory: API\n  - name: Unity Distributed Authority API\n    baseURL: ''\n    tags:\n      - Distributed\n      - Multiplayer\n      - Networking\n      - State Management\n    serviceName: Unity Distributed Authority API\n    serviceCategory: API\n  - name: Unity Safe Text API\n    baseURL: ''\n    tags:\n      - Moderation\n      - Safety\n      - Text Filtering\n      - AI Moderation\n    serviceName: Unity Safe Text API\n    serviceCategory: API\n  - name: Unity Asset Manager API\n    baseURL: ''\n    tags:\n      - Assets\n      - Asset Management\n      - 3D Content\n      - Collaboration\n    serviceName: Unity Asset Manager API\n    serviceCategory: API\n  - name: Unity Monetize API\n    baseURL: ''\n    tags:\n      - Monetization\n      - Advertising\n      - Revenue\n      - Mobile Ads\n    serviceName: Unity Monetize API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric:\
+  \ billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n  - name: Unity Technologies\n    email: support@unity.com\n    url: https://unity.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/unity/refs/heads/main/finops/unity-finops.yml
-sources:
-- https://unity.com
-- https://docs.unity.com/ugs/manual/overview
+sources: []
 specification: FinOps Framework
 tags:
 - Game Development
+- Real-Time 3D
+- Multiplayer
+- Game Services
 - Cloud Gaming
 - FinOps
+- Cost Management
 - FOCUS
 ---

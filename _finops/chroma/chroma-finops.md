@@ -24,87 +24,88 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Credit
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription + Pay-As-You-Go
-description: 'FOCUS-aligned FinOps for Chroma Cloud: hybrid Subscription + Pay-As-You-Go on four primitives (Write, Storage, Query, Network) with monthly credits on Starter and Team, and custom-priced Enterprise (including BYOC).'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Chroma API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Chroma, Inc.
-  PricingCategory: Pay-As-You-Go
+  InvoiceIssuerName: Chroma
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Chroma
-  PublisherName: Chroma, Inc.
-  ServiceCategory: AI Infrastructure / Vector Database
-  ServiceName: Chroma Cloud
+  PublisherName: Chroma
+  ServiceCategory: Developer Tools / API
+  ServiceName: Chroma
 layout: finops
 meters:
 - aggregation: sum
-  description: GiB written into Chroma Cloud collections
+  description: Count of billable API requests
   dimensions:
-  - database
-  - collection
-  - tenant
-  name: write
-  unit: GiB
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: GiB-month of vector and metadata storage
+  description: Bytes returned over the network in API responses
   dimensions:
-  - database
-  - tenant
-  name: storage
-  unit: GiB-month
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: TiB scanned by similarity, full-text, and metadata queries
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - database
-  - collection
-  - tenant
-  name: query
-  unit: TiB
-- aggregation: sum
-  description: GiB of response data returned over the network
-  dimensions:
-  - database
-  - tenant
-  name: network
-  unit: GiB
-- aggregation: sum
-  description: Monthly Team / Enterprise plan fee
-  dimensions:
-  - plan
-  name: plan_fee
-  unit: month
-- aggregation: max
-  description: Team member seats consumed (Team / Enterprise)
-  dimensions:
-  - plan
-  name: seats
-  unit: seat
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Chroma Finops
 provider_name: Chroma
 provider_slug: chroma
-publisher_name: Chroma, Inc.
-service_category: AI Infrastructure / Vector Database
+publisher_name: Chroma
+service_category: API
 slug: chroma-finops
 source_filename: chroma-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.trychroma.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Chroma\nproviderId: chroma\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - AI\n  - Vector Database\n  - Retrieval\n  - Serverless\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Chroma Cloud: hybrid Subscription + Pay-As-You-Go on four\n  primitives (Write, Storage, Query, Network) with monthly credits on Starter and Team, and\n  custom-priced Enterprise (including BYOC).'\nsources:\n  - https://www.trychroma.com/pricing\n  - https://docs.trychroma.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Chroma, Inc.\nserviceCategory: AI Infrastructure / Vector Database\nbillingModel:\n  pricingCategory: Subscription + Pay-As-You-Go\n  billingFrequency:\
-  \ Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Credit\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Chroma Cloud\n  ServiceCategory: AI Infrastructure / Vector Database\n  ProviderName: Chroma\n  PublisherName: Chroma, Inc.\n  InvoiceIssuerName: Chroma, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Usage\n  PricingCategory: Pay-As-You-Go\nmeters:\n  - name: write\n    description: GiB written into Chroma Cloud collections\n    unit: GiB\n    aggregation: sum\n    dimensions:\n      - database\n      - collection\n      - tenant\n  - name: storage\n    description: GiB-month of vector and metadata storage\n    unit: GiB-month\n    aggregation: sum\n    dimensions:\n      - database\n      - tenant\n  - name: query\n    description: TiB scanned by similarity, full-text, and metadata queries\n    unit: TiB\n    aggregation: sum\n    dimensions:\n      - database\n      - collection\n      - tenant\n  - name: network\n    description:\
-  \ GiB of response data returned over the network\n    unit: GiB\n    aggregation: sum\n    dimensions:\n      - database\n      - tenant\n  - name: plan_fee\n    description: Monthly Team / Enterprise plan fee\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n  - name: seats\n    description: Team member seats consumed (Team / Enterprise)\n    unit: seat\n    aggregation: max\n    dimensions:\n      - plan\nprinciples:\n  - name: Visibility\n    description: Track Chroma Cloud spend through the in-product usage dashboard (Write GiB, Storage\n      GiB-month, Query TiB, Network GiB) and the credit-burn ledger.\n  - name: Allocation\n    description: Tag spend by database and tenant — Chroma's primitives align naturally with\n      database / collection boundaries for showback to AI features.\n  - name: Optimization\n    description: Reduce dimensionality, batch writes, prune stale collections, cache frequent queries\n      upstream, and right-size embeddings to lower\
-  \ Storage and Query meters.\n  - name: Accountability\n    description: AI / ML teams own collection design and recall quality; platform engineering owns\n      Chroma cost dashboards; finance reconciles invoices and credit consumption.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Chroma\nproviderId: chroma\npublisherName: Chroma\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - AI Native\n  - Apache 2.0\n  - Cloud\n  - Embeddings\n  - Hybrid Search\n  - JavaScript\n  - LLM\n  - Machine Learning\n  - Multi-Modal\n  - Open Source\n  - Python\n  - RAG\n  - Retrieval\n  - SDK\n  - Search\n  - Serverless\n  - TypeScript\n  - Vector Database\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Chroma API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description:\
+  \ Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n   \
+  \   - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Chroma\n  ServiceCategory: Developer Tools / API\n  ProviderName: Chroma\n  PublisherName: Chroma\n  InvoiceIssuerName: Chroma\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n\
+  \      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Chroma Server API\n    baseURL: https://api.trychroma.com\n    tags:\n      - AI\n      - Embeddings\n      - Machine Learning\n      - Search\n      - Vector Database\n    serviceName: Chroma Server API\n    serviceCategory: API\n  - name: Chroma Cloud API\n    baseURL: https://api.trychroma.com\n    tags:\n      - AI\n      - Cloud\n      - Embeddings\n      - Serverless\n      - Vector Database\n    serviceName: Chroma Cloud API\n    serviceCategory: API\n  - name: Chroma Python Client\n    baseURL: ''\n    tags:\n      - Embeddings\n\
+  \      - Python\n      - SDK\n      - Vector Database\n    serviceName: Chroma Python Client\n    serviceCategory: API\n  - name: Chroma JavaScript Client\n    baseURL: ''\n    tags:\n      - Embeddings\n      - JavaScript\n      - SDK\n      - TypeScript\n      - Vector Database\n    serviceName: Chroma JavaScript Client\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/chroma/refs/heads/main/finops/chroma-finops.yml
-sources:
-- https://www.trychroma.com/pricing
-- https://docs.trychroma.com/
+sources: []
 specification: FinOps Framework
 tags:
 - AI
-- Vector Database
+- AI Native
+- Apache 2.0
+- Cloud
+- Embeddings
+- Hybrid Search
+- JavaScript
+- LLM
+- Machine Learning
+- Multi-Modal
+- Open Source
+- Python
+- RAG
 - Retrieval
+- SDK
+- Search
 - Serverless
+- TypeScript
+- Vector Database
 - FinOps
+- Cost Management
 - FOCUS
 ---

@@ -30,53 +30,69 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  pricingCategory: Bank Fees / Partner Agreement
-description: FinOps placement for Wells Fargo Open Banking APIs. Cost is bundled into the treasury / commercial-banking relationship rather than published as per-call API pricing; FOCUS mapping reflects bank-fee billing.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the wells-fargo API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Wells Fargo Bank, N.A.
-  ProviderName: Wells Fargo
-  PublisherName: Wells Fargo Bank, N.A.
-  ServiceCategory: Banking / Open Banking
-  ServiceName: Wells Fargo Open Banking APIs
+  ChargeCategory: Usage
+  InvoiceIssuerName: wells-fargo
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: wells-fargo
+  PublisherName: wells-fargo
+  ServiceCategory: Developer Tools / API
+  ServiceName: wells-fargo
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of payment-initiation / wire / ACH calls executed via the Open Banking Payments APIs; priced through the treasury services schedule.
+  description: Count of billable API requests
   dimensions:
-  - rail
-  - account
-  name: payment_transactions
-  unit: transaction
-- aggregation: sum
-  description: Count of account-information / balance / transaction-history calls via the Open Banking Data APIs; pricing depends on the partner agreement.
-  dimensions:
-  - product
-  - account
-  name: data_calls
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Wells Fargo Finops
 provider_name: wells-fargo
 provider_slug: wells-fargo
-publisher_name: Wells Fargo Bank, N.A.
-service_category: Banking / Open Banking
+publisher_name: wells-fargo
+service_category: API
 slug: wells-fargo-finops
 source_filename: wells-fargo-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.wellsfargo.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: wells-fargo\nproviderId: wells-fargo\npublisherName: Wells Fargo Bank, N.A.\nserviceCategory: Banking / Open Banking\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Banking\n  - Open Banking\n  - Payments\n  - Treasury\n  - FinOps\n  - FOCUS\n  - Contact Sales\ndescription: FinOps placement for Wells Fargo Open Banking APIs. Cost is bundled into the treasury /\n  commercial-banking relationship rather than published as per-call API pricing; FOCUS mapping\n  reflects bank-fee billing.\nnotes: No public per-call price list. FOCUS columns reflect the treasury / commercial-banking invoice\n  shape only.\nsources:\n  - https://developer.wellsfargo.com/\n\
-  billingModel:\n  pricingCategory: Bank Fees / Partner Agreement\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\nfocusColumns:\n  ServiceName: Wells Fargo Open Banking APIs\n  ServiceCategory: Banking / Open Banking\n  ProviderName: Wells Fargo\n  PublisherName: Wells Fargo Bank, N.A.\n  InvoiceIssuerName: Wells Fargo Bank, N.A.\n  BillingCurrency: USD\nmeters:\n  - name: payment_transactions\n    description: Count of payment-initiation / wire / ACH calls executed via the Open Banking\n      Payments APIs; priced through the treasury services schedule.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - rail\n      - account\n  - name: data_calls\n    description: Count of account-information / balance / transaction-history calls via the Open\n      Banking Data APIs; pricing depends on the partner agreement.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - product\n      - account\nprinciples:\n\
-  \  - name: Visibility\n    description: Spend visibility is via the Wells Fargo Commercial Electronic Office (CEO) account\n      analysis statement and any partner-portal reporting provisioned at onboarding.\n  - name: Allocation\n    description: Allocate API-driven banking spend by account, legal entity, or product line using\n      the Wells Fargo account hierarchy and your internal cost-center tags on the integrating\n      application.\n  - name: Optimization\n    description: Cost levers are payment-rail selection (ACH vs wire vs RTP), batching, and renegotiation\n      of the treasury services schedule; idempotency on payments avoids duplicate-charge incidents.\n  - name: Accountability\n    description: Treasury operations and the bank's relationship manager hold accountability;\n      engineering owns idempotency, retry, and reconciliation hygiene.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: wells-fargo\nproviderId: wells-fargo\npublisherName: wells-fargo\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the wells-fargo API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost\
+  \ can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n     \
+  \ - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: wells-fargo\n  ServiceCategory: Developer Tools / API\n  ProviderName: wells-fargo\n  PublisherName: wells-fargo\n  InvoiceIssuerName: wells-fargo\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n\
+  \  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Wells Fargo Gateway API\n    baseURL: https://api.wellsfargo.com\n    tags:\n      - Banking\n      - Financial Services\n      - Open Banking\n      - Payments\n      - Treasury Management\n      - Commercial Banking\n    serviceName: Wells Fargo Gateway API\n    serviceCategory: API\n  - name: Wells Fargo Account Transactions API\n    baseURL: https://api.wellsfargo.com\n    tags:\n      - Banking\n      - Financial Services\n      - Account Management\n      - Transactions\n      - Treasury Management\n    serviceName: Wells Fargo Account Transactions API\n    serviceCategory: API\n  - name: Wells Fargo ACH Payments API\n    baseURL: https://api.wellsfargo.com\n    tags:\n      - Banking\n      - Financial Services\n      - Payments\n      - ACH\n      - Treasury\
+  \ Management\n    serviceName: Wells Fargo ACH Payments API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/wells-fargo/refs/heads/main/finops/wells-fargo-finops.yml
-sources:
-- https://developer.wellsfargo.com/
+sources: []
 specification: FinOps Framework
 tags:
-- Banking
-- Open Banking
-- Payments
-- Treasury
 - FinOps
+- Cost Management
 - FOCUS
-- Contact Sales
 ---

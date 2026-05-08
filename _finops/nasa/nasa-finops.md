@@ -44,61 +44,76 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/nasa/refs/heads/main/openapi/nasa-nasa-image-and-video-library-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: None
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Free / Public Good
-description: 'FOCUS-aligned FinOps for NASA Open APIs: zero-cost public-good APIs whose only meaningful consumption signal is request volume per key. No invoiced charges; cost concerns are limited to internal consumer-side observability and rate-limit avoidance.'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the NASA API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: N/A (no invoicing)
+  InvoiceIssuerName: NASA
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: NASA
-  PublisherName: National Aeronautics and Space Administration
-  ServiceCategory: Open Data
-  ServiceName: NASA Open APIs
+  PublisherName: NASA
+  ServiceCategory: Developer Tools / API
+  ServiceName: NASA
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
   - api
-  - api_key
   - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
-- aggregation: count
-  dimensions:
-  - api_key
-  - api
-  name: ratelimit_blocks
-  unit: event
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - source_ip
   - api
-  name: demo_key_requests
-  unit: request
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Nasa Finops
 provider_name: NASA
 provider_slug: nasa
-publisher_name: National Aeronautics and Space Administration
-service_category: Open Data / Public Sector
+publisher_name: NASA
+service_category: API
 slug: nasa-finops
 source_filename: nasa-finops.yml
 source_heading: FinOps Profile
-source_url: https://api.nasa.gov/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: NASA\nproviderId: nasa\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Government\n  - Open Data\n  - Space\ndescription: 'FOCUS-aligned FinOps for NASA Open APIs: zero-cost public-good APIs whose only meaningful\n  consumption signal is request volume per key. No invoiced charges; cost concerns are limited to internal\n  consumer-side observability and rate-limit avoidance.'\nsources:\n  - https://api.nasa.gov/\n  - https://api.nasa.gov/assets/html/authentication.html\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: National Aeronautics and Space Administration\nserviceCategory: Open Data / Public Sector\nbillingModel:\n  pricingCategory:\
-  \ Free / Public Good\n  billingFrequency: None\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: NASA Open APIs\n  ServiceCategory: Open Data\n  ProviderName: NASA\n  PublisherName: National Aeronautics and Space Administration\n  InvoiceIssuerName: N/A (no invoicing)\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - api_key\n      - endpoint\n  - name: ratelimit_blocks\n    unit: event\n    aggregation: count\n    dimensions:\n      - api_key\n      - api\n  - name: demo_key_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - source_ip\n      - api\nprinciples:\n  - name: Visibility\n    description: Inspect the X-RateLimit-Limit and X-RateLimit-Remaining response headers on every call;\n      log them per-consumer to track approach to the 1,000/hour cap.\n  - name: Allocation\n    description: Issue distinct api.nasa.gov\
-  \ API keys per consuming application or team to attribute usage;\n      the platform itself does not provide chargeback because there is no charge.\n  - name: Optimization\n    description: Cache responses (especially APOD, EPIC, and NeoWs which change at most daily) to stay\n      well below the hourly cap; avoid the shared DEMO_KEY for any real workload.\n  - name: Accountability\n    description: Each consuming team owns its NASA API key, monitors rate-limit headers, and contacts\n      api@nasa.gov before scaling beyond 1,000 req/hour rather than retrying through 429 blocks.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: NASA\nproviderId: nasa\npublisherName: NASA\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Government\n  - Science\n  - Space\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the NASA API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature\
+  \ so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n\
+  \      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: NASA\n  ServiceCategory: Developer Tools / API\n  ProviderName: NASA\n  PublisherName: NASA\n  InvoiceIssuerName: NASA\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n\
+  \    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: NASA Astronomy Picture of the Day (APOD) API\n    baseURL: ''\n    tags:\n      - Astronomy\n      - Images\n      - Space\n    serviceName: NASA Astronomy Picture of the Day (APOD) API\n    serviceCategory: API\n  - name: NASA Mars Rover Photos API\n    baseURL: ''\n    tags:\n      - Images\n      - Mars\n      - Rovers\n      - Space\n    serviceName: NASA Mars Rover Photos API\n    serviceCategory: API\n  - name: NASA NeoWs (Near Earth Object Web Service) API\n    baseURL: ''\n    tags:\n      - Asteroids\n      - Near Earth Objects\n      - Space\n    serviceName: NASA NeoWs (Near Earth Object Web Service) API\n    serviceCategory: API\n  - name: NASA DONKI (Space Weather) API\n    baseURL: ''\n    tags:\n      - Solar\n      - Space\n      - Space Weather\n    serviceName: NASA DONKI\
+  \ (Space Weather) API\n    serviceCategory: API\n  - name: NASA EPIC (Earth Polychromatic Imaging Camera) API\n    baseURL: ''\n    tags:\n      - Earth\n      - Images\n      - Space\n    serviceName: NASA EPIC (Earth Polychromatic Imaging Camera) API\n    serviceCategory: API\n  - name: NASA Image and Video Library API\n    baseURL: ''\n    tags:\n      - Images\n      - Media\n      - Space\n      - Video\n    serviceName: NASA Image and Video Library API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/nasa/refs/heads/main/finops/nasa-finops.yml
-sources:
-- https://api.nasa.gov/
-- https://api.nasa.gov/assets/html/authentication.html
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Government
-- Open Data
+- Science
 - Space
+- FinOps
+- Cost Management
+- FOCUS
 ---

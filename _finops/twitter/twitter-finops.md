@@ -14,84 +14,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/twitter/refs/heads/main/openapi/x-api-openapi.json
 billing_model:
   billingCurrency: USD
-  billingFrequency: On-Demand
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
-  pricingCategory: Pay-As-You-Go
-description: FOCUS-aligned FinOps for the X API v2 — credit-based pay-per-call with per-resource read pricing ($0.001 owned / $0.005 content / $0.010 identity), per-request write pricing ($0.015 standard, $0.200 with URL), 24-hour request deduplication, and configurable spending limits / auto-recharge in the Developer Console.
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the X (Twitter) API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: X Corp.
+  ChargeCategory: Usage
+  InvoiceIssuerName: X (Twitter)
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: X (Twitter)
-  PublisherName: X Corp.
-  ServiceCategory: Social Media Developer API
-  ServiceName: X API
+  PublisherName: X (Twitter)
+  ServiceCategory: Developer Tools / API
+  ServiceName: X (Twitter)
 layout: finops
 meters:
 - aggregation: sum
-  description: Read of post / list / space / community / note / media / analytics resources at $0.005 each.
+  description: Count of billable API requests
   dimensions:
-  - resource_type
-  - app
-  name: read_resources_content
-  unit: resource
-- aggregation: sum
-  description: Read of user / DM / following / followers / trends resources at $0.010 each.
-  dimensions:
-  - resource_type
-  - app
-  name: read_resources_identity
-  unit: resource
-- aggregation: sum
-  description: Reads against your own data (own posts, bookmarks, followers) at $0.001 each.
-  dimensions:
-  - resource_type
-  - app
-  name: owned_reads
-  unit: resource
-- aggregation: sum
-  description: Content-creation and basic write/interaction requests at $0.015 (interactions $0.005-$0.015).
-  dimensions:
+  - api
   - endpoint
-  - app
-  name: write_requests_standard
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: Content-creation requests that include a URL at $0.200 each.
+  description: Bytes returned over the network in API responses
   dimensions:
-  - endpoint
-  - app
-  name: write_requests_with_url
-  unit: request
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Credits purchased upfront in the Developer Console; consumed by request meters.
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - app
-  name: credits_purchased
-  unit: USD
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Twitter Finops
 provider_name: X (Twitter)
 provider_slug: twitter
-publisher_name: X Corp.
-service_category: Social Media Developer API
+publisher_name: X (Twitter)
+service_category: API
 slug: twitter-finops
 source_filename: twitter-finops.yml
 source_heading: FinOps Profile
-source_url: https://docs.x.com/x-api/getting-started/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: X (Twitter)\nproviderId: twitter\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Social Media\n  - Developer API\n  - Pay-Per-Use\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for the X API v2 — credit-based pay-per-call with per-resource read\n  pricing ($0.001 owned / $0.005 content / $0.010 identity), per-request write pricing ($0.015 standard,\n  $0.200 with URL), 24-hour request deduplication, and configurable spending limits / auto-recharge in\n  the Developer Console.\nsources:\n  - https://docs.x.com/x-api/getting-started/pricing\n  - https://docs.x.com/x-api/getting-started/about-x-api\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
-  \ X Corp.\nserviceCategory: Social Media Developer API\nbillingModel:\n  pricingCategory: Pay-As-You-Go\n  billingFrequency: On-Demand\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: X API\n  ServiceCategory: Social Media Developer API\n  ProviderName: X (Twitter)\n  PublisherName: X Corp.\n  InvoiceIssuerName: X Corp.\n  BillingCurrency: USD\nmeters:\n  - name: read_resources_content\n    description: Read of post / list / space / community / note / media / analytics resources at $0.005\n      each.\n    unit: resource\n    aggregation: sum\n    dimensions:\n      - resource_type\n      - app\n  - name: read_resources_identity\n    description: Read of user / DM / following / followers / trends resources at $0.010 each.\n    unit: resource\n    aggregation: sum\n    dimensions:\n      - resource_type\n      - app\n  - name: owned_reads\n    description: Reads against your own data (own posts, bookmarks, followers) at $0.001 each.\n\
-  \    unit: resource\n    aggregation: sum\n    dimensions:\n      - resource_type\n      - app\n  - name: write_requests_standard\n    description: Content-creation and basic write/interaction requests at $0.015 (interactions $0.005-$0.015).\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - app\n  - name: write_requests_with_url\n    description: Content-creation requests that include a URL at $0.200 each.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - app\n  - name: credits_purchased\n    description: Credits purchased upfront in the Developer Console; consumed by request meters.\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - app\nprinciples:\n  - name: Visibility\n    description: Use the X Developer Console real-time tracking to monitor credit balance, per-endpoint\n      cost, and request counts; rate-limit headers (x-rate-limit-remaining / reset) provide an additional\n      governance signal.\n\
-  \  - name: Allocation\n    description: Allocate spend per Developer Console app (client) — each app has its own credit balance,\n      spending limit, and auto-recharge. Map apps to product features so credit consumption charges back\n      cleanly.\n  - name: Optimization\n    description: Lever the 24-hour request-deduplication window (do not re-fetch the same resource within\n      24 hours), prefer owned reads ($0.001) over content/identity reads where applicable, avoid posting\n      with URLs ($0.200) when a plain post ($0.015) suffices, and use streaming endpoints for real-time\n      data instead of poll-driven reads.\n  - name: Accountability\n    description: Each app's credit balance has an owner who configures the spending limit and auto-recharge\n      threshold; finance reviews credit-purchase invoices and the per-app monthly burn rate.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: X (Twitter)\nproviderId: twitter\npublisherName: X (Twitter)\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Social Media\n  - Microblogging\n  - Real-Time Data\n  - Streaming\n  - Advertising\n  - Content\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the X (Twitter) API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
+  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
+  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: X (Twitter)\n  ServiceCategory: Developer Tools / API\n  ProviderName: X (Twitter)\n  PublisherName: X (Twitter)\n  InvoiceIssuerName: X (Twitter)\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: X API\n    baseURL: https://api.x.com/2\n    tags:\n      - Posts\n      - Users\n      - Spaces\n      - Lists\n      - Direct Messages\n      - Streaming\n      - Search\n      - Timelines\n    serviceName: X API\n    serviceCategory: API\n  - name: X Ads API\n    baseURL: https://ads-api.x.com\n    tags:\n      - Advertising\n      - Campaigns\n      - Analytics\n      - Audiences\n      - Creatives\n    serviceName: X Ads API\n    serviceCategory: API\n  - name: X Activity API\n    baseURL: https://api.x.com\n    tags:\n      - Activity\n      - Events\n      - Real-Time\n      - Streaming\n      - Webhooks\n    serviceName: X Activity API\n    serviceCategory:\
+  \ API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/twitter/refs/heads/main/finops/twitter-finops.yml
-sources:
-- https://docs.x.com/x-api/getting-started/pricing
-- https://docs.x.com/x-api/getting-started/about-x-api
+sources: []
 specification: FinOps Framework
 tags:
 - Social Media
-- Developer API
-- Pay-Per-Use
+- Microblogging
+- Real-Time Data
+- Streaming
+- Advertising
+- Content
 - FinOps
+- Cost Management
 - FOCUS
 ---

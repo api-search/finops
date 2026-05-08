@@ -14,59 +14,76 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/general-dynamics/refs/heads/main/openapi/general-dynamics-mission-systems-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Contract / Program
-description: General Dynamics revenue is contract-based across defense, aerospace, marine, and technology services. There is no SaaS or API billing surface; FinOps for downstream consumers applies to program / contract management rather than per-call usage.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the General Dynamics API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: General Dynamics Corporation
+  ChargeCategory: Usage
+  InvoiceIssuerName: General Dynamics
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: General Dynamics
-  PublisherName: General Dynamics Corporation
-  ServiceCategory: Defense & Aerospace
+  PublisherName: General Dynamics
+  ServiceCategory: Developer Tools / API
   ServiceName: General Dynamics
 layout: finops
 meters:
-- aggregation: count
-  dimensions:
-  - program
-  - contract_id
-  name: contract_milestones
-  unit: milestone
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - program
-  - labor_category
-  name: program_hours
-  unit: hour
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - program
-  - cdrl
-  name: deliverables
-  unit: unit
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: General Dynamics Finops
 provider_name: General Dynamics
 provider_slug: general-dynamics
-publisher_name: General Dynamics Corporation
-service_category: Defense & Aerospace
+publisher_name: General Dynamics
+service_category: API
 slug: general-dynamics-finops
 source_filename: general-dynamics-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.gd.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: General Dynamics\nproviderId: general-dynamics\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Defense\n  - Aerospace\ndescription: General Dynamics revenue is contract-based across defense, aerospace, marine, and\n  technology services. There is no SaaS or API billing surface; FinOps for downstream consumers\n  applies to program / contract management rather than per-call usage.\nnotes: No public API or pricing surface; FinOps shape inferred from a defense-contractor program\n  model.\nsources:\n  - https://www.gd.com/\n  - https://www.gdit.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: General Dynamics Corporation\nserviceCategory:\
-  \ Defense & Aerospace\nbillingModel:\n  pricingCategory: Contract / Program\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: General Dynamics\n  ServiceCategory: Defense & Aerospace\n  ProviderName: General Dynamics\n  PublisherName: General Dynamics Corporation\n  InvoiceIssuerName: General Dynamics Corporation\n  BillingCurrency: USD\nmeters:\n  - name: contract_milestones\n    unit: milestone\n    aggregation: count\n    dimensions:\n      - program\n      - contract_id\n  - name: program_hours\n    unit: hour\n    aggregation: sum\n    dimensions:\n      - program\n      - labor_category\n  - name: deliverables\n    unit: unit\n    aggregation: sum\n    dimensions:\n      - program\n      - cdrl\nprinciples:\n  - name: Visibility\n    description: Reconcile General Dynamics invoices against contract line items (CLINs) and\n      milestone schedules; track earned-value per program.\n  - name:\
-  \ Allocation\n    description: Allocate program cost to mission / capability owners; tag CLINs to\n      appropriations.\n  - name: Optimization\n    description: Use IDIQ / multi-award vehicles to drive task-order competition; right-size\n      labor categories; review fixed-price vs cost-plus mix.\n  - name: Accountability\n    description: Program manager owns spend and EVM variance; contracting officer governs\n      change orders.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: General Dynamics\nproviderId: general-dynamics\npublisherName: General Dynamics\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Aerospace\n  - Defense\n  - Mission Systems\n  - Government\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the General Dynamics API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
+  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: General Dynamics\n  ServiceCategory: Developer Tools / API\n  ProviderName: General Dynamics\n  PublisherName: General Dynamics\n  InvoiceIssuerName: General Dynamics\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API\
+  \ responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: General Dynamics Mission Systems API\n    baseURL: https://api.gdmissionsystems.com\n    tags:\n      - Aerospace\n      - Defense\n      - Government\n      - Mission Systems\n    serviceName: General Dynamics Mission Systems API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/general-dynamics/refs/heads/main/finops/general-dynamics-finops.yml
-sources:
-- https://www.gd.com/
-- https://www.gdit.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Defense
 - Aerospace
+- Defense
+- Mission Systems
+- Government
+- FinOps
+- Cost Management
+- FOCUS
 ---

@@ -7,70 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly / Per-Milestone
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
-  - Adjustment
+  - Purchase
+  - Tax
   - Credit
-  pricingCategory: Government Contract (FFP / T&M / Per-Transaction)
-description: 'FOCUS-aligned FinOps shape for Maximus: government / commercial contractor priced via contract vehicles (fixed-price, time-and-materials, per-case). FinOps focus is on contract milestone tracking and per-transaction unit economics, not per-API-call billing.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Maximus API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Maximus, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Maximus
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Maximus
-  PublisherName: Maximus, Inc.
-  ServiceCategory: Government Services / IT Modernization
-  ServiceName: Maximus Services
+  PublisherName: Maximus
+  ServiceCategory: Developer Tools / API
+  ServiceName: Maximus
 layout: finops
 meters:
-- aggregation: max
-  description: Total contract / task-order value, billed against milestones.
-  dimensions:
-  - contract
-  - clin
-  - agency
-  name: contract_value
-  unit: USD
 - aggregation: sum
-  description: Eligibility cases or contact-center calls handled (per-transaction contract vehicles).
+  description: Count of billable API requests
   dimensions:
-  - contract
-  - state
-  - program
-  name: cases_handled
-  unit: case
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Billable labor hours under T&M contracts.
+  description: Bytes returned over the network in API responses
   dimensions:
-  - contract
-  - labor_category
-  name: labor_hours
-  unit: hour
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Maximus Finops
 provider_name: Maximus
 provider_slug: maximus
-publisher_name: Maximus, Inc.
-service_category: Government Services / IT Modernization
+publisher_name: Maximus
+service_category: API
 slug: maximus-finops
 source_filename: maximus-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.maximus.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Maximus\nproviderId: maximus\npublisherName: Maximus, Inc.\nserviceCategory: Government Services / IT Modernization\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Government Services\n  - Health\n  - Technology\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps shape for Maximus: government / commercial contractor priced via\n  contract vehicles (fixed-price, time-and-materials, per-case). FinOps focus is on contract milestone\n  tracking and per-transaction unit economics, not per-API-call billing.'\nnotes: |\n  No public per-API pricing. Cost is allocated by program / contract / task order; meters represent\n\
-  \  contract-level economic units rather than API requests.\nsources:\n  - https://www.maximus.com/\n  - https://www.maximus.com/federal\nprinciples:\n  - name: Visibility\n    description: Track program spend at the task-order / contract-line-item-number (CLIN) level via\n      government invoicing systems (e.g. WAWF / iRAPT for DoD, Treasury IPP for civilian) and integrate\n      with internal ERP for project burn-down.\n  - name: Allocation\n    description: Allocate by contract / task order / CLIN. For state / health programs, allocate by\n      state and program (Medicaid, CHIP, child support); for federal IT, allocate by agency, system,\n      and ATO boundary.\n  - name: Optimization\n    description: Optimize contract structure (firm-fixed-price vs. T&M vs. per-case), automate eligibility\n      and contact-center tasks where appropriate, and pursue option years / extensions where unit economics\n      improve at scale.\n  - name: Accountability\n    description: Assign a contract\
-  \ / program manager per CLIN responsible for invoicing, milestone delivery,\n      and government acceptance of deliverables.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Allocation\n      - Reporting and Analytics\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Workload Optimization\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - Invoicing and Chargeback\n      - Onboarding Workloads\nbillingModel:\n  pricingCategory: Government Contract (FFP / T&M / Per-Transaction)\n  billingFrequency: Monthly / Per-Milestone\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Maximus Services\n  ServiceCategory: Government Services / IT Modernization\n  ProviderName: Maximus\n\
-  \  PublisherName: Maximus, Inc.\n  InvoiceIssuerName: Maximus, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: contract_value\n    description: Total contract / task-order value, billed against milestones.\n    unit: USD\n    aggregation: max\n    dimensions:\n      - contract\n      - clin\n      - agency\n  - name: cases_handled\n    description: Eligibility cases or contact-center calls handled (per-transaction contract vehicles).\n    unit: case\n    aggregation: sum\n    dimensions:\n      - contract\n      - state\n      - program\n  - name: labor_hours\n    description: Billable labor hours under T&M contracts.\n    unit: hour\n    aggregation: sum\n    dimensions:\n      - contract\n      - labor_category\napis:\n  - name: Maximus API\n    baseURL: https://api.maximus.com\n    tags:\n      - Government Services\n      - Health\n      - Technology\n    serviceName: Maximus API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Case Handled\n\
-  \    metric: billed_cost / cases_handled\n    target: TBD\n  - name: Labor Recovery Rate\n    metric: billable_hours / total_hours\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Maximus\nproviderId: maximus\npublisherName: Maximus\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Government Services\n  - Health\n  - Technology\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Maximus API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Maximus\n  ServiceCategory: Developer Tools / API\n  ProviderName: Maximus\n  PublisherName: Maximus\n  InvoiceIssuerName: Maximus\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n  \
+  \    - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Maximus API\n    baseURL: https://api.maximus.com\n    tags:\n      - Government Services\n      - Health\n      - Technology\n    serviceName: Maximus API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/maximus/refs/heads/main/finops/maximus-finops.yml
-sources:
-- https://www.maximus.com/
-- https://www.maximus.com/federal
+sources: []
 specification: FinOps Framework
 tags:
 - Government Services
 - Health
 - Technology
 - FinOps
+- Cost Management
 - FOCUS
 ---

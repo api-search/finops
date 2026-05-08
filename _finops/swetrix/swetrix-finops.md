@@ -26,62 +26,80 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/swetrix/refs/heads/main/openapi/swetrix-admin-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly or Annual
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Tiered Subscription
-description: FOCUS-aligned FinOps definition for Swetrix. Pricing is a pure tiered subscription differentiated by the included monthly event quota (10 published tiers from 100k to 20M events plus a Custom tier). All tiers ship the same feature set, so the only variable cost driver is monthly event volume.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Swetrix API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Swetrix Ltd.
+  InvoiceIssuerName: Swetrix
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Swetrix
-  PublisherName: Swetrix Ltd.
-  ServiceCategory: Web Analytics
+  PublisherName: Swetrix
+  ServiceCategory: Developer Tools / API
   ServiceName: Swetrix
 layout: finops
 meters:
 - aggregation: sum
-  description: Monthly or annual base plan fee, tier determined by included monthly event quota
+  description: Count of billable API requests
   dimensions:
-  - plan
-  name: base_subscription
-  unit: month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Tracked analytics events ingested per month (counted against plan quota)
+  description: Bytes returned over the network in API responses
   dimensions:
-  - project
-  - event_type
-  name: monthly_events
-  unit: event
-- aggregation: max
-  description: Websites under one account, capped at 50 per account
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - project
-  name: tracked_websites
-  unit: website
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Swetrix Finops
 provider_name: Swetrix
 provider_slug: swetrix
-publisher_name: Swetrix Ltd.
-service_category: Web Analytics
+publisher_name: Swetrix
+service_category: API
 slug: swetrix-finops
 source_filename: swetrix-finops.yml
 source_heading: FinOps Profile
-source_url: https://swetrix.com/#pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Swetrix\nproviderId: swetrix\npublisherName: Swetrix Ltd.\nserviceCategory: Web Analytics\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Analytics\n  - Web Analytics\ndescription: FOCUS-aligned FinOps definition for Swetrix. Pricing is a pure tiered subscription differentiated\n  by the included monthly event quota (10 published tiers from 100k to 20M events plus a Custom tier).\n  All tiers ship the same feature set, so the only variable cost driver is monthly event volume.\nsources:\n  - https://swetrix.com/#pricing\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\
-  \ or Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Swetrix\n  ServiceCategory: Web Analytics\n  ProviderName: Swetrix\n  PublisherName: Swetrix Ltd.\n  InvoiceIssuerName: Swetrix Ltd.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: base_subscription\n    description: Monthly or annual base plan fee, tier determined by included monthly event quota\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n  - name: monthly_events\n    description: Tracked analytics events ingested per month (counted against plan quota)\n    unit: event\n    aggregation: sum\n    dimensions:\n      - project\n      - event_type\n  - name: tracked_websites\n    description: Websites under one account, capped at 50 per account\n    unit: website\n    aggregation: max\n    dimensions:\n      - project\nprinciples:\n  - name: Visibility\n    description: Use the Swetrix dashboard project\
-  \ usage view to track monthly event volume relative\n      to the subscribed plan quota; alert as you approach the next tier threshold.\n  - name: Allocation\n    description: Allocate Swetrix cost to the product or marketing site whose tracked events drive volume;\n      one Swetrix account aggregates up to 50 sites which can be split per business unit.\n  - name: Optimization\n    description: Reduce event volume by sampling high-volume events, disabling tracking on noisy paths,\n      and choosing annual billing for the ~17% discount; right-size to the smallest tier that covers\n      typical monthly volume rather than the peak.\n  - name: Accountability\n    description: Assign a Swetrix account owner per workspace; review monthly event consumption against\n      the subscribed tier and forecast tier upgrades 1-2 months ahead.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Swetrix\nproviderId: swetrix\npublisherName: Swetrix\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Cookieless Tracking\n  - GDPR Compliant\n  - Open Source\n  - Privacy\n  - Real-Time Analytics\n  - Web Analytics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Swetrix API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Swetrix\n  ServiceCategory: Developer Tools / API\n  ProviderName: Swetrix\n  PublisherName: Swetrix\n  InvoiceIssuerName: Swetrix\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Swetrix Events API\n    baseURL: https://api.swetrix.com\n    tags:\n      - Analytics\n      - Cookieless Tracking\n      - Custom Events\n      - Error Tracking\n      - Events\n      - Pageviews\n      - Revenue Tracking\n    serviceName: Swetrix Events API\n    serviceCategory: API\n  - name: Swetrix Statistics API\n    baseURL: https://api.swetrix.com\n    tags:\n      - Analytics\n      - Funnels\n      - Performance\n      - Statistics\n      - Traffic\n    serviceName: Swetrix Statistics API\n    serviceCategory: API\n  - name: Swetrix Admin API\n    baseURL: https://api.swetrix.com\n    tags:\n      - Administration\n      - Analytics\n      - Organisations\n     \
+  \ - Project Management\n      - Projects\n    serviceName: Swetrix Admin API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/swetrix/refs/heads/main/finops/swetrix-finops.yml
-sources:
-- https://swetrix.com/#pricing
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Analytics
+- Cookieless Tracking
+- GDPR Compliant
+- Open Source
+- Privacy
+- Real-Time Analytics
 - Web Analytics
+- FinOps
+- Cost Management
+- FOCUS
 ---

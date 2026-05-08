@@ -38,52 +38,78 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/pypi/refs/heads/main/openapi/pypi-stats-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: On-Demand
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Free
-description: FOCUS-aligned FinOps shape for PyPI. PyPI is operated by the Python Software Foundation as donation-supported public infrastructure — there is no vendor invoice, no metered API, and no commercial tier. Consumer-side cost is purely the consumer's own infrastructure (egress, CI runner time, mirror storage).
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the PyPI API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: n/a (donation-supported)
+  ChargeCategory: Usage
+  InvoiceIssuerName: PyPI
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: PyPI
-  PublisherName: Python Software Foundation
-  ServiceCategory: Package Registry
+  PublisherName: PyPI
+  ServiceCategory: Developer Tools / API
   ServiceName: PyPI
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - package
-  - version
-  name: package_downloads
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - mirror
-  name: consumer_egress
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Pypi Finops
 provider_name: PyPI
 provider_slug: pypi
-publisher_name: Python Software Foundation
-service_category: Package Registry
+publisher_name: PyPI
+service_category: API
 slug: pypi-finops
 source_filename: pypi-finops.yml
 source_heading: FinOps Profile
-source_url: https://pypi.org/help/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: PyPI\nproviderId: pypi\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Package Registry\n  - Python\n  - Open Source\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for PyPI. PyPI is operated by the Python Software Foundation\n  as donation-supported public infrastructure — there is no vendor invoice, no metered API, and no\n  commercial tier. Consumer-side cost is purely the consumer's own infrastructure (egress, CI runner\n  time, mirror storage).\nnotes: PyPI does not bill consumers. The only FinOps-relevant cost is the consumer's own bandwidth /\n  CI / mirror infrastructure. Donations to the PSF are voluntary.\nsources:\n  - https://pypi.org/help/\n  - https://docs.pypi.org/api/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
-  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Python Software Foundation\nserviceCategory: Package Registry\nbillingModel:\n  pricingCategory: Free\n  billingFrequency: On-Demand\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: PyPI\n  ServiceCategory: Package Registry\n  ProviderName: PyPI\n  PublisherName: Python Software Foundation\n  InvoiceIssuerName: 'n/a (donation-supported)'\n  BillingCurrency: USD\nmeters:\n  - name: package_downloads\n    unit: request\n    aggregation: sum\n    dimensions:\n      - package\n      - version\n  - name: consumer_egress\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - mirror\nprinciples:\n  - name: Visibility\n    description: PyPI publishes BigQuery / Google Cloud Storage download statistics (`bigquery-public-data.pypi.file_downloads`)\n      so consumers and maintainers can see download patterns; consumer cost is observable in the consumer's\n   \
-  \   own cloud / CI bill.\n  - name: Allocation\n    description: Allocate consumer-side cost (egress, CI runtime, mirror storage) by team or product\n      using the consumer's own tagging; PyPI itself has no per-consumer billing surface.\n  - name: Optimization\n    description: Use Fastly's CDN cache headers and ETag conditional requests, pin and cache wheels\n      in a private mirror (devpi, Artifactory, Nexus) to reduce repeat egress, and use lockfiles to\n      avoid unnecessary metadata churn.\n  - name: Accountability\n    description: PyPI has no consumer-side budget owner; the PSF funds operation via donations. Consumer\n      organizations should account for their own mirror and CI cost.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: PyPI\nproviderId: pypi\npublisherName: PyPI\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Developer Tools\n  - Open Source\n  - Package Management\n  - Packages\n  - Python\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the PyPI API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: PyPI\n  ServiceCategory: Developer Tools / API\n  ProviderName: PyPI\n  PublisherName: PyPI\n  InvoiceIssuerName: PyPI\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      -\
+  \ api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: PyPI JSON API\n    baseURL: ''\n    tags:\n      - Metadata\n      - Open Source\n      - Packages\n      - Python\n    serviceName: PyPI JSON API\n    serviceCategory: API\n  - name: PyPI Index API\n    baseURL: ''\n    tags:\n      - Index\n      - Packages\n      - PEP 503\n      - PEP 691\n      - Python\n    serviceName: PyPI Index API\n    serviceCategory: API\n  - name: PyPI Integrity API\n    baseURL: ''\n    tags:\n      - Attestations\n      - Provenance\n      - Python\n      - Security\n      - Supply Chain\n    serviceName: PyPI Integrity API\n    serviceCategory: API\n  - name: PyPI Upload API\n    baseURL: ''\n    tags:\n      - Packages\n      - Publishing\n      - Python\n      - Upload\n    serviceName: PyPI\
+  \ Upload API\n    serviceCategory: API\n  - name: PyPI RSS Feeds\n    baseURL: ''\n    tags:\n      - Feeds\n      - Packages\n      - Python\n      - RSS\n      - Updates\n    serviceName: PyPI RSS Feeds\n    serviceCategory: API\n  - name: PyPI Stats API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Downloads\n      - Packages\n      - Python\n      - Statistics\n    serviceName: PyPI Stats API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/pypi/refs/heads/main/finops/pypi-finops.yml
-sources:
-- https://pypi.org/help/
-- https://docs.pypi.org/api/
+sources: []
 specification: FinOps Framework
 tags:
-- Package Registry
-- Python
+- Developer Tools
 - Open Source
+- Package Management
+- Packages
+- Python
 - FinOps
+- Cost Management
 - FOCUS
 ---

@@ -7,43 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Subscription
-description: 'FOCUS-aligned FinOps stub for Verint Systems: enterprise customer-engagement SaaS subscription with no public pricing or usage/billing API.'
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Verint Systems API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Verint Systems Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Verint Systems
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Verint Systems
-  PublisherName: Verint Systems Inc.
-  ServiceCategory: Customer Engagement
-  ServiceName: Verint Open CCaaS / WEM
+  PublisherName: Verint Systems
+  ServiceCategory: Developer Tools / API
+  ServiceName: Verint Systems
 layout: finops
 meters:
 - aggregation: sum
-  description: Annual Verint platform subscription line; sub-meters not publicly published.
-  name: platform_subscription
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Verint Systems Finops
 provider_name: Verint Systems
 provider_slug: verint-systems
-publisher_name: Verint Systems Inc.
-service_category: Customer Engagement
+publisher_name: Verint Systems
+service_category: API
 slug: verint-systems-finops
 source_filename: verint-systems-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.verint.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Verint Systems\nproviderId: verint-systems\npublisherName: Verint Systems Inc.\nserviceCategory: Customer Engagement\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Customer Engagement\n  - Analytics\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps stub for Verint Systems: enterprise customer-engagement SaaS subscription\n  with no public pricing or usage/billing API.'\nsources:\n  - https://www.verint.com/\nnotes: No public pricing or billing API. Meters are not invented; reconciliation deferred pending customer-portal\n  access.\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n\
-  \  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Verint Open CCaaS / WEM\n  ServiceCategory: Customer Engagement\n  ProviderName: Verint Systems\n  PublisherName: Verint Systems Inc.\n  InvoiceIssuerName: Verint Systems Inc.\n  BillingCurrency: USD\nmeters:\n  - name: platform_subscription\n    description: Annual Verint platform subscription line; sub-meters not publicly published.\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Verint exposes consumption telemetry inside the platform UI; no public usage/cost API\n      is documented. Track license utilization through the customer success engagement.\n  - name: Allocation\n    description: Allocation is contract-level (per Verint product, seat / channel scoping in the order\n      form).\n  - name: Optimization\n    description: 'Optimization is scope-driven: which channels and modules are licensed, agent / seat\n      counts. Renewal is the primary\
-  \ optimization checkpoint.'\n  - name: Accountability\n    description: Accountability sits with the contact-center / WEM platform owner; finance owns the\n      annual subscription line.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Verint Systems\nproviderId: verint-systems\npublisherName: Verint Systems\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Security\n  - Customer Engagement\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Verint Systems API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Verint Systems\n  ServiceCategory: Developer Tools / API\n  ProviderName: Verint Systems\n  PublisherName: Verint Systems\n  InvoiceIssuerName: Verint Systems\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Verint Systems API\n    baseURL: https://api.verint.com\n    tags:\n      - Analytics\n      - Security\n      - Customer Engagement\n    serviceName: Verint Systems API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/verint-systems/refs/heads/main/finops/verint-systems-finops.yml
-sources:
-- https://www.verint.com/
+sources: []
 specification: FinOps Framework
 tags:
-- Customer Engagement
 - Analytics
+- Security
+- Customer Engagement
 - FinOps
+- Cost Management
 - FOCUS
 ---

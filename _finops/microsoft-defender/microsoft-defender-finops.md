@@ -19,121 +19,75 @@ api_specs:
   spec_type: OpenAPI
   url: https://developer.microsoft.com/en-us/graph/graph-explorer
 billing_model:
-  billingCurrency: USD (settlement varies)
+  billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
+  - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Subscription (per Seat) + Pay-As-You-Go (per Resource)
-description: FOCUS-aligned FinOps for Microsoft Defender — hybrid model. User-licensed Defender products (Endpoint, Identity, Office 365, Cloud Apps) bill per user per month and roll up through M365 commerce. Defender for Cloud (Servers, Storage, Databases, Containers, CSPM) bills per Azure resource per hour and rolls up through Azure Cost Management with FOCUS-aligned exports. Optimization centers on right-sizing seat coverage, scoping Defender for Cloud plans per subscription, and avoiding double-coverage on E5 customers.
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Microsoft Defender API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Corporation
-  PricingCategory: Hybrid (Subscription + Usage)
-  PricingUnit: varies (user-month, server-hour, resource-month)
-  ProviderName: Microsoft Corporation
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Security
+  InvoiceIssuerName: Microsoft Defender
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Microsoft Defender
+  PublisherName: Microsoft Defender
+  ServiceCategory: Developer Tools / API
   ServiceName: Microsoft Defender
 layout: finops
 meters:
-- aggregation: max
-  description: Defender for Endpoint Plan 1/2 user seats.
-  dimensions:
-  - plan
-  - department
-  - cost_center
-  name: defender_endpoint_seats
-  unit: user-month
-- aggregation: max
-  description: Defender for Office 365 Plan 1/2 user seats.
-  dimensions:
-  - plan
-  - tenant
-  name: defender_office_seats
-  unit: user-month
-- aggregation: max
-  description: Defender for Identity user seats.
-  dimensions:
-  - tenant
-  name: defender_identity_seats
-  unit: user-month
 - aggregation: sum
-  description: Defender for Servers Plan 1/2 server-hour consumption.
+  description: Count of billable API requests
   dimensions:
-  - plan
-  - subscription
+  - api
+  - endpoint
+  - tier
   - region
-  - resource_group
-  name: defender_servers_hours
-  unit: server-hour
-- aggregation: max
-  description: Defender for Storage protected accounts.
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - subscription
+  - api
   - region
-  name: defender_storage_accounts
-  unit: account-month
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Storage operations metered by Defender for Storage.
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - account
-  name: defender_storage_transactions
-  unit: 1000-transactions
-- aggregation: sum
-  description: Defender for SQL / Cosmos DB protection.
-  dimensions:
-  - db_type
-  - subscription
-  name: defender_databases_vcore_hours
-  unit: vcore-hour
-- aggregation: sum
-  description: Defender for Containers per-vCore-hour.
-  dimensions:
-  - cluster
-  - cloud
-  name: defender_containers_vcore_hours
-  unit: vcore-hour
-- aggregation: max
-  description: Resources covered by Defender CSPM (Plan 2).
-  dimensions:
-  - resource_type
-  - subscription
-  name: defender_cspm_resources
-  unit: resource-month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Defender Finops
 provider_name: Microsoft Defender
 provider_slug: microsoft-defender
-publisher_name: Microsoft Corporation
-service_category: Security / XDR
+publisher_name: Microsoft Defender
+service_category: API
 slug: microsoft-defender-finops
 source_filename: microsoft-defender-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.microsoft.com/security/business/microsoft-defender
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Defender\nproviderId: microsoft-defender\npublisherName: Microsoft Corporation\nserviceCategory: Security / XDR\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Security\n  - XDR\n  - Cloud Security\n  - Endpoint\n  - Microsoft\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for Microsoft Defender — hybrid model. User-licensed Defender\n  products (Endpoint, Identity, Office 365, Cloud Apps) bill per user per month and roll up\n  through M365 commerce. Defender for Cloud (Servers, Storage, Databases, Containers, CSPM)\n  bills per Azure resource per hour and rolls up through Azure Cost Management with\
-  \ FOCUS-aligned\n  exports. Optimization centers on right-sizing seat coverage, scoping Defender for Cloud\n  plans per subscription, and avoiding double-coverage on E5 customers.\nsources:\n  - https://www.microsoft.com/security/business/microsoft-defender\n  - https://azure.microsoft.com/pricing/details/defender-for-cloud/\n  - https://learn.microsoft.com/en-us/azure/cost-management-billing/\n  - https://focus.finops.org/focus-specification/v1-3/\nbillingModel:\n  pricingCategory: Subscription (per Seat) + Pay-As-You-Go (per Resource)\n  billingFrequency: Monthly\n  billingCurrency: USD (settlement varies)\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Defender\n  ServiceCategory: Security\n  ProviderName: Microsoft Corporation\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  PricingCategory: Hybrid (Subscription + Usage)\n  PricingUnit:\
-  \ varies (user-month, server-hour, resource-month)\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: defender_endpoint_seats\n    description: Defender for Endpoint Plan 1/2 user seats.\n    unit: user-month\n    aggregation: max\n    dimensions:\n      - plan\n      - department\n      - cost_center\n  - name: defender_office_seats\n    description: Defender for Office 365 Plan 1/2 user seats.\n    unit: user-month\n    aggregation: max\n    dimensions:\n      - plan\n      - tenant\n  - name: defender_identity_seats\n    description: Defender for Identity user seats.\n    unit: user-month\n    aggregation: max\n    dimensions:\n      - tenant\n  - name: defender_servers_hours\n    description: Defender for Servers Plan 1/2 server-hour consumption.\n    unit: server-hour\n    aggregation: sum\n    dimensions:\n      - plan\n      - subscription\n      - region\n      - resource_group\n  - name: defender_storage_accounts\n    description: Defender for Storage protected\
-  \ accounts.\n    unit: account-month\n    aggregation: max\n    dimensions:\n      - subscription\n      - region\n  - name: defender_storage_transactions\n    description: Storage operations metered by Defender for Storage.\n    unit: 1000-transactions\n    aggregation: sum\n    dimensions:\n      - account\n  - name: defender_databases_vcore_hours\n    description: Defender for SQL / Cosmos DB protection.\n    unit: vcore-hour\n    aggregation: sum\n    dimensions:\n      - db_type\n      - subscription\n  - name: defender_containers_vcore_hours\n    description: Defender for Containers per-vCore-hour.\n    unit: vcore-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - cloud\n  - name: defender_cspm_resources\n    description: Resources covered by Defender CSPM (Plan 2).\n    unit: resource-month\n    aggregation: max\n    dimensions:\n      - resource_type\n      - subscription\nprinciples:\n  - name: Visibility\n    description: Microsoft 365 admin center surfaces\
-  \ Defender seat allocations. Microsoft\n      Defender portal > Settings > Pricing shows Defender for Cloud plan coverage per\n      subscription. Azure Cost Management exports show per-meter line items in FOCUS format.\n      Use Microsoft Sentinel + Defender XDR for unified security event telemetry.\n  - name: Allocation\n    description: Tag Azure subscriptions with cost-center to allocate Defender for Cloud\n      charges. For seat-based SKUs, use Entra ID dynamic groups by department to drive license\n      assignment and chargeback.\n  - name: Optimization\n    description: Avoid stacking — E5 / E5 Security customers already include Defender P2,\n      Identity, MDO P2, MDCA. Disable redundant standalone purchases. Scope Defender for Cloud\n      Plans per subscription, not tenant-wide — turn off Storage / Containers plans on\n      subscriptions without those resources. Use Plan 1 for Servers if you only need EDR; use\n      P2 only where vulnerability assessment / FIM is required.\
-  \ Reclaim Endpoint seats from\n      offboarded users monthly.\n  - name: Accountability\n    description: Security team owns plan selection; FinOps validates billing impact before\n      enabling new Defender for Cloud plans. Set Cost Management budgets on the security\n      management group with alerts at 80/100%. Monthly seat reconciliation against Entra ID\n      active users.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://www.microsoft.com/security/business/microsoft-defender\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Defender\nproviderId: microsoft-defender\npublisherName: Microsoft Defender\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Defender API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Defender\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Defender\n  PublisherName: Microsoft Defender\n  InvoiceIssuerName: Microsoft Defender\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Microsoft Defender for Endpoint API\n    baseURL: ''\n    tags:\n      - EDR\n      - Endpoint Security\n      - Threat Detection\n      - Vulnerability Management\n    serviceName: Microsoft Defender for Endpoint API\n    serviceCategory: API\n  - name: Microsoft Defender for Cloud Apps API\n    baseURL: ''\n    tags:\n      - CASB\n      - Cloud Security\n      - Data Protection\n      - Shadow IT\n    serviceName: Microsoft Defender for Cloud Apps API\n    serviceCategory: API\n  - name: Microsoft Defender Threat Intelligence API\n    baseURL: ''\n    tags:\n      - IOC\n      - Security Intelligence\n      - Threat Analytics\n      - Threat Intelligence\n    serviceName: Microsoft Defender Threat Intelligence API\n\
+  \    serviceCategory: API\n  - name: Microsoft Graph Security API\n    baseURL: ''\n    tags:\n      - Alerts\n      - Secure Score\n      - Security Graph\n      - Threat Protection\n    serviceName: Microsoft Graph Security API\n    serviceCategory: API\n  - name: Microsoft Defender for Office 365 API\n    baseURL: ''\n    tags:\n      - Collaboration Security\n      - Email Security\n      - Phishing Protection\n      - Safe Attachments\n    serviceName: Microsoft Defender for Office 365 API\n    serviceCategory: API\n  - name: Microsoft Defender XDR API\n    baseURL: ''\n    tags:\n      - Advanced Hunting\n      - Event Streaming\n      - Incidents\n      - Threat Protection\n      - XDR\n    serviceName: Microsoft Defender XDR API\n    serviceCategory: API\n  - name: Microsoft Defender for Cloud REST API\n    baseURL: ''\n    tags:\n      - Azure Security\n      - Cloud Security\n      - CSPM\n      - Security Posture\n      - Workload Protection\n    serviceName: Microsoft Defender\
+  \ for Cloud REST API\n    serviceCategory: API\n  - name: Microsoft Defender for Identity API\n    baseURL: ''\n    tags:\n      - Active Directory\n      - Identity Security\n      - Identity Threat Detection\n      - Sensor Management\n    serviceName: Microsoft Defender for Identity API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-defender/refs/heads/main/finops/microsoft-defender-finops.yml
-sources:
-- https://www.microsoft.com/security/business/microsoft-defender
-- https://azure.microsoft.com/pricing/details/defender-for-cloud/
-- https://learn.microsoft.com/en-us/azure/cost-management-billing/
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
-- Security
-- XDR
-- Cloud Security
-- Endpoint
-- Microsoft
 - FinOps
+- Cost Management
 - FOCUS
 ---

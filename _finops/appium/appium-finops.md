@@ -14,69 +14,81 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/appium/refs/heads/main/openapi/appium-server-openapi.yaml
 billing_model:
   billingCurrency: USD
-  billingFrequency: N/A
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Open Source (No Charge)
-description: 'FOCUS-aligned FinOps view for Appium: the framework itself is free and Apache-2.0 licensed with no direct charges. FinOps allocation should focus on the underlying compute (CI/CD runners, mac build hosts, device farms) and managed-cloud Appium services (BrowserStack, Sauce Labs, AWS Device Farm, LambdaTest) where actual spend occurs.'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Appium API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: N/A (no invoice)
-  ProviderName: OpenJS Foundation / Appium
-  PublisherName: OpenJS Foundation
-  ServiceCategory: Test Automation / WebDriver
+  InvoiceIssuerName: Appium
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Appium
+  PublisherName: Appium
+  ServiceCategory: Developer Tools / API
   ServiceName: Appium
 layout: finops
 meters:
 - aggregation: sum
-  description: Hours of self-hosted Appium server runtime, used to attribute infrastructure cost
+  description: Count of billable API requests
   dimensions:
-  - host_type
-  - environment
-  name: appium_server_hours
-  unit: instance-hour
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Connected-device wall-clock minutes consumed by test sessions
+  description: Bytes returned over the network in API responses
   dimensions:
-  - platform
-  - device_type
-  name: device_minutes
-  unit: minute
-- aggregation: max
-  description: Peak concurrent sessions, used for grid sizing
-  dimensions:
-  - environment
-  name: parallel_sessions
-  unit: session
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Minutes consumed on managed Appium clouds (BrowserStack, Sauce Labs, AWS Device Farm, etc.) — actual billed spend
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - cloud_provider
-  - device_type
-  name: cloud_grid_minutes
-  unit: minute
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Appium Finops
 provider_name: Appium
 provider_slug: appium
-publisher_name: OpenJS Foundation
-service_category: Test Automation / WebDriver
+publisher_name: Appium
+service_category: API
 slug: appium-finops
 source_filename: appium-finops.yml
 source_heading: FinOps Profile
-source_url: https://appium.io/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Appium\nproviderId: appium\npublisherName: OpenJS Foundation\nserviceCategory: Test Automation / WebDriver\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Open Source\n  - Test Automation\ndescription: 'FOCUS-aligned FinOps view for Appium: the framework itself is free and Apache-2.0 licensed\n  with no direct charges. FinOps allocation should focus on the underlying compute (CI/CD runners, mac\n  build hosts, device farms) and managed-cloud Appium services (BrowserStack, Sauce Labs, AWS Device Farm,\n  LambdaTest) where actual spend occurs.'\nsources:\n  - https://appium.io/\n  - https://github.com/appium/appium/blob/master/LICENSE\n\
-  billingModel:\n  pricingCategory: Open Source (No Charge)\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Appium\n  ServiceCategory: Test Automation / WebDriver\n  ProviderName: OpenJS Foundation / Appium\n  PublisherName: OpenJS Foundation\n  InvoiceIssuerName: N/A (no invoice)\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: appium_server_hours\n    description: Hours of self-hosted Appium server runtime, used to attribute infrastructure cost\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - host_type\n      - environment\n  - name: device_minutes\n    description: Connected-device wall-clock minutes consumed by test sessions\n    unit: minute\n    aggregation: sum\n    dimensions:\n      - platform\n      - device_type\n  - name: parallel_sessions\n    description: Peak concurrent sessions, used for grid sizing\n    unit: session\n    aggregation: max\n    dimensions:\n     \
-  \ - environment\n  - name: cloud_grid_minutes\n    description: Minutes consumed on managed Appium clouds (BrowserStack, Sauce Labs, AWS Device Farm,\n      etc.) — actual billed spend\n    unit: minute\n    aggregation: sum\n    dimensions:\n      - cloud_provider\n      - device_type\nprinciples:\n  - name: Visibility\n    description: Capture per-suite session duration and per-device minutes from CI/CD runs; correlate\n      to underlying compute or cloud-grid invoices.\n  - name: Allocation\n    description: Allocate test infrastructure cost to the consuming team or product based on session count\n      and device-minutes; tag CI jobs with team metadata.\n  - name: Optimization\n    description: Reuse driver sessions; parallelize across devices; prefer emulator/simulator where fidelity\n      allows; choose cloud-grid tier (parallel sessions) sized to peak rather than peak+headroom.\n  - name: Accountability\n    description: QE / Platform team owns the Appium grid contract or self-hosted\
-  \ infra; product engineering\n      teams accountable for test-suite efficiency and minute consumption.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Appium\nproviderId: appium\npublisherName: Appium\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Android\n  - Cross-Platform\n  - iOS\n  - Mobile Testing\n  - Open Source\n  - OpenJS Foundation\n  - Test Automation\n  - WebDriver\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Appium API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Appium\n  ServiceCategory: Developer Tools / API\n  ProviderName: Appium\n  PublisherName: Appium\n  InvoiceIssuerName: Appium\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Appium Server API\n    baseURL: http://localhost:4723\n    tags:\n      - Android\n      - Automation\n      - iOS\n      - Mobile Testing\n      - WebDriver\n    serviceName: Appium Server API\n    serviceCategory: API\n  - name: Appium Inspector\n    baseURL: https://github.com/appium/appium-inspector/releases\n    tags:\n      - Debugging\n      - GUI\n      - Inspector\n      - Mobile Testing\n    serviceName: Appium Inspector\n    serviceCategory: API\n  - name: Appium UiAutomator2 Driver\n    baseURL: http://localhost:4723\n    tags:\n      - Android\n      - Automation\n      - Driver\n      - Mobile Testing\n    serviceName: Appium UiAutomator2 Driver\n    serviceCategory:\
+  \ API\n  - name: Appium XCUITest Driver\n    baseURL: http://localhost:4723\n    tags:\n      - Automation\n      - Driver\n      - iOS\n      - Mobile Testing\n      - tvOS\n    serviceName: Appium XCUITest Driver\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Appium Contributors\n    email: appium@googlegroups.com\n    url: https://github.com/appium/appium/graphs/contributors\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/appium/refs/heads/main/finops/appium-finops.yml
-sources:
-- https://appium.io/
-- https://github.com/appium/appium/blob/master/LICENSE
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Android
+- Cross-Platform
+- iOS
+- Mobile Testing
 - Open Source
+- OpenJS Foundation
 - Test Automation
+- WebDriver
+- FinOps
+- Cost Management
+- FOCUS
 ---

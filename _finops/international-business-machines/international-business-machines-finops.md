@@ -57,66 +57,77 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Pay-As-You-Go + Committed Use
-description: FOCUS-aligned FinOps for International Business Machines (IBM).
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the International Business Machines API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ProviderName: International Business Machines (IBM)
-  PublisherName: International Business Machines (IBM)
-  ServiceCategory: Cloud + AI + Enterprise Software
-  ServiceName: International Business Machines (IBM)
+  ChargeCategory: Usage
+  InvoiceIssuerName: International Business Machines
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: International Business Machines
+  PublisherName: International Business Machines
+  ServiceCategory: Developer Tools / API
+  ServiceName: International Business Machines
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - service
-  - region
-  - instance_type
-  - tenant
-  name: compute_hours
-  unit: instance-hour
-- aggregation: max
-  dimensions:
-  - service
+  - api
+  - endpoint
   - tier
-  name: storage
-  unit: GB-month
-- aggregation: sum
-  dimensions:
-  - egress_type
-  - region_pair
-  name: data_transfer
-  unit: GB
-- aggregation: sum
-  dimensions:
-  - service
-  - operation
+  - region
+  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - service
-  name: managed_services
-  unit: varies
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: International Business Machines Finops
 provider_name: International Business Machines
 provider_slug: international-business-machines
-publisher_name: International Business Machines (IBM)
-service_category: Cloud + AI + Enterprise Software
+publisher_name: International Business Machines
+service_category: API
 slug: international-business-machines-finops
 source_filename: international-business-machines-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.ibm.com/cloud/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: International Business Machines (IBM)\nproviderId: international-business-machines\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Cloud + AI + Enterprise Software\ndescription: FOCUS-aligned FinOps for International Business Machines (IBM).\nsources:\n  - https://www.ibm.com/cloud/pricing\n  - https://focus.finops.org/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: International Business Machines (IBM)\nserviceCategory: Cloud + AI + Enterprise Software\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Committed Use\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: International Business Machines\
-  \ (IBM)\n  ServiceCategory: Cloud + AI + Enterprise Software\n  ProviderName: International Business Machines (IBM)\n  PublisherName: International Business Machines (IBM)\n  BillingCurrency: USD\nmeters:\n  - name: compute_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - service\n      - region\n      - instance_type\n      - tenant\n  - name: storage\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - service\n      - tier\n  - name: data_transfer\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - egress_type\n      - region_pair\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - service\n      - operation\n  - name: managed_services\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - service\nprinciples:\n  - name: Visibility\n    description: Track International Business Machines (IBM) consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers\
-  \ for chargeback.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: International Business Machines\nproviderId: international-business-machines\npublisherName: International Business Machines\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Artificial Intelligence\n  - Cloud\n  - Enterprise\n  - IBM\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the International Business Machines API surface. Provides\n  a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across\n  the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
+  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
+  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: International Business Machines\n  ServiceCategory: Developer Tools / API\n  ProviderName: International Business Machines\n  PublisherName: International Business Machines\n  InvoiceIssuerName: International Business Machines\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n  \
+  \    - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: IBM Watsonx.ai API\n    baseURL: ''\n    tags:\n      - Artificial Intelligence\n      - Machine Learning\n      - Text Generation\n    serviceName: IBM Watsonx.ai API\n    serviceCategory: API\n  - name: IBM Watsonx Assistant V2 API\n    baseURL: ''\n    tags:\n      - Artificial Intelligence\n      - Chatbots\n      - Conversational AI\n    serviceName: IBM Watsonx Assistant V2 API\n    serviceCategory: API\n  - name: IBM Natural Language Understanding API\n    baseURL: ''\n    tags:\n      - Artificial Intelligence\n      - Natural\
+  \ Language Processing\n      - Text Analytics\n    serviceName: IBM Natural Language Understanding API\n    serviceCategory: API\n  - name: IBM Speech to Text API\n    baseURL: ''\n    tags:\n      - Artificial Intelligence\n      - Audio\n      - Speech Recognition\n    serviceName: IBM Speech to Text API\n    serviceCategory: API\n  - name: IBM Text to Speech API\n    baseURL: ''\n    tags:\n      - Artificial Intelligence\n      - Audio\n      - Speech Synthesis\n    serviceName: IBM Text to Speech API\n    serviceCategory: API\n  - name: IBM Cloud Object Storage API\n    baseURL: ''\n    tags:\n      - Cloud\n      - Objects\n      - Storage\n    serviceName: IBM Cloud Object Storage API\n    serviceCategory: API\n  - name: IBM Cloud Kubernetes Service API\n    baseURL: ''\n    tags:\n      - Cloud\n      - Containers\n      - Kubernetes\n    serviceName: IBM Cloud Kubernetes Service API\n    serviceCategory: API\n  - name: IBM Cloud VPC API\n    baseURL: ''\n    tags:\n      - Cloud\n\
+  \      - Infrastructure\n      - Networking\n    serviceName: IBM Cloud VPC API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/international-business-machines/refs/heads/main/finops/international-business-machines-finops.yml
-sources:
-- https://www.ibm.com/cloud/pricing
-- https://focus.finops.org/
+sources: []
 specification: FinOps Framework
 tags:
+- Artificial Intelligence
+- Cloud
+- Enterprise
+- IBM
 - FinOps
+- Cost Management
 - FOCUS
-- Cloud + AI + Enterprise Software
 ---

@@ -67,77 +67,76 @@ billing_model:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Tiered Subscription
-description: 'FOCUS-aligned FinOps for Microsoft 365 / Office 365: tiered per-user-per-month subscriptions across Business (Basic / Standard / Premium) and Enterprise (E3 / E5 / E7) plans plus frontline F1 / F3 SKUs; programmatic access via Microsoft Graph included at no incremental per-call charge.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Microsoft Office 365 API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Microsoft Corporation
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Productivity
-  ServiceName: Microsoft 365
+  ChargeCategory: Usage
+  InvoiceIssuerName: Microsoft Office 365
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Microsoft Office 365
+  PublisherName: Microsoft Office 365
+  ServiceCategory: Developer Tools / API
+  ServiceName: Microsoft Office 365
 layout: finops
 meters:
 - aggregation: sum
-  description: Microsoft 365 seat licences across Business and Enterprise SKUs
+  description: Count of billable API requests
   dimensions:
-  - tenant
-  - sku
-  - with_teams
-  name: m365_seats
-  unit: seat
-- aggregation: sum
-  description: Exchange Online mailbox storage in use
-  dimensions:
-  - mailbox
-  name: mailbox_storage
-  unit: GB
-- aggregation: sum
-  description: OneDrive for Business storage in use per user
-  dimensions:
-  - user
-  - tenant
-  name: onedrive_storage
-  unit: GB
-- aggregation: sum
-  description: SharePoint storage in use per site
-  dimensions:
-  - site
-  - tenant
-  name: sharepoint_storage
-  unit: GB
-- aggregation: sum
-  description: Microsoft Graph API calls (no charge; tracked for throttling)
-  dimensions:
-  - application
-  - tenant
-  - service
-  name: graph_api_requests
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Office 365 Finops
 provider_name: Microsoft Office 365
 provider_slug: microsoft-office-365
-publisher_name: Microsoft Corporation
-service_category: Productivity
+publisher_name: Microsoft Office 365
+service_category: API
 slug: microsoft-office-365-finops
 source_filename: microsoft-office-365-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.microsoft.com/en-us/microsoft-365/business/compare-all-plans
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Office 365\nproviderId: microsoft-office-365\npublisherName: Microsoft Corporation\nserviceCategory: Productivity\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Productivity\n  - Microsoft 365\n  - Microsoft\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Microsoft 365 / Office 365: tiered per-user-per-month subscriptions\n  across Business (Basic / Standard / Premium) and Enterprise (E3 / E5 / E7) plans plus frontline F1 /\n  F3 SKUs; programmatic access via Microsoft Graph included at no incremental per-call charge.'\nsources:\n  - https://www.microsoft.com/en-us/microsoft-365/business/compare-all-plans\n\
-  \  - https://www.microsoft.com/en-us/microsoft-365/enterprise/microsoft365-plans-and-pricing\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Microsoft 365\n  ServiceCategory: Productivity\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: m365_seats\n    description: Microsoft 365 seat licences across Business and Enterprise SKUs\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - tenant\n      - sku\n      - with_teams\n  - name: mailbox_storage\n    description: Exchange Online mailbox storage in use\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - mailbox\n  - name: onedrive_storage\n    description: OneDrive for Business storage in use per user\n    unit: GB\n\
-  \    aggregation: sum\n    dimensions:\n      - user\n      - tenant\n  - name: sharepoint_storage\n    description: SharePoint storage in use per site\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - site\n      - tenant\n  - name: graph_api_requests\n    description: Microsoft Graph API calls (no charge; tracked for throttling)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - application\n      - tenant\n      - service\nprinciples:\n  - name: Visibility\n    description: Use the Microsoft 365 admin centre Active Users and product-usage reports, plus Microsoft\n      Cost Management for the SKU billing line.\n  - name: Allocation\n    description: Map seat licences to Entra groups bound to cost-centres for chargeback / showback; use\n      group-based licensing to keep allocation in sync.\n  - name: Optimization\n    description: Right-size SKU mix (Business Basic for kiosk/web users, Standard / E3 for desktop power\n      users, E5 only where Power BI\
-  \ Pro / Defender P2 / Entra ID P2 is needed); reclaim inactive licences\n      via Microsoft 365 admin centre activity reports.\n  - name: Accountability\n    description: IT owns SKU mix and Entra group-based licence assignment; finance owns the contract;\n      app owners reconcile programmatic Graph usage to the throttling budget.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Office 365\nproviderId: microsoft-office-365\npublisherName: Microsoft Office 365\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud\n  - Collaboration\n  - Enterprise\n  - Microsoft\n  - Productivity\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Office 365 API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Office 365\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Office 365\n  PublisherName: Microsoft Office 365\n  InvoiceIssuerName: Microsoft Office 365\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes\
+  \ returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Microsoft Graph API\n    baseURL: https://graph.microsoft.com\n    tags:\n      - Calendar\n      - Graph\n      - Groups\n      - Mail\n      - Unified\n      - Users\n    serviceName: Microsoft Graph API\n    serviceCategory: API\n  - name: Outlook Mail API\n    baseURL: https://graph.microsoft.com/v1.0/me/messages\n    tags:\n      - Email\n      - Mail\n      - Messages\n      - Outlook\n    serviceName: Outlook Mail API\n    serviceCategory: API\n  - name: Outlook Calendar API\n    baseURL: https://graph.microsoft.com/v1.0/me/calendar\n    tags:\n      - Calendar\n      - Events\n      - Meetings\n      - Scheduling\n\
+  \    serviceName: Outlook Calendar API\n    serviceCategory: API\n  - name: Outlook Contacts API\n    baseURL: https://graph.microsoft.com/v1.0/me/contacts\n    tags:\n      - Address-Book\n      - Contacts\n      - Outlook\n      - People\n    serviceName: Outlook Contacts API\n    serviceCategory: API\n  - name: OneDrive API\n    baseURL: https://graph.microsoft.com/v1.0/me/drive\n    tags:\n      - Files\n      - Onedrive\n      - Sharing\n      - Storage\n    serviceName: OneDrive API\n    serviceCategory: API\n  - name: SharePoint API\n    baseURL: https://graph.microsoft.com/v1.0/sites\n    tags:\n      - Collaboration\n      - Lists\n      - Sharepoint\n      - Sites\n    serviceName: SharePoint API\n    serviceCategory: API\n  - name: Microsoft Teams API\n    baseURL: https://graph.microsoft.com/v1.0/teams\n    tags:\n      - Channels\n      - Chat\n      - Collaboration\n      - Teams\n    serviceName: Microsoft Teams API\n    serviceCategory: API\n  - name: Office 365 Users API\n\
+  \    baseURL: https://graph.microsoft.com/v1.0/users\n    tags:\n      - Directory\n      - Identity\n      - Profiles\n      - Users\n    serviceName: Office 365 Users API\n    serviceCategory: API\n  - name: Planner API\n    baseURL: https://graph.microsoft.com/v1.0/planner\n    tags:\n      - Planner\n      - Planning\n      - Projects\n      - Tasks\n    serviceName: Planner API\n    serviceCategory: API\n  - name: OneNote API\n    baseURL: https://graph.microsoft.com/v1.0/me/onenote\n    tags:\n      - Notebooks\n      - Notes\n      - Onenote\n      - Pages\n      - Sections\n    serviceName: OneNote API\n    serviceCategory: API\n  - name: Excel Workbooks and Charts API\n    baseURL: https://graph.microsoft.com/v1.0/me/drive/items/{id}/workbook\n    tags:\n      - Charts\n      - Excel\n      - Spreadsheets\n      - Tables\n      - Workbooks\n    serviceName: Excel Workbooks and Charts API\n    serviceCategory: API\n  - name: Microsoft To Do API\n    baseURL: https://graph.microsoft.com/v1.0/me/todo\n\
+  \    tags:\n      - Productivity\n      - Task-Lists\n      - Tasks\n      - Todo\n    serviceName: Microsoft To Do API\n    serviceCategory: API\n  - name: Microsoft Bookings API\n    baseURL: https://graph.microsoft.com/v1.0/solutions/bookingBusinesses\n    tags:\n      - Appointments\n      - Bookings\n      - Business\n      - Scheduling\n    serviceName: Microsoft Bookings API\n    serviceCategory: API\n  - name: Office 365 Groups API\n    baseURL: https://graph.microsoft.com/v1.0/groups\n    tags:\n      - Collaboration\n      - Groups\n      - Membership\n      - Teams\n    serviceName: Office 365 Groups API\n    serviceCategory: API\n  - name: Microsoft Graph Security API\n    baseURL: https://graph.microsoft.com/v1.0/security\n    tags:\n      - Alerts\n      - Compliance\n      - Security\n      - Threats\n    serviceName: Microsoft Graph Security API\n    serviceCategory: API\n  - name: Microsoft Graph Communications API\n    baseURL: https://graph.microsoft.com/v1.0/communications\n\
+  \    tags:\n      - Calls\n      - Communications\n      - Meetings\n      - Online-Meetings\n    serviceName: Microsoft Graph Communications API\n    serviceCategory: API\n  - name: Office Add-ins Platform\n    baseURL: ''\n    tags:\n      - Add-Ins\n      - Excel\n      - Extensions\n      - Office-Js\n      - Outlook\n      - Powerpoint\n      - Word\n    serviceName: Office Add-ins Platform\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-office-365/refs/heads/main/finops/microsoft-office-365-finops.yml
-sources:
-- https://www.microsoft.com/en-us/microsoft-365/business/compare-all-plans
-- https://www.microsoft.com/en-us/microsoft-365/enterprise/microsoft365-plans-and-pricing
+sources: []
 specification: FinOps Framework
 tags:
-- Productivity
-- Microsoft 365
+- Cloud
+- Collaboration
+- Enterprise
 - Microsoft
+- Productivity
 - FinOps
+- Cost Management
 - FOCUS
 ---

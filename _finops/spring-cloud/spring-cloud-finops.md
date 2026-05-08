@@ -14,49 +14,81 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/spring-cloud/refs/heads/main/openapi/spring-cloud-gateway-actuator-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Open Source
-description: Spring Cloud is open-source self-hosted software with no vendor invoice. FinOps applies only to the cloud infrastructure that runs Spring Cloud components (Config Server, Gateway, Eureka, etc.) and to optional VMware Tanzu Spring / Broadcom commercial support contracts.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Spring Cloud API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Broadcom
+  ChargeCategory: Usage
+  InvoiceIssuerName: Spring Cloud
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Spring Cloud
-  PublisherName: Broadcom
-  ServiceCategory: Developer Tools
+  PublisherName: Spring Cloud
+  ServiceCategory: Developer Tools / API
   ServiceName: Spring Cloud
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - contract_tier
-  - cores
-  name: spring_runtime_subscription
-  unit: month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Spring Cloud Finops
 provider_name: Spring Cloud
 provider_slug: spring-cloud
-publisher_name: Broadcom (VMware Tanzu)
-service_category: Developer Tools
+publisher_name: Spring Cloud
+service_category: API
 slug: spring-cloud-finops
 source_filename: spring-cloud-finops.yml
 source_heading: FinOps Profile
-source_url: https://spring.io/projects/spring-cloud
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Spring Cloud\nproviderId: spring-cloud\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Cloud Native\n  - Distributed Systems\n  - Java\n  - Microservices\n  - Spring Framework\n  - FinOps\n  - FOCUS\ndescription: Spring Cloud is open-source self-hosted software with no vendor invoice. FinOps applies only to the cloud infrastructure that runs Spring Cloud components (Config Server, Gateway, Eureka, etc.) and to optional VMware Tanzu Spring / Broadcom commercial support contracts.\nsources:\n  - https://spring.io/projects/spring-cloud\n  - https://tanzu.vmware.com/spring-runtime\nnotes: No vendor usage meter. FinOps signal lives in the operator's own cloud-provider invoice and any Tanzu Spring support contract.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n\
-  \  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Broadcom (VMware Tanzu)\nserviceCategory: Developer Tools\nbillingModel:\n  pricingCategory: Open Source\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Spring Cloud\n  ServiceCategory: Developer Tools\n  ProviderName: Spring Cloud\n  PublisherName: Broadcom\n  InvoiceIssuerName: Broadcom\n  BillingCurrency: USD\nmeters:\n  - name: spring_runtime_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - contract_tier\n      - cores\nprinciples:\n  - name: Visibility\n    description: Spring Cloud emits Micrometer metrics (request counts, gateway timings, circuit breaker state) that operators ship to their observability stack. Vendor cost is visible only on the Tanzu Spring / Broadcom invoice line.\n  - name: Allocation\n    description: Allocate the underlying compute footprint of Config\
-  \ Server, Gateway, Eureka, etc. by team via cloud provider tags. The Tanzu support subscription is typically a single platform-org line, not chargeable per consuming team.\n  - name: Optimization\n    description: Cost levers are infrastructure-side - consolidate Config Server and Eureka into shared platform clusters, autoscale Gateway pods on RPS, and use Resilience4j to shed load before it hits paid downstream APIs.\n  - name: Accountability\n    description: Platform/SRE team owns Spring Cloud control-plane spend; product teams own the cost of their own Spring Boot services that consume it.\nmaintainers:\n  - name: VMware Tanzu / Broadcom\n    url: https://tanzu.vmware.com/spring-runtime\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Spring Cloud\nproviderId: spring-cloud\npublisherName: Spring Cloud\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Circuit Breaker\n  - Cloud Native\n  - Distributed Systems\n  - Java\n  - Microservices\n  - Service Discovery\n  - Spring Framework\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Spring Cloud API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  -\
+  \ name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n\
+  \  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Spring Cloud\n  ServiceCategory: Developer Tools / API\n  ProviderName: Spring Cloud\n  PublisherName: Spring Cloud\n  InvoiceIssuerName: Spring Cloud\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
+  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Spring Cloud Config\n    baseURL: http://localhost:8888\n    tags:\n      - Configuration\n      - Distributed Config\n      - Git\n      - Microservices\n    serviceName: Spring Cloud Config\n    serviceCategory: API\n  - name: Spring Cloud Netflix Eureka\n    baseURL: http://localhost:8761\n    tags:\n      - Eureka\n      - Registry\n      - Service Discovery\n    serviceName: Spring Cloud Netflix Eureka\n    serviceCategory: API\n  - name: Spring Cloud Gateway\n    baseURL: http://localhost:8080\n    tags:\n      - API Gateway\n      - Filtering\n      - Load Balancing\n      - Routing\n    serviceName: Spring\
+  \ Cloud Gateway\n    serviceCategory: API\n  - name: Spring Cloud Stream\n    baseURL: https://spring.io/projects/spring-cloud-stream\n    tags:\n      - Event-Driven\n      - Kafka\n      - Messaging\n      - RabbitMQ\n    serviceName: Spring Cloud Stream\n    serviceCategory: API\n  - name: Spring Cloud Circuit Breaker\n    baseURL: https://spring.io/projects/spring-cloud-circuitbreaker\n    tags:\n      - Circuit Breaker\n      - Fault Tolerance\n      - Resilience\n      - Resilience4J\n    serviceName: Spring Cloud Circuit Breaker\n    serviceCategory: API\n  - name: Spring Cloud OpenFeign\n    baseURL: https://spring.io/projects/spring-cloud-openfeign\n    tags:\n      - Declarative Client\n      - Feign\n      - HTTP\n      - REST Client\n    serviceName: Spring Cloud OpenFeign\n    serviceCategory: API\n  - name: Spring Cloud Kubernetes\n    baseURL: https://spring.io/projects/spring-cloud-kubernetes\n    tags:\n      - ConfigMap\n      - Container Orchestration\n      - Kubernetes\n\
+  \      - Service Discovery\n    serviceName: Spring Cloud Kubernetes\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: VMware Tanzu (Spring Team)\n    email: support@vmware.com\n    url: https://spring.io/team\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/spring-cloud/refs/heads/main/finops/spring-cloud-finops.yml
-sources:
-- https://spring.io/projects/spring-cloud
-- https://tanzu.vmware.com/spring-runtime
+sources: []
 specification: FinOps Framework
 tags:
+- Circuit Breaker
 - Cloud Native
 - Distributed Systems
 - Java
 - Microservices
+- Service Discovery
 - Spring Framework
 - FinOps
+- Cost Management
 - FOCUS
 ---

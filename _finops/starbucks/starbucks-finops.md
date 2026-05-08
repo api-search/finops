@@ -14,43 +14,77 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/starbucks/refs/heads/main/openapi/starbucks-starbucks-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Contract
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contract
-description: Starbucks does not operate a public, metered API program. There is no public price list, meter set, or invoice surface for API consumption — all integrations are private partner contracts outside the FOCUS-billable surface.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Starbucks API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Starbucks Corporation
+  ChargeCategory: Usage
+  InvoiceIssuerName: Starbucks
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Starbucks
-  PublisherName: Starbucks Corporation
-  ServiceCategory: Food & Beverage / Retail
+  PublisherName: Starbucks
+  ServiceCategory: Developer Tools / API
   ServiceName: Starbucks
 layout: finops
 meters:
 - aggregation: sum
-  description: Placeholder for contractual line items defined per partner agreement.
-  name: contracted_engagement
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Starbucks Finops
 provider_name: Starbucks
 provider_slug: starbucks
-publisher_name: Starbucks Corporation
-service_category: Food & Beverage / Retail
+publisher_name: Starbucks
+service_category: API
 slug: starbucks-finops
 source_filename: starbucks-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.starbucks.com/business
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Starbucks\nproviderId: starbucks\npublisherName: Starbucks Corporation\nserviceCategory: Food & Beverage / Retail\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Food Service\n  - Loyalty\ndescription: Starbucks does not operate a public, metered API program. There is no public price list,\n  meter set, or invoice surface for API consumption — all integrations are private partner contracts\n  outside the FOCUS-billable surface.\nsources:\n  - https://www.starbucks.com/business\nnotes: No public pricing or billing surface to reconcile. Meters, FOCUS columns, and principles are deferred\n  until\
-  \ a partner contract defines them.\nbillingModel:\n  pricingCategory: Contract\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Starbucks\n  ServiceCategory: Food & Beverage / Retail\n  ProviderName: Starbucks\n  PublisherName: Starbucks Corporation\n  InvoiceIssuerName: Starbucks Corporation\n  BillingCurrency: USD\nmeters:\n  - name: contracted_engagement\n    description: Placeholder for contractual line items defined per partner agreement.\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Visibility is whatever telemetry (usage reports, invoice line items) the partner contract\n      with Starbucks Technology grants — there is no public usage API.\n  - name: Allocation\n    description: Cost allocation is contract-by-contract; tag the partnership engagement in your own\n      ERP / cost system rather than relying on a Starbucks-provided breakdown.\n  - name: Optimization\n\
-  \    description: Optimization happens at contract renewal, not via dynamic plan changes — there is no\n      public pay-as-you-go surface to optimize against.\n  - name: Accountability\n    description: A single business owner of the Starbucks partnership relationship should own the engagement\n      cost line and renewal cycle.\nmaintainers: []\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Starbucks\nproviderId: starbucks\npublisherName: Starbucks\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Coffee\n  - Food Service\n  - Loyalty\n  - Ordering\n  - Retail\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Starbucks API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Starbucks\n  ServiceCategory: Developer Tools / API\n  ProviderName: Starbucks\n  PublisherName: Starbucks\n  InvoiceIssuerName: Starbucks\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n   \
+  \ dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Starbucks API\n    baseURL: ''\n    tags:\n      - Food Service\n      - Coffee\n      - Ordering\n      - Loyalty\n      - Store Locator\n      - Menu\n    serviceName: Starbucks API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/starbucks/refs/heads/main/finops/starbucks-finops.yml
-sources:
-- https://www.starbucks.com/business
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Coffee
 - Food Service
 - Loyalty
+- Ordering
+- Retail
+- FinOps
+- Cost Management
+- FOCUS
 ---

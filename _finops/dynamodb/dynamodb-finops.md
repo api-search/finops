@@ -31,94 +31,75 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Pay-As-You-Go + Committed Use
-description: 'FOCUS-aligned FinOps for Amazon DynamoDB: pay-per-request and provisioned-capacity billing with optional Reserved Capacity commitments, per AWS Region.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Amazon DynamoDB API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Amazon Web Services, Inc.
-  PricingUnit: request-unit / capacity-unit-hour / GB-month
-  ProviderName: Amazon Web Services
-  PublisherName: Amazon Web Services, Inc.
-  ServiceCategory: Database
+  InvoiceIssuerName: Amazon DynamoDB
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Amazon DynamoDB
+  PublisherName: Amazon DynamoDB
+  ServiceCategory: Developer Tools / API
   ServiceName: Amazon DynamoDB
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
+  - endpoint
+  - tier
   - region
-  - table
-  - consistency
-  name: read_request_units
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
+  - api
   - region
-  - table
-  - transaction
-  name: write_request_units
-  unit: request
-- aggregation: sum
-  dimensions:
-  - region
-  - table
-  name: provisioned_read_capacity
-  unit: RCU-hour
-- aggregation: sum
-  dimensions:
-  - region
-  - table
-  name: provisioned_write_capacity
-  unit: WCU-hour
-- aggregation: avg
-  dimensions:
-  - region
-  - table
-  - storage_class
-  name: storage_gb_month
-  unit: GB-month
-- aggregation: sum
-  dimensions:
-  - region
-  - table
-  name: streams_reads
-  unit: request
-- aggregation: avg
-  dimensions:
-  - region
-  - backup_type
-  name: backup_storage
-  unit: GB-month
-- aggregation: sum
-  dimensions:
-  - region
-  - destination
-  name: data_transfer_out
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Dynamodb Finops
 provider_name: Amazon DynamoDB
 provider_slug: dynamodb
-publisher_name: Amazon Web Services, Inc.
-service_category: Database
+publisher_name: Amazon DynamoDB
+service_category: API
 slug: dynamodb-finops
 source_filename: dynamodb-finops.yml
 source_heading: FinOps Profile
-source_url: https://aws.amazon.com/dynamodb/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Amazon DynamoDB\nproviderId: dynamodb\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - AWS\n  - Database\n  - NoSQL\ndescription: 'FOCUS-aligned FinOps for Amazon DynamoDB: pay-per-request and provisioned-capacity billing\n  with optional Reserved Capacity commitments, per AWS Region.'\nsources:\n  - https://aws.amazon.com/dynamodb/pricing/\n  - https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Amazon Web Services, Inc.\nserviceCategory: Database\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Committed Use\n\
-  \  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Amazon DynamoDB\n  ServiceCategory: Database\n  ProviderName: Amazon Web Services\n  PublisherName: Amazon Web Services, Inc.\n  InvoiceIssuerName: Amazon Web Services, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Usage\n  PricingUnit: request-unit / capacity-unit-hour / GB-month\nmeters:\n  - name: read_request_units\n    unit: request\n    aggregation: sum\n    dimensions:\n      - region\n      - table\n      - consistency\n  - name: write_request_units\n    unit: request\n    aggregation: sum\n    dimensions:\n      - region\n      - table\n      - transaction\n  - name: provisioned_read_capacity\n    unit: RCU-hour\n    aggregation: sum\n    dimensions:\n      - region\n      - table\n  - name: provisioned_write_capacity\n    unit: WCU-hour\n    aggregation: sum\n    dimensions:\n      - region\n      -\
-  \ table\n  - name: storage_gb_month\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - region\n      - table\n      - storage_class\n  - name: streams_reads\n    unit: request\n    aggregation: sum\n    dimensions:\n      - region\n      - table\n  - name: backup_storage\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - region\n      - backup_type\n  - name: data_transfer_out\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - region\n      - destination\nprinciples:\n  - name: Visibility\n    description: Use AWS Cost Explorer, the Cost and Usage Report (CUR), and CloudWatch DynamoDB metrics\n      (ConsumedReadCapacityUnits, ConsumedWriteCapacityUnits, ThrottledRequests) to track consumption\n      per table and region.\n  - name: Allocation\n    description: Tag tables with cost-allocation tags (team, environment, application) and enable user-defined\n      cost allocation in the AWS Billing console for chargeback.\n  - name: Optimization\n\
-  \    description: Switch idle workloads to On-Demand, apply Reserved Capacity for steady provisioned RCU/WCU,\n      use DynamoDB Standard-IA storage class for cold tables, enable auto-scaling, and adopt DAX caching\n      to lower read costs.\n  - name: Accountability\n    description: Set CloudWatch billing alarms and AWS Budgets per tag dimension; review per-table costs\n      monthly against the CUR and investigate ThrottledRequests spikes.\nmaintainers:\n  - name: Amazon Web Services\n    email: aws-dynamodb@amazon.com\n    url: https://aws.amazon.com\n  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Amazon DynamoDB\nproviderId: dynamodb\npublisherName: Amazon DynamoDB\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AWS\n  - Cloud\n  - Database\n  - Document Store\n  - Key-Value\n  - Managed Service\n  - NoSQL\n  - Serverless\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Amazon DynamoDB API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Amazon DynamoDB\n  ServiceCategory: Developer Tools / API\n  ProviderName: Amazon DynamoDB\n  PublisherName: Amazon DynamoDB\n  InvoiceIssuerName: Amazon DynamoDB\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes\
+  \ returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Amazon DynamoDB API\n    baseURL: https://dynamodb.{region}.amazonaws.com\n    tags:\n      - Database\n      - Items\n      - Managed Service\n      - NoSQL\n      - Queries\n      - Tables\n    serviceName: Amazon DynamoDB API\n    serviceCategory: API\n  - name: Amazon DynamoDB Streams API\n    baseURL: https://streams.dynamodb.{region}.amazonaws.com\n    tags:\n      - Change Data Capture\n      - Event-Driven\n      - Real-Time\n      - Streams\n    serviceName: Amazon DynamoDB Streams API\n    serviceCategory: API\n  - name: Amazon DynamoDB Accelerator (DAX) API\n    baseURL: https://dax.{region}.amazonaws.com\n  \
+  \  tags:\n      - Accelerator\n      - Caching\n      - In-Memory\n      - Performance\n    serviceName: Amazon DynamoDB Accelerator (DAX) API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Amazon Web Services\n    email: aws-dynamodb@amazon.com\n    url: https://aws.amazon.com\n  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/dynamodb/refs/heads/main/finops/dynamodb-finops.yml
-sources:
-- https://aws.amazon.com/dynamodb/pricing/
-- https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Cloud
 - Database
+- Document Store
+- Key-Value
+- Managed Service
 - NoSQL
+- Serverless
+- FinOps
+- Cost Management
+- FOCUS
 ---

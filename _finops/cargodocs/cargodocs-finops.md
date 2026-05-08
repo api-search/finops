@@ -26,64 +26,83 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/cargodocs/refs/heads/main/openapi/cargodocs-customer-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription + Per-Document
-description: 'FOCUS-aligned FinOps for CargoDocs (EssDocs): enterprise license + per-document fees on electronic bills of lading and trade documents; billing is contract-based.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the CargoDocs API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Electronic Shipping Solutions Limited
+  ChargeCategory: Usage
+  InvoiceIssuerName: CargoDocs
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: CargoDocs
-  PublisherName: Electronic Shipping Solutions Limited
-  ServiceCategory: Trade Documentation Platform
-  ServiceName: CargoDocs DocEx
+  PublisherName: CargoDocs
+  ServiceCategory: Developer Tools / API
+  ServiceName: CargoDocs
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - module
-  name: enterprise_license
-  unit: year
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - document_type
-  - issuer
-  - geography
-  name: document_issuance
-  unit: document
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - document_type
-  name: document_transfers
-  unit: event
-- aggregation: max
-  dimensions:
-  - role
-  name: named_users
-  unit: seat-month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Cargodocs Finops
 provider_name: CargoDocs
 provider_slug: cargodocs
-publisher_name: Electronic Shipping Solutions Limited
-service_category: Trade Documentation Platform
+publisher_name: CargoDocs
+service_category: API
 slug: cargodocs-finops
 source_filename: cargodocs-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.essdocs.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: CargoDocs\nproviderId: cargodocs\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Trade Documentation\n  - Shipping\n  - Supply Chain\ndescription: 'FOCUS-aligned FinOps for CargoDocs (EssDocs): enterprise license + per-document fees on\n  electronic bills of lading and trade documents; billing is contract-based.'\nnotes: CargoDocs/EssDocs does not publish public API or document-volume pricing. FinOps mapping is provisional\n  pending enterprise-contract reconciliation.\nsources:\n  - https://www.essdocs.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Electronic Shipping Solutions Limited\nserviceCategory: Trade Documentation\
-  \ Platform\nbillingModel:\n  pricingCategory: Subscription + Per-Document\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: CargoDocs DocEx\n  ServiceCategory: Trade Documentation Platform\n  ProviderName: CargoDocs\n  PublisherName: Electronic Shipping Solutions Limited\n  InvoiceIssuerName: Electronic Shipping Solutions Limited\n  BillingCurrency: USD\nmeters:\n  - name: enterprise_license\n    unit: year\n    aggregation: sum\n    dimensions:\n      - module\n  - name: document_issuance\n    unit: document\n    aggregation: sum\n    dimensions:\n      - document_type\n      - issuer\n      - geography\n  - name: document_transfers\n    unit: event\n    aggregation: sum\n    dimensions:\n      - document_type\n  - name: named_users\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - role\nprinciples:\n  - name: Visibility\n    description: Visibility into document-volume\
-  \ costs is via EssDocs customer reports; the platform\n      audit log identifies issuance, transfer, and surrender events for cost attribution.\n  - name: Allocation\n    description: Allocate by issuer entity (carrier/NVOCC), trade lane, and document type; multi-business-unit\n      customers should configure separate issuer codes.\n  - name: Optimization\n    description: Consolidate document issuance windows, retire unused user seats, and align module selection\n      to active document types.\n  - name: Accountability\n    description: Trade-operations / digital-trade lead owns the relationship; quarterly volume reviews\n      with EssDocs are typical.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CargoDocs\nproviderId: cargodocs\npublisherName: CargoDocs\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Bills of Lading\n  - Documentation\n  - eBoL\n  - EssDocs\n  - MLETR\n  - Shipping\n  - Supply Chain\n  - Trade\n  - Trade Finance\n  - Warehouse Warrants\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the CargoDocs API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
+  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
+  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: CargoDocs\n  ServiceCategory: Developer Tools / API\n  ProviderName: CargoDocs\n  PublisherName: CargoDocs\n  InvoiceIssuerName: CargoDocs\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes\
+  \ returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: CargoDocs Partner API\n    baseURL: https://api.essdocs.com\n    tags:\n      - Bills of Lading\n      - Shipping\n      - Trade\n    serviceName: CargoDocs Partner API\n    serviceCategory: API\n  - name: CargoDocs Issuer API\n    baseURL: https://api.essdocs.com\n    tags:\n      - Bills of Lading\n      - Issuance\n      - Shipping\n    serviceName: CargoDocs Issuer API\n    serviceCategory: API\n  - name: CargoDocs Customer Data/Docs API\n    baseURL: https://api.essdocs.com\n    tags:\n      - Documents\n      - Shipping\n      - Trade\n    serviceName: CargoDocs Customer Data/Docs API\n    serviceCategory: API\nunitEconomics:\n\
+  \  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cargodocs/refs/heads/main/finops/cargodocs-finops.yml
-sources:
-- https://www.essdocs.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Trade Documentation
+- Bills of Lading
+- Documentation
+- eBoL
+- EssDocs
+- MLETR
 - Shipping
 - Supply Chain
+- Trade
+- Trade Finance
+- Warehouse Warrants
+- FinOps
+- Cost Management
+- FOCUS
 ---

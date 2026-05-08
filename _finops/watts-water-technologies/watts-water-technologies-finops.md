@@ -7,45 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Enterprise / Channel Agreement
-description: FinOps placement for Watts Water Technologies. Spend is realized through hardware purchases and partner / OEM software agreements rather than a metered API surface; FOCUS mapping is limited until a billable API is published.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Watts Water Technologies API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Watts Water Technologies, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Watts Water Technologies
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Watts Water Technologies
-  PublisherName: Watts Water Technologies, Inc.
-  ServiceCategory: Industrial / Water
+  PublisherName: Watts Water Technologies
+  ServiceCategory: Developer Tools / API
   ServiceName: Watts Water Technologies
 layout: finops
 meters:
 - aggregation: sum
-  description: Negotiated OEM / channel / BMS-integration fees with Watts; not metered per call.
-  name: contract_fees
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Watts Water Technologies Finops
 provider_name: Watts Water Technologies
 provider_slug: watts-water-technologies
-publisher_name: Watts Water Technologies, Inc.
-service_category: Industrial / Water
+publisher_name: Watts Water Technologies
+service_category: API
 slug: watts-water-technologies-finops
 source_filename: watts-water-technologies-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.watts.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Watts Water Technologies\nproviderId: watts-water-technologies\npublisherName: Watts Water Technologies, Inc.\nserviceCategory: Industrial / Water\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Water\n  - Industrial\n  - Infrastructure\n  - FinOps\n  - FOCUS\n  - Contact Sales\ndescription: FinOps placement for Watts Water Technologies. Spend is realized through hardware purchases\n  and partner / OEM software agreements rather than a metered API surface; FOCUS mapping is limited\n  until a billable API is published.\nnotes: No public usage-billing API published; meters and FOCUS columns reflect the contract-billing\
-  \ shape.\nsources:\n  - https://www.watts.com/\nbillingModel:\n  pricingCategory: Enterprise / Channel Agreement\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Watts Water Technologies\n  ServiceCategory: Industrial / Water\n  ProviderName: Watts Water Technologies\n  PublisherName: Watts Water Technologies, Inc.\n  InvoiceIssuerName: Watts Water Technologies, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: contract_fees\n    description: Negotiated OEM / channel / BMS-integration fees with Watts; not metered per call.\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Spend visibility is sourced from procurement, hardware POs, and the executed integration\n      contract; no public usage telemetry API exists.\n  - name: Allocation\n    description: Allocate Watts spend by site, building, or BMS instance using internal asset-tracking\n      tags on hardware and integration\
-  \ deployments.\n  - name: Optimization\n    description: Cost levers are negotiated at contract / RFP stage — bundle scope, regional volume,\n      multi-year commitments — not at per-request granularity.\n  - name: Accountability\n    description: Facilities engineering or building-controls teams typically own the relationship and\n      coordinate renewals with Watts account management.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Watts Water Technologies\nproviderId: watts-water-technologies\npublisherName: Watts Water Technologies\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Water\n  - Industrial\n  - Infrastructure\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Watts Water Technologies API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
+  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
+  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Watts Water Technologies\n  ServiceCategory: Developer Tools / API\n  ProviderName: Watts Water Technologies\n  PublisherName: Watts Water Technologies\n  InvoiceIssuerName: Watts Water Technologies\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
+  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Watts Water Technologies API\n    baseURL: https://api.wattswater.com\n    tags:\n      - Water\n      - Industrial\n      - Infrastructure\n    serviceName: Watts Water Technologies API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/watts-water-technologies/refs/heads/main/finops/watts-water-technologies-finops.yml
-sources:
-- https://www.watts.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Water
 - Industrial
 - Infrastructure
 - FinOps
+- Cost Management
 - FOCUS
-- Contact Sales
 ---

@@ -7,54 +7,74 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Mandate
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Bilateral Contract
-description: FOCUS-aligned FinOps placeholder for Piper Sandler. As an investment bank and institutional broker-dealer, Piper Sandler bills clients via brokerage commissions, advisory fees, and research / platform subscriptions rather than as a metered API SKU.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Piper Sandler Companies API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
+  ChargeCategory: Usage
   InvoiceIssuerName: Piper Sandler Companies
-  ProviderName: Piper Sandler
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Piper Sandler Companies
   PublisherName: Piper Sandler Companies
-  ServiceCategory: Capital Markets
-  ServiceName: Piper Sandler Institutional
-  ServiceSubcategory: Investment Banking and Institutional Brokerage
+  ServiceCategory: Developer Tools / API
+  ServiceName: Piper Sandler Companies
 layout: finops
 meters:
-- aggregation: count
-  description: Bilateral institutional client mandate (research distribution, trading, advisory). Not metered per-call.
-  dimensions:
-  - product_line
-  - region
-  name: institutional_client_contract
-  unit: contract
 - aggregation: sum
-  description: Per-trade or per-share commission billed at execution. Not API-metered.
+  description: Count of billable API requests
   dimensions:
-  - asset_class
-  name: brokerage_commission
-  unit: trade
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Piper Sandler Finops
 provider_name: Piper Sandler Companies
 provider_slug: piper-sandler
 publisher_name: Piper Sandler Companies
-service_category: Capital Markets
+service_category: API
 slug: piper-sandler-finops
 source_filename: piper-sandler-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.pipersandler.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Piper Sandler Companies\nproviderId: piper-sandler\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Investment Banking\n  - Capital Markets\nnotes: Piper Sandler is an investment bank, not a software / API vendor. There is no public\n  metered API to model. This artifact captures the FinOps shape only at the institutional client\n  contract level.\ndescription: FOCUS-aligned FinOps placeholder for Piper Sandler. As an investment bank and\n  institutional broker-dealer, Piper Sandler bills clients via brokerage commissions, advisory\n  fees, and research / platform subscriptions rather than as a metered API SKU.\nsources:\n  - https://www.pipersandler.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl:\
-  \ https://focus.finops.org/focus-specification/v1-3/\npublisherName: Piper Sandler Companies\nserviceCategory: Capital Markets\nbillingModel:\n  pricingCategory: Bilateral Contract\n  billingFrequency: Per-Mandate\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Piper Sandler Institutional\n  ServiceCategory: Capital Markets\n  ServiceSubcategory: Investment Banking and Institutional Brokerage\n  ProviderName: Piper Sandler\n  PublisherName: Piper Sandler Companies\n  InvoiceIssuerName: Piper Sandler Companies\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: institutional_client_contract\n    description: Bilateral institutional client mandate (research distribution, trading,\n      advisory). Not metered per-call.\n    unit: contract\n    aggregation: count\n    dimensions:\n      - product_line\n      - region\n  - name: brokerage_commission\n    description: Per-trade or per-share commission billed at execution. Not API-metered.\n\
-  \    unit: trade\n    aggregation: sum\n    dimensions:\n      - asset_class\nprinciples:\n  - name: Visibility\n    description: Visibility lives at the brokerage / advisory invoice level rather than at API\n      consumption.\n  - name: Allocation\n    description: Allocate institutional fees and brokerage commissions to the consuming desk /\n      strategy / fund.\n  - name: Optimization\n    description: Optimize via execution-quality reviews and renegotiation of advisory mandates;\n      this is not an API-cost-optimization problem.\n  - name: Accountability\n    description: Buy-side trading desk and finance team own the relationship and review fees per\n      mandate.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Piper Sandler Companies\nproviderId: piper-sandler\npublisherName: Piper Sandler Companies\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Investment Banking\n  - Institutional Brokerage\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Piper Sandler Companies API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Piper Sandler Companies\n  ServiceCategory: Developer Tools / API\n  ProviderName: Piper Sandler Companies\n  PublisherName: Piper Sandler Companies\n  InvoiceIssuerName: Piper Sandler Companies\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned\
+  \ over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Piper Sandler Companies API\n    baseURL: https://api.pipersandler.com\n    tags:\n      - Investment Banking\n      - Institutional Brokerage\n    serviceName: Piper Sandler Companies API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/piper-sandler/refs/heads/main/finops/piper-sandler-finops.yml
-sources:
-- https://www.pipersandler.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Investment Banking
-- Capital Markets
+- Institutional Brokerage
+- FinOps
+- Cost Management
+- FOCUS
 ---

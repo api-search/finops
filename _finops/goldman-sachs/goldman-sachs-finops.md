@@ -6,67 +6,76 @@ aligned_with:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
-  billingCurrency: USD (settlement varies)
+  billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription + Transaction Fees
-description: 'FOCUS-aligned FinOps framing for Goldman Sachs institutional API products: Marquee data & analytics subscriptions and Transaction Banking transaction fees. Specific rates are bilateral and not publicly posted.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Goldman Sachs API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Goldman Sachs Bank USA
+  ChargeCategory: Usage
+  InvoiceIssuerName: Goldman Sachs
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Goldman Sachs
-  PublisherName: The Goldman Sachs Group, Inc.
-  ServiceCategory: Banking
+  PublisherName: Goldman Sachs
+  ServiceCategory: Developer Tools / API
   ServiceName: Goldman Sachs
 layout: finops
 meters:
 - aggregation: sum
-  description: Marquee data / analytics subscription
+  description: Count of billable API requests
   dimensions:
-  - product
-  - data_set
-  name: marquee_subscription
-  unit: month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Payment instructions executed via Transaction Banking
+  description: Bytes returned over the network in API responses
   dimensions:
-  - rail
-  - currency
-  name: txb_payments
-  unit: transaction
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: FX execution volume
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - currency_pair
-  name: txb_fx_volume
-  unit: USD
-- aggregation: sum
-  description: Corporate / virtual account maintenance fees
-  name: account_maintenance
-  unit: account-month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Goldman Sachs Finops
 provider_name: Goldman Sachs
 provider_slug: goldman-sachs
-publisher_name: The Goldman Sachs Group, Inc.
-service_category: Banking / Capital Markets
+publisher_name: Goldman Sachs
+service_category: API
 slug: goldman-sachs-finops
 source_filename: goldman-sachs-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.goldmansachs.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Goldman Sachs\nproviderId: goldman-sachs\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Banking\n  - Capital Markets\ndescription: 'FOCUS-aligned FinOps framing for Goldman Sachs institutional API products: Marquee data\n  & analytics subscriptions and Transaction Banking transaction fees. Specific rates are bilateral and\n  not publicly posted.'\nnotes: Reconcile once published rate cards exist.\nsources:\n  - https://www.goldmansachs.com/\n  - https://developer.gs.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: The Goldman Sachs Group, Inc.\nserviceCategory: Banking / Capital Markets\nbillingModel:\n  pricingCategory:\
-  \ Subscription + Transaction Fees\n  billingFrequency: Monthly\n  billingCurrency: USD (settlement varies)\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: Goldman Sachs\n  ServiceCategory: Banking\n  ProviderName: Goldman Sachs\n  PublisherName: The Goldman Sachs Group, Inc.\n  InvoiceIssuerName: Goldman Sachs Bank USA\n  BillingCurrency: USD\nmeters:\n  - name: marquee_subscription\n    description: Marquee data / analytics subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\n      - data_set\n  - name: txb_payments\n    description: Payment instructions executed via Transaction Banking\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - rail\n      - currency\n  - name: txb_fx_volume\n    description: FX execution volume\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - currency_pair\n  - name: account_maintenance\n    description: Corporate / virtual account maintenance\
-  \ fees\n    unit: account-month\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Reconcile Goldman Sachs invoices and Marquee usage exports against ledger; surface TxB\n      payment volumes via the TxB reporting API.\n  - name: Allocation\n    description: Allocate Marquee subscription cost to the consuming desk; TxB payment fees to the originating\n      product.\n  - name: Optimization\n    description: Right-size Marquee data-set entitlements; route low-value payments to cheaper rails;\n      consolidate accounts to qualify for relationship pricing.\n  - name: Accountability\n    description: Front-office desks own Marquee spend; corporate treasury owns TxB spend; finance reviews\n      monthly statements.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Goldman Sachs\nproviderId: goldman-sachs\npublisherName: Goldman Sachs\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Banking\n  - Financial\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Goldman Sachs API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Goldman Sachs\n  ServiceCategory: Developer Tools / API\n  ProviderName: Goldman Sachs\n  PublisherName: Goldman Sachs\n  InvoiceIssuerName: Goldman Sachs\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      -\
+  \ api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Goldman Sachs Content Services API\n    baseURL: ''\n    tags:\n      - Content\n      - Insights\n      - Research\n    serviceName: Goldman Sachs Content Services API\n    serviceCategory: API\n  - name: Goldman Sachs Pricing & Risk Services API\n    baseURL: ''\n    tags:\n      - Pricing\n      - Risk\n      - Analytics\n    serviceName: Goldman Sachs Pricing & Risk Services API\n    serviceCategory: API\n  - name: Goldman Sachs Hedging Services API\n    baseURL: ''\n    tags:\n      - Hedging\n      - Optimization\n      - Risk\n    serviceName: Goldman Sachs Hedging Services API\n    serviceCategory: API\n  - name: Goldman Sachs Index Services API\n    baseURL: ''\n    tags:\n      - Indices\n      - Baskets\n      -\
+  \ Investment\n    serviceName: Goldman Sachs Index Services API\n    serviceCategory: API\n  - name: Goldman Sachs Portfolio Services API\n    baseURL: ''\n    tags:\n      - Portfolio\n      - Reporting\n      - Workflow\n    serviceName: Goldman Sachs Portfolio Services API\n    serviceCategory: API\n  - name: Goldman Sachs Data Services API\n    baseURL: ''\n    tags:\n      - Data\n      - Market Data\n      - Research\n    serviceName: Goldman Sachs Data Services API\n    serviceCategory: API\n  - name: Goldman Sachs Transaction Banking API\n    baseURL: ''\n    tags:\n      - Banking\n      - Payments\n      - Transaction Banking\n    serviceName: Goldman Sachs Transaction Banking API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/goldman-sachs/refs/heads/main/finops/goldman-sachs-finops.yml
-sources:
-- https://www.goldmansachs.com/
-- https://developer.gs.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Banking
-- Capital Markets
+- Financial
+- FinOps
+- Cost Management
+- FOCUS
 ---

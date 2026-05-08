@@ -7,44 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contract
-description: Rayonier exposes no public developer API or usage-billed surface; this artifact describes the FinOps shape only nominally for inventory completeness.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Rayonier API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Rayonier Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Rayonier
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Rayonier
-  PublisherName: Rayonier Inc.
-  ServiceCategory: Forestry / Real Estate
+  PublisherName: Rayonier
+  ServiceCategory: Developer Tools / API
   ServiceName: Rayonier
 layout: finops
 meters:
 - aggregation: sum
-  description: Per-contract invoice line for any negotiated timber, land, or data integration
-  name: contract_invoice
-  unit: contract
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Rayonier Finops
 provider_name: Rayonier
 provider_slug: rayonier
-publisher_name: Rayonier Inc.
-service_category: Forestry / Real Estate
+publisher_name: Rayonier
+service_category: API
 slug: rayonier-finops
 source_filename: rayonier-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.rayonier.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Rayonier\nproviderId: rayonier\npublisherName: Rayonier Inc.\nserviceCategory: Forestry / Real Estate\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Timber\n  - Real Estate\n  - Forest Products\n  - FinOps\n  - FOCUS\ndescription: Rayonier exposes no public developer API or usage-billed surface; this artifact\n  describes the FinOps shape only nominally for inventory completeness.\nsources:\n  - https://www.rayonier.com/\nnotes: No public API or usage-billing model exists for Rayonier; FOCUS columns and meters here\n  are placeholder-only and should not be treated as a billing schema.\nbillingModel:\n  pricingCategory:\
-  \ Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Rayonier\n  ServiceCategory: Forestry / Real Estate\n  ProviderName: Rayonier\n  PublisherName: Rayonier Inc.\n  InvoiceIssuerName: Rayonier Inc.\n  BillingCurrency: USD\nmeters:\n  - name: contract_invoice\n    description: Per-contract invoice line for any negotiated timber, land, or data integration\n    unit: contract\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Spend with Rayonier is captured on the customer's accounts-payable system at\n      contract level; there is no developer-facing usage telemetry.\n  - name: Allocation\n    description: Allocation occurs at the procurement / cost-center level rather than per API\n      call.\n  - name: Optimization\n    description: Optimization happens through commercial negotiation (volume, term length) at\n      contract renewal.\n  - name: Accountability\n    description: Procurement\
-  \ and the line-of-business sponsor own the contract relationship.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Rayonier\nproviderId: rayonier\npublisherName: Rayonier\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Timber\n  - Real Estate\n  - Forest Products\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Rayonier API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Rayonier\n  ServiceCategory: Developer Tools / API\n  ProviderName: Rayonier\n  PublisherName: Rayonier\n  InvoiceIssuerName: Rayonier\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
+  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Rayonier API\n    baseURL: https://api.rayonier.com\n    tags:\n      - Timber\n      - Real Estate\n      - Forest Products\n    serviceName: Rayonier API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/rayonier/refs/heads/main/finops/rayonier-finops.yml
-sources:
-- https://www.rayonier.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Timber
 - Real Estate
 - Forest Products
 - FinOps
+- Cost Management
 - FOCUS
 ---

@@ -445,78 +445,97 @@ billing_model:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Bundled with Microsoft 365 + Pay-As-You-Go (Data Connect)
-description: 'FOCUS-aligned FinOps for Microsoft Graph: API access is bundled with the underlying Microsoft 365 / Office 365 / Entra / Intune / Dynamics seat licences with no per-call charge. Microsoft Graph Data Connect (bulk extraction) is metered separately under Azure consumption.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Microsoft Graph API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Microsoft Corporation
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Productivity / Identity API
+  ChargeCategory: Usage
+  InvoiceIssuerName: Microsoft Graph
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Microsoft Graph
+  PublisherName: Microsoft Graph
+  ServiceCategory: Developer Tools / API
   ServiceName: Microsoft Graph
 layout: finops
 meters:
 - aggregation: sum
-  description: Microsoft Graph API calls (no charge; capacity-managed via throttling)
+  description: Count of billable API requests
   dimensions:
-  - application
-  - tenant
-  - service
-  name: graph_api_requests
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: ResourceUnits consumed against the identity / directory service (token-bucket)
+  description: Bytes returned over the network in API responses
   dimensions:
-  - application
-  - tenant
-  name: graph_resource_units
-  unit: resource_unit
-- aggregation: sum
-  description: Underlying Microsoft 365 / Office 365 seats that entitle Graph access
-  dimensions:
-  - tenant
-  - sku
-  name: m365_seats
-  unit: seat
-- aggregation: sum
-  description: Entra ID seats (Free / P1 / P2) that entitle directory and Conditional Access Graph endpoints
-  dimensions:
-  - tenant
-  - sku
-  name: entra_id_seats
-  unit: seat
-- aggregation: sum
-  description: Bytes extracted via Microsoft Graph Data Connect to Azure Data Lake (billed via Azure consumption)
-  dimensions:
-  - dataset
-  - tenant
-  name: data_connect_bytes
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Graph Finops
 provider_name: Microsoft Graph
 provider_slug: microsoft-graph
-publisher_name: Microsoft Corporation
-service_category: Productivity / Identity API
+publisher_name: Microsoft Graph
+service_category: API
 slug: microsoft-graph-finops
 source_filename: microsoft-graph-finops.yml
 source_heading: FinOps Profile
-source_url: https://learn.microsoft.com/en-us/graph/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Graph\nproviderId: microsoft-graph\npublisherName: Microsoft Corporation\nserviceCategory: Productivity / Identity API\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Microsoft 365\n  - Identity\n  - Microsoft Graph\n  - Microsoft\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Microsoft Graph: API access is bundled with the underlying Microsoft\n  365 / Office 365 / Entra / Intune / Dynamics seat licences with no per-call charge. Microsoft Graph\n  Data Connect (bulk extraction) is metered separately under Azure consumption.'\nsources:\n  - https://learn.microsoft.com/en-us/graph/\n  - https://learn.microsoft.com/en-us/graph/data-connect-concept-overview\n\
-  billingModel:\n  pricingCategory: Bundled with Microsoft 365 + Pay-As-You-Go (Data Connect)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Microsoft Graph\n  ServiceCategory: Productivity / Identity API\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: graph_api_requests\n    description: Microsoft Graph API calls (no charge; capacity-managed via throttling)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - application\n      - tenant\n      - service\n  - name: graph_resource_units\n    description: ResourceUnits consumed against the identity / directory service (token-bucket)\n    unit: resource_unit\n    aggregation: sum\n    dimensions:\n      - application\n      - tenant\n  - name: m365_seats\n    description: Underlying\
-  \ Microsoft 365 / Office 365 seats that entitle Graph access\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - tenant\n      - sku\n  - name: entra_id_seats\n    description: Entra ID seats (Free / P1 / P2) that entitle directory and Conditional Access Graph\n      endpoints\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - tenant\n      - sku\n  - name: data_connect_bytes\n    description: Bytes extracted via Microsoft Graph Data Connect to Azure Data Lake (billed via Azure\n      consumption)\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - dataset\n      - tenant\nprinciples:\n  - name: Visibility\n    description: Capture x-ms-throttle-scope, x-ms-throttle-limit-percentage, and request-id from every\n      Graph response for usage analytics; correlate with the M365 admin centre seat reports.\n  - name: Allocation\n    description: Use a per-team Entra app registration so request volume can be attributed to the consuming\n      team and chargedback\
-  \ against the parent M365 SKU.\n  - name: Optimization\n    description: Replace polling with change notifications and delta queries; prefer $batch; move tenant-wide\n      analytics to Microsoft Graph Data Connect to avoid REST throttling and reduce per-call overhead.\n  - name: Accountability\n    description: API platform team owns Graph app registrations, throttling SLOs, and Data Connect cost;\n      finance owns the M365 / Entra SKU mix that entitles Graph access.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n  - name: Microsoft\n    email: graphsdkpub@microsoft.com\n    url: https://developer.microsoft.com/en-us/graph\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Graph\nproviderId: microsoft-graph\npublisherName: Microsoft Graph\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Azure AD\n  - Collaboration\n  - Contacts\n  - Documents\n  - Email\n  - Graph\n  - Identity\n  - Microsoft\n  - Office 365\n  - Presentations\n  - Productivity\n  - Spreadsheets\n  - T1\n  - Tasks\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Graph API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible\
+  \ to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload\
+  \ Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Graph\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Graph\n  PublisherName: Microsoft Graph\n  InvoiceIssuerName: Microsoft Graph\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n\
+  \      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Microsoft Graph Admin\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Administrative\n    serviceName: Microsoft Graph Admin\n    serviceCategory: API\n  - name: Microsoft Graph Agreement Acceptances\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Agreement Acceptances\n    serviceName: Microsoft Graph Agreement Acceptances\n    serviceCategory: API\n  - name: Microsoft Graph Agreements\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Agreements\n    serviceName: Microsoft Graph\
+  \ Agreements\n    serviceCategory: API\n  - name: Microsoft Graph Applicaiton Catalogs\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Application Catalogs\n    serviceName: Microsoft Graph Applicaiton Catalogs\n    serviceCategory: API\n  - name: Microsoft Graph Applications\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Applications\n    serviceName: Microsoft Graph Applications\n    serviceCategory: API\n  - name: Microsoft Graph Application Templates\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Application Templates\n    serviceName: Microsoft Graph Application Templates\n    serviceCategory: API\n  - name: Microsoft Graph Audit Logs\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Audits\n      - Logs\n    serviceName: Microsoft Graph Audit Logs\n    serviceCategory: API\n  - name: Microsoft Graph Authentication Method Configurations\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Authentication\n\
+  \      - Configuration\n    serviceName: Microsoft Graph Authentication Method Configurations\n    serviceCategory: API\n  - name: Microsoft Graph Authentication Methods Policies\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Authentication\n      - Policies\n    serviceName: Microsoft Graph Authentication Methods Policies\n    serviceCategory: API\n  - name: Microsoft Graph Certificate Based Authorization Configuration\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Authorization\n      - Configuration\n    serviceName: Microsoft Graph Certificate Based Authorization Configuration\n    serviceCategory: API\n  - name: Microsoft Graph Chats\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Chat\n    serviceName: Microsoft Graph Chats\n    serviceCategory: API\n  - name: Microsoft Graph Communications\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Communications\n    serviceName: Microsoft Graph Communications\n\
+  \    serviceCategory: API\n  - name: Microsoft Graph Compliance\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Compliance\n    serviceName: Microsoft Graph Compliance\n    serviceCategory: API\n  - name: Microsoft Graph Connections\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Connections\n    serviceName: Microsoft Graph Connections\n    serviceCategory: API\n  - name: Microsoft Graph Contacts\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Contacts\n    serviceName: Microsoft Graph Contacts\n    serviceCategory: API\n  - name: Microsoft Graph Contracts\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Contracts\n    serviceCategory: API\n  - name: Microsoft Graph Copilot\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Copilot\n    serviceCategory: API\n  - name: Microsoft Graph Data Policy Operations\n    baseURL: https://graph.microsoft.com/v1.0\n\
+  \    tags: []\n    serviceName: Microsoft Graph Data Policy Operations\n    serviceCategory: API\n  - name: Microsoft Graph Device Application Management\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Device Application Management\n    serviceCategory: API\n  - name: Microsoft Graph Device Management\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Device Management\n    serviceCategory: API\n  - name: Microsoft Graph Devices\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Devices\n    serviceCategory: API\n  - name: Microsoft Graph Directory\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Directory\n    serviceCategory: API\n  - name: Microsoft Graph Directory Objects\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Directory Objects\n    serviceCategory:\
+  \ API\n  - name: Microsoft Graph Directory Roles\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Directory Roles\n    serviceCategory: API\n  - name: Microsoft Graph Directory Role Templates\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Directory Role Templates\n    serviceCategory: API\n  - name: Microsoft Graph Domain DNS Records\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Domain DNS Records\n    serviceCategory: API\n  - name: Microsoft Graph Domains\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Domains\n    serviceCategory: API\n  - name: Microsoft Graph Drives\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Drives\n    serviceCategory: API\n  - name: Microsoft Graph Education\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName:\
+  \ Microsoft Graph Education\n    serviceCategory: API\n  - name: Microsoft Graph Employee Experience\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Employee Experience\n    serviceCategory: API\n  - name: Microsoft Graph External\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph External\n    serviceCategory: API\n  - name: Microsoft Graph Filter Operators\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Filter Operators\n    serviceCategory: API\n  - name: Microsoft Graph Functions\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Functions\n    serviceCategory: API\n  - name: Microsoft Graph Group Lifecycle Policies\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Group Lifecycle Policies\n    serviceCategory: API\n  - name: Microsoft Graph Groups\n    baseURL:\
+  \ https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Groups\n    serviceCategory: API\n  - name: Microsoft Graph Group Settings\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Group Settings\n    serviceCategory: API\n  - name: Microsoft Graph Group Setting Templates\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Group Setting Templates\n    serviceCategory: API\n  - name: Microsoft Graph Identity\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Identity\n    serviceCategory: API\n  - name: Microsoft Graph Identity Governance\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Identity Governance\n    serviceCategory: API\n  - name: Microsoft Graph Identity Protection\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Identity Protection\n\
+  \    serviceCategory: API\n  - name: Microsoft Graph Identity Providers\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Identity Providers\n    serviceCategory: API\n  - name: Microsoft Graph Information Protection\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Information Protection\n    serviceCategory: API\n  - name: Microsoft Graph Invitations\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Invitations\n    serviceCategory: API\n  - name: Microsoft Graph Me\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Me\n    serviceCategory: API\n  - name: Microsoft Graph Oauth2 Permission Grants\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Oauth2 Permission Grants\n    serviceCategory: API\n  - name: Microsoft Graph Organizations\n    baseURL: https://graph.microsoft.com/v1.0\n\
+  \    tags: []\n    serviceName: Microsoft Graph Organizations\n    serviceCategory: API\n  - name: Microsoft Graph Permission Grants\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Permission Grants\n    serviceCategory: API\n  - name: Microsoft Graph Places\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Places\n    serviceCategory: API\n  - name: Microsoft Graph Planner\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Planner\n    serviceCategory: API\n  - name: Microsoft Graph Policies\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Policies\n    serviceCategory: API\n  - name: Microsoft Graph Print\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Print\n    serviceCategory: API\n  - name: Microsoft Graph Privacy\n    baseURL: https://graph.microsoft.com/v1.0\n\
+  \    tags: []\n    serviceName: Microsoft Graph Privacy\n    serviceCategory: API\n  - name: Microsoft Graph Reports\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Reports\n    serviceCategory: API\n  - name: Microsoft Graph Role Management\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Role Management\n    serviceCategory: API\n  - name: Microsoft Graph Schema Extensions\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Schema Extensions\n    serviceCategory: API\n  - name: Microsoft Graph Scoped Role Memberships\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Scoped Role Memberships\n    serviceCategory: API\n  - name: Microsoft Graph Search\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Search\n    serviceCategory: API\n  - name: Microsoft Graph Security\n\
+  \    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Security\n    serviceCategory: API\n  - name: Microsoft Graph Service Principals\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Service Principals\n    serviceCategory: API\n  - name: Microsoft Graph Shares\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Shares\n    serviceCategory: API\n  - name: Microsoft Graph Sites\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Sites\n    serviceCategory: API\n  - name: Microsoft Graph Solutions\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Solutions\n    serviceCategory: API\n  - name: Microsoft Graph Storage\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Storage\n    serviceCategory: API\n  - name: Microsoft Graph Subscribed\
+  \ SKUs\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Subscribed SKUs\n    serviceCategory: API\n  - name: Microsoft Graph Subscriptions\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Subscriptions\n    serviceCategory: API\n  - name: Microsoft Graph Teams\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Teams\n    serviceCategory: API\n  - name: Microsoft Graph Teams Templates\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Teams Templates\n    serviceCategory: API\n  - name: Microsoft Graph Teamwork\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Teamwork\n    serviceCategory: API\n  - name: Microsoft Graph Tenant Relationships\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Tenant Relationships\n    serviceCategory:\
+  \ API\n  - name: Microsoft Graph Users\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Microsoft Graph Users\n    serviceCategory: API\n  - name: Token\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Token\n    serviceCategory: API\n  - name: Workspaces\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Workspaces\n    serviceCategory: API\n  - name: Sites\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Sites\n    serviceCategory: API\n  - name: Collections\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Collections\n    serviceCategory: API\n  - name: Pages\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Pages\n    serviceCategory: API\n  - name: Assets\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Assets\n    serviceCategory: API\n  - name: Asset Folders\n    baseURL: https://graph.microsoft.com/v1.0\n\
+  \    tags: []\n    serviceName: Asset Folders\n    serviceCategory: API\n  - name: Webhooks\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Webhooks\n    serviceCategory: API\n  - name: Forms\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Forms\n    serviceCategory: API\n  - name: Form Submissions\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Form Submissions\n    serviceCategory: API\n  - name: Token\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Token\n    serviceCategory: API\n  - name: Workspaces\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Workspaces\n    serviceCategory: API\n  - name: Sites\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Sites\n    serviceCategory: API\n  - name: Collections\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Collections\n    serviceCategory:\
+  \ API\n  - name: Pages\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Pages\n    serviceCategory: API\n  - name: Assets\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Assets\n    serviceCategory: API\n  - name: Asset Folders\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Asset Folders\n    serviceCategory: API\n  - name: Webhooks\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Webhooks\n    serviceCategory: API\n  - name: Forms\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Forms\n    serviceCategory: API\n  - name: Form Submissions\n    baseURL: https://graph.microsoft.com/v1.0\n    tags: []\n    serviceName: Form Submissions\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n\
+  \    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n  - name: Microsoft\n    email: graphsdkpub@microsoft.com\n    url: https://developer.microsoft.com/en-us/graph\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-graph/refs/heads/main/finops/microsoft-graph-finops.yml
-sources:
-- https://learn.microsoft.com/en-us/graph/
-- https://learn.microsoft.com/en-us/graph/data-connect-concept-overview
+sources: []
 specification: FinOps Framework
 tags:
-- Microsoft 365
+- Azure AD
+- Collaboration
+- Contacts
+- Documents
+- Email
+- Graph
 - Identity
-- Microsoft Graph
 - Microsoft
+- Office 365
+- Presentations
+- Productivity
+- Spreadsheets
+- T1
+- Tasks
 - FinOps
+- Cost Management
 - FOCUS
 ---

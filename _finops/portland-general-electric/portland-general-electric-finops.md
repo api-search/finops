@@ -7,50 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Contract
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Contract / Custom
-description: FOCUS-aligned FinOps placeholder for Portland General Electric. The provider does not publish a public API pricing surface, so there are no documented meters or unit prices to align to FOCUS. Any cost allocation lives inside the bilateral partner / member contract.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Portland General Electric API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Portland General Electric Company
+  ChargeCategory: Usage
+  InvoiceIssuerName: Portland General Electric
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Portland General Electric
-  PublisherName: Portland General Electric Company
-  ServiceCategory: Utilities
+  PublisherName: Portland General Electric
+  ServiceCategory: Developer Tools / API
   ServiceName: Portland General Electric
-  ServiceSubcategory: Electric Utility
 layout: finops
 meters:
 - aggregation: sum
-  description: Negotiated contract fee or member dues; the actual unit (per-month, per-transaction, percent-of-spend) is defined in the executed agreement.
+  description: Count of billable API requests
   dimensions:
-  - contract
-  - department
-  name: contract_fee
-  unit: varies
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Portland General Electric Finops
 provider_name: Portland General Electric
 provider_slug: portland-general-electric
-publisher_name: Portland General Electric Company
-service_category: Utilities
+publisher_name: Portland General Electric
+service_category: API
 slug: portland-general-electric-finops
 source_filename: portland-general-electric-finops.yml
 source_heading: FinOps Profile
-source_url: https://portlandgeneral.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Portland General Electric\nproviderId: portland-general-electric\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Utilities\n  - Electric\n  - Energy\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps placeholder for Portland General Electric. The provider does not publish\n  a public API pricing surface, so there are no documented meters or unit\n  prices to align to FOCUS. Any cost allocation lives inside the bilateral\n  partner / member contract.\nsources:\n  - https://portlandgeneral.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Portland General Electric Company\nserviceCategory: Utilities\nbillingModel:\n  pricingCategory:\
-  \ Contract / Custom\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Portland General Electric\n  ServiceCategory: Utilities\n  ServiceSubcategory: Electric Utility\n  ProviderName: Portland General Electric\n  PublisherName: Portland General Electric Company\n  InvoiceIssuerName: Portland General Electric Company\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: contract_fee\n    description: Negotiated contract fee or member dues; the actual unit (per-month, per-transaction, percent-of-spend) is defined in the executed agreement.\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - contract\n      - department\nprinciples:\n  - name: Visibility\n    description: Cost visibility for Portland General Electric comes from the negotiated contract artifacts and the consuming organization's AP / procurement system rather than from a provider usage API.\n  - name:\
-  \ Allocation\n    description: Allocate by the cost center or business unit listed on the contract; there is no provider-side tag surface.\n  - name: Optimization\n    description: Renegotiate at renewal; consolidate purchasing through procurement; benchmark against peer organizations where possible.\n  - name: Accountability\n    description: The contract owner / category manager is accountable for spend; review at the contract renewal cadence.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\nnotes: >-\n  No public pricing or billing documentation exists. Reconciled=false\n  because there is nothing publicly published to align to FOCUS columns or\n  meters.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Portland General Electric\nproviderId: portland-general-electric\npublisherName: Portland General Electric\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Utilities\n  - Electric\n  - Energy\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Portland General Electric API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
+  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
+  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Portland General Electric\n  ServiceCategory: Developer Tools / API\n  ProviderName: Portland General Electric\n  PublisherName: Portland General Electric\n  InvoiceIssuerName: Portland General Electric\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n   \
+  \ description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Portland General Electric API\n    baseURL: https://api.portlandgeneral.com\n    tags:\n      - Utilities\n      - Electric\n      - Energy\n    serviceName: Portland General Electric API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/portland-general-electric/refs/heads/main/finops/portland-general-electric-finops.yml
-sources:
-- https://portlandgeneral.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Utilities
 - Electric
 - Energy
 - FinOps
+- Cost Management
 - FOCUS
 ---

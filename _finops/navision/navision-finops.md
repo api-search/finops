@@ -38,91 +38,81 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/navision/refs/heads/main/openapi/automation-api.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Tiered Subscription
-description: 'FOCUS-aligned FinOps for Microsoft Dynamics NAV / Dynamics 365 Business Central: per-seat subscription billing across Essentials, Premium, and Team Members SKUs with annual commitment, plus metered Microsoft Copilot Credits.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Microsoft Dynamics NAV API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Microsoft Corporation
-  PricingCategory: Subscription
-  PricingUnit: seat-month
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  ServiceCategory: ERP
-  ServiceName: Microsoft Dynamics 365 Business Central
-  ServiceSubcategory: Business Management
+  ChargeCategory: Usage
+  InvoiceIssuerName: Microsoft Dynamics NAV
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Microsoft Dynamics NAV
+  PublisherName: Microsoft Dynamics NAV
+  ServiceCategory: Developer Tools / API
+  ServiceName: Microsoft Dynamics NAV
 layout: finops
 meters:
 - aggregation: sum
-  description: Number of Essentials full-user seats licensed.
+  description: Count of billable API requests
   dimensions:
-  - tenant
-  - environment
-  name: essentials_seats
-  unit: seat-month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Number of Premium full-user seats licensed.
+  description: Bytes returned over the network in API responses
   dimensions:
-  - tenant
-  - environment
-  name: premium_seats
-  unit: seat-month
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Number of limited-access Team Members seats licensed.
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - tenant
-  - environment
-  name: team_member_seats
-  unit: seat-month
-- aggregation: sum
-  description: Microsoft Copilot Credits consumed by AI agents inside Business Central.
-  dimensions:
-  - tenant
-  - agent
-  name: copilot_credits
-  unit: credit
-- aggregation: avg
-  description: Provisioned production and sandbox environments per tenant.
-  dimensions:
-  - tenant
-  - type
-  name: environments
-  unit: environment-month
-- aggregation: avg
-  description: Compressed environment database storage (cap 3 TB per environment).
-  dimensions:
-  - tenant
-  - environment
-  name: storage
-  unit: GB-month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Navision Finops
 provider_name: Microsoft Dynamics NAV
 provider_slug: navision
-publisher_name: Microsoft Corporation
-service_category: ERP
+publisher_name: Microsoft Dynamics NAV
+service_category: API
 slug: navision-finops
 source_filename: navision-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.microsoft.com/en-us/dynamics-365/products/business-central/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Microsoft Dynamics NAV\nproviderId: navision\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - ERP\n  - Microsoft\n  - Cost Management\ndescription: 'FOCUS-aligned FinOps for Microsoft Dynamics NAV / Dynamics 365 Business Central: per-seat\n  subscription billing across Essentials, Premium, and Team Members SKUs with annual commitment, plus\n  metered Microsoft Copilot Credits.'\nsources:\n  - https://www.microsoft.com/en-us/dynamics-365/products/business-central/pricing\n  - https://learn.microsoft.com/en-us/dynamics365/business-central/dev-itpro/administration/operational-limits-online\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
-  \ Microsoft Corporation\nserviceCategory: ERP\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Microsoft Dynamics 365 Business Central\n  ServiceCategory: ERP\n  ServiceSubcategory: Business Management\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  PricingCategory: Subscription\n  PricingUnit: seat-month\nmeters:\n  - name: essentials_seats\n    description: Number of Essentials full-user seats licensed.\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - tenant\n      - environment\n  - name: premium_seats\n    description: Number of Premium full-user seats licensed.\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - tenant\n      - environment\n  - name: team_member_seats\n    description:\
-  \ Number of limited-access Team Members seats licensed.\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - tenant\n      - environment\n  - name: copilot_credits\n    description: Microsoft Copilot Credits consumed by AI agents inside Business Central.\n    unit: credit\n    aggregation: sum\n    dimensions:\n      - tenant\n      - agent\n  - name: environments\n    description: Provisioned production and sandbox environments per tenant.\n    unit: environment-month\n    aggregation: avg\n    dimensions:\n      - tenant\n      - type\n  - name: storage\n    description: Compressed environment database storage (cap 3 TB per environment).\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - tenant\n      - environment\nprinciples:\n  - name: Visibility\n    description: Use the Microsoft 365 admin center, Dynamics 365 admin center, and the Business Central\n      Telemetry data in Application Insights to attribute seat consumption, environment counts, and\
-  \ Copilot\n      Credit burn.\n  - name: Allocation\n    description: Map seat assignments and environments to cost centers via Microsoft Entra (Azure AD)\n      groups and license assignment policies; tag custom AL extensions and integrations by department.\n  - name: Optimization\n    description: Right-size SKU mix — use Team Members ($8) for read/approval-only users instead of full\n      Essentials/Premium seats; consolidate environments where possible; meter Copilot adoption before\n      committing credit packs; spread API load across multiple users to avoid throttling-driven retries.\n  - name: Accountability\n    description: Tie annual seat commitments to department headcount forecasts; set Copilot Credit budget\n      alerts; review unused seats quarterly; review API throttling telemetry to ensure integrations stay\n      within per-user limits.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Dynamics NAV\nproviderId: navision\npublisherName: Microsoft Dynamics NAV\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Business Management\n  - Dynamics NAV\n  - ERP\n  - Finance\n  - Inventory\n  - Microsoft\n  - Navision\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Dynamics NAV API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name:\
+  \ Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  -\
+  \ name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Dynamics NAV\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Dynamics NAV\n  PublisherName: Microsoft Dynamics NAV\n  InvoiceIssuerName: Microsoft Dynamics NAV\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n\
+  \  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Dynamics NAV Web Services API\n    baseURL: https://{server}:{port}/{instance}/api/{version}\n    tags:\n      - Enterprise Resource Planning\n      - OData\n      - SOAP\n      - Web Services\n    serviceName: Dynamics NAV Web Services API\n    serviceCategory: API\n  - name: Dynamics NAV OData API\n    baseURL: https://{server}:{port}/{instance}/OData/Company('{company}')\n    tags:\n      - Business Data\n      - Data Integration\n      - OData\n      - Queries\n    serviceName: Dynamics NAV OData API\n    serviceCategory: API\n  - name: Dynamics NAV SOAP Web Services\n   \
+  \ baseURL: https://{server}:{port}/{instance}/WS/{company}/\n    tags:\n      - Business Logic\n      - Codeunits\n      - Legacy Integration\n      - SOAP\n    serviceName: Dynamics NAV SOAP Web Services\n    serviceCategory: API\n  - name: Business Central API v2.0\n    baseURL: https://api.businesscentral.dynamics.com/v2.0/{environment}/api/v2.0\n    tags:\n      - Business Central\n      - Business Data\n      - Cloud ERP\n      - Connect Apps\n      - REST API\n    serviceName: Business Central API v2.0\n    serviceCategory: API\n  - name: Business Central Administration Center API\n    baseURL: https://api.businesscentral.dynamics.com/admin/v2.28\n    tags:\n      - Administration\n      - Cloud ERP\n      - Environment Management\n      - Tenant Management\n    serviceName: Business Central Administration Center API\n    serviceCategory: API\n  - name: Business Central Automation API\n    baseURL: https://api.businesscentral.dynamics.com/v2.0/{environment}/api/microsoft/automation/v2.0\n\
+  \    tags:\n      - Automation\n      - Extension Management\n      - Tenant Management\n      - User Management\n    serviceName: Business Central Automation API\n    serviceCategory: API\n  - name: Business Central REST API Web Services\n    baseURL: https://api.businesscentral.dynamics.com/v2.0/{environment}/api\n    tags:\n      - Business Central\n      - Custom APIs\n      - Data Integration\n      - REST API\n      - Web Services\n    serviceName: Business Central REST API Web Services\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/navision/refs/heads/main/finops/navision-finops.yml
-sources:
-- https://www.microsoft.com/en-us/dynamics-365/products/business-central/pricing
-- https://learn.microsoft.com/en-us/dynamics365/business-central/dev-itpro/administration/operational-limits-online
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Business Management
+- Dynamics NAV
 - ERP
+- Finance
+- Inventory
 - Microsoft
+- Navision
+- FinOps
 - Cost Management
+- FOCUS
 ---

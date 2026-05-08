@@ -7,54 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Custom Contract
-description: 'FOCUS-aligned FinOps scaffold for LHC Group: partner-only healthcare API access with no public per-call pricing. Consumer-side spend tracks against the partner / BAA contract rather than metered LHC Group invoices.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the LHC Group API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: LHC Group, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: LHC Group
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: LHC Group
-  PublisherName: LHC Group, Inc.
-  ServiceCategory: Healthcare / API
-  ServiceName: LHC Group API
+  PublisherName: LHC Group
+  ServiceCategory: Developer Tools / API
+  ServiceName: LHC Group
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
   - endpoint
-  - environment
-  - partner
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - contract
-  name: partner_fees
-  unit: month
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Lhc Group Finops
 provider_name: LHC Group
 provider_slug: lhc-group
-publisher_name: LHC Group, Inc.
-service_category: Healthcare / API
+publisher_name: LHC Group
+service_category: API
 slug: lhc-group-finops
 source_filename: lhc-group-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.lhcgroup.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: LHC Group\nproviderId: lhc-group\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Home Health\n  - Hospice\n  - Healthcare\ndescription: 'FOCUS-aligned FinOps scaffold for LHC Group: partner-only healthcare API access with no\n  public per-call pricing. Consumer-side spend tracks against the partner / BAA contract rather than\n  metered LHC Group invoices.'\nnotes: Pricing is contract-driven. Meters describe the consumer-side telemetry shape; reconcile against\n  the executed partner / BAA agreement.\nsources:\n  - https://www.lhcgroup.com\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: LHC Group, Inc.\nserviceCategory: Healthcare\
-  \ / API\nbillingModel:\n  pricingCategory: Custom Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: LHC Group API\n  ServiceCategory: Healthcare / API\n  ProviderName: LHC Group\n  PublisherName: LHC Group, Inc.\n  InvoiceIssuerName: LHC Group, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - environment\n      - partner\n  - name: partner_fees\n    unit: month\n    aggregation: sum\n    dimensions:\n      - contract\nprinciples:\n  - name: Visibility\n    description: Track outbound API call volume and any referral / interop event volume in your own gateway\n      / observability stack; LHC Group does not expose a public usage API.\n  - name: Allocation\n    description: Tag calls by service line (home health, hospice, referrals) and by consuming application\n      so partner-contract\
-  \ spend can be charged back.\n  - name: Optimization\n    description: Batch referral and authorization checks; cache static facility / clinician reference\n      data to stay within contracted volumes.\n  - name: Accountability\n    description: Assign a contract owner per LHC Group / Optum partner agreement and review monthly against\n      contracted volume and PHI handling controls.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: LHC Group\nproviderId: lhc-group\npublisherName: LHC Group\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Home Health\n  - Hospice\n  - Healthcare\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the LHC Group API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: LHC Group\n  ServiceCategory: Developer Tools / API\n  ProviderName: LHC Group\n  PublisherName: LHC Group\n  InvoiceIssuerName: LHC Group\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
+  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: LHC Group API\n    baseURL: https://api.lhcgroup.com\n    tags:\n      - Home Health\n      - Hospice\n      - Healthcare\n    serviceName: LHC Group API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/lhc-group/refs/heads/main/finops/lhc-group-finops.yml
-sources:
-- https://www.lhcgroup.com
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Home Health
 - Hospice
 - Healthcare
+- FinOps
+- Cost Management
+- FOCUS
 ---

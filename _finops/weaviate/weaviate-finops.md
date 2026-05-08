@@ -15,45 +15,78 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Subscription + Per-GiB
-description: FOCUS-aligned FinOps for Weaviate.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Weaviate API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Weaviate
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Weaviate
   PublisherName: Weaviate
-  ServiceCategory: Vector Database
+  ServiceCategory: Developer Tools / API
   ServiceName: Weaviate
 layout: finops
 meters:
-- aggregation: max
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - cluster
+  - api
+  - endpoint
   - tier
-  name: storage
-  unit: GiB-month
-- aggregation: max
-  name: backup_storage
-  unit: GiB-month
-- aggregation: max
-  name: vector_dimensions
-  unit: dimension-month
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Weaviate Finops
 provider_name: Weaviate
 provider_slug: weaviate
 publisher_name: Weaviate
-service_category: Vector Database
+service_category: API
 slug: weaviate-finops
 source_filename: weaviate-finops.yml
 source_heading: FinOps Profile
-source_url: https://weaviate.io/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Weaviate\nproviderId: weaviate\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Vector Database\ndescription: FOCUS-aligned FinOps for Weaviate.\nsources:\n  - https://weaviate.io/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Weaviate\nserviceCategory: Vector Database\nbillingModel:\n  pricingCategory: Subscription + Per-GiB\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Weaviate\n  ServiceCategory: Vector Database\n  ProviderName: Weaviate\n  PublisherName: Weaviate\n  BillingCurrency: USD\nmeters:\n  - name: storage\n    unit: GiB-month\n    aggregation: max\n    dimensions:\n  \
-  \    - cluster\n      - tier\n  - name: backup_storage\n    unit: GiB-month\n    aggregation: max\n  - name: vector_dimensions\n    unit: dimension-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track Weaviate consumption monthly via admin/billing exports.\n  - name: Allocation\n    description: Tag usage to teams or cost centers for chargeback.\n  - name: Optimization\n    description: Right-size models/tiers; use caching and batching.\n  - name: Accountability\n    description: Set hard spend limits; quarterly review.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Weaviate\nproviderId: weaviate\npublisherName: Weaviate\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Vector Database\n  - AI\n  - Machine Learning\n  - Semantic Search\n  - Open Source\n  - GraphQL\n  - Kubernetes\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Weaviate API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
+  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Weaviate\n  ServiceCategory: Developer Tools / API\n  ProviderName: Weaviate\n  PublisherName: Weaviate\n  InvoiceIssuerName: Weaviate\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n \
+  \   unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Weaviate REST API\n    baseURL: ''\n    tags:\n      - Vector Database\n      - Objects\n      - Schema\n      - GraphQL\n      - Search\n      - AI\n    serviceName: Weaviate REST API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/weaviate/refs/heads/main/finops/weaviate-finops.yml
-sources:
-- https://weaviate.io/pricing
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Vector Database
+- AI
+- Machine Learning
+- Semantic Search
+- Open Source
+- GraphQL
+- Kubernetes
+- FinOps
+- Cost Management
+- FOCUS
 ---

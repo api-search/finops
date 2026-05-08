@@ -15,45 +15,76 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Per-Second GPU
-description: FOCUS-aligned FinOps for Replicate.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Replicate API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Replicate
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Replicate
   PublisherName: Replicate
-  ServiceCategory: ML Inference
+  ServiceCategory: Developer Tools / API
   ServiceName: Replicate
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - hardware
-  - model
-  name: gpu_seconds
-  unit: second
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  name: predictions_count
-  unit: prediction
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  name: deployment_idle_seconds
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
   unit: second
 name: Replicate Finops
 provider_name: Replicate
 provider_slug: replicate
 publisher_name: Replicate
-service_category: ML Inference
+service_category: API
 slug: replicate-finops
 source_filename: replicate-finops.yml
 source_heading: FinOps Profile
-source_url: https://replicate.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Replicate\nproviderId: replicate\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - ML Inference\ndescription: FOCUS-aligned FinOps for Replicate.\nsources:\n  - https://replicate.com/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Replicate\nserviceCategory: ML Inference\nbillingModel:\n  pricingCategory: Per-Second GPU\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Replicate\n  ServiceCategory: ML Inference\n  ProviderName: Replicate\n  PublisherName: Replicate\n  BillingCurrency: USD\nmeters:\n  - name: gpu_seconds\n    unit: second\n    aggregation: sum\n    dimensions:\n      - hardware\n\
-  \      - model\n  - name: predictions_count\n    unit: prediction\n    aggregation: sum\n  - name: deployment_idle_seconds\n    unit: second\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Track Replicate consumption monthly via admin/billing exports.\n  - name: Allocation\n    description: Tag usage to teams or cost centers for chargeback.\n  - name: Optimization\n    description: Right-size models/tiers; use caching and batching.\n  - name: Accountability\n    description: Set hard spend limits; quarterly review.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Replicate\nproviderId: replicate\npublisherName: Replicate\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Artificial Intelligence\n  - Machine Learning\n  - Image Generation\n  - Language Models\n  - Model Deployment\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Replicate API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Replicate\n  ServiceCategory: Developer Tools / API\n  ProviderName: Replicate\n  PublisherName: Replicate\n  InvoiceIssuerName: Replicate\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Replicate\n    baseURL: ''\n    tags:\n      - Accounts\n      - Artificial Intelligence\n      - Collections\n      - Deployments\n      - Hardware\n      - Machine Learning\n      - Models\n      - Predictions\n      - Training\n      - Webhooks\n    serviceName: Replicate\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/replicate/refs/heads/main/finops/replicate-finops.yml
-sources:
-- https://replicate.com/pricing
+sources: []
 specification: FinOps Framework
 tags:
+- Artificial Intelligence
+- Machine Learning
+- Image Generation
+- Language Models
+- Model Deployment
 - FinOps
+- Cost Management
 - FOCUS
-- ML Inference
 ---

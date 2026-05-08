@@ -25,61 +25,74 @@ billing_model:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Contracted Per-Transaction + Platform Fee
-description: TSYS (now part of Global Payments) bills processing partners on contracted per-transaction and platform-fee terms. There is no public meter rate card; this artifact describes the structural shape only.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Total System Services API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Global Payments Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Total System Services
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Total System Services
-  PublisherName: Global Payments Inc.
-  ServiceCategory: Payments Processing
+  PublisherName: Total System Services
+  ServiceCategory: Developer Tools / API
   ServiceName: Total System Services
 layout: finops
 meters:
 - aggregation: sum
-  description: Authorizations, captures, refunds, and reversals processed through TSYS Payment Gateway or Merchant Services.
+  description: Count of billable API requests
   dimensions:
-  - card_brand
-  - card_present
+  - api
+  - endpoint
+  - tier
   - region
-  name: card_transactions_processed
-  unit: transaction
-- aggregation: avg
-  description: Cardholder accounts maintained on the TSYS Issuing Platform.
-  dimensions:
-  - product
-  - region
-  name: accounts_on_file
-  unit: account-month
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Monthly platform / connectivity fee separate from per-transaction pricing.
+  description: Bytes returned over the network in API responses
   dimensions:
-  - service
-  name: platform_fee
-  unit: month
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Total System Services Finops
 provider_name: Total System Services
 provider_slug: total-system-services
-publisher_name: Global Payments Inc.
-service_category: Payments Processing
+publisher_name: Total System Services
+service_category: API
 slug: total-system-services-finops
 source_filename: total-system-services-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.tsys.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Total System Services\nproviderId: total-system-services\npublisherName: Global Payments Inc.\nserviceCategory: Payments Processing\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Payments\n  - Payment Processing\n  - Card Issuing\n  - Merchant Services\n  - FinOps\n  - FOCUS\ndescription: 'TSYS (now part of Global Payments) bills processing partners on contracted per-transaction\n  and platform-fee terms. There is no public meter rate card; this artifact describes the structural shape\n  only.'\nsources:\n  - https://www.tsys.com/\nnotes: Pricing not publicly retrievable; meters are descriptive and unpriced.\nbillingModel:\n\
-  \  pricingCategory: Contracted Per-Transaction + Platform Fee\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Total System Services\n  ServiceCategory: Payments Processing\n  ProviderName: Total System Services\n  PublisherName: Global Payments Inc.\n  InvoiceIssuerName: Global Payments Inc.\n  BillingCurrency: USD\nmeters:\n  - name: card_transactions_processed\n    description: Authorizations, captures, refunds, and reversals processed through TSYS Payment Gateway\n      or Merchant Services.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - card_brand\n      - card_present\n      - region\n  - name: accounts_on_file\n    description: Cardholder accounts maintained on the TSYS Issuing Platform.\n    unit: account-month\n    aggregation: avg\n    dimensions:\n      - product\n      - region\n  - name: platform_fee\n    description: Monthly platform /\
-  \ connectivity fee separate from per-transaction pricing.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - service\nprinciples:\n  - name: Visibility\n    description: Reconcile the monthly TSYS settlement statement against your switch / authorization logs;\n      because rates are tiered by network and volume, line-item detail must be requested from your TSYS\n      relationship manager.\n  - name: Allocation\n    description: Attribute processing fees per card product / merchant-of-record entity. Keep BIN, MID,\n      and chain hierarchy in your COA so chargeback maps to the correct cost center.\n  - name: Optimization\n    description: Routinely review network routing (debit network choice), interchange-optimization data\n      submission quality (Level 2/3), and tier breakpoints to keep the blended take-rate near contract\n      floor.\n  - name: Accountability\n    description: Treasury / payments operations owns reconciliation against TSYS; product owners own\n  \
-  \    issuing-platform fees per program.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Total System Services\nproviderId: total-system-services\npublisherName: Total System Services\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Payments\n  - Payment Processing\n  - Card Issuing\n  - Merchant Services\n  - Fintech\n  - Financial Services\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Total System Services API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
+  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
+  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Total System Services\n  ServiceCategory: Developer Tools / API\n  ProviderName: Total System Services\n  PublisherName: Total System Services\n  InvoiceIssuerName: Total System Services\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n\
+  \  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: TSYS Payment Gateway\n    baseURL: ''\n    tags:\n      - Payments\n      - Payment Processing\n      - Credit Card\n      - Transactions\n      - POS\n    serviceName: TSYS Payment Gateway\n    serviceCategory: API\n  - name: TSYS Issuing Platform\n    baseURL: ''\n    tags:\n      - Payments\n      - Card Issuing\n      - Account Management\n      - Digital Payments\n      - Fintech\n    serviceName: TSYS Issuing Platform\n    serviceCategory: API\n  - name: TSYS Merchant Services\n    baseURL: ''\n    tags:\n      - Payments\n      - Merchant Management\n      - Acquiring\n\
+  \      - Boarding\n      - Settlement\n    serviceName: TSYS Merchant Services\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/total-system-services/refs/heads/main/finops/total-system-services-finops.yml
-sources:
-- https://www.tsys.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Payments
 - Payment Processing
 - Card Issuing
 - Merchant Services
+- Fintech
+- Financial Services
 - FinOps
+- Cost Management
 - FOCUS
 ---

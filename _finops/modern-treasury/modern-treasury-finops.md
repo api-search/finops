@@ -5,54 +5,105 @@ aligned_with:
   dataSpecVersion: '1.3'
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
+api_specs:
+- filename: modern-treasury-openapi.yml
+  format: yaml
+  label: Modern Treasury Payments API
+  slug: ''
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/modern-treasury/refs/heads/main/openapi/modern-treasury-openapi.yml
+- filename: modern-treasury-openapi.yml
+  format: yaml
+  label: Modern Treasury Ledgers API
+  slug: ''
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/modern-treasury/refs/heads/main/openapi/modern-treasury-openapi.yml
+- filename: modern-treasury-openapi.yml
+  format: yaml
+  label: Modern Treasury Counterparties API
+  slug: ''
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/modern-treasury/refs/heads/main/openapi/modern-treasury-openapi.yml
+- filename: modern-treasury-openapi.yml
+  format: yaml
+  label: Modern Treasury Connections & Webhooks API
+  slug: ''
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/modern-treasury/refs/heads/main/openapi/modern-treasury-openapi.yml
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Custom Usage-Based
-description: FOCUS-aligned FinOps for Modern Treasury.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Modern Treasury API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Modern Treasury
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Modern Treasury
   PublisherName: Modern Treasury
-  ServiceCategory: Bank Payments
+  ServiceCategory: Developer Tools / API
   ServiceName: Modern Treasury
 layout: finops
 meters:
 - aggregation: sum
-  name: ach_transactions
-  unit: transaction
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  name: wire_transactions
-  unit: transaction
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  name: rtp_transactions
-  unit: transaction
-- aggregation: sum
-  name: push_to_card_transactions
-  unit: transaction
-- aggregation: sum
-  name: stablecoin_transactions
-  unit: transaction
-- aggregation: max
-  name: internal_accounts
-  unit: account-month
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Modern Treasury Finops
 provider_name: Modern Treasury
 provider_slug: modern-treasury
 publisher_name: Modern Treasury
-service_category: Bank Payments
+service_category: API
 slug: modern-treasury-finops
 source_filename: modern-treasury-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.moderntreasury.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Modern Treasury\nproviderId: modern-treasury\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Bank Payments\ndescription: FOCUS-aligned FinOps for Modern Treasury.\nsources:\n  - https://www.moderntreasury.com/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Modern Treasury\nserviceCategory: Bank Payments\nbillingModel:\n  pricingCategory: Custom Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Modern Treasury\n  ServiceCategory: Bank Payments\n  ProviderName: Modern Treasury\n  PublisherName: Modern Treasury\n  BillingCurrency: USD\nmeters:\n  - name: ach_transactions\n   \
-  \ unit: transaction\n    aggregation: sum\n  - name: wire_transactions\n    unit: transaction\n    aggregation: sum\n  - name: rtp_transactions\n    unit: transaction\n    aggregation: sum\n  - name: push_to_card_transactions\n    unit: transaction\n    aggregation: sum\n  - name: stablecoin_transactions\n    unit: transaction\n    aggregation: sum\n  - name: internal_accounts\n    unit: account-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track Modern Treasury consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Modern Treasury\nproviderId: modern-treasury\npublisherName: Modern Treasury\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Fintech\n  - Payments\n  - ACH\n  - Wires\n  - Treasury\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Modern Treasury API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
+  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
+  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Modern Treasury\n  ServiceCategory: Developer Tools / API\n  ProviderName: Modern Treasury\n  PublisherName: Modern Treasury\n  InvoiceIssuerName: Modern Treasury\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Modern Treasury Payments API\n    baseURL: https://app.moderntreasury.com/api\n    tags:\n      - Payments\n      - ACH\n      - Wires\n      - RTP\n    serviceName: Modern Treasury Payments API\n    serviceCategory: API\n  - name: Modern Treasury Ledgers API\n    baseURL: https://app.moderntreasury.com/api\n    tags:\n      - Ledgers\n      - Accounting\n    serviceName: Modern Treasury Ledgers API\n    serviceCategory: API\n  - name: Modern Treasury Counterparties API\n    baseURL: https://app.moderntreasury.com/api\n    tags:\n      - Counterparties\n    serviceName: Modern Treasury Counterparties API\n    serviceCategory: API\n  - name: Modern Treasury Connections\
+  \ & Webhooks API\n    baseURL: https://app.moderntreasury.com/api\n    tags:\n      - Webhooks\n      - Events\n    serviceName: Modern Treasury Connections & Webhooks API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/modern-treasury/refs/heads/main/finops/modern-treasury-finops.yml
-sources:
-- https://www.moderntreasury.com/pricing
+sources: []
 specification: FinOps Framework
 tags:
+- Fintech
+- Payments
+- ACH
+- Wires
+- Treasury
 - FinOps
+- Cost Management
 - FOCUS
-- Bank Payments
 ---

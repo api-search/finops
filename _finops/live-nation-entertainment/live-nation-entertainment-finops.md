@@ -17,68 +17,69 @@ billing_model:
   billingFrequency: Monthly
   chargeCategories:
   - Usage
-  - Adjustment
+  - Purchase
+  - Tax
   - Credit
-  pricingCategory: Free API + Affiliate Revenue Share
-description: 'FOCUS-aligned FinOps for Live Nation / Ticketmaster: the public Discovery API is free with a 5,000 call/day, 5 req/sec quota, so direct API spend is zero. Commercial value flows through affiliate / partner ticket-sales revenue share rather than API fees. FinOps for consumers focuses on quota headroom (avoid 429s) and affiliate ROI rather than line-item API cost.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the live-nation-entertainment API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Ticketmaster L.L.C.
-  ProviderName: Live Nation Entertainment
-  PublisherName: Live Nation Entertainment, Inc.
-  ServiceCategory: Ticketing / Events
-  ServiceName: Ticketmaster Discovery API
+  ChargeCategory: Usage
+  InvoiceIssuerName: live-nation-entertainment
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: live-nation-entertainment
+  PublisherName: live-nation-entertainment
+  ServiceCategory: Developer Tools / API
+  ServiceName: live-nation-entertainment
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - api_key
+  - api
   - endpoint
-  - market
-  - locale
-  name: discovery_api_calls
-  unit: request
-- aggregation: max
-  dimensions:
-  - api_key
-  name: daily_quota_consumed
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - partner
-  - market
-  - event_type
-  name: affiliate_referrals
-  unit: referral
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - partner
-  - market
-  - event_type
-  name: affiliate_revenue
-  unit: USD
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Live Nation Entertainment Finops
 provider_name: live-nation-entertainment
 provider_slug: live-nation-entertainment
-publisher_name: Live Nation Entertainment, Inc. / Ticketmaster L.L.C.
-service_category: Ticketing / Events
+publisher_name: live-nation-entertainment
+service_category: API
 slug: live-nation-entertainment-finops
 source_filename: live-nation-entertainment-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.ticketmaster.com/products-and-docs/apis/getting-started/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Live Nation Entertainment\nproviderId: live-nation-entertainment\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Ticketing\n  - Events\n  - Venues\ndescription: 'FOCUS-aligned FinOps for Live Nation / Ticketmaster: the public Discovery API is free\n  with a 5,000 call/day, 5 req/sec quota, so direct API spend is zero. Commercial value flows through\n  affiliate / partner ticket-sales revenue share rather than API fees. FinOps for consumers focuses\n  on quota headroom (avoid 429s) and affiliate ROI rather than line-item API cost.'\nsources:\n  - https://developer.ticketmaster.com/products-and-docs/apis/getting-started/\n  - https://developer.ticketmaster.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n\
-  \  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Live Nation Entertainment, Inc. / Ticketmaster L.L.C.\nserviceCategory: Ticketing / Events\nbillingModel:\n  pricingCategory: Free API + Affiliate Revenue Share\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Ticketmaster Discovery API\n  ServiceCategory: Ticketing / Events\n  ProviderName: Live Nation Entertainment\n  PublisherName: Live Nation Entertainment, Inc.\n  InvoiceIssuerName: Ticketmaster L.L.C.\n  BillingCurrency: USD\nmeters:\n  - name: discovery_api_calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_key\n      - endpoint\n      - market\n      - locale\n  - name: daily_quota_consumed\n    unit: request\n    aggregation: max\n    dimensions:\n      - api_key\n  - name: affiliate_referrals\n    unit: referral\n    aggregation: sum\n    dimensions:\n      - partner\n\
-  \      - market\n      - event_type\n  - name: affiliate_revenue\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - partner\n      - market\n      - event_type\nprinciples:\n  - name: Visibility\n    description: Read Rate-Limit / Rate-Limit-Available / Rate-Limit-Reset response headers on every\n      call; export them to your observability platform for headroom dashboards. Use the affiliate /\n      partner reporting portal for revenue share.\n  - name: Allocation\n    description: Issue distinct API keys per integration / brand to attribute Discovery API consumption\n      and to scope quota-increase requests; tag affiliate URLs with sub-IDs for revenue allocation.\n  - name: Optimization\n    description: Cache event / venue / classification results; use search filters and pagination to stay\n      within 5,000/day; throttle clients to 5 req/sec with token-bucket; only request quota increases\n      after compliance / branding review readiness.\n  - name: Accountability\n\
-  \    description: Assign an integration owner who watches 429 rate and quota headroom, and a partner-program\n      owner who reviews affiliate revenue against ticket-referral targets each month.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: live-nation-entertainment\nproviderId: live-nation-entertainment\npublisherName: live-nation-entertainment\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the live-nation-entertainment API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: live-nation-entertainment\n  ServiceCategory: Developer Tools / API\n  ProviderName: live-nation-entertainment\n  PublisherName: live-nation-entertainment\n  InvoiceIssuerName: live-nation-entertainment\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API\
+  \ responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Ticketmaster Discovery API\n    baseURL: https://app.ticketmaster.com/discovery/v2\n    tags:\n      - Attractions\n      - Events\n      - Ticketing\n      - Venues\n    serviceName: Ticketmaster Discovery API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/live-nation-entertainment/refs/heads/main/finops/live-nation-entertainment-finops.yml
-sources:
-- https://developer.ticketmaster.com/products-and-docs/apis/getting-started/
-- https://developer.ticketmaster.com/
+sources: []
 specification: FinOps Framework
 tags:
 - FinOps
+- Cost Management
 - FOCUS
-- Ticketing
-- Events
-- Venues
 ---

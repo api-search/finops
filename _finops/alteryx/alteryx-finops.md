@@ -14,84 +14,82 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/alteryx/refs/heads/main/openapi/alteryx-server-api-v3.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
   - Credit
   - Adjustment
-  pricingCategory: Tiered Subscription
-description: 'FOCUS-aligned FinOps for Alteryx: tiered seat-based subscription pricing across Starter ($250 per user/month, annual billing), Professional, and Enterprise editions, with optional add-ons for automation capacity, dedicated data processing, and professional services. Three user roles - Viewer, Basic Creator, Full Creator - shape per-seat cost.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Alteryx API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Alteryx, Inc.
-  PricingUnit: seat-month
+  ChargeCategory: Usage
+  InvoiceIssuerName: Alteryx
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Alteryx
-  PublisherName: Alteryx, Inc.
-  ServiceCategory: Analytics Platform
-  ServiceName: Alteryx Analytics Platform
+  PublisherName: Alteryx
+  ServiceCategory: Developer Tools / API
+  ServiceName: Alteryx
 layout: finops
 meters:
-- aggregation: max
-  description: Full Creator user seats (end-to-end automation across the analytics lifecycle)
-  dimensions:
-  - edition
-  - region
-  name: full_creator_seats
-  unit: seat-month
-- aggregation: max
-  description: Basic Creator user seats (essential data prep and analytics tools)
-  dimensions:
-  - edition
-  - region
-  name: basic_creator_seats
-  unit: seat-month
-- aggregation: max
-  description: Viewer user seats (access and explore shared workflows and reports)
-  dimensions:
-  - edition
-  - region
-  name: viewer_seats
-  unit: seat-month
 - aggregation: sum
-  description: Add-on automation capacity beyond included edition allotments
+  description: Count of billable API requests
   dimensions:
-  - edition
-  name: automation_capacity
-  unit: capacity-unit-month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Add-on dedicated data-processing capacity
+  description: Bytes returned over the network in API responses
   dimensions:
-  - edition
-  name: dedicated_data_processing
-  unit: capacity-unit-month
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Alteryx Finops
 provider_name: Alteryx
 provider_slug: alteryx
-publisher_name: Alteryx, Inc.
-service_category: Analytics Platform
+publisher_name: Alteryx
+service_category: API
 slug: alteryx-finops
 source_filename: alteryx-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.alteryx.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Alteryx\nproviderId: alteryx\npublisherName: Alteryx, Inc.\nserviceCategory: Analytics Platform\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Analytics\n  - Automation\n  - Data Engineering\n  - Data Preparation\n  - ETL\n  - Machine Learning\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Alteryx: tiered seat-based subscription pricing across Starter\n  ($250 per user/month, annual billing), Professional, and Enterprise editions, with optional add-ons\n  for automation capacity, dedicated data processing, and professional services. Three user roles - Viewer,\n  Basic Creator, Full Creator - shape per-seat\
-  \ cost.'\nsources:\n  - https://www.alteryx.com/pricing\n  - https://focus.finops.org/focus-specification/v1-3/\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Credit\n    - Adjustment\nfocusColumns:\n  ServiceName: Alteryx Analytics Platform\n  ServiceCategory: Analytics Platform\n  ProviderName: Alteryx\n  PublisherName: Alteryx, Inc.\n  InvoiceIssuerName: Alteryx, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingUnit: seat-month\nmeters:\n  - name: full_creator_seats\n    description: Full Creator user seats (end-to-end automation across the analytics lifecycle)\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - edition\n      - region\n  - name: basic_creator_seats\n    description: Basic Creator user seats (essential data prep and analytics tools)\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - edition\n\
-  \      - region\n  - name: viewer_seats\n    description: Viewer user seats (access and explore shared workflows and reports)\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - edition\n      - region\n  - name: automation_capacity\n    description: Add-on automation capacity beyond included edition allotments\n    unit: capacity-unit-month\n    aggregation: sum\n    dimensions:\n      - edition\n  - name: dedicated_data_processing\n    description: Add-on dedicated data-processing capacity\n    unit: capacity-unit-month\n    aggregation: sum\n    dimensions:\n      - edition\nprinciples:\n  - name: Visibility\n    description: Use the Alteryx Server admin and Analytics Cloud usage dashboards to see seat utilization,\n      workflow run volume, and add-on capacity consumption. Reconcile against the annual subscription\n      schedule.\n  - name: Allocation\n    description: Allocate seats and capacity across analytics teams using Alteryx role assignments and\n      project-level\
-  \ chargeback dimensions.\n  - name: Optimization\n    description: Right-size seat counts at renewal (downgrade Full Creators to Basic where possible, increase\n      Viewers for read-only consumption); evaluate add-on capacity utilization to avoid overprovisioning;\n      consolidate workflows to reduce automation-capacity needs.\n  - name: Accountability\n    description: Analytics center-of-excellence or data-engineering leadership owns the contract; run\n      quarterly utilization reviews against analytics outcomes.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Alteryx\nproviderId: alteryx\npublisherName: Alteryx\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Automation\n  - Data Engineering\n  - Data Preparation\n  - Data Science\n  - ETL\n  - Machine Learning\n  - Predictive Analytics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Alteryx API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Alteryx\n  ServiceCategory: Developer Tools / API\n  ProviderName: Alteryx\n  PublisherName: Alteryx\n  InvoiceIssuerName: Alteryx\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in\
+  \ API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Alteryx Server API\n    baseURL: https://your-server/webapi\n    tags:\n      - Automation\n      - Jobs\n      - Scheduling\n      - Server\n      - Workflows\n    serviceName: Alteryx Server API\n    serviceCategory: API\n  - name: Alteryx Server API V3\n    baseURL: https://your-server/webapi/v3\n    tags:\n      - Admin\n      - Credentials\n      - OAuth2\n      - Server\n      - Users\n      - Workflows\n    serviceName: Alteryx Server API V3\n    serviceCategory: API\n  - name: Alteryx Server API V1\n    baseURL: https://your-server/webapi/v1\n    tags:\n      - Admin\n      - Audit\n      - Migration\n      - Server\n    serviceName: Alteryx\
+  \ Server API V1\n    serviceCategory: API\n  - name: Alteryx Gallery API\n    baseURL: https://gallery.alteryx.com/api\n    tags:\n      - Gallery\n      - Public API\n      - Sharing\n      - Workflows\n    serviceName: Alteryx Gallery API\n    serviceCategory: API\n  - name: Alteryx Connect API\n    baseURL: https://your-connect-server/api\n    tags:\n      - Collaboration\n      - Data Catalog\n      - Governance\n      - Metadata\n    serviceName: Alteryx Connect API\n    serviceCategory: API\n  - name: Alteryx AlteryxEngine API\n    baseURL: https://your-server/api\n    tags:\n      - Designer\n      - Engine\n      - Execution\n      - Workflows\n    serviceName: Alteryx AlteryxEngine API\n    serviceCategory: API\n  - name: Alteryx Designer Cloud API\n    baseURL: https://api.trifacta.com\n    tags:\n      - Cloud\n      - Data Preparation\n      - Pipelines\n      - Transformation\n      - Trifacta\n    serviceName: Alteryx Designer Cloud API\n    serviceCategory: API\nunitEconomics:\n\
+  \  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://www.alteryx.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/alteryx/refs/heads/main/finops/alteryx-finops.yml
-sources:
-- https://www.alteryx.com/pricing
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
 - Analytics
 - Automation
 - Data Engineering
 - Data Preparation
+- Data Science
 - ETL
 - Machine Learning
+- Predictive Analytics
 - FinOps
+- Cost Management
 - FOCUS
 ---

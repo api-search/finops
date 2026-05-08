@@ -43,67 +43,81 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/avaloq/refs/heads/main/openapi/avaloq-compliance-openapi.yml
 billing_model:
-  billingCurrency: USD/EUR/CHF
-  billingFrequency: Annual
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
-  - Adjustment
+  - Purchase
   - Tax
   - Credit
-  pricingCategory: Enterprise Subscription
-description: 'FOCUS-aligned FinOps for Avaloq: enterprise subscription core-banking platform with optional BPO services. Cost is dominated by platform license + per-AUM / per-account scale fees and BPO operations charges; not by per-API-call usage.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Avaloq API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
-  BillingCurrency: CHF
-  InvoiceIssuerName: Avaloq Group AG
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Avaloq
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Avaloq
-  PublisherName: Avaloq Group AG
-  ServiceCategory: Core Banking / Wealth Management
+  PublisherName: Avaloq
+  ServiceCategory: Developer Tools / API
   ServiceName: Avaloq
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - module
-  - deployment
-  name: banking_suite_license
-  unit: month
-- aggregation: max
-  name: client_accounts
-  unit: account
-- aggregation: max
-  name: assets_under_management
-  unit: USD
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - service
-  name: bpo_operations
-  unit: month
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - module
-  name: api_invocations
-  unit: invocation
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Avaloq Finops
 provider_name: Avaloq
 provider_slug: avaloq
-publisher_name: Avaloq Group AG
-service_category: Core Banking / Wealth Management
+publisher_name: Avaloq
+service_category: API
 slug: avaloq-finops
 source_filename: avaloq-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.avaloq.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Avaloq\nproviderId: avaloq\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nnotes: Avaloq pricing is enterprise-quote and not publicly posted. This artifact models the FinOps\n  shape of an Avaloq deployment (subscription + BPO + optional on-prem).\ntags:\n  - FinOps\n  - FOCUS\n  - Banking\n  - Wealth Management\n  - Core Banking\ndescription: 'FOCUS-aligned FinOps for Avaloq: enterprise subscription core-banking platform with\n  optional BPO services. Cost is dominated by platform license + per-AUM / per-account scale fees and\n  BPO operations charges; not by per-API-call usage.'\nsources:\n  - https://www.avaloq.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
-  \ Avaloq Group AG\nserviceCategory: Core Banking / Wealth Management\nbillingModel:\n  pricingCategory: Enterprise Subscription\n  billingFrequency: Annual\n  billingCurrency: USD/EUR/CHF\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\n    - Tax\n    - Credit\nfocusColumns:\n  ServiceName: Avaloq\n  ServiceCategory: Core Banking / Wealth Management\n  ProviderName: Avaloq\n  PublisherName: Avaloq Group AG\n  InvoiceIssuerName: Avaloq Group AG\n  BillingCurrency: CHF\nmeters:\n  - name: banking_suite_license\n    unit: month\n    aggregation: sum\n    dimensions:\n      - module\n      - deployment\n  - name: client_accounts\n    unit: account\n    aggregation: max\n  - name: assets_under_management\n    unit: USD\n    aggregation: max\n  - name: bpo_operations\n    unit: month\n    aggregation: sum\n    dimensions:\n      - service\n  - name: api_invocations\n    unit: invocation\n    aggregation: sum\n    dimensions:\n      - module\nprinciples:\n  - name: Visibility\n\
-  \    description: Visibility comes from the institution's own Avaloq instance — operations dashboards,\n      Banking Suite reporting, and contractual scale reports tied to AUM / account counts.\n  - name: Allocation\n    description: Allocate by business unit (private banking, wealth, corporate), legal entity, and\n      booking center. Avaloq supports multi-entity bookkeeping for chargeback.\n  - name: Optimization\n    description: Optimization levers are module mix (only license modules used), retiring legacy\n      country / module deployments, and renegotiating BPO scope. API call patterns matter less than\n      module footprint.\n  - name: Accountability\n    description: COO / Head of Operations or CIO typically owns the Avaloq relationship; multi-year\n      contract reviews involve procurement and risk.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Avaloq\nproviderId: avaloq\npublisherName: Avaloq\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Banking\n  - Digital Banking\n  - Financial Services\n  - Fintech\n  - Payments\n  - Wealth Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Avaloq API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Avaloq\n  ServiceCategory: Developer Tools / API\n  ProviderName: Avaloq\n  PublisherName: Avaloq\n  InvoiceIssuerName: Avaloq\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Avaloq Banking API\n    baseURL: https://api.avaloq.com\n    tags:\n      - Accounts\n      - Banking\n      - Core Banking\n      - Transactions\n      - Wealth Management\n    serviceName: Avaloq Banking API\n    serviceCategory: API\n  - name: Avaloq Wealth Management API\n    baseURL: https://api.avaloq.com\n    tags:\n      - Asset Management\n      - Investment Management\n      - Portfolio Management\n      - Wealth Management\n    serviceName: Avaloq Wealth Management API\n    serviceCategory: API\n  - name: Avaloq Payments API\n    baseURL: https://api.avaloq.com\n    tags:\n      - Banking\n      - Payments\n      - SEPA\n      - SWIFT\n    serviceName: Avaloq Payments API\n    serviceCategory:\
+  \ API\n  - name: Avaloq Client Management API\n    baseURL: https://api.avaloq.com\n    tags:\n      - Client Management\n      - Financial Services\n      - KYC\n      - Onboarding\n    serviceName: Avaloq Client Management API\n    serviceCategory: API\n  - name: Avaloq Trading API\n    baseURL: https://api.avaloq.com\n    tags:\n      - Banking\n      - Financial Services\n      - Order Management\n      - Trading\n    serviceName: Avaloq Trading API\n    serviceCategory: API\n  - name: Avaloq Compliance & Risk API\n    baseURL: https://api.avaloq.com\n    tags:\n      - AML\n      - Banking\n      - Compliance\n      - Regulatory Reporting\n      - Risk Management\n    serviceName: Avaloq Compliance & Risk API\n    serviceCategory: API\n  - name: Avaloq Community API\n    baseURL: https://api.avaloq.com\n    tags:\n      - Banking\n      - Community\n      - Fintech\n      - Integration\n    serviceName: Avaloq Community API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost\
+  \ per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/avaloq/refs/heads/main/finops/avaloq-finops.yml
-sources:
-- https://www.avaloq.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Banking
+- Digital Banking
+- Financial Services
+- Fintech
+- Payments
 - Wealth Management
-- Core Banking
+- FinOps
+- Cost Management
+- FOCUS
 ---

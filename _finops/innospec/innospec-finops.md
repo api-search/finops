@@ -7,42 +7,74 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Order
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
-  pricingCategory: Not Applicable (Goods)
-description: Innospec is a specialty chemistry company (NASDAQ:IOSP); it does not deliver a public commercial API. There is no usage-based billing model to FOCUS-map. This artifact records the non-API nature of the provider rather than fabricating meters, and is retained for inventory completeness.
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Innospec API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Innospec Inc.
-  PricingCategory: Goods
-  PricingUnit: not-applicable
+  ChargeCategory: Usage
+  InvoiceIssuerName: Innospec
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Innospec
-  PublisherName: Innospec Inc.
-  ServiceCategory: Specialty Chemicals (Non-API)
-  ServiceName: Innospec Specialty Chemicals
+  PublisherName: Innospec
+  ServiceCategory: Developer Tools / API
+  ServiceName: Innospec
 layout: finops
-meters: []
+meters:
+- aggregation: sum
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Innospec Finops
 provider_name: Innospec
 provider_slug: innospec
-publisher_name: Innospec Inc.
-service_category: Specialty Chemicals (Non-API)
+publisher_name: Innospec
+service_category: API
 slug: innospec-finops
 source_filename: innospec-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.innospec.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Innospec\nproviderId: innospec\npublisherName: Innospec Inc.\nserviceCategory: Specialty Chemicals (Non-API)\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Specialty Chemicals\n  - Fuel Additives\n  - FinOps\n  - FOCUS\ndescription: Innospec is a specialty chemistry company (NASDAQ:IOSP); it does not deliver a public commercial\n  API. There is no usage-based billing model to FOCUS-map. This artifact records the non-API nature of\n  the provider rather than fabricating meters, and is retained for inventory completeness.\nnotes: Innospec is not an API provider; meters and FOCUS columns are placeholders reflecting that\
-  \ there\n  is no API-level cost data to allocate. Reconcile flag is false to signal \"no applicable API billing\n  surface\".\nsources:\n  - https://www.innospec.com/\nprinciples:\n  - name: Not Applicable\n    description: Innospec does not operate an API surface; no API-cost FinOps practice applies.\nbillingModel:\n  pricingCategory: Not Applicable (Goods)\n  billingFrequency: Per-Order\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\nfocusColumns:\n  ServiceName: Innospec Specialty Chemicals\n  ServiceCategory: Specialty Chemicals (Non-API)\n  ProviderName: Innospec\n  PublisherName: Innospec Inc.\n  InvoiceIssuerName: Innospec Inc.\n  PricingCategory: Goods\n  PricingUnit: not-applicable\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters: []\napis: []\nunitEconomics: []\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Innospec\nproviderId: innospec\npublisherName: Innospec\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Specialty Chemicals\n  - Fuel Additives\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Innospec API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Innospec\n  ServiceCategory: Developer Tools / API\n  ProviderName: Innospec\n  PublisherName: Innospec\n  InvoiceIssuerName: Innospec\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
+  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Innospec API\n    baseURL: https://api.innospec.com\n    tags:\n      - Specialty Chemicals\n      - Fuel Additives\n    serviceName: Innospec API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/innospec/refs/heads/main/finops/innospec-finops.yml
-sources:
-- https://www.innospec.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Specialty Chemicals
 - Fuel Additives
 - FinOps
+- Cost Management
 - FOCUS
 ---

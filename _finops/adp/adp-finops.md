@@ -22,64 +22,76 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription
-description: 'FOCUS-aligned FinOps for ADP: contract-based partner pricing for HCM, payroll, and benefits APIs.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the ADP API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: ADP, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: ADP
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: ADP
-  PublisherName: ADP, Inc.
-  ServiceCategory: Human Capital Management
+  PublisherName: ADP
+  ServiceCategory: Developer Tools / API
   ServiceName: ADP
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
   - api
-  - environment
-  - partner
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
-- aggregation: max
-  dimensions:
-  - client
-  - country
-  name: active_workers
-  unit: worker
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - client
-  - country
-  name: payroll_runs
-  unit: run
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - product
-  name: subscription_fees
-  unit: month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Adp Finops
 provider_name: ADP
 provider_slug: adp
-publisher_name: ADP, Inc.
-service_category: Human Capital Management
+publisher_name: ADP
+service_category: API
 slug: adp-finops
 source_filename: adp-finops.yml
 source_heading: FinOps Profile
-source_url: https://developers.adp.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: ADP\nproviderId: adp\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nnotes: ADP API pricing is custom and contract-based. FinOps mapping is approximate; actual\n  invoice line items depend on the negotiated agreement.\ntags:\n  - FinOps\n  - FOCUS\n  - HCM\n  - Payroll\n  - HR\ndescription: 'FOCUS-aligned FinOps for ADP: contract-based partner pricing for HCM, payroll, and\n  benefits APIs.'\nsources:\n  - https://developers.adp.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: ADP, Inc.\nserviceCategory: Human Capital Management\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    -\
-  \ Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: ADP\n  ServiceCategory: Human Capital Management\n  ProviderName: ADP\n  PublisherName: ADP, Inc.\n  InvoiceIssuerName: ADP, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - environment\n      - partner\n  - name: active_workers\n    unit: worker\n    aggregation: max\n    dimensions:\n      - client\n      - country\n  - name: payroll_runs\n    unit: run\n    aggregation: sum\n    dimensions:\n      - client\n      - country\n  - name: subscription_fees\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\nprinciples:\n  - name: Visibility\n    description: Use ADP partner reports and the contracted usage API to track per-client request\n      and worker counts.\n  - name: Allocation\n    description: Tag API calls with the end-client identifier and the consuming product to support\n      partner chargeback.\n\
-  \  - name: Optimization\n    description: Cache reference data; batch worker reads; consult ADP account team about volume\n      tier renegotiation.\n  - name: Accountability\n    description: Reconcile monthly ADP invoices against contracted minimums and active-worker counts;\n      assign budget owner per ADP product.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: ADP\nproviderId: adp\npublisherName: ADP\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Benefits\n  - HCM\n  - HR\n  - Payroll\n  - Workforce\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the ADP API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: ADP\n  ServiceCategory: Developer Tools / API\n  ProviderName: ADP\n  PublisherName: ADP\n  InvoiceIssuerName: ADP\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n\
+  \  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: ADP Workers API\n    baseURL: https://api.adp.com\n    tags:\n      - HCM\n      - HR\n      - Payroll\n      - Workers\n      - Workforce\n    serviceName: ADP Workers API\n    serviceCategory: API\n  - name: ADP Payroll API\n    baseURL: https://api.adp.com\n    tags:\n      - Compensation\n      - HCM\n      - HR\n      - Payroll\n    serviceName: ADP Payroll API\n    serviceCategory: API\n  - name: ADP Embedded Payroll API\n    baseURL: https://api.adp.com\n    tags:\n      - Embedded\n      - HCM\n      - Payroll\n      - Small Business\n    serviceName: ADP Embedded Payroll API\n    serviceCategory: API\n  - name: ADP Benefits Administration API\n    baseURL: https://api.adp.com\n    tags:\n      - Benefits\n      - Enrollment\n      - HCM\n      - HR\n   \
+  \ serviceName: ADP Benefits Administration API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/adp/refs/heads/main/finops/adp-finops.yml
-sources:
-- https://developers.adp.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Benefits
 - HCM
-- Payroll
 - HR
+- Payroll
+- Workforce
+- FinOps
+- Cost Management
+- FOCUS
 ---

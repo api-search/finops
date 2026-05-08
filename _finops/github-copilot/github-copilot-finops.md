@@ -46,85 +46,88 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
-  - Adjustment
+  - Purchase
+  - Tax
   - Credit
-  pricingCategory: Subscription + Metered Overage
-description: 'FOCUS-aligned FinOps for GitHub Copilot: per-seat subscription with included premium-request budgets and metered overage at $0.04 per premium request.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the GitHub Copilot API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: GitHub, Inc.
-  PricingCategory: Subscription
-  PricingUnit: seat-month
-  ProviderName: GitHub
-  PublisherName: GitHub, Inc.
-  ServiceCategory: Developer Tools
+  ChargeCategory: Usage
+  InvoiceIssuerName: GitHub Copilot
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: GitHub Copilot
+  PublisherName: GitHub Copilot
+  ServiceCategory: Developer Tools / API
   ServiceName: GitHub Copilot
-  ServiceSubcategory: AI Code Assistance
 layout: finops
 meters:
-- aggregation: max
-  description: Number of paid Copilot seats assigned in the billing period
-  dimensions:
-  - plan
-  - org
-  - team
-  name: copilot_seats
-  unit: seat
 - aggregation: sum
-  description: Premium model invocations (chat, agent mode, code review) consumed against plan budget
+  description: Count of billable API requests
   dimensions:
-  - plan
-  - org
-  - user
-  - model
-  name: premium_requests
-  unit: request
-- aggregation: sum
-  description: Premium requests beyond the included monthly budget; billed at $0.04 each
-  dimensions:
-  - plan
-  - org
-  - user
-  name: premium_request_overage
-  unit: request
-- aggregation: sum
-  description: Inline code completion suggestions issued
-  dimensions:
-  - org
-  - user
-  - language
-  name: completions
-  unit: completion
-- aggregation: sum
-  description: GitHub REST/GraphQL requests against Copilot management endpoints
-  dimensions:
-  - org
+  - api
   - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Github Copilot Finops
 provider_name: GitHub Copilot
 provider_slug: github-copilot
-publisher_name: GitHub, Inc.
-service_category: Developer Tools / AI
+publisher_name: GitHub Copilot
+service_category: API
 slug: github-copilot-finops
 source_filename: github-copilot-finops.yml
 source_heading: FinOps Profile
-source_url: https://github.com/features/copilot/plans
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: GitHub Copilot\nproviderId: github-copilot\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - AI\n  - Developer Tools\ndescription: 'FOCUS-aligned FinOps for GitHub Copilot: per-seat subscription with included premium-request\n  budgets and metered overage at $0.04 per premium request.'\nsources:\n  - https://github.com/features/copilot/plans\n  - https://docs.github.com/en/billing/concepts/product-billing/github-copilot\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: GitHub, Inc.\nserviceCategory: Developer Tools / AI\nbillingModel:\n  pricingCategory: Subscription + Metered Overage\n  billingFrequency: Monthly\n  billingCurrency:\
-  \ USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: GitHub Copilot\n  ServiceCategory: Developer Tools\n  ServiceSubcategory: AI Code Assistance\n  ProviderName: GitHub\n  PublisherName: GitHub, Inc.\n  InvoiceIssuerName: GitHub, Inc.\n  BillingCurrency: USD\n  PricingCategory: Subscription\n  PricingUnit: seat-month\nmeters:\n  - name: copilot_seats\n    description: Number of paid Copilot seats assigned in the billing period\n    unit: seat\n    aggregation: max\n    dimensions:\n      - plan\n      - org\n      - team\n  - name: premium_requests\n    description: Premium model invocations (chat, agent mode, code review) consumed against plan budget\n    unit: request\n    aggregation: sum\n    dimensions:\n      - plan\n      - org\n      - user\n      - model\n  - name: premium_request_overage\n    description: Premium requests beyond the included monthly budget; billed at $0.04 each\n    unit: request\n    aggregation:\
-  \ sum\n    dimensions:\n      - plan\n      - org\n      - user\n  - name: completions\n    description: Inline code completion suggestions issued\n    unit: completion\n    aggregation: sum\n    dimensions:\n      - org\n      - user\n      - language\n  - name: api_requests\n    description: GitHub REST/GraphQL requests against Copilot management endpoints\n    unit: request\n    aggregation: sum\n    dimensions:\n      - org\n      - endpoint\nprinciples:\n  - name: Visibility\n    description: Use the Copilot Usage Metrics API and the org Billing dashboard to attribute premium\n      request consumption per user and team; export GitHub usage CSVs for ledger reconciliation.\n  - name: Allocation\n    description: Tag seats by team via SAML/SCIM groups; route Copilot Business invoices through the cost\n      center owning the org.\n  - name: Optimization\n    description: Right-size seat counts using the Copilot Usage Metrics API to identify dormant seats;\n      educate users on when\
-  \ to use chat vs agent mode to avoid burning premium-request budget; opt low-volume\n      teams onto Pro instead of Business.\n  - name: Accountability\n    description: Engineering leaders own seat allocation and premium-request overage budgets; finance\n      reviews monthly Copilot line item against developer headcount.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: http://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: GitHub Copilot\nproviderId: github-copilot\npublisherName: GitHub Copilot\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Agents\n  - AI\n  - Artificial Intelligence\n  - Code Generation\n  - Code Review\n  - Coding Agent\n  - Custom Instructions\n  - Developer Tools\n  - Extensions\n  - IDE\n  - Machine Learning\n  - MCP\n  - Metrics\n  - Model Context Protocol\n  - Productivity\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the GitHub Copilot API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n\
+  \    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting\
+  \ for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: GitHub Copilot\n  ServiceCategory: Developer Tools / API\n  ProviderName: GitHub Copilot\n  PublisherName: GitHub Copilot\n  InvoiceIssuerName: GitHub Copilot\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n\
+  \    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: GitHub Copilot API\n    baseURL: https://api.github.com\n    tags:\n      - AI\n      - Code Completion\n      - Developer Tools\n      - Machine Learning\n    serviceName: GitHub Copilot API\n    serviceCategory: API\n  - name: GitHub Copilot for Business API\n    baseURL: https://api.github.com\n    tags:\n      - Enterprise\n      - Seat Management\n      - Usage Analytics\n    serviceName: GitHub Copilot for Business API\n    serviceCategory: API\n  - name: GitHub Copilot Chat API\n\
+  \    baseURL: https://api.github.com\n    tags:\n      - Chat\n      - Conversational AI\n      - IDE Integration\n    serviceName: GitHub Copilot Chat API\n    serviceCategory: API\n  - name: GitHub Copilot User Management API\n    baseURL: https://api.github.com\n    tags:\n      - Billing\n      - Organizations\n      - Seat Management\n      - User Management\n    serviceName: GitHub Copilot User Management API\n    serviceCategory: API\n  - name: GitHub Copilot Metrics API\n    baseURL: https://api.github.com\n    tags:\n      - Analytics\n      - Metrics\n      - Organizations\n      - Usage\n    serviceName: GitHub Copilot Metrics API\n    serviceCategory: API\n  - name: GitHub Copilot Usage Metrics API\n    baseURL: https://api.github.com\n    tags:\n      - Analytics\n      - Enterprise\n      - Reporting\n      - Usage Metrics\n    serviceName: GitHub Copilot Usage Metrics API\n    serviceCategory: API\n  - name: GitHub Copilot Content Exclusion API\n    baseURL: https://api.github.com\n\
+  \    tags:\n      - Content Exclusion\n      - Governance\n      - Policy\n      - Security\n    serviceName: GitHub Copilot Content Exclusion API\n    serviceCategory: API\n  - name: GitHub Copilot Extensions API\n    baseURL: https://api.github.com\n    tags:\n      - Agents\n      - Extensions\n      - Integrations\n      - Skillsets\n    serviceName: GitHub Copilot Extensions API\n    serviceCategory: API\n  - name: GitHub Copilot Coding Agent\n    baseURL: https://api.github.com\n    tags:\n      - Agents\n      - Automation\n      - Code Generation\n      - GitHub Actions\n      - Pull Requests\n    serviceName: GitHub Copilot Coding Agent\n    serviceCategory: API\n  - name: GitHub Copilot Code Review\n    baseURL: https://api.github.com\n    tags:\n      - Agents\n      - Code Quality\n      - Code Review\n      - Pull Requests\n    serviceName: GitHub Copilot Code Review\n    serviceCategory: API\n  - name: GitHub MCP Server\n    baseURL: https://api.github.com\n    tags:\n  \
+  \    - Agents\n      - Context\n      - Integrations\n      - MCP\n      - Model Context Protocol\n    serviceName: GitHub MCP Server\n    serviceCategory: API\n  - name: GitHub Copilot Custom Instructions\n    baseURL: https://api.github.com\n    tags:\n      - Configuration\n      - Customization\n      - Instructions\n      - Organizations\n    serviceName: GitHub Copilot Custom Instructions\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: http://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/github-copilot/refs/heads/main/finops/github-copilot-finops.yml
-sources:
-- https://github.com/features/copilot/plans
-- https://docs.github.com/en/billing/concepts/product-billing/github-copilot
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Agents
 - AI
+- Artificial Intelligence
+- Code Generation
+- Code Review
+- Coding Agent
+- Custom Instructions
 - Developer Tools
+- Extensions
+- IDE
+- Machine Learning
+- MCP
+- Metrics
+- Model Context Protocol
+- Productivity
+- FinOps
+- Cost Management
+- FOCUS
 ---

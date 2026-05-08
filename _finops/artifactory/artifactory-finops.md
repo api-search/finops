@@ -32,89 +32,80 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/artifactory/refs/heads/main/openapi/artifactory-build-integration-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly (SaaS) / Annual (Self-Managed)
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Tiered Subscription + Usage Overage
-description: FOCUS-aligned FinOps for JFrog Artifactory — tiered SaaS subscription with included storage consumption plus a per-GB overage meter on a tiered overage schedule, alongside annual self-managed per-server subscriptions.
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the JFrog Artifactory API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: JFrog Ltd.
-  PricingCategory: Tiered Subscription + Usage Overage
-  PricingUnit: GB-month
-  ProviderName: JFrog
-  PublisherName: JFrog Ltd.
-  ServiceCategory: Developer Tools
+  InvoiceIssuerName: JFrog Artifactory
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: JFrog Artifactory
+  PublisherName: JFrog Artifactory
+  ServiceCategory: Developer Tools / API
   ServiceName: JFrog Artifactory
-  ServiceSubcategory: Artifact Repository
 layout: finops
 meters:
 - aggregation: sum
-  description: Monthly or annual subscription fee for the selected Artifactory plan
+  description: Count of billable API requests
   dimensions:
-  - plan
-  - deployment_model
-  name: subscription_fee
-  unit: month
-- aggregation: max
-  description: GB of artifact storage consumed (counts toward included base before overage)
-  dimensions:
-  - plan
+  - api
+  - endpoint
+  - tier
   - region
-  name: storage_consumption
-  unit: GB-month
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: GB of storage above the plan's included base, billed on the tiered overage schedule
+  description: Bytes returned over the network in API responses
   dimensions:
-  - plan
+  - api
   - region
-  - tier_band
-  name: storage_overage
+  - consumer
+  name: data_egress
   unit: GB
 - aggregation: sum
-  description: Network data transfer associated with artifact downloads where charged
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - direction
-  - region
-  name: data_transfer
-  unit: GB
-- aggregation: max
-  description: Number of self-managed servers under license
-  dimensions:
-  - plan
-  name: server_count
-  unit: server
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Artifactory Finops
 provider_name: JFrog Artifactory
 provider_slug: artifactory
-publisher_name: JFrog Ltd.
-service_category: Developer Tools / Artifact Management
+publisher_name: JFrog Artifactory
+service_category: API
 slug: artifactory-finops
 source_filename: artifactory-finops.yml
 source_heading: FinOps Profile
-source_url: https://jfrog.com/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: JFrog Artifactory\nproviderId: artifactory\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Artifacts\n  - DevOps\n  - CI/CD\n  - Docker Registry\n  - Package Management\n  - Repository\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for JFrog Artifactory — tiered SaaS subscription with included storage\n  consumption plus a per-GB overage meter on a tiered overage schedule, alongside annual self-managed\n  per-server subscriptions.\nsources:\n  - https://jfrog.com/pricing/\n  - https://jfrog.com/help/\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: JFrog Ltd.\nserviceCategory: Developer\
-  \ Tools / Artifact Management\nbillingModel:\n  pricingCategory: Tiered Subscription + Usage Overage\n  billingFrequency: Monthly (SaaS) / Annual (Self-Managed)\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: JFrog Artifactory\n  ServiceCategory: Developer Tools\n  ServiceSubcategory: Artifact Repository\n  ProviderName: JFrog\n  PublisherName: JFrog Ltd.\n  InvoiceIssuerName: JFrog Ltd.\n  BillingCurrency: USD\n  PricingCategory: Tiered Subscription + Usage Overage\n  PricingUnit: GB-month\n  ChargeCategory: Usage\nmeters:\n  - name: subscription_fee\n    description: Monthly or annual subscription fee for the selected Artifactory plan\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n      - deployment_model\n  - name: storage_consumption\n    description: GB of artifact storage consumed (counts toward included base before overage)\n    unit: GB-month\n    aggregation:\
-  \ max\n    dimensions:\n      - plan\n      - region\n  - name: storage_overage\n    description: GB of storage above the plan's included base, billed on the tiered overage schedule\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - plan\n      - region\n      - tier_band\n  - name: data_transfer\n    description: Network data transfer associated with artifact downloads where charged\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - direction\n      - region\n  - name: server_count\n    description: Number of self-managed servers under license\n    unit: server\n    aggregation: max\n    dimensions:\n      - plan\nprinciples:\n  - name: Visibility\n    description: Use the JFrog Platform Admin console (Reports → Storage Summary, Usage by Repository)\n      and the System REST API (api/storageinfo, api/repositories/{key}/usage) to surface monthly storage\n      consumption and projected overage before invoice close.\n  - name: Allocation\n    description: Tag spend\
-  \ by repository and project using Artifactory's repository-level metadata\n      and properties; map repositories to cost centers in the consuming team's CMDB or via JFrog\n      labels.\n  - name: Optimization\n    description: Reduce storage overage through repository cleanup policies (max-unique-snapshots,\n      retention rules), generic-repo deduplication, and binary cleanup with JFrog's automated cleanup\n      features (Enterprise X+). Use Tiered Storage to push cold artifacts to cheaper backends.\n  - name: Accountability\n    description: Assign repository ownership and surface monthly storage charts to repo owners; use\n      JFrog Insight or exported CSV reports to feed showback. Trigger alerts when projected storage\n      crosses 80% of the included plan base.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: JFrog Artifactory\nproviderId: artifactory\npublisherName: JFrog Artifactory\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Artifacts\n  - DevOps\n  - CI/CD\n  - Docker Registry\n  - Maven\n  - Package Management\n  - Repository\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the JFrog Artifactory API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: JFrog Artifactory\n  ServiceCategory: Developer Tools / API\n  ProviderName: JFrog Artifactory\n  PublisherName: JFrog Artifactory\n  InvoiceIssuerName: JFrog Artifactory\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
+  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Artifactory REST API\n    baseURL: https://artifactory.example.com/artifactory/api\n    tags:\n      - Artifacts\n      - Repositories\n      - REST\n    serviceName: Artifactory REST API\n    serviceCategory: API\n  - name: Artifactory Query Language (AQL) API\n    baseURL: https://artifactory.example.com/artifactory/api/search/aql\n    tags:\n      - AQL\n      - Query\n      - Search\n    serviceName: Artifactory Query Language (AQL) API\n    serviceCategory: API\n  - name: Artifactory Docker Registry API\n    baseURL: https://artifactory.example.com/artifactory/api/docker\n    tags:\n      - Docker\n      - Containers\n\
+  \      - Registry\n    serviceName: Artifactory Docker Registry API\n    serviceCategory: API\n  - name: Artifactory Build Integration API\n    baseURL: https://artifactory.example.com/artifactory/api/build\n    tags:\n      - Builds\n      - CI/CD\n      - Integration\n    serviceName: Artifactory Build Integration API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/artifactory/refs/heads/main/finops/artifactory-finops.yml
-sources:
-- https://jfrog.com/pricing/
-- https://jfrog.com/help/
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
 - Artifacts
 - DevOps
 - CI/CD
 - Docker Registry
+- Maven
 - Package Management
 - Repository
 - FinOps
+- Cost Management
 - FOCUS
 ---

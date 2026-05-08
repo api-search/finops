@@ -7,60 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  - Refund
-  pricingCategory: Project / Service Contract
-description: 'FOCUS-aligned FinOps for Comfort Systems USA: project- and contract-priced mechanical/HVAC services. No public API or recurring SaaS spend; meters cover invoice-line abstractions for capital projects and recurring service contracts.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Comfort Systems USA API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Comfort Systems USA, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Comfort Systems USA
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Comfort Systems USA
-  PublisherName: Comfort Systems USA, Inc.
-  ServiceCategory: Construction Services
+  PublisherName: Comfort Systems USA
+  ServiceCategory: Developer Tools / API
   ServiceName: Comfort Systems USA
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - project
-  - subsidiary
-  name: project_milestones
-  unit: milestone
-- aggregation: sum
-  dimensions:
-  - site
-  - scope
-  name: service_contract
-  unit: month
-- aggregation: sum
-  dimensions:
-  - trade
+  - api
+  - endpoint
+  - tier
   - region
-  name: time_and_materials
-  unit: hour
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Comfort Systems Usa Finops
 provider_name: Comfort Systems USA
 provider_slug: comfort-systems-usa
-publisher_name: Comfort Systems USA, Inc.
-service_category: Construction Services
+publisher_name: Comfort Systems USA
+service_category: API
 slug: comfort-systems-usa-finops
 source_filename: comfort-systems-usa-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.comfortsystemsusa.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Comfort Systems USA\nproviderId: comfort-systems-usa\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Construction\n  - HVAC\ndescription: 'FOCUS-aligned FinOps for Comfort Systems USA: project- and contract-priced mechanical/HVAC\n  services. No public API or recurring SaaS spend; meters cover invoice-line abstractions for capital\n  projects and recurring service contracts.'\nsources:\n  - https://www.comfortsystemsusa.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Comfort Systems USA, Inc.\nserviceCategory: Construction Services\nbillingModel:\n  pricingCategory: Project / Service Contract\n  billingFrequency: Per-Invoice\n\
-  \  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: Comfort Systems USA\n  ServiceCategory: Construction Services\n  ProviderName: Comfort Systems USA\n  PublisherName: Comfort Systems USA, Inc.\n  InvoiceIssuerName: Comfort Systems USA, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: project_milestones\n    unit: milestone\n    aggregation: sum\n    dimensions:\n      - project\n      - subsidiary\n  - name: service_contract\n    unit: month\n    aggregation: sum\n    dimensions:\n      - site\n      - scope\n  - name: time_and_materials\n    unit: hour\n    aggregation: sum\n    dimensions:\n      - trade\n      - region\nprinciples:\n  - name: Visibility\n    description: Reconcile project invoices against the schedule of values and change orders; track service-contract\n      utilization.\n  - name: Allocation\n    description: Tag invoices to building, site, or capital project for chargeback.\n  -\
-  \ name: Optimization\n    description: Bundle service work; renegotiate multi-site service contracts at renewal; compare bids\n      across Comfort Systems subsidiaries.\n  - name: Accountability\n    description: Facilities/PMO owns project scope; finance owns capital approvals and AP.\nnotes: No public API/SaaS pricing.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Comfort Systems USA\nproviderId: comfort-systems-usa\npublisherName: Comfort Systems USA\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - HVAC\n  - Mechanical\n  - Construction\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Comfort Systems USA API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Comfort Systems USA\n  ServiceCategory: Developer Tools / API\n  ProviderName: Comfort Systems USA\n  PublisherName: Comfort Systems USA\n  InvoiceIssuerName: Comfort Systems USA\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Comfort Systems USA API\n    baseURL: https://api.comfortsystemsusa.com\n    tags:\n      - HVAC\n      - Mechanical\n      - Construction\n    serviceName: Comfort Systems USA API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/comfort-systems-usa/refs/heads/main/finops/comfort-systems-usa-finops.yml
-sources:
-- https://www.comfortsystemsusa.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Construction
 - HVAC
+- Mechanical
+- Construction
+- FinOps
+- Cost Management
+- FOCUS
 ---

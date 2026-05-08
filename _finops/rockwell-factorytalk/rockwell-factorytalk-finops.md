@@ -20,53 +20,73 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/rockwell-factorytalk/refs/heads/main/asyncapi/rockwell-factorytalk-realtime-asyncapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: License-Based
-description: Rockwell FactoryTalk is licensed software sold through distributors. FinOps treatment is capex/opex license-driven rather than usage-metered.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the rockwell-factorytalk API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ProviderName: Rockwell Automation
-  PublisherName: Rockwell Automation, Inc.
-  ServiceCategory: Industrial Automation Software
-  ServiceName: Rockwell FactoryTalk
+  ChargeCategory: Usage
+  InvoiceIssuerName: rockwell-factorytalk
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: rockwell-factorytalk
+  PublisherName: rockwell-factorytalk
+  ServiceCategory: Developer Tools / API
+  ServiceName: rockwell-factorytalk
 layout: finops
 meters:
 - aggregation: sum
-  description: FactoryTalk licensed seats and tag counts per site
+  description: Count of billable API requests
   dimensions:
-  - product
-  - site
-  name: license_seats
-  unit: license
-- aggregation: sum
-  description: FactoryTalk Hub annual subscription
-  dimensions:
+  - api
+  - endpoint
   - tier
-  - site
-  name: hub_subscription
-  unit: month
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Rockwell Factorytalk Finops
 provider_name: rockwell-factorytalk
 provider_slug: rockwell-factorytalk
-publisher_name: Rockwell Automation, Inc.
-service_category: Industrial Automation Software
+publisher_name: rockwell-factorytalk
+service_category: API
 slug: rockwell-factorytalk-finops
 source_filename: rockwell-factorytalk-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.rockwellautomation.com/en-us/products/software/factorytalk.html
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: rockwell-factorytalk\nproviderId: rockwell-factorytalk\npublisherName: Rockwell Automation, Inc.\nserviceCategory: Industrial Automation Software\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Manufacturing\n  - Industrial\n  - Automation\n  - FinOps\n  - FOCUS\ndescription: >-\n  Rockwell FactoryTalk is licensed software sold through distributors. FinOps treatment is\n  capex/opex license-driven rather than usage-metered.\nnotes: >-\n  No public usage API or itemized billing exists. Cost is dominated by perpetual or\n  subscription license SKUs and FactoryTalk Hub site contracts.\nsources:\n  - https://www.rockwellautomation.com/en-us/products/software/factorytalk.html\n\
-  billingModel:\n  pricingCategory: License-Based\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Rockwell FactoryTalk\n  ServiceCategory: Industrial Automation Software\n  ProviderName: Rockwell Automation\n  PublisherName: Rockwell Automation, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: license_seats\n    description: FactoryTalk licensed seats and tag counts per site\n    unit: license\n    aggregation: sum\n    dimensions:\n      - product\n      - site\n  - name: hub_subscription\n    description: FactoryTalk Hub annual subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\n      - site\nprinciples:\n  - name: Visibility\n    description: >-\n      Track FactoryTalk license entitlements and renewal dates through Rockwell's licensing\n      portal and the AP/procurement system.\n  - name: Allocation\n    description: >-\n      Allocate FactoryTalk costs to the manufacturing site\
-  \ or production line that consumes\n      the licenses, not to corporate IT.\n  - name: Optimization\n    description: >-\n      Right-size license SKUs against actual tag and user counts; consolidate sites onto Hub\n      where it lowers the per-site total.\n  - name: Accountability\n    description: >-\n      Plant engineering and OT leadership own FactoryTalk license decisions; review annually\n      against site headcount and connected-tag growth.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: rockwell-factorytalk\nproviderId: rockwell-factorytalk\npublisherName: rockwell-factorytalk\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the rockwell-factorytalk API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: rockwell-factorytalk\n  ServiceCategory: Developer Tools / API\n  ProviderName: rockwell-factorytalk\n  PublisherName: rockwell-factorytalk\n  InvoiceIssuerName: rockwell-factorytalk\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
+  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Rockwell FactoryTalk Optix REST API\n    baseURL: https://api.factorytalk.example.com\n    tags:\n      - Automation\n      - HMI\n      - Manufacturing\n      - REST\n    serviceName: Rockwell FactoryTalk Optix REST API\n    serviceCategory: API\n  - name: Rockwell FactoryTalk Hub API\n    baseURL: https://api.factorytalk.example.com\n    tags:\n      - Automation\n      - Cloud\n      - Manufacturing\n      - REST\n    serviceName: Rockwell FactoryTalk Hub API\n    serviceCategory: API\n  - name: Rockwell FactoryTalk Logix Designer API\n    baseURL: https://api.factorytalk.example.com\n    tags:\n      - Automation\n      - Manufacturing\n      - PLC\n      - Programming\n      - REST\n    serviceName:\
+  \ Rockwell FactoryTalk Logix Designer API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/rockwell-factorytalk/refs/heads/main/finops/rockwell-factorytalk-finops.yml
-sources:
-- https://www.rockwellautomation.com/en-us/products/software/factorytalk.html
+sources: []
 specification: FinOps Framework
 tags:
-- Manufacturing
-- Industrial
-- Automation
 - FinOps
+- Cost Management
 - FOCUS
 ---

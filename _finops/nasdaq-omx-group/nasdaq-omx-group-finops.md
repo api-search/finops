@@ -5,73 +5,87 @@ aligned_with:
   dataSpecVersion: '1.3'
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
+api_specs:
+- filename: nasdaq-omx-group-openapi.yml
+  format: yaml
+  label: Nasdaq Data Link Time-series API
+  slug: data-link-time-series
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/nasdaq-omx-group/refs/heads/main/openapi/nasdaq-omx-group-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly / Annual (per dataset)
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  - Adjustment
   - Tax
-  pricingCategory: Per-Dataset Subscription
-description: 'FOCUS-aligned FinOps for Nasdaq Data Link APIs: free for community / open datasets and metered by a la carte premium dataset subscriptions. Cost is dataset-driven rather than call-volume-driven — the meaningful FinOps levers are which datasets are subscribed and which API keys are entitled.'
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Nasdaq API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Nasdaq, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Nasdaq
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Nasdaq
-  PublisherName: Nasdaq, Inc.
-  ServiceCategory: Market Data
-  ServiceName: Nasdaq Data Link
+  PublisherName: Nasdaq
+  ServiceCategory: Developer Tools / API
+  ServiceName: Nasdaq
 layout: finops
 meters:
-- aggregation: max
-  dimensions:
-  - dataset
-  - account
-  name: dataset_subscription
-  unit: dataset-month
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - api_key
   - api
-  - dataset
-  name: api_calls
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
-- aggregation: count
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - api_key
-  - dataset
-  name: bulk_exports
-  unit: export
-- aggregation: count
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api_key
-  - table
-  name: bulk_downloads
-  unit: download
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Nasdaq Omx Group Finops
 provider_name: Nasdaq
 provider_slug: nasdaq-omx-group
-publisher_name: Nasdaq, Inc.
-service_category: Market Data / Financial Data
+publisher_name: Nasdaq
+service_category: API
 slug: nasdaq-omx-group-finops
 source_filename: nasdaq-omx-group-finops.yml
 source_heading: FinOps Profile
-source_url: https://data.nasdaq.com/sign-up
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Nasdaq\nproviderId: nasdaq-omx-group\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Financial Data\n  - Capital Markets\n  - Market Data\ndescription: 'FOCUS-aligned FinOps for Nasdaq Data Link APIs: free for community / open datasets and metered\n  by a la carte premium dataset subscriptions. Cost is dataset-driven rather than call-volume-driven —\n  the meaningful FinOps levers are which datasets are subscribed and which API keys are entitled.'\nsources:\n  - https://data.nasdaq.com/sign-up\n  - https://docs.data.nasdaq.com/docs/in-depth-usage\n  - https://docs.data.nasdaq.com/docs/rate-limits-1\n  - https://help.data.nasdaq.com/article/464-what-is-included-with-my-premium-data-subscription\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec:\
-  \ FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Nasdaq, Inc.\nserviceCategory: Market Data / Financial Data\nbillingModel:\n  pricingCategory: Per-Dataset Subscription\n  billingFrequency: Monthly / Annual (per dataset)\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\n    - Tax\nfocusColumns:\n  ServiceName: Nasdaq Data Link\n  ServiceCategory: Market Data\n  ProviderName: Nasdaq\n  PublisherName: Nasdaq, Inc.\n  InvoiceIssuerName: Nasdaq, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: dataset_subscription\n    unit: dataset-month\n    aggregation: max\n    dimensions:\n      - dataset\n      - account\n  - name: api_calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_key\n      - api\n      - dataset\n  - name: bulk_exports\n    unit: export\n    aggregation: count\n    dimensions:\n      - api_key\n      - dataset\n  - name: bulk_downloads\n    unit: download\n\
-  \    aggregation: count\n    dimensions:\n      - api_key\n      - table\nprinciples:\n  - name: Visibility\n    description: Track Data Link subscription invoices per dataset; use the API key as the allocation\n      handle (one key per consuming application or research workstream) and read the rate-limit headers\n      to monitor headroom.\n  - name: Allocation\n    description: Map datasets to research / trading / data-science cost centers; tag each Data Link API\n      key with its owning team so subscription cost rolls up cleanly.\n  - name: Optimization\n    description: Cancel premium datasets that are not actively queried; consolidate research workloads\n      onto a smaller number of premium keys; cache historical time-series locally rather than re-pulling\n      static slices.\n  - name: Accountability\n    description: The data-platform / quant-research lead owns the dataset portfolio decision; engineering\n      owns the consumption pattern (rate-limit-friendly, cached); procurement\
-  \ owns the renewal cadence.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Nasdaq\nproviderId: nasdaq-omx-group\npublisherName: Nasdaq\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Financial Services\n  - Capital Markets\n  - Stock Exchange\n  - Market Data\n  - Economics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Nasdaq API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Nasdaq\n  ServiceCategory: Developer Tools / API\n  ProviderName: Nasdaq\n  PublisherName: Nasdaq\n  InvoiceIssuerName: Nasdaq\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Nasdaq Data Link Time-series API\n    baseURL: https://data.nasdaq.com/api/v3\n    tags:\n      - Time Series\n      - Financial Data\n      - Market Data\n      - Datasets\n    serviceName: Nasdaq Data Link Time-series API\n    serviceCategory: API\n  - name: Nasdaq Data Link Tables API\n    baseURL: https://data.nasdaq.com/api/v3\n    tags:\n      - Tables\n      - Financial Data\n      - Datasets\n    serviceName: Nasdaq Data Link Tables API\n    serviceCategory: API\n  - name: Nasdaq Data Link Streaming API\n    baseURL: https://data.nasdaq.com/api/v3\n    tags:\n      - Streaming\n      - Real Time\n      - Market Data\n    serviceName: Nasdaq Data Link Streaming API\n    serviceCategory:\
+  \ API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/nasdaq-omx-group/refs/heads/main/finops/nasdaq-omx-group-finops.yml
-sources:
-- https://data.nasdaq.com/sign-up
-- https://docs.data.nasdaq.com/docs/in-depth-usage
-- https://docs.data.nasdaq.com/docs/rate-limits-1
-- https://help.data.nasdaq.com/article/464-what-is-included-with-my-premium-data-subscription
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Financial Data
+- Financial Services
 - Capital Markets
+- Stock Exchange
 - Market Data
+- Economics
+- FinOps
+- Cost Management
+- FOCUS
 ---

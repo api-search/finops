@@ -26,64 +26,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/checkmarx/refs/heads/main/openapi/checkmarx-one-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Tiered Subscription
-description: 'FOCUS-aligned FinOps framing for Checkmarx One: tiered enterprise subscriptions priced by tenant tier, scanner coverage, contributing developer counts, and scan volume; pricing is custom-quoted and not publicly listed.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Checkmarx API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Checkmarx Ltd.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Checkmarx
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Checkmarx
-  PublisherName: Checkmarx Ltd.
-  ServiceCategory: Application Security
-  ServiceName: Checkmarx One
+  PublisherName: Checkmarx
+  ServiceCategory: Developer Tools / API
+  ServiceName: Checkmarx
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
+  - endpoint
   - tier
-  name: tenant_subscription
-  unit: tenant-year
-- aggregation: max
-  name: contributing_developers
-  unit: developer
-- aggregation: max
-  name: projects_scanned
-  unit: project
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - engine
-  name: scans_executed
-  unit: scan
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - engine
-  name: lines_of_code
-  unit: LOC
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Checkmarx Finops
 provider_name: Checkmarx
 provider_slug: checkmarx
-publisher_name: Checkmarx Ltd.
-service_category: Application Security
+publisher_name: Checkmarx
+service_category: API
 slug: checkmarx-finops
 source_filename: checkmarx-finops.yml
 source_heading: FinOps Profile
-source_url: https://checkmarx.com/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Checkmarx\nproviderId: checkmarx\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Application Security\n  - DevSecOps\ndescription: 'FOCUS-aligned FinOps framing for Checkmarx One: tiered enterprise subscriptions priced\n  by tenant tier, scanner coverage, contributing developer counts, and scan volume; pricing is custom-quoted\n  and not publicly listed.'\nnotes: Per-call API pricing is not separately metered; cost driven by subscription tier plus contributing-developer\n  / project counts.\nsources:\n  - https://checkmarx.com/pricing/\n  - https://checkmarx.com/product/checkmarx-one/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
-  \ Checkmarx Ltd.\nserviceCategory: Application Security\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Checkmarx One\n  ServiceCategory: Application Security\n  ProviderName: Checkmarx\n  PublisherName: Checkmarx Ltd.\n  InvoiceIssuerName: Checkmarx Ltd.\n  BillingCurrency: USD\nmeters:\n  - name: tenant_subscription\n    unit: tenant-year\n    aggregation: sum\n    dimensions:\n      - tier\n  - name: contributing_developers\n    unit: developer\n    aggregation: max\n  - name: projects_scanned\n    unit: project\n    aggregation: max\n  - name: scans_executed\n    unit: scan\n    aggregation: sum\n    dimensions:\n      - engine\n  - name: lines_of_code\n    unit: LOC\n    aggregation: sum\n    dimensions:\n      - engine\nprinciples:\n  - name: Visibility\n    description: Use the Checkmarx One admin console and the\
-  \ REST analytics endpoints for scan volume,\n      contributing-developer counts, and engine breakdowns; reconcile against contract entitlements.\n  - name: Allocation\n    description: Tag projects and applications with team / business-unit metadata; allocate subscription\n      cost by contributing-developer attribution.\n  - name: Optimization\n    description: Tune scan triggers (incremental scans, PR-only) to reduce runaway scan volume; right-size\n      tier to actual scanner usage and prune unused engines.\n  - name: Accountability\n    description: AppSec / DevSecOps team owns the Checkmarx subscription; review developer attribution\n      and scan volume monthly to forecast renewal sizing.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Checkmarx\nproviderId: checkmarx\npublisherName: Checkmarx\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Application Security\n  - Code Analysis\n  - DevSecOps\n  - SAST\n  - Security Testing\n  - Vulnerability Scanning\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Checkmarx API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Checkmarx\n  ServiceCategory: Developer Tools / API\n  ProviderName: Checkmarx\n  PublisherName: Checkmarx\n  InvoiceIssuerName: Checkmarx\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Checkmarx SAST API\n    baseURL: https://your-checkmarx-instance.com/cxrestapi\n    tags:\n      - SAST\n      - Security Scanning\n      - Static Analysis\n      - Vulnerability Detection\n    serviceName: Checkmarx SAST API\n    serviceCategory: API\n  - name: Checkmarx SCA API\n    baseURL: https://api-sca.checkmarx.net\n    tags:\n      - Dependency Scanning\n      - License Compliance\n      - Open Source Security\n      - SCA\n    serviceName: Checkmarx SCA API\n    serviceCategory: API\n  - name: Checkmarx One API\n    baseURL: https://ast.checkmarx.net/api\n    tags:\n      - Application Security\n      - Cloud Security\n      - DevSecOps\n      - Unified Platform\n\
+  \    serviceName: Checkmarx One API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/checkmarx/refs/heads/main/finops/checkmarx-finops.yml
-sources:
-- https://checkmarx.com/pricing/
-- https://checkmarx.com/product/checkmarx-one/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Application Security
+- Code Analysis
 - DevSecOps
+- SAST
+- Security Testing
+- Vulnerability Scanning
+- FinOps
+- Cost Management
+- FOCUS
 ---

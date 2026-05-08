@@ -19,63 +19,74 @@ billing_model:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription (bundled with Microsoft 365)
-description: 'FOCUS-aligned FinOps for Microsoft Excel: bundled with Microsoft 365 / Office 365 per-user-per-month subscriptions; no incremental per-call API charge. Costs flow through the parent Microsoft 365 SKU.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Microsoft Excel API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Microsoft Corporation
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Productivity
+  ChargeCategory: Usage
+  InvoiceIssuerName: Microsoft Excel
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Microsoft Excel
+  PublisherName: Microsoft Excel
+  ServiceCategory: Developer Tools / API
   ServiceName: Microsoft Excel
 layout: finops
 meters:
 - aggregation: sum
-  description: Microsoft 365 seats granting Excel entitlement (Business Basic / Standard / Premium / E3 / E5 / Apps for Business / Apps for Enterprise)
+  description: Count of billable API requests
   dimensions:
-  - tenant
-  - sku
-  name: m365_seats
-  unit: seat
-- aggregation: sum
-  description: Microsoft Graph workbook API calls (no charge; tracked for capacity and throttling)
-  dimensions:
-  - tenant
-  - application
-  name: workbook_api_requests
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: Storage consumed by .xlsx files in OneDrive / SharePoint
+  description: Bytes returned over the network in API responses
   dimensions:
-  - drive
-  - tenant
-  name: workbook_storage
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Excel Finops
 provider_name: Microsoft Excel
 provider_slug: microsoft-excel
-publisher_name: Microsoft Corporation
-service_category: Productivity
+publisher_name: Microsoft Excel
+service_category: API
 slug: microsoft-excel-finops
 source_filename: microsoft-excel-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.microsoft.com/en-us/microsoft-365/business/compare-all-plans
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Excel\nproviderId: microsoft-excel\npublisherName: Microsoft Corporation\nserviceCategory: Productivity\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Spreadsheets\n  - Productivity\n  - Microsoft 365\n  - Microsoft\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Microsoft Excel: bundled with Microsoft 365 / Office 365 per-user-per-month\n  subscriptions; no incremental per-call API charge. Costs flow through the parent Microsoft 365 SKU.'\nsources:\n  - https://www.microsoft.com/en-us/microsoft-365/business/compare-all-plans\n  - https://www.microsoft.com/en-us/microsoft-365/enterprise/microsoft365-plans-and-pricing\n\
-  billingModel:\n  pricingCategory: Subscription (bundled with Microsoft 365)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Microsoft Excel\n  ServiceCategory: Productivity\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: m365_seats\n    description: Microsoft 365 seats granting Excel entitlement (Business Basic / Standard / Premium /\n      E3 / E5 / Apps for Business / Apps for Enterprise)\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - tenant\n      - sku\n  - name: workbook_api_requests\n    description: Microsoft Graph workbook API calls (no charge; tracked for capacity and throttling)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - tenant\n      - application\n  - name: workbook_storage\n    description:\
-  \ Storage consumed by .xlsx files in OneDrive / SharePoint\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - drive\n      - tenant\nprinciples:\n  - name: Visibility\n    description: Use the Microsoft 365 admin centre Active Users report and Microsoft 365 Usage Analytics\n      to see Excel consumption; capture Microsoft Graph throttling telemetry from request-id and x-ms-throttle-scope\n      headers.\n  - name: Allocation\n    description: Map Microsoft 365 seat assignments to Entra groups bound to cost-centres for chargeback;\n      tag programmatic Excel API access by the calling application.\n  - name: Optimization\n    description: Right-size the Microsoft 365 SKU mix (downgrade rarely-used desktop seats to Business\n      Basic); persist workbook sessions and use $batch to reduce throttling exposure.\n  - name: Accountability\n    description: Workplace IT owns the M365 SKU mix; engineering owns Office Add-in / Graph workbook automations\n      and their throttling\
-  \ budget.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Excel\nproviderId: microsoft-excel\npublisherName: Microsoft Excel\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Automation\n  - Data Analysis\n  - Microsoft\n  - Microsoft 365\n  - Office\n  - Spreadsheets\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Excel API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Excel\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Excel\n  PublisherName: Microsoft Excel\n  InvoiceIssuerName: Microsoft Excel\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the\
+  \ network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Microsoft Graph Excel API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Cloud\n      - Microsoft Graph\n      - OneDrive\n      - REST API\n      - SharePoint\n    serviceName: Microsoft Graph Excel API\n    serviceCategory: API\n  - name: Excel JavaScript API\n    baseURL: https://excel.office.com\n    tags:\n      - Client-Side\n      - JavaScript\n      - Office Add-Ins\n    serviceName: Excel JavaScript API\n    serviceCategory: API\n  - name: Office Scripts API\n    baseURL: https://excel.office.com\n    tags:\n      - Automation\n      - Excel Online\n      - Power Automate\n      - TypeScript\n    serviceName:\
+  \ Office Scripts API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-excel/refs/heads/main/finops/microsoft-excel-finops.yml
-sources:
-- https://www.microsoft.com/en-us/microsoft-365/business/compare-all-plans
-- https://www.microsoft.com/en-us/microsoft-365/enterprise/microsoft365-plans-and-pricing
+sources: []
 specification: FinOps Framework
 tags:
-- Spreadsheets
-- Productivity
-- Microsoft 365
+- Automation
+- Data Analysis
 - Microsoft
+- Microsoft 365
+- Office
+- Spreadsheets
 - FinOps
+- Cost Management
 - FOCUS
 ---

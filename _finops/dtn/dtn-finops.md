@@ -14,66 +14,73 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/dtn/refs/heads/main/openapi/dtn-weather-conditions-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
-  pricingCategory: Subscription (or AWS Marketplace PAYG)
-description: FOCUS-aligned FinOps shape for DTN. Billing is custom subscription per industry vertical (Weather, Marine, Agribusiness, Aviation, Refined Fuels). A subset is also available pay-as-you-go via AWS Marketplace.
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the dtn API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: DTN, LLC (or AWS Marketplace)
-  ProviderName: DTN
-  PublisherName: DTN, LLC
-  ServiceCategory: Weather & Industry Data
-  ServiceName: DTN APIs
+  ChargeCategory: Usage
+  InvoiceIssuerName: dtn
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: dtn
+  PublisherName: dtn
+  ServiceCategory: Developer Tools / API
+  ServiceName: dtn
 layout: finops
 meters:
 - aggregation: sum
-  description: Internal observability of calls against DTN endpoints
+  description: Count of billable API requests
   dimensions:
   - api
   - endpoint
-  - subscription_tier
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
-- aggregation: count
-  description: Active DTN subscriptions
-  dimensions:
-  - vertical
-  name: subscription_seats
-  unit: seat
 - aggregation: sum
-  description: Metered units when consumed via AWS Marketplace
+  description: Bytes returned over the network in API responses
   dimensions:
-  - product
-  name: aws_marketplace_units
-  unit: varies
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Dtn Finops
 provider_name: dtn
 provider_slug: dtn
-publisher_name: DTN, LLC
-service_category: Weather & Industry Data
+publisher_name: dtn
+service_category: API
 slug: dtn-finops
 source_filename: dtn-finops.yml
 source_heading: FinOps Profile
-source_url: https://devportal.dtn.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: DTN\nproviderId: dtn\npublisherName: DTN, LLC\nserviceCategory: Weather & Industry Data\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Weather\n  - Agriculture\n  - Aviation\n  - Marine\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for DTN. Billing is custom subscription per industry vertical\n  (Weather, Marine, Agribusiness, Aviation, Refined Fuels). A subset is also available pay-as-you-go via\n  AWS Marketplace.\nnotes: No public per-call meter; reconciled=false.\nsources:\n  - https://devportal.dtn.com/\n  - https://www.dtn.com/resources/api-data-integrations/\n  - https://aws.amazon.com/marketplace/pp/prodview-yohehde7bckaq\n\
-  billingModel:\n  pricingCategory: Subscription (or AWS Marketplace PAYG)\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\nfocusColumns:\n  ServiceName: DTN APIs\n  ServiceCategory: Weather & Industry Data\n  ProviderName: DTN\n  PublisherName: DTN, LLC\n  InvoiceIssuerName: DTN, LLC (or AWS Marketplace)\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: api_requests\n    description: Internal observability of calls against DTN endpoints\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - subscription_tier\n  - name: subscription_seats\n    description: Active DTN subscriptions\n    unit: seat\n    aggregation: count\n    dimensions:\n      - vertical\n  - name: aws_marketplace_units\n    description: Metered units when consumed via AWS Marketplace\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - product\nprinciples:\n  - name: Visibility\n\
-  \    description: Reconcile DTN invoices (or AWS Marketplace charges) against subscription scope; cache\n      forecast and observation responses at the subscription's update cadence.\n  - name: Allocation\n    description: Allocate DTN cost to the line of business consuming the data (agronomy, fleet ops, refined-fuels\n      ops, aviation safety).\n  - name: Optimization\n    description: Right-size the forecast horizon to the lowest tier that meets the use case; cache observation\n      pulls; coalesce duplicate point forecasts at the geofence level.\n  - name: Accountability\n    description: Subscription owner per vertical is accountable for renewal terms and adherence to subscription\n      scope.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: dtn\nproviderId: dtn\npublisherName: dtn\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the dtn API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n\
+  \    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding\
+  \ Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: dtn\n  ServiceCategory: Developer Tools / API\n  ProviderName: dtn\n  PublisherName: dtn\n  InvoiceIssuerName: dtn\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed\
+  \ by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: DTN Weather Conditions API\n    baseURL: https://weather.api.dtn.com/conditions\n    tags:\n      - Agriculture\n      - Climate\n      - Forecast\n      - REST\n      - Weather\n    serviceName: DTN Weather Conditions API\n    serviceCategory: API\n  - name: DTN Point Observation API\n    baseURL: https://point-observation.weather.mg\n    tags:\n      - Agriculture\n      - Historical Data\n      - Observations\n      - Weather\n    serviceName: DTN Point Observation API\n    serviceCategory: API\n  - name: DTN Point Forecast API\n    baseURL: https://point-forecast.weather.mg\n    tags:\n      - Agriculture\n      - Aviation\n      - Forecast\n      - Weather\n    serviceName: DTN Point Forecast API\n    serviceCategory: API\n  - name: DTN Radar Precipitation Forecast API\n    baseURL: https://precipitation-forecast.weather.mg\n  \
+  \  tags:\n      - Precipitation\n      - Radar\n      - Short-Term Forecast\n      - Weather\n    serviceName: DTN Radar Precipitation Forecast API\n    serviceCategory: API\n  - name: DTN Commodity & Market Data API\n    baseURL: https://api.dtn.com\n    tags:\n      - Agriculture\n      - Commodity Prices\n      - Grain\n      - Livestock\n      - Market Data\n    serviceName: DTN Commodity & Market Data API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/dtn/refs/heads/main/finops/dtn-finops.yml
-sources:
-- https://devportal.dtn.com/
-- https://www.dtn.com/resources/api-data-integrations/
-- https://aws.amazon.com/marketplace/pp/prodview-yohehde7bckaq
+sources: []
 specification: FinOps Framework
 tags:
-- Weather
-- Agriculture
-- Aviation
-- Marine
 - FinOps
+- Cost Management
 - FOCUS
 ---

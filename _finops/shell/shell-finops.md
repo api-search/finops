@@ -62,62 +62,85 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/shell/refs/heads/main/openapi/shell-b2b-mobility-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
-  pricingCategory: Embedded in B2B Contract
-description: FinOps shape for Shell B2B APIs — gated to existing partners with no public per-call pricing. The dominant cost line is the underlying B2B contract (fuel-card transactions, mobility services, loyalty programme); the API itself is typically a free service layer on top of that contract. Reconciliation to FOCUS columns is best-effort because Shell does not publish a meter-level rate sheet.
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Shell API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Shell plc
+  ChargeCategory: Usage
+  InvoiceIssuerName: Shell
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Shell
-  PublisherName: Shell plc
-  ServiceCategory: Energy / Mobility B2B
-  ServiceName: Shell B2B APIs
+  PublisherName: Shell
+  ServiceCategory: Developer Tools / API
+  ServiceName: Shell
 layout: finops
 meters:
 - aggregation: sum
-  description: Fuel-card transactions processed under the partner's Shell agreement
-  dimensions:
-  - card_program
-  - country
-  name: card_transactions
-  unit: transaction
-- aggregation: max
-  description: Active cards under management for a B2B partner
-  dimensions:
-  - card_program
-  name: cards_managed
-  unit: card
-- aggregation: sum
-  description: API requests against Shell developer endpoints (operational meter; not billed at the API layer)
+  description: Count of billable API requests
   dimensions:
   - api
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Shell Finops
 provider_name: Shell
 provider_slug: shell
-publisher_name: Shell plc
-service_category: Energy / Mobility B2B
+publisher_name: Shell
+service_category: API
 slug: shell-finops
 source_filename: shell-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.shell.com/api-catalog
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Shell\nproviderId: shell\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Energy\n  - Mobility\n  - Fleet\n  - Fuel Cards\n  - FinOps\n  - FOCUS\ndescription: FinOps shape for Shell B2B APIs — gated to existing partners with no public per-call pricing.\n  The dominant cost line is the underlying B2B contract (fuel-card transactions, mobility services, loyalty\n  programme); the API itself is typically a free service layer on top of that contract. Reconciliation\n  to FOCUS columns is best-effort because Shell does not publish a meter-level rate sheet.\nsources:\n  - https://developer.shell.com/api-catalog\nnotes: No public per-meter pricing. Cost flows through the underlying Shell B2B agreement (fuel-card\n  fees, transaction commissions, etc.) rather than per-API metering.\nalignedWith:\n  framework: FinOps Foundation Framework\n \
-  \ frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Shell plc\nserviceCategory: Energy / Mobility B2B\nbillingModel:\n  pricingCategory: Embedded in B2B Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: Shell B2B APIs\n  ServiceCategory: Energy / Mobility B2B\n  ProviderName: Shell\n  PublisherName: Shell plc\n  InvoiceIssuerName: Shell plc\n  BillingCurrency: USD\nmeters:\n  - name: card_transactions\n    description: Fuel-card transactions processed under the partner's Shell agreement\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - card_program\n      - country\n  - name: cards_managed\n    description: Active cards under management for a B2B partner\n    unit: card\n    aggregation: max\n    dimensions:\n      - card_program\n  - name: api_requests\n\
-  \    description: API requests against Shell developer endpoints (operational meter; not billed at the\n      API layer)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\nprinciples:\n  - name: Visibility\n    description: Visibility comes from the partner's Shell B2B portal and invoice (transaction reports,\n      card-level statements). API call volume should be instrumented client-side because Shell does not\n      publish a usage API.\n  - name: Allocation\n    description: Allocate fuel-card and transaction cost by cost center / fleet / driver via card metadata;\n      align with the partner's existing fuel-card cost-allocation process rather than re-deriving it\n      from API logs.\n  - name: Optimization\n    description: Optimization happens at the Shell B2B contract level (volume rebates, network preference)\n      rather than via API tuning. On the integration side, batch transaction queries and respect partner\n      rate limits to avoid disruption.\n\
-  \  - name: Accountability\n    description: Procurement / Fleet management owns the Shell partner relationship. Integration-platform\n      engineering owns API hygiene and is the contact for partner-side rate-limit issues escalated through\n      the Shell account team.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Shell\nproviderId: shell\npublisherName: Shell\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Aviation\n  - Electric Vehicle Charging\n  - Energy\n  - Fleet Management\n  - Fuel\n  - Gas\n  - Loyalty\n  - Lubricants\n  - Mobility\n  - Oil and Gas\n  - Renewable Energy\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Shell API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
+  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
+  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Shell\n  ServiceCategory: Developer Tools / API\n  ProviderName: Shell\n  PublisherName: Shell\n  InvoiceIssuerName: Shell\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over\
+  \ the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Shell B2B Mobility Card Management API\n    baseURL: ''\n    tags:\n      - B2B\n      - Cards\n      - Fleet\n      - Mobility\n    serviceName: Shell B2B Mobility Card Management API\n    serviceCategory: API\n  - name: Shell B2B Mobility Card Transaction Data API\n    baseURL: ''\n    tags:\n      - B2B\n      - Fleet\n      - Mobility\n      - Transactions\n    serviceName: Shell B2B Mobility Card Transaction Data API\n    serviceCategory: API\n  - name: Shell B2B Mobility Invoice API\n    baseURL: ''\n    tags:\n      - B2B\n      - Finance\n      - Fleet\n      - Invoices\n    serviceName: Shell B2B Mobility Invoice API\n    serviceCategory:\
+  \ API\n  - name: Shell Loyalty Catalogue API\n    baseURL: ''\n    tags:\n      - Loyalty\n      - Rewards\n      - Retail\n    serviceName: Shell Loyalty Catalogue API\n    serviceCategory: API\n  - name: Shell Loyalty Account Management API\n    baseURL: ''\n    tags:\n      - Loyalty\n      - Rewards\n      - Accounts\n    serviceName: Shell Loyalty Account Management API\n    serviceCategory: API\n  - name: Shell Loyalty Points Balance API\n    baseURL: ''\n    tags:\n      - Loyalty\n      - Points\n      - Rewards\n    serviceName: Shell Loyalty Points Balance API\n    serviceCategory: API\n  - name: Shell Loyalty Points Redemption API\n    baseURL: ''\n    tags:\n      - Loyalty\n      - Points\n      - Redemption\n    serviceName: Shell Loyalty Points Redemption API\n    serviceCategory: API\n  - name: Shell Lubricants Order Management API\n    baseURL: ''\n    tags:\n      - Lubricants\n      - Oil\n      - Orders\n      - B2B\n    serviceName: Shell Lubricants Order Management\
+  \ API\n    serviceCategory: API\n  - name: Shell Aviation Fuel Reseller API\n    baseURL: ''\n    tags:\n      - Aviation\n      - Fuel\n      - B2B\n    serviceName: Shell Aviation Fuel Reseller API\n    serviceCategory: API\n  - name: Shell B2B Mobility Sites API\n    baseURL: ''\n    tags:\n      - B2B\n      - Fleet\n      - Locations\n      - Mobility\n    serviceName: Shell B2B Mobility Sites API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n  - FN: Shell Digital Services\n    email: api-maintainers@shell.com\n    X-twitter: shell\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/shell/refs/heads/main/finops/shell-finops.yml
-sources:
-- https://developer.shell.com/api-catalog
+sources: []
 specification: FinOps Framework
 tags:
+- Aviation
+- Electric Vehicle Charging
 - Energy
+- Fleet Management
+- Fuel
+- Gas
+- Loyalty
+- Lubricants
 - Mobility
-- Fleet
-- Fuel Cards
+- Oil and Gas
+- Renewable Energy
 - FinOps
+- Cost Management
 - FOCUS
 ---

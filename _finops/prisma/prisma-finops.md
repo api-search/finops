@@ -46,79 +46,71 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
-  pricingCategory: Subscription + Pay-As-You-Go
-description: FOCUS-aligned FinOps for Prisma Data Platform — flat plan subscription plus per-1,000 metered overage on Prisma Postgres operations and Prisma Accelerate operations, plus per-GB storage and per-GiB Accelerate egress.
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Prisma API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Prisma Data, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Prisma
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Prisma
-  PublisherName: Prisma Data, Inc.
-  ServiceCategory: Database + Developer Tools
-  ServiceName: Prisma Data Platform
+  PublisherName: Prisma
+  ServiceCategory: Developer Tools / API
+  ServiceName: Prisma
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - plan
-  name: plan_subscription
-  unit: month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - plan
-  - database
-  name: postgres_operations
-  unit: operation
-- aggregation: max
-  dimensions:
-  - plan
-  - database
-  name: postgres_storage
-  unit: GB-month
-- aggregation: max
-  dimensions:
-  - plan
-  name: postgres_databases
-  unit: database
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - plan
-  - environment
-  name: accelerate_operations
-  unit: operation
-- aggregation: sum
-  dimensions:
-  - plan
-  name: accelerate_cache_tags
-  unit: operation
-- aggregation: sum
-  dimensions:
-  - plan
-  - environment
-  name: accelerate_egress
-  unit: GiB
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Prisma Finops
 provider_name: Prisma
 provider_slug: prisma
-publisher_name: Prisma Data, Inc.
-service_category: Database + Developer Tools
+publisher_name: Prisma
+service_category: API
 slug: prisma-finops
 source_filename: prisma-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.prisma.io/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Prisma\nproviderId: prisma\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Database\n  - ORM\n  - Postgres\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for Prisma Data Platform — flat plan subscription plus per-1,000 metered\n  overage on Prisma Postgres operations and Prisma Accelerate operations, plus per-GB storage and per-GiB\n  Accelerate egress.\nsources:\n  - https://www.prisma.io/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Prisma Data, Inc.\nserviceCategory: Database + Developer Tools\nbillingModel:\n  pricingCategory: Subscription + Pay-As-You-Go\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n\
-  \    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: Prisma Data Platform\n  ServiceCategory: Database + Developer Tools\n  ProviderName: Prisma\n  PublisherName: Prisma Data, Inc.\n  InvoiceIssuerName: Prisma Data, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: plan_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n  - name: postgres_operations\n    unit: operation\n    aggregation: sum\n    dimensions:\n      - plan\n      - database\n  - name: postgres_storage\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - plan\n      - database\n  - name: postgres_databases\n    unit: database\n    aggregation: max\n    dimensions:\n      - plan\n  - name: accelerate_operations\n    unit: operation\n    aggregation: sum\n    dimensions:\n      - plan\n      - environment\n  - name: accelerate_cache_tags\n    unit: operation\n    aggregation: sum\n    dimensions:\n      - plan\n  - name: accelerate_egress\n    unit: GiB\n    aggregation:\
-  \ sum\n    dimensions:\n      - plan\n      - environment\nprinciples:\n  - name: Visibility\n    description: Track Postgres + Accelerate operation counts and storage per environment in the Prisma\n      Console; reconcile against the monthly invoice. Plan-level included quotas vs overage are the\n      primary cost line.\n  - name: Allocation\n    description: Allocate by Prisma project / environment / database; tag environments (dev / preview\n      / prod) and split overage cost back to the consuming feature team.\n  - name: Optimization\n    description: Use Accelerate's cache + cache tags to convert Postgres operations into cheaper cached\n      operations; right-size the plan when sustained overage on Postgres operations is cheaper at the\n      next tier (Pro $0.002/1k vs Starter $0.008/1k vs Business $0.001/1k); paginate to stay under\n      the 5 MB response ceiling.\n  - name: Accountability\n    description: Assign a plan and budget owner per Prisma workspace; alert on overage\
-  \ when monthly\n      Postgres operations or Accelerate operations exceed the included allotment.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Prisma\nproviderId: prisma\npublisherName: Prisma\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Prisma API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n\
+  \  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n\
+  \      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Prisma\n  ServiceCategory: Developer Tools / API\n  ProviderName: Prisma\n  PublisherName: Prisma\n  InvoiceIssuerName: Prisma\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description:\
+  \ Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Prisma Data Platform API\n    baseURL: ''\n    tags:\n      - Database\n      - Developer Tools\n      - ORM\n      - Platform\n    serviceName: Prisma Data Platform API\n    serviceCategory: API\n  - name: Prisma Accelerate API\n    baseURL: ''\n    tags:\n      - Caching\n      - Connection Pooling\n      - Database\n      - Performance\n      - Serverless\n    serviceName: Prisma Accelerate API\n    serviceCategory: API\n  - name: Prisma Pulse API\n    baseURL: ''\n    tags:\n      - Change Data Capture\n      - Database\n      - Events\n      - Real-Time\n      - Subscriptions\n    serviceName: Prisma Pulse API\n    serviceCategory: API\n  - name: Prisma Postgres Management API\n    baseURL: ''\n    tags:\n      - Database\n      - Infrastructure\n      - Managed Database\n      - PostgreSQL\n      -\
+  \ Provisioning\n    serviceName: Prisma Postgres Management API\n    serviceCategory: API\n  - name: Prisma Client API\n    baseURL: ''\n    tags:\n      - Database\n      - Node.js\n      - ORM\n      - Query Builder\n      - TypeScript\n    serviceName: Prisma Client API\n    serviceCategory: API\n  - name: Prisma Optimize API\n    baseURL: ''\n    tags:\n      - AI\n      - Database\n      - Developer Tools\n      - Performance\n      - Query Optimization\n    serviceName: Prisma Optimize API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://www.prisma.io\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/prisma/refs/heads/main/finops/prisma-finops.yml
-sources:
-- https://www.prisma.io/pricing
+sources: []
 specification: FinOps Framework
 tags:
-- Database
-- ORM
-- Postgres
 - FinOps
+- Cost Management
 - FOCUS
 ---

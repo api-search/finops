@@ -14,54 +14,80 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/vitess/refs/heads/main/openapi/vitess-vtadmin-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: N/A
-  chargeCategories: []
-  pricingCategory: Open Source (Apache 2.0)
-description: Vitess is an Apache-2.0 open-source project; there is no project-level invoice or metered billing surface. Operator cost lives in the underlying compute / storage / network resources that run Vitess and its MySQL shards, which are reported by the underlying cloud provider's FOCUS feed.
+  billingFrequency: Monthly
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Vitess API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ProviderName: Cloud Native Computing Foundation
-  PublisherName: Cloud Native Computing Foundation
-  ServiceCategory: Open Source Database
+  ChargeCategory: Usage
+  InvoiceIssuerName: Vitess
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Vitess
+  PublisherName: Vitess
+  ServiceCategory: Developer Tools / API
   ServiceName: Vitess
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - role
-  - instance_type
-  name: compute_hours
-  unit: instance-hour
-- aggregation: max
-  dimensions:
-  - shard
-  name: storage_capacity
-  unit: GB-month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - direction
-  name: network_egress
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Vitess Finops
 provider_name: Vitess
 provider_slug: vitess
-publisher_name: Cloud Native Computing Foundation
-service_category: Open Source Database
+publisher_name: Vitess
+service_category: API
 slug: vitess-finops
 source_filename: vitess-finops.yml
 source_heading: FinOps Profile
-source_url: https://vitess.io/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Vitess\nproviderId: vitess\npublisherName: Cloud Native Computing Foundation\nserviceCategory: Open Source Database\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Open Source\n  - Database\n  - MySQL\ndescription: Vitess is an Apache-2.0 open-source project; there is no project-level invoice or\n  metered billing surface. Operator cost lives in the underlying compute / storage / network\n  resources that run Vitess and its MySQL shards, which are reported by the underlying cloud\n  provider's FOCUS feed.\nsources:\n  - https://vitess.io/\nnotes: No commercial billing surface. Treat Vitess cost as a workload allocation against the\n  hosting\
-  \ cloud's compute, storage, and network meters.\nbillingModel:\n  pricingCategory: Open Source (Apache 2.0)\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories: []\nfocusColumns:\n  ServiceName: Vitess\n  ServiceCategory: Open Source Database\n  ProviderName: Cloud Native Computing Foundation\n  PublisherName: Cloud Native Computing Foundation\n  BillingCurrency: USD\nmeters:\n  - name: compute_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - role\n      - instance_type\n  - name: storage_capacity\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - shard\n  - name: network_egress\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - direction\nprinciples:\n  - name: Visibility\n    description: Visibility comes from the hosting cloud's cost-and-usage report and from Vitess\n      operational dashboards (vtgate / vtablet metrics, query stats); there is no Vitess-issued\n      invoice.\n  - name: Allocation\n    description:\
-  \ Tag the cloud resources that run Vitess (Kubernetes namespace, instance group,\n      EBS volume) with the consuming workload to attribute cost back to product teams.\n  - name: Optimization\n    description: Levers are infrastructure-driven - shard right-sizing, autoscaling vtgate,\n      reserved-instance commitments on the MySQL backends, query consolidator tuning, and shard\n      consolidation as workloads shrink.\n  - name: Accountability\n    description: The platform / database team that operates the Vitess deployment owns the cost\n      line; finance allocates back to consuming teams via tagging rules.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Vitess\nproviderId: vitess\npublisherName: Vitess\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud Native\n  - CNCF\n  - Database\n  - Distributed Systems\n  - Graduated\n  - MySQL\n  - Sharding\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Vitess API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Vitess\n  ServiceCategory: Developer Tools / API\n  ProviderName: Vitess\n  PublisherName: Vitess\n  InvoiceIssuerName: Vitess\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Vitess VTGate API\n    baseURL: ''\n    tags:\n      - gRPC\n      - MySQL\n      - Proxy\n      - Query Routing\n      - SQL\n    serviceName: Vitess VTGate API\n    serviceCategory: API\n  - name: Vitess VTAdmin API\n    baseURL: ''\n    tags:\n      - Administration\n      - Cluster Management\n      - REST\n      - Web UI\n    serviceName: Vitess VTAdmin API\n    serviceCategory: API\n  - name: Vitess VTCtld API\n    baseURL: ''\n    tags:\n      - Administration\n      - Cluster Management\n      - gRPC\n      - Topology\n    serviceName: Vitess VTCtld API\n    serviceCategory: API\n  - name: Vitess VReplication API\n    baseURL: ''\n    tags:\n      - Data Migration\n      - Replication\n\
+  \      - Streaming\n      - Workflows\n    serviceName: Vitess VReplication API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/vitess/refs/heads/main/finops/vitess-finops.yml
-sources:
-- https://vitess.io/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Open Source
+- Cloud Native
+- CNCF
 - Database
+- Distributed Systems
+- Graduated
 - MySQL
+- Sharding
+- FinOps
+- Cost Management
+- FOCUS
 ---

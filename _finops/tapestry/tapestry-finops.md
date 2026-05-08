@@ -7,41 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Custom / Contact Sales
-description: FinOps placeholder for Tapestry, Inc. No public API billing surface; commercial partner billing is invoiced under bilateral agreements per brand.
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Tapestry API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Tapestry, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Tapestry
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Tapestry
-  PublisherName: Tapestry, Inc.
-  ServiceCategory: Apparel & Accessories Retail
+  PublisherName: Tapestry
+  ServiceCategory: Developer Tools / API
   ServiceName: Tapestry
 layout: finops
 meters:
 - aggregation: sum
-  name: custom_engagement
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Tapestry Finops
 provider_name: Tapestry
 provider_slug: tapestry
-publisher_name: Tapestry, Inc.
-service_category: Apparel & Accessories Retail
+publisher_name: Tapestry
+service_category: API
 slug: tapestry-finops
 source_filename: tapestry-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.tapestry.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Tapestry\nproviderId: tapestry\npublisherName: Tapestry, Inc.\nserviceCategory: Apparel & Accessories Retail\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Apparel\n  - Retail\n  - FinOps\n  - FOCUS\ndescription: FinOps placeholder for Tapestry, Inc. No public API billing surface; commercial\n  partner billing is invoiced under bilateral agreements per brand.\nsources:\n  - https://www.tapestry.com/\nnotes: No public billing telemetry. Meter list collapsed to custom engagement.\nbillingModel:\n  pricingCategory: Custom / Contact Sales\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n  \
-  \  - Usage\nfocusColumns:\n  ServiceName: Tapestry\n  ServiceCategory: Apparel & Accessories Retail\n  ProviderName: Tapestry\n  PublisherName: Tapestry, Inc.\n  InvoiceIssuerName: Tapestry, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: custom_engagement\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Visibility is provided through Tapestry's brand partnership and merchandising\n      teams; no public usage API ships.\n  - name: Allocation\n    description: Cost is allocated to the partnering team's own AP records against Tapestry brand\n      invoices.\n  - name: Optimization\n    description: Optimization is handled through commercial review with the brand partnership\n      manager.\n  - name: Accountability\n    description: Accountability sits with the partner-facing or merchandising owner of the Tapestry\n      relationship.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Tapestry\nproviderId: tapestry\npublisherName: Tapestry\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Retail\n  - Luxury\n  - Fashion\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Tapestry API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n\
+  \      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and\
+  \ Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Tapestry\n  ServiceCategory: Developer Tools / API\n  ProviderName: Tapestry\n  PublisherName: Tapestry\n  InvoiceIssuerName: Tapestry\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n  \
+  \    - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Tapestry API\n    baseURL: https://api.tapestry.com\n    tags:\n      - Retail\n      - Luxury\n      - Fashion\n    serviceName: Tapestry API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tapestry/refs/heads/main/finops/tapestry-finops.yml
-sources:
-- https://www.tapestry.com/
+sources: []
 specification: FinOps Framework
 tags:
-- Apparel
 - Retail
+- Luxury
+- Fashion
 - FinOps
+- Cost Management
 - FOCUS
 ---

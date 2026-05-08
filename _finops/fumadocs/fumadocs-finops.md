@@ -20,44 +20,77 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/fumadocs/refs/heads/main/openapi/fumadocs-openapi-proxy-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: On-Demand
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Free / Open Source
-description: Fumadocs has no commercial billing surface — it is a free, open-source npm package. The only FinOps-relevant cost is the underlying hosting/CDN of the consumer's documentation site, which is governed by the host's pricing rather than Fumadocs.
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Fumadocs API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: not-applicable
+  ChargeCategory: Usage
+  InvoiceIssuerName: Fumadocs
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Fumadocs
-  PublisherName: Fumadocs (open source community)
-  ServiceCategory: Developer Tools
+  PublisherName: Fumadocs
+  ServiceCategory: Developer Tools / API
   ServiceName: Fumadocs
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - host
-  name: hosting_costs
-  unit: varies
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Fumadocs Finops
 provider_name: Fumadocs
 provider_slug: fumadocs
-publisher_name: Fumadocs (open source community)
-service_category: Developer Tools
+publisher_name: Fumadocs
+service_category: API
 slug: fumadocs-finops
 source_filename: fumadocs-finops.yml
 source_heading: FinOps Profile
-source_url: https://fumadocs.dev/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Fumadocs\nproviderId: fumadocs\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Open Source\n  - Documentation\ndescription: Fumadocs has no commercial billing surface — it is a free, open-source npm package.\n  The only FinOps-relevant cost is the underlying hosting/CDN of the consumer's documentation\n  site, which is governed by the host's pricing rather than Fumadocs.\nsources:\n  - https://fumadocs.dev/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Fumadocs (open source community)\nserviceCategory: Developer Tools\nbillingModel:\n  pricingCategory: Free / Open Source\n  billingFrequency: On-Demand\n  billingCurrency: USD\n\
-  \  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Fumadocs\n  ServiceCategory: Developer Tools\n  ProviderName: Fumadocs\n  PublisherName: Fumadocs (open source community)\n  InvoiceIssuerName: not-applicable\n  BillingCurrency: USD\nmeters:\n  - name: hosting_costs\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - host\nprinciples:\n  - name: Visibility\n    description: Costs of running a Fumadocs site come from the underlying host (Vercel, Netlify,\n      Cloudflare Pages, etc.); track those provider bills rather than Fumadocs.\n  - name: Allocation\n    description: Allocate documentation-site hosting cost to the product or team that owns the\n      docs.\n  - name: Optimization\n    description: Use static export and CDN caching; pre-build search indexes; avoid dynamic\n      runtime where the static path suffices.\n  - name: Accountability\n    description: DevRel / docs owner is accountable for documentation hosting cost; no Fumadocs\n      invoice\
-  \ exists.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Fumadocs\nproviderId: fumadocs\npublisherName: Fumadocs\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Documentation\n  - Framework\n  - Next.js\n  - React\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Fumadocs API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
+  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
+  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Fumadocs\n  ServiceCategory: Developer Tools / API\n  ProviderName: Fumadocs\n  PublisherName: Fumadocs\n  InvoiceIssuerName: Fumadocs\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n\
+  \      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Fumadocs\n    baseURL: ''\n    tags:\n      - Documentation\n      - Framework\n      - Next.js\n    serviceName: Fumadocs\n    serviceCategory: API\n  - name: Fumadocs Search API\n    baseURL: ''\n    tags:\n      - Documentation\n      - Search\n    serviceName: Fumadocs Search API\n    serviceCategory: API\n  - name: Fumadocs OpenAPI Proxy API\n    baseURL: ''\n    tags:\n      - Documentation\n      - OpenAPI\n      - Proxy\n    serviceName: Fumadocs OpenAPI Proxy API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin\
+  \ Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/fumadocs/refs/heads/main/finops/fumadocs-finops.yml
-sources:
-- https://fumadocs.dev/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Open Source
 - Documentation
+- Framework
+- Next.js
+- React
+- FinOps
+- Cost Management
+- FOCUS
 ---

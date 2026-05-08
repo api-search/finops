@@ -14,49 +14,77 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/walt-disney/refs/heads/main/openapi/walt-disney-disney-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Custom Contract
-description: FinOps view of The Walt Disney Company at the corporate level. Disney does not bill API consumption directly; integration costs and revenues flow through bilateral content-licensing, distribution, and partnership settlements rather than a metered API invoice surface.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Walt Disney API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: The Walt Disney Company
-  ProviderName: The Walt Disney Company
-  PublisherName: The Walt Disney Company
-  ServiceCategory: Entertainment / Media
-  ServiceName: Walt Disney Partnerships
+  ChargeCategory: Usage
+  InvoiceIssuerName: Walt Disney
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Walt Disney
+  PublisherName: Walt Disney
+  ServiceCategory: Developer Tools / API
+  ServiceName: Walt Disney
 layout: finops
 meters:
 - aggregation: sum
-  description: Negotiated settlement under the bilateral partnership / licensing agreement.
+  description: Count of billable API requests
   dimensions:
-  - business_segment
-  - partner
-  name: partnership_settlement
-  unit: varies
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Walt Disney Finops
 provider_name: Walt Disney
 provider_slug: walt-disney
-publisher_name: The Walt Disney Company
-service_category: Entertainment / Media
+publisher_name: Walt Disney
+service_category: API
 slug: walt-disney-finops
 source_filename: walt-disney-finops.yml
 source_heading: FinOps Profile
-source_url: https://thewaltdisneycompany.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Walt Disney\nproviderId: walt-disney\npublisherName: The Walt Disney Company\nserviceCategory: Entertainment / Media\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Entertainment\n  - Media\n  - Streaming\n  - FinOps\n  - FOCUS\ndescription: FinOps view of The Walt Disney Company at the corporate level.\n  Disney does not bill API consumption directly; integration costs and\n  revenues flow through bilateral content-licensing, distribution, and\n  partnership settlements rather than a metered API invoice surface.\nsources:\n  - https://thewaltdisneycompany.com/\nnotes: No corporate-level API invoice; FOCUS attribution flows through the\n  partnership-settlement\
-  \ entity.\nbillingModel:\n  pricingCategory: Custom Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Walt Disney Partnerships\n  ServiceCategory: Entertainment / Media\n  ProviderName: The Walt Disney Company\n  PublisherName: The Walt Disney Company\n  InvoiceIssuerName: The Walt Disney Company\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: partnership_settlement\n    description: Negotiated settlement under the bilateral partnership /\n      licensing agreement.\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - business_segment\n      - partner\nprinciples:\n  - name: Visibility\n    description: Track partnership-level settlements at the corporate\n      treasury layer; per-API consumption telemetry is partner-side.\n  - name: Allocation\n    description: Allocate partnership cost / revenue to the relevant\n      Disney business segment (Studios,\
-  \ Streaming, Parks, ESPN).\n  - name: Optimization\n    description: Optimization happens at the partnership-renegotiation\n      layer; there is no in-flight metered usage to tune.\n  - name: Accountability\n    description: Corporate development / business-segment leadership\n      owns the partnership terms; legal and finance own settlement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Walt Disney\nproviderId: walt-disney\npublisherName: Walt Disney\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Entertainment\n  - Media\n  - Streaming\n  - Parks\n  - Content\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Walt Disney API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the\
+  \ consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Walt Disney\n  ServiceCategory: Developer Tools / API\n  ProviderName: Walt Disney\n  PublisherName: Walt Disney\n  InvoiceIssuerName: Walt Disney\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Disney Characters API\n    baseURL: https://api.disneyapi.dev\n    tags:\n      - Characters\n      - Content\n      - Entertainment\n      - Films\n      - Parks\n      - Television\n    serviceName: Disney Characters API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/walt-disney/refs/heads/main/finops/walt-disney-finops.yml
-sources:
-- https://thewaltdisneycompany.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Entertainment
 - Media
 - Streaming
+- Parks
+- Content
 - FinOps
+- Cost Management
 - FOCUS
 ---

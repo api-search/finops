@@ -14,46 +14,78 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/aligned-news/refs/heads/main/openapi/aligned-news-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly or Annual (Pro); Contract (Enterprise)
-  pricingCategory: Subscription (flat-rate)
-description: Aligned News bills via flat-rate Pro and contact-sales Enterprise subscriptions managed through Clerk Billing on top of Stripe. There is no metered usage-based billing surface today (Free has no API access; Pro unlocks the entire content corpus and the API for a single recurring fee; Enterprise is contact sales). FOCUS-style cost tracking is best modelled at the seat/subscription level rather than per-token or per-call. Reconciled is false because the public site does not expose price values for the Pro or Enterprise tiers.
+  billingFrequency: Monthly
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Aligned News API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Aligned News
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Aligned News
   PublisherName: Aligned News
-  ServiceCategory: AI News Intelligence
+  ServiceCategory: Developer Tools / API
   ServiceName: Aligned News
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - billing_period
-  name: pro_subscription
-  unit: seat-month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - contract_term
-  name: enterprise_subscription
-  unit: contract
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Aligned News Finops
 provider_name: Aligned News
 provider_slug: aligned-news
 publisher_name: Aligned News
-service_category: AI News Intelligence
+service_category: API
 slug: aligned-news-finops
 source_filename: aligned-news-finops.yml
 source_heading: FinOps Profile
-source_url: https://alignednews.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Aligned News\nproviderId: aligned-news\ncreated: '2026-05-06'\nmodified: '2026-05-06'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - AI News\ndescription: >-\n  Aligned News bills via flat-rate Pro and contact-sales Enterprise\n  subscriptions managed through Clerk Billing on top of Stripe. There is no\n  metered usage-based billing surface today (Free has no API access; Pro\n  unlocks the entire content corpus and the API for a single recurring fee;\n  Enterprise is contact sales). FOCUS-style cost tracking is best modelled at\n  the seat/subscription level rather than per-token or per-call. Reconciled\n  is false because the public site does not expose price values for the Pro\n  or Enterprise tiers.\nsources:\n  - https://alignednews.com/pricing\n  - https://alignednews.com/developers\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl:\
-  \ https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Aligned News\nserviceCategory: AI News Intelligence\nbillingModel:\n  pricingCategory: Subscription (flat-rate)\n  billingFrequency: Monthly or Annual (Pro); Contract (Enterprise)\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Aligned News\n  ServiceCategory: AI News Intelligence\n  ProviderName: Aligned News\n  PublisherName: Aligned News\n  BillingCurrency: USD\nnotes:\n  - No usage-metered billing surface is exposed publicly.\n  - Subscriptions are managed via Clerk Billing; payments via Stripe.\n  - Cost-allocation should attribute the seat/subscription to the consuming\n    team rather than per-call.\nmeters:\n  - name: pro_subscription\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - billing_period\n  - name: enterprise_subscription\n    unit: contract\n    aggregation: sum\n    dimensions:\n\
-  \      - contract_term\nprinciples:\n  - name: Visibility\n    description: Track Aligned News spend at the subscription level via Stripe billing\n      exports.\n  - name: Allocation\n    description: Tag the subscription owner team or cost centre; Aligned News does\n      not break out per-key usage.\n  - name: Optimization\n    description: Right-size between Pro and Enterprise based on team size and need\n      for priority support and custom analysis.\n  - name: Accountability\n    description: Annual review of subscription value vs. usage of API and MCP\n      surfaces.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Aligned News\nproviderId: aligned-news\npublisherName: Aligned News\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - News\n  - Intelligence\n  - MCP\n  - Signals\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Aligned News API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Aligned News\n  ServiceCategory: Developer Tools / API\n  ProviderName: Aligned News\n  PublisherName: Aligned News\n  InvoiceIssuerName: Aligned News\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Aligned News\n    baseURL: ''\n    tags:\n      - AI\n      - News\n      - Intelligence\n    serviceName: Aligned News\n    serviceCategory: API\n  - name: Aligned News REST API\n    baseURL: https://alignednews.com/v1\n    tags:\n      - AI\n      - News\n      - Intelligence\n      - REST\n      - Signals\n      - Search\n    serviceName: Aligned News REST API\n    serviceCategory: API\n  - name: Aligned News MCP Server\n    baseURL: https://alignednews.com/v1\n    tags:\n      - AI\n      - MCP\n      - Agents\n      - Tooling\n    serviceName: Aligned News MCP Server\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n\
+  \    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n  - FN: Aligned News\n    url: https://alignednews.com/\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/aligned-news/refs/heads/main/finops/aligned-news-finops.yml
-sources:
-- https://alignednews.com/pricing
-- https://alignednews.com/developers
+sources: []
 specification: FinOps Framework
 tags:
+- AI
+- News
+- Intelligence
+- MCP
+- Signals
 - FinOps
+- Cost Management
 - FOCUS
-- AI News
 ---

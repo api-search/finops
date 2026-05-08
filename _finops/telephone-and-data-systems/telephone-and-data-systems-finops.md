@@ -9,39 +9,68 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Subscription
-description: FOCUS-aligned FinOps shape for Telephone and Data Systems. TDS bills connectivity services (broadband, voice, video, business connectivity, wireless infrastructure) on a recurring subscription basis rather than as developer-API consumption.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Telephone and Data Systems API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Telephone and Data Systems, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Telephone and Data Systems
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Telephone and Data Systems
-  PublisherName: Telephone and Data Systems, Inc.
-  ServiceCategory: Telecommunications / Connectivity
-  ServiceName: TDS Telecom
+  PublisherName: Telephone and Data Systems
+  ServiceCategory: Developer Tools / API
+  ServiceName: Telephone and Data Systems
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - product
-  - market
-  name: connectivity_subscriptions
-  unit: month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Telephone And Data Systems Finops
 provider_name: Telephone and Data Systems
 provider_slug: telephone-and-data-systems
-publisher_name: Telephone and Data Systems, Inc.
-service_category: Telecommunications / Connectivity
+publisher_name: Telephone and Data Systems
+service_category: API
 slug: telephone-and-data-systems-finops
 source_filename: telephone-and-data-systems-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.tdstelecom.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Telephone and Data Systems\nproviderId: telephone-and-data-systems\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Broadband\n  - Fiber Internet\n  - Fortune 500\n  - Rural Connectivity\n  - Telecommunications\n  - Wireless Infrastructure\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for Telephone and Data Systems. TDS bills connectivity\n  services (broadband, voice, video, business connectivity, wireless infrastructure) on a recurring\n  subscription basis rather than as developer-API consumption.\nsources:\n  - https://www.tdstelecom.com/\nnotes: TDS does not operate a usage-priced developer API. FOCUS columns capture the publisher\n  identity; meters describe connectivity-service subscriptions rather than API requests.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n\
-  \  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Telephone and Data Systems, Inc.\nserviceCategory: Telecommunications / Connectivity\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: TDS Telecom\n  ServiceCategory: Telecommunications / Connectivity\n  ProviderName: Telephone and Data Systems\n  PublisherName: Telephone and Data Systems, Inc.\n  InvoiceIssuerName: Telephone and Data Systems, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: connectivity_subscriptions\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\n      - market\nprinciples:\n  - name: Visibility\n    description: Spend is observed through TDS Telecom invoices and account portals; no developer\n      consumption export exists.\n  - name: Allocation\n    description: Allocation is by service line (residential\
-  \ broadband, business broadband, voice,\n      wireless infrastructure) and market.\n  - name: Optimization\n    description: Optimization is procurement / contract-driven (term length, bundle selection)\n      rather than API-cost driven.\n  - name: Accountability\n    description: The contracting customer (residential household or business owner) is the\n      accountable cost owner of the connectivity subscription.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Telephone and Data Systems\nproviderId: telephone-and-data-systems\npublisherName: Telephone and Data Systems\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Broadband\n  - Fiber Internet\n  - Fortune 500\n  - Rural Connectivity\n  - Telecommunications\n  - Wireless Infrastructure\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Telephone and Data Systems API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and\
+  \ finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud\
+  \ Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Telephone and Data Systems\n  ServiceCategory: Developer Tools / API\n  ProviderName: Telephone and Data Systems\n  PublisherName: Telephone and Data Systems\n  InvoiceIssuerName: Telephone and Data Systems\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n  \
+  \    - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: TDS Telecom\n    baseURL: https://tdstelecom.com\n    tags:\n      - Broadband\n      - Cable TV\n      - Fiber Internet\n      - Home Phone\n      - Internet Service Provider\n    serviceName: TDS Telecom\n    serviceCategory: API\n  - name: Array Digital Infrastructure\n    baseURL: https://www.arrayinc.com\n    tags:\n      - Cell Towers\n      - Spectrum Holdings\n      - Wireless Infrastructure\n    serviceName: Array Digital Infrastructure\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n\
+  \    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/telephone-and-data-systems/refs/heads/main/finops/telephone-and-data-systems-finops.yml
-sources:
-- https://www.tdstelecom.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Broadband
@@ -51,5 +80,6 @@ tags:
 - Telecommunications
 - Wireless Infrastructure
 - FinOps
+- Cost Management
 - FOCUS
 ---

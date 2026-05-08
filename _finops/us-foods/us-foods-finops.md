@@ -7,43 +7,78 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Bundled with Distribution Contract
-description: 'FinOps shape for US Foods: API access is bundled into the customer/distribution agreement rather than billed as a developer plan. Cost flows through purchase orders for foodservice goods, not through API metering.'
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the US Foods API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: US Foods, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: US Foods
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: US Foods
-  PublisherName: US Foods, Inc.
-  ServiceCategory: Food Service Distribution
+  PublisherName: US Foods
+  ServiceCategory: Developer Tools / API
   ServiceName: US Foods
 layout: finops
 meters:
-- aggregation: count
-  description: API access provisioned under a customer or integration partner agreement; not metered as a developer billing line
-  name: contracted_access
-  unit: varies
+- aggregation: sum
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Us Foods Finops
 provider_name: US Foods
 provider_slug: us-foods
-publisher_name: US Foods, Inc.
-service_category: Food Service Distribution
+publisher_name: US Foods
+service_category: API
 slug: us-foods-finops
 source_filename: us-foods-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.usfoods.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: US Foods\nproviderId: us-foods\npublisherName: US Foods, Inc.\nserviceCategory: Food Service Distribution\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Food Service\n  - Distribution\n  - FinOps\n  - FOCUS\ndescription: 'FinOps shape for US Foods: API access is bundled into the customer/distribution agreement rather than billed as a developer plan. Cost flows through purchase orders for foodservice goods, not through API metering.'\nsources:\n  - https://www.usfoods.com/\nnotes: No public usage-based billing surface for US Foods APIs. Costs sit inside the foodservice distribution contract; FinOps observability is not\
-  \ exposed to consumers as a separate billing line.\nbillingModel:\n  pricingCategory: Bundled with Distribution Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: US Foods\n  ServiceCategory: Food Service Distribution\n  ProviderName: US Foods\n  PublisherName: US Foods, Inc.\n  InvoiceIssuerName: US Foods, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: contracted_access\n    description: API access provisioned under a customer or integration partner agreement; not metered as a developer billing line\n    unit: varies\n    aggregation: count\nprinciples:\n  - name: Visibility\n    description: API usage is not exposed via a public usage API; integration partners must coordinate with their US Foods account team for any required reporting.\n  - name: Allocation\n    description: Costs are allocated through the underlying distribution invoice (goods + services), not via API meters.\n  - name: Optimization\n\
-  \    description: Optimization happens at the procurement and integration design level (batching orders, EDI cadence) rather than via per-call cost levers.\n  - name: Accountability\n    description: Owned by the customer's procurement/operations function and the integration partner managing the EDI / API connection.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: US Foods\nproviderId: us-foods\npublisherName: US Foods\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Food Service\n  - Fortune 500\n  - Distribution\n  - Supply Chain\n  - eCommerce\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the US Foods API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: US Foods\n  ServiceCategory: Developer Tools / API\n  ProviderName: US Foods\n  PublisherName: US Foods\n  InvoiceIssuerName: US Foods\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
+  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: US Foods MOXe eCommerce Platform\n    baseURL: ''\n    tags:\n      - Food Service\n      - Ordering\n      - eCommerce\n      - Foodservice Distribution\n    serviceName: US Foods MOXe eCommerce Platform\n    serviceCategory: API\n  - name: US Foods EDI Integration\n    baseURL: ''\n    tags:\n      - EDI\n      - Supply Chain\n      - Integration\n      - B2B\n    serviceName: US Foods EDI Integration\n    serviceCategory: API\n  - name: US Foods Supplier Product Information Management\n    baseURL: ''\n    tags:\n      - Product Data\n      - Supplier Integration\n      - Data Sync\n      - Food Safety\n    serviceName: US Foods Supplier Product Information Management\n    serviceCategory: API\nunitEconomics:\n\
+  \  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/us-foods/refs/heads/main/finops/us-foods-finops.yml
-sources:
-- https://www.usfoods.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Food Service
+- Fortune 500
 - Distribution
+- Supply Chain
+- eCommerce
 - FinOps
+- Cost Management
 - FOCUS
 ---

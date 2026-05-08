@@ -14,78 +14,91 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/cyberark/refs/heads/main/openapi/cyberark-conjur-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
+  - Credit
   - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Enterprise Subscription
-description: 'FOCUS-aligned FinOps for CyberArk: enterprise per-seat / per-machine-identity subscriptions across PAM, Workforce Access, Secrets Management, and Identity Governance. APIs are entitlements of the product license rather than separately metered.'
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the CyberArk API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: CyberArk Software Ltd.
-  PricingCategory: Subscription
-  PricingUnit: seat-year
+  ChargeCategory: Usage
+  InvoiceIssuerName: CyberArk
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: CyberArk
-  PublisherName: CyberArk Software Ltd.
-  ServiceCategory: Identity Security
+  PublisherName: CyberArk
+  ServiceCategory: Developer Tools / API
   ServiceName: CyberArk
 layout: finops
 meters:
-- aggregation: max
-  description: Licensed privileged users / endpoints under PAM coverage
-  dimensions:
-  - product
-  - business_unit
-  name: privileged_users
-  unit: seat-year
-- aggregation: max
-  description: Licensed workforce identity seats (SSO / MFA / passwordless)
-  dimensions:
-  - product
-  - business_unit
-  name: workforce_users
-  unit: seat-year
-- aggregation: max
-  description: Licensed machine identities / secrets / certificates
-  dimensions:
-  - product
-  - environment
-  name: machine_identities
-  unit: machine-year
 - aggregation: sum
-  description: API calls against CyberArk REST APIs (not separately billed; observed for capacity)
+  description: Count of billable API requests
   dimensions:
   - api
-  - tenant
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Cyberark Finops
 provider_name: CyberArk
 provider_slug: cyberark
-publisher_name: CyberArk Software Ltd.
-service_category: Identity Security
+publisher_name: CyberArk
+service_category: API
 slug: cyberark-finops
 source_filename: cyberark-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.cyberark.com/products/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CyberArk\nproviderId: cyberark\npublisherName: CyberArk Software Ltd.\nserviceCategory: Identity Security\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Identity Security\n  - Privileged Access Management\n  - Secrets Management\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for CyberArk: enterprise per-seat / per-machine-identity subscriptions\n  across PAM, Workforce Access, Secrets Management, and Identity Governance. APIs are entitlements of\n  the product license rather than separately metered.'\nsources:\n  - https://www.cyberark.com/products/\nnotes: No public pricing. Replace meter targets with contract-derived\
-  \ values (per-privileged-user, per-machine-identity,\n  per-workforce-user).\nprinciples:\n  - name: Visibility\n    description: Use CyberArk Identity Security Intelligence and the per-product admin consoles to count\n      privileged users, machine identities, and workforce seats; export to your CMDB / FinOps store.\n  - name: Allocation\n    description: Tag Safes (PAM), platforms, and Conjur policy branches by business unit / application\n      to attribute identity spend; use Identity Flows for joiner/mover/leaver attribution.\n  - name: Optimization\n    description: Decommission unused privileged / workforce seats at quarterly access reviews; consolidate\n      Conjur secrets across applications; right-size Privilege Cloud vs Self-Hosted PAM by deployment\n      density.\n  - name: Accountability\n    description: Identity / security org owns the CyberArk contract; coordinate with finance for chargeback\n      based on Safe ownership and identity governance rollups.\ndomains:\n\
-  \  - name: Understand Usage and Cost\n    capabilities:\n      - Allocation\n      - Reporting and Analytics\n  - name: Quantify Business Value\n    capabilities:\n      - Forecasting\n      - Budgeting\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Workload Optimization\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - Invoicing and Chargeback\n      - Onboarding Workloads\nbillingModel:\n  pricingCategory: Enterprise Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: CyberArk\n  ServiceCategory: Identity Security\n  ProviderName: CyberArk\n  PublisherName: CyberArk Software Ltd.\n  InvoiceIssuerName: CyberArk Software Ltd.\n  PricingCategory: Subscription\n  PricingUnit: seat-year\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name:\
-  \ privileged_users\n    description: Licensed privileged users / endpoints under PAM coverage\n    unit: seat-year\n    aggregation: max\n    dimensions:\n      - product\n      - business_unit\n  - name: workforce_users\n    description: Licensed workforce identity seats (SSO / MFA / passwordless)\n    unit: seat-year\n    aggregation: max\n    dimensions:\n      - product\n      - business_unit\n  - name: machine_identities\n    description: Licensed machine identities / secrets / certificates\n    unit: machine-year\n    aggregation: max\n    dimensions:\n      - product\n      - environment\n  - name: api_requests\n    description: API calls against CyberArk REST APIs (not separately billed; observed for capacity)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - tenant\napis:\n  - name: CyberArk Conjur Secrets Manager API\n    baseURL: https://conjur.example.com\n    tags:\n      - Authentication\n      - Conjur\n      - DevOps Secrets\n      - Machine\
-  \ Identity\n      - Policies\n      - Resources\n      - Roles\n      - Secrets\n      - Vault\n    serviceName: CyberArk Conjur Secrets Manager API\n    serviceCategory: API\n  - name: CyberArk PAM Self-Hosted REST API\n    baseURL: ''\n    tags:\n      - Accounts\n      - PAM\n      - Privileged Access\n      - REST\n      - Safes\n      - Sessions\n      - Vault\n    serviceName: CyberArk PAM Self-Hosted REST API\n    serviceCategory: API\n  - name: CyberArk Privilege Cloud REST API\n    baseURL: ''\n    tags:\n      - Accounts\n      - PAM\n      - Privilege Cloud\n      - Safes\n      - SaaS\n      - Vault\n    serviceName: CyberArk Privilege Cloud REST API\n    serviceCategory: API\n  - name: CyberArk Identity REST API\n    baseURL: ''\n    tags:\n      - Identity\n      - MFA\n      - OAuth2\n      - SCIM\n      - SSO\n      - Workforce Identity\n    serviceName: CyberArk Identity REST API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Privileged User\n    metric:\
-  \ billed_cost / privileged_users\n    target: TBD\n  - name: Cost per Machine Identity\n    metric: billed_cost / machine_identities\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CyberArk\nproviderId: cyberark\npublisherName: CyberArk\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Authentication\n  - Cloud Security\n  - Conjur\n  - Credential Vault\n  - DevOps Secrets\n  - Endpoint Privilege Management\n  - Identity Security\n  - Machine Identity\n  - MFA\n  - OpenAPI\n  - PAM\n  - Privileged Access\n  - Privileged Access Management\n  - Secrets Management\n  - Session Management\n  - SSO\n  - Vault\n  - Zero Trust\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the CyberArk API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting\
+  \ across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name:\
+  \ Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: CyberArk\n  ServiceCategory: Developer Tools / API\n  ProviderName: CyberArk\n  PublisherName: CyberArk\n  InvoiceIssuerName: CyberArk\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n\
+  \    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: CyberArk Conjur Secrets Manager API\n    baseURL: https://conjur.example.com\n    tags:\n      - Authentication\n      - Conjur\n      - DevOps Secrets\n      - Machine Identity\n      - Policies\n      - Resources\n      - Roles\n      - Secrets\n      - Vault\n    serviceName: CyberArk Conjur Secrets Manager API\n    serviceCategory: API\n  - name: CyberArk PAM Self-Hosted REST API\n    baseURL: ''\n    tags:\n      - Accounts\n      - PAM\n\
+  \      - Privileged Access\n      - REST\n      - Safes\n      - Sessions\n      - Vault\n    serviceName: CyberArk PAM Self-Hosted REST API\n    serviceCategory: API\n  - name: CyberArk Privilege Cloud REST API\n    baseURL: ''\n    tags:\n      - Accounts\n      - PAM\n      - Privilege Cloud\n      - Safes\n      - SaaS\n      - Vault\n    serviceName: CyberArk Privilege Cloud REST API\n    serviceCategory: API\n  - name: CyberArk Identity REST API\n    baseURL: ''\n    tags:\n      - Identity\n      - MFA\n      - OAuth2\n      - SCIM\n      - SSO\n      - Workforce Identity\n    serviceName: CyberArk Identity REST API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cyberark/refs/heads/main/finops/cyberark-finops.yml
-sources:
-- https://www.cyberark.com/products/
+sources: []
 specification: FinOps Framework
 tags:
+- Authentication
+- Cloud Security
+- Conjur
+- Credential Vault
+- DevOps Secrets
+- Endpoint Privilege Management
 - Identity Security
+- Machine Identity
+- MFA
+- OpenAPI
+- PAM
+- Privileged Access
 - Privileged Access Management
 - Secrets Management
+- Session Management
+- SSO
+- Vault
+- Zero Trust
 - FinOps
+- Cost Management
 - FOCUS
 ---

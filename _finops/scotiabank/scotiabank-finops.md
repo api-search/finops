@@ -13,45 +13,79 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/scotiabank/refs/heads/main/openapi/scotiabank-tranxact-openapi.yml
 billing_model:
-  billingCurrency: USD (varies by contract)
-  billingFrequency: Per-Contract
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Contract / Negotiated
-description: 'FOCUS-aligned FinOps shape for Scotiabank: corporate-banking APIs (Scotia TranXact: wire, EFT, INTERAC e-Transfer, account info) priced under the customer''s corporate-banking relationship; transaction-level fees apply per the Treasury Services agreement.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Scotiabank API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: The Bank of Nova Scotia
+  ChargeCategory: Usage
+  InvoiceIssuerName: Scotiabank
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Scotiabank
-  PublisherName: The Bank of Nova Scotia
-  ServiceCategory: Banking
+  PublisherName: Scotiabank
+  ServiceCategory: Developer Tools / API
   ServiceName: Scotiabank
 layout: finops
 meters:
 - aggregation: sum
-  name: contracted_consumption
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Scotiabank Finops
 provider_name: Scotiabank
 provider_slug: scotiabank
-publisher_name: The Bank of Nova Scotia
-service_category: Banking
+publisher_name: Scotiabank
+service_category: API
 slug: scotiabank-finops
 source_filename: scotiabank-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.scotiabank.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Scotiabank\nproviderId: scotiabank\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n- FinOps\n- FOCUS\n- Banking\n- Payments\ndescription: 'FOCUS-aligned FinOps shape for Scotiabank: corporate-banking APIs (Scotia TranXact: wire,\n  EFT, INTERAC e-Transfer, account info) priced under the customer''s corporate-banking relationship;\n  transaction-level fees apply per the Treasury Services agreement.'\nnotes: Scotiabank's Scotia TranXact developer portal is a B2B partner-only API marketplace for corporate\n  / commercial customers. There is no public pricing page; access and pricing are negotiated as part of\n  the broader corporate-banking relationship through Scotiabank Treasury and Cash Management.\nsources:\n- https://developer.scotiabank.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n\
-  \  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: The Bank of Nova Scotia\nserviceCategory: Banking\nbillingModel:\n  pricingCategory: Contract / Negotiated\n  billingFrequency: Per-Contract\n  billingCurrency: USD (varies by contract)\n  chargeCategories:\n  - Purchase\n  - Usage\n  - Adjustment\nfocusColumns:\n  ServiceName: Scotiabank\n  ServiceCategory: Banking\n  ProviderName: Scotiabank\n  PublisherName: The Bank of Nova Scotia\n  InvoiceIssuerName: The Bank of Nova Scotia\n  BillingCurrency: USD\nmeters:\n- name: contracted_consumption\n  unit: varies\n  aggregation: sum\nprinciples:\n- name: Visibility\n  description: Consumption visibility comes from the Scotiabank account / partner reporting surface (invoices,\n    account dashboards) rather than a public usage API.\n- name: Allocation\n  description: Allocate cost through the Scotiabank contract structure (entitlement, project, business\n    unit)\
-  \ and reconcile against internal cost centers.\n- name: Optimization\n  description: 'Optimization levers are commercial: renegotiation cadence, commitment sizing, and consolidation\n    of Scotiabank entitlements.'\n- name: Accountability\n  description: Assign a contract owner who reconciles Scotiabank invoices against contracted entitlements\n    each billing cycle.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n  url: https://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Scotiabank\nproviderId: scotiabank\npublisherName: Scotiabank\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Banking\n  - Finance\n  - Payments\n  - Canada\n  - Open Banking\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Scotiabank API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Scotiabank\n  ServiceCategory: Developer Tools / API\n  ProviderName: Scotiabank\n  PublisherName: Scotiabank\n  InvoiceIssuerName: Scotiabank\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
+  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Scotia TranXact APIs\n    baseURL: ''\n    tags:\n      - Banking\n      - Payments\n      - Wire Transfer\n      - EFT\n      - Account Management\n    serviceName: Scotia TranXact APIs\n    serviceCategory: API\n  - name: Wire Payments API\n    baseURL: ''\n    tags:\n      - Wire Transfer\n      - Payments\n      - SWIFT\n      - Banking\n    serviceName: Wire Payments API\n    serviceCategory: API\n  - name: Real-time Payments API\n    baseURL: ''\n    tags:\n      - Real-Time Payments\n      - INTERAC\n      - Payments\n      - Banking\n    serviceName: Real-time Payments API\n    serviceCategory: API\n  - name: EFT Payment API\n    baseURL: ''\n    tags:\n      - EFT\n      - Payments\n      -\
+  \ Banking\n      - ACH\n    serviceName: EFT Payment API\n    serviceCategory: API\n  - name: Account Balance and Transactions API\n    baseURL: ''\n    tags:\n      - Account Management\n      - Transactions\n      - Banking\n      - Balance\n    serviceName: Account Balance and Transactions API\n    serviceCategory: API\n  - name: Account Validation API\n    baseURL: ''\n    tags:\n      - Account Validation\n      - Banking\n      - Verification\n    serviceName: Account Validation API\n    serviceCategory: API\n  - name: Payment Track and Trace API\n    baseURL: ''\n    tags:\n      - Payment Tracking\n      - Wire Transfer\n      - Banking\n      - SWIFT\n    serviceName: Payment Track and Trace API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/scotiabank/refs/heads/main/finops/scotiabank-finops.yml
-sources:
-- https://developer.scotiabank.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Banking
+- Finance
 - Payments
+- Canada
+- Open Banking
+- FinOps
+- Cost Management
+- FOCUS
 ---

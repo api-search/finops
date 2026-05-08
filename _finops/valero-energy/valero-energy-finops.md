@@ -7,43 +7,80 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Contract
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Bundled with Commercial Contract
-description: 'FinOps shape for Valero Energy: there is no developer-billed API surface. Trading-partner and commercial customer integrations live inside private B2B contracts; cost flows through the underlying commodity transactions, not API metering.'
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Valero Energy API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Valero Energy Corporation
+  ChargeCategory: Usage
+  InvoiceIssuerName: Valero Energy
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Valero Energy
-  PublisherName: Valero Energy Corporation
-  ServiceCategory: Energy
+  PublisherName: Valero Energy
+  ServiceCategory: Developer Tools / API
   ServiceName: Valero Energy
 layout: finops
 meters:
-- aggregation: count
-  description: API/EDI access provisioned under a trading-partner or customer agreement; not metered as a developer billing line
-  name: contracted_access
-  unit: varies
+- aggregation: sum
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Valero Energy Finops
 provider_name: Valero Energy
 provider_slug: valero-energy
-publisher_name: Valero Energy Corporation
-service_category: Energy
+publisher_name: Valero Energy
+service_category: API
 slug: valero-energy-finops
 source_filename: valero-energy-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.valero.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Valero Energy\nproviderId: valero-energy\npublisherName: Valero Energy Corporation\nserviceCategory: Energy\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Energy\n  - Petroleum\n  - FinOps\n  - FOCUS\ndescription: 'FinOps shape for Valero Energy: there is no developer-billed API surface. Trading-partner and commercial customer integrations live inside private B2B contracts; cost flows through the underlying commodity transactions, not API metering.'\nsources:\n  - https://www.valero.com/\nnotes: No public usage-based billing surface for Valero APIs. Costs are settled inside the commodity/distribution contract.\nbillingModel:\n\
-  \  pricingCategory: Bundled with Commercial Contract\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Valero Energy\n  ServiceCategory: Energy\n  ProviderName: Valero Energy\n  PublisherName: Valero Energy Corporation\n  InvoiceIssuerName: Valero Energy Corporation\n  BillingCurrency: USD\nmeters:\n  - name: contracted_access\n    description: API/EDI access provisioned under a trading-partner or customer agreement; not metered as a developer billing line\n    unit: varies\n    aggregation: count\nprinciples:\n  - name: Visibility\n    description: Valero does not expose public API usage telemetry; partners reconcile via their own EDI/middleware logs.\n  - name: Allocation\n    description: Costs are not allocated to API line items; they sit in the underlying purchase or sales invoice for petroleum/renewable products.\n  - name: Optimization\n    description: Optimization happens at the commercial-contract and\
-  \ integration-cadence level (batching, scheduling, EDI map design) rather than per-call cost.\n  - name: Accountability\n    description: Owned by the trading-partner counterparty's commercial and IT operations teams under the master agreement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Valero Energy\nproviderId: valero-energy\npublisherName: Valero Energy\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Energy\n  - Petroleum\n  - Refining\n  - Renewable Fuels\n  - Fortune 100\n  - Ethanol\n  - Renewable Diesel\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Valero Energy API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n \
+  \   description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Valero Energy\n  ServiceCategory: Developer Tools / API\n  ProviderName: Valero Energy\n  PublisherName: Valero Energy\n  InvoiceIssuerName: Valero Energy\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned\
+  \ over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Valero Energy SEC EDGAR Data\n    baseURL: ''\n    tags:\n      - SEC\n      - EDGAR\n      - Financial Data\n      - Regulatory Filings\n      - Investor Relations\n    serviceName: Valero Energy SEC EDGAR Data\n    serviceCategory: API\n  - name: Valero Investor Relations Portal\n    baseURL: ''\n    tags:\n      - Investor Relations\n      - Financial Data\n      - Stock Data\n      - Dividends\n    serviceName: Valero Investor Relations Portal\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric:\
+  \ billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/valero-energy/refs/heads/main/finops/valero-energy-finops.yml
-sources:
-- https://www.valero.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Energy
 - Petroleum
+- Refining
+- Renewable Fuels
+- Fortune 100
+- Ethanol
+- Renewable Diesel
 - FinOps
+- Cost Management
 - FOCUS
 ---

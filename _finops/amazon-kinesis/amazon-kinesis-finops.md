@@ -57,86 +57,72 @@ billing_model:
   - Tax
   - Credit
   - Adjustment
-  pricingCategory: Pay-As-You-Go
-description: 'FOCUS-aligned FinOps for Amazon Kinesis Data Streams: per-GB ingest/retrieval and per-shard-hour charges across On-Demand and Provisioned modes, with separately metered Enhanced Fan-Out, extended retention, and long-term storage.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Amazon Kinesis API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Amazon Web Services, Inc.
-  ProviderName: AWS
-  PublisherName: Amazon Web Services, Inc.
-  ServiceCategory: Analytics
-  ServiceName: Amazon Kinesis Data Streams
-  ServiceSubcategory: Streaming
+  InvoiceIssuerName: Amazon Kinesis
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Amazon Kinesis
+  PublisherName: Amazon Kinesis
+  ServiceCategory: Developer Tools / API
+  ServiceName: Amazon Kinesis
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
+  - endpoint
+  - tier
   - region
-  - stream_name
-  - capacity_mode
-  name: data_ingested_gb
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - region
-  - stream_name
-  - consumer_type
-  name: data_retrieved_gb
-  unit: GB
-- aggregation: sum
-  dimensions:
-  - region
-  - stream_name
-  name: shard_hours
-  unit: shard-hour
-- aggregation: sum
-  dimensions:
-  - region
-  - stream_name
-  - capacity_mode
-  name: stream_hours
-  unit: stream-hour
-- aggregation: sum
-  dimensions:
-  - region
-  - stream_name
-  name: put_payload_units
-  unit: PUT-payload-unit
-- aggregation: sum
-  dimensions:
-  - region
-  - stream_name
-  - consumer_arn
-  name: efo_consumer_shard_hours
-  unit: consumer-shard-hour
-- aggregation: sum
-  dimensions:
-  - region
-  - stream_name
-  name: long_term_storage_gb_month
-  unit: GB-month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Amazon Kinesis Finops
 provider_name: Amazon Kinesis
 provider_slug: amazon-kinesis
-publisher_name: Amazon Web Services, Inc.
-service_category: Analytics / Streaming
+publisher_name: Amazon Kinesis
+service_category: API
 slug: amazon-kinesis-finops
 source_filename: amazon-kinesis-finops.yml
 source_heading: FinOps Profile
-source_url: https://aws.amazon.com/kinesis/data-streams/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Amazon Kinesis\nproviderId: amazon-kinesis\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - AWS\n  - Streaming\n  - Kinesis\n  - Cost Management\ndescription: 'FOCUS-aligned FinOps for Amazon Kinesis Data Streams: per-GB ingest/retrieval and per-shard-hour\n  charges across On-Demand and Provisioned modes, with separately metered Enhanced Fan-Out, extended\n  retention, and long-term storage.'\nsources:\n  - https://aws.amazon.com/kinesis/data-streams/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Amazon Web Services, Inc.\nserviceCategory: Analytics / Streaming\nbillingModel:\n  pricingCategory: Pay-As-You-Go\n  billingFrequency:\
-  \ Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\nfocusColumns:\n  ServiceName: Amazon Kinesis Data Streams\n  ServiceCategory: Analytics\n  ServiceSubcategory: Streaming\n  ProviderName: AWS\n  PublisherName: Amazon Web Services, Inc.\n  InvoiceIssuerName: Amazon Web Services, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: data_ingested_gb\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - region\n      - stream_name\n      - capacity_mode\n  - name: data_retrieved_gb\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - region\n      - stream_name\n      - consumer_type\n  - name: shard_hours\n    unit: shard-hour\n    aggregation: sum\n    dimensions:\n      - region\n      - stream_name\n  - name: stream_hours\n    unit: stream-hour\n    aggregation: sum\n    dimensions:\n      - region\n      - stream_name\n      - capacity_mode\n  - name: put_payload_units\n\
-  \    unit: PUT-payload-unit\n    aggregation: sum\n    dimensions:\n      - region\n      - stream_name\n  - name: efo_consumer_shard_hours\n    unit: consumer-shard-hour\n    aggregation: sum\n    dimensions:\n      - region\n      - stream_name\n      - consumer_arn\n  - name: long_term_storage_gb_month\n    unit: GB-month\n    aggregation: sum\n    dimensions:\n      - region\n      - stream_name\nprinciples:\n  - name: Visibility\n    description: Use CloudWatch Kinesis metrics (IncomingBytes, IncomingRecords, GetRecords.IteratorAgeMilliseconds)\n      and the AWS CUR / FOCUS export for per-stream cost.\n  - name: Allocation\n    description: Tag streams with Environment, Team, Pipeline; enable cost allocation tags in Billing.\n  - name: Optimization\n    description: Choose On-Demand for spiky workloads, Provisioned for steady throughput; aggregate small\n      records via KPL to reduce PUT payload units; size retention to match consumer SLA; consider On-Demand\n      Advantage at\
-  \ over 25 MB/s baseline.\n  - name: Accountability\n    description: Set AWS Budgets per stream tag, alert on iterator-age (consumer lag), and review monthly\n      shard utilization for right-sizing.\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n  - name: Amazon Web Services\n    email: support@aws.amazon.com\n    url: https://aws.amazon.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Amazon Kinesis\nproviderId: amazon-kinesis\npublisherName: Amazon Kinesis\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Big Data\n  - Data Processing\n  - Real-Time\n  - Streaming\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Amazon Kinesis API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Amazon Kinesis\n  ServiceCategory: Developer Tools / API\n  ProviderName: Amazon Kinesis\n  PublisherName: Amazon Kinesis\n  InvoiceIssuerName: Amazon Kinesis\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Amazon Kinesis Data Streams\n    baseURL: https://kinesis.amazonaws.com\n    tags:\n      - Data Ingestion\n      - Real-Time\n      - Streams\n    serviceName: Amazon Kinesis Data Streams\n    serviceCategory: API\n  - name: Amazon Data Firehose\n    baseURL: https://firehose.amazonaws.com\n    tags:\n      - Data Loading\n      - ETL\n      - Streaming\n    serviceName: Amazon Data Firehose\n    serviceCategory: API\n  - name: Amazon Managed Service for Apache Flink\n    baseURL: https://kinesisanalytics.amazonaws.com\n    tags:\n      - Analytics\n      - Apache Flink\n      - SQL\n      - Stream Processing\n    serviceName: Amazon Managed Service for Apache Flink\n\
+  \    serviceCategory: API\n  - name: Amazon Kinesis Video Streams\n    baseURL: https://kinesisvideo.amazonaws.com\n    tags:\n      - IoT\n      - Machine Learning\n      - Streaming\n      - Video\n    serviceName: Amazon Kinesis Video Streams\n    serviceCategory: API\n  - name: Amazon Kinesis Video Streams Media\n    baseURL: https://kinesisvideo.amazonaws.com\n    tags:\n      - Media\n      - Real-Time\n      - Streaming\n      - Video\n    serviceName: Amazon Kinesis Video Streams Media\n    serviceCategory: API\n  - name: Amazon Kinesis Video Streams Archived Media\n    baseURL: https://kinesisvideo.amazonaws.com\n    tags:\n      - Archived Media\n      - DASH\n      - HLS\n      - Playback\n      - Video\n    serviceName: Amazon Kinesis Video Streams Archived Media\n    serviceCategory: API\n  - name: Amazon Kinesis Video Signaling Channels\n    baseURL: https://kinesisvideo.amazonaws.com\n    tags:\n      - Real-Time\n      - Signaling\n      - Video\n      - WebRTC\n    serviceName:\
+  \ Amazon Kinesis Video Signaling Channels\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    url: http://apievangelist.com\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/amazon-kinesis/refs/heads/main/finops/amazon-kinesis-finops.yml
-sources:
-- https://aws.amazon.com/kinesis/data-streams/pricing/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Analytics
+- Big Data
+- Data Processing
+- Real-Time
 - Streaming
-- Kinesis
+- FinOps
 - Cost Management
+- FOCUS
 ---

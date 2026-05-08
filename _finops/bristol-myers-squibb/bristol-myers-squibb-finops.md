@@ -7,59 +7,81 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Agreement
+  billingFrequency: Monthly
   chargeCategories:
-  - Adjustment
+  - Usage
+  - Purchase
   - Tax
-  pricingCategory: Research Collaboration
-description: 'FOCUS-aligned FinOps for Bristol Myers Squibb: not a commercial API publisher. Programmatic surfaces (Medical Information portal, BMS Study Connect, Business Development, data sharing) are accessed under research and partnership agreements. Cost is governed by the underlying collaboration contract, not metered API spend.'
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Bristol Myers Squibb API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Bristol-Myers Squibb Company
-  PricingCategory: Other
-  PricingUnit: agreement
+  ChargeCategory: Usage
+  InvoiceIssuerName: Bristol Myers Squibb
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Bristol Myers Squibb
-  PublisherName: Bristol-Myers Squibb Company
-  ServiceCategory: Pharmaceutical
+  PublisherName: Bristol Myers Squibb
+  ServiceCategory: Developer Tools / API
   ServiceName: Bristol Myers Squibb
 layout: finops
 meters:
-- aggregation: count
-  description: Active research / partnership / data sharing agreement between BMS and the consuming organization.
-  dimensions:
-  - program
-  - therapeutic_area
-  name: collaboration_agreement
-  unit: agreement
 - aggregation: sum
-  description: Independent researcher data sharing requests submitted and approved.
+  description: Count of billable API requests
   dimensions:
-  - therapeutic_area
-  - study
-  name: data_sharing_request
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Bristol Myers Squibb Finops
 provider_name: Bristol Myers Squibb
 provider_slug: bristol-myers-squibb
-publisher_name: Bristol-Myers Squibb Company
-service_category: Pharmaceutical
+publisher_name: Bristol Myers Squibb
+service_category: API
 slug: bristol-myers-squibb-finops
 source_filename: bristol-myers-squibb-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.bms.com/researchers-and-partners.html
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Bristol Myers Squibb\nproviderId: bristol-myers-squibb\npublisherName: Bristol-Myers Squibb Company\nserviceCategory: Pharmaceutical\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Pharmaceutical\n  - Biopharmaceutical\n  - Clinical Trials\n  - Digital Health\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Bristol Myers Squibb: not a commercial API publisher. Programmatic\n  surfaces (Medical Information portal, BMS Study Connect, Business Development, data sharing) are accessed\n  under research and partnership agreements. Cost is governed by the underlying collaboration contract,\n  not metered API spend.'\n\
-  sources:\n  - https://www.bms.com/researchers-and-partners.html\nnotes: BMS is not billed as an API service. Reconcile against the relevant research collaboration / partnership\n  agreement for any cost or commitment terms.\nbillingModel:\n  pricingCategory: Research Collaboration\n  billingFrequency: Per-Agreement\n  billingCurrency: USD\n  chargeCategories:\n    - Adjustment\n    - Tax\nfocusColumns:\n  ServiceName: Bristol Myers Squibb\n  ServiceCategory: Pharmaceutical\n  ProviderName: Bristol Myers Squibb\n  PublisherName: Bristol-Myers Squibb Company\n  InvoiceIssuerName: Bristol-Myers Squibb Company\n  BillingCurrency: USD\n  PricingCategory: Other\n  PricingUnit: agreement\nmeters:\n  - name: collaboration_agreement\n    description: Active research / partnership / data sharing agreement between BMS and the consuming\n      organization.\n    unit: agreement\n    aggregation: count\n    dimensions:\n      - program\n      - therapeutic_area\n  - name: data_sharing_request\n   \
-  \ description: Independent researcher data sharing requests submitted and approved.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - therapeutic_area\n      - study\nprinciples:\n  - name: Visibility\n    description: Track active collaboration agreements, scope of data shared, and reporting deliverables\n      under each agreement; reconcile internal usage against contract terms.\n  - name: Allocation\n    description: Allocate program costs to therapeutic-area research budgets and to the partnerships /\n      business development function rather than to engineering platform cost.\n  - name: Optimization\n    description: Consolidate data sharing requests across teams, reuse anonymized study data where contract\n      terms allow, and align renewal cadence with research milestones.\n  - name: Accountability\n    description: Designate a research / partnership owner for each BMS agreement; track deliverables,\n      data-sharing scope, and contractual obligations on a\
-  \ defined cadence.\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Bristol Myers Squibb\nproviderId: bristol-myers-squibb\npublisherName: Bristol Myers Squibb\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Pharmaceutical\n  - Biopharmaceutical\n  - Oncology\n  - Immunology\n  - Cardiovascular\n  - Clinical Trials\n  - Digital Health\n  - Fortune 500\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Bristol Myers Squibb API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and\
+  \ finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud\
+  \ Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Bristol Myers Squibb\n  ServiceCategory: Developer Tools / API\n  ProviderName: Bristol Myers Squibb\n  PublisherName: Bristol Myers Squibb\n  InvoiceIssuerName: Bristol Myers Squibb\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n\
+  \      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: BMS Medical Information Portal\n    baseURL: ''\n    tags:\n      - Medical Information\n      - Healthcare Providers\n      - Clinical Data\n    serviceName: BMS Medical Information Portal\n    serviceCategory: API\n  - name: BMS Study Connect\n    baseURL: ''\n    tags:\n      - Clinical Trials\n      - Patient Recruitment\n      - Research\n    serviceName: BMS Study Connect\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n\
+  \    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/bristol-myers-squibb/refs/heads/main/finops/bristol-myers-squibb-finops.yml
-sources:
-- https://www.bms.com/researchers-and-partners.html
+sources: []
 specification: FinOps Framework
 tags:
 - Pharmaceutical
 - Biopharmaceutical
+- Oncology
+- Immunology
+- Cardiovascular
 - Clinical Trials
 - Digital Health
+- Fortune 500
 - FinOps
+- Cost Management
 - FOCUS
 ---

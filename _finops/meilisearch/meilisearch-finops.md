@@ -8,45 +8,76 @@ aligned_with:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Subscription with Usage or Resource Pricing
-description: FOCUS-aligned FinOps for Meilisearch.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Meilisearch API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Meilisearch
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Meilisearch
   PublisherName: Meilisearch
-  ServiceCategory: Search
+  ServiceCategory: Developer Tools / API
   ServiceName: Meilisearch
 layout: finops
 meters:
 - aggregation: sum
-  name: search_queries
-  unit: query
-- aggregation: max
-  name: stored_documents
-  unit: document-month
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  name: compute_resources
-  unit: resource-hour
-- aggregation: max
-  name: storage
-  unit: GB-month
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Meilisearch Finops
 provider_name: Meilisearch
 provider_slug: meilisearch
 publisher_name: Meilisearch
-service_category: Search
+service_category: API
 slug: meilisearch-finops
 source_filename: meilisearch-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.meilisearch.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Meilisearch\nproviderId: meilisearch\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Search\ndescription: FOCUS-aligned FinOps for Meilisearch.\nsources:\n  - https://www.meilisearch.com/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Meilisearch\nserviceCategory: Search\nbillingModel:\n  pricingCategory: Subscription with Usage or Resource Pricing\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Meilisearch\n  ServiceCategory: Search\n  ProviderName: Meilisearch\n  PublisherName: Meilisearch\n  BillingCurrency: USD\nmeters:\n  - name: search_queries\n    unit: query\n    aggregation:\
-  \ sum\n  - name: stored_documents\n    unit: document-month\n    aggregation: max\n  - name: compute_resources\n    unit: resource-hour\n    aggregation: sum\n  - name: storage\n    unit: GB-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track Meilisearch consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Meilisearch\nproviderId: meilisearch\npublisherName: Meilisearch\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI Search\n  - Full-Text Search\n  - Hybrid Search\n  - Open Source\n  - Search\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Meilisearch API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
+  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Meilisearch\n  ServiceCategory: Developer Tools / API\n  ProviderName: Meilisearch\n  PublisherName: Meilisearch\n  InvoiceIssuerName: Meilisearch\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Meilisearch API\n    baseURL: https://localhost:7700\n    tags:\n      - Documents\n      - Indexing\n      - Search\n    serviceName: Meilisearch API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/meilisearch/refs/heads/main/finops/meilisearch-finops.yml
-sources:
-- https://www.meilisearch.com/pricing
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- AI Search
+- Full-Text Search
+- Hybrid Search
+- Open Source
 - Search
+- FinOps
+- Cost Management
+- FOCUS
 ---

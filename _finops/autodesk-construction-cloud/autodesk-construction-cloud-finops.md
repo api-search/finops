@@ -19,87 +19,83 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/autodesk-construction-cloud/refs/heads/main/openapi/acc-issues-openapi.yml
 billing_model:
-  billingCurrency: USD (settlement varies)
-  billingFrequency: Annual
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Subscription (Per-User / Per-Project)
-description: FOCUS-aligned FinOps for Autodesk Construction Cloud — per-user / per-project subscription bundles (Model Management, Preconstruction, Construction Operations) plus standalone products (Build, Docs, BIM Collaborate Pro, Takeoff, Cost Management). API access is bundled with the underlying ACC product entitlement; no separate per-API metering. Storage in Autodesk Docs counts toward project entitlements.
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Autodesk Construction Cloud API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Autodesk, Inc.
-  PricingCategory: Subscription
-  ProviderName: Autodesk
-  PublisherName: Autodesk, Inc.
-  ServiceCategory: Construction Software
+  ChargeCategory: Usage
+  InvoiceIssuerName: Autodesk Construction Cloud
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Autodesk Construction Cloud
+  PublisherName: Autodesk Construction Cloud
+  ServiceCategory: Developer Tools / API
   ServiceName: Autodesk Construction Cloud
-  ServiceSubcategory: Project Management & Field Execution
 layout: finops
 meters:
-- aggregation: max
-  description: Per-user ACC product subscriptions (Build, Docs, BIM Collaborate Pro, etc.)
-  dimensions:
-  - product
-  - bundle
-  - hub
-  name: acc_user_seats
-  unit: seat-month
-- aggregation: max
-  description: Active ACC projects under the account
-  dimensions:
-  - hub
-  - project_type
-  name: acc_project_count
-  unit: project
-- aggregation: max
-  description: Project storage consumed in Autodesk Docs / BIM 360 Docs
-  dimensions:
-  - hub
-  - project
-  name: acc_storage
-  unit: GB-month
 - aggregation: sum
-  description: ACC API call activity — included with product entitlement, not separately billed
+  description: Count of billable API requests
   dimensions:
   - api
-  - app
-  - project
-  name: acc_api_calls
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: ACC Data Connector bulk-export jobs run
+  description: Bytes returned over the network in API responses
   dimensions:
-  - module
-  - project
-  name: data_connector_exports
-  unit: job
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Autodesk Construction Cloud Finops
 provider_name: Autodesk Construction Cloud
 provider_slug: autodesk-construction-cloud
-publisher_name: Autodesk, Inc.
-service_category: Construction Software / Project Management
+publisher_name: Autodesk Construction Cloud
+service_category: API
 slug: autodesk-construction-cloud-finops
 source_filename: autodesk-construction-cloud-finops.yml
 source_heading: FinOps Profile
-source_url: https://construction.autodesk.com/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Autodesk Construction Cloud\nproviderId: autodesk-construction-cloud\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Construction\n  - BIM\n  - Project Management\n  - AEC\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for Autodesk Construction Cloud — per-user / per-project subscription\n  bundles (Model Management, Preconstruction, Construction Operations) plus standalone products\n  (Build, Docs, BIM Collaborate Pro, Takeoff, Cost Management). API access is bundled with the\n  underlying ACC product entitlement; no separate per-API metering. Storage in Autodesk Docs counts\n  toward project entitlements.\nsources:\n  - https://construction.autodesk.com/pricing/\n  - https://aps.autodesk.com/en/docs/acc/v1/overview/\n  - https://focus.finops.org/focus-specification/v1-3/\nnotes: ACC pricing is quote-based; per-seat list\
-  \ rates not publicly published. Meters below describe\n  the entitlement axes for showback rather than direct invoice lines.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Autodesk, Inc.\nserviceCategory: Construction Software / Project Management\nbillingModel:\n  pricingCategory: Subscription (Per-User / Per-Project)\n  billingFrequency: Annual\n  billingCurrency: USD (settlement varies)\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Autodesk Construction Cloud\n  ServiceCategory: Construction Software\n  ServiceSubcategory: Project Management & Field Execution\n  ProviderName: Autodesk\n  PublisherName: Autodesk, Inc.\n  InvoiceIssuerName: Autodesk, Inc.\n  BillingCurrency: USD\n  PricingCategory: Subscription\nmeters:\n  - name: acc_user_seats\n\
-  \    description: Per-user ACC product subscriptions (Build, Docs, BIM Collaborate Pro, etc.)\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - product\n      - bundle\n      - hub\n  - name: acc_project_count\n    description: Active ACC projects under the account\n    unit: project\n    aggregation: max\n    dimensions:\n      - hub\n      - project_type\n  - name: acc_storage\n    description: Project storage consumed in Autodesk Docs / BIM 360 Docs\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - hub\n      - project\n  - name: acc_api_calls\n    description: ACC API call activity — included with product entitlement, not separately billed\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - app\n      - project\n  - name: data_connector_exports\n    description: ACC Data Connector bulk-export jobs run\n    unit: job\n    aggregation: sum\n    dimensions:\n      - module\n      - project\nprinciples:\n  - name: Visibility\n\
-  \    description: Use the Autodesk Account portal and ACC Admin reports to surface seat utilization,\n      active project count, and storage per hub. Pair with the ACC Data Connector to export usage\n      data for showback.\n  - name: Allocation\n    description: Allocate ACC seats and project counts by ACC hub, project owner, and division using\n      the ACC company directory and project metadata; tag APS apps by integration owner.\n  - name: Optimization\n    description: Reclaim inactive ACC seats at renewal; consolidate dormant projects; archive completed\n      projects from active storage. For data-heavy integrations, schedule Data Connector exports off-peak\n      to avoid contention with interactive users.\n  - name: Accountability\n    description: Construction IT or VDC/BIM-platform team owns ACC entitlement; review seat utilization\n      quarterly. Project executives own per-project storage and active-project counts.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Autodesk Construction Cloud\nproviderId: autodesk-construction-cloud\npublisherName: Autodesk Construction Cloud\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Construction\n  - BIM\n  - Project Management\n  - AEC\n  - CAD\n  - Architecture\n  - Engineering\n  - Field Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Autodesk Construction Cloud API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and\
+  \ finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud\
+  \ Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Autodesk Construction Cloud\n  ServiceCategory: Developer Tools / API\n  ProviderName: Autodesk Construction Cloud\n  PublisherName: Autodesk Construction Cloud\n  InvoiceIssuerName: Autodesk Construction Cloud\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n\
+  \      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Autodesk Construction Cloud Admin API\n    baseURL: https://developer.api.autodesk.com\n    tags:\n      - ACC\n      - Administration\n      - BIM\n      - Construction\n      - Project Management\n    serviceName: Autodesk Construction Cloud Admin API\n    serviceCategory: API\n  - name: Autodesk Construction Cloud Issues API\n    baseURL: https://developer.api.autodesk.com\n    tags:\n      - BIM\n      - Construction\n      - Field Management\n      - Issues\n      - Quality\n    serviceName: Autodesk Construction\
+  \ Cloud Issues API\n    serviceCategory: API\n  - name: Autodesk Construction Cloud Cost Management API\n    baseURL: https://developer.api.autodesk.com\n    tags:\n      - ACC\n      - Budget\n      - Construction\n      - Contracts\n      - Cost Management\n    serviceName: Autodesk Construction Cloud Cost Management API\n    serviceCategory: API\n  - name: Autodesk Construction Cloud Model Coordination API\n    baseURL: https://developer.api.autodesk.com\n    tags:\n      - BIM\n      - Clash Detection\n      - Construction\n      - IFC\n      - Model Coordination\n    serviceName: Autodesk Construction Cloud Model Coordination API\n    serviceCategory: API\n  - name: Autodesk Construction Cloud RFIs API\n    baseURL: https://developer.api.autodesk.com\n    tags:\n      - ACC\n      - Construction\n      - Document Management\n      - RFI\n    serviceName: Autodesk Construction Cloud RFIs API\n    serviceCategory: API\n  - name: Autodesk Construction Cloud Submittals API\n    baseURL:\
+  \ https://developer.api.autodesk.com\n    tags:\n      - ACC\n      - Construction\n      - Document Management\n      - Submittals\n    serviceName: Autodesk Construction Cloud Submittals API\n    serviceCategory: API\n  - name: Autodesk Construction Cloud Data Connector API\n    baseURL: https://developer.api.autodesk.com\n    tags:\n      - ACC\n      - Analytics\n      - Construction\n      - Data Export\n    serviceName: Autodesk Construction Cloud Data Connector API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/autodesk-construction-cloud/refs/heads/main/finops/autodesk-construction-cloud-finops.yml
-sources:
-- https://construction.autodesk.com/pricing/
-- https://aps.autodesk.com/en/docs/acc/v1/overview/
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
 - Construction
 - BIM
 - Project Management
 - AEC
+- CAD
+- Architecture
+- Engineering
+- Field Management
 - FinOps
+- Cost Management
 - FOCUS
 ---

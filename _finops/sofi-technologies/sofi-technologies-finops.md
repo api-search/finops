@@ -7,39 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Product
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Not Applicable (Consumer Banking)
-description: FOCUS-aligned FinOps placeholder for SoFi Technologies. SoFi is a B2C banking, lending, and investing platform with no public developer billing surface; FOCUS columns describe the corporate publisher only.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the SoFi Technologies API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: SoFi Bank, N.A.
+  ChargeCategory: Usage
+  InvoiceIssuerName: SoFi Technologies
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: SoFi Technologies
-  PublisherName: SoFi Technologies, Inc.
-  ServiceCategory: Consumer Banking and Lending
-  ServiceName: SoFi Member Banking and Lending
+  PublisherName: SoFi Technologies
+  ServiceCategory: Developer Tools / API
+  ServiceName: SoFi Technologies
 layout: finops
-meters: []
+meters:
+- aggregation: sum
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Sofi Technologies Finops
 provider_name: SoFi Technologies
 provider_slug: sofi-technologies
-publisher_name: SoFi Technologies, Inc.
-service_category: Consumer Banking and Lending
+publisher_name: SoFi Technologies
+service_category: API
 slug: sofi-technologies-finops
 source_filename: sofi-technologies-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.sofi.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: SoFi Technologies\nproviderId: sofi-technologies\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Fintech\n  - Banking\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps placeholder for SoFi Technologies. SoFi is a B2C banking, lending,\n  and investing platform with no public developer billing surface; FOCUS columns describe the corporate\n  publisher only.'\nsources:\n  - https://www.sofi.com\nnotes: SoFi Technologies does not expose a public developer API or usage-based billing surface. Meters,\n  unit prices, and ChargeCategory mappings cannot be reconciled because there are no published API consumption\n  units. Updated only if SoFi publishes a partner/developer pricing page.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
-  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: SoFi Technologies, Inc.\nserviceCategory: Consumer Banking and Lending\nbillingModel:\n  pricingCategory: Not Applicable (Consumer Banking)\n  billingFrequency: Per-Product\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: SoFi Member Banking and Lending\n  ServiceCategory: Consumer Banking and Lending\n  ProviderName: SoFi Technologies\n  PublisherName: SoFi Technologies, Inc.\n  InvoiceIssuerName: SoFi Bank, N.A.\n  BillingCurrency: USD\nmeters: []\nprinciples:\n  - name: Visibility\n    description: SoFi member-facing consumption (interest, fees, investing activity) is surfaced through\n      the SoFi mobile/web app and member statements, not through a developer billing API.\n  - name: Allocation\n    description: Not applicable - SoFi is a direct-to-consumer bank without team/cost-center allocation\n      semantics on a developer surface.\n  - name: Optimization\n\
-  \    description: Not applicable at the API/FinOps layer; product-level optimization (rate shopping, fee\n      avoidance) is the member's responsibility.\n  - name: Accountability\n    description: Member-level accountability is governed by the SoFi member agreement, not by a developer/tenant\n      contract.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: SoFi Technologies\nproviderId: sofi-technologies\npublisherName: SoFi Technologies\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Fintech\n  - Personal Finance\n  - Banking\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the SoFi Technologies API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: SoFi Technologies\n  ServiceCategory: Developer Tools / API\n  ProviderName: SoFi Technologies\n  PublisherName: SoFi Technologies\n  InvoiceIssuerName: SoFi Technologies\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: SoFi Technologies API\n    baseURL: https://api.sofi.com\n    tags:\n      - Fintech\n      - Personal Finance\n      - Banking\n    serviceName: SoFi Technologies API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sofi-technologies/refs/heads/main/finops/sofi-technologies-finops.yml
-sources:
-- https://www.sofi.com
+sources: []
 specification: FinOps Framework
 tags:
 - Fintech
+- Personal Finance
 - Banking
 - FinOps
+- Cost Management
 - FOCUS
 ---

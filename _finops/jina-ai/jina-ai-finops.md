@@ -26,72 +26,78 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/jina-ai/refs/heads/main/openapi/jina-ai-reranker-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: On-Demand
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
-  - Refund
+  - Purchase
+  - Tax
   - Credit
-  pricingCategory: Token-Based Usage
-description: 'FOCUS-aligned FinOps for Jina AI: token-based pay-as-you-go metering across Embeddings, Reranker, Reader, Classifier, Segmenter, and DeepSearch. Token balance on the API key drives both cost and the rate-limit tier (Free / Paid / Premium). Cloud-marketplace procurement available via AWS, Azure, GCP.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Jina AI API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Jina AI GmbH
+  ChargeCategory: Usage
+  InvoiceIssuerName: Jina AI
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Jina AI
-  PublisherName: Jina AI GmbH
-  ServiceCategory: AI Infrastructure
+  PublisherName: Jina AI
+  ServiceCategory: Developer Tools / API
   ServiceName: Jina AI
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - service
-  - model
-  - api_key
-  name: tokens_consumed
-  unit: token
-- aggregation: sum
-  dimensions:
-  - model
-  - input_modality
-  name: embedding_requests
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - model
-  name: reranker_requests
-  unit: request
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - mode
-  name: reader_requests
-  unit: request
-- aggregation: max
-  dimensions:
-  - api_key
-  name: token_balance
-  unit: token
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Jina Ai Finops
 provider_name: Jina AI
 provider_slug: jina-ai
-publisher_name: Jina AI GmbH
-service_category: AI Infrastructure
+publisher_name: Jina AI
+service_category: API
 slug: jina-ai-finops
 source_filename: jina-ai-finops.yml
 source_heading: FinOps Profile
-source_url: https://jina.ai/embeddings/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Jina AI\nproviderId: jina-ai\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - AI\n  - Embeddings\n  - LLM\ndescription: 'FOCUS-aligned FinOps for Jina AI: token-based pay-as-you-go metering across Embeddings,\n  Reranker, Reader, Classifier, Segmenter, and DeepSearch. Token balance on the API key drives both\n  cost and the rate-limit tier (Free / Paid / Premium). Cloud-marketplace procurement available via\n  AWS, Azure, GCP.'\nsources:\n  - https://jina.ai/embeddings/\n  - https://jina.ai/api-dashboard/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Jina AI GmbH\nserviceCategory: AI Infrastructure\nbillingModel:\n  pricingCategory:\
-  \ Token-Based Usage\n  billingFrequency: On-Demand\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Refund\n    - Credit\nfocusColumns:\n  ServiceName: Jina AI\n  ServiceCategory: AI Infrastructure\n  ProviderName: Jina AI\n  PublisherName: Jina AI GmbH\n  InvoiceIssuerName: Jina AI GmbH\n  BillingCurrency: USD\nmeters:\n  - name: tokens_consumed\n    unit: token\n    aggregation: sum\n    dimensions:\n      - service\n      - model\n      - api_key\n  - name: embedding_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - model\n      - input_modality\n  - name: reranker_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - model\n  - name: reader_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - mode\n  - name: token_balance\n    unit: token\n    aggregation: max\n    dimensions:\n      - api_key\nprinciples:\n  - name: Visibility\n    description: Use the Jina API Dashboard to monitor\
-  \ remaining token balance per API key and per-service\n      consumption; export usage to your data warehouse for FOCUS-aligned reporting.\n  - name: Allocation\n    description: Issue separate API keys per team / product / environment so token consumption maps\n      cleanly to a chargeback dimension; tag application traces with the key identifier.\n  - name: Optimization\n    description: Choose the smallest model that hits quality bar (e.g., jina-embeddings-v2 vs v3),\n      truncate input text before embedding, cache embeddings of stable corpora, batch reranker queries,\n      and use the Reader caching path (r.jina.ai) for stable URLs.\n  - name: Accountability\n    description: AI / Search platform owner reconciles monthly Stripe invoices (or marketplace bills)\n      against forecasted token spend; sets balance-low alerts on production keys.\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Jina AI\nproviderId: jina-ai\npublisherName: Jina AI\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - Embeddings\n  - Machine Learning\n  - Reranking\n  - Search\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Jina AI API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Jina AI\n  ServiceCategory: Developer Tools / API\n  ProviderName: Jina AI\n  PublisherName: Jina AI\n  InvoiceIssuerName: Jina AI\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      -\
+  \ api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Jina AI Embeddings API\n    baseURL: https://api.jina.ai/v1\n    tags:\n      - Embeddings\n      - Multimodal\n      - Text\n    serviceName: Jina AI Embeddings API\n    serviceCategory: API\n  - name: Jina AI Reader API\n    baseURL: https://r.jina.ai\n    tags:\n      - Content Extraction\n      - LLM\n      - Web Reading\n    serviceName: Jina AI Reader API\n    serviceCategory: API\n  - name: Jina AI Reranker API\n    baseURL: https://api.jina.ai/v1\n    tags:\n      - Relevance\n      - Reranking\n      - Search\n    serviceName: Jina AI Reranker API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n\
+  \    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/jina-ai/refs/heads/main/finops/jina-ai-finops.yml
-sources:
-- https://jina.ai/embeddings/
-- https://jina.ai/api-dashboard/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - AI
 - Embeddings
-- LLM
+- Machine Learning
+- Reranking
+- Search
+- FinOps
+- Cost Management
+- FOCUS
 ---

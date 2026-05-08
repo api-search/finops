@@ -19,70 +19,79 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/contour/refs/heads/main/openapi/contour-gateway-openapi.yml
 billing_model:
-  billingCurrency: N/A
-  billingFrequency: N/A
-  chargeCategories: []
-  chargeFrequency: N/A
-  pricingCategory: Open Source (No Charge)
-description: FinOps shape for Contour - an Apache 2.0 / CNCF Incubating open-source project. There is no upstream Contour invoice. Operator FinOps cost is borne by the underlying Kubernetes platform (compute, network egress, observability) and any commercial Kubernetes-distribution support contract the operator chooses to layer on.
+  billingCurrency: USD
+  billingFrequency: Monthly
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Contour API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
-  BillingCurrency: N/A
-  ChargeCategory: N/A
-  PricingCategory: Free
-  ProviderName: Project Contour
-  PublisherName: Project Contour Authors
-  ServiceCategory: Open Source Networking
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Contour
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Contour
+  PublisherName: Contour
+  ServiceCategory: Developer Tools / API
   ServiceName: Contour
 layout: finops
 meters:
 - aggregation: sum
-  description: Contour control-plane pods running in the cluster (compute time consumed, billed by the underlying Kubernetes platform)
+  description: Count of billable API requests
   dimensions:
-  - cluster
-  - namespace
-  name: contour_pods
-  unit: pod-hour
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Envoy data-plane pods running as DaemonSet / Deployment under Contour
+  description: Bytes returned over the network in API responses
   dimensions:
-  - cluster
-  - node_pool
-  name: envoy_pods
-  unit: pod-hour
-- aggregation: sum
-  description: HTTP / TLS ingress traffic processed by Envoy (drives load-balancer and egress charges on the underlying cloud)
-  dimensions:
-  - cluster
-  - vhost
-  - direction
-  name: ingress_traffic
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Contour Finops
 provider_name: Contour
 provider_slug: contour
-publisher_name: Project Contour Authors
-service_category: Open Source Networking
+publisher_name: Contour
+service_category: API
 slug: contour-finops
 source_filename: contour-finops.yml
 source_heading: FinOps Profile
-source_url: https://projectcontour.io/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Contour\nproviderId: contour\npublisherName: Project Contour Authors\nserviceCategory: Open Source Networking\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Envoy\n  - Ingress Controller\n  - Kubernetes\n  - Networking\n  - Open Source\n  - Proxy\n  - FinOps\n  - FOCUS\ndescription: FinOps shape for Contour - an Apache 2.0 / CNCF Incubating open-source project. There\n  is no upstream Contour invoice. Operator FinOps cost is borne by the underlying Kubernetes platform\n  (compute, network egress, observability) and any commercial Kubernetes-distribution support contract\n  the operator chooses to layer on.\nsources:\n\
-  \  - https://projectcontour.io/\n  - https://github.com/projectcontour/contour\n  - https://www.cncf.io/projects/contour/\nbillingModel:\n  pricingCategory: Open Source (No Charge)\n  billingFrequency: N/A\n  billingCurrency: N/A\n  chargeCategories: []\n  chargeFrequency: N/A\nfocusColumns:\n  ServiceName: Contour\n  ServiceCategory: Open Source Networking\n  ProviderName: Project Contour\n  PublisherName: Project Contour Authors\n  PricingCategory: Free\n  BillingCurrency: N/A\n  ChargeCategory: N/A\nmeters:\n  - name: contour_pods\n    description: Contour control-plane pods running in the cluster (compute time consumed, billed by\n      the underlying Kubernetes platform)\n    unit: pod-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - namespace\n  - name: envoy_pods\n    description: Envoy data-plane pods running as DaemonSet / Deployment under Contour\n    unit: pod-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - node_pool\n  - name: ingress_traffic\n\
-  \    description: HTTP / TLS ingress traffic processed by Envoy (drives load-balancer and egress charges\n      on the underlying cloud)\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - cluster\n      - vhost\n      - direction\nprinciples:\n  - name: Visibility\n    description: Contour itself is free; observe cost through the underlying Kubernetes / cloud provider\n      using Envoy's Prometheus metrics (envoy_cluster_upstream_rq, response sizes) joined to FOCUS-\n      aligned cluster billing.\n  - name: Allocation\n    description: Allocate the cost of Contour pods, Envoy pods, and load-balancer / egress traffic\n      to teams via Kubernetes namespace and HTTPProxy ownership labels. Treat each HTTPProxy as a chargeback\n      unit.\n  - name: Optimization\n    description: Right-size Envoy DaemonSet vs Deployment topology; enable HTTP/2 and connection pooling;\n      use Envoy local rate limiting to curb runaway traffic before it triggers egress / load-balancer\n    \
-  \  cost; consolidate low-traffic vhosts onto shared Contour deployments.\n  - name: Accountability\n    description: Assign each HTTPProxy to a team owner via Kubernetes labels; review traffic spikes\n      and 5xx rates against budgeted egress; treat operational toil on Contour upgrades as a real cost\n      input.\nnotes: Contour is open-source with no upstream commercial billing. FinOps for Contour is really FinOps\n  for the Kubernetes platform that hosts it - compute, load balancers, and egress. Reconciled is false\n  because there is no provider-issued invoice or rate card to reconcile against.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Contour\nproviderId: contour\npublisherName: Contour\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Envoy\n  - Ingress Controller\n  - Kubernetes\n  - Networking\n  - Proxy\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Contour API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Contour\n  ServiceCategory: Developer Tools / API\n  ProviderName: Contour\n  PublisherName: Contour\n  InvoiceIssuerName: Contour\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Contour HTTPProxy API\n    baseURL: https://projectcontour.io\n    tags:\n      - Custom Resource\n      - HTTPProxy\n      - Ingress\n      - Kubernetes\n      - Routing\n    serviceName: Contour HTTPProxy API\n    serviceCategory: API\n  - name: Contour Gateway API\n    baseURL: https://projectcontour.io\n    tags:\n      - Gateway API\n      - Ingress\n      - Kubernetes\n      - Networking\n      - Routing\n    serviceName: Contour Gateway API\n    serviceCategory: API\n  - name: Contour Kubernetes Ingress API\n    baseURL: https://projectcontour.io\n    tags:\n      - Ingress\n      - Kubernetes\n      - Networking\n      - Routing\n      - Standard API\n    serviceName: Contour Kubernetes Ingress API\n    serviceCategory:\
+  \ API\n  - name: Contour ExtensionService API\n    baseURL: https://projectcontour.io\n    tags:\n      - Authorization\n      - Custom Resource\n      - Extension Service\n      - gRPC\n      - Kubernetes\n    serviceName: Contour ExtensionService API\n    serviceCategory: API\n  - name: Contour Configuration API\n    baseURL: https://projectcontour.io\n    tags:\n      - Configuration\n      - Custom Resource\n      - Kubernetes\n      - Networking\n      - Operator\n    serviceName: Contour Configuration API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/contour/refs/heads/main/finops/contour-finops.yml
-sources:
-- https://projectcontour.io/
-- https://github.com/projectcontour/contour
-- https://www.cncf.io/projects/contour/
+sources: []
 specification: FinOps Framework
 tags:
 - Envoy
 - Ingress Controller
 - Kubernetes
 - Networking
-- Open Source
 - Proxy
 - FinOps
+- Cost Management
 - FOCUS
 ---

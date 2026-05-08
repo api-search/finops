@@ -7,43 +7,80 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Not Applicable
-description: 'FOCUS-aligned FinOps placeholder for Snap-on: not a software / API vendor; tooling and diagnostics products ship as physical hardware plus bundled software, with no public API invoice-line catalog.'
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Snap-on API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Snap-on Incorporated
+  ChargeCategory: Usage
+  InvoiceIssuerName: Snap-on
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Snap-on
-  PublisherName: Snap-on Incorporated
-  ServiceCategory: Tools / Diagnostics
+  PublisherName: Snap-on
+  ServiceCategory: Developer Tools / API
   ServiceName: Snap-on
 layout: finops
 meters:
 - aggregation: sum
-  description: Snap-on does not bill API consumption.
-  dimensions: []
-  name: not_applicable
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Snap On Finops
 provider_name: Snap-on
 provider_slug: snap-on
-publisher_name: Snap-on Incorporated
-service_category: Tools / Diagnostics
+publisher_name: Snap-on
+service_category: API
 slug: snap-on-finops
 source_filename: snap-on-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.snapon.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Snap-on\nproviderId: snap-on\npublisherName: Snap-on Incorporated\nserviceCategory: Tools / Diagnostics\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Tools\n  - Diagnostics\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps placeholder for Snap-on: not a software / API vendor; tooling and\n  diagnostics products ship as physical hardware plus bundled software, with no public API\n  invoice-line catalog.'\nsources:\n  - https://www.snapon.com\nnotes: |\n  Not a software / API vendor. Retained as a placeholder for catalog completeness only.\nbillingModel:\n  pricingCategory: Not Applicable\n  billingFrequency:\
-  \ Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Snap-on\n  ServiceCategory: Tools / Diagnostics\n  ProviderName: Snap-on\n  PublisherName: Snap-on Incorporated\n  InvoiceIssuerName: Snap-on Incorporated\n  BillingCurrency: USD\nmeters:\n  - name: not_applicable\n    description: Snap-on does not bill API consumption.\n    unit: varies\n    aggregation: sum\n    dimensions: []\nprinciples:\n  - name: Visibility\n    description: Not applicable - Snap-on is a physical tool / diagnostics manufacturer, not an API\n      vendor.\n  - name: Allocation\n    description: Not applicable.\n  - name: Optimization\n    description: Not applicable.\n  - name: Accountability\n    description: Not applicable.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Snap-on\nproviderId: snap-on\npublisherName: Snap-on\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Automotive\n  - Diagnostics\n  - Electronic Parts Catalog\n  - Industrial Tools\n  - Manufacturing\n  - Repair Information\n  - Vehicle Repair\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Snap-on API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Snap-on\n  ServiceCategory: Developer Tools / API\n  ProviderName: Snap-on\n  PublisherName: Snap-on\n  InvoiceIssuerName: Snap-on\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in\
+  \ API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Snap-on Electronic Parts Catalog (EPC)\n    baseURL: ''\n    tags:\n      - Automotive\n      - Dealer Management\n      - Electronic Parts Catalog\n      - Parts Ordering\n    serviceName: Snap-on Electronic Parts Catalog (EPC)\n    serviceCategory: API\n  - name: ShopKey Pro Repair Information System\n    baseURL: ''\n    tags:\n      - Automotive\n      - Repair Information\n      - Diagnostics\n      - OEM Data\n    serviceName: ShopKey Pro Repair Information System\n    serviceCategory: API\n  - name: SureTrack Expert Information\n    baseURL: ''\n    tags:\n      - Automotive\n      - Cloud Platform\n      - Diagnostics\n      - Expert Information\n\
+  \    serviceName: SureTrack Expert Information\n    serviceCategory: API\n  - name: Snap-on Diagnostics Software\n    baseURL: ''\n    tags:\n      - Automotive\n      - Diagnostics\n      - OEM Integration\n      - Software\n    serviceName: Snap-on Diagnostics Software\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/snap-on/refs/heads/main/finops/snap-on-finops.yml
-sources:
-- https://www.snapon.com
+sources: []
 specification: FinOps Framework
 tags:
-- Tools
+- Automotive
 - Diagnostics
+- Electronic Parts Catalog
+- Industrial Tools
+- Manufacturing
+- Repair Information
+- Vehicle Repair
 - FinOps
+- Cost Management
 - FOCUS
 ---

@@ -14,80 +14,82 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/aruba/refs/heads/main/openapi/aruba-central-api.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription + Perpetual License
-description: FOCUS-aligned FinOps shape for HPE Aruba Networking APIs — APIs are bundled with subscription licenses (Aruba Central Foundation/Advanced, ClearPass), perpetual hardware purchases (AOS-CX, EdgeConnect), and support contracts. There is no per-API metered billing line.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Aruba API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Hewlett Packard Enterprise
-  PricingCategory: Subscription + Perpetual License
-  ProviderName: HPE Aruba Networking
-  PublisherName: Hewlett Packard Enterprise
-  ServiceCategory: Networking
-  ServiceName: HPE Aruba Networking
-  ServiceSubcategory: Network Management & Security
+  ChargeCategory: Usage
+  InvoiceIssuerName: Aruba
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Aruba
+  PublisherName: Aruba
+  ServiceCategory: Developer Tools / API
+  ServiceName: Aruba
 layout: finops
 meters:
-- aggregation: max
-  description: Aruba Central Foundation/Advanced/Premium device-month subscription
-  dimensions:
-  - tier
-  - device_type
-  - region
-  name: aruba_central_subscription
-  unit: device-month
-- aggregation: max
-  description: ClearPass policy manager licenses (endpoint counts)
-  dimensions:
-  - product
-  - region
-  name: clearpass_license
-  unit: endpoint
-- aggregation: max
-  description: EdgeConnect SD-WAN appliance/site subscription
-  dimensions:
-  - bandwidth_tier
-  - region
-  name: edgeconnect_subscription
-  unit: site-month
 - aggregation: sum
-  description: API call activity — not separately billed; tracked for capacity planning only
+  description: Count of billable API requests
   dimensions:
-  - product
-  - cluster
-  name: api_calls
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Aruba Finops
 provider_name: Aruba
 provider_slug: aruba
-publisher_name: Hewlett Packard Enterprise (HPE Aruba Networking)
-service_category: Networking
+publisher_name: Aruba
+service_category: API
 slug: aruba-finops
 source_filename: aruba-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.arubanetworks.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Aruba\nproviderId: aruba\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Network Management\n  - Networking\n  - SD-WAN\n  - Security\n  - Wireless\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for HPE Aruba Networking APIs — APIs are bundled with subscription\n  licenses (Aruba Central Foundation/Advanced, ClearPass), perpetual hardware purchases (AOS-CX, EdgeConnect),\n  and support contracts. There is no per-API metered billing line.\nsources:\n  - https://www.arubanetworks.com/\n  - https://www.hpe.com/us/en/aruba-networking.html\n  - https://focus.finops.org/focus-specification/v1-3/\nnotes: APIs are not separately metered or invoiced. Cost is allocated via the parent device/subscription\n  SKU. Treat the meters below as proxies for activity tracking rather than billing inputs.\nalignedWith:\n  framework: FinOps\
-  \ Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Hewlett Packard Enterprise (HPE Aruba Networking)\nserviceCategory: Networking\nbillingModel:\n  pricingCategory: Subscription + Perpetual License\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: HPE Aruba Networking\n  ServiceCategory: Networking\n  ServiceSubcategory: Network Management & Security\n  ProviderName: HPE Aruba Networking\n  PublisherName: Hewlett Packard Enterprise\n  InvoiceIssuerName: Hewlett Packard Enterprise\n  BillingCurrency: USD\n  PricingCategory: Subscription + Perpetual License\n  ChargeCategory: Purchase\nmeters:\n  - name: aruba_central_subscription\n    description: Aruba Central Foundation/Advanced/Premium device-month subscription\n    unit: device-month\n\
-  \    aggregation: max\n    dimensions:\n      - tier\n      - device_type\n      - region\n  - name: clearpass_license\n    description: ClearPass policy manager licenses (endpoint counts)\n    unit: endpoint\n    aggregation: max\n    dimensions:\n      - product\n      - region\n  - name: edgeconnect_subscription\n    description: EdgeConnect SD-WAN appliance/site subscription\n    unit: site-month\n    aggregation: max\n    dimensions:\n      - bandwidth_tier\n      - region\n  - name: api_calls\n    description: API call activity — not separately billed; tracked for capacity planning only\n    unit: request\n    aggregation: sum\n    dimensions:\n      - product\n      - cluster\nprinciples:\n  - name: Visibility\n    description: Use HPE GreenLake / Aruba Central usage reports and the per-product invoice line items\n      from HPE to surface the underlying device/subscription costs that fund API access.\n  - name: Allocation\n    description: Allocate Aruba spend by site, business\
-  \ unit, and device group using Aruba Central labels\n      and HPE GreenLake tagging; APIs themselves carry no separate cost line.\n  - name: Optimization\n    description: Right-size Central tiers (Foundation vs Advanced), retire shelfware ClearPass endpoint\n      licenses, and consolidate AirWave instances. API access does not drive cost — device counts and\n      subscription tiers do.\n  - name: Accountability\n    description: Network architects and IT ops own Aruba spend; review device subscriptions quarterly\n      against actual deployed counts in Central inventory.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Aruba\nproviderId: aruba\npublisherName: Aruba\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud\n  - Infrastructure\n  - Network Management\n  - Networking\n  - SD-WAN\n  - Security\n  - Switches\n  - Wireless\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Aruba API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
+  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
+  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Aruba\n  ServiceCategory: Developer Tools / API\n  ProviderName: Aruba\n  PublisherName: Aruba\n  InvoiceIssuerName: Aruba\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n  \
+  \  aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Aruba Central API\n    baseURL: https://apigw-prod2.central.arubanetworks.com\n    tags:\n      - Analytics\n      - Cloud Management\n      - Monitoring\n      - Network Automation\n    serviceName: Aruba Central API\n    serviceCategory: API\n  - name: Aruba ClearPass API\n    baseURL: https://clearpass.example.com/api\n    tags:\n      - Authentication\n      - Authorization\n      - Network Access Control\n      - Policy Management\n    serviceName: Aruba ClearPass API\n    serviceCategory: API\n  - name: Aruba AOS-CX REST API\n    baseURL: ''\n    tags:\n      - Infrastructure\n      - Network Automation\n      - Programmability\n      - Switches\n    serviceName: Aruba AOS-CX\
+  \ REST API\n    serviceCategory: API\n  - name: Aruba EdgeConnect SD-WAN API\n    baseURL: ''\n    tags:\n      - Edge Networking\n      - Orchestrator\n      - SD-WAN\n      - WAN Optimization\n    serviceName: Aruba EdgeConnect SD-WAN API\n    serviceCategory: API\n  - name: Aruba Fabric Composer API\n    baseURL: ''\n    tags:\n      - Data Center\n      - Fabric\n      - Leaf-Spine\n      - Orchestration\n    serviceName: Aruba Fabric Composer API\n    serviceCategory: API\n  - name: Aruba User Experience Insight API\n    baseURL: ''\n    tags:\n      - Monitoring\n      - Network Testing\n      - Sensors\n      - User Experience\n    serviceName: Aruba User Experience Insight API\n    serviceCategory: API\n  - name: Aruba AirWave API\n    baseURL: https://airwave.example.com/api\n    tags:\n      - Monitoring\n      - Network Management\n      - Reporting\n    serviceName: Aruba AirWave API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost\
+  \ / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/aruba/refs/heads/main/finops/aruba-finops.yml
-sources:
-- https://www.arubanetworks.com/
-- https://www.hpe.com/us/en/aruba-networking.html
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
+- Cloud
+- Infrastructure
 - Network Management
 - Networking
 - SD-WAN
 - Security
+- Switches
 - Wireless
 - FinOps
+- Cost Management
 - FOCUS
 ---

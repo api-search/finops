@@ -6,61 +6,76 @@ aligned_with:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
-  billingCurrency: USD/EUR/CHF
-  billingFrequency: Per-Invoice
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription
-description: 'FOCUS-aligned FinOps for Mettler-Toledo: contract-priced industrial/lab instrumentation software with bundled API access. No public pricing surface; cost is captured at the contract line level rather than per-API-call.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Mettler-Toledo International API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Mettler-Toledo International Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Mettler-Toledo International
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Mettler-Toledo International
-  PublisherName: Mettler-Toledo International Inc.
-  ServiceCategory: Industrial / Laboratory Instruments
+  PublisherName: Mettler-Toledo International
+  ServiceCategory: Developer Tools / API
   ServiceName: Mettler-Toledo International
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - product
-  - site
-  name: software_subscription
-  unit: month
-- aggregation: sum
-  dimensions:
-  - product
-  name: instrument_connector_seats
-  unit: seat
-- aggregation: sum
-  dimensions:
-  - product
-  - integration
-  name: api_calls
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Mettler Toledo Finops
 provider_name: Mettler-Toledo International
 provider_slug: mettler-toledo
-publisher_name: Mettler-Toledo International Inc.
-service_category: Industrial / Laboratory Instruments
+publisher_name: Mettler-Toledo International
+service_category: API
 slug: mettler-toledo-finops
 source_filename: mettler-toledo-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.mt.com/us/en/home.html
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Mettler-Toledo International\nproviderId: mettler-toledo\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Laboratory\n  - Instruments\n  - Precision\ndescription: 'FOCUS-aligned FinOps for Mettler-Toledo: contract-priced industrial/lab instrumentation\n  software with bundled API access. No public pricing surface; cost is captured at the contract line\n  level rather than per-API-call.'\nsources:\n  - https://www.mt.com/us/en/home.html\nnotes: No public API pricing surface; FOCUS columns reflect contract-level invoicing rather than usage\n  metering.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Mettler-Toledo International\
-  \ Inc.\nserviceCategory: Industrial / Laboratory Instruments\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Per-Invoice\n  billingCurrency: USD/EUR/CHF\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Mettler-Toledo International\n  ServiceCategory: Industrial / Laboratory Instruments\n  ProviderName: Mettler-Toledo International\n  PublisherName: Mettler-Toledo International Inc.\n  InvoiceIssuerName: Mettler-Toledo International Inc.\n  BillingCurrency: USD\nmeters:\n  - name: software_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\n      - site\n  - name: instrument_connector_seats\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - product\n  - name: api_calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - product\n      - integration\nprinciples:\n  - name: Visibility\n    description: Reconcile Mettler-Toledo invoice line items\
-  \ against site-level usage of LabX, RetailSuite,\n      and instrument connectors; APIs are not metered separately on the invoice.\n  - name: Allocation\n    description: Allocate spend by site, lab, and instrument family using purchase order metadata\n      and contract IDs.\n  - name: Optimization\n    description: Right-size instrument connector seat counts and consolidate site licenses; renegotiate\n      multi-year contracts where instrument footprint is stable.\n  - name: Accountability\n    description: Assign cost ownership to lab/site managers tied to the originating purchase order;\n      review annually at contract renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Mettler-Toledo International\nproviderId: mettler-toledo\npublisherName: Mettler-Toledo International\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Laboratory\n  - Instruments\n  - Precision\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Mettler-Toledo International API surface. Provides a\n  FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the\n  provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
+  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Mettler-Toledo International\n  ServiceCategory: Developer Tools / API\n  ProviderName: Mettler-Toledo International\n  PublisherName: Mettler-Toledo International\n  InvoiceIssuerName: Mettler-Toledo International\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
+  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Mettler-Toledo International API\n    baseURL: https://api.mt.com\n    tags:\n      - Laboratory\n      - Instruments\n      - Precision\n    serviceName: Mettler-Toledo International API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/mettler-toledo/refs/heads/main/finops/mettler-toledo-finops.yml
-sources:
-- https://www.mt.com/us/en/home.html
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Laboratory
 - Instruments
 - Precision
+- FinOps
+- Cost Management
+- FOCUS
 ---

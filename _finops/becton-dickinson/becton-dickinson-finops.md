@@ -7,74 +7,79 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Hospital Services Agreement
-description: 'FOCUS-aligned FinOps shape for BD Incada and BD Pyxis: hospital-services agreement billed per platform license + connected-device scope, with API access bundled. Public rate-card data is not available.'
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Becton Dickinson API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Becton, Dickinson and Company
-  PricingCategory: Hospital Services Agreement
-  PricingUnit: device
+  ChargeCategory: Usage
+  InvoiceIssuerName: Becton Dickinson
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Becton Dickinson
-  PublisherName: Becton, Dickinson and Company
-  ServiceCategory: Healthcare / Medical Device Connectivity
-  ServiceName: BD Connected Care
+  PublisherName: Becton Dickinson
+  ServiceCategory: Developer Tools / API
+  ServiceName: Becton Dickinson
 layout: finops
 meters:
-- aggregation: max
-  description: BD devices integrated through Incada / Pyxis
-  dimensions:
-  - device_class
-  - hospital_unit
-  name: connected_devices
-  unit: device
-- aggregation: max
-  description: BD Pyxis automated dispensing stations under management
-  dimensions:
-  - hospital_unit
-  name: pyxis_stations
-  unit: station
 - aggregation: sum
-  description: Medication dispense / administration events tracked through Pyxis / Incada
+  description: Count of billable API requests
   dimensions:
-  - hospital_unit
-  - medication_class
-  name: medication_events
-  unit: event
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: AI-analytics seats / use-case licenses
+  description: Bytes returned over the network in API responses
   dimensions:
-  - module
-  - hospital_unit
-  name: ai_analytics_seats
-  unit: seat
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Becton Dickinson Finops
 provider_name: Becton Dickinson
 provider_slug: becton-dickinson
-publisher_name: Becton, Dickinson and Company
-service_category: Healthcare / Medical Device Connectivity
+publisher_name: Becton Dickinson
+service_category: API
 slug: becton-dickinson-finops
 source_filename: becton-dickinson-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.bd.com/en-us/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Becton Dickinson\nproviderId: becton-dickinson\npublisherName: Becton, Dickinson and Company\nserviceCategory: Healthcare / Medical Device Connectivity\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Healthcare\n  - Medical Devices\n  - Medication Management\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps shape for BD Incada and BD Pyxis: hospital-services agreement billed\n  per platform license + connected-device scope, with API access bundled. Public rate-card data is not\n  available.'\nnotes: No public rate card. Replace meter values with the customer-negotiated BD agreement once available.\nsources:\n  - https://www.bd.com/en-us/\nprinciples:\n\
-  \  - name: Visibility\n    description: Use BD Incada's natural-language analytics and Pyxis reporting to attribute medication\n      use, infusion volume, and inventory by hospital unit.\n  - name: Allocation\n    description: Allocate platform cost across nursing units (ICU, peri-op, oncology) and pharmacy by\n      connected-device count and medication-event volume.\n  - name: Optimization\n    description: Right-size connected-device scope each renewal; consolidate Pyxis station footprint where\n      utilization is low. Use AI inventory analytics to reduce stockouts and waste.\n  - name: Accountability\n    description: Joint biomed / pharmacy ownership of the BD engagement; review uptime, integration changes,\n      and medication-safety metrics quarterly.\nbillingModel:\n  pricingCategory: Hospital Services Agreement\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n\
-  \  ServiceName: BD Connected Care\n  ServiceCategory: Healthcare / Medical Device Connectivity\n  ProviderName: Becton Dickinson\n  PublisherName: Becton, Dickinson and Company\n  InvoiceIssuerName: Becton, Dickinson and Company\n  PricingCategory: Hospital Services Agreement\n  PricingUnit: device\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: connected_devices\n    description: BD devices integrated through Incada / Pyxis\n    unit: device\n    aggregation: max\n    dimensions:\n      - device_class\n      - hospital_unit\n  - name: pyxis_stations\n    description: BD Pyxis automated dispensing stations under management\n    unit: station\n    aggregation: max\n    dimensions:\n      - hospital_unit\n  - name: medication_events\n    description: Medication dispense / administration events tracked through Pyxis / Incada\n    unit: event\n    aggregation: sum\n    dimensions:\n      - hospital_unit\n      - medication_class\n  - name: ai_analytics_seats\n    description:\
-  \ AI-analytics seats / use-case licenses\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - module\n      - hospital_unit\napis:\n  - name: BD Incada Connected Care Platform\n    baseURL: ''\n    serviceName: BD Incada Connected Care Platform\n    serviceCategory: API\n  - name: BD Pyxis Medication Management System\n    baseURL: ''\n    serviceName: BD Pyxis Medication Management System\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Connected Device\n    metric: platform_cost / connected_devices\n    target: align to per-device clinical / inventory savings\n  - name: Cost per Pyxis Station\n    metric: pyxis_cost / pyxis_stations\n    target: align to medication-safety + waste-reduction targets\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Becton Dickinson\nproviderId: becton-dickinson\npublisherName: Becton Dickinson\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Healthcare\n  - Medical Devices\n  - Infusion Therapy\n  - Medication Management\n  - Connected Health\n  - Diagnostics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Becton Dickinson API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
+  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
+  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Becton Dickinson\n  ServiceCategory: Developer Tools / API\n  ProviderName: Becton Dickinson\n  PublisherName: Becton Dickinson\n  InvoiceIssuerName: Becton Dickinson\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
+  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: BD Incada Connected Care Platform\n    baseURL: ''\n    tags:\n      - Healthcare\n      - Connected Devices\n      - AI\n      - Medication Management\n      - EMR Integration\n    serviceName: BD Incada Connected Care Platform\n    serviceCategory: API\n  - name: BD Pyxis Medication Management System\n    baseURL: ''\n    tags:\n      - Healthcare\n      - Medication Management\n      - Pharmacy\n      - Hospital Automation\n    serviceName: BD Pyxis Medication Management System\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n\
+  \    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/becton-dickinson/refs/heads/main/finops/becton-dickinson-finops.yml
-sources:
-- https://www.bd.com/en-us/
+sources: []
 specification: FinOps Framework
 tags:
 - Healthcare
 - Medical Devices
+- Infusion Therapy
 - Medication Management
+- Connected Health
+- Diagnostics
 - FinOps
+- Cost Management
 - FOCUS
 ---

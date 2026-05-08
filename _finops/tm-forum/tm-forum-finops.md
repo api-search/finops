@@ -80,52 +80,80 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/tm-forum/refs/heads/main/openapi/tm-forum-tmf666-account-management-openapi.json
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  - Refund
-  pricingCategory: Membership
-description: TM Forum is a not-for-profit industry association whose direct customer billing surface is association membership rather than API consumption. There is no FOCUS-aligned per-request meter at the TM Forum level; FinOps for "TMF APIs" applies to the operator that implements them.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the TM Forum API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
+  ChargeCategory: Usage
   InvoiceIssuerName: TM Forum
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: TM Forum
   PublisherName: TM Forum
-  ServiceCategory: Industry Standards Body
-  ServiceName: TM Forum Membership
+  ServiceCategory: Developer Tools / API
+  ServiceName: TM Forum
 layout: finops
 meters:
 - aggregation: sum
-  description: One year of TM Forum association membership at the contracted tier.
+  description: Count of billable API requests
   dimensions:
+  - api
+  - endpoint
   - tier
-  - organization
-  name: tm_forum_membership_year
-  unit: year
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Tm Forum Finops
 provider_name: TM Forum
 provider_slug: tm-forum
 publisher_name: TM Forum
-service_category: Industry Standards Body
+service_category: API
 slug: tm-forum-finops
 source_filename: tm-forum-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.tmforum.org/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: TM Forum\nproviderId: tm-forum\npublisherName: TM Forum\nserviceCategory: Industry Standards Body\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Telco\n  - Telecommunications\n  - Open APIs\n  - Standards\n  - FinOps\n  - FOCUS\ndescription: 'TM Forum is a not-for-profit industry association whose direct customer billing surface\n  is association membership rather than API consumption. There is no FOCUS-aligned per-request meter at\n  the TM Forum level; FinOps for \"TMF APIs\" applies to the operator that implements them.'\nsources:\n  - https://www.tmforum.org/\nnotes: TM Forum membership pricing not retrievable (403).\
-  \ FOCUS columns and meters here describe membership\n  billing only; per-request meters belong to the implementing CSP or vendor.\nbillingModel:\n  pricingCategory: Membership\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: TM Forum Membership\n  ServiceCategory: Industry Standards Body\n  ProviderName: TM Forum\n  PublisherName: TM Forum\n  InvoiceIssuerName: TM Forum\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: tm_forum_membership_year\n    description: One year of TM Forum association membership at the contracted tier.\n    unit: year\n    aggregation: sum\n    dimensions:\n      - tier\n      - organization\nprinciples:\n  - name: Visibility\n    description: Track the TM Forum membership invoice as a fixed annual line; for downstream API costs,\n      visibility is the responsibility of the implementer that runs the TMF API.\n  - name: Allocation\n\
-  \    description: Allocate the membership fee to the central architecture/standards function that uses\n      the conformance program; do not attempt to per-call attribute it.\n  - name: Optimization\n    description: Review the membership tier annually against actual use of conformance, working groups,\n      and event credits.\n  - name: Accountability\n    description: Designate the standards/architecture lead as the membership owner.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: TM Forum\nproviderId: tm-forum\npublisherName: TM Forum\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Telco\n  - Telecommunications\n  - BSS\n  - OSS\n  - Open APIs\n  - Standards\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the TM Forum API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the\
+  \ consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: TM Forum\n  ServiceCategory: Developer Tools / API\n  ProviderName: TM Forum\n  PublisherName: TM Forum\n  InvoiceIssuerName: TM Forum\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
+  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: TMF620 Product Catalog Management\n    baseURL: ''\n    tags:\n      - Product Catalog\n      - BSS\n    serviceName: TMF620 Product Catalog Management\n    serviceCategory: API\n  - name: TMF621 Trouble Ticket Management\n    baseURL: ''\n    tags:\n      - Trouble Ticket\n      - OSS\n      - Incident Management\n    serviceName: TMF621 Trouble Ticket Management\n    serviceCategory: API\n  - name: TMF622 Product Order Management\n    baseURL: ''\n    tags:\n      - Product Ordering\n      - BSS\n    serviceName: TMF622 Product Order Management\n    serviceCategory: API\n  - name: TMF629 Customer Management\n    baseURL: ''\n    tags:\n      - Customer Management\n      - BSS\n    serviceName: TMF629\
+  \ Customer Management\n    serviceCategory: API\n  - name: TMF632 Party Management\n    baseURL: ''\n    tags:\n      - Party Management\n      - BSS\n      - Master Data\n    serviceName: TMF632 Party Management\n    serviceCategory: API\n  - name: TMF633 Service Catalog Management\n    baseURL: ''\n    tags:\n      - Service Catalog\n      - OSS\n    serviceName: TMF633 Service Catalog Management\n    serviceCategory: API\n  - name: TMF634 Resource Catalog Management\n    baseURL: ''\n    tags:\n      - Resource Catalog\n      - OSS\n    serviceName: TMF634 Resource Catalog Management\n    serviceCategory: API\n  - name: TMF637 Product Inventory Management\n    baseURL: ''\n    tags:\n      - Product Inventory\n      - BSS\n    serviceName: TMF637 Product Inventory Management\n    serviceCategory: API\n  - name: TMF641 Service Order Management\n    baseURL: ''\n    tags:\n      - Service Ordering\n      - OSS\n    serviceName: TMF641 Service Order Management\n    serviceCategory: API\n\
+  \  - name: TMF648 Quote Management\n    baseURL: ''\n    tags:\n      - Quote Management\n      - BSS\n    serviceName: TMF648 Quote Management\n    serviceCategory: API\n  - name: TMF651 Agreement Management\n    baseURL: ''\n    tags:\n      - Agreement Management\n      - BSS\n    serviceName: TMF651 Agreement Management\n    serviceCategory: API\n  - name: TMF666 Account Management\n    baseURL: ''\n    tags:\n      - Account Management\n      - Billing\n      - BSS\n    serviceName: TMF666 Account Management\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tm-forum/refs/heads/main/finops/tm-forum-finops.yml
-sources:
-- https://www.tmforum.org/
+sources: []
 specification: FinOps Framework
 tags:
 - Telco
 - Telecommunications
+- BSS
+- OSS
 - Open APIs
 - Standards
 - FinOps
+- Cost Management
 - FOCUS
 ---

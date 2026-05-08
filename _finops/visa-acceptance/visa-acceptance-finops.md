@@ -25,69 +25,81 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/visa-acceptance/refs/heads/main/openapi/visa-acceptance-payments-openapi.yml
 billing_model:
-  billingCurrency: USD (settlement varies)
+  billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
-  - Refund
+  - Credit
   - Adjustment
-  pricingCategory: Take Rate + Subscription
-description: FOCUS-aligned FinOps shape for Visa Acceptance / Cybersource. Pricing is contractual per-merchant; meters reflect the canonical line items on a card-acceptance invoice rather than publicly priced units.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Visa Acceptance API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: CyberSource Corporation
-  ProviderName: Visa Acceptance Solutions
-  PublisherName: CyberSource Corporation
-  ServiceCategory: Payments
-  ServiceName: Visa Acceptance / Cybersource
+  ChargeCategory: Usage
+  InvoiceIssuerName: Visa Acceptance
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Visa Acceptance
+  PublisherName: Visa Acceptance
+  ServiceCategory: Developer Tools / API
+  ServiceName: Visa Acceptance
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - card_brand
+  - api
+  - endpoint
+  - tier
   - region
-  - mcc
-  name: card_transactions
-  unit: transaction
-- aggregation: sum
-  dimensions:
-  - card_brand
-  - region
-  name: transaction_volume
-  unit: USD
-- aggregation: sum
-  name: tokenization_requests
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - decision_outcome
-  name: fraud_screen_requests
-  unit: request
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  name: refunds
-  unit: transaction
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Visa Acceptance Finops
 provider_name: Visa Acceptance
 provider_slug: visa-acceptance
-publisher_name: CyberSource Corporation (a Visa company)
-service_category: Payments
+publisher_name: Visa Acceptance
+service_category: API
 slug: visa-acceptance-finops
 source_filename: visa-acceptance-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.cybersource.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Visa Acceptance\nproviderId: visa-acceptance\npublisherName: CyberSource Corporation (a Visa company)\nserviceCategory: Payments\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Payments\n  - Card Acceptance\n  - Cybersource\ndescription: FOCUS-aligned FinOps shape for Visa Acceptance / Cybersource. Pricing is contractual\n  per-merchant; meters reflect the canonical line items on a card-acceptance invoice rather than\n  publicly priced units.\nsources:\n  - https://developer.cybersource.com/\nnotes: No public unit prices were available; per-transaction take rate, interchange, and\n  value-added-service fees are negotiated under the merchant\
-  \ processing agreement.\nbillingModel:\n  pricingCategory: Take Rate + Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD (settlement varies)\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Refund\n    - Adjustment\nfocusColumns:\n  ServiceName: Visa Acceptance / Cybersource\n  ServiceCategory: Payments\n  ProviderName: Visa Acceptance Solutions\n  PublisherName: CyberSource Corporation\n  InvoiceIssuerName: CyberSource Corporation\n  BillingCurrency: USD\nmeters:\n  - name: card_transactions\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - card_brand\n      - region\n      - mcc\n  - name: transaction_volume\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - card_brand\n      - region\n  - name: tokenization_requests\n    unit: request\n    aggregation: sum\n  - name: fraud_screen_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - decision_outcome\n  - name: refunds\n    unit: transaction\n \
-  \   aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Use the Business Center reports and Reporting / On-Demand Reporting REST APIs to\n      pull settlement, fee, and transaction-level detail; reconcile against the monthly merchant\n      statement.\n  - name: Allocation\n    description: Tag transactions with merchant_defined_data fields (MID, sub-merchant, brand) so\n      cost can be allocated across business units sharing a Visa Acceptance contract.\n  - name: Optimization\n    description: Levers include processor / acquirer routing, network tokenization to lift auth\n      rates, decision-manager rule tuning to reduce false declines, and renegotiating tier breaks\n      against settled volume.\n  - name: Accountability\n    description: Payments / treasury owns the merchant agreement; engineering owns API integration\n      and decision-manager rules; finance reconciles the monthly statement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Visa Acceptance\nproviderId: visa-acceptance\npublisherName: Visa Acceptance\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Payments\n  - E-Commerce\n  - Fintech\n  - Credit Cards\n  - Invoicing\n  - Payment Links\n  - Digital Wallets\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Visa Acceptance API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Visa Acceptance\n  ServiceCategory: Developer Tools / API\n  ProviderName: Visa Acceptance\n  PublisherName: Visa Acceptance\n  InvoiceIssuerName: Visa Acceptance\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes\
+  \ returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Visa Acceptance Payments API\n    baseURL: ''\n    tags:\n      - Payments\n      - Authorization\n      - Capture\n      - Refunds\n      - Voids\n    serviceName: Visa Acceptance Payments API\n    serviceCategory: API\n  - name: Visa Acceptance Invoicing API\n    baseURL: ''\n    tags:\n      - Invoicing\n      - Payments\n      - Payment Links\n    serviceName: Visa Acceptance Invoicing API\n    serviceCategory: API\n  - name: Visa Acceptance Pay by Link API\n    baseURL: ''\n    tags:\n      - Payment Links\n      - Payments\n      - AI Agents\n    serviceName: Visa Acceptance Pay by Link API\n    serviceCategory: API\n\
+  unitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/visa-acceptance/refs/heads/main/finops/visa-acceptance-finops.yml
-sources:
-- https://developer.cybersource.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Payments
-- Card Acceptance
-- Cybersource
+- E-Commerce
+- Fintech
+- Credit Cards
+- Invoicing
+- Payment Links
+- Digital Wallets
+- FinOps
+- Cost Management
+- FOCUS
 ---

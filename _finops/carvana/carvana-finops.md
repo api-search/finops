@@ -9,64 +9,77 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Custom (Partner Contract) + AWS Marketplace Subscription
-description: 'FOCUS-aligned FinOps for Carvana''s partner integration surface. Two billing shapes coexist: partner-negotiated contracts for the Partner / Collective APIs (no public per-call price), and an AWS Data Exchange subscription for Carvana Car Sales Data (priced + invoiced through AWS Marketplace).'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Carvana API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Carvana, LLC / Amazon Web Services, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Carvana
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Carvana
-  PublisherName: Carvana, LLC
-  ServiceCategory: Automotive Data
-  ServiceName: Carvana Partner / Data APIs
+  PublisherName: Carvana
+  ServiceCategory: Developer Tools / API
+  ServiceName: Carvana
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - subscription_key
-  - operation
-  name: partner_api_requests
-  unit: request
-- aggregation: count
-  dimensions:
-  - partner
-  - operation
-  name: inventory_records_managed
-  unit: record
-- aggregation: sum
-  dimensions:
-  - product
-  name: data_exchange_subscription
-  unit: month
-- aggregation: sum
-  dimensions:
-  - product
+  - api
+  - endpoint
+  - tier
   - region
-  name: data_exchange_data_delivered
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Carvana Finops
 provider_name: Carvana
 provider_slug: carvana
-publisher_name: Carvana, LLC
-service_category: Automotive Data + Partner Integration
+publisher_name: Carvana
+service_category: API
 slug: carvana-finops
 source_filename: carvana-finops.yml
 source_heading: FinOps Profile
-source_url: https://api-developer.carvana.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Carvana\nproviderId: carvana\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Automotive\n  - Partner API\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Carvana''s partner integration surface. Two billing shapes coexist:\n  partner-negotiated contracts for the Partner / Collective APIs (no public per-call price), and an\n  AWS Data Exchange subscription for Carvana Car Sales Data (priced + invoiced through AWS Marketplace).'\nnotes: Partner API pricing is private. AWS Data Exchange listing surfaces actual invoice lines via the\n  AWS Marketplace billing report.\nsources:\n  - https://api-developer.carvana.com/\n  - https://aws.amazon.com/marketplace/pp/prodview-y77x3t6zisn4w\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
-  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Carvana, LLC\nserviceCategory: Automotive Data + Partner Integration\nbillingModel:\n  pricingCategory: Custom (Partner Contract) + AWS Marketplace Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: Carvana Partner / Data APIs\n  ServiceCategory: Automotive Data\n  ProviderName: Carvana\n  PublisherName: Carvana, LLC\n  InvoiceIssuerName: Carvana, LLC / Amazon Web Services, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: partner_api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - subscription_key\n      - operation\n  - name: inventory_records_managed\n    unit: record\n    aggregation: count\n    dimensions:\n      - partner\n      - operation\n  - name: data_exchange_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\n\
-  \  - name: data_exchange_data_delivered\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - product\n      - region\nprinciples:\n  - name: Visibility\n    description: For Partner API, rely on the per-partner reporting Carvana surfaces during onboarding;\n      for AWS Data Exchange, ingest the AWS Marketplace Billing and CUR reports to see Carvana line\n      items.\n  - name: Allocation\n    description: Tag the AWS Marketplace subscription with the consuming product team; allocate Partner\n      API contract fees to the inventory operations function that owns the Carvana relationship.\n  - name: Optimization\n    description: Batch inventory updates rather than polling; subscribe to AWS Data Exchange revisions\n      only for the regions / data fields needed to avoid paying for unused breadth.\n  - name: Accountability\n    description: Assign a single inventory-operations owner for the Carvana Partner contract and a data-platform\n      owner for the AWS Data Exchange subscription;\
-  \ review monthly Marketplace invoices.\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Carvana\nproviderId: carvana\npublisherName: Carvana\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Automotive\n  - E-Commerce\n  - Used Cars\n  - Inventory\n  - Partner API\n  - Fortune 500\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Carvana API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
+  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
+  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Carvana\n  ServiceCategory: Developer Tools / API\n  ProviderName: Carvana\n  PublisherName: Carvana\n  InvoiceIssuerName: Carvana\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Carvana Partner API\n    baseURL: https://api-developer.carvana.com\n    tags:\n      - Partner\n      - Inventory\n      - Authorized Access\n    serviceName: Carvana Partner API\n    serviceCategory: API\n  - name: Carvana Collective API\n    baseURL: https://api.collective.carvana.com\n    tags:\n      - Partner\n      - Collective\n    serviceName: Carvana Collective API\n    serviceCategory: API\n  - name: Carvana Car Sales Data (AWS Data Exchange)\n    baseURL: ''\n    tags:\n      - Data Product\n      - AWS Data Exchange\n      - Inventory\n    serviceName: Carvana Car Sales Data (AWS Data Exchange)\n    serviceCategory: API\n  - name: Carvana Partner Inventory Help Center\n    baseURL:\
+  \ ''\n    tags:\n      - Partner\n      - Inventory\n      - Consumer\n    serviceName: Carvana Partner Inventory Help Center\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/carvana/refs/heads/main/finops/carvana-finops.yml
-sources:
-- https://api-developer.carvana.com/
-- https://aws.amazon.com/marketplace/pp/prodview-y77x3t6zisn4w
+sources: []
 specification: FinOps Framework
 tags:
 - Automotive
+- E-Commerce
+- Used Cars
+- Inventory
 - Partner API
+- Fortune 500
 - FinOps
+- Cost Management
 - FOCUS
 ---

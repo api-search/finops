@@ -16,62 +16,77 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
-  pricingCategory: Subscription (Storage Tier)
-description: 'FOCUS-aligned FinOps view for Apple Keynote: the Keynote app itself is free; the only direct charge associated with Keynote workflows is the iCloud+ storage tier that holds the .key files. Allocation should track per-user iCloud+ tier cost and (where applicable) Apple Business Manager / Apple Education device-bundled licensing.'
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Apple Keynote API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Apple Inc.
-  PricingCategory: Subscription
-  ProviderName: Apple
-  PublisherName: Apple Inc.
-  ServiceCategory: Productivity / Presentations
-  ServiceName: Apple Keynote / iCloud+
+  ChargeCategory: Usage
+  InvoiceIssuerName: Apple Keynote
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Apple Keynote
+  PublisherName: Apple Keynote
+  ServiceCategory: Developer Tools / API
+  ServiceName: Apple Keynote
 layout: finops
 meters:
 - aggregation: sum
-  description: Per-user monthly iCloud+ storage tier covering Keynote document sync (50GB / 200GB / 2TB / 6TB / 12TB)
+  description: Count of billable API requests
   dimensions:
+  - api
+  - endpoint
   - tier
-  - apple_id
-  name: icloud_plus_subscription
-  unit: month
-- aggregation: max
-  description: Actual iCloud storage consumed by Keynote documents (telemetry, not directly billed)
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - apple_id
-  - app
-  name: icloud_storage_used
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
-- aggregation: max
-  description: Count of Keynote documents stored in iCloud Drive (for chargeback)
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - apple_id
-  name: keynote_documents
-  unit: document
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Apple Keynote Finops
 provider_name: Apple Keynote
 provider_slug: apple-keynote
-publisher_name: Apple Inc.
-service_category: Productivity / Presentations
+publisher_name: Apple Keynote
+service_category: API
 slug: apple-keynote-finops
 source_filename: apple-keynote-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.apple.com/keynote/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Apple Keynote\nproviderId: apple-keynote\npublisherName: Apple Inc.\nserviceCategory: Productivity / Presentations\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Apple\n  - iWork\n  - iCloud\ndescription: 'FOCUS-aligned FinOps view for Apple Keynote: the Keynote app itself is free; the only direct\n  charge associated with Keynote workflows is the iCloud+ storage tier that holds the .key files. Allocation\n  should track per-user iCloud+ tier cost and (where applicable) Apple Business Manager / Apple Education\n  device-bundled licensing.'\nsources:\n  - https://www.apple.com/keynote/\n  - https://www.apple.com/icloud/\n\
-  billingModel:\n  pricingCategory: Subscription (Storage Tier)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\nfocusColumns:\n  ServiceName: Apple Keynote / iCloud+\n  ServiceCategory: Productivity / Presentations\n  ProviderName: Apple\n  PublisherName: Apple Inc.\n  InvoiceIssuerName: Apple Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingCategory: Subscription\nmeters:\n  - name: icloud_plus_subscription\n    description: Per-user monthly iCloud+ storage tier covering Keynote document sync (50GB / 200GB /\n      2TB / 6TB / 12TB)\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\n      - apple_id\n  - name: icloud_storage_used\n    description: Actual iCloud storage consumed by Keynote documents (telemetry, not directly billed)\n    unit: GB\n    aggregation: max\n    dimensions:\n      - apple_id\n      - app\n  - name: keynote_documents\n    description: Count of Keynote documents stored in\
-  \ iCloud Drive (for chargeback)\n    unit: document\n    aggregation: max\n    dimensions:\n      - apple_id\nprinciples:\n  - name: Visibility\n    description: Use Apple Business Manager (where managed) or per-user Apple ID storage views to track\n      iCloud+ tier and storage utilization.\n  - name: Allocation\n    description: Allocate iCloud+ subscription cost per managed Apple ID; tag by department or cost center\n      via Apple Business Manager metadata.\n  - name: Optimization\n    description: Right-size iCloud+ tier per user; consolidate via Family Sharing where licensing permits;\n      archive large legacy .key files locally.\n  - name: Accountability\n    description: IT / Workplace team owns the Apple Business Manager contract and per-seat iCloud+ assignment;\n      individual users accountable for keeping storage within tier.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Apple Keynote\nproviderId: apple-keynote\npublisherName: Apple Keynote\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Apple\n  - Design\n  - iWork\n  - Presentations\n  - Productivity\n  - Slides\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Apple Keynote API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Apple Keynote\n  ServiceCategory: Developer Tools / API\n  ProviderName: Apple Keynote\n  PublisherName: Apple Keynote\n  InvoiceIssuerName: Apple Keynote\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Keynote iCloud API\n    baseURL: https://p00-keynote.icloud.com\n    tags:\n      - Cloud Storage\n      - Collaboration\n      - Presentations\n      - Slides\n      - iCloud\n    serviceName: Keynote iCloud API\n    serviceCategory: API\n  - name: Keynote AppleScript API\n    baseURL: ''\n    tags:\n      - Automation\n      - Local API\n      - macOS\n      - Scripting\n    serviceName: Keynote AppleScript API\n    serviceCategory: API\n  - name: Keynote JavaScript for Automation API\n    baseURL: ''\n    tags:\n      - Automation\n      - JavaScript\n      - macOS\n      - Scripting\n    serviceName: Keynote JavaScript for Automation API\n    serviceCategory: API\n\
+  \  - name: Keynote Shortcuts Actions\n    baseURL: ''\n    tags:\n      - Automation\n      - iOS\n      - Shortcuts\n      - Workflows\n    serviceName: Keynote Shortcuts Actions\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/apple-keynote/refs/heads/main/finops/apple-keynote-finops.yml
-sources:
-- https://www.apple.com/keynote/
-- https://www.apple.com/icloud/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Apple
+- Design
 - iWork
-- iCloud
+- Presentations
+- Productivity
+- Slides
+- FinOps
+- Cost Management
+- FOCUS
 ---

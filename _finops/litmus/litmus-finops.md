@@ -26,72 +26,77 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/litmus/refs/heads/main/openapi/litmus-email-analytics-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  - Adjustment
+  - Tax
   - Credit
-  pricingCategory: Subscription + Add-Ons
-description: 'FOCUS-aligned FinOps for Litmus: enterprise SaaS with one base subscription plus opt-in add-on subscriptions (Deliverability, Sender Certification, Competitive Intel, Email Guardian, Mailcharts). Litmus Instant API access is partner-program-gated. Pricing is custom; charges land as monthly or annual subscription invoices rather than per-call usage.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Litmus API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Litmus Software, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Litmus
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Litmus
-  PublisherName: Litmus Software, Inc.
-  ServiceCategory: Email Testing / Marketing Tools
+  PublisherName: Litmus
+  ServiceCategory: Developer Tools / API
   ServiceName: Litmus
 layout: finops
 meters:
-- aggregation: count
-  dimensions:
-  - contract
-  name: enterprise_subscription
-  unit: contract
-- aggregation: count
-  dimensions:
-  - addon
-  - contract
-  name: addon_subscriptions
-  unit: contract
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - subaccount
-  - email_client
-  name: email_previews
-  unit: preview
-- aggregation: sum
-  dimensions:
+  - api
   - endpoint
-  - partner_app
-  name: instant_api_calls
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
-- aggregation: count
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - subaccount
-  name: full_users
-  unit: seat
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Litmus Finops
 provider_name: Litmus
 provider_slug: litmus
-publisher_name: Litmus Software, Inc.
-service_category: Email Testing / Marketing Tools
+publisher_name: Litmus
+service_category: API
 slug: litmus-finops
 source_filename: litmus-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.litmus.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Litmus\nproviderId: litmus\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Email Testing\n  - Marketing Tools\n  - Developer Tools\ndescription: 'FOCUS-aligned FinOps for Litmus: enterprise SaaS with one base subscription plus opt-in\n  add-on subscriptions (Deliverability, Sender Certification, Competitive Intel, Email Guardian, Mailcharts).\n  Litmus Instant API access is partner-program-gated. Pricing is custom; charges land as monthly or annual\n  subscription invoices rather than per-call usage.'\nsources:\n  - https://www.litmus.com/pricing\n  - https://docs.litmus.com/instant\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
-  \ Litmus Software, Inc.\nserviceCategory: Email Testing / Marketing Tools\nbillingModel:\n  pricingCategory: Subscription + Add-Ons\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Litmus\n  ServiceCategory: Email Testing / Marketing Tools\n  ProviderName: Litmus\n  PublisherName: Litmus Software, Inc.\n  InvoiceIssuerName: Litmus Software, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: enterprise_subscription\n    unit: contract\n    aggregation: count\n    dimensions:\n      - contract\n  - name: addon_subscriptions\n    unit: contract\n    aggregation: count\n    dimensions:\n      - addon\n      - contract\n  - name: email_previews\n    unit: preview\n    aggregation: sum\n    dimensions:\n      - subaccount\n      - email_client\n  - name: instant_api_calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - partner_app\n  - name: full_users\n \
-  \   unit: seat\n    aggregation: count\n    dimensions:\n      - subaccount\nprinciples:\n  - name: Visibility\n    description: Track preview / API usage in the Litmus admin and via partner reporting; cross-reference\n      against Litmus invoices for the Enterprise subscription and each active add-on.\n  - name: Allocation\n    description: Use Litmus subaccounts to scope usage to brands, business units, or campaigns; allocate\n      the Enterprise subscription cost by subaccount activity.\n  - name: Optimization\n    description: Cull unused full-user seats; review add-on ROI annually (Deliverability vs Sender Certification\n      vs Email Guardian); for partner integrations, batch preview captures and reuse email_guids within\n      the 48-hour upload window.\n  - name: Accountability\n    description: Assign a Litmus contract owner who reviews subaccount usage and add-on consumption ahead\n      of each renewal; partners running Instant API integrations report usage back to that owner.\n\
-  maintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Litmus\nproviderId: litmus\npublisherName: Litmus\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Developer Tools\n  - Email Testing\n  - Marketing Tools\n  - Quality Assurance\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Litmus API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Litmus\n  ServiceCategory: Developer Tools / API\n  ProviderName: Litmus\n  PublisherName: Litmus\n  InvoiceIssuerName: Litmus\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Litmus Instant API\n    baseURL: https://instant-api.litmus.com/v1\n    tags:\n      - Email Clients\n      - Email Testing\n      - Previews\n      - REST API\n    serviceName: Litmus Instant API\n    serviceCategory: API\n  - name: Litmus Legacy Previews API\n    baseURL: https://previews-api.litmus.com/api/v1\n    tags:\n      - Email Testing\n      - Previews\n      - REST API\n      - Spam Testing\n    serviceName: Litmus Legacy Previews API\n    serviceCategory: API\n  - name: Litmus Email Analytics API\n    baseURL: https://analytics-api.litmus.com/api/v1\n    tags:\n      - Campaign Metrics\n      - Email Analytics\n      - Reporting\n      - REST API\n    serviceName: Litmus Email Analytics API\n    serviceCategory:\
+  \ API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/litmus/refs/heads/main/finops/litmus-finops.yml
-sources:
-- https://www.litmus.com/pricing
-- https://docs.litmus.com/instant
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Developer Tools
 - Email Testing
 - Marketing Tools
-- Developer Tools
+- Quality Assurance
+- FinOps
+- Cost Management
+- FOCUS
 ---

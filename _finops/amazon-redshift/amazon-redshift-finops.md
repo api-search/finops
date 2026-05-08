@@ -27,78 +27,75 @@ billing_model:
   - Tax
   - Credit
   - Adjustment
-  pricingCategory: Pay-As-You-Go + Committed Use
-description: 'FOCUS-aligned FinOps for Amazon Redshift: per-RPU-hour Serverless billing, per-node-hour Provisioned billing on RA3, Redshift Managed Storage at $0.024/GB-month, plus Concurrency Scaling overage, Reserved Instances, and Savings Plans.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Amazon Redshift API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Amazon Web Services, Inc.
-  ProviderName: AWS
-  PublisherName: Amazon Web Services, Inc.
-  ServiceCategory: Analytics
+  InvoiceIssuerName: Amazon Redshift
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Amazon Redshift
+  PublisherName: Amazon Redshift
+  ServiceCategory: Developer Tools / API
   ServiceName: Amazon Redshift
-  ServiceSubcategory: Data Warehouse
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
+  - endpoint
+  - tier
   - region
-  - workgroup
-  - namespace
-  name: rpu_hours
-  unit: RPU-hour
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
+  - api
   - region
-  - cluster
-  - node_type
-  name: node_hours
-  unit: node-hour
-- aggregation: sum
-  dimensions:
-  - region
-  - cluster_or_namespace
-  name: managed_storage_gb_month
-  unit: GB-month
-- aggregation: sum
-  dimensions:
-  - region
-  - cluster
-  name: concurrency_scaling_seconds
-  unit: cs-second
-- aggregation: sum
-  dimensions:
-  - region
-  - cluster_or_namespace
-  name: backup_storage_gb_month
-  unit: GB-month
-- aggregation: sum
-  dimensions:
-  - region
-  - direction
-  name: data_transfer_gb
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Amazon Redshift Finops
 provider_name: Amazon Redshift
 provider_slug: amazon-redshift
-publisher_name: Amazon Web Services, Inc.
-service_category: Analytics / Data Warehouse
+publisher_name: Amazon Redshift
+service_category: API
 slug: amazon-redshift-finops
 source_filename: amazon-redshift-finops.yml
 source_heading: FinOps Profile
-source_url: https://aws.amazon.com/redshift/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Amazon Redshift\nproviderId: amazon-redshift\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - AWS\n  - Data Warehouse\n  - Redshift\n  - Cost Management\ndescription: 'FOCUS-aligned FinOps for Amazon Redshift: per-RPU-hour Serverless billing, per-node-hour\n  Provisioned billing on RA3, Redshift Managed Storage at $0.024/GB-month, plus Concurrency Scaling overage,\n  Reserved Instances, and Savings Plans.'\nsources:\n  - https://aws.amazon.com/redshift/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Amazon Web Services, Inc.\nserviceCategory: Analytics / Data Warehouse\nbillingModel:\n  pricingCategory: Pay-As-You-Go +\
-  \ Committed Use\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\nfocusColumns:\n  ServiceName: Amazon Redshift\n  ServiceCategory: Analytics\n  ServiceSubcategory: Data Warehouse\n  ProviderName: AWS\n  PublisherName: Amazon Web Services, Inc.\n  InvoiceIssuerName: Amazon Web Services, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: rpu_hours\n    unit: RPU-hour\n    aggregation: sum\n    dimensions:\n      - region\n      - workgroup\n      - namespace\n  - name: node_hours\n    unit: node-hour\n    aggregation: sum\n    dimensions:\n      - region\n      - cluster\n      - node_type\n  - name: managed_storage_gb_month\n    unit: GB-month\n    aggregation: sum\n    dimensions:\n      - region\n      - cluster_or_namespace\n  - name: concurrency_scaling_seconds\n    unit: cs-second\n    aggregation: sum\n    dimensions:\n      - region\n      - cluster\n  - name:\
-  \ backup_storage_gb_month\n    unit: GB-month\n    aggregation: sum\n    dimensions:\n      - region\n      - cluster_or_namespace\n  - name: data_transfer_gb\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - region\n      - direction\nprinciples:\n  - name: Visibility\n    description: Use Cost Explorer with the Redshift dimension, the Redshift console's Performance and\n      Concurrency Scaling reports, system tables (STL_QUERY, SVL_QUERY_METRICS), and CUR / FOCUS export.\n  - name: Allocation\n    description: Tag clusters/workgroups/namespaces with Environment, Team, Use Case; enable cost allocation\n      tags so charges flow into FOCUS columns.\n  - name: Optimization\n    description: Pause/scale-down Provisioned clusters, choose Serverless for spiky workloads, commit to\n      Reserved Instances for steady production, monitor RA3 storage growth, use Concurrency Scaling free-hour\n      credits before paying overage, and use Materialized Views and Auto-Vacuum to reduce\
-  \ query cost.\n  - name: Accountability\n    description: Set AWS Budgets per cluster tag, alert on Concurrency Scaling overage, and review monthly\n      RPU-hour utilization for Serverless workgroup right-sizing.\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n  - name: Amazon Web Services\n    email: support@aws.amazon.com\n    url: https://aws.amazon.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Amazon Redshift\nproviderId: amazon-redshift\npublisherName: Amazon Redshift\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Big Data\n  - Cloud\n  - Data Lake\n  - Data Warehouse\n  - ETL\n  - Machine Learning\n  - Serverless\n  - SQL\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Amazon Redshift API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
+  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
+  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Amazon Redshift\n  ServiceCategory: Developer Tools / API\n  ProviderName: Amazon Redshift\n  PublisherName: Amazon Redshift\n  InvoiceIssuerName: Amazon Redshift\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
+  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Amazon Redshift API\n    baseURL: https://redshift.amazonaws.com\n    tags:\n      - Clusters\n      - Data Warehouse\n      - Snapshots\n    serviceName: Amazon Redshift API\n    serviceCategory: API\n  - name: Amazon Redshift Data API\n    baseURL: https://redshift-data.amazonaws.com\n    tags:\n      - Data API\n      - Serverless\n      - SQL\n    serviceName: Amazon Redshift Data API\n    serviceCategory: API\n  - name: Amazon Redshift Serverless API\n    baseURL: https://redshift-serverless.amazonaws.com\n    tags:\n      - Data Warehouse\n      - Namespaces\n      - Serverless\n      - Workgroups\n\
+  \    serviceName: Amazon Redshift Serverless API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/amazon-redshift/refs/heads/main/finops/amazon-redshift-finops.yml
-sources:
-- https://aws.amazon.com/redshift/pricing/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Analytics
+- Big Data
+- Cloud
+- Data Lake
 - Data Warehouse
-- Redshift
+- ETL
+- Machine Learning
+- Serverless
+- SQL
+- FinOps
 - Cost Management
+- FOCUS
 ---

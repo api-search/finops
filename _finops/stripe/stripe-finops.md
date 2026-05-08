@@ -349,73 +349,87 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-method-configurations-api-openapi.yml
 billing_model:
-  billingCurrency: USD (settlement varies)
-  billingFrequency: Continuous Settlement
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
-  - Adjustment
-  - Refund
+  - Tax
   - Credit
-  pricingCategory: Take Rate + Subscription
-description: 'FOCUS-aligned FinOps for Stripe: per-transaction take rates plus per-product subscriptions.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Stripe API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Stripe, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Stripe
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Stripe
-  PublisherName: Stripe, Inc.
-  ServiceCategory: Payments
+  PublisherName: Stripe
+  ServiceCategory: Developer Tools / API
   ServiceName: Stripe
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - country
-  - card_brand
-  - card_type
-  - currency
-  name: card_transactions
-  unit: transaction
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - country
-  - card_brand
-  - currency
-  name: transaction_volume
-  unit: USD
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  name: radar_screened_transactions
-  unit: transaction
-- aggregation: sum
-  name: billing_volume
-  unit: USD
-- aggregation: sum
-  name: tax_calculations
-  unit: calculation
-- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - product
-  name: subscription_fees
-  unit: month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Stripe Finops
 provider_name: Stripe
 provider_slug: stripe
-publisher_name: Stripe, Inc.
-service_category: Payments
+publisher_name: Stripe
+service_category: API
 slug: stripe-finops
 source_filename: stripe-finops.yml
 source_heading: FinOps Profile
-source_url: https://stripe.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Stripe\nproviderId: stripe\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\n  - Payments\ndescription: 'FOCUS-aligned FinOps for Stripe: per-transaction take rates plus per-product subscriptions.'\nsources:\n  - https://stripe.com/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Stripe, Inc.\nserviceCategory: Payments\nbillingModel:\n  pricingCategory: Take Rate + Subscription\n  billingFrequency: Continuous Settlement\n  billingCurrency: USD (settlement varies)\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\n    - Refund\n    - Credit\nfocusColumns:\n  ServiceName: Stripe\n  ServiceCategory:\
-  \ Payments\n  ProviderName: Stripe\n  PublisherName: Stripe, Inc.\n  InvoiceIssuerName: Stripe, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: card_transactions\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - country\n      - card_brand\n      - card_type\n      - currency\n  - name: transaction_volume\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - country\n      - card_brand\n      - currency\n  - name: radar_screened_transactions\n    unit: transaction\n    aggregation: sum\n  - name: billing_volume\n    unit: USD\n    aggregation: sum\n  - name: tax_calculations\n    unit: calculation\n    aggregation: sum\n  - name: subscription_fees\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\nprinciples:\n  - name: Visibility\n    description: Use the Balance Transactions API and Sigma for transaction-level cost and revenue.\n  - name: Allocation\n    description: Tag PaymentIntents with metadata for product/team chargeback.\n\
-  \  - name: Optimization\n    description: Negotiate IC+ pricing at scale; use Link to lift conversion; route low-risk transactions\n      away from Radar premium screening.\n  - name: Accountability\n    description: Reconcile monthly Stripe payouts against your ledger; investigate take-rate variances.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Stripe\nproviderId: stripe\npublisherName: Stripe\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Commerce\n  - Financial Services\n  - Fintech\n  - Payments\n  - T1\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Stripe API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Stripe\n  ServiceCategory: Developer Tools / API\n  ProviderName: Stripe\n  PublisherName: Stripe\n  InvoiceIssuerName: Stripe\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n\
+  \      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Stripe Accounts API\n    baseURL: ''\n    tags:\n      - Accounts\n    serviceName: Stripe Accounts API\n    serviceCategory: API\n  - name: Stripe Apple Pay API\n    baseURL: ''\n    tags:\n      - Apple\n      - Apply Pay\n      - Payments\n    serviceName: Stripe Apple Pay API\n    serviceCategory: API\n  - name: Stripe Application Fees API\n    baseURL: ''\n    tags:\n      - Applications\n      - Fees\n      - Refunds\n    serviceName: Stripe Application Fees API\n    serviceCategory: API\n  - name: Stripe Application Secrets API\n    baseURL: ''\n    tags:\n      - Applications\n      - Secrets\n    serviceName: Stripe Application Secrets API\n    serviceCategory: API\n  - name: Stripe Balance API\n    baseURL: ''\n    tags:\n\
+  \      - Balance\n      - History\n      - Transactions\n    serviceName: Stripe Balance API\n    serviceCategory: API\n  - name: Stripe Billing API\n    baseURL: ''\n    tags:\n      - Billing\n    serviceName: Stripe Billing API\n    serviceCategory: API\n  - name: Stripe Charges API\n    baseURL: ''\n    tags:\n      - Charges\n      - Disputes\n      - Refunds\n    serviceName: Stripe Charges API\n    serviceCategory: API\n  - name: Stripe Checkout API\n    baseURL: ''\n    tags:\n      - Checkout\n    serviceName: Stripe Checkout API\n    serviceCategory: API\n  - name: Stripe Climate API\n    baseURL: ''\n    tags:\n      - Carbon\n      - Climate\n    serviceName: Stripe Climate API\n    serviceCategory: API\n  - name: Stripe Country API\n    baseURL: ''\n    tags:\n      - Countries\n    serviceName: Stripe Country API\n    serviceCategory: API\n  - name: Stripe Coupons API\n    baseURL: ''\n    tags:\n      - Coupons\n    serviceName: Stripe Coupons API\n    serviceCategory: API\n\
+  \  - name: Stripe Credit Notes API\n    baseURL: ''\n    tags:\n      - Credit\n      - Notes\n    serviceName: Stripe Credit Notes API\n    serviceCategory: API\n  - name: Stripe Customers API\n    baseURL: ''\n    tags:\n      - Customers\n    serviceName: Stripe Customers API\n    serviceCategory: API\n  - name: Stripe Disputes API\n    baseURL: ''\n    tags:\n      - Disputes\n    serviceName: Stripe Disputes API\n    serviceCategory: API\n  - name: Stripe Ephemeral Keys API\n    baseURL: ''\n    tags:\n      - Ephemeral\n      - Keys\n    serviceName: Stripe Ephemeral Keys API\n    serviceCategory: API\n  - name: Stripe Events API\n    baseURL: ''\n    tags:\n      - Events\n    serviceName: Stripe Events API\n    serviceCategory: API\n  - name: Stripe Exchange Rates API\n    baseURL: ''\n    tags:\n      - Exchanges\n      - Rates\n    serviceName: Stripe Exchange Rates API\n    serviceCategory: API\n  - name: Stripe Files API\n    baseURL: ''\n    tags:\n      - Files\n    serviceName:\
+  \ Stripe Files API\n    serviceCategory: API\n  - name: Stripe Financial Connections API\n    baseURL: ''\n    tags:\n      - Connections\n      - Financial\n    serviceName: Stripe Financial Connections API\n    serviceCategory: API\n  - name: Stripe Identity API\n    baseURL: ''\n    tags:\n      - Cancel\n      - Entities\n      - Identity\n      - Redact\n      - Reports\n      - Sessions\n      - Verification\n    serviceName: Stripe Identity API\n    serviceCategory: API\n  - name: Stripe Invoice API\n    baseURL: ''\n    tags:\n      - Invoices\n    serviceName: Stripe Invoice API\n    serviceCategory: API\n  - name: Stripe Issuing API\n    baseURL: ''\n    tags:\n      - Cards\n      - Issuing\n    serviceName: Stripe Issuing API\n    serviceCategory: API\n  - name: Stripe Link API\n    baseURL: ''\n    tags:\n      - Links\n      - Payments\n    serviceName: Stripe Link API\n    serviceCategory: API\n  - name: Stripe Payment Intents API\n    baseURL: ''\n    tags:\n      - Intent\n\
+  \      - Intents\n      - Payments\n    serviceName: Stripe Payment Intents API\n    serviceCategory: API\n  - name: Stripe Payment Links API\n    baseURL: ''\n    tags:\n      - Link\n      - Links\n      - Payments\n    serviceName: Stripe Payment Links API\n    serviceCategory: API\n  - name: Stripe Payment Method API\n    baseURL: ''\n    tags:\n      - Detach\n      - Methods\n      - Payments\n    serviceName: Stripe Payment Method API\n    serviceCategory: API\n  - name: Stripe Payouts API\n    baseURL: ''\n    tags:\n      - Payouts\n    serviceName: Stripe Payouts API\n    serviceCategory: API\n  - name: Stripe Plans API\n    baseURL: ''\n    tags:\n      - Plan\n      - Plans\n    serviceName: Stripe Plans API\n    serviceCategory: API\n  - name: Stripe Prices API\n    baseURL: ''\n    tags:\n      - Prices\n    serviceName: Stripe Prices API\n    serviceCategory: API\n  - name: Stripe Products API\n    baseURL: ''\n    tags:\n      - Products\n    serviceName: Stripe Products\
+  \ API\n    serviceCategory: API\n  - name: Stripe Promotion Codes API\n    baseURL: ''\n    tags:\n      - Codes\n      - Promotion\n      - Promotions\n    serviceName: Stripe Promotion Codes API\n    serviceCategory: API\n  - name: Stripe Quotes API\n    baseURL: ''\n    tags:\n      - Quotes\n    serviceName: Stripe Quotes API\n    serviceCategory: API\n  - name: Stripe Radar API\n    baseURL: ''\n    tags:\n      - Fraud\n      - Radar\n    serviceName: Stripe Radar API\n    serviceCategory: API\n  - name: Stripe Refunds API\n    baseURL: ''\n    tags:\n      - Refunds\n    serviceName: Stripe Refunds API\n    serviceCategory: API\n  - name: Stripe Reporting API\n    baseURL: ''\n    tags:\n      - Reporting\n      - Reports\n    serviceName: Stripe Reporting API\n    serviceCategory: API\n  - name: Stripe Reviews API\n    baseURL: ''\n    tags:\n      - Reviews\n    serviceName: Stripe Reviews API\n    serviceCategory: API\n  - name: Stripe Setup API\n    baseURL: ''\n    tags:\n\
+  \      - Intent\n      - Intents\n      - Setup\n    serviceName: Stripe Setup API\n    serviceCategory: API\n  - name: Stripe Shipping Rates API\n    baseURL: ''\n    tags:\n      - Rates\n      - Shipping\n    serviceName: Stripe Shipping Rates API\n    serviceCategory: API\n  - name: Stripe Sigma API\n    baseURL: ''\n    tags:\n      - Sigma\n    serviceName: Stripe Sigma API\n    serviceCategory: API\n  - name: Stripe Sources API\n    baseURL: ''\n    tags:\n      - Sources\n      - Transactions\n    serviceName: Stripe Sources API\n    serviceCategory: API\n  - name: Stripe Subscription API\n    baseURL: ''\n    tags:\n      - Recurring\n      - Subscriptions\n    serviceName: Stripe Subscription API\n    serviceCategory: API\n  - name: Stripe Tax API\n    baseURL: ''\n    tags:\n      - Taxes\n    serviceName: Stripe Tax API\n    serviceCategory: API\n  - name: Stripe Terminal API\n    baseURL: ''\n    tags:\n      - Point of Sale\n      - Terminal\n      - Terminals\n    serviceName:\
+  \ Stripe Terminal API\n    serviceCategory: API\n  - name: Stripe Test Helpers API\n    baseURL: ''\n    tags:\n      - Synthetic\n      - Testing\n      - Virtualization\n    serviceName: Stripe Test Helpers API\n    serviceCategory: API\n  - name: Stripe Tokens API\n    baseURL: ''\n    tags:\n      - Tokens\n    serviceName: Stripe Tokens API\n    serviceCategory: API\n  - name: Stripe Topups API\n    baseURL: ''\n    tags:\n      - Topups\n    serviceName: Stripe Topups API\n    serviceCategory: API\n  - name: Stripe Transfers API\n    baseURL: ''\n    tags:\n      - Transfers\n    serviceName: Stripe Transfers API\n    serviceCategory: API\n  - name: Stripe Treasury API\n    baseURL: ''\n    tags:\n      - Treasury\n    serviceName: Stripe Treasury API\n    serviceCategory: API\n  - name: Stripe Webhook API\n    baseURL: ''\n    tags:\n      - Webhooks\n    serviceName: Stripe Webhook API\n    serviceCategory: API\n  - name: Stripe Connect API\n    baseURL: ''\n    tags:\n      -\
+  \ Connect\n      - Marketplaces\n      - Platforms\n    serviceName: Stripe Connect API\n    serviceCategory: API\n  - name: Stripe Customer Portal API\n    baseURL: ''\n    tags:\n      - Billing\n      - Customers\n      - Portal\n      - Subscriptions\n    serviceName: Stripe Customer Portal API\n    serviceCategory: API\n  - name: Stripe Entitlements API\n    baseURL: ''\n    tags:\n      - Billing\n      - Entitlements\n      - Features\n    serviceName: Stripe Entitlements API\n    serviceCategory: API\n  - name: Stripe Forwarding API\n    baseURL: ''\n    tags:\n      - Cards\n      - Forwarding\n      - Vault\n    serviceName: Stripe Forwarding API\n    serviceCategory: API\n  - name: Stripe Crypto Onramp API\n    baseURL: ''\n    tags:\n      - Crypto\n      - Onramp\n      - Payments\n    serviceName: Stripe Crypto Onramp API\n    serviceCategory: API\n  - name: Stripe Revenue Recognition API\n    baseURL: ''\n    tags:\n      - Accounting\n      - Recognition\n      - Revenue\n\
+  \    serviceName: Stripe Revenue Recognition API\n    serviceCategory: API\n  - name: Stripe Billing Meters API\n    baseURL: ''\n    tags:\n      - Billing\n      - Meters\n      - Usage-Based\n    serviceName: Stripe Billing Meters API\n    serviceCategory: API\n  - name: Stripe Payment Method Configurations API\n    baseURL: ''\n    tags:\n      - Configuration\n      - Payments\n    serviceName: Stripe Payment Method Configurations API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n  - FN: APIs.json\n    email: info@apis.io\n  - name: Stripe\n    email: support@stripe.com\n    url: https://stripe.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/finops/stripe-finops.yml
-sources:
-- https://stripe.com/pricing
+sources: []
 specification: FinOps Framework
 tags:
+- Commerce
+- Financial Services
+- Fintech
+- Payments
+- T1
 - FinOps
 - Cost Management
 - FOCUS
-- Payments
 ---

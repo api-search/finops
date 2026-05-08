@@ -20,66 +20,73 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/freshdesk/refs/heads/main/asyncapi/freshdesk-webhook-api-asyncapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Tiered Subscription + Usage Add-ons
-description: 'FOCUS-aligned FinOps for Freshdesk: tiered per-agent SaaS subscription (Growth / Pro / Enterprise) billed annually, plus add-on usage for Freddy AI Agent sessions and purchased API capacity.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the freshdesk API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Freshworks Inc.
-  ProviderName: Freshworks
-  PublisherName: Freshworks Inc.
-  ServiceCategory: Customer Support SaaS
-  ServiceName: Freshdesk
+  ChargeCategory: Usage
+  InvoiceIssuerName: freshdesk
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: freshdesk
+  PublisherName: freshdesk
+  ServiceCategory: Developer Tools / API
+  ServiceName: freshdesk
 layout: finops
 meters:
-- aggregation: max
-  dimensions:
-  - plan
-  - account
-  name: agent_seats
-  unit: seat-month
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - account
-  name: freddy_ai_sessions
-  unit: session
-- aggregation: sum
-  dimensions:
+  - api
   - endpoint
-  - account
-  name: api_calls
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
-- aggregation: max
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - account
-  name: api_capacity_addon
-  unit: capacity-block
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Freshdesk Finops
 provider_name: freshdesk
 provider_slug: freshdesk
-publisher_name: Freshworks Inc.
-service_category: Customer Support SaaS
+publisher_name: freshdesk
+service_category: API
 slug: freshdesk-finops
 source_filename: freshdesk-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.freshworks.com/freshdesk/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: freshdesk\nproviderId: freshdesk\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Customer Support\n  - SaaS\ndescription: 'FOCUS-aligned FinOps for Freshdesk: tiered per-agent SaaS subscription (Growth / Pro\n  / Enterprise) billed annually, plus add-on usage for Freddy AI Agent sessions and purchased API\n  capacity.'\nsources:\n  - https://www.freshworks.com/freshdesk/pricing/\n  - https://developers.freshdesk.com/api/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Freshworks Inc.\nserviceCategory: Customer Support SaaS\nbillingModel:\n  pricingCategory: Tiered Subscription + Usage Add-ons\n  billingFrequency: Annual\n  billingCurrency:\
-  \ USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Freshdesk\n  ServiceCategory: Customer Support SaaS\n  ProviderName: Freshworks\n  PublisherName: Freshworks Inc.\n  InvoiceIssuerName: Freshworks Inc.\n  BillingCurrency: USD\nmeters:\n  - name: agent_seats\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - plan\n      - account\n  - name: freddy_ai_sessions\n    unit: session\n    aggregation: sum\n    dimensions:\n      - account\n  - name: api_calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - account\n  - name: api_capacity_addon\n    unit: capacity-block\n    aggregation: max\n    dimensions:\n      - account\nprinciples:\n  - name: Visibility\n    description: Use the Freshworks Admin / Billing console to see committed seats, Freddy\n      session consumption, and API rate-limit headroom; rely on X-RateLimit-* headers for\n      live API spend\
-  \ signals.\n  - name: Allocation\n    description: Map agent seats to teams/queues; tag tickets with custom fields to allocate\n      effort to product lines or customers.\n  - name: Optimization\n    description: Right-size annual seat commitments against active agent count; use Freddy AI\n      Copilot to deflect tickets and reduce headcount growth; cache list responses and\n      batch-update where the API contract allows.\n  - name: Accountability\n    description: Customer-support leader owns annual seat commit; finance reviews Freddy\n      session usage and any purchased API capacity blocks.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: freshdesk\nproviderId: freshdesk\npublisherName: freshdesk\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the freshdesk API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be\
+  \ allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing\
+  \ and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: freshdesk\n  ServiceCategory: Developer Tools / API\n  ProviderName: freshdesk\n  PublisherName: freshdesk\n  InvoiceIssuerName: freshdesk\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n\
+  \    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Freshdesk REST API\n    baseURL: https://yourdomain.freshdesk.com/api/v2\n    tags:\n      - Agents\n      - Companies\n      - Contacts\n      - Customer Support\n      - Helpdesk\n      - Tickets\n    serviceName: Freshdesk REST API\n    serviceCategory: API\n  - name: Freshdesk Webhook API\n    baseURL: https://api.example.com\n    tags:\n      - Automation\n      - Customer Support\n      - Events\n      - Notifications\n      - Webhooks\n    serviceName: Freshdesk Webhook API\n    serviceCategory: API\n  - name: Freshdesk App SDK\n    baseURL: https://api.example.com\n    tags:\n      - Apps\n      - Extensions\n      - Marketplace\n      - Plugins\n      - SDK\n    serviceName: Freshdesk App SDK\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost\
+  \ / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/freshdesk/refs/heads/main/finops/freshdesk-finops.yml
-sources:
-- https://www.freshworks.com/freshdesk/pricing/
-- https://developers.freshdesk.com/api/
+sources: []
 specification: FinOps Framework
 tags:
 - FinOps
+- Cost Management
 - FOCUS
-- Customer Support
-- SaaS
 ---

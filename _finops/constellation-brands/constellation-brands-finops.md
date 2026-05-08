@@ -5,58 +5,90 @@ aligned_with:
   dataSpecVersion: '1.3'
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
+api_specs:
+- filename: constellation-brands-openapi.yml
+  format: yaml
+  label: Product Items API
+  slug: product
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/constellation-brands/refs/heads/main/openapi/constellation-brands-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Partner-Bundled
-description: 'FOCUS-aligned FinOps for Constellation Brands: partner-distributed product / digital-asset API; access is governed by the partner agreement rather than per-call billing. FinOps applies to internal attribution of partner-API consumption and to commercial counterparty spend, not to a metered API bill.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Constellation Brands API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Constellation Brands, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Constellation Brands
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Constellation Brands
-  PublisherName: Constellation Brands, Inc.
-  ServiceCategory: Beverages / Product Data API
-  ServiceName: Constellation Brands API
+  PublisherName: Constellation Brands
+  ServiceCategory: Developer Tools / API
+  ServiceName: Constellation Brands
 layout: finops
 meters:
 - aggregation: sum
-  description: Internal-only meter — count of API calls per consuming application for chargeback within the partner organization. Not billed externally by Constellation Brands.
+  description: Count of billable API requests
   dimensions:
   - api
-  - consumer_app
-  - environment
-  name: api_calls_internal
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: Bottle shot / digital-asset downloads served from the partner API
+  description: Bytes returned over the network in API responses
   dimensions:
-  - asset_type
-  - brand
-  name: digital_asset_downloads
-  unit: download
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Constellation Brands Finops
 provider_name: Constellation Brands
 provider_slug: constellation-brands
-publisher_name: Constellation Brands, Inc.
-service_category: Beverages / Product Data API
+publisher_name: Constellation Brands
+service_category: API
 slug: constellation-brands-finops
 source_filename: constellation-brands-finops.yml
 source_heading: FinOps Profile
-source_url: https://dev.cbrands.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Constellation Brands\nproviderId: constellation-brands\npublisherName: Constellation Brands, Inc.\nserviceCategory: Beverages / Product Data API\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Beverages\n  - Digital Assets\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Constellation Brands: partner-distributed product / digital-asset\n  API; access is governed by the partner agreement rather than per-call billing. FinOps applies to internal\n  attribution of partner-API consumption and to commercial counterparty spend, not to a metered API\n  bill.'\nnotes: Constellation Brands does not publish per-call\
-  \ API pricing. This artifact tracks internal-only\n  meters useful for chargeback within consuming organizations.\nsources:\n  - https://dev.cbrands.com\nbillingModel:\n  pricingCategory: Partner-Bundled\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Constellation Brands API\n  ServiceCategory: Beverages / Product Data API\n  ProviderName: Constellation Brands\n  PublisherName: Constellation Brands, Inc.\n  InvoiceIssuerName: Constellation Brands, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: api_calls_internal\n    description: Internal-only meter — count of API calls per consuming application for chargeback within\n      the partner organization. Not billed externally by Constellation Brands.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - consumer_app\n      - environment\n  - name: digital_asset_downloads\n    description: Bottle\
-  \ shot / digital-asset downloads served from the partner API\n    unit: download\n    aggregation: sum\n    dimensions:\n      - asset_type\n      - brand\nprinciples:\n  - name: Visibility\n    description: Track API key usage internally; coordinate with api.support@cbrands.com for partner-side\n      usage reports under the partner agreement.\n  - name: Allocation\n    description: Allocate by consuming product / brand integration via API-key segmentation.\n  - name: Optimization\n    description: Cache product metadata and bottle-shot assets; pull deltas via the items product API\n      rather than full refresh; right-size partner agreement scope at renewal.\n  - name: Accountability\n    description: Trade-marketing / partner-integration teams own consumption against the partner agreement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Constellation Brands\nproviderId: constellation-brands\npublisherName: Constellation Brands\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Alcohol\n  - Beer\n  - Beverages\n  - Digital Assets\n  - Fortune 500\n  - Spirits\n  - Wine\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Constellation Brands API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Constellation Brands\n  ServiceCategory: Developer Tools / API\n  ProviderName: Constellation Brands\n  PublisherName: Constellation Brands\n  InvoiceIssuerName: Constellation Brands\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
+  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Product Items API\n    baseURL: https://api.cbrands.com/v3\n    tags:\n      - Catalog\n      - Items\n      - Products\n    serviceName: Product Items API\n    serviceCategory: API\n  - name: Bottle Shots API\n    baseURL: https://api.cbrands.com/api/1.0\n    tags:\n      - Bottle Shots\n      - Digital Assets\n      - Images\n    serviceName: Bottle Shots API\n    serviceCategory: API\n  - name: Tasting Notes API\n    baseURL: https://api.cbrands.com/api/1.0\n    tags:\n      - Documents\n      - Tasting Notes\n      - Wine\n    serviceName: Tasting Notes API\n    serviceCategory: API\n  - name: Hot\
+  \ Sheets API\n    baseURL: https://api.cbrands.com/api/1.0\n    tags:\n      - Awards\n      - Documents\n      - Reviews\n    serviceName: Hot Sheets API\n    serviceCategory: API\n  - name: Shelf Talkers API\n    baseURL: https://api.cbrands.com/api/1.0\n    tags:\n      - Merchandising\n      - POS\n      - Retail\n    serviceName: Shelf Talkers API\n    serviceCategory: API\n  - name: Neck Hangers API\n    baseURL: https://api.cbrands.com/api/1.0\n    tags:\n      - Merchandising\n      - POS\n      - Retail\n    serviceName: Neck Hangers API\n    serviceCategory: API\n  - name: Recipes API\n    baseURL: https://api.cbrands.com/api/1.0\n    tags:\n      - Cocktails\n      - Recipes\n    serviceName: Recipes API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email:\
+  \ kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/constellation-brands/refs/heads/main/finops/constellation-brands-finops.yml
-sources:
-- https://dev.cbrands.com
+sources: []
 specification: FinOps Framework
 tags:
+- Alcohol
+- Beer
 - Beverages
 - Digital Assets
+- Fortune 500
+- Spirits
+- Wine
 - FinOps
+- Cost Management
 - FOCUS
 ---

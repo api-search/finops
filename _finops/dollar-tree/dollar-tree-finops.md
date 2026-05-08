@@ -7,47 +7,77 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Not Applicable
-  chargeCategories: []
-  pricingCategory: Not Applicable (No Public API)
-description: FOCUS-aligned FinOps shape for Dollar Tree vendor integrations. Dollar Tree does not invoice for API consumption; FinOps focus is on the consumer-side cost of running EDI/SAP integration with the Vendor Portal.
+  billingFrequency: Monthly
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Dollar Tree API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Not Applicable
+  ChargeCategory: Usage
+  InvoiceIssuerName: Dollar Tree
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Dollar Tree
-  PublisherName: Dollar Tree, Inc.
-  ServiceCategory: Retail / Vendor Integration
-  ServiceName: Dollar Tree Vendor Portal
+  PublisherName: Dollar Tree
+  ServiceCategory: Developer Tools / API
+  ServiceName: Dollar Tree
 layout: finops
 meters:
-- aggregation: count
-  description: EDI documents exchanged with Dollar Tree
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - document_type
-  - direction
-  name: edi_documents
-  unit: document
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Dollar Tree Finops
 provider_name: Dollar Tree
 provider_slug: dollar-tree
-publisher_name: Dollar Tree, Inc.
-service_category: Retail / Vendor Integration
+publisher_name: Dollar Tree
+service_category: API
 slug: dollar-tree-finops
 source_filename: dollar-tree-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.dollartree.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Dollar Tree\nproviderId: dollar-tree\npublisherName: Dollar Tree, Inc.\nserviceCategory: Retail / Vendor Integration\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Retail\n  - Discount Retail\n  - EDI\n  - Vendor Management\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for Dollar Tree vendor integrations. Dollar Tree does not invoice\n  for API consumption; FinOps focus is on the consumer-side cost of running EDI/SAP integration with the\n  Vendor Portal.\nnotes: No public API or invoiced consumption; reconciled=false. Meters describe internal integration cost.\nsources:\n  - https://www.dollartree.com/\n\
-  billingModel:\n  pricingCategory: Not Applicable (No Public API)\n  billingFrequency: Not Applicable\n  billingCurrency: USD\n  chargeCategories: []\nfocusColumns:\n  ServiceName: Dollar Tree Vendor Portal\n  ServiceCategory: Retail / Vendor Integration\n  ProviderName: Dollar Tree\n  PublisherName: Dollar Tree, Inc.\n  InvoiceIssuerName: Not Applicable\n  BillingCurrency: USD\nmeters:\n  - name: edi_documents\n    description: EDI documents exchanged with Dollar Tree\n    unit: document\n    aggregation: count\n    dimensions:\n      - document_type\n      - direction\nprinciples:\n  - name: Visibility\n    description: Track EDI volumes and acknowledgement latency in the consumer's integration platform;\n      Dollar Tree does not invoice for API access.\n  - name: Allocation\n    description: Allocate EDI/SAP integration cost to the vendor program that owns the trading-partner\n      relationship.\n  - name: Optimization\n    description: Batch EDI transmissions where the trading-partner\
-  \ agreement permits; minimise duplicated\n      vendor portal sessions.\n  - name: Accountability\n    description: Vendor program owner is accountable for the trading-partner agreement and integration\n      uptime.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Dollar Tree\nproviderId: dollar-tree\npublisherName: Dollar Tree\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Retail\n  - Discount Retail\n  - EDI\n  - Vendor Management\n  - Fortune 500\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Dollar Tree API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
+  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Dollar Tree\n  ServiceCategory: Developer Tools / API\n  ProviderName: Dollar Tree\n  PublisherName: Dollar Tree\n  InvoiceIssuerName: Dollar Tree\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Dollar Tree Vendor Portal\n    baseURL: https://cvp.dollartree.com\n    tags:\n      - Discount Retail\n      - EDI\n      - Retail\n      - Vendor Management\n    serviceName: Dollar Tree Vendor Portal\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/dollar-tree/refs/heads/main/finops/dollar-tree-finops.yml
-sources:
-- https://www.dollartree.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Retail
 - Discount Retail
 - EDI
 - Vendor Management
+- Fortune 500
 - FinOps
+- Cost Management
 - FOCUS
 ---

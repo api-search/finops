@@ -20,45 +20,80 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/workday-studio/refs/heads/main/openapi/workday-studio-web-services-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Subscription
-description: FinOps shape for Workday Studio is opaque. Studio is an IDE bundled with a Workday tenant subscription; runtime API consumption is part of the same tenant contract with no per-integration meter, FOCUS export, or public usage-billing API.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Workday Studio API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Workday, Inc.
-  ProviderName: Workday
-  PublisherName: Workday, Inc.
-  ServiceCategory: HR / Finance SaaS
+  ChargeCategory: Usage
+  InvoiceIssuerName: Workday Studio
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Workday Studio
+  PublisherName: Workday Studio
+  ServiceCategory: Developer Tools / API
   ServiceName: Workday Studio
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - tenant
-  name: tenant_subscription
-  unit: month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Workday Studio Finops
 provider_name: Workday Studio
 provider_slug: workday-studio
-publisher_name: Workday, Inc.
-service_category: HR / Finance SaaS
+publisher_name: Workday Studio
+service_category: API
 slug: workday-studio-finops
 source_filename: workday-studio-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.workday.com/en-us/why-workday/about-us/contact-us.html
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Workday Studio\nproviderId: workday-studio\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Integration\n  - Workday\ndescription: FinOps shape for Workday Studio is opaque. Studio is an IDE bundled with a Workday\n  tenant subscription; runtime API consumption is part of the same tenant contract with no\n  per-integration meter, FOCUS export, or public usage-billing API.\nsources:\n  - https://www.workday.com/en-us/why-workday/about-us/contact-us.html\n  - https://doc.workday.com/\nnotes: Workday does not expose a FOCUS-aligned cost export for Studio integrations. Meters and\n  charge categories cannot be reconciled without authenticated access to the customer's Workday\n  Community documentation and contract.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n\
-  \  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Workday, Inc.\nserviceCategory: HR / Finance SaaS\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Workday Studio\n  ServiceCategory: HR / Finance SaaS\n  ProviderName: Workday\n  PublisherName: Workday, Inc.\n  InvoiceIssuerName: Workday, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: tenant_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tenant\nprinciples:\n  - name: Visibility\n    description: No public usage API; customers track Studio integration runs through the Workday\n      Integration Cloud monitor inside the tenant.\n  - name: Allocation\n    description: Costs allocate by Workday tenant and integration entitlement; per-integration\n      attribution depends on Studio's internal run history rather than\
-  \ a billing export.\n  - name: Optimization\n    description: Levers are integration-design choices (batch sizing, schedule frequency, EIB use\n      where appropriate) rather than rate or commitment discounts.\n  - name: Accountability\n    description: Studio license is owned by Workday procurement; Studio integration design and\n      operation are owned by the integration engineering team.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Workday Studio\nproviderId: workday-studio\npublisherName: Workday Studio\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud\n  - Development\n  - Enterprise\n  - Finance\n  - HR\n  - IDE\n  - Integration\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Workday Studio API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
+  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Workday Studio\n  ServiceCategory: Developer Tools / API\n  ProviderName: Workday Studio\n  PublisherName: Workday Studio\n  InvoiceIssuerName: Workday Studio\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network\
+  \ in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Workday Studio Integration API\n    baseURL: ''\n    tags:\n      - Custom\n      - Development\n      - Integration\n    serviceName: Workday Studio Integration API\n    serviceCategory: API\n  - name: Workday Web Services API\n    baseURL: ''\n    tags:\n      - Enterprise\n      - REST\n      - SOAP\n      - Web Services\n    serviceName: Workday Web Services API\n    serviceCategory: API\n  - name: Workday REST API\n    baseURL: ''\n    tags:\n      - Data Access\n      - JSON\n      - OAuth\n      - REST\n    serviceName: Workday REST API\n    serviceCategory: API\n  - name: Workday Custom Reports API\n    baseURL: ''\n    tags:\n      - Analytics\n\
+  \      - Custom\n      - Report as a Service\n      - Reports\n    serviceName: Workday Custom Reports API\n    serviceCategory: API\n  - name: Workday Orchestrate API\n    baseURL: ''\n    tags:\n      - Automation\n      - Event Driven\n      - Low Code\n      - Orchestration\n      - Workflows\n    serviceName: Workday Orchestrate API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/workday-studio/refs/heads/main/finops/workday-studio-finops.yml
-sources:
-- https://www.workday.com/en-us/why-workday/about-us/contact-us.html
-- https://doc.workday.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Cloud
+- Development
+- Enterprise
+- Finance
+- HR
+- IDE
 - Integration
-- Workday
+- FinOps
+- Cost Management
+- FOCUS
 ---

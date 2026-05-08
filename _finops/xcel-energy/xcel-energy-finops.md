@@ -20,46 +20,83 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/xcel-energy/refs/heads/main/openapi/xcel-energy-smart-meter-api.yaml
 billing_model:
   billingCurrency: USD
-  billingFrequency: N/A
-  chargeCategories: []
-  pricingCategory: Non-Commercial (Regulated Data Sharing)
-description: 'FinOps shape for Xcel Energy is non-commercial: API access is provided to customers and authorized third parties under ESPI / Green Button regulation rather than as a billable service. There is no Xcel-issued invoice for API usage and no public per-request meter.'
+  billingFrequency: Monthly
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Xcel Energy API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Xcel Energy Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Xcel Energy
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Xcel Energy
-  PublisherName: Xcel Energy Inc.
-  ServiceCategory: Regulated Utility / Energy Data
-  ServiceName: Xcel Energy Developer APIs
+  PublisherName: Xcel Energy
+  ServiceCategory: Developer Tools / API
+  ServiceName: Xcel Energy
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - third_party_provider
-  - customer_authorization
-  name: espi_data_volume
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Xcel Energy Finops
 provider_name: Xcel Energy
 provider_slug: xcel-energy
-publisher_name: Xcel Energy Inc.
-service_category: Regulated Utility / Energy Data
+publisher_name: Xcel Energy
+service_category: API
 slug: xcel-energy-finops
 source_filename: xcel-energy-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer-apim.aws.xcelenergy.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Xcel Energy\nproviderId: xcel-energy\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Energy Data\n  - Utility\n  - Green Button\ndescription: 'FinOps shape for Xcel Energy is non-commercial: API access is provided to customers\n  and authorized third parties under ESPI / Green Button regulation rather than as a billable\n  service. There is no Xcel-issued invoice for API usage and no public per-request meter.'\nsources:\n  - https://developer-apim.aws.xcelenergy.com/\n  - https://my.xcelenergy.com/s/\nnotes: Xcel Energy does not bill for API access. The provider's commercial relationship with\n  customers is energy delivery, not data access. FOCUS columns are populated for completeness;\n  meters reflect data-volume telemetry rather than billable line items.\nalignedWith:\n  framework: FinOps Foundation Framework\n\
-  \  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Xcel Energy Inc.\nserviceCategory: Regulated Utility / Energy Data\nbillingModel:\n  pricingCategory: Non-Commercial (Regulated Data Sharing)\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories: []\nfocusColumns:\n  ServiceName: Xcel Energy Developer APIs\n  ServiceCategory: Regulated Utility / Energy Data\n  ProviderName: Xcel Energy\n  PublisherName: Xcel Energy Inc.\n  InvoiceIssuerName: Xcel Energy Inc.\n  BillingCurrency: USD\nmeters:\n  - name: espi_data_volume\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - third_party_provider\n      - customer_authorization\nprinciples:\n  - name: Visibility\n    description: Third-party providers see ESPI data flow through their own ingestion pipeline;\n      Xcel does not publish a usage dashboard for downstream consumers.\n  - name: Allocation\n\
-  \    description: Allocation occurs at the third-party provider's own infrastructure (per\n      authorized customer or per service offering), not on a Xcel invoice.\n  - name: Optimization\n    description: Levers are ESPI subscription cadence (daily vs. real-time), batch sizing on\n      NotificationLink callbacks, and limiting authorized data scope to what the application\n      needs.\n  - name: Accountability\n    description: The third-party provider's product team owns the integration; Xcel's role is\n      regulated data fiduciary rather than billable counterparty.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Xcel Energy\nproviderId: xcel-energy\npublisherName: Xcel Energy\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Electric Utility\n  - Energy\n  - Energy Data\n  - Green Button\n  - Natural Gas\n  - Smart Grid\n  - Smart Meter\n  - Utility\n  - ESPI\n  - IEEE 2030.5\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Xcel Energy API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n    \
+  \  real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      -\
+  \ Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Xcel Energy\n  ServiceCategory: Developer Tools / API\n  ProviderName: Xcel Energy\n  PublisherName: Xcel Energy\n  InvoiceIssuerName: Xcel Energy\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
+  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Xcel Energy Green Button Connect My Data API\n    baseURL: https://api.xcelenergy.com\n    tags:\n      - Energy Data\n      - Green Button\n      - ESPI\n      - Smart Meter\n      - Usage Data\n      - OAuth 2.0\n    serviceName: Xcel Energy Green Button Connect My Data API\n    serviceCategory: API\n  - name: Xcel Energy Smart Meter IEEE 2030.5 API\n    baseURL: ''\n    tags:\n      - IEEE 2030.5\n      - Smart Meter\n      - Energy Usage\n      - Solar\n      - Demand Response\n      - Local Network\n    serviceName: Xcel Energy Smart Meter IEEE 2030.5 API\n    serviceCategory: API\nunitEconomics:\n\
+  \  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/xcel-energy/refs/heads/main/finops/xcel-energy-finops.yml
-sources:
-- https://developer-apim.aws.xcelenergy.com/
-- https://my.xcelenergy.com/s/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Electric Utility
+- Energy
 - Energy Data
-- Utility
 - Green Button
+- Natural Gas
+- Smart Grid
+- Smart Meter
+- Utility
+- ESPI
+- IEEE 2030.5
+- FinOps
+- Cost Management
+- FOCUS
 ---

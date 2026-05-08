@@ -38,72 +38,83 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/coinbase/refs/heads/main/openapi/coinbase-commerce-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Continuous Settlement
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  - Refund
-  pricingCategory: Take Rate
-description: 'FOCUS-aligned FinOps for Coinbase: per-trade maker/taker take rates that scale by 30-day USD volume. API access itself is free; cost is realized at trade execution.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Coinbase API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Coinbase, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Coinbase
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Coinbase
-  PublisherName: Coinbase, Inc.
-  ServiceCategory: Financial Services
-  ServiceName: Coinbase Advanced Trade
+  PublisherName: Coinbase
+  ServiceCategory: Developer Tools / API
+  ServiceName: Coinbase
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - product_id
-  - fee_tier
-  - stable_pair_flag
-  name: maker_volume
-  unit: USD
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - product_id
-  - fee_tier
-  name: taker_volume
-  unit: USD
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - product_id
-  - fee_tier
-  name: maker_fees
-  unit: USD
-- aggregation: sum
-  dimensions:
-  - product_id
-  - fee_tier
-  name: taker_fees
-  unit: USD
-- aggregation: max
-  dimensions:
-  - account
-  name: rolling_30d_volume
-  unit: USD
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Coinbase Finops
 provider_name: Coinbase
 provider_slug: coinbase
-publisher_name: Coinbase, Inc.
-service_category: Financial Services
+publisher_name: Coinbase
+service_category: API
 slug: coinbase-finops
 source_filename: coinbase-finops.yml
 source_heading: FinOps Profile
-source_url: https://help.coinbase.com/en/coinbase/trading-and-funding/advanced-trade/advanced-trade-fees
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Coinbase\nproviderId: coinbase\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Cryptocurrency\n  - Trading\ndescription: 'FOCUS-aligned FinOps for Coinbase: per-trade maker/taker take rates that scale by 30-day\n  USD volume. API access itself is free; cost is realized at trade execution.'\nsources:\n  - https://help.coinbase.com/en/coinbase/trading-and-funding/advanced-trade/advanced-trade-fees\n  - https://docs.cdp.coinbase.com/advanced-trade/docs/welcome\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Coinbase, Inc.\nserviceCategory: Financial Services\nbillingModel:\n  pricingCategory: Take Rate\n  billingFrequency: Continuous\
-  \ Settlement\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: Coinbase Advanced Trade\n  ServiceCategory: Financial Services\n  ProviderName: Coinbase\n  PublisherName: Coinbase, Inc.\n  InvoiceIssuerName: Coinbase, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: maker_volume\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - product_id\n      - fee_tier\n      - stable_pair_flag\n  - name: taker_volume\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - product_id\n      - fee_tier\n  - name: maker_fees\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - product_id\n      - fee_tier\n  - name: taker_fees\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - product_id\n      - fee_tier\n  - name: rolling_30d_volume\n    unit: USD\n    aggregation: max\n    dimensions:\n      - account\nprinciples:\n  - name: Visibility\n    description: Pull executed-trade fee data from\
-  \ the Advanced Trade /orders/historical/fills endpoint;\n      track 30-day rolling USD volume to anticipate tier transitions.\n  - name: Allocation\n    description: Tag orders with client_order_id metadata to attribute trading PnL and fees to strategy,\n      desk, or product.\n  - name: Optimization\n    description: Use limit orders to qualify for maker pricing; route through 22 stable pairs (0.00% maker)\n      where possible; consolidate volume across one entity to reach higher Advanced tiers; apply for fee\n      upgrade program above $100M monthly volume.\n  - name: Accountability\n    description: Trading desk owns fee tier; finance reconciles maker/taker fees against fills nightly.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Coinbase\nproviderId: coinbase\npublisherName: Coinbase\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Blockchain\n  - Cryptocurrency\n  - Custody\n  - Exchange\n  - Onramp\n  - Payments\n  - Trading\n  - Wallet\n  - Web3\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Coinbase API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Coinbase\n  ServiceCategory: Developer Tools / API\n  ProviderName: Coinbase\n  PublisherName: Coinbase\n  InvoiceIssuerName: Coinbase\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n \
+  \   unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Coinbase Advanced Trade API\n    baseURL: https://api.coinbase.com\n    tags:\n      - Automation\n      - Cryptocurrency\n      - Market Data\n      - Orders\n      - Trading\n    serviceName: Coinbase Advanced Trade API\n    serviceCategory: API\n  - name: Coinbase Exchange API\n    baseURL: https://api.exchange.coinbase.com\n    tags:\n      - Cryptocurrency\n      - Exchange\n      - FIX\n      - Market Data\n      - Trading\n      - WebSocket\n    serviceName: Coinbase Exchange API\n    serviceCategory: API\n  - name: Coinbase Prime API\n    baseURL: https://api.prime.coinbase.com\n    tags:\n      - Cryptocurrency\n      - Custody\n      - Institutional\n    \
+  \  - Prime Brokerage\n      - Trading\n    serviceName: Coinbase Prime API\n    serviceCategory: API\n  - name: Coinbase Onramp API\n    baseURL: https://api.developer.coinbase.com\n    tags:\n      - Cryptocurrency\n      - Fiat\n      - Offramp\n      - Onramp\n      - Payments\n    serviceName: Coinbase Onramp API\n    serviceCategory: API\n  - name: Coinbase Commerce API\n    baseURL: https://api.commerce.coinbase.com\n    tags:\n      - Checkout\n      - Commerce\n      - Cryptocurrency\n      - Invoices\n      - Payments\n    serviceName: Coinbase Commerce API\n    serviceCategory: API\n  - name: Coinbase Wallet SDK\n    baseURL: ''\n    tags:\n      - Cryptocurrency\n      - DApps\n      - SDK\n      - Wallet\n      - Web3\n    serviceName: Coinbase Wallet SDK\n    serviceCategory: API\n  - name: Coinbase Data API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Blockchain\n      - Cryptocurrency\n      - Market Data\n    serviceName: Coinbase Data API\n    serviceCategory:\
+  \ API\n  - name: Coinbase AgentKit\n    baseURL: ''\n    tags:\n      - Agents\n      - AI\n      - Blockchain\n      - SDK\n      - Wallet\n    serviceName: Coinbase AgentKit\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/coinbase/refs/heads/main/finops/coinbase-finops.yml
-sources:
-- https://help.coinbase.com/en/coinbase/trading-and-funding/advanced-trade/advanced-trade-fees
-- https://docs.cdp.coinbase.com/advanced-trade/docs/welcome
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Blockchain
 - Cryptocurrency
+- Custody
+- Exchange
+- Onramp
+- Payments
 - Trading
+- Wallet
+- Web3
+- FinOps
+- Cost Management
+- FOCUS
 ---

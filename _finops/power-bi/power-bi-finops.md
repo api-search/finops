@@ -14,106 +14,79 @@ api_specs:
   url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/powerbi/data-plane/Microsoft.PowerBI/stable/v1.0/powerbi.json
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly (per-user) and Hourly (capacity)
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Subscription + Capacity (Pay-As-You-Go + Reservation)
-description: 'FOCUS-aligned FinOps for Power BI: hybrid model combining per-user subscriptions (Free, Pro $14/user/month, Premium Per User $24/user/month) with hourly Azure capacity (Power BI Embedded A SKUs and Microsoft Fabric F SKUs that host Power BI Premium workloads). Per-user charges land on the Microsoft 365 / commerce invoice; capacity charges land on the Azure invoice and reconcile to FOCUS Pay-As-You-Go + Commitment Discount.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Power BI API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Corporation
-  PricingUnit: seat-month or v-core-hour
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  RegionId: varies (capacity is non-regional; data plane region per tenant)
-  ServiceCategory: Analytics
+  InvoiceIssuerName: Power BI
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Power BI
+  PublisherName: Power BI
+  ServiceCategory: Developer Tools / API
   ServiceName: Power BI
-  ServiceSubcategory: Business Intelligence
 layout: finops
 meters:
-- aggregation: max
-  description: Power BI Pro per-user subscriptions.
-  dimensions:
-  - tenant
-  - department
-  - cost_center
-  name: pro_seats
-  unit: seat-month
-- aggregation: max
-  description: Power BI Premium Per User subscriptions.
-  dimensions:
-  - tenant
-  - department
-  - cost_center
-  name: ppu_seats
-  unit: seat-month
 - aggregation: sum
-  description: Hourly v-core capacity billed for Power BI Embedded (A SKUs).
+  description: Count of billable API requests
   dimensions:
-  - sku
+  - api
+  - endpoint
+  - tier
   - region
-  - capacity_id
-  name: embedded_capacity_hours
-  unit: capacity-hour
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Hourly v-core capacity billed for Microsoft Fabric (F SKUs) hosting Power BI Premium workloads.
+  description: Bytes returned over the network in API responses
   dimensions:
-  - sku
+  - api
   - region
-  - capacity_id
-  - workload
-  name: fabric_capacity_hours
-  unit: capacity-hour
-- aggregation: count
-  description: Annual capacity reservation purchase that earns the 40.5% commitment discount over pay-as-you-go.
-  dimensions:
-  - sku
-  - region
-  name: capacity_reservation
-  unit: reservation-year
-- aggregation: max
-  description: Storage consumed by datasets, dataflows, and Lakehouse content.
-  dimensions:
-  - workspace
-  - capacity_id
-  name: dataset_storage
-  unit: GB-month
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Scheduled and on-demand dataset refresh operations.
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - dataset
-  - workspace
-  name: dataset_refreshes
-  unit: refresh
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Power Bi Finops
 provider_name: Power BI
 provider_slug: power-bi
-publisher_name: Microsoft Corporation
-service_category: Analytics
+publisher_name: Power BI
+service_category: API
 slug: power-bi-finops
 source_filename: power-bi-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.microsoft.com/en-us/power-platform/products/power-bi/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Power BI\nproviderId: power-bi\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Analytics\n  - Business Intelligence\n  - Microsoft\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps for Power BI: hybrid model combining per-user\n  subscriptions (Free, Pro $14/user/month, Premium Per User $24/user/month)\n  with hourly Azure capacity (Power BI Embedded A SKUs and Microsoft Fabric\n  F SKUs that host Power BI Premium workloads). Per-user charges land on the\n  Microsoft 365 / commerce invoice; capacity charges land on the Azure\n  invoice and reconcile to FOCUS Pay-As-You-Go + Commitment Discount.\nsources:\n  - https://www.microsoft.com/en-us/power-platform/products/power-bi/pricing\n  - https://learn.microsoft.com/en-us/power-bi/developer/embedded/embedded-faq\n  - https://learn.microsoft.com/en-us/rest/api/power-bi/\n\
-  alignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Microsoft Corporation\nserviceCategory: Analytics\nbillingModel:\n  pricingCategory: Subscription + Capacity (Pay-As-You-Go + Reservation)\n  billingFrequency: Monthly (per-user) and Hourly (capacity)\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Power BI\n  ServiceCategory: Analytics\n  ServiceSubcategory: Business Intelligence\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Usage\n  PricingUnit: seat-month or v-core-hour\n  RegionId: varies (capacity is non-regional; data plane region per tenant)\nmeters:\n  - name: pro_seats\n    description: Power\
-  \ BI Pro per-user subscriptions.\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - tenant\n      - department\n      - cost_center\n  - name: ppu_seats\n    description: Power BI Premium Per User subscriptions.\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - tenant\n      - department\n      - cost_center\n  - name: embedded_capacity_hours\n    description: Hourly v-core capacity billed for Power BI Embedded (A SKUs).\n    unit: capacity-hour\n    aggregation: sum\n    dimensions:\n      - sku\n      - region\n      - capacity_id\n  - name: fabric_capacity_hours\n    description: Hourly v-core capacity billed for Microsoft Fabric (F SKUs) hosting Power BI Premium workloads.\n    unit: capacity-hour\n    aggregation: sum\n    dimensions:\n      - sku\n      - region\n      - capacity_id\n      - workload\n  - name: capacity_reservation\n    description: Annual capacity reservation purchase that earns the 40.5% commitment discount over pay-as-you-go.\n\
-  \    unit: reservation-year\n    aggregation: count\n    dimensions:\n      - sku\n      - region\n  - name: dataset_storage\n    description: Storage consumed by datasets, dataflows, and Lakehouse content.\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - workspace\n      - capacity_id\n  - name: dataset_refreshes\n    description: Scheduled and on-demand dataset refresh operations.\n    unit: refresh\n    aggregation: sum\n    dimensions:\n      - dataset\n      - workspace\nprinciples:\n  - name: Visibility\n    description: Use the Microsoft Fabric Capacity Metrics app and Azure diagnostic logs to track v-core utilization on a 30-second evaluation cycle; per-user license consumption surfaces in the Microsoft 365 admin center and Cost Management exports.\n  - name: Allocation\n    description: Allocate per-user costs by department/cost center via Microsoft Entra group membership; allocate capacity costs by workspace assignment - the utilization report's bar chart visual\
-  \ maps directly to chargeback by workspace owner.\n  - name: Optimization\n    description: Pause Embedded A-SKU capacity when not in use to stop hourly billing; choose annual capacity reservation for 40.5% over pay-as-you-go; right-size SKUs using the metrics-app utilization data to avoid interactive request delay.\n  - name: Accountability\n    description: Capacity admins receive utilization-threshold notifications (default 80%) from the Power BI admin portal; Azure Alerts can be configured on the Premium CPU metric; workspace owners are accountable for refresh and dataflow load profiles that drive background utilization.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Power BI\nproviderId: power-bi\npublisherName: Power BI\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Business Intelligence\n  - Dashboards\n  - Data Analysis\n  - Reporting\n  - Visualization\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Power BI API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
+  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
+  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Power BI\n  ServiceCategory: Developer Tools / API\n  ProviderName: Power BI\n  PublisherName: Power BI\n  InvoiceIssuerName: Power BI\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Power BI REST API\n    baseURL: https://api.powerbi.com\n    tags:\n      - Dashboards\n      - Datasets\n      - Embeddings\n      - Reports\n      - REST\n    serviceName: Power BI REST API\n    serviceCategory: API\n  - name: Power BI Embedded\n    baseURL: https://api.powerbi.com\n    tags:\n      - Azure\n      - Embedded\n      - Integration\n    serviceName: Power BI Embedded\n    serviceCategory: API\n  - name: Power BI Management API\n    baseURL: https://api.powerbi.com/v1.0/myorg/admin\n    tags:\n      - Administration\n      - Governance\n      - Management\n    serviceName: Power BI Management API\n    serviceCategory: API\n  - name: Power BI Push Datasets API\n\
+  \    baseURL: https://api.powerbi.com\n    tags:\n      - Datasets\n      - Push\n      - Real-Time\n      - Streaming\n    serviceName: Power BI Push Datasets API\n    serviceCategory: API\n  - name: Power BI Report Server REST API\n    baseURL: https://api.powerbi.com\n    tags:\n      - On-Premises\n      - Report Server\n      - Reports\n      - SSRS\n    serviceName: Power BI Report Server REST API\n    serviceCategory: API\n  - name: Power BI Visuals API\n    baseURL: https://api.powerbi.com\n    tags:\n      - Charts\n      - Custom Visuals\n      - Visualization\n      - Visuals\n    serviceName: Power BI Visuals API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/power-bi/refs/heads/main/finops/power-bi-finops.yml
-sources:
-- https://www.microsoft.com/en-us/power-platform/products/power-bi/pricing
-- https://learn.microsoft.com/en-us/power-bi/developer/embedded/embedded-faq
-- https://learn.microsoft.com/en-us/rest/api/power-bi/
+sources: []
 specification: FinOps Framework
 tags:
 - Analytics
 - Business Intelligence
-- Microsoft
+- Dashboards
+- Data Analysis
+- Reporting
+- Visualization
 - FinOps
+- Cost Management
 - FOCUS
 ---

@@ -187,97 +187,78 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/synapse/data-plane/Microsoft.Synapse/preview/2023-04-18-preview/linkConnections.json
 billing_model:
-  billingCurrency: USD (settlement varies)
+  billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
-  - Refund
   - Credit
+  - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Pay-As-You-Go + Committed Use
-description: FOCUS-aligned FinOps for Azure Synapse Analytics — three independent meter families (Dedicated SQL Pool DWU-hour, Serverless SQL Pool TB-processed, Spark vCore-hour) plus Pipelines activity runs and ADLS Gen2 storage. Optimization centers on pause/resume, Reserved Capacity, query-tuning to reduce TB-scanned, and migrating to Microsoft Fabric for unified capacity-based pricing.
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Azure Synapse Analytics API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Corporation
+  InvoiceIssuerName: Azure Synapse Analytics
   PricingCategory: Usage-Based
-  PricingUnit: varies (DWU-hour, TB, vCore-hour, activity-run)
-  ProviderName: Microsoft Azure
-  PublisherName: Microsoft Corporation
-  RegionId: varies
-  ServiceCategory: Analytics
+  PricingUnit: request
+  ProviderName: Azure Synapse Analytics
+  PublisherName: Azure Synapse Analytics
+  ServiceCategory: Developer Tools / API
   ServiceName: Azure Synapse Analytics
 layout: finops
 meters:
 - aggregation: sum
-  description: Dedicated SQL Pool DWU-hour consumption (DW100c–DW30000c).
+  description: Count of billable API requests
   dimensions:
-  - workspace
-  - sql_pool_name
-  - region
-  name: dwu_hours
-  unit: dwu-hour
-- aggregation: sum
-  description: Serverless SQL Pool data scanned per query, billed per TB.
-  dimensions:
-  - workspace
-  - query_label
-  - dataset
-  name: serverless_tb_processed
-  unit: TB
-- aggregation: sum
-  description: Apache Spark pool vCore-hour consumption.
-  dimensions:
-  - workspace
-  - spark_pool_name
-  - node_size
-  name: spark_vcore_hours
-  unit: vcore-hour
-- aggregation: sum
-  description: Synapse Pipelines orchestration activity executions.
-  dimensions:
-  - workspace
-  - pipeline
-  - activity_type
-  name: pipeline_activity_runs
-  unit: 1000-activity-runs
-- aggregation: sum
-  description: Data Integration Units consumed during copy/movement activities.
-  dimensions:
-  - workspace
-  - integration_runtime
-  name: data_movement_diu_hours
-  unit: diu-hour
-- aggregation: max
-  description: ADLS Gen2 storage backing the workspace.
-  dimensions:
-  - account
-  - container
+  - api
+  - endpoint
   - tier
-  name: storage_gb_month
-  unit: GB-month
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Azure Synapse Analytics Finops
 provider_name: Azure Synapse Analytics
 provider_slug: microsoft-azure-synapse-analytics
-publisher_name: Microsoft Corporation
-service_category: Analytics / Data Warehouse
+publisher_name: Azure Synapse Analytics
+service_category: API
 slug: microsoft-azure-synapse-analytics-finops
 source_filename: microsoft-azure-synapse-analytics-finops.yml
 source_heading: FinOps Profile
-source_url: https://azure.microsoft.com/en-us/pricing/details/synapse-analytics/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Azure Synapse Analytics\nproviderId: microsoft-azure-synapse-analytics\npublisherName: Microsoft Corporation\nserviceCategory: Analytics / Data Warehouse\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Analytics\n  - Apache Spark\n  - Big Data\n  - Data Integration\n  - Data Warehouse\n  - ETL\n  - SQL\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for Azure Synapse Analytics — three independent meter\n  families (Dedicated SQL Pool DWU-hour, Serverless SQL Pool TB-processed, Spark vCore-hour)\n  plus Pipelines activity runs and ADLS Gen2 storage. Optimization centers on pause/resume,\n  Reserved Capacity,\
-  \ query-tuning to reduce TB-scanned, and migrating to Microsoft Fabric\n  for unified capacity-based pricing.\nsources:\n  - https://azure.microsoft.com/en-us/pricing/details/synapse-analytics/\n  - https://learn.microsoft.com/en-us/azure/cost-management-billing/\n  - https://focus.finops.org/focus-specification/v1-3/\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Committed Use\n  billingFrequency: Monthly\n  billingCurrency: USD (settlement varies)\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\n    - Credit\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Azure Synapse Analytics\n  ServiceCategory: Analytics\n  ProviderName: Microsoft Azure\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  PricingCategory: Usage-Based\n  PricingUnit: varies (DWU-hour, TB, vCore-hour, activity-run)\n  BillingCurrency: USD\n  ChargeCategory: Usage\n  RegionId: varies\nmeters:\n  - name: dwu_hours\n    description:\
-  \ Dedicated SQL Pool DWU-hour consumption (DW100c–DW30000c).\n    unit: dwu-hour\n    aggregation: sum\n    dimensions:\n      - workspace\n      - sql_pool_name\n      - region\n  - name: serverless_tb_processed\n    description: Serverless SQL Pool data scanned per query, billed per TB.\n    unit: TB\n    aggregation: sum\n    dimensions:\n      - workspace\n      - query_label\n      - dataset\n  - name: spark_vcore_hours\n    description: Apache Spark pool vCore-hour consumption.\n    unit: vcore-hour\n    aggregation: sum\n    dimensions:\n      - workspace\n      - spark_pool_name\n      - node_size\n  - name: pipeline_activity_runs\n    description: Synapse Pipelines orchestration activity executions.\n    unit: 1000-activity-runs\n    aggregation: sum\n    dimensions:\n      - workspace\n      - pipeline\n      - activity_type\n  - name: data_movement_diu_hours\n    description: Data Integration Units consumed during copy/movement activities.\n    unit: diu-hour\n    aggregation:\
-  \ sum\n    dimensions:\n      - workspace\n      - integration_runtime\n  - name: storage_gb_month\n    description: ADLS Gen2 storage backing the workspace.\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - account\n      - container\n      - tier\nprinciples:\n  - name: Visibility\n    description: Cost Management shows per-resource line items (sql_pool, serverless,\n      spark_pool, pipelines). Use sys.dm_pdw_exec_requests / sys.dm_exec_requests to attribute\n      DWU-hour to specific queries. Synapse Studio's Monitor hub graphs Spark and pipeline\n      consumption.\n  - name: Allocation\n    description: Tag workspaces by team / cost-center via Azure tags. Pipeline activities can\n      carry custom annotations that flow through to Cost Management. Use separate workspaces\n      or SQL pools per business unit when chargeback is required.\n  - name: Optimization\n    description: Pause Dedicated SQL Pools off-hours (saves 100% of compute). Set Spark\n      auto-pause\
-  \ to 15 min idle. For Serverless, use partitioning + Parquet + result-set caching\n      + statistics to reduce TB-scanned. Buy Reserved Capacity for steady-state SQL workloads.\n      Migrate ETL to Spark or to Fabric for capacity pricing. Right-size DWU based on\n      sys.dm_pdw_resource_waits.\n  - name: Accountability\n    description: Workspace owner approves DWU upgrades. Set Cost Management budgets per\n      workspace with 50/80/100% alerts. Quarterly review of TB-scanned trends; flag queries\n      scanning >100 GB without partition pruning.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://azure.microsoft.com/services/synapse-analytics/\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Azure Synapse Analytics\nproviderId: microsoft-azure-synapse-analytics\npublisherName: Azure Synapse Analytics\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Apache Spark\n  - Big Data\n  - Data Integration\n  - Data Warehouse\n  - ETL\n  - SQL\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Azure Synapse Analytics API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n\
+  \      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n   \
+  \   - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Azure Synapse Analytics\n  ServiceCategory: Developer Tools / API\n  ProviderName: Azure Synapse Analytics\n  PublisherName: Azure Synapse Analytics\n  InvoiceIssuerName: Azure Synapse Analytics\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n  \
+  \    - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Synapse Workspace API\n    baseURL: https://management.azure.com\n    tags:\n      - Management\n      - Resource Manager\n      - Workspace\n    serviceName: Synapse Workspace API\n    serviceCategory: API\n  - name: Synapse SQL Pools API\n    baseURL: https://management.azure.com\n    tags:\n      - Data Warehouse\n      - Resource Manager\n      - SQL Pool\n    serviceName: Synapse SQL Pools API\n    serviceCategory: API\n  - name: Synapse Spark Pools API\n    baseURL: https://management.azure.com\n    tags:\n      - Apache Spark\n      - Big\
+  \ Data\n      - Resource Manager\n      - Spark\n    serviceName: Synapse Spark Pools API\n    serviceCategory: API\n  - name: Synapse Pipeline API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Data Integration\n      - Data Plane\n      - ETL\n      - Pipeline\n    serviceName: Synapse Pipeline API\n    serviceCategory: API\n  - name: Synapse Spark Job API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Batch Processing\n      - Data Plane\n      - Spark Jobs\n    serviceName: Synapse Spark Job API\n    serviceCategory: API\n  - name: Synapse Monitoring API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Data Plane\n      - Monitoring\n      - Observability\n    serviceName: Synapse Monitoring API\n    serviceCategory: API\n  - name: Synapse Link API\n    baseURL: https://management.azure.com\n    tags:\n      - HTAP\n      - Real-Time Analytics\n      - Synapse Link\n    serviceName: Synapse\
+  \ Link API\n    serviceCategory: API\n  - name: Synapse Access Control API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Access Control\n      - Data Plane\n      - RBAC\n      - Security\n    serviceName: Synapse Access Control API\n    serviceCategory: API\n  - name: Synapse Notebook API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Artifacts\n      - Data Exploration\n      - Data Plane\n      - Notebook\n    serviceName: Synapse Notebook API\n    serviceCategory: API\n  - name: Synapse Dataset API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Artifacts\n      - Data Management\n      - Data Plane\n      - Dataset\n    serviceName: Synapse Dataset API\n    serviceCategory: API\n  - name: Synapse Linked Service API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Connectivity\n      - Data Integration\n      - Data Plane\n      - Linked Service\n    serviceName:\
+  \ Synapse Linked Service API\n    serviceCategory: API\n  - name: Synapse Data Flow API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Data Flow\n      - Data Plane\n      - Data Transformation\n      - ETL\n    serviceName: Synapse Data Flow API\n    serviceCategory: API\n  - name: Synapse SQL Script API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Artifacts\n      - Data Plane\n      - SQL\n      - SQL Script\n    serviceName: Synapse SQL Script API\n    serviceCategory: API\n  - name: Synapse Trigger API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Automation\n      - Data Plane\n      - Scheduling\n      - Trigger\n    serviceName: Synapse Trigger API\n    serviceCategory: API\n  - name: Synapse Spark Job Definition API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Artifacts\n      - Batch Processing\n      - Data Plane\n      - Spark Job Definition\n\
+  \    serviceName: Synapse Spark Job Definition API\n    serviceCategory: API\n  - name: Synapse Managed Private Endpoints API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Data Plane\n      - Networking\n      - Private Endpoints\n      - Security\n    serviceName: Synapse Managed Private Endpoints API\n    serviceCategory: API\n  - name: Synapse Integration Runtimes API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Compute\n      - Data Integration\n      - Data Plane\n      - Integration Runtime\n    serviceName: Synapse Integration Runtimes API\n    serviceCategory: API\n  - name: Synapse Library API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Data Plane\n      - Library\n      - Package Management\n      - Spark\n    serviceName: Synapse Library API\n    serviceCategory: API\n  - name: Synapse Git Integration API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n\
+  \      - Data Plane\n      - DevOps\n      - Git Integration\n      - Source Control\n    serviceName: Synapse Git Integration API\n    serviceCategory: API\n  - name: Synapse Firewall Rules API\n    baseURL: https://management.azure.com\n    tags:\n      - Firewall Rules\n      - Network Security\n      - Resource Manager\n    serviceName: Synapse Firewall Rules API\n    serviceCategory: API\n  - name: Synapse Keys API\n    baseURL: https://management.azure.com\n    tags:\n      - Encryption Keys\n      - Resource Manager\n      - Security\n    serviceName: Synapse Keys API\n    serviceCategory: API\n  - name: Synapse Private Endpoint Connections API\n    baseURL: https://management.azure.com\n    tags:\n      - Networking\n      - Private Endpoint\n      - Resource Manager\n      - Security\n    serviceName: Synapse Private Endpoint Connections API\n    serviceCategory: API\n  - name: Synapse Private Link Hubs API\n    baseURL: https://management.azure.com\n    tags:\n      - Networking\n\
+  \      - Private Link Hub\n      - Resource Manager\n      - Security\n    serviceName: Synapse Private Link Hubs API\n    serviceCategory: API\n  - name: Synapse Kusto Pools API\n    baseURL: https://management.azure.com\n    tags:\n      - Data Explorer\n      - Kusto Pool\n      - Real-Time Analytics\n      - Resource Manager\n    serviceName: Synapse Kusto Pools API\n    serviceCategory: API\n  - name: Synapse Azure AD Only Authentication API\n    baseURL: https://management.azure.com\n    tags:\n      - Authentication\n      - Azure Active Directory\n      - Resource Manager\n      - Security\n    serviceName: Synapse Azure AD Only Authentication API\n    serviceCategory: API\n  - name: Synapse Spark Configuration API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Configuration\n      - Data Plane\n      - Spark\n      - Spark Configuration\n    serviceName: Synapse Spark Configuration API\n    serviceCategory: API\n  - name: Synapse Data Flow Debug\
+  \ Session API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Data Flow Debug\n      - Data Plane\n      - Data Transformation\n      - Debugging\n    serviceName: Synapse Data Flow Debug Session API\n    serviceCategory: API\n  - name: Synapse Credential API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Authentication\n      - Credential\n      - Data Plane\n      - Security\n    serviceName: Synapse Credential API\n    serviceCategory: API\n  - name: Synapse KQL Script API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Data Explorer\n      - Data Plane\n      - KQL Script\n      - Kusto\n    serviceName: Synapse KQL Script API\n    serviceCategory: API\n  - name: Synapse Link Connection API\n    baseURL: https://{workspaceName}.dev.azuresynapse.net\n    tags:\n      - Data Plane\n      - Data Replication\n      - Link Connection\n      - Real-Time Analytics\n    serviceName: Synapse Link Connection\
+  \ API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com/\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-synapse-analytics/refs/heads/main/finops/microsoft-azure-synapse-analytics-finops.yml
-sources:
-- https://azure.microsoft.com/en-us/pricing/details/synapse-analytics/
-- https://learn.microsoft.com/en-us/azure/cost-management-billing/
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
 - Analytics
@@ -288,5 +269,6 @@ tags:
 - ETL
 - SQL
 - FinOps
+- Cost Management
 - FOCUS
 ---

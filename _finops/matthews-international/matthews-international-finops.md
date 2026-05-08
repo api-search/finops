@@ -6,67 +6,76 @@ aligned_with:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
-  billingCurrency: USD (settlement varies)
-  billingFrequency: Per-Invoice
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Project / Solution Contract
-description: 'FOCUS-aligned FinOps shape for Matthews International: solution / project-priced industrial and brand-workflow integrations. There is no per-API-call meter; cost lives at the contract / project level.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Matthews International API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Matthews International Corporation
+  ChargeCategory: Usage
+  InvoiceIssuerName: Matthews International
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Matthews International
-  PublisherName: Matthews International Corporation
-  ServiceCategory: Industrial / B2B Solutions
-  ServiceName: Matthews International Solutions
+  PublisherName: Matthews International
+  ServiceCategory: Developer Tools / API
+  ServiceName: Matthews International
 layout: finops
 meters:
-- aggregation: max
-  description: Per-solution license, billed under the customer contract.
-  dimensions:
-  - segment
-  - product
-  - site
-  name: solution_license
-  unit: month
 - aggregation: sum
-  description: Implementation / professional services hours billed against the SOW.
+  description: Count of billable API requests
   dimensions:
-  - project
-  - site
-  name: professional_services
-  unit: hour
-- aggregation: max
-  description: Annual support / maintenance contract value.
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - segment
-  - product
-  name: support_contract
-  unit: year
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Matthews International Finops
 provider_name: Matthews International
 provider_slug: matthews-international
-publisher_name: Matthews International Corporation
-service_category: Industrial / B2B Solutions
+publisher_name: Matthews International
+service_category: API
 slug: matthews-international-finops
 source_filename: matthews-international-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.matw.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Matthews International\nproviderId: matthews-international\npublisherName: Matthews International Corporation\nserviceCategory: Industrial / B2B Solutions\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Memorialization\n  - Branding\n  - Industrial\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps shape for Matthews International: solution / project-priced industrial\n  and brand-workflow integrations. There is no per-API-call meter; cost lives at the contract / project\n  level.'\nnotes: |\n  No public per-API pricing. Meters track contract-level economics (license, project services, support)\n  rather than\
-  \ API request volume.\nsources:\n  - https://www.matw.com/\nprinciples:\n  - name: Visibility\n    description: Track integration spend at the project / contract level via the underlying purchase\n      order and statement-of-work; aggregate by Matthews business segment (Memorialization, Industrial\n      Technologies, SGK).\n  - name: Allocation\n    description: Allocate by consuming business unit / facility / brand. For warehouse automation, allocate\n      by site; for SGK brand workflows, allocate by brand and packaging program.\n  - name: Optimization\n    description: Consolidate integrations across sites and brands to reuse a single connector, negotiate\n      multi-year support, and revisit feature usage at contract renewal.\n  - name: Accountability\n    description: Assign a contract owner per Matthews business segment who reviews invoice accuracy and\n      milestone delivery against the SOW.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Allocation\n\
-  \      - Reporting and Analytics\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Budgeting\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Licensing and SaaS\n      - Workload Optimization\n  - name: Manage the FinOps Practice\n    capabilities:\n      - Invoicing and Chargeback\n      - Onboarding Workloads\nbillingModel:\n  pricingCategory: Project / Solution Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD (settlement varies)\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: Matthews International Solutions\n  ServiceCategory: Industrial / B2B Solutions\n  ProviderName: Matthews International\n  PublisherName: Matthews International Corporation\n  InvoiceIssuerName: Matthews International Corporation\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: solution_license\n    description: Per-solution license, billed\
-  \ under the customer contract.\n    unit: month\n    aggregation: max\n    dimensions:\n      - segment\n      - product\n      - site\n  - name: professional_services\n    description: Implementation / professional services hours billed against the SOW.\n    unit: hour\n    aggregation: sum\n    dimensions:\n      - project\n      - site\n  - name: support_contract\n    description: Annual support / maintenance contract value.\n    unit: year\n    aggregation: max\n    dimensions:\n      - segment\n      - product\napis:\n  - name: Matthews International API\n    baseURL: https://api.matw.com\n    tags:\n      - Memorialization\n      - Branding\n      - Industrial\n    serviceName: Matthews International API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Site\n    metric: billed_cost / active_sites\n    target: TBD\n  - name: Cost per Brand Program\n    metric: billed_cost / brand_programs\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Matthews International\nproviderId: matthews-international\npublisherName: Matthews International\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Memorialization\n  - Branding\n  - Industrial\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Matthews International API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Matthews International\n  ServiceCategory: Developer Tools / API\n  ProviderName: Matthews International\n  PublisherName: Matthews International\n  InvoiceIssuerName: Matthews International\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned\
+  \ over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Matthews International API\n    baseURL: https://api.matw.com\n    tags:\n      - Memorialization\n      - Branding\n      - Industrial\n    serviceName: Matthews International API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/matthews-international/refs/heads/main/finops/matthews-international-finops.yml
-sources:
-- https://www.matw.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Memorialization
 - Branding
 - Industrial
 - FinOps
+- Cost Management
 - FOCUS
 ---

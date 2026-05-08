@@ -7,59 +7,78 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: N/A
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Free (regulated)
-description: 'FOCUS-aligned FinOps shell for Elevance Health: CMS Interoperability FHIR APIs are free to consumers per regulation, so this artifact tracks the operational cost-of-serve rather than billed consumption. Meters describe FHIR call volume by endpoint to support internal cost accounting.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Elevance Health API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Adjustment
-  InvoiceIssuerName: Elevance Health, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Elevance Health
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Elevance Health
-  PublisherName: Elevance Health, Inc.
-  ServiceCategory: Healthcare Interoperability
-  ServiceName: Elevance Health FHIR APIs
+  PublisherName: Elevance Health
+  ServiceCategory: Developer Tools / API
+  ServiceName: Elevance Health
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
   - api
-  - resource
-  - app
-  name: fhir_requests
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
-- aggregation: count
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
   - api
-  name: registered_apps
-  unit: app
-- aggregation: count
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
   - api
-  name: member_authorizations
-  unit: authorization
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Elevance Health Finops
 provider_name: Elevance Health
 provider_slug: elevance-health
-publisher_name: Elevance Health, Inc.
-service_category: Healthcare Interoperability
+publisher_name: Elevance Health
+service_category: API
 slug: elevance-health-finops
 source_filename: elevance-health-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.anthem.com/developers
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Elevance Health\nproviderId: elevance-health\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Healthcare\n  - FHIR\n  - Interoperability\ndescription: 'FOCUS-aligned FinOps shell for Elevance Health: CMS Interoperability FHIR APIs are free\n  to consumers per regulation, so this artifact tracks the operational cost-of-serve rather than billed\n  consumption. Meters describe FHIR call volume by endpoint to support internal cost accounting.'\nnotes: Elevance Health does not bill external consumers for CMS-mandated FHIR access. FOCUS mapping\n  here serves Elevance internal accounting (compute and infrastructure attribution) rather than external\n  invoice reconciliation.\nsources:\n  - https://www.anthem.com/developers\n  - https://www.cms.gov/Regulations-and-Guidance/Guidance/Interoperability/index\nalignedWith:\n\
-  \  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Elevance Health, Inc.\nserviceCategory: Healthcare Interoperability\nbillingModel:\n  pricingCategory: Free (regulated)\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories:\n    - Adjustment\nfocusColumns:\n  ServiceName: Elevance Health FHIR APIs\n  ServiceCategory: Healthcare Interoperability\n  ProviderName: Elevance Health\n  PublisherName: Elevance Health, Inc.\n  InvoiceIssuerName: Elevance Health, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Adjustment\nmeters:\n  - name: fhir_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - resource\n      - app\n  - name: registered_apps\n    unit: app\n    aggregation: count\n    dimensions:\n      - api\n  - name: member_authorizations\n    unit: authorization\n   \
-  \ aggregation: count\n    dimensions:\n      - api\nprinciples:\n  - name: Visibility\n    description: Track FHIR call volume per registered app; expose to Elevance compliance team for CMS\n      reporting.\n  - name: Allocation\n    description: Allocate gateway and FHIR backend infrastructure cost across Patient Access, Provider\n      Directory, Formulary, and Payer-to-Payer.\n  - name: Optimization\n    description: Cache public Provider Directory and Formulary responses; right-size FHIR cluster autoscaling\n      to actual traffic profile.\n  - name: Accountability\n    description: Interoperability program owner reviews call volume and gateway cost monthly; reports\n      compliance metrics to the CMS-mandated annual filing.\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Elevance Health\nproviderId: elevance-health\npublisherName: Elevance Health\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Fortune 500\n  - Healthcare\n  - Health Insurance\n  - FHIR\n  - Interoperability\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Elevance Health API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
+  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Elevance Health\n  ServiceCategory: Developer Tools / API\n  ProviderName: Elevance Health\n  PublisherName: Elevance Health\n  InvoiceIssuerName: Elevance Health\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the\
+  \ network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Elevance Health Patient Access API\n    baseURL: https://patient360.anthem.com/P360Member/fhir\n    tags:\n      - FHIR\n      - Healthcare\n      - Health Insurance\n      - Patient Access\n      - Interoperability\n    serviceName: Elevance Health Patient Access API\n    serviceCategory: API\n  - name: Elevance Health Provider Directory API\n    baseURL: ''\n    tags:\n      - FHIR\n      - Provider Directory\n      - Healthcare\n      - Interoperability\n    serviceName: Elevance Health Provider Directory API\n    serviceCategory: API\n  - name: Elevance Health Formulary API\n    baseURL: ''\n    tags:\n      - FHIR\n      - Formulary\n\
+  \      - Pharmacy\n      - Healthcare\n      - Interoperability\n    serviceName: Elevance Health Formulary API\n    serviceCategory: API\n  - name: Elevance Health Payer to Payer API\n    baseURL: ''\n    tags:\n      - FHIR\n      - Payer to Payer\n      - Healthcare\n      - Interoperability\n    serviceName: Elevance Health Payer to Payer API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/elevance-health/refs/heads/main/finops/elevance-health-finops.yml
-sources:
-- https://www.anthem.com/developers
-- https://www.cms.gov/Regulations-and-Guidance/Guidance/Interoperability/index
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Fortune 500
 - Healthcare
+- Health Insurance
 - FHIR
 - Interoperability
+- FinOps
+- Cost Management
+- FOCUS
 ---

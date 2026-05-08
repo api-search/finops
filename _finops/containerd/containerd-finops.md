@@ -14,66 +14,80 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/containerd/refs/heads/main/openapi/containerd-metrics-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Not Applicable
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Open Source / Free
-description: 'FOCUS-aligned FinOps for Containerd: CNCF-graduated OSS runtime with no per-call or license cost. FinOps focuses on the underlying compute / storage / network it consumes (Kubernetes node hours, registry-pull egress) rather than a vendor invoice from containerd itself.'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Containerd API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Not Applicable
-  ProviderName: Containerd Project
-  PublisherName: Cloud Native Computing Foundation (CNCF)
-  ServiceCategory: Container Runtime
+  InvoiceIssuerName: Containerd
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Containerd
+  PublisherName: Containerd
+  ServiceCategory: Developer Tools / API
   ServiceName: Containerd
 layout: finops
 meters:
 - aggregation: sum
-  description: Compute hours of nodes running containerd (proxy meter — billed by the underlying cloud provider, not by containerd)
+  description: Count of billable API requests
   dimensions:
-  - cloud_provider
-  - instance_type
-  - cluster
-  name: node_hours
-  unit: instance-hour
-- aggregation: sum
-  description: Egress from container registries during image pulls
-  dimensions:
-  - registry
+  - api
+  - endpoint
+  - tier
   - region
-  name: image_pull_egress
-  unit: GB
-- aggregation: count
-  description: Containers / pods executed via the containerd CRI surface (operational meter, no charge)
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - namespace
-  - cluster
-  name: container_runtime_count
-  unit: container
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Containerd Finops
 provider_name: Containerd
 provider_slug: containerd
-publisher_name: Cloud Native Computing Foundation (CNCF)
-service_category: Container Runtime / Open Source
+publisher_name: Containerd
+service_category: API
 slug: containerd-finops
 source_filename: containerd-finops.yml
 source_heading: FinOps Profile
-source_url: https://containerd.io
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Containerd\nproviderId: containerd\npublisherName: Cloud Native Computing Foundation (CNCF)\nserviceCategory: Container Runtime / Open Source\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Cloud Native\n  - Container Runtime\n  - Kubernetes\n  - OSS\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Containerd: CNCF-graduated OSS runtime with no per-call or license\n  cost. FinOps focuses on the underlying compute / storage / network it consumes (Kubernetes node hours,\n  registry-pull egress) rather than a vendor invoice from containerd itself.'\nsources:\n  - https://containerd.io\n  - https://github.com/containerd/containerd\n\
-  billingModel:\n  pricingCategory: Open Source / Free\n  billingFrequency: Not Applicable\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Containerd\n  ServiceCategory: Container Runtime\n  ProviderName: Containerd Project\n  PublisherName: Cloud Native Computing Foundation (CNCF)\n  InvoiceIssuerName: Not Applicable\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: node_hours\n    description: Compute hours of nodes running containerd (proxy meter — billed by the underlying cloud\n      provider, not by containerd)\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - cloud_provider\n      - instance_type\n      - cluster\n  - name: image_pull_egress\n    description: Egress from container registries during image pulls\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - registry\n      - region\n  - name: container_runtime_count\n    description: Containers / pods executed via the containerd CRI surface\
-  \ (operational meter, no charge)\n    unit: container\n    aggregation: count\n    dimensions:\n      - namespace\n      - cluster\nprinciples:\n  - name: Visibility\n    description: Containerd does not produce invoices; surface infrastructure cost via the underlying\n      cloud provider's billing exports and via Prometheus metrics scraped from the kubelet / containerd.\n  - name: Allocation\n    description: Allocate via cluster / namespace / pod labels and cloud-provider node tags; align with\n      Kubecost or OpenCost for per-workload mapping.\n  - name: Optimization\n    description: Reduce image-pull egress with registry mirrors / pull-through caches; tune `max_concurrent_downloads`;\n      consider lazy-loading snapshotters (stargz) for large images; right-size node pools.\n  - name: Accountability\n    description: Platform / SRE teams own cluster-level spend; product teams own per-namespace footprint\n      and image hygiene that drives storage and pull egress.\nmaintainers:\n\
-  \  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Containerd\nproviderId: containerd\npublisherName: Containerd\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud Native\n  - Container Runtime\n  - CRI\n  - Docker\n  - gRPC\n  - Kubernetes\n  - OCI\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Containerd API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Containerd\n  ServiceCategory: Developer Tools / API\n  ProviderName: Containerd\n  PublisherName: Containerd\n  InvoiceIssuerName: Containerd\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n\
+  \    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Containerd gRPC API\n    baseURL: ''\n    tags:\n      - Container Runtime\n      - gRPC\n      - Lifecycle Management\n    serviceName: Containerd gRPC API\n    serviceCategory: API\n  - name: Containerd CRI API\n    baseURL: ''\n    tags:\n      - Container Runtime\n      - CRI\n      - Kubernetes\n    serviceName: Containerd CRI API\n    serviceCategory: API\n  - name: Containerd Metrics API\n    baseURL: ''\n    tags:\n      - Metrics\n      - Observability\n      - Prometheus\n    serviceName: Containerd Metrics API\n    serviceCategory: API\n  - name: Containerd NRI API\n    baseURL: ''\n    tags:\n      - Extensibility\n      - Kubernetes\n      - NRI\n      - Plugins\n \
+  \   serviceName: Containerd NRI API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/containerd/refs/heads/main/finops/containerd-finops.yml
-sources:
-- https://containerd.io
-- https://github.com/containerd/containerd
+sources: []
 specification: FinOps Framework
 tags:
 - Cloud Native
 - Container Runtime
+- CRI
+- Docker
+- gRPC
 - Kubernetes
-- OSS
+- OCI
 - FinOps
+- Cost Management
 - FOCUS
 ---

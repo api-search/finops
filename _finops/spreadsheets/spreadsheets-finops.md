@@ -14,44 +14,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/spreadsheets/refs/heads/main/openapi/google-sheets-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Contract
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contact Sales
-description: FOCUS-aligned FinOps placeholder for the Spreadsheets category. No unified billing surface exists; cost and meters belong with each underlying provider (Google Workspace, Microsoft 365, SheetDB, Sheety).
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Spreadsheets API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Multiple
-  ProviderName: Multiple
-  PublisherName: Multiple
-  ServiceCategory: Productivity
+  ChargeCategory: Usage
+  InvoiceIssuerName: Spreadsheets
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Spreadsheets
+  PublisherName: Spreadsheets
+  ServiceCategory: Developer Tools / API
   ServiceName: Spreadsheets
 layout: finops
 meters:
 - aggregation: sum
-  description: Placeholder; meters belong on each underlying provider's FinOps artifact (Google Sheets / Workspace, Microsoft Graph / 365, SheetDB, Sheety).
-  name: see_component_providers
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Spreadsheets Finops
 provider_name: Spreadsheets
 provider_slug: spreadsheets
-publisher_name: Multiple (see component providers)
-service_category: Productivity / Spreadsheet Data Access
+publisher_name: Spreadsheets
+service_category: API
 slug: spreadsheets-finops
 source_filename: spreadsheets-finops.yml
 source_heading: FinOps Profile
-source_url: https://developers.google.com/sheets/api
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Spreadsheets\nproviderId: spreadsheets\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Spreadsheets\n  - Data\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps placeholder for the Spreadsheets category. No\n  unified billing surface exists; cost and meters belong with each underlying\n  provider (Google Workspace, Microsoft 365, SheetDB, Sheety).\nsources:\n  - https://developers.google.com/sheets/api\n  - https://learn.microsoft.com/graph\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Multiple (see component providers)\nserviceCategory: Productivity / Spreadsheet Data Access\nbillingModel:\n  pricingCategory: Contact Sales\n  billingFrequency:\
-  \ Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Spreadsheets\n  ServiceCategory: Productivity\n  ProviderName: Multiple\n  PublisherName: Multiple\n  InvoiceIssuerName: Multiple\n  BillingCurrency: USD\nmeters:\n  - name: see_component_providers\n    description: Placeholder; meters belong on each underlying provider's FinOps\n      artifact (Google Sheets / Workspace, Microsoft Graph / 365, SheetDB,\n      Sheety).\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Use each underlying provider's billing dashboards (Google\n      Cloud Billing, Microsoft 365 admin, SheetDB / Sheety dashboards). No\n      cross-provider rollup is published at the Spreadsheets level.\n  - name: Allocation\n    description: Allocate per underlying provider; tag at the Google project,\n      Microsoft tenant, and SheetDB / Sheety workspace level rather than at this\n      aggregator.\n  - name: Optimization\n\
-  \    description: Optimize each component independently — Google Sheets read\n      batching, Microsoft Graph delta queries, SheetDB / Sheety caching.\n  - name: Accountability\n    description: Each component sits with whoever owns the underlying tenant /\n      workspace (IT for Workspace / 365, the integration owner for SheetDB and\n      Sheety).\nnotes: Aggregator slug; see component providers for real meters and billing.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Spreadsheets\nproviderId: spreadsheets\npublisherName: Spreadsheets\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Spreadsheets\n  - Data\n  - Google Sheets\n  - Excel\n  - Productivity\n  - Automation\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Spreadsheets API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Spreadsheets\n  ServiceCategory: Developer Tools / API\n  ProviderName: Spreadsheets\n  PublisherName: Spreadsheets\n  InvoiceIssuerName: Spreadsheets\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Google Sheets API\n    baseURL: https://sheets.googleapis.com/v4\n    tags:\n      - Google Sheets\n      - Spreadsheets\n      - Data\n      - Productivity\n      - Google Workspace\n    serviceName: Google Sheets API\n    serviceCategory: API\n  - name: Microsoft Graph Excel API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Excel\n      - Microsoft Graph\n      - Microsoft 365\n      - Spreadsheets\n      - OneDrive\n    serviceName: Microsoft Graph Excel API\n    serviceCategory: API\n  - name: SheetDB\n    baseURL: https://sheetdb.io/api/v1\n    tags:\n      - Spreadsheets\n      - No Code\n      - REST API\n      - Google Sheets\n    serviceName: SheetDB\n\
+  \    serviceCategory: API\n  - name: Sheety\n    baseURL: https://api.sheety.co\n    tags:\n      - Spreadsheets\n      - No Code\n      - REST API\n      - Google Sheets\n    serviceName: Sheety\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/spreadsheets/refs/heads/main/finops/spreadsheets-finops.yml
-sources:
-- https://developers.google.com/sheets/api
-- https://learn.microsoft.com/graph
+sources: []
 specification: FinOps Framework
 tags:
 - Spreadsheets
 - Data
+- Google Sheets
+- Excel
+- Productivity
+- Automation
 - FinOps
+- Cost Management
 - FOCUS
 ---

@@ -9,79 +9,88 @@ api_specs:
 - filename: logrocket-rest-api-openapi.yml
   format: yaml
   label: LogRocket REST API
-  slug: rest-api
+  slug: logrocket-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/logrocket/refs/heads/main/openapi/logrocket-rest-api-openapi.yml
 - filename: logrocket-graphql-api-openapi.yml
   format: yaml
   label: LogRocket GraphQL API
-  slug: graphql-api
+  slug: logrocket-graphql-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/logrocket/refs/heads/main/openapi/logrocket-graphql-api-openapi.yml
-- filename: logrocket-highlights-webhook-asyncapi.yml
-  format: yaml
-  label: LogRocket Galileo Highlights API
-  slug: session-highlights-api
-  spec_type: AsyncAPI
-  url: https://raw.githubusercontent.com/api-evangelist/logrocket/refs/heads/main/asyncapi/logrocket-highlights-webhook-asyncapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Tiered Subscription
-description: 'FOCUS-aligned FinOps for LogRocket: tiered subscription priced by monthly session capacity, with seats and retention as secondary cost drivers. Annual commitment on paid tiers; Enterprise adds conditional recording and self-hosted options.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the LogRocket API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: LogRocket, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: LogRocket
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: LogRocket
-  PublisherName: LogRocket, Inc.
-  ServiceCategory: Observability
+  PublisherName: LogRocket
+  ServiceCategory: Developer Tools / API
   ServiceName: LogRocket
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - environment
-  - app
-  name: sessions
-  unit: session
-- aggregation: max
-  dimensions:
-  - role
-  name: seats
-  unit: seat
-- aggregation: max
-  name: retention_months
-  unit: month
-- aggregation: sum
-  dimensions:
+  - api
+  - endpoint
   - tier
-  name: subscription_fee
-  unit: month
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Logrocket Finops
 provider_name: LogRocket
 provider_slug: logrocket
-publisher_name: LogRocket, Inc.
-service_category: Observability
+publisher_name: LogRocket
+service_category: API
 slug: logrocket-finops
 source_filename: logrocket-finops.yml
 source_heading: FinOps Profile
-source_url: https://logrocket.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: LogRocket\nproviderId: logrocket\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Observability\n  - Session Replay\ndescription: 'FOCUS-aligned FinOps for LogRocket: tiered subscription priced by monthly session capacity,\n  with seats and retention as secondary cost drivers. Annual commitment on paid tiers; Enterprise adds\n  conditional recording and self-hosted options.'\nsources:\n  - https://logrocket.com/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: LogRocket, Inc.\nserviceCategory: Observability\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n\
-  \    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: LogRocket\n  ServiceCategory: Observability\n  ProviderName: LogRocket\n  PublisherName: LogRocket, Inc.\n  InvoiceIssuerName: LogRocket, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: sessions\n    unit: session\n    aggregation: sum\n    dimensions:\n      - environment\n      - app\n  - name: seats\n    unit: seat\n    aggregation: max\n    dimensions:\n      - role\n  - name: retention_months\n    unit: month\n    aggregation: max\n  - name: subscription_fee\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\nprinciples:\n  - name: Visibility\n    description: Use the LogRocket Usage page and project dashboards to monitor session ingest vs. monthly\n      capacity; set alerts before plan caps.\n  - name: Allocation\n    description: Tag sessions by app/environment via the JS SDK; map projects to internal team owners\n      for chargeback.\n  - name: Optimization\n\
-  \    description: Use Conditional Recording (Enterprise) to capture only impactful sessions; sample low-value\n      flows; right-size retention.\n  - name: Accountability\n    description: Owners review monthly session burn vs. plan tier; renegotiate at renewal if forecasted\n      sessions outgrow Team into Professional/Enterprise.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: LogRocket\nproviderId: logrocket\npublisherName: LogRocket\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Session Replay\n  - Product Analytics\n  - Frontend Monitoring\n  - Logging\n  - Errors\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the LogRocket API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
+  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: LogRocket\n  ServiceCategory: Developer Tools / API\n  ProviderName: LogRocket\n  PublisherName: LogRocket\n  InvoiceIssuerName: LogRocket\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n  \
+  \  aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: LogRocket REST API\n    baseURL: https://api.logrocket.com/v1\n    tags:\n      - Session Replay\n      - Analytics\n      - REST\n    serviceName: LogRocket REST API\n    serviceCategory: API\n  - name: LogRocket GraphQL API\n    baseURL: https://api.logrocket.com\n    tags:\n      - Session Replay\n      - Analytics\n      - GraphQL\n    serviceName: LogRocket GraphQL API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/logrocket/refs/heads/main/finops/logrocket-finops.yml
-sources:
-- https://logrocket.com/pricing
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Observability
 - Session Replay
+- Product Analytics
+- Frontend Monitoring
+- Logging
+- Errors
+- FinOps
+- Cost Management
+- FOCUS
 ---

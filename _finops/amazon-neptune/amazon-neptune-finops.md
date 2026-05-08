@@ -69,79 +69,74 @@ billing_model:
   - Tax
   - Credit
   - Adjustment
-  pricingCategory: Pay-As-You-Go + Committed Use
-description: 'FOCUS-aligned FinOps for Amazon Neptune: per-instance-hour plus storage/IO (Standard) or bundled (I/O-Optimized) on the provisioned model, NCU-second billing on Serverless, and separate backup storage charges.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Amazon Neptune API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Amazon Web Services, Inc.
-  ProviderName: AWS
-  PublisherName: Amazon Web Services, Inc.
-  ServiceCategory: Databases
+  InvoiceIssuerName: Amazon Neptune
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Amazon Neptune
+  PublisherName: Amazon Neptune
+  ServiceCategory: Developer Tools / API
   ServiceName: Amazon Neptune
-  ServiceSubcategory: Graph Database
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
+  - endpoint
+  - tier
   - region
-  - cluster
-  - instance_class
-  - storage_config
-  name: instance_hours
-  unit: instance-hour
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
+  - api
   - region
-  - cluster
-  - storage_config
-  name: storage_gb_month
-  unit: GB-month
-- aggregation: sum
-  dimensions:
-  - region
-  - cluster
-  name: io_requests
-  unit: million-requests
-- aggregation: sum
-  dimensions:
-  - region
-  - cluster
-  name: ncu_seconds
-  unit: NCU-second
-- aggregation: sum
-  dimensions:
-  - region
-  - cluster
-  name: backup_storage_gb_month
-  unit: GB-month
-- aggregation: sum
-  dimensions:
-  - region
-  - direction
-  name: data_transfer_gb
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Amazon Neptune Finops
 provider_name: Amazon Neptune
 provider_slug: amazon-neptune
-publisher_name: Amazon Web Services, Inc.
-service_category: Database / Graph
+publisher_name: Amazon Neptune
+service_category: API
 slug: amazon-neptune-finops
 source_filename: amazon-neptune-finops.yml
 source_heading: FinOps Profile
-source_url: https://aws.amazon.com/neptune/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Amazon Neptune\nproviderId: amazon-neptune\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - AWS\n  - Database\n  - Graph Database\n  - Cost Management\ndescription: 'FOCUS-aligned FinOps for Amazon Neptune: per-instance-hour plus storage/IO (Standard) or\n  bundled (I/O-Optimized) on the provisioned model, NCU-second billing on Serverless, and separate backup\n  storage charges.'\nsources:\n  - https://aws.amazon.com/neptune/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Amazon Web Services, Inc.\nserviceCategory: Database / Graph\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Committed Use\n  billingFrequency: Monthly\n\
-  \  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\nfocusColumns:\n  ServiceName: Amazon Neptune\n  ServiceCategory: Databases\n  ServiceSubcategory: Graph Database\n  ProviderName: AWS\n  PublisherName: Amazon Web Services, Inc.\n  InvoiceIssuerName: Amazon Web Services, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: instance_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - region\n      - cluster\n      - instance_class\n      - storage_config\n  - name: storage_gb_month\n    unit: GB-month\n    aggregation: sum\n    dimensions:\n      - region\n      - cluster\n      - storage_config\n  - name: io_requests\n    unit: million-requests\n    aggregation: sum\n    dimensions:\n      - region\n      - cluster\n  - name: ncu_seconds\n    unit: NCU-second\n    aggregation: sum\n    dimensions:\n      - region\n      - cluster\n  - name: backup_storage_gb_month\n    unit:\
-  \ GB-month\n    aggregation: sum\n    dimensions:\n      - region\n      - cluster\n  - name: data_transfer_gb\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - region\n      - direction\nprinciples:\n  - name: Visibility\n    description: Use CloudWatch Neptune metrics (CPUUtilization, GremlinRequestsPerSec, MainRequestQueuePendingRequests),\n      Performance Insights, and AWS CUR / FOCUS export.\n  - name: Allocation\n    description: Tag clusters with Application, Team, Environment; enable cost allocation tags so charges\n      flow into FOCUS columns.\n  - name: Optimization\n    description: Right-size instance class; choose Standard vs I/O-Optimized based on monthly IO; use Serverless\n      for variable workloads; pause dev/test clusters; commit to Reserved Instances at 1- or 3-year for\n      steady production.\n  - name: Accountability\n    description: Set AWS Budgets per cluster tag, alert on storage growth and IO spikes, review monthly\n      utilization for downsizing.\n\
-  maintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n  - name: Amazon Web Services\n    email: support@aws.amazon.com\n    url: https://aws.amazon.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Amazon Neptune\nproviderId: amazon-neptune\npublisherName: Amazon Neptune\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AWS\n  - Database\n  - Graph Database\n  - Gremlin\n  - Neptune\n  - Property Graph\n  - RDF\n  - SPARQL\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Amazon Neptune API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n \
+  \   description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Amazon Neptune\n  ServiceCategory: Developer Tools / API\n  ProviderName: Amazon Neptune\n  PublisherName: Amazon Neptune\n  InvoiceIssuerName: Amazon Neptune\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes\
+  \ returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Amazon Neptune Management API\n    baseURL: ''\n    tags:\n      - AWS\n      - Cluster Management\n      - Database Management\n      - Graph Database\n    serviceName: Amazon Neptune Management API\n    serviceCategory: API\n  - name: Amazon Neptune Data API\n    baseURL: ''\n    tags:\n      - Data API\n      - Data Operations\n      - Graph Query\n      - SDK\n    serviceName: Amazon Neptune Data API\n    serviceCategory: API\n  - name: Neptune Gremlin API\n    baseURL: ''\n    tags:\n      - Graph Traversal\n      - Gremlin\n      - Property Graph\n      - Query Language\n    serviceName: Neptune Gremlin API\n    serviceCategory:\
+  \ API\n  - name: Neptune SPARQL API\n    baseURL: ''\n    tags:\n      - Query Language\n      - RDF\n      - Semantic Web\n      - SPARQL\n    serviceName: Neptune SPARQL API\n    serviceCategory: API\n  - name: Neptune openCypher API\n    baseURL: ''\n    tags:\n      - Cypher\n      - openCypher\n      - Property Graph\n      - Query Language\n    serviceName: Neptune openCypher API\n    serviceCategory: API\n  - name: Neptune Streams API\n    baseURL: ''\n    tags:\n      - Change Data Capture\n      - Event Log\n      - Real-Time\n      - Streams\n    serviceName: Neptune Streams API\n    serviceCategory: API\n  - name: Neptune Loader API\n    baseURL: ''\n    tags:\n      - Bulk Import\n      - Data Ingestion\n      - Data Loading\n      - ETL\n    serviceName: Neptune Loader API\n    serviceCategory: API\n  - name: Neptune ML API\n    baseURL: ''\n    tags:\n      - Graph Neural Network\n      - Machine Learning\n      - Predictions\n      - SageMaker\n    serviceName: Neptune ML\
+  \ API\n    serviceCategory: API\n  - name: Neptune Analytics API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Graph Analytics\n      - In-Memory\n      - Vector Search\n    serviceName: Neptune Analytics API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/amazon-neptune/refs/heads/main/finops/amazon-neptune-finops.yml
-sources:
-- https://aws.amazon.com/neptune/pricing/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Database
 - Graph Database
+- Gremlin
+- Neptune
+- Property Graph
+- RDF
+- SPARQL
+- FinOps
 - Cost Management
+- FOCUS
 ---

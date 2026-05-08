@@ -7,45 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Contract
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contract
-description: Petco is a pet specialty retailer, not a software / API vendor. From a FinOps perspective, there is no metered API surface; partner integration cost lives in the partner's own integration platform and any contracted Petco-side fees.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Petco Animal Supplies API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  ProviderName: Petco
-  PublisherName: Petco Health and Wellness Company, Inc.
-  ServiceCategory: B2B Integration
-  ServiceName: Petco Partner Integration
+  ChargeCategory: Usage
+  InvoiceIssuerName: Petco Animal Supplies
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Petco Animal Supplies
+  PublisherName: Petco Animal Supplies
+  ServiceCategory: Developer Tools / API
+  ServiceName: Petco Animal Supplies
 layout: finops
 meters:
-- aggregation: count
-  description: Negotiated partner / vendor integration relationship.
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - partner_type
-  name: integration_contract
-  unit: contract
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Petco Finops
 provider_name: Petco Animal Supplies
 provider_slug: petco
-publisher_name: Petco Health and Wellness Company, Inc.
-service_category: B2B Integration
+publisher_name: Petco Animal Supplies
+service_category: API
 slug: petco-finops
 source_filename: petco-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.petco.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Petco Animal Supplies\nproviderId: petco\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Retail\n  - Pet Care\nnotes: Petco is not an API or platform vendor. There is no public metered SKU to model. This\n  artifact captures the FinOps shape only at the contract level for partner integration spend.\ndescription: Petco is a pet specialty retailer, not a software / API vendor. From a FinOps\n  perspective, there is no metered API surface; partner integration cost lives in the partner's\n  own integration platform and any contracted Petco-side fees.\nsources:\n  - https://www.petco.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
-  \ Petco Health and Wellness Company, Inc.\nserviceCategory: B2B Integration\nbillingModel:\n  pricingCategory: Contract\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Petco Partner Integration\n  ServiceCategory: B2B Integration\n  ProviderName: Petco\n  PublisherName: Petco Health and Wellness Company, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: integration_contract\n    description: Negotiated partner / vendor integration relationship.\n    unit: contract\n    aggregation: count\n    dimensions:\n      - partner_type\nprinciples:\n  - name: Visibility\n    description: Visibility lives at the contract level rather than per-API-call.\n  - name: Allocation\n    description: Allocate integration cost to the consuming Petco line of business (retail, vet,\n      grooming, marketplace).\n  - name: Optimization\n    description: Consolidate vendor integrations onto a managed integration\
-  \ platform; avoid\n      redundant point-to-point connections.\n  - name: Accountability\n    description: Vendor side and Petco business-unit owner jointly own the integration.\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Petco Animal Supplies\nproviderId: petco\npublisherName: Petco Animal Supplies\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Pet Care\n  - Retail\n  - Veterinary\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Petco Animal Supplies API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Petco Animal Supplies\n  ServiceCategory: Developer Tools / API\n  ProviderName: Petco Animal Supplies\n  PublisherName: Petco Animal Supplies\n  InvoiceIssuerName: Petco Animal Supplies\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Petco Animal Supplies API\n    baseURL: https://api.petco.com\n    tags:\n      - Pet Care\n      - Retail\n      - Veterinary\n    serviceName: Petco Animal Supplies API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/petco/refs/heads/main/finops/petco-finops.yml
-sources:
-- https://www.petco.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Retail
 - Pet Care
+- Retail
+- Veterinary
+- FinOps
+- Cost Management
+- FOCUS
 ---

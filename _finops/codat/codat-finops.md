@@ -28,76 +28,73 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription
-description: 'FOCUS-aligned FinOps for Codat: ACC-priced enterprise subscription with daily API call quotas derived from the ACC count. Codat does not publish a public price list, so principles below focus on ACC lifecycle hygiene and module-level allocation.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Codat API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
+  ChargeCategory: Usage
   InvoiceIssuerName: Codat
-  PricingCategory: Subscription
-  PricingUnit: connected-company-month
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Codat
   PublisherName: Codat
-  ServiceCategory: Unified API
+  ServiceCategory: Developer Tools / API
   ServiceName: Codat
 layout: finops
 meters:
-- aggregation: max
-  description: Count of Active Connected Companies (ACCs) over the billing period.
-  dimensions:
-  - product_module
-  - integration
-  - environment
-  name: active_connected_companies
-  unit: account-month
 - aggregation: sum
-  description: API calls made against the Codat platform; counts against the daily ACC-derived quota.
+  description: Count of billable API requests
   dimensions:
-  - product_module
-  - integration
-  - company
-  name: api_calls
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
-- aggregation: max
-  description: Active integration connections to upstream platforms (accounting, banking, commerce).
-  dimensions:
-  - integration
-  - environment
-  name: integration_connections
-  unit: connection
 - aggregation: sum
-  description: Webhook events delivered (data sync notifications, rate-limit signals, etc.).
+  description: Bytes returned over the network in API responses
   dimensions:
-  - event_type
-  name: webhook_events
-  unit: event
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Codat Finops
 provider_name: Codat
 provider_slug: codat
 publisher_name: Codat
-service_category: Unified API
+service_category: API
 slug: codat-finops
 source_filename: codat-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.codat.io/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Codat\nproviderId: codat\npublisherName: Codat\nserviceCategory: Unified API\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Unified API\n  - Accounting\n  - Banking\n  - Cost Management\nnotes: Codat does not publish public pricing; the FOCUS-aligned shape below assumes an Active-Connected-Company-priced\n  subscription with optional product modules, which is consistent with how Codat positions commercial discussions.\n  Validate exact billing line-items against your signed order form.\ndescription: 'FOCUS-aligned FinOps for Codat: ACC-priced enterprise subscription with daily API call quotas\n\
-  \  derived from the ACC count. Codat does not publish a public price list, so principles below focus on\n  ACC lifecycle hygiene and module-level allocation.'\nsources:\n  - https://www.codat.io/\n  - https://docs.codat.io/using-the-api/rate-limits\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Codat\n  ServiceCategory: Unified API\n  ProviderName: Codat\n  PublisherName: Codat\n  InvoiceIssuerName: Codat\n  PricingCategory: Subscription\n  PricingUnit: connected-company-month\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: active_connected_companies\n    description: Count of Active Connected Companies (ACCs) over the billing period.\n    unit: account-month\n    aggregation: max\n    dimensions:\n      - product_module\n      - integration\n      - environment\n  - name: api_calls\n    description:\
-  \ API calls made against the Codat platform; counts against the daily ACC-derived quota.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - product_module\n      - integration\n      - company\n  - name: integration_connections\n    description: Active integration connections to upstream platforms (accounting, banking, commerce).\n    unit: connection\n    aggregation: max\n    dimensions:\n      - integration\n      - environment\n  - name: webhook_events\n    description: Webhook events delivered (data sync notifications, rate-limit signals, etc.).\n    unit: event\n    aggregation: sum\n    dimensions:\n      - event_type\nprinciples:\n  - name: Visibility\n    description: Use the Codat dashboard to monitor ACC counts, daily quota burn-down (X-Rate-Limit headers),\n      and webhook delivery. Subscribe to `client.rateLimit.reached` to alert before quota exhaustion.\n  - name: Allocation\n    description: Tag ACCs and product modules to the consuming business line; reconcile\
-  \ module utilization\n      against the order form quarterly.\n  - name: Optimization\n    description: Off-board inactive ACCs to free up daily quota (which scales linearly with ACC count);\n      cache idempotent reads and rely on incremental sync rather than full refreshes; coalesce per-company\n      polling to stay within the 10-concurrent-request-per-ACC ceiling.\n  - name: Accountability\n    description: Assign an integration owner per product module and review ACC growth against contract\n      commitments before each renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Codat\nproviderId: codat\npublisherName: Codat\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Unified_API\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Codat API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be\
+  \ allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing\
+  \ and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Codat\n  ServiceCategory: Developer Tools / API\n  ProviderName: Codat\n  PublisherName: Codat\n  InvoiceIssuerName: Codat\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n\
+  \    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Codat Platform API\n    baseURL: ''\n    tags:\n      - Companies\n      - Connections\n      - Platform\n      - Unified_API\n    serviceName: Codat Platform API\n    serviceCategory: API\n  - name: Codat Lending API\n    baseURL: ''\n    tags:\n      - Credit\n      - Financial Data\n      - Lending\n      - Underwriting\n      - Unified_API\n    serviceName: Codat Lending API\n    serviceCategory: API\n  - name: Codat Bank Feeds API\n    baseURL: ''\n    tags:\n      - Accounting\n      - Bank Feeds\n      - Reconciliation\n      - Unified_API\n    serviceName: Codat Bank Feeds API\n    serviceCategory: API\n  - name: Codat Sync for Expenses API\n    baseURL: ''\n    tags:\n      - Accounting Sync\n      - Corporate Cards\n      - Expenses\n      - Unified_API\n    serviceName: Codat Sync\
+  \ for Expenses API\n    serviceCategory: API\n  - name: Codat Bill Pay API\n    baseURL: ''\n    tags:\n      - Accounts Payable\n      - Bill Pay\n      - Payables\n      - Unified_API\n    serviceName: Codat Bill Pay API\n    serviceCategory: API\n  - name: Codat Spend Insights API\n    baseURL: ''\n    tags:\n      - Accounts Payable\n      - Spend Insights\n      - Unified_API\n      - Virtual Cards\n    serviceName: Codat Spend Insights API\n    serviceCategory: API\n  - name: Codat Sync for Commerce API\n    baseURL: ''\n    tags:\n      - Commerce\n      - Point of Sale\n      - Reconciliation\n      - Unified_API\n    serviceName: Codat Sync for Commerce API\n    serviceCategory: API\n  - name: Codat Sync for Payroll API\n    baseURL: ''\n    tags:\n      - Accounting Sync\n      - HR\n      - Payroll\n      - Unified_API\n    serviceName: Codat Sync for Payroll API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests\
+  \ / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/codat/refs/heads/main/finops/codat-finops.yml
-sources:
-- https://www.codat.io/
-- https://docs.codat.io/using-the-api/rate-limits
+sources: []
 specification: FinOps Framework
 tags:
+- Unified_API
 - FinOps
-- FOCUS
-- Unified API
-- Accounting
-- Banking
 - Cost Management
+- FOCUS
 ---

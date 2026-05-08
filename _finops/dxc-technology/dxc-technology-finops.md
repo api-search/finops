@@ -14,54 +14,76 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/dxc-technology/refs/heads/main/openapi/dxc-developer-central-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Custom Contract
-description: FOCUS-aligned FinOps shell for DXC Technology API surface; pricing is contracted, not publicly metered, so meters and FOCUS columns are placeholders pending direct invoice review.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the DXC Technology API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: DXC Technology Company
+  ChargeCategory: Usage
+  InvoiceIssuerName: DXC Technology
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: DXC Technology
-  PublisherName: DXC Technology Company
-  ServiceCategory: IT Services
-  ServiceName: DXC Developer Central
+  PublisherName: DXC Technology
+  ServiceCategory: Developer Tools / API
+  ServiceName: DXC Technology
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
   - api
+  - endpoint
+  - tier
+  - region
   - consumer
   name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - engagement
+  - api
   - region
-  name: managed_service_hours
-  unit: hour
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Dxc Technology Finops
 provider_name: DXC Technology
 provider_slug: dxc-technology
-publisher_name: DXC Technology Company
-service_category: IT Services
+publisher_name: DXC Technology
+service_category: API
 slug: dxc-technology-finops
 source_filename: dxc-technology-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.dxc.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: DXC Technology\nproviderId: dxc-technology\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - IT Services\n  - Enterprise\ndescription: 'FOCUS-aligned FinOps shell for DXC Technology API surface; pricing is contracted, not\n  publicly metered, so meters and FOCUS columns are placeholders pending direct invoice review.'\nnotes: DXC Technology does not publish public API pricing. FinOps mapping should be reconciled against\n  the actual managed-services agreement and invoice line items.\nsources:\n  - https://developer.dxc.com/\n  - https://dxc.com\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: DXC Technology Company\nserviceCategory:\
-  \ IT Services\nbillingModel:\n  pricingCategory: Custom Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: DXC Developer Central\n  ServiceCategory: IT Services\n  ProviderName: DXC Technology\n  PublisherName: DXC Technology Company\n  InvoiceIssuerName: DXC Technology Company\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - consumer\n  - name: managed_service_hours\n    unit: hour\n    aggregation: sum\n    dimensions:\n      - engagement\n      - region\nprinciples:\n  - name: Visibility\n    description: Request itemized usage reports from the DXC account team; integrate invoice line items\n      into FOCUS-formatted tables.\n  - name: Allocation\n    description: Tag API consumers by engagement/cost-center and reconcile against the master services\n      agreement.\n  - name: Optimization\n\
-  \    description: Negotiate volume discounts at renewal; consolidate API consumers across business units\n      to qualify for tier discounts.\n  - name: Accountability\n    description: Engagement owner reviews the monthly DXC invoice; flag deviations from baseline run-rate.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: DXC Technology\nproviderId: dxc-technology\npublisherName: DXC Technology\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - IT Services\n  - Enterprise\n  - Platform\n  - Integration\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the DXC Technology API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: DXC Technology\n  ServiceCategory: Developer Tools / API\n  ProviderName: DXC Technology\n  PublisherName: DXC Technology\n  InvoiceIssuerName: DXC Technology\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n\
+  \    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: DXC Developer Central API\n    baseURL: https://developer.dxc.com\n    tags:\n      - Enterprise\n      - Integration\n      - IT Services\n      - Platform\n    serviceName: DXC Developer Central API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/dxc-technology/refs/heads/main/finops/dxc-technology-finops.yml
-sources:
-- https://developer.dxc.com/
-- https://dxc.com
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - IT Services
 - Enterprise
+- Platform
+- Integration
+- FinOps
+- Cost Management
+- FOCUS
 ---

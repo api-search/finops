@@ -7,45 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Contract
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
-  pricingCategory: Custom Enterprise Services
-description: Sykes Enterprises (now Foundever) is a CX/BPO services provider with no public API or published billing surface; FinOps shape is negotiated per enterprise contract.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Sykes Enterprises API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Foundever
-  ProviderName: Foundever
-  PublisherName: Foundever (formerly Sykes Enterprises, Incorporated)
-  ServiceCategory: Customer Experience / BPO Services
-  ServiceName: Sykes Enterprises (Foundever)
+  ChargeCategory: Usage
+  InvoiceIssuerName: Sykes Enterprises
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Sykes Enterprises
+  PublisherName: Sykes Enterprises
+  ServiceCategory: Developer Tools / API
+  ServiceName: Sykes Enterprises
 layout: finops
 meters:
 - aggregation: sum
-  description: Contracted CX/BPO service consumption, terms defined per-engagement.
-  name: contracted_services
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Sykes Enterprises Finops
 provider_name: Sykes Enterprises
 provider_slug: sykes-enterprises
-publisher_name: Foundever (formerly Sykes Enterprises, Incorporated)
-service_category: Customer Experience / BPO Services
+publisher_name: Sykes Enterprises
+service_category: API
 slug: sykes-enterprises-finops
 source_filename: sykes-enterprises-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.sykes.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sykes Enterprises\nproviderId: sykes-enterprises\npublisherName: Foundever (formerly Sykes Enterprises, Incorporated)\nserviceCategory: Customer Experience / BPO Services\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - BPO\n  - Customer Experience\n  - FinOps\n  - FOCUS\ndescription: Sykes Enterprises (now Foundever) is a CX/BPO services provider with no public API or published billing surface; FinOps shape is negotiated per enterprise contract.\nsources:\n  - https://www.sykes.com\n  - https://foundever.com\nnotes: No public usage telemetry, FOCUS-aligned export, or self-service billing surface. Cost data must be reconciled\
-  \ from negotiated enterprise CX invoices.\nbillingModel:\n  pricingCategory: Custom Enterprise Services\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\nfocusColumns:\n  ServiceName: Sykes Enterprises (Foundever)\n  ServiceCategory: Customer Experience / BPO Services\n  ProviderName: Foundever\n  PublisherName: Foundever (formerly Sykes Enterprises, Incorporated)\n  InvoiceIssuerName: Foundever\n  BillingCurrency: USD\nmeters:\n  - name: contracted_services\n    description: Contracted CX/BPO service consumption, terms defined per-engagement.\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Cost visibility is provided through contracted reporting agreed in the master services agreement; there is no self-service usage API.\n  - name: Allocation\n    description: Allocation follows the cost centers and program codes specified in the customer's CX engagement.\n  - name: Optimization\n \
-  \   description: Optimization levers are negotiated (volume commitments, FTE staffing models, channel mix) rather than self-service tier changes.\n  - name: Accountability\n    description: A named Foundever account team and the customer's program owner share accountability for spend versus contracted scope.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sykes Enterprises\nproviderId: sykes-enterprises\npublisherName: Sykes Enterprises\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - BPO\n  - Customer Engagement\n  - Technology\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sykes Enterprises API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sykes Enterprises\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sykes Enterprises\n  PublisherName: Sykes Enterprises\n  InvoiceIssuerName: Sykes Enterprises\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Sykes Enterprises API\n    baseURL: https://api.sykes.com\n    tags:\n      - BPO\n      - Customer Engagement\n      - Technology\n    serviceName: Sykes Enterprises API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sykes-enterprises/refs/heads/main/finops/sykes-enterprises-finops.yml
-sources:
-- https://www.sykes.com
-- https://foundever.com
+sources: []
 specification: FinOps Framework
 tags:
 - BPO
-- Customer Experience
+- Customer Engagement
+- Technology
 - FinOps
+- Cost Management
 - FOCUS
 ---

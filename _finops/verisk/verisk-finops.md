@@ -14,43 +14,80 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/verisk/refs/heads/main/openapi/verisk-insurance-analytics-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Subscription
-description: 'FOCUS-aligned FinOps stub for Verisk: contractual data / analytics license sold to insurance carriers and brokers. No public pricing or usage/billing API.'
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Verisk API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Verisk Analytics, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Verisk
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Verisk
-  PublisherName: Verisk Analytics, Inc.
-  ServiceCategory: Insurance Risk Analytics
-  ServiceName: Verisk Data & Analytics
+  PublisherName: Verisk
+  ServiceCategory: Developer Tools / API
+  ServiceName: Verisk
 layout: finops
 meters:
 - aggregation: sum
-  description: Annual contractual license for Verisk data sets / APIs; sub-meters not publicly published.
-  name: data_api_license
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Verisk Finops
 provider_name: Verisk
 provider_slug: verisk
-publisher_name: Verisk Analytics, Inc.
-service_category: Insurance Risk Analytics
+publisher_name: Verisk
+service_category: API
 slug: verisk-finops
 source_filename: verisk-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.verisk.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Verisk\nproviderId: verisk\npublisherName: Verisk Analytics, Inc.\nserviceCategory: Insurance Risk Analytics\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Insurance\n  - Risk Analytics\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps stub for Verisk: contractual data / analytics license sold to insurance\n  carriers and brokers. No public pricing or usage/billing API.'\nsources:\n  - https://www.verisk.com/\nnotes: No public pricing or billing API. Meters are not invented; reconciliation deferred pending customer-portal\n  access.\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n\
-  \  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Verisk Data & Analytics\n  ServiceCategory: Insurance Risk Analytics\n  ProviderName: Verisk\n  PublisherName: Verisk Analytics, Inc.\n  InvoiceIssuerName: Verisk Analytics, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: data_api_license\n    description: Annual contractual license for Verisk data sets / APIs; sub-meters not publicly published.\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Customers consume data via Verisk product portals and APIs; usage telemetry is exposed\n      contractually rather than via a public cost API.\n  - name: Allocation\n    description: Allocation is contract-level (per line of business, geography, data set scope).\n  - name: Optimization\n    description: Optimization is scoping-driven (which data sets, geographies, and query volumes are\n      licensed); renewal is the primary optimization checkpoint.\n  - name:\
-  \ Accountability\n    description: Accountability sits with the actuarial / underwriting / claims business owner; finance\n      owns the annual subscription line.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Verisk\nproviderId: verisk\npublisherName: Verisk\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Insurance\n  - Analytics\n  - Risk Management\n  - Property Data\n  - Catastrophe Modeling\n  - Underwriting\n  - Claims\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Verisk API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
+  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Verisk\n  ServiceCategory: Developer Tools / API\n  ProviderName: Verisk\n  PublisherName: Verisk\n  InvoiceIssuerName: Verisk\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Verisk Insurance Analytics API\n    baseURL: ''\n    tags:\n      - Insurance\n      - Analytics\n      - Risk Management\n      - Property Data\n      - Catastrophe Modeling\n      - Underwriting\n      - Claims\n    serviceName: Verisk Insurance Analytics API\n    serviceCategory: API\n  - name: Verisk UnderWriting API\n    baseURL: ''\n    tags:\n      - Underwriting\n      - Insurance\n      - Personal Lines\n      - Commercial Lines\n      - Motor Vehicle\n      - Property Data\n    serviceName: Verisk UnderWriting API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost\
+  \ per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/verisk/refs/heads/main/finops/verisk-finops.yml
-sources:
-- https://www.verisk.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Insurance
-- Risk Analytics
+- Analytics
+- Risk Management
+- Property Data
+- Catastrophe Modeling
+- Underwriting
+- Claims
 - FinOps
+- Cost Management
 - FOCUS
 ---

@@ -81,56 +81,74 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Pay As You Go (Per Channel)
-description: FOCUS-aligned FinOps for Bird (MessageBird).
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the messagebird API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ProviderName: Bird (MessageBird)
-  PublisherName: Bird (MessageBird)
-  ServiceCategory: Omnichannel CPaaS
-  ServiceName: Bird (MessageBird)
+  ChargeCategory: Usage
+  InvoiceIssuerName: messagebird
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: messagebird
+  PublisherName: messagebird
+  ServiceCategory: Developer Tools / API
+  ServiceName: messagebird
 layout: finops
 meters:
 - aggregation: sum
-  name: email_messages
-  unit: email
-- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - direction
-  - country
-  name: sms_messages
-  unit: message
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - template_category
-  name: whatsapp_messages
-  unit: message
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  name: push_notifications
-  unit: notification
-- aggregation: sum
-  name: rcs_messages
-  unit: message
-- aggregation: sum
-  name: voice_minutes
-  unit: minute
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Messagebird Finops
 provider_name: messagebird
 provider_slug: messagebird
-publisher_name: Bird (MessageBird)
-service_category: Omnichannel CPaaS
+publisher_name: messagebird
+service_category: API
 slug: messagebird-finops
 source_filename: messagebird-finops.yml
 source_heading: FinOps Profile
-source_url: https://bird.com/en/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Bird (MessageBird)\nproviderId: messagebird\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Omnichannel CPaaS\ndescription: FOCUS-aligned FinOps for Bird (MessageBird).\nsources:\n  - https://bird.com/en/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Bird (MessageBird)\nserviceCategory: Omnichannel CPaaS\nbillingModel:\n  pricingCategory: Pay As You Go (Per Channel)\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Bird (MessageBird)\n  ServiceCategory: Omnichannel CPaaS\n  ProviderName: Bird (MessageBird)\n  PublisherName: Bird (MessageBird)\n  BillingCurrency: USD\nmeters:\n  - name:\
-  \ email_messages\n    unit: email\n    aggregation: sum\n  - name: sms_messages\n    unit: message\n    aggregation: sum\n    dimensions:\n      - direction\n      - country\n  - name: whatsapp_messages\n    unit: message\n    aggregation: sum\n    dimensions:\n      - template_category\n  - name: push_notifications\n    unit: notification\n    aggregation: sum\n  - name: rcs_messages\n    unit: message\n    aggregation: sum\n  - name: voice_minutes\n    unit: minute\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Track Bird (MessageBird) consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: messagebird\nproviderId: messagebird\npublisherName: messagebird\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the messagebird API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost\
+  \ can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n     \
+  \ - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: messagebird\n  ServiceCategory: Developer Tools / API\n  ProviderName: messagebird\n  PublisherName: messagebird\n  InvoiceIssuerName: messagebird\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n\
+  \  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: MessageBird SMS Messaging API\n    baseURL: https://rest.messagebird.com\n    tags:\n      - Communications\n      - Messaging\n      - SMS\n      - Text Messages\n    serviceName: MessageBird SMS Messaging API\n    serviceCategory: API\n  - name: MessageBird Voice Calling API\n    baseURL: https://voice.messagebird.com\n    tags:\n      - Calling\n      - Communications\n      - Telephony\n      - Voice\n    serviceName: MessageBird Voice Calling API\n    serviceCategory: API\n  - name: MessageBird Voice Messaging API\n    baseURL: https://rest.messagebird.com\n    tags:\n      - Communications\n      - Messaging\n      - Text-To-Speech\n      - Voice\n    serviceName: MessageBird Voice Messaging API\n    serviceCategory: API\n  - name: MessageBird Conversations\
+  \ API\n    baseURL: https://conversations.messagebird.com\n    tags:\n      - Chat\n      - Communications\n      - Messaging\n      - Omnichannel\n      - WhatsApp\n    serviceName: MessageBird Conversations API\n    serviceCategory: API\n  - name: MessageBird WhatsApp API\n    baseURL: https://conversations.messagebird.com\n    tags:\n      - Communications\n      - Messaging\n      - Notifications\n      - WhatsApp\n    serviceName: MessageBird WhatsApp API\n    serviceCategory: API\n  - name: MessageBird Verify API\n    baseURL: https://rest.messagebird.com\n    tags:\n      - OTP\n      - Security\n      - Two-Factor Authentication\n      - Verification\n    serviceName: MessageBird Verify API\n    serviceCategory: API\n  - name: MessageBird Lookup API\n    baseURL: https://rest.messagebird.com\n    tags:\n      - HLR\n      - Number Intelligence\n      - Phone Numbers\n      - Validation\n    serviceName: MessageBird Lookup API\n    serviceCategory: API\n  - name: MessageBird HLR\
+  \ API\n    baseURL: https://rest.messagebird.com\n    tags:\n      - HLR\n      - Mobile Network\n      - Network Query\n      - Phone Numbers\n    serviceName: MessageBird HLR API\n    serviceCategory: API\n  - name: MessageBird Contacts API\n    baseURL: https://rest.messagebird.com\n    tags:\n      - Address Book\n      - Contacts\n      - Customer Data\n      - Groups\n    serviceName: MessageBird Contacts API\n    serviceCategory: API\n  - name: MessageBird Numbers API\n    baseURL: https://numbers.messagebird.com\n    tags:\n      - Number Management\n      - Phone Numbers\n      - Provisioning\n      - Telecommunications\n    serviceName: MessageBird Numbers API\n    serviceCategory: API\n  - name: MessageBird Balance API\n    baseURL: https://rest.messagebird.com\n    tags:\n      - Account\n      - Balance\n      - Billing\n      - Credits\n    serviceName: MessageBird Balance API\n    serviceCategory: API\n  - name: MessageBird Integrations API\n    baseURL: https://integrations.messagebird.com\n\
+  \    tags:\n      - Integrations\n      - Message Templates\n      - Templates\n      - WhatsApp\n    serviceName: MessageBird Integrations API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/messagebird/refs/heads/main/finops/messagebird-finops.yml
-sources:
-- https://bird.com/en/pricing
+sources: []
 specification: FinOps Framework
 tags:
 - FinOps
+- Cost Management
 - FOCUS
-- Omnichannel CPaaS
 ---

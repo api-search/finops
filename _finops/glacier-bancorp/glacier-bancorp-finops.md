@@ -9,55 +9,72 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Custom Contract
-description: FinOps framing for Glacier Bancorp partner integrations. Glacier Bancorp does not publish a self-service API price list; partner cost is governed by treasury management agreements and bilateral contracts.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Glacier Bancorp API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Glacier Bancorp, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Glacier Bancorp
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Glacier Bancorp
-  PublisherName: Glacier Bancorp, Inc.
-  ServiceCategory: Banking
+  PublisherName: Glacier Bancorp
+  ServiceCategory: Developer Tools / API
   ServiceName: Glacier Bancorp
 layout: finops
 meters:
 - aggregation: sum
-  description: Account inquiry / balance API calls (when available via partner integration)
-  name: account_inquiries
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: ACH originations and returns
-  name: ach_transactions
-  unit: transaction
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Wire transfer originations
-  name: wire_transactions
-  unit: transaction
-- aggregation: sum
-  description: Treasury management or partner-program flat monthly fee
-  name: monthly_service_fee
-  unit: month
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Glacier Bancorp Finops
 provider_name: Glacier Bancorp
 provider_slug: glacier-bancorp
-publisher_name: Glacier Bancorp, Inc.
-service_category: Banking
+publisher_name: Glacier Bancorp
+service_category: API
 slug: glacier-bancorp-finops
 source_filename: glacier-bancorp-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.glacierbancorp.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Glacier Bancorp\nproviderId: glacier-bancorp\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Banking\n  - Financial Services\ndescription: FinOps framing for Glacier Bancorp partner integrations. Glacier Bancorp does not publish\n  a self-service API price list; partner cost is governed by treasury management agreements and bilateral\n  contracts.\nnotes: Reconcile after a public developer program is launched. Meters below describe likely partner-billed\n  units rather than published rates.\nsources:\n  - https://www.glacierbancorp.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Glacier Bancorp, Inc.\nserviceCategory: Banking\n\
-  billingModel:\n  pricingCategory: Custom Contract\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: Glacier Bancorp\n  ServiceCategory: Banking\n  ProviderName: Glacier Bancorp\n  PublisherName: Glacier Bancorp, Inc.\n  InvoiceIssuerName: Glacier Bancorp, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: account_inquiries\n    description: Account inquiry / balance API calls (when available via partner integration)\n    unit: request\n    aggregation: sum\n  - name: ach_transactions\n    description: ACH originations and returns\n    unit: transaction\n    aggregation: sum\n  - name: wire_transactions\n    description: Wire transfer originations\n    unit: transaction\n    aggregation: sum\n  - name: monthly_service_fee\n    description: Treasury management or partner-program flat monthly fee\n    unit: month\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Reconcile\
-  \ partner usage against bank-issued treasury management statements and ACH/wire\n      activity reports.\n  - name: Allocation\n    description: Allocate banking-service charges to the legal entity holding the account; tag transactional\n      volume by the originating product/business unit.\n  - name: Optimization\n    description: Negotiate volume tiers in the treasury management contract; consolidate accounts to qualify\n      for relationship pricing.\n  - name: Accountability\n    description: Treasury function owns banking-fee management and reviews bank statement variances monthly.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Glacier Bancorp\nproviderId: glacier-bancorp\npublisherName: Glacier Bancorp\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Banking\n  - Financial Services\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Glacier Bancorp API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Glacier Bancorp\n  ServiceCategory: Developer Tools / API\n  ProviderName: Glacier Bancorp\n  PublisherName: Glacier Bancorp\n  InvoiceIssuerName: Glacier Bancorp\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Glacier Bancorp API\n    baseURL: https://api.glacierbancorp.com\n    tags:\n      - Banking\n      - Financial Services\n    serviceName: Glacier Bancorp API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/glacier-bancorp/refs/heads/main/finops/glacier-bancorp-finops.yml
-sources:
-- https://www.glacierbancorp.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Banking
 - Financial Services
+- FinOps
+- Cost Management
+- FOCUS
 ---

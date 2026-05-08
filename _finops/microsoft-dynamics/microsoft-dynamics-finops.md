@@ -25,115 +25,77 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-dynamics/refs/heads/main/openapi/microsoft-dynamics-finance-operations-openapi.yml
 billing_model:
-  billingCurrency: USD (settlement varies)
-  billingFrequency: Monthly (annual commitment for most apps)
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
+  - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Subscription (per Seat) + Tenant
-description: FOCUS-aligned FinOps for Microsoft Dynamics — primarily per-user-per-month seat pricing across Sales, Customer Service, Finance, Supply Chain, Field Service, Business Central, and tenant-priced platforms (Customer Insights). Significant savings from the qualifying-offer attach pricing — first app full price, subsequent apps for the same user at the attach rate ($20 / $30 / etc.). Largest waste signals are paying full price on attach-eligible users and over-provisioning Customer Insights profile capacity.
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Microsoft Dynamics API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Corporation
-  PricingCategory: Subscription
-  PricingUnit: user-month
-  ProviderName: Microsoft Corporation
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Business Applications
-  ServiceName: Microsoft Dynamics 365
+  InvoiceIssuerName: Microsoft Dynamics
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Microsoft Dynamics
+  PublisherName: Microsoft Dynamics
+  ServiceCategory: Developer Tools / API
+  ServiceName: Microsoft Dynamics
 layout: finops
 meters:
-- aggregation: max
-  description: Sales Pro / Enterprise / Premium user seats.
-  dimensions:
-  - sku
-  - department
-  - cost_center
-  - is_attach
-  name: sales_seats
-  unit: user-month
-- aggregation: max
-  description: Customer Service Pro / Enterprise user seats.
-  dimensions:
-  - sku
-  - is_attach
-  name: customer_service_seats
-  unit: user-month
-- aggregation: max
-  description: Field Service user seats.
-  dimensions:
-  - is_attach
-  name: field_service_seats
-  unit: user-month
-- aggregation: max
-  description: Finance user seats.
-  dimensions:
-  - is_attach
-  name: finance_seats
-  unit: user-month
-- aggregation: max
-  description: Supply Chain Management user seats.
-  dimensions:
-  - is_attach
-  name: supply_chain_seats
-  unit: user-month
-- aggregation: max
-  description: Business Central Essentials / Premium / Team Members.
-  dimensions:
-  - sku
-  name: business_central_seats
-  unit: user-month
-- aggregation: max
-  description: Customer Insights tenants and add-on profile bands.
-  dimensions:
-  - profile_band
-  name: customer_insights_tenants
-  unit: tenant-month
-- aggregation: max
-  description: Dataverse storage capacity (database GB, file GB, log GB) consumed by Dynamics 365 applications.
-  dimensions:
-  - environment
-  - storage_type
-  name: dataverse_capacity
-  unit: GB-month
 - aggregation: sum
-  description: Power Platform request entitlement consumed beyond licensed allocation.
+  description: Count of billable API requests
   dimensions:
-  - environment
-  - service_principal
-  name: api_request_entitlement
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Dynamics Finops
 provider_name: Microsoft Dynamics
 provider_slug: microsoft-dynamics
-publisher_name: Microsoft Corporation
-service_category: Business Applications / CRM-ERP
+publisher_name: Microsoft Dynamics
+service_category: API
 slug: microsoft-dynamics-finops
 source_filename: microsoft-dynamics-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.microsoft.com/dynamics-365/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Dynamics\nproviderId: microsoft-dynamics\npublisherName: Microsoft Corporation\nserviceCategory: Business Applications / CRM-ERP\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - CRM\n  - ERP\n  - Microsoft Dynamics\n  - Business Applications\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for Microsoft Dynamics — primarily per-user-per-month seat\n  pricing across Sales, Customer Service, Finance, Supply Chain, Field Service, Business\n  Central, and tenant-priced platforms (Customer Insights). Significant savings from the\n  qualifying-offer attach pricing — first app full price, subsequent apps for\
-  \ the same user\n  at the attach rate ($20 / $30 / etc.). Largest waste signals are paying full price on\n  attach-eligible users and over-provisioning Customer Insights profile capacity.\nsources:\n  - https://www.microsoft.com/dynamics-365/pricing\n  - https://learn.microsoft.com/en-us/dynamics365/get-started/licensing-overview\n  - https://focus.finops.org/focus-specification/v1-3/\nbillingModel:\n  pricingCategory: Subscription (per Seat) + Tenant\n  billingFrequency: Monthly (annual commitment for most apps)\n  billingCurrency: USD (settlement varies)\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Dynamics 365\n  ServiceCategory: Business Applications\n  ProviderName: Microsoft Corporation\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  PricingCategory: Subscription\n  PricingUnit: user-month\n  BillingCurrency: USD\n  ChargeCategory:\
-  \ Usage\nmeters:\n  - name: sales_seats\n    description: Sales Pro / Enterprise / Premium user seats.\n    unit: user-month\n    aggregation: max\n    dimensions:\n      - sku\n      - department\n      - cost_center\n      - is_attach\n  - name: customer_service_seats\n    description: Customer Service Pro / Enterprise user seats.\n    unit: user-month\n    aggregation: max\n    dimensions:\n      - sku\n      - is_attach\n  - name: field_service_seats\n    description: Field Service user seats.\n    unit: user-month\n    aggregation: max\n    dimensions:\n      - is_attach\n  - name: finance_seats\n    description: Finance user seats.\n    unit: user-month\n    aggregation: max\n    dimensions:\n      - is_attach\n  - name: supply_chain_seats\n    description: Supply Chain Management user seats.\n    unit: user-month\n    aggregation: max\n    dimensions:\n      - is_attach\n  - name: business_central_seats\n    description: Business Central Essentials / Premium / Team Members.\n  \
-  \  unit: user-month\n    aggregation: max\n    dimensions:\n      - sku\n  - name: customer_insights_tenants\n    description: Customer Insights tenants and add-on profile bands.\n    unit: tenant-month\n    aggregation: max\n    dimensions:\n      - profile_band\n  - name: dataverse_capacity\n    description: Dataverse storage capacity (database GB, file GB, log GB) consumed by\n      Dynamics 365 applications.\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - environment\n      - storage_type\n  - name: api_request_entitlement\n    description: Power Platform request entitlement consumed beyond licensed allocation.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - environment\n      - service_principal\nprinciples:\n  - name: Visibility\n    description: Microsoft 365 admin center > Billing surfaces seat allocations and the\n      qualifying-offer attach status. Power Platform admin center > Resources > Capacity shows\n      Dataverse storage and API\
-  \ entitlement consumption. FOCUS-aligned commerce exports\n      itemize each Dynamics SKU.\n  - name: Allocation\n    description: Tag users by department / cost-center via Entra ID groups; group-rule\n      assignment enforces the right SKU per role. Multi-org deployments split seats by\n      environment to drive chargeback.\n  - name: Optimization\n    description: Use qualifying-offer attach for users needing multiple apps (e.g., Sales\n      Enterprise primary + Customer Service attach at $20). Replace full Sales/CS users with\n      Team Members ($8) where read-only access is enough. Buy Customer Insights at the\n      profile band actually used; right-size profile capacity quarterly. Prefer Business\n      Central over full Finance/SCM for SMB deployments. Disable trial environments that\n      auto-create when developers explore; they consume capacity.\n  - name: Accountability\n    description: License administrator approves new seat purchases; FinOps validates\n      attach-eligibility\
-  \ before each purchase. Quarterly audit of last-sign-in date triggers\n      seat reclamation. Set Cost Management budget on the M365/Dynamics commerce subscription\n      with alerts at 80/100%.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://www.microsoft.com/dynamics-365\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Dynamics\nproviderId: microsoft-dynamics\npublisherName: Microsoft Dynamics\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - CRM\n  - ERP\n  - Microsoft Dynamics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Dynamics API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the\
+  \ consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Dynamics\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Dynamics\n  PublisherName: Microsoft Dynamics\n  InvoiceIssuerName: Microsoft Dynamics\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Microsoft Dynamics 365 Business Central API\n    baseURL: ''\n    tags:\n      - Business Central\n      - ERP\n      - Finance\n    serviceName: Microsoft Dynamics 365 Business Central API\n    serviceCategory: API\n  - name: Microsoft Dynamics 365 Dataverse Web API\n    baseURL: ''\n    tags:\n      - CRM\n      - Customer Engagement\n      - Sales\n    serviceName: Microsoft Dynamics 365 Dataverse Web API\n    serviceCategory: API\n  - name: Microsoft Dynamics 365 Finance & Operations Data API\n    baseURL: ''\n    tags:\n      - ERP\n      - Finance\n      - Supply Chain\n    serviceName: Microsoft Dynamics 365 Finance & Operations Data API\n    serviceCategory:\
+  \ API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-dynamics/refs/heads/main/finops/microsoft-dynamics-finops.yml
-sources:
-- https://www.microsoft.com/dynamics-365/pricing
-- https://learn.microsoft.com/en-us/dynamics365/get-started/licensing-overview
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
 - CRM
 - ERP
 - Microsoft Dynamics
-- Business Applications
 - FinOps
+- Cost Management
 - FOCUS
 ---

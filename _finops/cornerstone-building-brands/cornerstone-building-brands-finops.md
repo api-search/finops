@@ -6,41 +6,75 @@ aligned_with:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
-  billingCurrency: N/A
-  billingFrequency: N/A
-  chargeCategories: []
-  chargeFrequency: N/A
-  pricingCategory: N/A (not an API provider)
-description: Cornerstone Building Brands is a manufacturer, not an API provider. There is no publicly consumable API rate card or invoice surface to align with FOCUS. Any internal FinOps shape would be tied to the company's own enterprise-IT spend rather than to an API-as-a-product business.
+  billingCurrency: USD
+  billingFrequency: Monthly
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Cornerstone Building Brands API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
-  BillingCurrency: N/A
-  ChargeCategory: N/A
-  PricingCategory: N/A
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Cornerstone Building Brands
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Cornerstone Building Brands
-  PublisherName: Cornerstone Building Brands, Inc.
-  ServiceCategory: Building Products Manufacturer
+  PublisherName: Cornerstone Building Brands
+  ServiceCategory: Developer Tools / API
   ServiceName: Cornerstone Building Brands
 layout: finops
-meters: []
+meters:
+- aggregation: sum
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Cornerstone Building Brands Finops
 provider_name: Cornerstone Building Brands
 provider_slug: cornerstone-building-brands
-publisher_name: Cornerstone Building Brands, Inc.
-service_category: Building Products Manufacturer
+publisher_name: Cornerstone Building Brands
+service_category: API
 slug: cornerstone-building-brands-finops
 source_filename: cornerstone-building-brands-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.cornerstonebuildingbrands.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Cornerstone Building Brands\nproviderId: cornerstone-building-brands\npublisherName: Cornerstone Building Brands, Inc.\nserviceCategory: Building Products Manufacturer\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Building Products\n  - Construction\n  - FinOps\n  - FOCUS\ndescription: Cornerstone Building Brands is a manufacturer, not an API provider. There is no publicly\n  consumable API rate card or invoice surface to align with FOCUS. Any internal FinOps shape would\n  be tied to the company's own enterprise-IT spend rather than to an API-as-a-product business.\nsources:\n  - https://www.cornerstonebuildingbrands.com\n\
-  billingModel:\n  pricingCategory: N/A (not an API provider)\n  billingFrequency: N/A\n  billingCurrency: N/A\n  chargeCategories: []\n  chargeFrequency: N/A\nfocusColumns:\n  ServiceName: Cornerstone Building Brands\n  ServiceCategory: Building Products Manufacturer\n  ProviderName: Cornerstone Building Brands\n  PublisherName: Cornerstone Building Brands, Inc.\n  PricingCategory: N/A\n  BillingCurrency: N/A\n  ChargeCategory: N/A\nmeters: []\nprinciples:\n  - name: Visibility\n    description: Not applicable - no consumer-facing API meter is published.\n  - name: Allocation\n    description: Not applicable - no consumer-facing API charge to allocate.\n  - name: Optimization\n    description: Not applicable - no consumer-facing API consumption to optimize.\n  - name: Accountability\n    description: Not applicable - no consumer-facing API spend to own.\nnotes: Cornerstone Building Brands is not an API-as-a-product business. This artifact is intentionally\n  empty of meters because there\
-  \ is no publicly consumable API billing surface. Reconciled is false\n  pending evidence of a public API offering.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Cornerstone Building Brands\nproviderId: cornerstone-building-brands\npublisherName: Cornerstone Building Brands\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Building Products\n  - Construction\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Cornerstone Building Brands API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
+  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Cornerstone Building Brands\n  ServiceCategory: Developer Tools / API\n  ProviderName: Cornerstone Building Brands\n  PublisherName: Cornerstone Building Brands\n  InvoiceIssuerName: Cornerstone Building Brands\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
+  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Cornerstone Building Brands API\n    baseURL: https://api.cornerstonebuildingbrands.com\n    tags:\n      - Building Products\n      - Construction\n    serviceName: Cornerstone Building Brands API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cornerstone-building-brands/refs/heads/main/finops/cornerstone-building-brands-finops.yml
-sources:
-- https://www.cornerstonebuildingbrands.com
+sources: []
 specification: FinOps Framework
 tags:
 - Building Products
 - Construction
 - FinOps
+- Cost Management
 - FOCUS
 ---

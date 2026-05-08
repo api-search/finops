@@ -14,55 +14,72 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/activision-blizzard/refs/heads/main/openapi/activision-blizzard-battle-net.json
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Free (Non-Commercial) / Negotiated Commercial Licence
-description: FOCUS-aligned FinOps scaffold for Activision Blizzard's Battle.net API. There is no Blizzard invoice for non-commercial use; FinOps relevance is restricted to compute/egress costs incurred by the integrating application when polling Battle.net data and to any commercial-licence fee negotiated directly with Blizzard.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the activision-blizzard API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Blizzard Entertainment, Inc.
-  ProviderName: Blizzard Entertainment
-  PublisherName: Blizzard Entertainment, Inc.
-  ServiceCategory: Gaming / Game Data
-  ServiceName: Battle.net API
+  ChargeCategory: Usage
+  InvoiceIssuerName: activision-blizzard
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: activision-blizzard
+  PublisherName: activision-blizzard
+  ServiceCategory: Developer Tools / API
+  ServiceName: activision-blizzard
 layout: finops
 meters:
 - aggregation: sum
-  description: Battle.net API request consumed against per-OAuth-client limits. Not directly billed under the free developer tier, but the unit consumers track for cost-of-integration analysis.
+  description: Count of billable API requests
   dimensions:
-  - region
-  - game
+  - api
   - endpoint
-  name: api_request
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: Annual commercial-licence fee for Battle.net API use, where contracted.
+  description: Bytes returned over the network in API responses
   dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
   - tier
-  name: commercial_licence
-  unit: year
+  name: compute_seconds
+  unit: second
 name: Activision Blizzard Finops
 provider_name: activision-blizzard
 provider_slug: activision-blizzard
-publisher_name: Blizzard Entertainment, Inc.
-service_category: Gaming / Game Data
+publisher_name: activision-blizzard
+service_category: API
 slug: activision-blizzard-finops
 source_filename: activision-blizzard-finops.yml
 source_heading: FinOps Profile
-source_url: https://develop.battle.net/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Activision Blizzard\nproviderId: activision-blizzard\npublisherName: Blizzard Entertainment, Inc.\nserviceCategory: Gaming / Game Data\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Gaming\n  - Battle.net\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps scaffold for Activision Blizzard's Battle.net API. There is no Blizzard\n  invoice for non-commercial use; FinOps relevance is restricted to compute/egress costs incurred by\n  the integrating application when polling Battle.net data and to any commercial-licence fee negotiated\n  directly with Blizzard.\nsources:\n  - https://develop.battle.net/\n  - https://community.developer.battle.net/\n\
-  notes: No published commercial billing model. Reconciled flag is false because there is no provider\n  invoice to map to FOCUS columns.\nbillingModel:\n  pricingCategory: Free (Non-Commercial) / Negotiated Commercial Licence\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Battle.net API\n  ServiceCategory: Gaming / Game Data\n  ProviderName: Blizzard Entertainment\n  PublisherName: Blizzard Entertainment, Inc.\n  InvoiceIssuerName: Blizzard Entertainment, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: api_request\n    description: Battle.net API request consumed against per-OAuth-client limits. Not directly billed\n      under the free developer tier, but the unit consumers track for cost-of-integration analysis.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - region\n      - game\n      - endpoint\n  - name: commercial_licence\n    description: Annual commercial-licence\
-  \ fee for Battle.net API use, where contracted.\n    unit: year\n    aggregation: sum\n    dimensions:\n      - tier\nprinciples:\n  - name: Visibility\n    description: There is no Blizzard usage API. Track outbound calls by OAuth2 client at the consumer's\n      egress / API gateway and watch for 429 responses as the practical \"approaching budget\" signal.\n  - name: Allocation\n    description: Allocate compute and egress costs of polling Battle.net data to the consuming product\n      (e.g. guild website, leaderboard service, esports backend) rather than to Blizzard.\n  - name: Optimization\n    description: Cache aggressively, prefer scheduled batch refreshes over on-demand calls, share OAuth\n      clients only when limits permit, and use change-aware patterns where exposed.\n  - name: Accountability\n    description: The integrator's engineering team owns rate-limit headroom and any commercial-licence\n      renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: activision-blizzard\nproviderId: activision-blizzard\npublisherName: activision-blizzard\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the activision-blizzard API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: activision-blizzard\n  ServiceCategory: Developer Tools / API\n  ProviderName: activision-blizzard\n  PublisherName: activision-blizzard\n  InvoiceIssuerName: activision-blizzard\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
+  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Battle.net API\n    baseURL: ''\n    tags:\n      - Gaming\n      - World Of Warcraft\n      - Hearthstone\n      - Diablo\n      - Starcraft\n      - Battle.net\n    serviceName: Battle.net API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/activision-blizzard/refs/heads/main/finops/activision-blizzard-finops.yml
-sources:
-- https://develop.battle.net/
-- https://community.developer.battle.net/
+sources: []
 specification: FinOps Framework
 tags:
-- Gaming
-- Battle.net
 - FinOps
+- Cost Management
 - FOCUS
 ---

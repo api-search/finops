@@ -50,59 +50,75 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/open-policy-agent/refs/heads/main/openapi/status-api.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: N/A
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Self-Hosted Open Source
-description: 'FOCUS-aligned FinOps for self-hosted Open Policy Agent: there is no software licensing line item; cost is dominated by underlying compute, memory, and decision-log storage in the operator''s own infrastructure.'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Open Policy Agent API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: N/A (open source)
+  ChargeCategory: Usage
+  InvoiceIssuerName: Open Policy Agent
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Open Policy Agent
-  PublisherName: Open Policy Agent (CNCF)
-  ServiceCategory: Identity / Authorization
+  PublisherName: Open Policy Agent
+  ServiceCategory: Developer Tools / API
   ServiceName: Open Policy Agent
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - cluster
-  - environment
-  name: compute_hours
-  unit: instance-hour
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - cluster
-  - sink
-  name: decision_log_volume
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - policy
-  - cluster
-  name: policy_evaluations
-  unit: request
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Open Policy Agent Finops
 provider_name: Open Policy Agent
 provider_slug: open-policy-agent
-publisher_name: Open Policy Agent (CNCF)
-service_category: Identity / Authorization
+publisher_name: Open Policy Agent
+service_category: API
 slug: open-policy-agent-finops
 source_filename: open-policy-agent-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.openpolicyagent.org/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Open Policy Agent\nproviderId: open-policy-agent\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Policies\n  - Standards\n  - FinOps\n  - FOCUS\n  - Open Source\nnotes: OPA is open-source software with no licensing fees. FinOps shape here describes the cost of running\n  OPA (compute, observability) rather than a vendor invoice. Commercial alternatives (Styra DAS) would\n  produce a vendor-billed surface modeled separately.\ndescription: 'FOCUS-aligned FinOps for self-hosted Open Policy Agent: there is no software licensing line\n  item; cost is dominated by underlying compute, memory, and decision-log storage in the operator''s own\n  infrastructure.'\nsources:\n  - https://www.openpolicyagent.org/\n  - https://github.com/open-policy-agent/opa\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n\
-  \  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Open Policy Agent (CNCF)\nserviceCategory: Identity / Authorization\nbillingModel:\n  pricingCategory: Self-Hosted Open Source\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Open Policy Agent\n  ServiceCategory: Identity / Authorization\n  ProviderName: Open Policy Agent\n  PublisherName: Open Policy Agent (CNCF)\n  InvoiceIssuerName: N/A (open source)\n  BillingCurrency: USD\nmeters:\n  - name: compute_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - environment\n  - name: decision_log_volume\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - cluster\n      - sink\n  - name: policy_evaluations\n    unit: request\n    aggregation: sum\n    dimensions:\n      - policy\n      - cluster\nprinciples:\n  - name: Visibility\n    description: Capture\
-  \ decision logs and Prometheus metrics from each OPA instance to attribute query\n      load and latency by policy and cluster.\n  - name: Allocation\n    description: Tag the underlying compute (Kubernetes namespaces, nodes) running OPA so that infrastructure\n      cost can be attributed to the policies it serves.\n  - name: Optimization\n    description: Right-size OPA replicas, enable bundle caching, and consolidate policies to reduce CPU\n      and decision-log egress.\n  - name: Accountability\n    description: Platform / security teams typically own the OPA deployment; ensure decision-log storage\n      and OPA compute appear in their cost reviews.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Open Policy Agent\nproviderId: open-policy-agent\npublisherName: Open Policy Agent\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Policies\n  - Standards\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Open Policy Agent API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Open Policy Agent\n  ServiceCategory: Developer Tools / API\n  ProviderName: Open Policy Agent\n  PublisherName: Open Policy Agent\n  InvoiceIssuerName: Open Policy Agent\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Open Policy Agent Policy API\n    baseURL: ''\n    tags:\n      - Management\n      - Policies\n      - Rego\n    serviceName: Open Policy Agent Policy API\n    serviceCategory: API\n  - name: Open Policy Agent Data API\n    baseURL: ''\n    tags:\n      - Data\n      - Documents\n      - Storage\n    serviceName: Open Policy Agent Data API\n    serviceCategory: API\n  - name: Open Policy Agent Query API\n    baseURL: ''\n    tags:\n      - Evaluation\n      - Queries\n      - Rego\n    serviceName: Open Policy Agent Query API\n    serviceCategory: API\n  - name: Open Policy Agent Compile API\n    baseURL: ''\n    tags:\n      - Compile\n      - Evaluation\n      - Partial Evaluation\n    serviceName:\
+  \ Open Policy Agent Compile API\n    serviceCategory: API\n  - name: Open Policy Agent Health API\n    baseURL: ''\n    tags:\n      - Availability\n      - Health\n      - Monitoring\n    serviceName: Open Policy Agent Health API\n    serviceCategory: API\n  - name: Open Policy Agent Config API\n    baseURL: ''\n    tags:\n      - Configurations\n      - Discovery\n      - Management\n    serviceName: Open Policy Agent Config API\n    serviceCategory: API\n  - name: Open Policy Agent Status API\n    baseURL: ''\n    tags:\n      - Monitoring\n      - Observability\n      - Status\n    serviceName: Open Policy Agent Status API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/open-policy-agent/refs/heads/main/finops/open-policy-agent-finops.yml
-sources:
-- https://www.openpolicyagent.org/
-- https://github.com/open-policy-agent/opa
+sources: []
 specification: FinOps Framework
 tags:
 - Policies
 - Standards
 - FinOps
+- Cost Management
 - FOCUS
-- Open Source
 ---

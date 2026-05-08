@@ -19,77 +19,76 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Tiered Subscription
-description: 'FOCUS-aligned FinOps for Microsoft Project: tiered per-user subscriptions (Planner, Plan 1, Plan 3) plus optional one-time on-prem licenses, billed monthly via Microsoft 365 commerce.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Microsoft Project API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Corporation
-  PricingUnit: seat-month
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Project Management
+  InvoiceIssuerName: Microsoft Project
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Microsoft Project
+  PublisherName: Microsoft Project
+  ServiceCategory: Developer Tools / API
   ServiceName: Microsoft Project
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - tenant
-  - assigned_user
-  name: planner_seats
-  unit: seat-month
-- aggregation: sum
-  dimensions:
-  - tenant
-  - assigned_user
-  name: plan1_seats
-  unit: seat-month
-- aggregation: sum
-  dimensions:
-  - tenant
-  - assigned_user
-  name: plan3_seats
-  unit: seat-month
-- aggregation: count
-  dimensions:
-  - tenant
-  name: standard_2024_licenses
-  unit: license
-- aggregation: count
-  dimensions:
-  - tenant
-  name: professional_2024_licenses
-  unit: license
-- aggregation: sum
-  dimensions:
-  - user
-  - environment
-  name: power_platform_requests
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Project Finops
 provider_name: Microsoft Project
 provider_slug: microsoft-project
-publisher_name: Microsoft Corporation
-service_category: Project Management
+publisher_name: Microsoft Project
+service_category: API
 slug: microsoft-project-finops
 source_filename: microsoft-project-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.microsoft.com/en-us/microsoft-365/project/compare-microsoft-project-management-software
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Microsoft Project\nproviderId: microsoft-project\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Cost Management\n  - Microsoft\n  - Project Management\ndescription: 'FOCUS-aligned FinOps for Microsoft Project: tiered per-user subscriptions (Planner, Plan 1,\n  Plan 3) plus optional one-time on-prem licenses, billed monthly via Microsoft 365 commerce.'\nsources:\n  - https://www.microsoft.com/en-us/microsoft-365/project/compare-microsoft-project-management-software\n  - https://learn.microsoft.com/en-us/power-platform/admin/api-request-limits-allocations\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Microsoft Corporation\nserviceCategory:\
-  \ Project Management\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Microsoft Project\n  ServiceCategory: Project Management\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  PricingUnit: seat-month\n  ChargeCategory: Usage\nmeters:\n  - name: planner_seats\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - tenant\n      - assigned_user\n  - name: plan1_seats\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - tenant\n      - assigned_user\n  - name: plan3_seats\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - tenant\n      - assigned_user\n  - name: standard_2024_licenses\n    unit: license\n    aggregation: count\n    dimensions:\n      - tenant\n  - name: professional_2024_licenses\n\
-  \    unit: license\n    aggregation: count\n    dimensions:\n      - tenant\n  - name: power_platform_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - user\n      - environment\nprinciples:\n  - name: Visibility\n    description: Use the Microsoft 365 admin center license-usage report and the Power Platform admin\n      center capacity reports to expose per-tenant seat consumption and Power Platform request usage\n      over time.\n  - name: Allocation\n    description: Allocate Plan 1 / Plan 3 seats by Microsoft 365 license group; tag each Project\n      Online tenant with cost-center metadata to roll up to PMO budget owners.\n  - name: Optimization\n    description: Right-size between Planner-included, Plan 1 ($10), and Plan 3 ($30) per actual usage;\n      avoid blanket Plan 3 assignment for users who only need Planner. Reserve on-prem one-time licenses\n      for users who never need cloud collaboration. Plan migration off Plan 5 before 2026-05-01 EOS.\n\
-  \  - name: Accountability\n    description: Review monthly Plan 3 utilization against checked-in projects; reclaim seats from\n      inactive users; enforce a finance approval step on >100-seat additions.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Project\nproviderId: microsoft-project\npublisherName: Microsoft Project\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Budgeting\n  - Gantt Charts\n  - Microsoft\n  - Portfolio Management\n  - Project Management\n  - Resource Management\n  - Scheduling\n  - Task Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Project API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance\
+  \ teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n\
+  \      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Project\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Project\n  PublisherName: Microsoft Project\n  InvoiceIssuerName: Microsoft Project\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      -\
+  \ consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Microsoft Project Online REST API\n    baseURL: https://{tenant}.sharepoint.com/sites/pwa/_api/ProjectServer\n    tags:\n      - Assignments\n      - Calendars\n      - Custom Fields\n      - Projects\n      - Resources\n      - REST\n      - Tasks\n      - Timesheets\n    serviceName: Microsoft Project Online REST API\n    serviceCategory: API\n  - name: Microsoft Project Online CSOM API\n    baseURL: https://{tenant}.sharepoint.com/sites/pwa/_api/ProjectServer\n    tags:\n      - .NET\n      - Client Library\n      - CSOM\n      - JavaScript\n      - Projects\n  \
+  \    - Resources\n      - Tasks\n    serviceName: Microsoft Project Online CSOM API\n    serviceCategory: API\n  - name: Microsoft Project OData Reporting API\n    baseURL: https://{tenant}.sharepoint.com/sites/pwa/_api/ProjectData\n    tags:\n      - OData\n      - Projects\n      - Reporting\n      - Resources\n      - Tasks\n    serviceName: Microsoft Project OData Reporting API\n    serviceCategory: API\n  - name: Microsoft Project JavaScript API\n    baseURL: https://appsforoffice.microsoft.com/lib/1/hosted/office.js\n    tags:\n      - Add-Ins\n      - JavaScript\n      - Office\n      - Task Pane\n    serviceName: Microsoft Project JavaScript API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-project/refs/heads/main/finops/microsoft-project-finops.yml
-sources:
-- https://www.microsoft.com/en-us/microsoft-365/project/compare-microsoft-project-management-software
-- https://learn.microsoft.com/en-us/power-platform/admin/api-request-limits-allocations
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Cost Management
+- Budgeting
+- Gantt Charts
 - Microsoft
+- Portfolio Management
 - Project Management
+- Resource Management
+- Scheduling
+- Task Management
+- FinOps
+- Cost Management
+- FOCUS
 ---

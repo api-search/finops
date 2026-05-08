@@ -67,94 +67,85 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/scaleway/refs/heads/main/openapi/scaleway-transactional-email-openapi.yml
 billing_model:
-  billingCurrency: EUR
+  billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Pay-As-You-Go
-description: 'FOCUS-aligned FinOps for Scaleway: pay-as-you-go European cloud billed per second / per GB-month / per request across compute, storage, network, AI, and managed services, with a real-time Billing API for consumption and invoice export.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Scaleway API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
-  BillingCurrency: EUR
-  InvoiceIssuerName: Scaleway SAS
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Scaleway
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Scaleway
-  PublisherName: Scaleway SAS
-  ServiceCategory: Cloud Infrastructure
+  PublisherName: Scaleway
+  ServiceCategory: Developer Tools / API
   ServiceName: Scaleway
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - instance_type
-  - zone
-  - project
-  name: instance_hours
-  unit: instance-hour
-- aggregation: sum
-  dimensions:
-  - volume_type
-  - zone
-  - project
-  name: block_storage
-  unit: GB-month
-- aggregation: sum
-  dimensions:
-  - storage_class
+  - api
+  - endpoint
+  - tier
   - region
-  - project
-  name: object_storage
-  unit: GB-month
-- aggregation: sum
-  dimensions:
-  - region
-  - project
-  name: public_ipv4
-  unit: ip-month
-- aggregation: sum
-  dimensions:
-  - cluster_type
-  - region
-  name: kubernetes_kapsule
-  unit: cluster-hour
-- aggregation: sum
-  dimensions:
-  - product
-  - region
-  - project
-  name: serverless_invocations
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - model
-  - direction
-  - project
-  name: generative_ai_tokens
-  unit: token
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Scaleway Finops
 provider_name: Scaleway
 provider_slug: scaleway
-publisher_name: Scaleway SAS
-service_category: Cloud Infrastructure
+publisher_name: Scaleway
+service_category: API
 slug: scaleway-finops
 source_filename: scaleway-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.scaleway.com/en/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Scaleway\nproviderId: scaleway\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Cloud Computing\n  - European Cloud\ndescription: 'FOCUS-aligned FinOps for Scaleway: pay-as-you-go European cloud billed per\n  second / per GB-month / per request across compute, storage, network, AI, and managed services,\n  with a real-time Billing API for consumption and invoice export.'\nsources:\n  - https://www.scaleway.com/en/pricing/\n  - https://www.scaleway.com/en/developers/api/billing/\n  - https://www.scaleway.com/en/developers/api/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Scaleway SAS\nserviceCategory: Cloud Infrastructure\nbillingModel:\n\
-  \  pricingCategory: Pay-As-You-Go\n  billingFrequency: Monthly\n  billingCurrency: EUR\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Scaleway\n  ServiceCategory: Cloud Infrastructure\n  ProviderName: Scaleway\n  PublisherName: Scaleway SAS\n  InvoiceIssuerName: Scaleway SAS\n  BillingCurrency: EUR\nmeters:\n  - name: instance_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - instance_type\n      - zone\n      - project\n  - name: block_storage\n    unit: GB-month\n    aggregation: sum\n    dimensions:\n      - volume_type\n      - zone\n      - project\n  - name: object_storage\n    unit: GB-month\n    aggregation: sum\n    dimensions:\n      - storage_class\n      - region\n      - project\n  - name: public_ipv4\n    unit: ip-month\n    aggregation: sum\n    dimensions:\n      - region\n      - project\n  - name: kubernetes_kapsule\n    unit: cluster-hour\n    aggregation: sum\n\
-  \    dimensions:\n      - cluster_type\n      - region\n  - name: serverless_invocations\n    unit: request\n    aggregation: sum\n    dimensions:\n      - product\n      - region\n      - project\n  - name: generative_ai_tokens\n    unit: token\n    aggregation: sum\n    dimensions:\n      - model\n      - direction\n      - project\nprinciples:\n  - name: Visibility\n    description: Use the Scaleway Billing API (/billing/v2beta1/consumptions, /invoices,\n      /export-invoices) for real-time spend and CSV export; the console exposes per-project\n      cost dashboards.\n  - name: Allocation\n    description: Use Scaleway Projects and resource tags plus IAM to segregate spend per\n      team or environment; export invoices to CSV for chargeback.\n  - name: Optimization\n    description: Right-size between DEV / GP / PRO / Compute / Memory instance lines, use\n      per-second billing to shut idle workloads, prefer Object Storage Glacier class for\n      cold data, and negotiate committed-use\
-  \ for predictable workloads.\n  - name: Accountability\n    description: Assign a project owner per Scaleway Project; reconcile monthly invoice\n      exports against the consumption API and investigate anomalies via the Billing API.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Scaleway\nproviderId: scaleway\npublisherName: Scaleway\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - Cloud Computing\n  - Containers\n  - Database\n  - European Cloud\n  - Infrastructure\n  - Kubernetes\n  - Serverless\n  - Storage\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Scaleway API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Scaleway\n  ServiceCategory: Developer Tools / API\n  ProviderName: Scaleway\n  PublisherName: Scaleway\n  InvoiceIssuerName: Scaleway\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network\
+  \ in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Scaleway Instance API\n    baseURL: ''\n    tags:\n      - Compute\n      - Images\n      - Instances\n      - Security Groups\n      - Snapshots\n      - Virtual Machines\n    serviceName: Scaleway Instance API\n    serviceCategory: API\n  - name: Scaleway Kubernetes API\n    baseURL: ''\n    tags:\n      - Containers\n      - Kapsule\n      - Kubernetes\n      - Node Pools\n      - Orchestration\n    serviceName: Scaleway Kubernetes API\n    serviceCategory: API\n  - name: Scaleway IAM API\n    baseURL: ''\n    tags:\n      - Access Control\n      - API Keys\n      - Groups\n      - IAM\n      - Identity\n      - Permissions\n      - Policies\n\
+  \    serviceName: Scaleway IAM API\n    serviceCategory: API\n  - name: Scaleway Load Balancer API\n    baseURL: ''\n    tags:\n      - Backend\n      - Health Checks\n      - Load Balancing\n      - Networking\n      - SSL\n    serviceName: Scaleway Load Balancer API\n    serviceCategory: API\n  - name: Scaleway Managed Database API\n    baseURL: ''\n    tags:\n      - Backup\n      - Database\n      - MySQL\n      - PostgreSQL\n      - Redis\n      - Relational Database\n    serviceName: Scaleway Managed Database API\n    serviceCategory: API\n  - name: Scaleway VPC API\n    baseURL: ''\n    tags:\n      - Network Isolation\n      - Networking\n      - Private Networks\n      - VPC\n      - Virtual Private Cloud\n    serviceName: Scaleway VPC API\n    serviceCategory: API\n  - name: Scaleway Serverless Containers API\n    baseURL: ''\n    tags:\n      - Containers\n      - CRON\n      - Docker\n      - Serverless\n    serviceName: Scaleway Serverless Containers API\n    serviceCategory:\
+  \ API\n  - name: Scaleway Serverless Functions API\n    baseURL: ''\n    tags:\n      - Event-Driven\n      - FaaS\n      - Functions\n      - Serverless\n    serviceName: Scaleway Serverless Functions API\n    serviceCategory: API\n  - name: Scaleway Secret Manager API\n    baseURL: ''\n    tags:\n      - Certificates\n      - Credentials\n      - Secrets\n      - Security\n      - Vault\n    serviceName: Scaleway Secret Manager API\n    serviceCategory: API\n  - name: Scaleway Transactional Email API\n    baseURL: ''\n    tags:\n      - Email\n      - Messaging\n      - Notifications\n      - SMTP\n      - Transactional Email\n    serviceName: Scaleway Transactional Email API\n    serviceCategory: API\n  - name: Scaleway Generative APIs\n    baseURL: ''\n    tags:\n      - AI\n      - Artificial Intelligence\n      - Generative AI\n      - Language Models\n      - LLM\n    serviceName: Scaleway Generative APIs\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n\
+  \    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/scaleway/refs/heads/main/finops/scaleway-finops.yml
-sources:
-- https://www.scaleway.com/en/pricing/
-- https://www.scaleway.com/en/developers/api/billing/
-- https://www.scaleway.com/en/developers/api/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- AI
 - Cloud Computing
+- Containers
+- Database
 - European Cloud
+- Infrastructure
+- Kubernetes
+- Serverless
+- Storage
+- FinOps
+- Cost Management
+- FOCUS
 ---

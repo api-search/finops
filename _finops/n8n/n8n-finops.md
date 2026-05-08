@@ -15,45 +15,74 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Subscription with Execution Quota
-description: FOCUS-aligned FinOps for n8n.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the N8n API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ProviderName: n8n
-  PublisherName: n8n
-  ServiceCategory: Workflow Automation
-  ServiceName: n8n
+  ChargeCategory: Usage
+  InvoiceIssuerName: N8n
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: N8n
+  PublisherName: N8n
+  ServiceCategory: Developer Tools / API
+  ServiceName: N8n
 layout: finops
 meters:
 - aggregation: sum
-  name: workflow_executions
-  unit: execution
-- aggregation: max
-  name: active_workflows
-  unit: workflow-month
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  name: ai_credits
-  unit: credit
-- aggregation: max
-  name: shared_projects
-  unit: project-month
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: N8N Finops
 provider_name: N8n
 provider_slug: n8n
-publisher_name: n8n
-service_category: Workflow Automation
+publisher_name: N8n
+service_category: API
 slug: n8n-finops
 source_filename: n8n-finops.yml
 source_heading: FinOps Profile
-source_url: https://n8n.io/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: n8n\nproviderId: n8n\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Workflow Automation\ndescription: FOCUS-aligned FinOps for n8n.\nsources:\n  - https://n8n.io/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: n8n\nserviceCategory: Workflow Automation\nbillingModel:\n  pricingCategory: Subscription with Execution Quota\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: n8n\n  ServiceCategory: Workflow Automation\n  ProviderName: n8n\n  PublisherName: n8n\n  BillingCurrency: USD\nmeters:\n  - name: workflow_executions\n    unit: execution\n    aggregation: sum\n  - name: active_workflows\n\
-  \    unit: workflow-month\n    aggregation: max\n  - name: ai_credits\n    unit: credit\n    aggregation: sum\n  - name: shared_projects\n    unit: project-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track n8n consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: N8n\nproviderId: n8n\npublisherName: N8n\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Agents\n  - Artificial Intelligence\n  - Integrations\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the N8n API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: N8n\n  ServiceCategory: Developer Tools / API\n  ProviderName: N8n\n  PublisherName: N8n\n  InvoiceIssuerName: N8n\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n\
+  \  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: N8n\n    baseURL: ''\n    tags:\n      - Agents\n      - Artificial Intelligence\n      - Integrations\n    serviceName: N8n\n    serviceCategory: API\n  - name: N8n REST API\n    baseURL: https://app.n8n.cloud/api/v1\n    tags:\n      - Automation\n      - Credentials\n      - Executions\n      - Workflows\n    serviceName: N8n REST API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/n8n/refs/heads/main/finops/n8n-finops.yml
-sources:
-- https://n8n.io/pricing/
+sources: []
 specification: FinOps Framework
 tags:
+- Agents
+- Artificial Intelligence
+- Integrations
 - FinOps
+- Cost Management
 - FOCUS
-- Workflow Automation
 ---

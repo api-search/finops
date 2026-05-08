@@ -67,70 +67,77 @@ billing_model:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Bundled with Microsoft 365 / Exchange Online
-description: 'FOCUS-aligned FinOps for Microsoft Outlook: free with a consumer Microsoft account (Outlook.com), bundled into Microsoft 365 / Office 365 / Exchange Online for work and school. APIs included with the seat licence; no per-call charge.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Microsoft Outlook API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Microsoft Corporation
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Email and Calendar
+  ChargeCategory: Usage
+  InvoiceIssuerName: Microsoft Outlook
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Microsoft Outlook
+  PublisherName: Microsoft Outlook
+  ServiceCategory: Developer Tools / API
   ServiceName: Microsoft Outlook
 layout: finops
 meters:
 - aggregation: sum
-  description: Outlook entitlement via Microsoft 365 / Exchange Online seat licences
+  description: Count of billable API requests
   dimensions:
-  - tenant
-  - sku
-  name: outlook_seats
-  unit: seat
-- aggregation: sum
-  description: Mailbox storage in use (primary + archive)
-  dimensions:
-  - mailbox
-  - mailbox_type
-  name: mailbox_storage
-  unit: GB
-- aggregation: sum
-  description: Microsoft Graph mail / calendar / contacts API calls (no charge; tracked for throttling)
-  dimensions:
-  - application
-  - tenant
-  - resource
-  name: graph_mail_calendar_requests
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: Outbound SMTP messages per mailbox
+  description: Bytes returned over the network in API responses
   dimensions:
-  - mailbox
-  name: smtp_messages_sent
-  unit: message
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Outlook Finops
 provider_name: Microsoft Outlook
 provider_slug: microsoft-outlook
-publisher_name: Microsoft Corporation
-service_category: Email and Calendar
+publisher_name: Microsoft Outlook
+service_category: API
 slug: microsoft-outlook-finops
 source_filename: microsoft-outlook-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.microsoft.com/en-us/microsoft-365/outlook/email-and-calendar-software-microsoft-outlook
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Outlook\nproviderId: microsoft-outlook\npublisherName: Microsoft Corporation\nserviceCategory: Email and Calendar\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Email\n  - Calendar\n  - Microsoft 365\n  - Microsoft\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Microsoft Outlook: free with a consumer Microsoft account (Outlook.com),\n  bundled into Microsoft 365 / Office 365 / Exchange Online for work and school. APIs included with the\n  seat licence; no per-call charge.'\nsources:\n  - https://www.microsoft.com/en-us/microsoft-365/outlook/email-and-calendar-software-microsoft-outlook\n  -\
-  \ https://www.microsoft.com/en-us/microsoft-365/exchange/compare-microsoft-exchange-online-plans\nbillingModel:\n  pricingCategory: Bundled with Microsoft 365 / Exchange Online\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Microsoft Outlook\n  ServiceCategory: Email and Calendar\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: outlook_seats\n    description: Outlook entitlement via Microsoft 365 / Exchange Online seat licences\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - tenant\n      - sku\n  - name: mailbox_storage\n    description: Mailbox storage in use (primary + archive)\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - mailbox\n      - mailbox_type\n  - name: graph_mail_calendar_requests\n    description:\
-  \ Microsoft Graph mail / calendar / contacts API calls (no charge; tracked for throttling)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - application\n      - tenant\n      - resource\n  - name: smtp_messages_sent\n    description: Outbound SMTP messages per mailbox\n    unit: message\n    aggregation: sum\n    dimensions:\n      - mailbox\nprinciples:\n  - name: Visibility\n    description: Use the Microsoft 365 admin centre user-activity reports, Exchange admin centre mailbox\n      usage report, and Message Trace API for inbound / outbound visibility.\n  - name: Allocation\n    description: Tag mailboxes by department / cost-centre via Entra group-based licensing; tag programmatic\n      mail traffic by the Graph application identity.\n  - name: Optimization\n    description: Convert seldom-used user mailboxes to shared mailboxes (no licence under 50 GB); migrate\n      from EWS to Microsoft Graph; replace polling with change notifications; right-size Plan 1 vs Plan\n\
-  \      2 based on archive needs.\n  - name: Accountability\n    description: Workplace IT owns Outlook policy and licence assignment; security owns DLP / Defender\n      for Office 365 policy; finance owns Exchange / M365 SKU mix.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Outlook\nproviderId: microsoft-outlook\npublisherName: Microsoft Outlook\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Calendar\n  - Contacts\n  - Email\n  - Enterprise\n  - Microsoft\n  - Office 365\n  - Productivity\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Outlook API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Outlook\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Outlook\n  PublisherName: Microsoft Outlook\n  InvoiceIssuerName: Microsoft Outlook\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
+  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Microsoft Graph Mail API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Email\n      - Folders\n      - Mail\n      - Messages\n    serviceName: Microsoft Graph Mail API\n    serviceCategory: API\n  - name: Microsoft Graph Calendar API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Calendar\n      - Events\n      - Meetings\n      - Scheduling\n    serviceName: Microsoft Graph Calendar API\n    serviceCategory: API\n  - name: Microsoft Graph Contacts API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Address Book\n      - Contacts\n      - People\n    serviceName:\
+  \ Microsoft Graph Contacts API\n    serviceCategory: API\n  - name: Microsoft Graph Tasks API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Task Management\n      - Tasks\n      - To-Do\n    serviceName: Microsoft Graph Tasks API\n    serviceCategory: API\n  - name: Outlook Add-ins API\n    baseURL: https://appsforoffice.microsoft.com/lib/1/hosted/office.js\n    tags:\n      - Add-Ins\n      - Extensions\n      - Office.js\n      - Plugins\n    serviceName: Outlook Add-ins API\n    serviceCategory: API\n  - name: Microsoft Graph People API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Contacts\n      - Directory\n      - People\n      - Social\n    serviceName: Microsoft Graph People API\n    serviceCategory: API\n  - name: Microsoft Graph Change Notifications API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Events\n      - Notifications\n      - Subscriptions\n      - Webhooks\n    serviceName: Microsoft Graph Change Notifications\
+  \ API\n    serviceCategory: API\n  - name: Microsoft Graph Focused Inbox API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Classification\n      - Email Organization\n      - Focused Inbox\n    serviceName: Microsoft Graph Focused Inbox API\n    serviceCategory: API\n  - name: Microsoft Graph Mail Rules API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Email Automation\n      - Filters\n      - Inbox Rules\n      - Rules\n    serviceName: Microsoft Graph Mail Rules API\n    serviceCategory: API\n  - name: Microsoft Graph Categories API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Categories\n      - Labels\n      - Organization\n    serviceName: Microsoft Graph Categories API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n\
+  \  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-outlook/refs/heads/main/finops/microsoft-outlook-finops.yml
-sources:
-- https://www.microsoft.com/en-us/microsoft-365/outlook/email-and-calendar-software-microsoft-outlook
-- https://www.microsoft.com/en-us/microsoft-365/exchange/compare-microsoft-exchange-online-plans
+sources: []
 specification: FinOps Framework
 tags:
-- Email
 - Calendar
-- Microsoft 365
+- Contacts
+- Email
+- Enterprise
 - Microsoft
+- Office 365
+- Productivity
 - FinOps
+- Cost Management
 - FOCUS
 ---

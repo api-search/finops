@@ -7,77 +7,90 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Partner Contract
-description: 'FOCUS-aligned FinOps for CVS Health: payer-mandated patient-access FHIR is no-cost; partner integrations (HL7 / NCPDP / EDI / FHIR) are contractual. Spend rolls up to the underlying healthcare product (PBM, plan, pharmacy), not API metering.'
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the CVS Health API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: CVS Health Corporation
-  PricingCategory: Partner Contract
+  InvoiceIssuerName: CVS Health
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: CVS Health
-  PublisherName: CVS Health Corporation
-  ServiceCategory: Healthcare
+  PublisherName: CVS Health
+  ServiceCategory: Developer Tools / API
   ServiceName: CVS Health
 layout: finops
 meters:
 - aggregation: sum
-  description: FHIR API calls under patient-access / partner agreements
-  dimensions:
-  - app
-  - resource_type
-  name: fhir_requests
-  unit: request
-- aggregation: sum
-  description: EDI healthcare transactions (270/271/834/835/837)
-  dimensions:
-  - partner
-  - transaction_type
-  name: edi_transactions
-  unit: transaction
-- aggregation: sum
-  description: Pharmacy claim transactions via NCPDP
-  dimensions:
-  - partner
-  - line_of_business
-  name: ncpdp_claims
-  unit: claim
-- aggregation: sum
-  description: API calls against CVS Health partner endpoints (not separately billed; observed for capacity)
+  description: Count of billable API requests
   dimensions:
   - api
-  - partner
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Cvs Health Finops
 provider_name: CVS Health
 provider_slug: cvs-health
-publisher_name: CVS Health Corporation
-service_category: Healthcare
+publisher_name: CVS Health
+service_category: API
 slug: cvs-health-finops
 source_filename: cvs-health-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.cvshealth.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CVS Health\nproviderId: cvs-health\npublisherName: CVS Health Corporation\nserviceCategory: Healthcare\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Healthcare\n  - Pharmacy\n  - Health Insurance\n  - FHIR\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for CVS Health: payer-mandated patient-access FHIR is no-cost; partner\n  integrations (HL7 / NCPDP / EDI / FHIR) are contractual. Spend rolls up to the underlying healthcare\n  product (PBM, plan, pharmacy), not API metering.'\nsources:\n  - https://www.cvshealth.com/\nnotes: No public API pricing. Reconcile against partner integration agreements for B2B\
-  \ costs.\nprinciples:\n  - name: Visibility\n    description: Use partner-portal usage reports and EDI / NCPDP transaction logs to track integration\n      activity; correlate with the relevant pharmacy / payer cost center.\n  - name: Allocation\n    description: Allocate to the consuming line of business (Pharmacy, Aetna, Caremark, MinuteClinic,\n      Oak Street) via partner_id and integration_type tags.\n  - name: Optimization\n    description: Consolidate duplicate partner endpoints; prefer FHIR over EDI where supported; reuse\n      tokens within their lifetime to reduce auth overhead.\n  - name: Accountability\n    description: Health-IT integration and compliance teams jointly own partner integrations; review\n      quarterly for HIPAA, CMS rule, and 21st Century Cures Act compliance.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Allocation\n      - Reporting and Analytics\n  - name: Quantify Business Value\n    capabilities:\n      - Forecasting\n \
-  \     - Budgeting\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Workload Optimization\n  - name: Manage the FinOps Practice\n    capabilities:\n      - Invoicing and Chargeback\nbillingModel:\n  pricingCategory: Partner Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: CVS Health\n  ServiceCategory: Healthcare\n  ProviderName: CVS Health\n  PublisherName: CVS Health Corporation\n  InvoiceIssuerName: CVS Health Corporation\n  PricingCategory: Partner Contract\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: fhir_requests\n    description: FHIR API calls under patient-access / partner agreements\n    unit: request\n    aggregation: sum\n    dimensions:\n      - app\n      - resource_type\n  - name: edi_transactions\n    description: EDI healthcare transactions (270/271/834/835/837)\n    unit: transaction\n\
-  \    aggregation: sum\n    dimensions:\n      - partner\n      - transaction_type\n  - name: ncpdp_claims\n    description: Pharmacy claim transactions via NCPDP\n    unit: claim\n    aggregation: sum\n    dimensions:\n      - partner\n      - line_of_business\n  - name: api_requests\n    description: API calls against CVS Health partner endpoints (not separately billed; observed for\n      capacity)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - partner\napis:\n  - name: CVS Health Partner Integrations\n    baseURL: ''\n    tags:\n      - EDI\n      - FHIR\n      - Healthcare\n      - HL7\n      - NCPDP\n      - Partner Integration\n      - Pharmacy\n    serviceName: CVS Health Partner Integrations\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per FHIR Request\n    metric: billed_cost / fhir_requests\n    target: TBD\n  - name: Cost per EDI Transaction\n    metric: billed_cost / edi_transactions\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n\
-  \    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CVS Health\nproviderId: cvs-health\npublisherName: CVS Health\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Aetna\n  - Caremark\n  - CVS Pharmacy\n  - Digital Health\n  - FHIR\n  - Health Insurance\n  - Healthcare\n  - HIPAA\n  - Interoperability\n  - Medicare\n  - MinuteClinic\n  - Oak Street Health\n  - Pharmacy\n  - Pharmacy Benefits Management\n  - Prescriptions\n  - Retail Pharmacy\n  - Signify Health\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the CVS Health API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\n\
+  principles:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n\
+  \      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: CVS Health\n  ServiceCategory: Developer Tools / API\n  ProviderName: CVS Health\n  PublisherName: CVS Health\n  InvoiceIssuerName: CVS Health\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: CVS Health Partner Integrations\n    baseURL: ''\n    tags:\n      - EDI\n      - FHIR\n      - Healthcare\n      - HL7\n      - NCPDP\n      - Partner Integration\n      - Pharmacy\n    serviceName: CVS Health Partner Integrations\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n\
+  \  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cvs-health/refs/heads/main/finops/cvs-health-finops.yml
-sources:
-- https://www.cvshealth.com/
+sources: []
 specification: FinOps Framework
 tags:
-- Healthcare
-- Pharmacy
-- Health Insurance
+- Aetna
+- Caremark
+- CVS Pharmacy
+- Digital Health
 - FHIR
+- Health Insurance
+- Healthcare
+- HIPAA
+- Interoperability
+- Medicare
+- MinuteClinic
+- Oak Street Health
+- Pharmacy
+- Pharmacy Benefits Management
+- Prescriptions
+- Retail Pharmacy
+- Signify Health
 - FinOps
+- Cost Management
 - FOCUS
 ---

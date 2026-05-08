@@ -37,74 +37,68 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Pay-As-You-Go + Subscription
-description: 'FOCUS-aligned FinOps for TiDB Cloud: Request-Unit and storage metering on Starter/Essential/Premium, hourly instance billing on Dedicated, and contract-based licensing on Self-Managed.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the tidb API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: PingCAP, Inc.
-  ProviderName: PingCAP
-  PublisherName: PingCAP, Inc.
-  ServiceCategory: Database
-  ServiceName: TiDB Cloud
+  InvoiceIssuerName: tidb
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: tidb
+  PublisherName: tidb
+  ServiceCategory: Developer Tools / API
+  ServiceName: tidb
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - cluster
-  - region
+  - api
+  - endpoint
   - tier
-  name: request_units
-  unit: request-unit
-- aggregation: max
-  dimensions:
-  - cluster
   - region
-  name: row_storage
-  unit: GB-month
-- aggregation: max
-  dimensions:
-  - cluster
-  - region
-  name: column_storage
-  unit: GB-month
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - cluster
-  - node_type
-  - cloud_provider
+  - api
   - region
-  name: dedicated_node_hours
-  unit: instance-hour
-- aggregation: sum
-  dimensions:
-  - cluster
-  - region
-  name: data_transfer
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Tidb Finops
 provider_name: tidb
 provider_slug: tidb
-publisher_name: PingCAP, Inc.
-service_category: Database
+publisher_name: tidb
+service_category: API
 slug: tidb-finops
 source_filename: tidb-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.pingcap.com/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: tidb\nproviderId: tidb\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Database\n  - Cloud\n  - HTAP\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for TiDB Cloud: Request-Unit and storage metering on Starter/Essential/Premium,\n  hourly instance billing on Dedicated, and contract-based licensing on Self-Managed.'\nsources:\n  - https://www.pingcap.com/pricing/\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: PingCAP, Inc.\nserviceCategory: Database\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n\
-  \    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: TiDB Cloud\n  ServiceCategory: Database\n  ProviderName: PingCAP\n  PublisherName: PingCAP, Inc.\n  InvoiceIssuerName: PingCAP, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: request_units\n    unit: request-unit\n    aggregation: sum\n    dimensions:\n      - cluster\n      - region\n      - tier\n  - name: row_storage\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - cluster\n      - region\n  - name: column_storage\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - cluster\n      - region\n  - name: dedicated_node_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - node_type\n      - cloud_provider\n      - region\n  - name: data_transfer\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - cluster\n      - region\nprinciples:\n  - name: Visibility\n    description: Use\
-  \ the TiDB Cloud console billing dashboard and exported invoices to see RU consumption,\n      storage growth, and Dedicated node-hours per cluster.\n  - name: Allocation\n    description: Allocate cost by cluster name and project tags; tag clusters with the owning team and\n      environment so RU and storage spend roll up cleanly.\n  - name: Optimization\n    description: For Starter, tune queries to reduce RU consumption and use spend limits; for Dedicated,\n      right-size vCPU node counts (4–32 vCPU options) and consolidate underutilized clusters.\n  - name: Accountability\n    description: Assign a database platform owner accountable for the PingCAP account, free-tier headroom,\n      and quarterly true-up against RU and node-hour burn.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: tidb\nproviderId: tidb\npublisherName: tidb\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the tidb API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name:\
+  \ Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n\
+  \      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: tidb\n  ServiceCategory: Developer Tools / API\n  ProviderName: tidb\n  PublisherName: tidb\n  InvoiceIssuerName: tidb\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side\
+  \ compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: TiDB Cloud API\n    baseURL: https://api.tidbcloud.com\n    tags:\n      - Cloud\n      - Cluster Management\n      - Database\n      - Distributed SQL\n    serviceName: TiDB Cloud API\n    serviceCategory: API\n  - name: TiDB Cloud Data Service API\n    baseURL: https://data.tidbcloud.com\n    tags:\n      - Cloud\n      - Data Access\n      - Database\n      - REST\n      - Serverless\n    serviceName: TiDB Cloud Data Service API\n    serviceCategory: API\n  - name: TiDB Cloud Chat2Query API\n    baseURL: https://data.tidbcloud.com\n    tags:\n      - AI\n      - Cloud\n      - Database\n      - Natural Language\n      - SQL Generation\n    serviceName: TiDB Cloud Chat2Query API\n    serviceCategory: API\n  - name: TiDB HTTP API\n    baseURL: http://localhost:10080\n    tags:\n      - Database\n      - Monitoring\n\
+  \      - Operations\n      - Self-Managed\n      - Status\n    serviceName: TiDB HTTP API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tidb/refs/heads/main/finops/tidb-finops.yml
-sources:
-- https://www.pingcap.com/pricing/
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
-- Database
-- Cloud
-- HTAP
 - FinOps
+- Cost Management
 - FOCUS
 ---

@@ -20,64 +20,73 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/manhattan-associates/refs/heads/main/openapi/manhattan-associates-wms-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Enterprise SaaS
-description: 'FOCUS-aligned FinOps for Manhattan Associates: enterprise SaaS contract for the Manhattan Active platform suite. APIs are not separately metered; cost lines are SaaS subscription, transaction volumes (orders, shipments, fulfillments), and implementation services.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the manhattan-associates API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Manhattan Associates, Inc.
-  ProviderName: Manhattan Associates
-  PublisherName: Manhattan Associates, Inc.
-  ServiceCategory: Supply Chain Software
-  ServiceName: Manhattan Active
+  ChargeCategory: Usage
+  InvoiceIssuerName: manhattan-associates
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: manhattan-associates
+  PublisherName: manhattan-associates
+  ServiceCategory: Developer Tools / API
+  ServiceName: manhattan-associates
 layout: finops
 meters:
 - aggregation: sum
-  dimensions:
-  - product
-  name: subscription_fee
-  unit: year
-- aggregation: sum
-  dimensions:
-  - channel
-  name: orders_processed
-  unit: order
-- aggregation: sum
-  name: shipments
-  unit: shipment
-- aggregation: max
-  name: warehouses
-  unit: site
-- aggregation: sum
+  description: Count of billable API requests
   dimensions:
   - api
-  - integration
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Manhattan Associates Finops
 provider_name: manhattan-associates
 provider_slug: manhattan-associates
-publisher_name: Manhattan Associates, Inc.
-service_category: Supply Chain Software
+publisher_name: manhattan-associates
+service_category: API
 slug: manhattan-associates-finops
 source_filename: manhattan-associates-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.manh.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Manhattan Associates\nproviderId: manhattan-associates\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Supply Chain\n  - Order Management\ndescription: 'FOCUS-aligned FinOps for Manhattan Associates: enterprise SaaS contract for the Manhattan\n  Active platform suite. APIs are not separately metered; cost lines are SaaS subscription, transaction\n  volumes (orders, shipments, fulfillments), and implementation services.'\nsources:\n  - https://www.manh.com\nnotes: No public pricing/billing surface; meters reflect typical SaaS supply-chain contract lines.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Manhattan Associates, Inc.\n\
-  serviceCategory: Supply Chain Software\nbillingModel:\n  pricingCategory: Enterprise SaaS\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Manhattan Active\n  ServiceCategory: Supply Chain Software\n  ProviderName: Manhattan Associates\n  PublisherName: Manhattan Associates, Inc.\n  InvoiceIssuerName: Manhattan Associates, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: subscription_fee\n    unit: year\n    aggregation: sum\n    dimensions:\n      - product\n  - name: orders_processed\n    unit: order\n    aggregation: sum\n    dimensions:\n      - channel\n  - name: shipments\n    unit: shipment\n    aggregation: sum\n  - name: warehouses\n    unit: site\n    aggregation: max\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - integration\nprinciples:\n  - name: Visibility\n    description: Pull order / shipment / API call\
-  \ metrics from the Manhattan Active console; reconcile\n      against contracted volumes.\n  - name: Allocation\n    description: Tag orders/shipments by channel / business unit; map Manhattan tenants to internal\n      product lines for chargeback.\n  - name: Optimization\n    description: Consolidate integrations onto Manhattan Active platform APIs; retire legacy TMS/WMS\n      connectors as Active modules absorb scope.\n  - name: Accountability\n    description: Owners review contracted-volume burn quarterly; renegotiate at renewal as channel mix\n      and geography change.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: manhattan-associates\nproviderId: manhattan-associates\npublisherName: manhattan-associates\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the manhattan-associates API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: manhattan-associates\n  ServiceCategory: Developer Tools / API\n  ProviderName: manhattan-associates\n  PublisherName: manhattan-associates\n  InvoiceIssuerName: manhattan-associates\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
+  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Manhattan Active Platform API\n    baseURL: https://api.developer.manh.com\n    tags:\n      - Logistics\n      - Platform\n      - SaaS\n      - Supply Chain\n    serviceName: Manhattan Active Platform API\n    serviceCategory: API\n  - name: Manhattan Active Omni and Enterprise Promise & Fulfill API\n    baseURL: https://api.developer.manh.com\n    tags:\n      - Fulfillment\n      - Logistics\n      - Omnichannel\n      - Order Management\n    serviceName: Manhattan Active Omni and Enterprise Promise & Fulfill API\n    serviceCategory: API\n  - name: Manhattan Active Supply Chain API\n    baseURL: https://api.developer.manh.com\n    tags:\n      - Logistics\n      - Supply Chain\n      - Warehouse\n\
+  \      - WMS\n    serviceName: Manhattan Active Supply Chain API\n    serviceCategory: API\n  - name: Manhattan Active Supply Chain Planning API\n    baseURL: https://api.developer.manh.com\n    tags:\n      - Inventory Planning\n      - Logistics\n      - Planning\n      - Supply Chain\n    serviceName: Manhattan Active Supply Chain Planning API\n    serviceCategory: API\n  - name: Manhattan Associates TMS/WMS API\n    baseURL: https://api.manh.example.com\n    tags:\n      - Logistics\n      - Supply Chain\n      - Transportation\n      - Warehouse\n    serviceName: Manhattan Associates TMS/WMS API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/manhattan-associates/refs/heads/main/finops/manhattan-associates-finops.yml
-sources:
-- https://www.manh.com
+sources: []
 specification: FinOps Framework
 tags:
 - FinOps
+- Cost Management
 - FOCUS
-- Supply Chain
-- Order Management
 ---

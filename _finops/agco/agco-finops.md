@@ -14,58 +14,72 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/agco/refs/heads/main/openapi/agco-agcommand-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
-  pricingCategory: OEM / Dealer Contract
-description: FOCUS-aligned FinOps shape for AGCO's AgCommand telematics. AGCO is an OEM; telematics access is bundled with equipment and dealer agreements rather than billed as a standalone API.
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the agco API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: AGCO Corporation
-  ProviderName: AGCO Corporation
-  PublisherName: AGCO Corporation
-  ServiceCategory: Agriculture / Telematics
-  ServiceName: AGCO AgCommand
+  ChargeCategory: Usage
+  InvoiceIssuerName: agco
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: agco
+  PublisherName: agco
+  ServiceCategory: Developer Tools / API
+  ServiceName: agco
 layout: finops
 meters:
 - aggregation: sum
-  description: Telemetry subscription per piece of connected AGCO equipment
+  description: Count of billable API requests
   dimensions:
-  - brand
-  - model
-  - dealer
-  name: equipment_subscription
-  unit: equipment-month
-- aggregation: count
-  description: Telematics data-feed delivery to a customer system
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - feed_type
-  - integration
-  name: data_feed
-  unit: feed
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Agco Finops
 provider_name: agco
 provider_slug: agco
-publisher_name: AGCO Corporation
-service_category: Agriculture / Telematics
+publisher_name: agco
+service_category: API
 slug: agco-finops
 source_filename: agco-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.agcocorp.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: AGCO Corporation\nproviderId: agco\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: AGCO Corporation\nserviceCategory: Agriculture / Telematics\ntags:\n  - Agriculture\n  - Farm Equipment\n  - Telematics\n  - IoT\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for AGCO's AgCommand telematics. AGCO is an OEM; telematics\n  access is bundled with equipment and dealer agreements rather than billed as a standalone API.\nnotes: No public pricing; meters reflect the contract dimensions used by AGCO dealers (equipment count,\n  fleet size, telemetry feed type).\nsources:\n  - https://www.agcocorp.com/\nbillingModel:\n\
-  \  pricingCategory: OEM / Dealer Contract\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: AGCO AgCommand\n  ServiceCategory: Agriculture / Telematics\n  ProviderName: AGCO Corporation\n  PublisherName: AGCO Corporation\n  InvoiceIssuerName: AGCO Corporation\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: equipment_subscription\n    description: Telemetry subscription per piece of connected AGCO equipment\n    unit: equipment-month\n    aggregation: sum\n    dimensions:\n      - brand\n      - model\n      - dealer\n  - name: data_feed\n    description: Telematics data-feed delivery to a customer system\n    unit: feed\n    aggregation: count\n    dimensions:\n      - feed_type\n      - integration\nprinciples:\n  - name: Visibility\n    description: Track AgCommand cost via the dealer's invoice and the AgCommand fleet portal; correlate\n      with the equipment register so cost\
-  \ ties to specific machines.\n  - name: Allocation\n    description: Allocate cost by farm / business unit / equipment cohort using the equipment serial\n      number as the allocation key.\n  - name: Optimization\n    description: Optimize by deactivating telemetry on idled or sold equipment, consolidating data feeds,\n      and aligning telemetry scope with what fleet operations actually use.\n  - name: Accountability\n    description: Fleet operations or farm-management leadership owns the AgCommand subscription line;\n      reviews typically align with the equipment lease or service-contract renewal cycle.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: agco\nproviderId: agco\npublisherName: agco\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the agco API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name:\
+  \ Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n\
+  \      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: agco\n  ServiceCategory: Developer Tools / API\n  ProviderName: agco\n  PublisherName: agco\n  InvoiceIssuerName: agco\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side\
+  \ compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: AGCO AgCommand API\n    baseURL: https://api.agcocorp.com\n    tags:\n      - Agriculture\n      - Farm Equipment\n      - IoT\n      - Precision Farming\n      - Telematics\n    serviceName: AGCO AgCommand API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/agco/refs/heads/main/finops/agco-finops.yml
-sources:
-- https://www.agcocorp.com/
+sources: []
 specification: FinOps Framework
 tags:
-- Agriculture
-- Farm Equipment
-- Telematics
-- IoT
 - FinOps
+- Cost Management
 - FOCUS
 ---

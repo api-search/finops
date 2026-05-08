@@ -7,53 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
-  pricingCategory: Partner-Negotiated
-description: FinOps shape for Wingstop is partner-contract-driven - no public per-call price exists. Cost lines for an integrating party are commission / fee structures negotiated with corporate or third-party delivery (3PD) partners.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Wingstop API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Wingstop Restaurants Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Wingstop
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Wingstop
-  PublisherName: Wingstop Restaurants Inc.
-  ServiceCategory: Restaurants
-  ServiceName: Wingstop Integrations
+  PublisherName: Wingstop
+  ServiceCategory: Developer Tools / API
+  ServiceName: Wingstop
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - channel
-  - location
-  name: orders_processed
-  unit: order
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - partner_program
-  name: integration_partner_fees
-  unit: varies
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Wingstop Finops
 provider_name: Wingstop
 provider_slug: wingstop
-publisher_name: Wingstop Restaurants Inc.
-service_category: Restaurants
+publisher_name: Wingstop
+service_category: API
 slug: wingstop-finops
 source_filename: wingstop-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.wingstop.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Wingstop\nproviderId: wingstop\npublisherName: Wingstop Restaurants Inc.\nserviceCategory: Restaurants\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Restaurants\n  - QSR\n  - Food Service\n  - FinOps\n  - FOCUS\n  - Contact Sales\ndescription: FinOps shape for Wingstop is partner-contract-driven - no public per-call price exists. Cost lines for an integrating party are commission / fee structures negotiated with corporate or third-party delivery (3PD) partners.\nsources:\n  - https://www.wingstop.com\nnotes: No public pricing or billing surface. Populate meters once a corporate / franchisee / 3PD integration agreement\
-  \ is in place.\nbillingModel:\n  pricingCategory: Partner-Negotiated\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\nfocusColumns:\n  ServiceName: Wingstop Integrations\n  ServiceCategory: Restaurants\n  ProviderName: Wingstop\n  PublisherName: Wingstop Restaurants Inc.\n  InvoiceIssuerName: Wingstop Restaurants Inc.\n  BillingCurrency: USD\nmeters:\n  - name: orders_processed\n    unit: order\n    aggregation: sum\n    dimensions:\n      - channel\n      - location\n  - name: integration_partner_fees\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - partner_program\nprinciples:\n  - name: Visibility\n    description: Reconcile against POS / 3PD partner reports and corporate franchisee dashboards; there is no public Wingstop billing API.\n  - name: Allocation\n    description: Allocate by channel (web, app, 3PD partner) and store / location, matching how franchise reporting is structured.\n  - name: Optimization\n\
-  \    description: Levers are commercial - 3PD commission negotiation, channel mix, and reducing failed-order retries.\n  - name: Accountability\n    description: Owned by the franchisee / corporate operations team; technical integrators own reliability, not unit cost.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Wingstop\nproviderId: wingstop\npublisherName: Wingstop\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Restaurants\n  - QSR\n  - Food Service\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Wingstop API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Wingstop\n  ServiceCategory: Developer Tools / API\n  ProviderName: Wingstop\n  PublisherName: Wingstop\n  InvoiceIssuerName: Wingstop\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
+  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Wingstop API\n    baseURL: https://api.wingstop.com\n    tags:\n      - Restaurants\n      - QSR\n      - Food Service\n    serviceName: Wingstop API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/wingstop/refs/heads/main/finops/wingstop-finops.yml
-sources:
-- https://www.wingstop.com
+sources: []
 specification: FinOps Framework
 tags:
 - Restaurants
 - QSR
 - Food Service
 - FinOps
+- Cost Management
 - FOCUS
-- Contact Sales
 ---

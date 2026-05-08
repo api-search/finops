@@ -44,76 +44,82 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/google-analytics/refs/heads/main/openapi/google-analytics-management-api-v3.yaml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription (Free + Enterprise)
-description: 'FOCUS-aligned FinOps for Google Analytics: GA4 Standard is free with token-quota throttling rather than line-item billing; Analytics 360 is a contracted enterprise license invoiced annually by Google. The token quota functions as the practical FinOps lever for GA4 spend predictability.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Google Analytics API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Google LLC
-  ProviderName: Google
-  PublisherName: Google LLC
-  ServiceCategory: Web Analytics
+  ChargeCategory: Usage
+  InvoiceIssuerName: Google Analytics
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Google Analytics
+  PublisherName: Google Analytics
+  ServiceCategory: Developer Tools / API
   ServiceName: Google Analytics
 layout: finops
 meters:
-- aggregation: max
-  description: Active GA4 Standard or 360 property under the account
-  dimensions:
-  - sku
-  - region
-  name: ga4_property_license
-  unit: property
 - aggregation: sum
-  description: Tokens consumed against the Data API token quota (Core/Realtime/Funnel)
-  dimensions:
-  - property
-  - category
-  - api_method
-  name: data_api_tokens
-  unit: token
-- aggregation: sum
-  description: Count of Data API / Admin API / Measurement Protocol requests
+  description: Count of billable API requests
   dimensions:
   - api
-  - property
+  - endpoint
+  - tier
+  - region
   - consumer
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes exported from GA4 to BigQuery (billed via the BigQuery surface, not GA)
+  description: Bytes returned over the network in API responses
   dimensions:
-  - property
-  - dataset
-  name: bigquery_export_volume
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Google Analytics Finops
 provider_name: Google Analytics
 provider_slug: google-analytics
-publisher_name: Google LLC
-service_category: Web Analytics
+publisher_name: Google Analytics
+service_category: API
 slug: google-analytics-finops
 source_filename: google-analytics-finops.yml
 source_heading: FinOps Profile
-source_url: https://developers.google.com/analytics/devguides/reporting/data/v1/quotas
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Analytics\nproviderId: google-analytics\npublisherName: Google LLC\nserviceCategory: Web Analytics\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Analytics\n  - Web Analytics\n  - Google\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Google Analytics: GA4 Standard is free with token-quota throttling\n  rather than line-item billing; Analytics 360 is a contracted enterprise license invoiced annually by\n  Google. The token quota functions as the practical FinOps lever for GA4 spend predictability.'\nsources:\n  - https://developers.google.com/analytics/devguides/reporting/data/v1/quotas\n  - https://marketingplatform.google.com/about/analytics-360/\n\
-  \  - https://support.google.com/analytics/answer/11202874\nbillingModel:\n  pricingCategory: Subscription (Free + Enterprise)\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Google Analytics\n  ServiceCategory: Web Analytics\n  ProviderName: Google\n  PublisherName: Google LLC\n  InvoiceIssuerName: Google LLC\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: ga4_property_license\n    description: Active GA4 Standard or 360 property under the account\n    unit: property\n    aggregation: max\n    dimensions:\n      - sku\n      - region\n  - name: data_api_tokens\n    description: Tokens consumed against the Data API token quota (Core/Realtime/Funnel)\n    unit: token\n    aggregation: sum\n    dimensions:\n      - property\n      - category\n      - api_method\n  - name: api_requests\n    description: Count of Data API / Admin API / Measurement Protocol requests\n    unit: request\n\
-  \    aggregation: sum\n    dimensions:\n      - api\n      - property\n      - consumer\n  - name: bigquery_export_volume\n    description: Bytes exported from GA4 to BigQuery (billed via the BigQuery surface, not GA)\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - property\n      - dataset\napis:\n  - name: Google Analytics Data API (GA4)\n    baseURL: https://analyticsdata.googleapis.com\n    serviceName: Google Analytics Data API (GA4)\n    serviceCategory: Web Analytics\n  - name: Google Analytics Admin API\n    baseURL: https://analyticsadmin.googleapis.com\n    serviceName: Google Analytics Admin API\n    serviceCategory: Web Analytics\n  - name: Google Analytics Measurement Protocol (GA4)\n    baseURL: https://www.google-analytics.com\n    serviceName: Google Analytics Measurement Protocol (GA4)\n    serviceCategory: Web Analytics\n  - name: Google Analytics User Deletion API\n    baseURL: https://www.googleapis.com/analytics/v3\n    serviceName: Google Analytics User\
-  \ Deletion API\n    serviceCategory: Web Analytics\nprinciples:\n  - name: Visibility\n    description: Send returnPropertyQuota=true on Data API calls to surface remaining Core/Realtime/Funnel\n      tokens; pipe quota telemetry into Cloud Monitoring or BigQuery for trend dashboards.\n  - name: Allocation\n    description: Allocate Analytics 360 license cost to product lines via property mapping; for Standard,\n      tag API consumers by GCP project and property to chargeback the BigQuery export side of the cost.\n  - name: Optimization\n    description: Reduce Core token spend by lowering report cardinality, narrowing date ranges, batching\n      requests via runReport batch, and caching repeat queries. Move heavy analytical workloads to BigQuery\n      export rather than the Data API.\n  - name: Accountability\n    description: Designate a property owner per GA4 property; review quota burn weekly and escalate to\n      a 360 upgrade only when token throttling materially blocks reporting\
-  \ needs.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Analytics\nproviderId: google-analytics\npublisherName: Google Analytics\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Data\n  - Google\n  - Metrics\n  - Reporting\n  - Web Analytics\n  - Machine Learning\n  - Attribution\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Google Analytics API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  -\
+  \ name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n\
+  \  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Google Analytics\n  ServiceCategory: Developer Tools / API\n  ProviderName: Google Analytics\n  PublisherName: Google Analytics\n  InvoiceIssuerName: Google Analytics\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
+  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Google Analytics Data API (GA4)\n    baseURL: https://analyticsdata.googleapis.com\n    tags:\n      - Analytics\n      - Data API\n      - GA4\n      - Reporting\n      - Real-Time\n      - Funnels\n    serviceName: Google Analytics Data API (GA4)\n    serviceCategory: API\n  - name: Google Analytics Admin API\n    baseURL: https://analyticsadmin.googleapis.com\n    tags:\n      - Admin\n      - Configuration\n      - GA4\n      - Management\n      - Permissions\n    serviceName: Google Analytics Admin API\n    serviceCategory: API\n  - name: Google Analytics Measurement Protocol (GA4)\n    baseURL:\
+  \ https://www.google-analytics.com\n    tags:\n      - Events\n      - Measurement\n      - Server-Side\n      - Tracking\n    serviceName: Google Analytics Measurement Protocol (GA4)\n    serviceCategory: API\n  - name: Google Analytics User Deletion API\n    baseURL: https://www.googleapis.com/analytics/v3\n    tags:\n      - Compliance\n      - Data Privacy\n      - GDPR\n      - User Deletion\n    serviceName: Google Analytics User Deletion API\n    serviceCategory: API\n  - name: Google Analytics Reporting API v4 (Universal Analytics)\n    baseURL: https://analyticsreporting.googleapis.com\n    tags:\n      - Analytics\n      - Deprecated\n      - Legacy\n      - Reporting\n      - Universal Analytics\n    serviceName: Google Analytics Reporting API v4 (Universal Analytics)\n    serviceCategory: API\n  - name: Google Analytics Management API v3\n    baseURL: https://www.googleapis.com/analytics/v3\n    tags:\n      - Configuration\n      - Deprecated\n      - Legacy\n      - Management\n\
+  \      - Universal Analytics\n    serviceName: Google Analytics Management API v3\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/google-analytics/refs/heads/main/finops/google-analytics-finops.yml
-sources:
-- https://developers.google.com/analytics/devguides/reporting/data/v1/quotas
-- https://marketingplatform.google.com/about/analytics-360/
-- https://support.google.com/analytics/answer/11202874
+sources: []
 specification: FinOps Framework
 tags:
 - Analytics
-- Web Analytics
+- Data
 - Google
+- Metrics
+- Reporting
+- Web Analytics
+- Machine Learning
+- Attribution
 - FinOps
+- Cost Management
 - FOCUS
 ---

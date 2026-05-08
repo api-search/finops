@@ -7,46 +7,76 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contract
-description: ABM Connect is bundled with ABM facilities-services contracts; there is no metered API invoice. FinOps mapping is structural only.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the ABM Industries API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: ABM Industries Incorporated
+  ChargeCategory: Usage
+  InvoiceIssuerName: ABM Industries
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: ABM Industries
-  PublisherName: ABM Industries Incorporated
-  ServiceCategory: Facilities Management
-  ServiceName: ABM Connect
+  PublisherName: ABM Industries
+  ServiceCategory: Developer Tools / API
+  ServiceName: ABM Industries
 layout: finops
 meters:
-- aggregation: count
-  description: Facilities-services contract bundle — not a metered API unit.
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - customer
-  - service_line
-  name: services_contract
-  unit: contract
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Abm Industries Finops
 provider_name: ABM Industries
 provider_slug: abm-industries
-publisher_name: ABM Industries Incorporated
-service_category: Facilities Management
+publisher_name: ABM Industries
+service_category: API
 slug: abm-industries-finops
 source_filename: abm-industries-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.abm.com/abm-connect
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: ABM Industries\nproviderId: abm-industries\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Facilities Management\n  - Engineering\n  - FinOps\n  - FOCUS\ndescription: ABM Connect is bundled with ABM facilities-services contracts; there is no metered API invoice.\n  FinOps mapping is structural only.\nnotes: No public developer pricing — placeholder only. Costs flow through the master services contract,\n  not a metered API line item.\nsources:\n  - https://www.abm.com/abm-connect\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: ABM Industries Incorporated\nserviceCategory: Facilities Management\nbillingModel:\n  pricingCategory: Contract\n  billingFrequency:\
-  \ Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: ABM Connect\n  ServiceCategory: Facilities Management\n  ProviderName: ABM Industries\n  PublisherName: ABM Industries Incorporated\n  InvoiceIssuerName: ABM Industries Incorporated\n  BillingCurrency: USD\nmeters:\n  - name: services_contract\n    description: Facilities-services contract bundle — not a metered API unit.\n    unit: contract\n    aggregation: count\n    dimensions:\n      - customer\n      - service_line\nprinciples:\n  - name: Visibility\n    description: ABM Connect dashboards expose facility, financial, and IoT data to the customer; track\n      usage as part of facilities operations rather than a metered API.\n  - name: Allocation\n    description: Allocate cost to the facilities-management or real-estate function that owns the ABM\n      services contract.\n  - name: Optimization\n    description: Optimize by tuning IoT polling cadence and analytics-job frequency\
-  \ inside ABM Connect\n      to actual decision needs.\n  - name: Accountability\n    description: Real-estate / facilities leadership owns the ABM relationship; IT owns the data-feed\n      integration. Review usage during quarterly business reviews.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: ABM Industries\nproviderId: abm-industries\npublisherName: ABM Industries\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Facilities Management\n  - Engineering\n  - Infrastructure\n  - Mobility\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the ABM Industries API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: ABM Industries\n  ServiceCategory: Developer Tools / API\n  ProviderName: ABM Industries\n  PublisherName: ABM Industries\n  InvoiceIssuerName: ABM Industries\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: ABM Connect\n    baseURL: ''\n    tags:\n      - Facilities Management\n      - Data Intelligence\n      - IoT\n    serviceName: ABM Connect\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/abm-industries/refs/heads/main/finops/abm-industries-finops.yml
-sources:
-- https://www.abm.com/abm-connect
+sources: []
 specification: FinOps Framework
 tags:
 - Facilities Management
 - Engineering
+- Infrastructure
+- Mobility
 - FinOps
+- Cost Management
 - FOCUS
 ---

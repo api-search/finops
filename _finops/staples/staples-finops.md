@@ -14,58 +14,77 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/staples/refs/heads/main/openapi/staples-advantage-eprocurement-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  - Refund
-  pricingCategory: Procurement (Per-Order)
-description: Staples Advantage eProcurement is a B2B procurement contract, not a per-call API product. Cost surfaces as the line items on the Staples Business Advantage invoice (purchased goods, shipping, applicable taxes), not as an API-usage meter. FinOps shape is procurement-spend tracking against the negotiated agreement; per-call API metering does not apply.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Staples API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Staples, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Staples
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Staples
-  PublisherName: Staples, Inc.
-  ServiceCategory: B2B Procurement
-  ServiceName: Staples Advantage eProcurement
+  PublisherName: Staples
+  ServiceCategory: Developer Tools / API
+  ServiceName: Staples
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - cost_center
-  - department
-  - punchout_session
-  name: purchase_order_value
-  unit: USD
-- aggregation: count
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - sku_category
-  - cost_center
-  name: purchase_order_lines
-  unit: line
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Staples Finops
 provider_name: Staples
 provider_slug: staples
-publisher_name: Staples, Inc. (Staples Business Advantage)
-service_category: B2B Procurement
+publisher_name: Staples
+service_category: API
 slug: staples-finops
 source_filename: staples-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.staplesadvantage.com/learn/eprocurement-integrations
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Staples\nproviderId: staples\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Office Supplies\n  - Procurement\n  - eProcurement\n  - B2B\n  - FinOps\n  - FOCUS\ndescription: Staples Advantage eProcurement is a B2B procurement contract, not a per-call API product. Cost surfaces as the line items on the Staples Business Advantage invoice (purchased goods, shipping, applicable taxes), not as an API-usage meter. FinOps shape is procurement-spend tracking against the negotiated agreement; per-call API metering does not apply.\nsources:\n  - https://www.staplesadvantage.com/learn/eprocurement-integrations\nnotes: No API usage meter. FOCUS-style modeling here describes procurement spend (purchase orders, line items) rather than per-call API charges, since access is bundled into the procurement agreement.\nalignedWith:\n  framework: FinOps\
-  \ Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Staples, Inc. (Staples Business Advantage)\nserviceCategory: B2B Procurement\nbillingModel:\n  pricingCategory: Procurement (Per-Order)\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: Staples Advantage eProcurement\n  ServiceCategory: B2B Procurement\n  ProviderName: Staples\n  PublisherName: Staples, Inc.\n  InvoiceIssuerName: Staples, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: purchase_order_value\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - cost_center\n      - department\n      - punchout_session\n  - name: purchase_order_lines\n    unit: line\n    aggregation: count\n    dimensions:\n      - sku_category\n      - cost_center\nprinciples:\n \
-  \ - name: Visibility\n    description: Spend is visible through the Staples Business Advantage account dashboard and through the integrated procurement system (Ariba, Coupa, Jaggaer, Oracle, NetSuite). Pull cXML order responses or EDI 810 invoices into the procurement-analytics layer for line-level visibility.\n  - name: Allocation\n    description: Allocate spend by cost center / department through the procurement system's chart-of-accounts mapping. PunchOut sessions carry the requisitioner identity into Staples for downstream reporting.\n  - name: Optimization\n    description: Cost levers are catalog-side - enforce contract-priced SKU lists in the punch-out catalog, set per-requester approval thresholds, and consolidate orders to qualify for shipping / volume discounts negotiated in the master agreement.\n  - name: Accountability\n    description: Procurement / sourcing team owns the Staples Business Advantage agreement; department managers own their cost-center spend through the procurement\
-  \ system's approval flow.\nmaintainers:\n  - name: Staples Business Advantage\n    url: https://www.staplesadvantage.com/\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Staples\nproviderId: staples\npublisherName: Staples\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Office Supplies\n  - Retail\n  - Procurement\n  - B2B\n  - eProcurement\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Staples API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Staples\n  ServiceCategory: Developer Tools / API\n  ProviderName: Staples\n  PublisherName: Staples\n  InvoiceIssuerName: Staples\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Staples Advantage eProcurement API\n    baseURL: ''\n    tags:\n      - eProcurement\n      - PunchOut\n      - B2B\n      - Office Supplies\n      - Procurement\n    serviceName: Staples Advantage eProcurement API\n    serviceCategory: API\n  - name: Staples Product Catalog API\n    baseURL: ''\n    tags:\n      - Catalog\n      - Products\n      - Retail\n      - Commerce\n      - Search\n    serviceName: Staples Product Catalog API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/staples/refs/heads/main/finops/staples-finops.yml
-sources:
-- https://www.staplesadvantage.com/learn/eprocurement-integrations
+sources: []
 specification: FinOps Framework
 tags:
 - Office Supplies
+- Retail
 - Procurement
-- eProcurement
 - B2B
+- eProcurement
 - FinOps
+- Cost Management
 - FOCUS
 ---

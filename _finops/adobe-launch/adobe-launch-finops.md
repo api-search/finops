@@ -32,60 +32,78 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/adobe-launch/refs/heads/main/openapi/data-collection-api.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Bundled
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Bundled (No Incremental Charge)
-description: 'FOCUS-aligned FinOps shape for Adobe Launch / Experience Platform Tags: bundled with Experience Cloud product licenses; no incremental billing.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Adobe Launch API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Adjustment
-  InvoiceIssuerName: Adobe Inc.
-  ProviderName: Adobe
-  PublisherName: Adobe Inc.
-  ServiceCategory: Tag Management
-  ServiceName: Adobe Experience Platform Tags
+  ChargeCategory: Usage
+  InvoiceIssuerName: Adobe Launch
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Adobe Launch
+  PublisherName: Adobe Launch
+  ServiceCategory: Developer Tools / API
+  ServiceName: Adobe Launch
 layout: finops
 meters:
-- aggregation: max
-  description: Tag-management properties under management (operational, not billed)
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - environment
-  name: tag_properties
-  unit: property
-- aggregation: max
-  description: Active tag-management rules (operational, not billed)
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - property
-  name: tag_rules
-  unit: rule
-- aggregation: avg
-  description: Published tag-library payload size delivered to visitors
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - property
-  - environment
-  name: library_size
-  unit: KB
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Adobe Launch Finops
 provider_name: Adobe Launch
 provider_slug: adobe-launch
-publisher_name: Adobe Inc.
-service_category: Tag Management
+publisher_name: Adobe Launch
+service_category: API
 slug: adobe-launch-finops
 source_filename: adobe-launch-finops.yml
 source_heading: FinOps Profile
-source_url: https://experienceleague.adobe.com/docs/experience-platform/tags/home.html
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Adobe Launch\nproviderId: adobe-launch\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Tag Management\n  - Experience Platform\nnotes: >-\n  Adobe Launch / Experience Platform Tags is bundled with every Experience\n  Cloud product license at no incremental cost. There is no separate\n  invoice line; FinOps levers focus on operational hygiene (property\n  cleanup, library size) rather than cost optimization.\ndescription: >-\n  FOCUS-aligned FinOps shape for Adobe Launch / Experience Platform Tags:\n  bundled with Experience Cloud product licenses; no incremental billing.\nsources:\n  - https://experienceleague.adobe.com/docs/experience-platform/tags/home.html\n  - https://developer.adobe.com/experience-platform-apis/references/reactor/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n\
-  \  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Adobe Inc.\nserviceCategory: Tag Management\nbillingModel:\n  pricingCategory: Bundled (No Incremental Charge)\n  billingFrequency: Bundled\n  billingCurrency: USD\n  chargeCategories:\n    - Adjustment\nfocusColumns:\n  ServiceName: Adobe Experience Platform Tags\n  ServiceCategory: Tag Management\n  ProviderName: Adobe\n  PublisherName: Adobe Inc.\n  InvoiceIssuerName: Adobe Inc.\n  BillingCurrency: USD\n  ChargeCategory: Adjustment\nmeters:\n  - name: tag_properties\n    description: Tag-management properties under management (operational, not billed)\n    unit: property\n    aggregation: max\n    dimensions:\n      - environment\n  - name: tag_rules\n    description: Active tag-management rules (operational, not billed)\n    unit: rule\n    aggregation: max\n    dimensions:\n      - property\n  - name: library_size\n    description: Published tag-library payload\
-  \ size delivered to visitors\n    unit: KB\n    aggregation: avg\n    dimensions:\n      - property\n      - environment\nprinciples:\n  - name: Visibility\n    description: >-\n      Use the Tags UI and Reactor API to inventory all properties,\n      libraries, and rules; track library payload size to monitor\n      visitor-side performance impact.\n  - name: Allocation\n    description: >-\n      Group properties by brand / business unit; restrict Reactor API\n      credentials per team to attribute tag-management ownership.\n  - name: Optimization\n    description: >-\n      Reduce library payload size by removing unused extensions, rules,\n      and data elements; consolidate redundant analytics tags; use Edge\n      tags where possible to reduce client-side load.\n  - name: Accountability\n    description: >-\n      Marketing analytics or web platform team owns property hygiene and\n      change control; deprecation reviews quarterly.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Adobe Launch\nproviderId: adobe-launch\npublisherName: Adobe Launch\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Data Collection\n  - Edge Network\n  - Event Forwarding\n  - Marketing Technology\n  - Tag Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Adobe Launch API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Adobe Launch\n  ServiceCategory: Developer Tools / API\n  ProviderName: Adobe Launch\n  PublisherName: Adobe Launch\n  InvoiceIssuerName: Adobe Launch\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API\
+  \ responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Adobe Launch Reactor API\n    baseURL: https://reactor.adobe.io\n    tags:\n      - Automation\n      - Data Collection\n      - Marketing Technology\n      - Tag Management\n    serviceName: Adobe Launch Reactor API\n    serviceCategory: API\n  - name: Adobe Launch Extension API\n    baseURL: https://reactor.adobe.io\n    tags:\n      - Development\n      - Extensions\n      - Integrations\n      - Tag Management\n    serviceName: Adobe Launch Extension API\n    serviceCategory: API\n  - name: Adobe Experience Platform Event Forwarding API\n    baseURL: https://reactor.adobe.io\n    tags:\n      - Data Collection\n      - Edge Network\n      - Event Forwarding\n\
+  \      - Server Side\n    serviceName: Adobe Experience Platform Event Forwarding API\n    serviceCategory: API\n  - name: Adobe Experience Platform Data Collection API\n    baseURL: https://edge.adobedc.net\n    tags:\n      - Analytics\n      - Data Collection\n      - Data Ingestion\n      - Edge Network\n    serviceName: Adobe Experience Platform Data Collection API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/adobe-launch/refs/heads/main/finops/adobe-launch-finops.yml
-sources:
-- https://experienceleague.adobe.com/docs/experience-platform/tags/home.html
-- https://developer.adobe.com/experience-platform-apis/references/reactor/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Data Collection
+- Edge Network
+- Event Forwarding
+- Marketing Technology
 - Tag Management
-- Experience Platform
+- FinOps
+- Cost Management
+- FOCUS
 ---

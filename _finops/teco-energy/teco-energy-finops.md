@@ -20,41 +20,70 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/teco-energy/refs/heads/main/openapi/teco-energy-account-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contract / Partner-Negotiated
-description: FOCUS-aligned FinOps shape for TECO Energy's Tampa Electric API surface. Access is partner-gated and not consumption-priced as a developer product; this artifact captures the publisher identity and a placeholder meter only.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the TECO Energy API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: TECO Energy, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: TECO Energy
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: TECO Energy
-  PublisherName: TECO Energy, Inc.
-  ServiceCategory: Energy / Utilities
-  ServiceName: Tampa Electric API Management
+  PublisherName: TECO Energy
+  ServiceCategory: Developer Tools / API
+  ServiceName: TECO Energy
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
   - api
-  - subscription
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Teco Energy Finops
 provider_name: TECO Energy
 provider_slug: teco-energy
-publisher_name: TECO Energy, Inc.
-service_category: Energy / Utilities
+publisher_name: TECO Energy
+service_category: API
 slug: teco-energy-finops
 source_filename: teco-energy-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.tecoenergy.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: TECO Energy\nproviderId: teco-energy\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Energy\n  - Utilities\n  - Electric\n  - Natural Gas\n  - Smart Grid\n  - Tampa Bay\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for TECO Energy's Tampa Electric API surface. Access is\n  partner-gated and not consumption-priced as a developer product; this artifact captures the\n  publisher identity and a placeholder meter only.\nsources:\n  - https://developer.tecoenergy.com/\nnotes: TECO Energy does not publish a developer-API price list. There is no public usage-billing\n  surface to map onto FOCUS columns. Meters and FOCUS values below describe identity only; charge\n  categories, currency conventions, and unit pricing are not reconciled.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n\
-  \  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: TECO Energy, Inc.\nserviceCategory: Energy / Utilities\nbillingModel:\n  pricingCategory: Contract / Partner-Negotiated\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Tampa Electric API Management\n  ServiceCategory: Energy / Utilities\n  ProviderName: TECO Energy\n  PublisherName: TECO Energy, Inc.\n  InvoiceIssuerName: TECO Energy, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - subscription\nprinciples:\n  - name: Visibility\n    description: API usage is visible to the partner through the Azure API Management developer\n      portal; there is no published TECO Energy spend dashboard for API consumption.\n  - name: Allocation\n    description: Allocation is by Azure APIM subscription key\
-  \ issued to a specific partner program.\n  - name: Optimization\n    description: Optimization is bounded by the partner's contractual access tier; there are no\n      publicly documented cost levers (committed use, caching tiers) for this API surface.\n  - name: Accountability\n    description: The named partner organization is the accountable owner of API consumption under\n      its TECO Energy access agreement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: TECO Energy\nproviderId: teco-energy\npublisherName: TECO Energy\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Energy\n  - Utilities\n  - Electric\n  - Natural Gas\n  - Smart Grid\n  - Tampa Bay\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the TECO Energy API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: TECO Energy\n  ServiceCategory: Developer Tools / API\n  ProviderName: TECO Energy\n  PublisherName: TECO Energy\n  InvoiceIssuerName: TECO Energy\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Tampa Electric API Management\n    baseURL: https://developer.tecoenergy.com\n    tags:\n      - Electric Utility\n      - Energy\n      - API Management\n      - Azure\n      - Tampa Electric\n    serviceName: Tampa Electric API Management\n    serviceCategory: API\n  - name: Tampa Electric Outage API\n    baseURL: https://account.tecoenergy.com\n    tags:\n      - Outage\n      - Electric Utility\n      - Grid Operations\n      - Reliability\n    serviceName: Tampa Electric Outage API\n    serviceCategory: API\n  - name: Tampa Electric Account API\n    baseURL: https://account.tecoenergy.com\n    tags:\n      - Account Management\n      - Billing\n      - Energy Usage\n \
+  \     - Customer Service\n    serviceName: Tampa Electric Account API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/teco-energy/refs/heads/main/finops/teco-energy-finops.yml
-sources:
-- https://developer.tecoenergy.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Energy
@@ -64,5 +93,6 @@ tags:
 - Smart Grid
 - Tampa Bay
 - FinOps
+- Cost Management
 - FOCUS
 ---

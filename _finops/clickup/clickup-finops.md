@@ -81,44 +81,74 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Per-Seat Subscription
-description: FOCUS-aligned FinOps for ClickUp.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the clickup API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ProviderName: ClickUp
-  PublisherName: ClickUp
-  ServiceCategory: Project Management
-  ServiceName: ClickUp
+  ChargeCategory: Usage
+  InvoiceIssuerName: clickup
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: clickup
+  PublisherName: clickup
+  ServiceCategory: Developer Tools / API
+  ServiceName: clickup
 layout: finops
 meters:
-- aggregation: max
-  dimensions:
-  - plan
-  name: user_seats
-  unit: seat-month
 - aggregation: sum
-  name: automations
-  unit: automation-run
-- aggregation: max
-  name: storage
-  unit: GB-month
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Clickup Finops
 provider_name: clickup
 provider_slug: clickup
-publisher_name: ClickUp
-service_category: Project Management
+publisher_name: clickup
+service_category: API
 slug: clickup-finops
 source_filename: clickup-finops.yml
 source_heading: FinOps Profile
-source_url: https://clickup.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: ClickUp\nproviderId: clickup\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Project Management\ndescription: FOCUS-aligned FinOps for ClickUp.\nsources:\n  - https://clickup.com/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: ClickUp\nserviceCategory: Project Management\nbillingModel:\n  pricingCategory: Per-Seat Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: ClickUp\n  ServiceCategory: Project Management\n  ProviderName: ClickUp\n  PublisherName: ClickUp\n  BillingCurrency: USD\nmeters:\n  - name: user_seats\n    unit: seat-month\n    aggregation: max\n    dimensions:\n\
-  \      - plan\n  - name: automations\n    unit: automation-run\n    aggregation: sum\n  - name: storage\n    unit: GB-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track ClickUp consumption monthly via admin/billing exports.\n  - name: Allocation\n    description: Tag seats/usage to teams or cost centers for chargeback.\n  - name: Optimization\n    description: Right-size tier and seat count quarterly; reclaim inactive seats.\n  - name: Accountability\n    description: Set spend alerts and renew at observed active utilization.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: clickup\nproviderId: clickup\npublisherName: clickup\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the clickup API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n\
+  \  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n\
+  \      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: clickup\n  ServiceCategory: Developer Tools / API\n  ProviderName: clickup\n  PublisherName: clickup\n  InvoiceIssuerName: clickup\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description:\
+  \ Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: ClickUp Tasks API\n    baseURL: https://api.clickup.com\n    tags:\n      - Collaboration\n      - Productivity\n      - Project Management\n      - Tasks\n    serviceName: ClickUp Tasks API\n    serviceCategory: API\n  - name: ClickUp Spaces API\n    baseURL: https://api.clickup.com\n    tags:\n      - Organization\n      - Project Management\n      - Workspaces\n    serviceName: ClickUp Spaces API\n    serviceCategory: API\n  - name: ClickUp Lists API\n    baseURL: https://api.clickup.com\n    tags:\n      - Lists\n      - Project Management\n      - Task Organization\n    serviceName: ClickUp Lists API\n    serviceCategory: API\n  - name: ClickUp Folders API\n    baseURL: https://api.clickup.com\n    tags:\n      - Folders\n      - Organization\n      - Project Management\n    serviceName: ClickUp Folders\
+  \ API\n    serviceCategory: API\n  - name: ClickUp Goals API\n    baseURL: https://api.clickup.com\n    tags:\n      - Goals\n      - OKR\n      - Project Management\n      - Tracking\n    serviceName: ClickUp Goals API\n    serviceCategory: API\n  - name: ClickUp Comments API\n    baseURL: https://api.clickup.com\n    tags:\n      - Collaboration\n      - Comments\n      - Project Management\n    serviceName: ClickUp Comments API\n    serviceCategory: API\n  - name: ClickUp Teams (Workspaces) API\n    baseURL: https://api.clickup.com\n    tags:\n      - Project Management\n      - Teams\n      - Users\n      - Workspaces\n    serviceName: ClickUp Teams (Workspaces) API\n    serviceCategory: API\n  - name: ClickUp Webhooks API\n    baseURL: https://api.clickup.com\n    tags:\n      - Events\n      - Project Management\n      - Real-Time\n      - Webhooks\n    serviceName: ClickUp Webhooks API\n    serviceCategory: API\n  - name: ClickUp Custom Fields API\n    baseURL: https://api.clickup.com\n\
+  \    tags:\n      - Custom Fields\n      - Metadata\n      - Project Management\n    serviceName: ClickUp Custom Fields API\n    serviceCategory: API\n  - name: ClickUp Time Tracking API\n    baseURL: https://api.clickup.com\n    tags:\n      - Productivity\n      - Project Management\n      - Reporting\n      - Time Tracking\n    serviceName: ClickUp Time Tracking API\n    serviceCategory: API\n  - name: ClickUp Views API\n    baseURL: https://api.clickup.com\n    tags:\n      - Dashboards\n      - Project Management\n      - Views\n    serviceName: ClickUp Views API\n    serviceCategory: API\n  - name: ClickUp OAuth API\n    baseURL: https://api.clickup.com\n    tags:\n      - Authentication\n      - Authorization\n      - OAuth\n      - Project Management\n    serviceName: ClickUp OAuth API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost\
+  \ / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/clickup/refs/heads/main/finops/clickup-finops.yml
-sources:
-- https://clickup.com/pricing
+sources: []
 specification: FinOps Framework
 tags:
 - FinOps
+- Cost Management
 - FOCUS
-- Project Management
 ---

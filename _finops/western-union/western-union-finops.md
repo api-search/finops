@@ -13,65 +13,74 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/western-union/refs/heads/main/openapi/western-union-mass-payments-openapi.yml
 billing_model:
-  billingCurrency: USD (settlement varies)
-  billingFrequency: Per-Invoice
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  - Refund
-  pricingCategory: Per-Transaction Fee + FX Margin
-description: FinOps shape for Western Union is partner-contract-driven - per-payment fees plus FX margin by corridor, no public price list, settled through the partner agreement.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the western-union API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: The Western Union Company
-  ProviderName: Western Union
-  PublisherName: The Western Union Company
-  ServiceCategory: Payments
-  ServiceName: Western Union Partner APIs
+  ChargeCategory: Usage
+  InvoiceIssuerName: western-union
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: western-union
+  PublisherName: western-union
+  ServiceCategory: Developer Tools / API
+  ServiceName: western-union
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - send_country
-  - receive_country
-  - send_currency
-  - receive_currency
-  - payout_method
-  name: payments_initiated
-  unit: transaction
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - send_currency
-  - receive_currency
-  - corridor
-  name: fx_converted_volume
-  unit: send_currency_amount
-- aggregation: count
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - partner
-  name: batches_submitted
-  unit: batch
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Western Union Finops
 provider_name: western-union
 provider_slug: western-union
-publisher_name: The Western Union Company
-service_category: Payments
+publisher_name: western-union
+service_category: API
 slug: western-union-finops
 source_filename: western-union-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.westernunion.com/us/en/business/payments-api.html
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Western Union\nproviderId: western-union\npublisherName: The Western Union Company\nserviceCategory: Payments\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Money Transfer\n  - Payments\n  - Cross-Border\n  - FinOps\n  - FOCUS\n  - Contact Sales\ndescription: FinOps shape for Western Union is partner-contract-driven - per-payment fees plus FX margin by corridor, no public price list, settled through the partner agreement.\nsources:\n  - https://www.westernunion.com/us/en/business/payments-api.html\nnotes: No public per-call or per-corridor price list. Meters reflect the actual billable shape (payments and FX-converted\
-  \ volume) but unit prices live in the partner contract.\nbillingModel:\n  pricingCategory: Per-Transaction Fee + FX Margin\n  billingFrequency: Per-Invoice\n  billingCurrency: USD (settlement varies)\n  chargeCategories:\n    - Usage\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: Western Union Partner APIs\n  ServiceCategory: Payments\n  ProviderName: Western Union\n  PublisherName: The Western Union Company\n  InvoiceIssuerName: The Western Union Company\n  BillingCurrency: USD\nmeters:\n  - name: payments_initiated\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - send_country\n      - receive_country\n      - send_currency\n      - receive_currency\n      - payout_method\n  - name: fx_converted_volume\n    unit: send_currency_amount\n    aggregation: sum\n    dimensions:\n      - send_currency\n      - receive_currency\n      - corridor\n  - name: batches_submitted\n    unit: batch\n    aggregation: count\n    dimensions:\n      - partner\nprinciples:\n\
-  \  - name: Visibility\n    description: Reconcile against the Mass Payments batch responses and partner settlement reports; there is no public billing API.\n  - name: Allocation\n    description: Allocate by corridor (send/receive country pair) and partner account, since fees and FX margins differ per corridor.\n  - name: Optimization\n    description: Optimization levers are corridor selection, payout method (bank vs cash vs wallet), batching, and renegotiating partner FX margins.\n  - name: Accountability\n    description: Treasury / payment-ops owns FX and corridor mix; engineering owns batch reliability and reconciliation accuracy.\nmaintainers: []\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: western-union\nproviderId: western-union\npublisherName: western-union\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the western-union API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature\
+  \ so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n\
+  \      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: western-union\n  ServiceCategory: Developer Tools / API\n  ProviderName: western-union\n  PublisherName: western-union\n  InvoiceIssuerName: western-union\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
+  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Western Union Mass Payments API\n    baseURL: https://api.westernunion.com\n    tags:\n      - Money Transfer\n      - Payments\n      - International\n      - Batch Payments\n      - Financial Services\n    serviceName: Western Union Mass Payments API\n    serviceCategory: API\n  - name: Western Union Open Banking API\n    baseURL: https://wu-priora.saltedge.com\n    tags:\n      - Open Banking\n      - PSD2\n      - Account Information\n      - Payment Initiation\n      - Financial Services\n    serviceName: Western Union Open Banking API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n\
+  \    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/western-union/refs/heads/main/finops/western-union-finops.yml
-sources:
-- https://www.westernunion.com/us/en/business/payments-api.html
+sources: []
 specification: FinOps Framework
 tags:
-- Money Transfer
-- Payments
-- Cross-Border
 - FinOps
+- Cost Management
 - FOCUS
-- Contact Sales
 ---

@@ -13,67 +13,78 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/krakend/refs/heads/main/openapi/krakend-service-api-openapi.yml
 billing_model:
-  billingCurrency: EUR/USD
-  billingFrequency: Annual
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Flat Subscription (Self-Hosted)
-description: 'FOCUS-aligned FinOps for KrakenD: shipped software with a flat Enterprise license fee that is explicitly not metered by API count or throughput, plus zero-cost Community Edition. The largest FinOps lever is operator infrastructure (compute, network, observability) — not vendor charges.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the KrakenD API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
-  BillingCurrency: EUR
-  InvoiceIssuerName: KrakenD SL
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: KrakenD
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: KrakenD
-  PublisherName: KrakenD SL
-  ServiceCategory: Developer Tools
+  PublisherName: KrakenD
+  ServiceCategory: Developer Tools / API
   ServiceName: KrakenD
-  ServiceSubcategory: API Gateway
 layout: finops
 meters:
-- aggregation: max
-  dimensions:
-  - environment
-  name: enterprise_license
-  unit: license-year
-- aggregation: max
-  dimensions:
-  - environment
-  - region
-  name: gateway_instances
-  notes: Operator-tracked, not billed by KrakenD; predict cost by sizing infra.
-  unit: instance
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - environment
+  - api
   - endpoint
-  name: requests_processed
-  notes: Tracked operationally, not billed by KrakenD.
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  name: support_hours
-  notes: Engineering hours for custom plugins / architecture reviews under Enterprise contract.
-  unit: hour
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Krakend Finops
 provider_name: KrakenD
 provider_slug: krakend
-publisher_name: KrakenD SL
-service_category: API Management
+publisher_name: KrakenD
+service_category: API
 slug: krakend-finops
 source_filename: krakend-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.krakend.io/enterprise/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: KrakenD\nproviderId: krakend\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - API Gateway\n  - Open Source\n  - API Management\ndescription: 'FOCUS-aligned FinOps for KrakenD: shipped software with a flat Enterprise license fee that\n  is explicitly not metered by API count or throughput, plus zero-cost Community Edition. The largest\n  FinOps lever is operator infrastructure (compute, network, observability) — not vendor charges.'\nsources:\n  - https://www.krakend.io/enterprise/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: KrakenD SL\nserviceCategory: API Management\nbillingModel:\n  pricingCategory: Flat Subscription (Self-Hosted)\n\
-  \  billingFrequency: Annual\n  billingCurrency: EUR/USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: KrakenD\n  ServiceCategory: Developer Tools\n  ServiceSubcategory: API Gateway\n  ProviderName: KrakenD\n  PublisherName: KrakenD SL\n  InvoiceIssuerName: KrakenD SL\n  BillingCurrency: EUR\nmeters:\n  - name: enterprise_license\n    unit: license-year\n    aggregation: max\n    dimensions:\n      - environment\n  - name: gateway_instances\n    unit: instance\n    aggregation: max\n    dimensions:\n      - environment\n      - region\n    notes: Operator-tracked, not billed by KrakenD; predict cost by sizing infra.\n  - name: requests_processed\n    unit: request\n    aggregation: sum\n    dimensions:\n      - environment\n      - endpoint\n    notes: Tracked operationally, not billed by KrakenD.\n  - name: support_hours\n    unit: hour\n    aggregation: sum\n    notes: Engineering hours for custom plugins / architecture reviews under Enterprise\
-  \ contract.\nprinciples:\n  - name: Visibility\n    description: KrakenD does not bill on usage, but operators should still expose request count, latency,\n      and rejection metrics through KrakenD's telemetry exporters (OpenTelemetry, Prometheus) to manage\n      the underlying compute spend.\n  - name: Allocation\n    description: Tag KrakenD instances and endpoints by team / product so the underlying compute (Kubernetes\n      pods, VMs) can be charged back; the license itself is centrally owned.\n  - name: Optimization\n    description: Use KrakenD's stateless scaling and aggressive caching/aggregation to reduce backend\n      and egress cost; the gateway license is fixed, so all marginal optimization happens at the infra\n      layer.\n  - name: Accountability\n    description: Platform team owns the Enterprise contract renewal; product teams own backend cost and\n      are accountable for sizing their own gateway capacity through their infra budget.\nmaintainers:\n  - FN: Kin Lane\n\
-  \    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: KrakenD\nproviderId: krakend\npublisherName: KrakenD\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Aggregation\n  - API Gateway\n  - Go\n  - Open Source\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the KrakenD API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
+  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
+  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: KrakenD\n  ServiceCategory: Developer Tools / API\n  ProviderName: KrakenD\n  PublisherName: KrakenD\n  InvoiceIssuerName: KrakenD\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n \
+  \     - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: KrakenD\n    baseURL: ''\n    tags:\n      - Aggregation\n      - API Gateway\n      - Go\n    serviceName: KrakenD\n    serviceCategory: API\n  - name: KrakenD Service API\n    baseURL: http://localhost:8080\n    tags:\n      - Health Check\n      - Monitoring\n      - Observability\n      - Operations\n    serviceName: KrakenD Service API\n    serviceCategory: API\n  - name: KrakenD Async Agent\n    baseURL: ''\n    tags:\n      - Async\n      - Event-Driven\n      - Kafka\n      - Messaging\n    serviceName: KrakenD Async Agent\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost /\
+  \ active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/krakend/refs/heads/main/finops/krakend-finops.yml
-sources:
-- https://www.krakend.io/enterprise/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Aggregation
 - API Gateway
+- Go
 - Open Source
-- API Management
+- FinOps
+- Cost Management
+- FOCUS
 ---

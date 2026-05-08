@@ -7,46 +7,80 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contact Sales
-description: 'FOCUS-aligned FinOps placeholder for SiriusXM: no public API pricing or self-serve B2B catalog; spend and meters are determined by individual partner contracts.'
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Sirius XM API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Sirius XM Holdings Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Sirius XM
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Sirius XM
-  PublisherName: Sirius XM Holdings Inc.
-  ServiceCategory: Audio Streaming / Advertising
+  PublisherName: Sirius XM
+  ServiceCategory: Developer Tools / API
   ServiceName: Sirius XM
 layout: finops
 meters:
 - aggregation: sum
-  description: Negotiated partner / API contract fees as itemized on the SiriusXM invoice.
+  description: Count of billable API requests
   dimensions:
-  - contract
-  - product
-  name: contract_fees
-  unit: varies
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Sirius Xm Finops
 provider_name: Sirius XM
 provider_slug: sirius-xm
-publisher_name: Sirius XM Holdings Inc.
-service_category: Audio Streaming / Advertising
+publisher_name: Sirius XM
+service_category: API
 slug: sirius-xm-finops
 source_filename: sirius-xm-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.siriusxm.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sirius XM\nproviderId: sirius-xm\npublisherName: Sirius XM Holdings Inc.\nserviceCategory: Audio Streaming / Advertising\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Audio\n  - Advertising\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps placeholder for SiriusXM: no public API pricing or self-serve\n  B2B catalog; spend and meters are determined by individual partner contracts.'\nsources:\n  - https://www.siriusxm.com/\nnotes: |\n  SiriusXM publishes consumer subscription pricing only. Pandora developer and AdsWizz partner APIs\n  use negotiated commercial terms, so meters and FOCUS columns below are stubs.\n\
-  billingModel:\n  pricingCategory: Contact Sales\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Sirius XM\n  ServiceCategory: Audio Streaming / Advertising\n  ProviderName: Sirius XM\n  PublisherName: Sirius XM Holdings Inc.\n  InvoiceIssuerName: Sirius XM Holdings Inc.\n  BillingCurrency: USD\nmeters:\n  - name: contract_fees\n    description: Negotiated partner / API contract fees as itemized on the SiriusXM invoice.\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - contract\n      - product\nprinciples:\n  - name: Visibility\n    description: Request usage exports from SiriusXM Media / AdsWizz account team; no self-serve\n      consumption dashboard is offered to partners.\n  - name: Allocation\n    description: Allocate per-contract fees to the consuming product line based on the line items\n      negotiated in the partner agreement.\n  - name: Optimization\n    description: Renegotiation cycle\
-  \ is the primary lever; track delivered impressions / streams\n      against the contract minimum to inform renewal terms.\n  - name: Accountability\n    description: Partner-relationship owner reconciles monthly invoice line items against the signed\n      agreement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sirius XM\nproviderId: sirius-xm\npublisherName: Sirius XM\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Audio\n  - Streaming\n  - Radio\n  - Music\n  - Podcast\n  - Advertising\n  - Entertainment\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sirius XM API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sirius XM\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sirius XM\n  PublisherName: Sirius XM\n  InvoiceIssuerName: Sirius XM\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n  \
+  \  aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Pandora Developer API\n    baseURL: https://www.pandora.com/api\n    tags:\n      - Music\n      - Streaming\n      - Podcast\n      - GraphQL\n    serviceName: Pandora Developer API\n    serviceCategory: API\n  - name: AdsWizz Domain API\n    baseURL: https://api.adswizz.com\n    tags:\n      - Advertising\n      - Audio Ads\n      - Programmatic\n      - Ad Insertion\n    serviceName: AdsWizz Domain API\n    serviceCategory: API\n  - name: AdsWizz SDK\n    baseURL: https://api.sdk.adswizz.com\n    tags:\n      - SDK\n      - Mobile\n      - Audio Ads\n      - VAST\n    serviceName: AdsWizz SDK\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric:\
+  \ billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sirius-xm/refs/heads/main/finops/sirius-xm-finops.yml
-sources:
-- https://www.siriusxm.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Audio
+- Streaming
+- Radio
+- Music
+- Podcast
 - Advertising
+- Entertainment
 - FinOps
+- Cost Management
 - FOCUS
 ---

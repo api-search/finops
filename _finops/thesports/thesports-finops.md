@@ -14,46 +14,80 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/thesports/refs/heads/main/openapi/thesports-football-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Contract
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
-  pricingCategory: Custom / Contact Sales
-description: 'FOCUS-aligned FinOps placeholder for TheSports: contact-sales sports data feeds with no published rate card.'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the TheSports API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: TheSports
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: TheSports
   PublisherName: TheSports
-  ServiceCategory: Sports Data
+  ServiceCategory: Developer Tools / API
   ServiceName: TheSports
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - sport
-  - feed
-  name: contracted_data_access
-  unit: varies
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Thesports Finops
 provider_name: TheSports
 provider_slug: thesports
 publisher_name: TheSports
-service_category: Sports Data
+service_category: API
 slug: thesports-finops
 source_filename: thesports-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.thesports.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: TheSports\nproviderId: thesports\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Sports\n  - Data\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps placeholder for TheSports: contact-sales sports data feeds with no\n  published rate card.'\nsources:\n  - https://www.thesports.com/pricing\n  - https://focus.finops.org/focus-specification/v1-3/\nnotes: TheSports publishes no public pricing or billing documentation; FinOps shape is inferred from\n  the contact-sales posture and cannot be reconciled until a contract is in hand.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: TheSports\nserviceCategory: Sports Data\nbillingModel:\n  pricingCategory:\
-  \ Custom / Contact Sales\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: TheSports\n  ServiceCategory: Sports Data\n  ProviderName: TheSports\n  PublisherName: TheSports\n  BillingCurrency: USD\nmeters:\n  - name: contracted_data_access\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - sport\n      - feed\nprinciples:\n  - name: Visibility\n    description: Track invoiced contract spend and any per-feed usage reports TheSports provides under\n      the negotiated agreement.\n  - name: Allocation\n    description: Allocate the contracted feed cost to the sports product/team consuming each feed (football,\n      basketball, tennis, esports).\n  - name: Optimization\n    description: Renegotiate or rescope feeds at renewal based on actual sport-by-sport consumption;\n      drop unused feeds.\n  - name: Accountability\n    description: Assign a single sports-data owner accountable for\
-  \ the TheSports contract, renewal date,\n      and overage exposure.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: TheSports\nproviderId: thesports\npublisherName: TheSports\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Sports\n  - Football\n  - Basketball\n  - Tennis\n  - Esports\n  - Data\n  - Real-Time\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the TheSports API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
+  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: TheSports\n  ServiceCategory: Developer Tools / API\n  ProviderName: TheSports\n  PublisherName: TheSports\n  InvoiceIssuerName: TheSports\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n  \
+  \  aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: TheSports Football API\n    baseURL: https://api.thesports.com/v1\n    tags:\n      - Football\n      - Soccer\n      - Sports\n      - Real-Time\n      - Data\n    serviceName: TheSports Football API\n    serviceCategory: API\n  - name: TheSports Basketball API\n    baseURL: https://api.thesports.com/v1\n    tags:\n      - Basketball\n      - NBA\n      - Sports\n      - Real-Time\n    serviceName: TheSports Basketball API\n    serviceCategory: API\n  - name: TheSports Tennis API\n    baseURL: https://api.thesports.com/v1\n    tags:\n      - Tennis\n      - ATP\n      - WTA\n      - Sports\n    serviceName: TheSports Tennis API\n    serviceCategory: API\n  - name: TheSports Esports\
+  \ API\n    baseURL: https://api.thesports.com/v1\n    tags:\n      - Esports\n      - CS:GO\n      - League of Legends\n      - Gaming\n    serviceName: TheSports Esports API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/thesports/refs/heads/main/finops/thesports-finops.yml
-sources:
-- https://www.thesports.com/pricing
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
 - Sports
+- Football
+- Basketball
+- Tennis
+- Esports
 - Data
+- Real-Time
 - FinOps
+- Cost Management
 - FOCUS
 ---

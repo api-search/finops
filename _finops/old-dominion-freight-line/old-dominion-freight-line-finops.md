@@ -32,67 +32,70 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/old-dominion-freight-line/refs/heads/main/openapi/old-dominion-freight-line-document-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: None (bundled)
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  chargeFrequency: None
-  pricingCategory: Bundled with Freight Relationship
-description: 'FOCUS-aligned FinOps for ODFL: API access is bundled with the freight customer relationship and is not invoiced separately. Cost dimensions are operational — engineering integration time, polling cadence, and the SOAP-to-REST migration cost (SOAP retiring 2025-12-31).'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Old Dominion Freight Line API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Old Dominion Freight Line, Inc. (freight invoice; API not separately billed)
-  PricingCategory: Bundled
+  InvoiceIssuerName: Old Dominion Freight Line
+  PricingCategory: Usage-Based
   PricingUnit: request
   ProviderName: Old Dominion Freight Line
-  PublisherName: Old Dominion Freight Line, Inc.
-  ServiceCategory: LTL Freight / Logistics
-  ServiceName: Old Dominion Freight Line API
+  PublisherName: Old Dominion Freight Line
+  ServiceCategory: Developer Tools / API
+  ServiceName: Old Dominion Freight Line
 layout: finops
 meters:
 - aggregation: sum
-  description: Operationally tracked API request count per key (not invoiced)
+  description: Count of billable API requests
   dimensions:
   - api
-  - api_key
   - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bills of lading submitted via the BOL API
-  name: bol_submissions
-  unit: bol
-- aggregation: sum
-  description: Pickup requests submitted
-  name: pickup_requests
-  unit: pickup
-- aggregation: sum
-  description: Tracking polls (track to optimize cadence)
+  description: Bytes returned over the network in API responses
   dimensions:
-  - shipment_id
-  name: tracking_polls
-  unit: poll
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Freight documents retrieved
-  name: documents_retrieved
-  unit: document
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Old Dominion Freight Line Finops
 provider_name: Old Dominion Freight Line
 provider_slug: old-dominion-freight-line
-publisher_name: Old Dominion Freight Line, Inc.
-service_category: LTL Freight / Logistics
+publisher_name: Old Dominion Freight Line
+service_category: API
 slug: old-dominion-freight-line-finops
 source_filename: old-dominion-freight-line-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.odfl.com/us/en/resources/shipping-api-integrations.html
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Old Dominion Freight Line\nproviderId: old-dominion-freight-line\npublisherName: Old Dominion Freight Line, Inc.\nserviceCategory: LTL Freight / Logistics\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Freight\n  - Less-Than-Truckload\n  - Logistics\n  - Shipping\n  - Transportation\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for ODFL: API access is bundled with the freight customer relationship\n  and is not invoiced separately. Cost dimensions are operational — engineering integration time, polling\n  cadence, and the SOAP-to-REST migration cost (SOAP retiring 2025-12-31).'\nnotes:\
-  \ ODFL does not invoice API consumers separately from freight services.\nsources:\n  - https://www.odfl.com/us/en/resources/shipping-api-integrations.html\nprinciples:\n  - name: Visibility\n    description: ODFL does not bill per-call. Track per-API-key request volume and tracking-poll rate\n      internally to ensure the integration scales with shipment volume.\n  - name: Allocation\n    description: Allocate engineering integration cost to the consuming TMS/WMS/logistics product. Tag\n      ODFL API keys per app/business unit for usage attribution.\n  - name: Optimization\n    description: Migrate from retiring SOAP services to REST before 2025-12-31. Cache tracking responses;\n      batch tracking-number lookups; avoid high-frequency polling for in-transit shipments.\n  - name: Accountability\n    description: Designate a logistics-IT owner for the ODFL API credential and SOAP-to-REST migration.\n      Reconcile shipment-document quality with ODFL Customer Service quarterly.\nbillingModel:\n\
-  \  pricingCategory: Bundled with Freight Relationship\n  billingFrequency: None (bundled)\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n  chargeFrequency: None\nfocusColumns:\n  ServiceName: Old Dominion Freight Line API\n  ServiceCategory: LTL Freight / Logistics\n  ProviderName: Old Dominion Freight Line\n  PublisherName: Old Dominion Freight Line, Inc.\n  InvoiceIssuerName: Old Dominion Freight Line, Inc. (freight invoice; API not separately billed)\n  PricingCategory: Bundled\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Operationally tracked API request count per key (not invoiced)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - api_key\n      - endpoint\n  - name: bol_submissions\n    description: Bills of lading submitted via the BOL API\n    unit: bol\n    aggregation: sum\n  - name: pickup_requests\n    description: Pickup requests submitted\n    unit: pickup\n\
-  \    aggregation: sum\n  - name: tracking_polls\n    description: Tracking polls (track to optimize cadence)\n    unit: poll\n    aggregation: sum\n    dimensions:\n      - shipment_id\n  - name: documents_retrieved\n    description: Freight documents retrieved\n    unit: document\n    aggregation: sum\napis:\n  - name: ODFL Bill of Lading API\n    baseURL: https://www.odfl.com\n    tags:\n      - Bill of Lading\n      - Documents\n      - Freight\n    serviceName: ODFL Bill of Lading API\n    serviceCategory: LTL Freight\n  - name: ODFL Pickup API\n    baseURL: https://www.odfl.com\n    tags:\n      - Freight\n      - Pickup\n    serviceName: ODFL Pickup API\n    serviceCategory: LTL Freight\n  - name: ODFL Tracking API\n    baseURL: https://www.odfl.com\n    tags:\n      - Freight\n      - Tracking\n    serviceName: ODFL Tracking API\n    serviceCategory: LTL Freight\n  - name: ODFL Document API\n    baseURL: https://www.odfl.com\n    tags:\n      - Documents\n      - Freight\n    serviceName:\
-  \ ODFL Document API\n    serviceCategory: LTL Freight\nunitEconomics:\n  - name: Polls per shipment\n    metric: tracking_polls / active_shipments\n    target: minimize via reduced polling cadence\n  - name: Integration cost per shipment\n    metric: integration_engineering_cost / shipments_processed\n    target: declining over time via reuse\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Old Dominion Freight Line\nproviderId: old-dominion-freight-line\npublisherName: Old Dominion Freight Line\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Freight\n  - Less-Than-Truckload\n  - Logistics\n  - Shipping\n  - Transportation\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Old Dominion Freight Line API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  -\
+  \ name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n\
+  \  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Old Dominion Freight Line\n  ServiceCategory: Developer Tools / API\n  ProviderName: Old Dominion Freight Line\n  PublisherName: Old Dominion Freight Line\n  InvoiceIssuerName: Old Dominion Freight Line\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n   \
+  \   - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: ODFL Bill of Lading API\n    baseURL: https://www.odfl.com\n    tags:\n      - Bill of Lading\n      - Documents\n      - Freight\n      - Shipping\n    serviceName: ODFL Bill of Lading API\n    serviceCategory: API\n  - name: ODFL Pickup API\n    baseURL: https://www.odfl.com\n    tags:\n      - Freight\n      - Logistics\n      - Pickup\n      - Shipping\n    serviceName: ODFL Pickup API\n    serviceCategory: API\n  - name: ODFL Tracking API\n    baseURL: https://www.odfl.com\n    tags:\n      - Freight\n      - Shipping\n      - Tracking\n    serviceName: ODFL\
+  \ Tracking API\n    serviceCategory: API\n  - name: ODFL Document API\n    baseURL: https://www.odfl.com\n    tags:\n      - Documents\n      - Freight\n      - Shipping\n    serviceName: ODFL Document API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/old-dominion-freight-line/refs/heads/main/finops/old-dominion-freight-line-finops.yml
-sources:
-- https://www.odfl.com/us/en/resources/shipping-api-integrations.html
+sources: []
 specification: FinOps Framework
 tags:
 - Freight

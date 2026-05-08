@@ -7,46 +7,79 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Internal
-description: Aaron's APIs power consumer-facing lease application and account-management flows and are not sold as a developer product. There is no metered API invoice; FinOps mapping is structural only.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Aaron's API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: The Aaron's Company, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Aaron's
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Aaron's
-  PublisherName: The Aaron's Company, Inc.
-  ServiceCategory: Retail / Consumer Finance
+  PublisherName: Aaron's
+  ServiceCategory: Developer Tools / API
   ServiceName: Aaron's
 layout: finops
 meters:
 - aggregation: sum
-  description: Internal application traffic — not externally billed.
+  description: Count of billable API requests
   dimensions:
+  - api
   - endpoint
-  name: internal_traffic
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Aarons Finops
 provider_name: Aaron's
 provider_slug: aarons
-publisher_name: The Aaron's Company, Inc.
-service_category: Retail / Consumer Finance
+publisher_name: Aaron's
+service_category: API
 slug: aarons-finops
 source_filename: aarons-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.aarons.com/apply
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Aaron's\nproviderId: aarons\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Lease-to-Own\n  - Retail\n  - Consumer Finance\n  - FinOps\n  - FOCUS\ndescription: Aaron's APIs power consumer-facing lease application and account-management flows and are\n  not sold as a developer product. There is no metered API invoice; FinOps mapping is structural only.\nnotes: No public developer pricing — placeholder only. Aaron's API surface is a cost of running its retail\n  experience, not a billable product.\nsources:\n  - https://www.aarons.com/apply\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: The Aaron's Company, Inc.\nserviceCategory: Retail / Consumer Finance\n\
-  billingModel:\n  pricingCategory: Internal\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Aaron's\n  ServiceCategory: Retail / Consumer Finance\n  ProviderName: Aaron's\n  PublisherName: The Aaron's Company, Inc.\n  InvoiceIssuerName: The Aaron's Company, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: internal_traffic\n    description: Internal application traffic — not externally billed.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\nprinciples:\n  - name: Visibility\n    description: Internal cost visibility comes from Aaron's own observability stack; not an externally\n      metered service.\n  - name: Allocation\n    description: Cost is allocated inside Aaron's IT/digital budget rather than to external API consumers.\n  - name: Optimization\n    description: Optimize internally by caching application status and scaling consumer-facing endpoints\n      to lease-application\
-  \ demand.\n  - name: Accountability\n    description: Digital experience leadership owns the consumer surface; finance reviews IT operating\n      costs as part of corporate budgeting.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Aaron's\nproviderId: aarons\npublisherName: Aaron's\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Lease-to-Own\n  - Retail\n  - Furniture\n  - Electronics\n  - Appliances\n  - Consumer Finance\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Aaron's API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
+  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Aaron's\n  ServiceCategory: Developer Tools / API\n  ProviderName: Aaron's\n  PublisherName: Aaron's\n  InvoiceIssuerName: Aaron's\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Aaron's Lease Application\n    baseURL: ''\n    tags:\n      - Lease-to-Own\n      - Consumer Finance\n      - Credit\n      - Applications\n    serviceName: Aaron's Lease Application\n    serviceCategory: API\n  - name: Aaron's Account Management\n    baseURL: ''\n    tags:\n      - Account Management\n      - Payments\n      - Lease Management\n    serviceName: Aaron's Account Management\n    serviceCategory: API\n  - name: Aaron's Product Catalog\n    baseURL: ''\n    tags:\n      - Retail\n      - Furniture\n      - Electronics\n      - Appliances\n      - Lease-to-Own\n    serviceName: Aaron's Product Catalog\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric:\
+  \ billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/aarons/refs/heads/main/finops/aarons-finops.yml
-sources:
-- https://www.aarons.com/apply
+sources: []
 specification: FinOps Framework
 tags:
 - Lease-to-Own
 - Retail
+- Furniture
+- Electronics
+- Appliances
 - Consumer Finance
 - FinOps
+- Cost Management
 - FOCUS
 ---

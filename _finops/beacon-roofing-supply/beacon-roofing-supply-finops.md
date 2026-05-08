@@ -16,79 +16,75 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
-  - Adjustment
-  - Refund
   - Credit
+  - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Account-Based Material Spend
-description: 'FOCUS-aligned FinOps shape for Beacon PRO+: API access bundled with the contractor account, with the dominant cost category being underlying material purchases and delivery fees rather than API consumption.'
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Beacon Roofing Supply API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Beacon Roofing Supply, Inc.
-  PricingCategory: Account-Based Material Spend
-  PricingUnit: order
+  ChargeCategory: Usage
+  InvoiceIssuerName: Beacon Roofing Supply
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Beacon Roofing Supply
-  PublisherName: Beacon Roofing Supply, Inc.
-  ServiceCategory: Construction Distribution / E-Commerce APIs
-  ServiceName: Beacon PRO+
+  PublisherName: Beacon Roofing Supply
+  ServiceCategory: Developer Tools / API
+  ServiceName: Beacon Roofing Supply
 layout: finops
 meters:
 - aggregation: sum
-  description: Orders placed through the PRO+ API
+  description: Count of billable API requests
   dimensions:
-  - account
-  - job
-  - branch
-  name: orders
-  unit: order
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Material spend value via the PRO+ API
+  description: Bytes returned over the network in API responses
   dimensions:
-  - account
-  - job
-  - product_category
-  name: order_volume
-  unit: USD
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Delivery events tracked via the API
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - account
-  - branch
-  name: deliveries
-  unit: delivery
-- aggregation: sum
-  description: Manufacturer rebates accrued / surfaced through the API
-  dimensions:
-  - manufacturer
-  - product_category
-  name: rebates
-  unit: USD
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Beacon Roofing Supply Finops
 provider_name: Beacon Roofing Supply
 provider_slug: beacon-roofing-supply
-publisher_name: Beacon Roofing Supply, Inc. (a QXO company)
-service_category: Construction Distribution / E-Commerce APIs
+publisher_name: Beacon Roofing Supply
+service_category: API
 slug: beacon-roofing-supply-finops
 source_filename: beacon-roofing-supply-finops.yml
 source_heading: FinOps Profile
-source_url: https://beaconproplus.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Beacon Roofing Supply\nproviderId: beacon-roofing-supply\npublisherName: Beacon Roofing Supply, Inc. (a QXO company)\nserviceCategory: Construction Distribution / E-Commerce APIs\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Construction\n  - Roofing\n  - Distribution\n  - E-Commerce\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps shape for Beacon PRO+: API access bundled with the contractor account,\n  with the dominant cost category being underlying material purchases and delivery fees rather than API\n  consumption.'\nnotes: No public rate card. Replace meter values with the contractor's negotiated Beacon account terms\n  and ISV integration scope\
-  \ once available.\nsources:\n  - https://beaconproplus.com\n  - https://beaconproplus.com/swagger/all_api/\nprinciples:\n  - name: Visibility\n    description: Use the PRO+ API to surface order, delivery, and rebate data to the contractor's job-cost\n      ledger so material spend can be attributed per job.\n  - name: Allocation\n    description: Allocate material orders to jobs / projects via contractor PO and job-number metadata\n      passed through the API.\n  - name: Optimization\n    description: Optimize delivery scheduling and consolidate orders to minimize delivery fees; track\n      manufacturer rebates through the API to capture the full earned value.\n  - name: Accountability\n    description: Designate a project manager or operations lead as the Beacon account owner who reviews\n      monthly statements and rebate accruals.\nbillingModel:\n  pricingCategory: Account-Based Material Spend\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n\
-  \    - Tax\n    - Adjustment\n    - Refund\n    - Credit\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Beacon PRO+\n  ServiceCategory: Construction Distribution / E-Commerce APIs\n  ProviderName: Beacon Roofing Supply\n  PublisherName: Beacon Roofing Supply, Inc.\n  InvoiceIssuerName: Beacon Roofing Supply, Inc.\n  PricingCategory: Account-Based Material Spend\n  PricingUnit: order\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: orders\n    description: Orders placed through the PRO+ API\n    unit: order\n    aggregation: sum\n    dimensions:\n      - account\n      - job\n      - branch\n  - name: order_volume\n    description: Material spend value via the PRO+ API\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - account\n      - job\n      - product_category\n  - name: deliveries\n    description: Delivery events tracked via the API\n    unit: delivery\n    aggregation: sum\n    dimensions:\n      - account\n      - branch\n  - name:\
-  \ rebates\n    description: Manufacturer rebates accrued / surfaced through the API\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - manufacturer\n      - product_category\napis:\n  - name: Beacon PRO+ API\n    baseURL: ''\n    tags:\n      - Construction\n      - Roofing\n      - Distribution\n      - E-Commerce\n    serviceName: Beacon PRO+ API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Job\n    metric: order_volume / active_jobs\n    target: align to job estimate\n  - name: Rebate Capture Rate\n    metric: rebates / order_volume\n    target: maximize per manufacturer program\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Beacon Roofing Supply\nproviderId: beacon-roofing-supply\npublisherName: Beacon Roofing Supply\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Construction\n  - Distribution\n  - Roofing\n  - Building Materials\n  - E-Commerce\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Beacon Roofing Supply API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Beacon Roofing Supply\n  ServiceCategory: Developer Tools / API\n  ProviderName: Beacon Roofing Supply\n  PublisherName: Beacon Roofing Supply\n  InvoiceIssuerName: Beacon Roofing Supply\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
+  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Beacon PRO+ API\n    baseURL: ''\n    tags:\n      - Construction\n      - Roofing\n      - Distribution\n      - E-Commerce\n      - Orders\n    serviceName: Beacon PRO+ API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/beacon-roofing-supply/refs/heads/main/finops/beacon-roofing-supply-finops.yml
-sources:
-- https://beaconproplus.com
-- https://beaconproplus.com/swagger/all_api/
+sources: []
 specification: FinOps Framework
 tags:
 - Construction
-- Roofing
 - Distribution
+- Roofing
+- Building Materials
 - E-Commerce
 - FinOps
+- Cost Management
 - FOCUS
 ---

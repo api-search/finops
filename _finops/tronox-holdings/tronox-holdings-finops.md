@@ -7,44 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contract
-description: Tronox Holdings does not operate a metered API or self-serve cloud product, so no FOCUS-aligned FinOps surface is published. Procurement of titanium dioxide and zircon is contracted directly and invoiced on commercial terms negotiated with the customer.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Tronox Holdings API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Tronox Holdings plc
+  ChargeCategory: Usage
+  InvoiceIssuerName: Tronox Holdings
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Tronox Holdings
-  PublisherName: Tronox Holdings plc
-  ServiceCategory: Chemicals & Materials
+  PublisherName: Tronox Holdings
+  ServiceCategory: Developer Tools / API
   ServiceName: Tronox Holdings
 layout: finops
 meters:
 - aggregation: sum
-  description: Volume of titanium dioxide, zircon, or related products delivered under contract.
-  name: contracted_supply
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Tronox Holdings Finops
 provider_name: Tronox Holdings
 provider_slug: tronox-holdings
-publisher_name: Tronox Holdings plc
-service_category: Chemicals & Materials
+publisher_name: Tronox Holdings
+service_category: API
 slug: tronox-holdings-finops
 source_filename: tronox-holdings-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.tronox.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Tronox Holdings\nproviderId: tronox-holdings\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Titanium Dioxide\n  - Chemical\n  - Mining\n  - FinOps\n  - FOCUS\ndescription: Tronox Holdings does not operate a metered API or self-serve cloud product, so no FOCUS-aligned\n  FinOps surface is published. Procurement of titanium dioxide and zircon is contracted directly and invoiced\n  on commercial terms negotiated with the customer.\nsources:\n  - https://www.tronox.com/\nnotes: No public API metering, usage telemetry, or FOCUS-style billing export. Trimmed to a Contact Sales\n  shape pending any future digital-product disclosure.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
-  publisherName: Tronox Holdings plc\nserviceCategory: Chemicals & Materials\nbillingModel:\n  pricingCategory: Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Tronox Holdings\n  ServiceCategory: Chemicals & Materials\n  ProviderName: Tronox Holdings\n  PublisherName: Tronox Holdings plc\n  InvoiceIssuerName: Tronox Holdings plc\n  BillingCurrency: USD\nmeters:\n  - name: contracted_supply\n    description: Volume of titanium dioxide, zircon, or related products delivered under contract.\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Spend visibility is established via the customer's procurement system and invoice review;\n      no provider-side usage API or cost dashboard is published.\n  - name: Allocation\n    description: Allocate Tronox spend through your purchase-order system; assign POs to product lines\n      and plants as they are issued.\n  - name:\
-  \ Optimization\n    description: Optimization is a procurement function — volume commitments, contract terms, and product\n      grade selection — negotiated directly with Tronox sales.\n  - name: Accountability\n    description: Accountability sits with the procurement and operations leaders responsible for the contract;\n      there is no metered cost-owner concept.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Tronox Holdings\nproviderId: tronox-holdings\npublisherName: Tronox Holdings\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Titanium Dioxide\n  - Chemical\n  - Mining\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Tronox Holdings API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Tronox Holdings\n  ServiceCategory: Developer Tools / API\n  ProviderName: Tronox Holdings\n  PublisherName: Tronox Holdings\n  InvoiceIssuerName: Tronox Holdings\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n \
+  \   aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Tronox Holdings API\n    baseURL: https://api.tronox.com\n    tags:\n      - Titanium Dioxide\n      - Chemical\n      - Mining\n    serviceName: Tronox Holdings API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tronox-holdings/refs/heads/main/finops/tronox-holdings-finops.yml
-sources:
-- https://www.tronox.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Titanium Dioxide
 - Chemical
 - Mining
 - FinOps
+- Cost Management
 - FOCUS
 ---

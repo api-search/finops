@@ -16,64 +16,70 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
-  - Refund
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription
-description: 'FOCUS-aligned FinOps for Aflac: premium-based insurance billing for supplemental policies plus broker/employer integration agreements.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the aflac API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Aflac Incorporated
-  ProviderName: Aflac
-  PublisherName: Aflac Incorporated
-  ServiceCategory: Insurance / Supplemental Benefits
-  ServiceName: Aflac
+  ChargeCategory: Usage
+  InvoiceIssuerName: aflac
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: aflac
+  PublisherName: aflac
+  ServiceCategory: Developer Tools / API
+  ServiceName: aflac
 layout: finops
 meters:
-- aggregation: max
-  dimensions:
-  - product
-  - state
-  - employer
-  name: active_policies
-  unit: policy
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - product
-  - state
-  name: monthly_premiums
-  unit: USD
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - product
-  - state
-  name: claims_paid
-  unit: USD
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - partner
-  name: broker_integration_fees
-  unit: USD
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Aflac Finops
 provider_name: aflac
 provider_slug: aflac
-publisher_name: Aflac Incorporated
-service_category: Insurance / Supplemental Benefits
+publisher_name: aflac
+service_category: API
 slug: aflac-finops
 source_filename: aflac-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.aflac.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: aflac\nproviderId: aflac\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nnotes: Aflac bills via insurance premiums (state-filed) and broker/employer integration fees;\n  it does not bill per API call.\ntags:\n  - FinOps\n  - FOCUS\n  - Insurance\n  - Voluntary Benefits\ndescription: 'FOCUS-aligned FinOps for Aflac: premium-based insurance billing for supplemental\n  policies plus broker/employer integration agreements.'\nsources:\n  - https://www.aflac.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Aflac Incorporated\nserviceCategory: Insurance / Supplemental Benefits\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Monthly\n  billingCurrency:\
-  \ USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Refund\n    - Adjustment\nfocusColumns:\n  ServiceName: Aflac\n  ServiceCategory: Insurance / Supplemental Benefits\n  ProviderName: Aflac\n  PublisherName: Aflac Incorporated\n  InvoiceIssuerName: Aflac Incorporated\n  BillingCurrency: USD\nmeters:\n  - name: active_policies\n    unit: policy\n    aggregation: max\n    dimensions:\n      - product\n      - state\n      - employer\n  - name: monthly_premiums\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - product\n      - state\n  - name: claims_paid\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - product\n      - state\n  - name: broker_integration_fees\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - partner\nprinciples:\n  - name: Visibility\n    description: Track active-policy counts and premium volume via the Aflac employer/broker\n      portal; reconcile against payroll deductions.\n  - name: Allocation\n    description: Tag\
-  \ premiums by employer group, division, and product line for benefits cost\n      reporting.\n  - name: Optimization\n    description: Review benefit utilization and renewal pricing annually; right-size product\n      offerings by employee segment.\n  - name: Accountability\n    description: Assign benefits-program owner; review enrollment, premium, and claim variance\n      monthly.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: aflac\nproviderId: aflac\npublisherName: aflac\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the aflac API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  -\
+  \ name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n\
+  \      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: aflac\n  ServiceCategory: Developer Tools / API\n  ProviderName: aflac\n  PublisherName: aflac\n  InvoiceIssuerName: aflac\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description:\
+  \ Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Aflac Enterprise Connect API\n    baseURL: https://api.enterprise-connect.aflac.com\n    tags:\n      - Benefits\n      - Enrollment\n      - Insurance\n      - Supplemental Insurance\n      - Workforce\n    serviceName: Aflac Enterprise Connect API\n    serviceCategory: API\n  - name: Aflac Claims API\n    baseURL: https://api.enterprise-connect.aflac.com\n    tags:\n      - Claims\n      - Insurance\n      - Payments\n      - Supplemental Insurance\n    serviceName: Aflac Claims API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/aflac/refs/heads/main/finops/aflac-finops.yml
-sources:
-- https://www.aflac.com/
+sources: []
 specification: FinOps Framework
 tags:
 - FinOps
+- Cost Management
 - FOCUS
-- Insurance
-- Voluntary Benefits
 ---

@@ -7,45 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Enterprise Contract
-description: Quaker Houghton does not publish a public API meter or invoice surface; any FinOps mapping must come from the customer's enterprise procurement contract.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Quaker Houghton API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
   InvoiceIssuerName: Quaker Houghton
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Quaker Houghton
   PublisherName: Quaker Houghton
-  ServiceCategory: Industrial Fluids
+  ServiceCategory: Developer Tools / API
   ServiceName: Quaker Houghton
 layout: finops
 meters:
 - aggregation: sum
-  description: Any platform or data integration is scoped under the enterprise customer contract.
+  description: Count of billable API requests
   dimensions:
-  - contract
-  name: contract_engagement
-  unit: varies
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Quaker Houghton Finops
 provider_name: Quaker Houghton
 provider_slug: quaker-houghton
 publisher_name: Quaker Houghton
-service_category: Industrial Fluids
+service_category: API
 slug: quaker-houghton-finops
 source_filename: quaker-houghton-finops.yml
 source_heading: FinOps Profile
-source_url: https://home.quakerhoughton.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Quaker Houghton\nproviderId: quaker-houghton\npublisherName: Quaker Houghton\nserviceCategory: Industrial Fluids\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Industrial Fluids\n  - Chemical\n  - FinOps\n  - FOCUS\nnotes: No public API or developer pricing surface is published by Quaker Houghton; FinOps mapping is\n  scoped to the enterprise contract level.\ndescription: Quaker Houghton does not publish a public API meter or invoice surface; any FinOps mapping\n  must come from the customer's enterprise procurement contract.\nsources:\n  - https://home.quakerhoughton.com/\nbillingModel:\n  pricingCategory: Enterprise\
-  \ Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Quaker Houghton\n  ServiceCategory: Industrial Fluids\n  ProviderName: Quaker Houghton\n  PublisherName: Quaker Houghton\n  InvoiceIssuerName: Quaker Houghton\n  BillingCurrency: USD\nmeters:\n  - name: contract_engagement\n    description: Any platform or data integration is scoped under the enterprise customer contract.\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - contract\nprinciples:\n  - name: Visibility\n    description: Treat any Quaker Houghton integration as opaque from a FinOps perspective; surface\n      contracted spend through procurement reporting rather than vendor telemetry.\n  - name: Allocation\n    description: Allocate the contract spend against the consuming manufacturing or operations cost\n      center named in the agreement.\n  - name: Optimization\n    description: Optimization happens at contract renewal;\
-  \ review consumption reports furnished by the\n      Quaker Houghton account team and renegotiate as needed.\n  - name: Accountability\n    description: Procurement and the operations sponsor co-own the contract; engineering teams should\n      route integration changes through the account team.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Quaker Houghton\nproviderId: quaker-houghton\npublisherName: Quaker Houghton\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Industrial Fluids\n  - Chemical\n  - Manufacturing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Quaker Houghton API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Quaker Houghton\n  ServiceCategory: Developer Tools / API\n  ProviderName: Quaker Houghton\n  PublisherName: Quaker Houghton\n  InvoiceIssuerName: Quaker Houghton\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Quaker Houghton API\n    baseURL: https://api.quakerhoughton.com\n    tags:\n      - Industrial Fluids\n      - Chemical\n      - Manufacturing\n    serviceName: Quaker Houghton API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/quaker-houghton/refs/heads/main/finops/quaker-houghton-finops.yml
-sources:
-- https://home.quakerhoughton.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Industrial Fluids
 - Chemical
+- Manufacturing
 - FinOps
+- Cost Management
 - FOCUS
 ---

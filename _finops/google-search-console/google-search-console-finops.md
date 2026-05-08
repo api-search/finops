@@ -14,68 +14,78 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/google-search-console/refs/heads/main/openapi/google-search-console-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: On-Demand
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Free
-description: 'FOCUS-aligned FinOps for the Google Search Console API: free-of-charge service whose FinOps cost is human / pipeline cost rather than per-call billing. Meters track quota consumption rather than invoice line items.'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Google Search Console API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Google LLC
-  ProviderName: Google
-  PublisherName: Google LLC
-  ServiceCategory: SEO / Search Tools
+  InvoiceIssuerName: Google Search Console
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Google Search Console
+  PublisherName: Google Search Console
+  ServiceCategory: Developer Tools / API
   ServiceName: Google Search Console
 layout: finops
 meters:
 - aggregation: sum
-  description: Search Analytics queries against per-site / per-user / per-project quotas
+  description: Count of billable API requests
   dimensions:
-  - site
-  - user
-  - project
-  name: search_analytics_queries
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: URL Inspection / index inspection queries against per-site / per-project quotas
+  description: Bytes returned over the network in API responses
   dimensions:
-  - site
-  - project
-  name: url_inspection_queries
-  unit: request
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Calls to the Indexing API
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - project
-  name: indexing_api_calls
-  unit: request
-- aggregation: sum
-  description: Sitemap submission and management calls
-  dimensions:
-  - site
-  name: sitemap_submissions
-  unit: request
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Google Search Console Finops
 provider_name: Google Search Console
 provider_slug: google-search-console
-publisher_name: Google LLC
-service_category: SEO / Search Tools
+publisher_name: Google Search Console
+service_category: API
 slug: google-search-console-finops
 source_filename: google-search-console-finops.yml
 source_heading: FinOps Profile
-source_url: https://developers.google.com/webmaster-tools/limits
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Search Console\nproviderId: google-search-console\npublisherName: Google LLC\nserviceCategory: SEO / Search Tools\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - SEO\n  - Search\n  - Webmaster Tools\ndescription: 'FOCUS-aligned FinOps for the Google Search Console API: free-of-charge service whose FinOps\n  cost is human / pipeline cost rather than per-call billing. Meters track quota consumption rather than\n  invoice line items.'\nsources:\n  - https://developers.google.com/webmaster-tools/limits\nbillingModel:\n  pricingCategory: Free\n  billingFrequency: On-Demand\n  billingCurrency:\
-  \ USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Google Search Console\n  ServiceCategory: SEO / Search Tools\n  ProviderName: Google\n  PublisherName: Google LLC\n  InvoiceIssuerName: Google LLC\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: search_analytics_queries\n    description: Search Analytics queries against per-site / per-user / per-project quotas\n    unit: request\n    aggregation: sum\n    dimensions:\n      - site\n      - user\n      - project\n  - name: url_inspection_queries\n    description: URL Inspection / index inspection queries against per-site / per-project quotas\n    unit: request\n    aggregation: sum\n    dimensions:\n      - site\n      - project\n  - name: indexing_api_calls\n    description: Calls to the Indexing API\n    unit: request\n    aggregation: sum\n    dimensions:\n      - project\n  - name: sitemap_submissions\n    description: Sitemap submission and management calls\n    unit: request\n    aggregation:\
-  \ sum\n    dimensions:\n      - site\nprinciples:\n  - name: Visibility\n    description: Track API quota consumption in the Google Cloud Console quota tab; export usage to\n      logging for trend analysis even though no charges accrue.\n  - name: Allocation\n    description: Use distinct Google Cloud projects per consuming team or workload so quota usage and\n      eventual rate-limit incidents map to owners.\n  - name: Optimization\n    description: Cache Search Analytics responses, batch URL inspection calls, and stagger Indexing\n      API submissions across the day to avoid hitting per-minute / per-day caps.\n  - name: Accountability\n    description: Designate an SEO / data-platform owner for quota raise requests and monitor 429 rates\n      so consumers throttle themselves before quota exhaustion.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Search Console\nproviderId: google-search-console\npublisherName: Google Search Console\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Google\n  - Search\n  - SEO\n  - Webmaster Tools\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Google Search Console API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Google Search Console\n  ServiceCategory: Developer Tools / API\n  ProviderName: Google Search Console\n  PublisherName: Google Search Console\n  InvoiceIssuerName: Google Search Console\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
+  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Google Search Console API\n    baseURL: https://searchconsole.googleapis.com\n    tags:\n      - Indexing\n      - Search Analytics\n      - SEO\n      - Sitemaps\n    serviceName: Google Search Console API\n    serviceCategory: API\n  - name: Google Search Console URL Testing Tools API\n    baseURL: https://searchconsole.googleapis.com\n    tags:\n      - Mobile Friendly\n      - Rich Results\n      - Structured Data\n      - Testing\n      - Validation\n    serviceName: Google Search Console URL Testing Tools API\n    serviceCategory: API\n  - name: Google Indexing API\n    baseURL: https://indexing.googleapis.com\n\
+  \    tags:\n      - Crawling\n      - Indexing\n      - SEO\n      - URL Submission\n    serviceName: Google Indexing API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/google-search-console/refs/heads/main/finops/google-search-console-finops.yml
-sources:
-- https://developers.google.com/webmaster-tools/limits
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- SEO
+- Analytics
+- Google
 - Search
+- SEO
 - Webmaster Tools
+- FinOps
+- Cost Management
+- FOCUS
 ---

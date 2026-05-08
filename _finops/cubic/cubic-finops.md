@@ -7,67 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
+  - Credit
   - Adjustment
-  chargeFrequency: Milestone
-  pricingCategory: Contract / Milestone
-description: 'FOCUS-aligned FinOps for Cubic: contract-priced transit and defense systems with embedded APIs; spend is tracked as project / milestone delivery rather than per-call usage.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Cubic Corporation API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
+  ChargeCategory: Usage
   InvoiceIssuerName: Cubic Corporation
-  PricingCategory: Custom Contract
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Cubic Corporation
   PublisherName: Cubic Corporation
-  ServiceCategory: Transportation & Defense Systems
+  ServiceCategory: Developer Tools / API
   ServiceName: Cubic Corporation
 layout: finops
 meters:
 - aggregation: sum
-  description: Delivered milestones under a Cubic systems contract
-  dimensions:
-  - program
-  - division
-  name: contract_milestones
-  unit: milestone
-- aggregation: max
-  description: Cubic-installed endpoints (fare gates, ATM training systems, etc.)
-  dimensions:
-  - site
-  - region
-  name: deployed_endpoints
-  unit: endpoint
-- aggregation: sum
-  description: API calls within delivered systems (not separately billed; observed for capacity)
+  description: Count of billable API requests
   dimensions:
   - api
-  - tenant
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Cubic Finops
 provider_name: Cubic Corporation
 provider_slug: cubic
 publisher_name: Cubic Corporation
-service_category: Transportation & Defense Systems
+service_category: API
 slug: cubic-finops
 source_filename: cubic-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.cubic.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Cubic Corporation\nproviderId: cubic\npublisherName: Cubic Corporation\nserviceCategory: Transportation & Defense Systems\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Defense\n  - Transportation\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Cubic: contract-priced transit and defense systems with embedded\n  APIs; spend is tracked as project / milestone delivery rather than per-call usage.'\nsources:\n  - https://www.cubic.com/\nnotes: No public pricing. Treat Cubic spend as project-based; reconcile against the contract milestone\n  schedule.\nprinciples:\n  - name: Visibility\n    description: Track\
-  \ Cubic spend through contract milestones and delivered-system commissioning rather\n      than API-call telemetry.\n  - name: Allocation\n    description: Allocate to the transit agency / mission program owning the contract; tag delivered\n      stations / endpoints by route / theater.\n  - name: Optimization\n    description: Negotiate scope at contract milestones; consolidate vendor systems across modes / theaters\n      to reduce duplicate licensing.\n  - name: Accountability\n    description: Program management and finance jointly own the Cubic contract; review milestone burn-down\n      and change-orders quarterly.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Allocation\n      - Reporting and Analytics\n  - name: Quantify Business Value\n    capabilities:\n      - Forecasting\n      - Budgeting\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Workload Optimization\n  - name: Manage the FinOps Practice\n    capabilities:\n      - Invoicing\
-  \ and Chargeback\nbillingModel:\n  pricingCategory: Contract / Milestone\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\n  chargeFrequency: Milestone\nfocusColumns:\n  ServiceName: Cubic Corporation\n  ServiceCategory: Transportation & Defense Systems\n  ProviderName: Cubic Corporation\n  PublisherName: Cubic Corporation\n  InvoiceIssuerName: Cubic Corporation\n  PricingCategory: Custom Contract\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: contract_milestones\n    description: Delivered milestones under a Cubic systems contract\n    unit: milestone\n    aggregation: sum\n    dimensions:\n      - program\n      - division\n  - name: deployed_endpoints\n    description: Cubic-installed endpoints (fare gates, ATM training systems, etc.)\n    unit: endpoint\n    aggregation: max\n    dimensions:\n      - site\n      - region\n  - name: api_requests\n    description: API calls\
-  \ within delivered systems (not separately billed; observed for capacity)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - tenant\napis:\n  - name: Cubic Corporation API\n    baseURL: https://api.cubic.com\n    tags:\n      - Defense\n      - Transportation\n      - Technology\n    serviceName: Cubic Corporation API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Deployed Endpoint\n    metric: billed_cost / deployed_endpoints\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Cubic Corporation\nproviderId: cubic\npublisherName: Cubic Corporation\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Defense\n  - Transportation\n  - Technology\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Cubic Corporation API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Cubic Corporation\n  ServiceCategory: Developer Tools / API\n  ProviderName: Cubic Corporation\n  PublisherName: Cubic Corporation\n  InvoiceIssuerName: Cubic Corporation\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Cubic Corporation API\n    baseURL: https://api.cubic.com\n    tags:\n      - Defense\n      - Transportation\n      - Technology\n    serviceName: Cubic Corporation API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cubic/refs/heads/main/finops/cubic-finops.yml
-sources:
-- https://www.cubic.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Defense
 - Transportation
+- Technology
 - FinOps
+- Cost Management
 - FOCUS
 ---

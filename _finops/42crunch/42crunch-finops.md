@@ -16,79 +16,77 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Tiered Subscription
-description: FOCUS-aligned FinOps for 42Crunch — tiered subscription priced on seats and contracted endpoints, with operation quotas on Free / Single User and unlimited operations on Teams / Enterprise.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the 42Crunch API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: 42Crunch Ltd.
-  PricingCategory: Tiered Subscription
-  PricingUnit: seat-month
+  ChargeCategory: Usage
+  InvoiceIssuerName: 42Crunch
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: 42Crunch
-  PublisherName: 42Crunch Ltd.
-  ServiceCategory: API Security
-  ServiceName: 42Crunch API Security Platform
+  PublisherName: 42Crunch
+  ServiceCategory: Developer Tools / API
+  ServiceName: 42Crunch
 layout: finops
 meters:
 - aggregation: sum
-  description: Active platform user seats per month.
+  description: Count of billable API requests
   dimensions:
-  - plan
-  - role
-  name: seat_month
-  unit: seat
-- aggregation: max
-  description: API endpoints under contract on Teams / Enterprise plans (drives plan minimums and renewal sizing).
-  dimensions:
-  - plan
   - api
-  name: contracted_endpoints
-  unit: endpoint
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: API Audit static-analysis runs (counts against Free/Single User quota; uncapped on Teams/Enterprise).
+  description: Bytes returned over the network in API responses
   dimensions:
-  - plan
   - api
-  name: audit_operations
-  unit: operation
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: API Scan dynamic-test runs.
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - plan
   - api
-  name: scan_operations
-  unit: operation
-- aggregation: sum
-  description: API Contract Generator runs.
-  dimensions:
-  - plan
-  - api
-  name: contract_generator_operations
-  unit: operation
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: 42Crunch Finops
 provider_name: 42Crunch
 provider_slug: 42crunch
-publisher_name: 42Crunch Ltd.
-service_category: API Security
+publisher_name: 42Crunch
+service_category: API
 slug: 42crunch-finops
 source_filename: 42crunch-finops.yml
 source_heading: FinOps Profile
-source_url: https://42crunch.com/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: 42Crunch\nproviderId: 42crunch\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - API Security\n  - DevSecOps\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for 42Crunch — tiered subscription priced on seats and contracted endpoints,\n  with operation quotas on Free / Single User and unlimited operations on Teams / Enterprise.\nsources:\n  - https://42crunch.com/pricing/\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: 42Crunch Ltd.\nserviceCategory: API Security\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n\
-  \    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: 42Crunch API Security Platform\n  ServiceCategory: API Security\n  ProviderName: 42Crunch\n  PublisherName: 42Crunch Ltd.\n  InvoiceIssuerName: 42Crunch Ltd.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingCategory: Tiered Subscription\n  PricingUnit: seat-month\nmeters:\n  - name: seat_month\n    description: Active platform user seats per month.\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - plan\n      - role\n  - name: contracted_endpoints\n    description: API endpoints under contract on Teams / Enterprise plans (drives plan minimums and renewal\n      sizing).\n    unit: endpoint\n    aggregation: max\n    dimensions:\n      - plan\n      - api\n  - name: audit_operations\n    description: API Audit static-analysis runs (counts against Free/Single User quota; uncapped on Teams/Enterprise).\n    unit: operation\n    aggregation: sum\n    dimensions:\n      - plan\n      - api\n\
-  \  - name: scan_operations\n    description: API Scan dynamic-test runs.\n    unit: operation\n    aggregation: sum\n    dimensions:\n      - plan\n      - api\n  - name: contract_generator_operations\n    description: API Contract Generator runs.\n    unit: operation\n    aggregation: sum\n    dimensions:\n      - plan\n      - api\nprinciples:\n  - name: Visibility\n    description: Use the 42Crunch SaaS platform dashboards to track operations consumed vs plan ceiling\n      and contracted-endpoint utilization.\n  - name: Allocation\n    description: Tag APIs by team / business unit in the platform to attribute operation counts and endpoint\n      coverage to the responsible product groups.\n  - name: Optimization\n    description: Reduce redundant scans by gating CI/CD runs to changed contracts; right-size the contracted\n      endpoint count at renewal rather than provisioning Teams/Enterprise above actual API surface.\n  - name: Accountability\n    description: AppSec or Platform\
-  \ Security team owns the subscription; product engineering owners are\n      accountable for keeping their APIs inside the contracted endpoint count.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: 42Crunch\nproviderId: 42crunch\npublisherName: 42Crunch\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Security\n  - Platform\n  - Scanning\n  - Security\n  - OpenAPI\n  - DevSecOps\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the 42Crunch API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: 42Crunch\n  ServiceCategory: Developer Tools / API\n  ProviderName: 42Crunch\n  PublisherName: 42Crunch\n  InvoiceIssuerName: 42Crunch\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
+  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: 42Crunch API Security Audit\n    baseURL: ''\n    tags:\n      - API Security\n      - Static Analysis\n      - OpenAPI\n      - Vulnerability Scanning\n    serviceName: 42Crunch API Security Audit\n    serviceCategory: API\n  - name: 42Crunch API Scan\n    baseURL: ''\n    tags:\n      - API Security\n      - Dynamic Testing\n      - DAST\n      - Contract Testing\n    serviceName: 42Crunch API Scan\n    serviceCategory: API\n  - name: 42Crunch API Protection\n    baseURL: ''\n    tags:\n      - API Security\n      - Runtime Protection\n      - Firewall\n      - API Gateway\n    serviceName: 42Crunch API Protection\n    serviceCategory: API\n  - name: 42Crunch API Conformance Scan Jobs Manager\n   \
+  \ baseURL: ''\n    tags:\n      - API Security\n      - Kubernetes\n      - Conformance Scanning\n      - DevSecOps\n    serviceName: 42Crunch API Conformance Scan Jobs Manager\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/42crunch/refs/heads/main/finops/42crunch-finops.yml
-sources:
-- https://42crunch.com/pricing/
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
 - API Security
+- Platform
+- Scanning
+- Security
+- OpenAPI
 - DevSecOps
 - FinOps
+- Cost Management
 - FOCUS
 ---

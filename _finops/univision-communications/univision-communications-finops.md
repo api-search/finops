@@ -7,54 +7,80 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contract
-description: TelevisaUnivision does not expose a metered API billing surface. Buyer-side spend is ad inventory paid via insertion-orders or programmatic auction; partner-side access is contracted. FinOps maps to advertising and distribution spend rather than per-API-call.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the TelevisaUnivision (Univision Communications) API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: TelevisaUnivision, Inc.
-  ProviderName: TelevisaUnivision
-  PublisherName: TelevisaUnivision, Inc.
-  ServiceCategory: Media and Advertising
-  ServiceName: TelevisaUnivision
+  ChargeCategory: Usage
+  InvoiceIssuerName: TelevisaUnivision (Univision Communications)
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: TelevisaUnivision (Univision Communications)
+  PublisherName: TelevisaUnivision (Univision Communications)
+  ServiceCategory: Developer Tools / API
+  ServiceName: TelevisaUnivision (Univision Communications)
 layout: finops
 meters:
 - aggregation: sum
-  description: Ad inventory bought through insertion-orders or programmatic auction across TelevisaUnivision properties (TV, radio, ViX streaming, digital).
+  description: Count of billable API requests
   dimensions:
-  - property
-  - format
-  - daypart
-  name: ad_insertion_order
-  unit: varies
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Distribution / partner agreement covering content syndication or platform integration.
-  name: partner_agreement
-  unit: varies
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Univision Communications Finops
 provider_name: TelevisaUnivision (Univision Communications)
 provider_slug: univision-communications
-publisher_name: TelevisaUnivision, Inc.
-service_category: Media and Advertising
+publisher_name: TelevisaUnivision (Univision Communications)
+service_category: API
 slug: univision-communications-finops
 source_filename: univision-communications-finops.yml
 source_heading: FinOps Profile
-source_url: https://corporate.univision.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: TelevisaUnivision (Univision Communications)\nproviderId: univision-communications\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Media\n  - Streaming\n  - Advertising\n  - FinOps\n  - FOCUS\n  - B2B\ndescription: TelevisaUnivision does not expose a metered API billing surface. Buyer-side spend is\n  ad inventory paid via insertion-orders or programmatic auction; partner-side access is contracted.\n  FinOps maps to advertising and distribution spend rather than per-API-call.\nsources:\n  - https://corporate.univision.com\nnotes: No public usage-based API billing exists. This artifact captures the contractual surface only.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
-  publisherName: TelevisaUnivision, Inc.\nserviceCategory: Media and Advertising\nbillingModel:\n  pricingCategory: Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: TelevisaUnivision\n  ServiceCategory: Media and Advertising\n  ProviderName: TelevisaUnivision\n  PublisherName: TelevisaUnivision, Inc.\n  InvoiceIssuerName: TelevisaUnivision, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: ad_insertion_order\n    description: Ad inventory bought through insertion-orders or programmatic auction across TelevisaUnivision\n      properties (TV, radio, ViX streaming, digital).\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - property\n      - format\n      - daypart\n  - name: partner_agreement\n    description: Distribution / partner agreement covering content syndication or platform integration.\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n\
-  \    description: API consumption is not separately metered. Track ad delivery and partner integration\n      volume against insertion-order or distribution-agreement targets.\n  - name: Allocation\n    description: Allocate spend at the campaign or partnership level, typically already aligned with\n      a marketing or distribution business owner.\n  - name: Optimization\n    description: Optimization happens at the buy level - daypart selection, programmatic vs direct,\n      property mix - rather than per-API-call.\n  - name: Accountability\n    description: Assign ownership to the campaign manager (buy-side) or partnership owner (distribution-side);\n      FinOps signals are the post-campaign performance and partner-usage reports.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: TelevisaUnivision (Univision Communications)\nproviderId: univision-communications\npublisherName: TelevisaUnivision (Univision Communications)\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Media\n  - Streaming\n  - Hispanic\n  - Advertising\n  - Television\n  - Radio\n  - Content\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the TelevisaUnivision (Univision Communications) API surface.\n  Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting\n  across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering,\
+  \ product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n\
+  \      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: TelevisaUnivision (Univision Communications)\n  ServiceCategory: Developer Tools / API\n  ProviderName: TelevisaUnivision (Univision Communications)\n  PublisherName: TelevisaUnivision (Univision Communications)\n  InvoiceIssuerName: TelevisaUnivision (Univision Communications)\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API\
+  \ requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: ViX Streaming Platform\n    baseURL: ''\n    tags:\n      - Streaming\n      - Video\n      - Spanish Language\n      - OTT\n      - CTV\n    serviceName: ViX Streaming Platform\n    serviceCategory: API\n  - name: TelevisaUnivision Advertising Platform\n    baseURL: ''\n    tags:\n      - Advertising\n      - Programmatic\n      - CTV\n      - Data\n      - Audiences\n    serviceName: TelevisaUnivision Advertising Platform\n    serviceCategory:\
+  \ API\n  - name: Uforia Audio Platform\n    baseURL: ''\n    tags:\n      - Audio\n      - Radio\n      - Streaming\n      - Hispanic\n    serviceName: Uforia Audio Platform\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/univision-communications/refs/heads/main/finops/univision-communications-finops.yml
-sources:
-- https://corporate.univision.com
+sources: []
 specification: FinOps Framework
 tags:
 - Media
 - Streaming
+- Hispanic
 - Advertising
+- Television
+- Radio
+- Content
 - FinOps
+- Cost Management
 - FOCUS
-- B2B
 ---

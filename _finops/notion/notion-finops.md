@@ -15,44 +15,81 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Per-Seat Subscription
-description: FOCUS-aligned FinOps for Notion.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Notion API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Notion
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Notion
   PublisherName: Notion
-  ServiceCategory: Productivity
+  ServiceCategory: Developer Tools / API
   ServiceName: Notion
 layout: finops
 meters:
-- aggregation: max
-  dimensions:
-  - plan
-  name: member_seats
-  unit: seat-month
 - aggregation: sum
-  name: ai_credits
-  unit: credit
-- aggregation: max
-  name: external_guests
-  unit: guest-month
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Notion Finops
 provider_name: Notion
 provider_slug: notion
 publisher_name: Notion
-service_category: Productivity
+service_category: API
 slug: notion-finops
 source_filename: notion-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.notion.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Notion\nproviderId: notion\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Productivity\ndescription: FOCUS-aligned FinOps for Notion.\nsources:\n  - https://www.notion.com/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Notion\nserviceCategory: Productivity\nbillingModel:\n  pricingCategory: Per-Seat Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Notion\n  ServiceCategory: Productivity\n  ProviderName: Notion\n  PublisherName: Notion\n  BillingCurrency: USD\nmeters:\n  - name: member_seats\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - plan\n  -\
-  \ name: ai_credits\n    unit: credit\n    aggregation: sum\n  - name: external_guests\n    unit: guest-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track Notion consumption monthly via admin/billing exports.\n  - name: Allocation\n    description: Tag seats/usage to teams or cost centers for chargeback.\n  - name: Optimization\n    description: Right-size tier and seat count quarterly; reclaim inactive seats.\n  - name: Accountability\n    description: Set spend alerts and renew at observed active utilization.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Notion\nproviderId: notion\npublisherName: Notion\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Collaboration\n  - Database\n  - Ideas\n  - Notes\n  - Productivity\n  - Projects\n  - T1\n  - Tasks\n  - Wiki\n  - Workspace\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Notion API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Notion\n  ServiceCategory: Developer Tools / API\n  ProviderName: Notion\n  PublisherName: Notion\n  InvoiceIssuerName: Notion\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Notion API\n    baseURL: ''\n    tags:\n      - Collaboration\n      - Ideas\n      - Projects\n      - Tasks\n    serviceName: Notion API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/notion/refs/heads/main/finops/notion-finops.yml
-sources:
-- https://www.notion.com/pricing
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Collaboration
+- Database
+- Ideas
+- Notes
 - Productivity
+- Projects
+- T1
+- Tasks
+- Wiki
+- Workspace
+- FinOps
+- Cost Management
+- FOCUS
 ---

@@ -17,78 +17,75 @@ billing_model:
   billingFrequency: Monthly
   chargeCategories:
   - Usage
+  - Purchase
   - Tax
-  - Adjustment
-  - Refund
   - Credit
+  - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Bundled Banking Fees
-description: 'FOCUS-aligned FinOps shape for Bank of America CashPro: API access is bundled into a corporate banking / treasury services agreement, so FinOps focuses on per-transaction banking fees (wire, ACH, FX margin) rather than per-API-call charges. Public meter values are not available.'
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Bank of America API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Bank of America, N.A.
-  PricingCategory: Bundled Banking Fees
-  PricingUnit: transaction
+  InvoiceIssuerName: Bank of America
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Bank of America
-  PublisherName: Bank of America Corporation
-  ServiceCategory: Corporate Banking / Treasury Services
-  ServiceName: Bank of America CashPro
+  PublisherName: Bank of America
+  ServiceCategory: Developer Tools / API
+  ServiceName: Bank of America
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of payment instructions submitted (wires, ACH, check, RTP, etc.)
+  description: Count of billable API requests
   dimensions:
-  - payment_type
-  - originating_account
-  - business_unit
-  name: payment_transactions
-  unit: transaction
-- aggregation: sum
-  description: Settled payment value (separate from per-transaction fees)
-  dimensions:
-  - payment_type
-  - currency
-  - originating_account
-  name: payment_volume
-  unit: USD
-- aggregation: sum
-  description: FX-converted volume; pricing is via spread/margin, not per-API-call fee
-  dimensions:
-  - currency_pair
-  - originating_account
-  name: fx_volume
-  unit: USD
-- aggregation: sum
-  description: Balance and statement API calls; included with the CashPro relationship
-  dimensions:
-  - account
   - api
-  name: balance_inquiries
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Bank Of America Finops
 provider_name: Bank of America
 provider_slug: bank-of-america
-publisher_name: Bank of America Corporation
-service_category: Corporate Banking / Treasury Services
+publisher_name: Bank of America
+service_category: API
 slug: bank-of-america-finops
 source_filename: bank-of-america-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.bankofamerica.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Bank of America\nproviderId: bank-of-america\npublisherName: Bank of America Corporation\nserviceCategory: Corporate Banking / Treasury Services\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Banking\n  - Corporate Banking\n  - Treasury\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps shape for Bank of America CashPro: API access is bundled into a corporate\n  banking / treasury services agreement, so FinOps focuses on per-transaction banking fees (wire, ACH,\n  FX margin) rather than per-API-call charges. Public meter values are not available.'\nnotes: No public rate card. Replace meter prices with the customer's negotiated CashPro fee schedule\n\
-  \  once available.\nsources:\n  - https://developer.bankofamerica.com/\n  - https://business.bofa.com/en-us/content/cashpro.html\nprinciples:\n  - name: Visibility\n    description: Pull statements and transaction details via the CashPro APIs to attribute banking fees\n      back to the originating business unit.\n  - name: Allocation\n    description: Allocate wire, ACH, lockbox, and FX fees by originating account, business unit, and payment\n      type using the structured payment metadata returned by the API.\n  - name: Optimization\n    description: Optimize payment-rail mix (ACH vs wire vs same-day ACH vs RTP) based on cost vs settlement-time\n      requirements; consolidate FX across business units to negotiate tighter spreads.\n  - name: Accountability\n    description: Assign a corporate treasury owner who reviews monthly account-analysis statements and\n      reconciles fee categories to internal cost centers.\nbillingModel:\n  pricingCategory: Bundled Banking Fees\n  billingFrequency:\
-  \ Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Tax\n    - Adjustment\n    - Refund\n    - Credit\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Bank of America CashPro\n  ServiceCategory: Corporate Banking / Treasury Services\n  ProviderName: Bank of America\n  PublisherName: Bank of America Corporation\n  InvoiceIssuerName: Bank of America, N.A.\n  PricingCategory: Bundled Banking Fees\n  PricingUnit: transaction\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: payment_transactions\n    description: Count of payment instructions submitted (wires, ACH, check, RTP, etc.)\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - payment_type\n      - originating_account\n      - business_unit\n  - name: payment_volume\n    description: Settled payment value (separate from per-transaction fees)\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - payment_type\n      - currency\n      - originating_account\n\
-  \  - name: fx_volume\n    description: FX-converted volume; pricing is via spread/margin, not per-API-call fee\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - currency_pair\n      - originating_account\n  - name: balance_inquiries\n    description: Balance and statement API calls; included with the CashPro relationship\n    unit: request\n    aggregation: sum\n    dimensions:\n      - account\n      - api\napis:\n  - name: Bank of America CashPro API\n    baseURL: https://api.bankofamerica.com/cashpro/v1\n    tags:\n      - Accounts\n      - Balances\n      - Banking\n      - Corporate Banking\n      - Payments\n      - Statements\n      - Treasury\n    serviceName: Bank of America CashPro API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Payment Transaction\n    metric: total_payment_fees / payment_transactions\n    target: minimize via rail-mix optimization\n  - name: FX Margin Rate\n    metric: fx_margin_revenue / fx_volume\n    target: negotiate downward\
-  \ at relationship review\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Bank of America\nproviderId: bank-of-america\npublisherName: Bank of America\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Banking\n  - Corporate Banking\n  - Finance\n  - Payments\n  - Treasury\n  - CashPro\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Bank of America API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
+  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Bank of America\n  ServiceCategory: Developer Tools / API\n  ProviderName: Bank of America\n  PublisherName: Bank of America\n  InvoiceIssuerName: Bank of America\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the\
+  \ network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Bank of America CashPro API\n    baseURL: https://api.bankofamerica.com/cashpro/v1\n    tags:\n      - Accounts\n      - Balances\n      - Banking\n      - Corporate Banking\n      - Payments\n      - Statements\n      - Treasury\n    serviceName: Bank of America CashPro API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/bank-of-america/refs/heads/main/finops/bank-of-america-finops.yml
-sources:
-- https://developer.bankofamerica.com/
-- https://business.bofa.com/en-us/content/cashpro.html
+sources: []
 specification: FinOps Framework
 tags:
 - Banking
 - Corporate Banking
+- Finance
+- Payments
 - Treasury
+- CashPro
 - FinOps
+- Cost Management
 - FOCUS
 ---

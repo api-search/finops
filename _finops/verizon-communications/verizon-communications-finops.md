@@ -12,57 +12,75 @@ billing_model:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Contract / Custom
-description: FOCUS-aligned FinOps shape for Verizon Communications API products. Verizon does not publish self-service rates for its Network APIs, ThingSpace IoT, 5G Edge, TM Forum, or Voice (CPaaS) APIs; billing is governed by the enterprise master service agreement and per-product schedules.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Verizon Communications API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Verizon Communications, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Verizon Communications
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Verizon Communications
-  PublisherName: Verizon Communications, Inc.
-  ServiceCategory: Telecommunications
-  ServiceName: Verizon Communications APIs
+  PublisherName: Verizon Communications
+  ServiceCategory: Developer Tools / API
+  ServiceName: Verizon Communications
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - api_product
-  - environment
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
-- aggregation: max
-  dimensions:
-  - api_product
-  - region
-  name: connected_devices
-  unit: device-month
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - direction
+  - api
   - region
-  name: voice_minutes
-  unit: minute
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Verizon Communications Finops
 provider_name: Verizon Communications
 provider_slug: verizon-communications
-publisher_name: Verizon Communications, Inc.
-service_category: Telecommunications
+publisher_name: Verizon Communications
+service_category: API
 slug: verizon-communications-finops
 source_filename: verizon-communications-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.verizon.com/business/products/internet-of-things/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Verizon Communications\nproviderId: verizon-communications\npublisherName: Verizon Communications, Inc.\nserviceCategory: Telecommunications\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Telecommunications\n  - Network APIs\n  - IoT\n  - 5G\ndescription: FOCUS-aligned FinOps shape for Verizon Communications API products. Verizon does not\n  publish self-service rates for its Network APIs, ThingSpace IoT, 5G Edge, TM Forum, or Voice (CPaaS)\n  APIs; billing is governed by the enterprise master service agreement and per-product schedules.\nsources:\n  - https://www.verizon.com/business/products/internet-of-things/\nnotes: No public unit\
-  \ prices or invoice line definitions were available at reconciliation time.\n  The meter list captures the categories Verizon contracts typically bill against.\nbillingModel:\n  pricingCategory: Contract / Custom\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Verizon Communications APIs\n  ServiceCategory: Telecommunications\n  ProviderName: Verizon Communications\n  PublisherName: Verizon Communications, Inc.\n  InvoiceIssuerName: Verizon Communications, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_product\n      - environment\n  - name: connected_devices\n    unit: device-month\n    aggregation: max\n    dimensions:\n      - api_product\n      - region\n  - name: voice_minutes\n    unit: minute\n    aggregation: sum\n    dimensions:\n      - direction\n      - region\nprinciples:\n \
-  \ - name: Visibility\n    description: Verizon does not expose a public usage API for these products; consumption is reported\n      through the Verizon Enterprise Center / My Business invoice and the per-product portals (e.g.\n      ThingSpace dashboard).\n  - name: Allocation\n    description: Tag spend at the contract / billing-account level using the cost-center mapping in\n      My Business; sub-account splits typically require a separate billing account from Verizon.\n  - name: Optimization\n    description: Optimization levers are commercial — committed-volume rate cards in the master\n      agreement, retiring unused SIMs / lines, and consolidating ThingSpace device pools.\n  - name: Accountability\n    description: Spend ownership sits with the named Verizon Business account executive on the\n      consumer side; finance reconciles against the My Business monthly invoice.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Verizon Communications\nproviderId: verizon-communications\npublisherName: Verizon Communications\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Telecommunications\n  - Wireless\n  - Network APIs\n  - IoT\n  - 5G\n  - Enterprise\n  - Identity\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Verizon Communications API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
+  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
+  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Verizon Communications\n  ServiceCategory: Developer Tools / API\n  ProviderName: Verizon Communications\n  PublisherName: Verizon Communications\n  InvoiceIssuerName: Verizon Communications\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n\
+  \  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Verizon Network APIs\n    baseURL: ''\n    tags:\n      - Network APIs\n      - Authentication\n      - Fraud Prevention\n      - Identity\n      - SIM Swap\n      - Number Verification\n    serviceName: Verizon Network APIs\n    serviceCategory: API\n  - name: Verizon ThingSpace IoT API\n    baseURL: ''\n    tags:\n      - IoT\n      - Device Management\n      - Connectivity\n      - Wireless\n    serviceName: Verizon ThingSpace IoT API\n    serviceCategory: API\n  - name: Verizon 5G Edge API\n    baseURL: ''\n    tags:\n      - 5G\n      - Edge Computing\n      - MEC\n     \
+  \ - Ultra-Low Latency\n    serviceName: Verizon 5G Edge API\n    serviceCategory: API\n  - name: Verizon TM Forum Service Management APIs\n    baseURL: ''\n    tags:\n      - TM Forum\n      - ITIL\n      - Service Management\n      - Enterprise\n      - B2B\n    serviceName: Verizon TM Forum Service Management APIs\n    serviceCategory: API\n  - name: Verizon Voice API (CPaaS)\n    baseURL: ''\n    tags:\n      - CPaaS\n      - Voice\n      - Contact Center\n      - IVR\n      - Communications\n    serviceName: Verizon Voice API (CPaaS)\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/verizon-communications/refs/heads/main/finops/verizon-communications-finops.yml
-sources:
-- https://www.verizon.com/business/products/internet-of-things/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Telecommunications
+- Wireless
 - Network APIs
 - IoT
 - 5G
+- Enterprise
+- Identity
+- FinOps
+- Cost Management
+- FOCUS
 ---

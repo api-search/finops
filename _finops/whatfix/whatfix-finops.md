@@ -8,66 +8,83 @@ aligned_with:
 api_specs:
 - filename: whatfix-openapi.yml
   format: yaml
-  label: Whatfix API
-  slug: whatfix-api
+  label: Whatfix REST API
+  slug: whatfix-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/whatfix/refs/heads/main/openapi/whatfix-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription + Per-User
-description: FinOps shape for Whatfix is a SaaS platform license - flat platform fee plus user-license fees, with employee-facing apps billed by total licensed users and customer-facing apps billed by monthly active users.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Whatfix API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Whatfix Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Whatfix
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Whatfix
-  PublisherName: Whatfix Inc.
-  ServiceCategory: Digital Adoption Platform
+  PublisherName: Whatfix
+  ServiceCategory: Developer Tools / API
   ServiceName: Whatfix
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - product_line
+  - api
+  - endpoint
   - tier
-  name: platform_subscription
-  unit: month
-- aggregation: max
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - product_line
-  - tier
-  name: licensed_users_employee
-  unit: seat
-- aggregation: max
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - product_line
+  - api
+  - endpoint
   - tier
-  name: monthly_active_users_customer
-  unit: monthly_active_user
+  name: compute_seconds
+  unit: second
 name: Whatfix Finops
 provider_name: Whatfix
 provider_slug: whatfix
-publisher_name: Whatfix Inc.
-service_category: Digital Adoption Platform
+publisher_name: Whatfix
+service_category: API
 slug: whatfix-finops
 source_filename: whatfix-finops.yml
 source_heading: FinOps Profile
-source_url: https://whatfix.com/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Whatfix\nproviderId: whatfix\npublisherName: Whatfix Inc.\nserviceCategory: Digital Adoption Platform\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Digital Adoption\n  - SaaS Management\n  - FinOps\n  - FOCUS\n  - Contact Sales\ndescription: FinOps shape for Whatfix is a SaaS platform license - flat platform fee plus user-license fees, with employee-facing apps billed by total licensed users and customer-facing apps billed by monthly active users.\nsources:\n  - https://whatfix.com/pricing/\nnotes: Public pricing page confirms the flat-fee + per-user model but provides no dollar figures. Meters reflect the documented\
-  \ billing shape; unit prices remain in the contract.\nbillingModel:\n  pricingCategory: Subscription + Per-User\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: Whatfix\n  ServiceCategory: Digital Adoption Platform\n  ProviderName: Whatfix\n  PublisherName: Whatfix Inc.\n  InvoiceIssuerName: Whatfix Inc.\n  BillingCurrency: USD\nmeters:\n  - name: platform_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product_line\n      - tier\n  - name: licensed_users_employee\n    unit: seat\n    aggregation: max\n    dimensions:\n      - product_line\n      - tier\n  - name: monthly_active_users_customer\n    unit: monthly_active_user\n    aggregation: max\n    dimensions:\n      - product_line\n      - tier\nprinciples:\n  - name: Visibility\n    description: Use the Whatfix admin / Product Analytics dashboards to track active-user counts feeding the MAU-billed lines,\
-  \ and reconcile against the order form for licensed-seat lines.\n  - name: Allocation\n    description: Allocate by product line (DAP web, mobile, OS, Product Analytics) and by tenant / business unit; tag MAUs in customer-facing apps to the consuming product.\n  - name: Optimization\n    description: Right-size by trimming unused licensed seats at renewal, and by gating which customer surfaces actually count toward MAU billing.\n  - name: Accountability\n    description: Procurement / IT owns the master subscription and renewal; product owners track MAU drift since they directly drive variable cost.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Whatfix\nproviderId: whatfix\npublisherName: Whatfix\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Digital Adoption\n  - In-App Guidance\n  - Onboarding\n  - Analytics\n  - Self-Help\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Whatfix API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Whatfix\n  ServiceCategory: Developer Tools / API\n  ProviderName: Whatfix\n  PublisherName: Whatfix\n  InvoiceIssuerName: Whatfix\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n  \
+  \  dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Whatfix REST API\n    baseURL: https://whatfix.com/api/v1\n    tags:\n      - Digital Adoption\n      - Analytics\n      - REST\n    serviceName: Whatfix REST API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/whatfix/refs/heads/main/finops/whatfix-finops.yml
-sources:
-- https://whatfix.com/pricing/
+sources: []
 specification: FinOps Framework
 tags:
 - Digital Adoption
-- SaaS Management
+- In-App Guidance
+- Onboarding
+- Analytics
+- Self-Help
 - FinOps
+- Cost Management
 - FOCUS
-- Contact Sales
 ---

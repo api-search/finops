@@ -9,51 +9,72 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
-  pricingCategory: Custom Contract
-description: FOCUS-aligned FinOps shell for East West Bancorp; treasury-services integrations are billed through relationship-banking agreements rather than a public consumption meter.
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the East West Bancorp API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: East West Bank
+  ChargeCategory: Usage
+  InvoiceIssuerName: East West Bancorp
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: East West Bancorp
-  PublisherName: East West Bank
-  ServiceCategory: Banking
-  ServiceName: East West Bancorp API
+  PublisherName: East West Bancorp
+  ServiceCategory: Developer Tools / API
+  ServiceName: East West Bancorp
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - product
-  - account
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
-  name: ach_transactions
-  unit: transaction
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  name: wire_transactions
-  unit: transaction
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: East West Bancorp Finops
 provider_name: East West Bancorp
 provider_slug: east-west-bancorp
-publisher_name: East West Bank
-service_category: Banking
+publisher_name: East West Bancorp
+service_category: API
 slug: east-west-bancorp-finops
 source_filename: east-west-bancorp-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.eastwestbank.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: East West Bancorp\nproviderId: east-west-bancorp\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Banking\n  - Financial Services\ndescription: 'FOCUS-aligned FinOps shell for East West Bancorp; treasury-services integrations are billed\n  through relationship-banking agreements rather than a public consumption meter.'\nnotes: No public API pricing or billing exists. Reconcile FOCUS columns and meters against actual treasury-services\n  fee schedules once available.\nsources:\n  - https://www.eastwestbank.com\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: East West Bank\nserviceCategory: Banking\nbillingModel:\n  pricingCategory:\
-  \ Custom Contract\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\nfocusColumns:\n  ServiceName: East West Bancorp API\n  ServiceCategory: Banking\n  ProviderName: East West Bancorp\n  PublisherName: East West Bank\n  InvoiceIssuerName: East West Bank\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - product\n      - account\n  - name: ach_transactions\n    unit: transaction\n    aggregation: sum\n  - name: wire_transactions\n    unit: transaction\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Pull treasury-services analysis statements; map to FOCUS-formatted records.\n  - name: Allocation\n    description: Tag any API-driven payment by initiating business unit and cost center.\n  - name: Optimization\n    description: Negotiate volume tiers in account-analysis pricing; consolidate banking relationships.\n  - name: Accountability\n\
-  \    description: Treasury operations owns reconciliation of monthly bank-fee charges.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: East West Bancorp\nproviderId: east-west-bancorp\npublisherName: East West Bancorp\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Banking\n  - Financial Services\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the East West Bancorp API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: East West Bancorp\n  ServiceCategory: Developer Tools / API\n  ProviderName: East West Bancorp\n  PublisherName: East West Bancorp\n  InvoiceIssuerName: East West Bancorp\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: East West Bancorp API\n    baseURL: https://api.eastwestbank.com\n    tags:\n      - Banking\n      - Financial Services\n    serviceName: East West Bancorp API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/east-west-bancorp/refs/heads/main/finops/east-west-bancorp-finops.yml
-sources:
-- https://www.eastwestbank.com
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Banking
 - Financial Services
+- FinOps
+- Cost Management
+- FOCUS
 ---

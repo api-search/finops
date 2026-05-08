@@ -7,64 +7,69 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Subscription
-description: 'FOCUS-aligned FinOps placeholder for Heartland Express: shipper / 3PL integration bundled into the broader transportation services contract. Meters describe shipment-tendering and tracking volume for allocation across business units.'
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Heartland Express API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Heartland Express, Inc.
-  PricingCategory: Subscription
-  PricingUnit: partner-agreement
+  ChargeCategory: Usage
+  InvoiceIssuerName: Heartland Express
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Heartland Express
-  PublisherName: Heartland Express, Inc.
-  ServiceCategory: Transportation / Logistics Carrier Partner API
-  ServiceName: Heartland Express API
+  PublisherName: Heartland Express
+  ServiceCategory: Developer Tools / API
+  ServiceName: Heartland Express
 layout: finops
 meters:
 - aggregation: sum
-  description: Partner-integration request volume (allocation meter)
+  description: Count of billable API requests
   dimensions:
-  - partner
+  - api
   - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Loads tendered to Heartland Express via the API
+  description: Bytes returned over the network in API responses
   dimensions:
-  - partner
-  - lane
-  name: loads_tendered
-  unit: load
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Shipment status / tracking events delivered
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - partner
-  - event_type
-  name: tracking_events
-  unit: event
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Heartland Express Finops
 provider_name: Heartland Express
 provider_slug: heartland-express
-publisher_name: Heartland Express, Inc.
-service_category: Transportation / Logistics Carrier Partner API
+publisher_name: Heartland Express
+service_category: API
 slug: heartland-express-finops
 source_filename: heartland-express-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.heartlandexpress.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Heartland Express\nproviderId: heartland-express\npublisherName: Heartland Express, Inc.\nserviceCategory: Transportation / Logistics Carrier Partner API\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Trucking\n  - Transportation\n  - Logistics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps placeholder for Heartland Express: shipper / 3PL integration\n  bundled into the broader transportation services contract. Meters describe shipment-tendering and\n  tracking volume for allocation across business units.'\nnotes: No public commercial model is published for the API. Reconcile against\
-  \ the shipper agreement.\nsources:\n  - https://www.heartlandexpress.com/\nprinciples:\n  - name: Visibility\n    description: Track API request volume and shipment events via the Heartland partner gateway\n      logs; correlate with tendered loads and invoiced freight.\n  - name: Allocation\n    description: Allocate integration cost across shipper business units and lanes using the calling\n      partner / TMS identifier.\n  - name: Optimization\n    description: Use webhook-driven status updates rather than high-frequency polling; batch\n      tender/accept and EDI 214 status messages.\n  - name: Accountability\n    description: Designate a partner-integration owner per shipper; review API utilization quarterly\n      against tendered-load volumes.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning\
-  \ and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Heartland Express API\n  ServiceCategory: Transportation / Logistics Carrier Partner API\n  ProviderName: Heartland Express\n  PublisherName: Heartland Express, Inc.\n  InvoiceIssuerName: Heartland Express, Inc.\n  PricingCategory: Subscription\n\
-  \  PricingUnit: partner-agreement\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: api_requests\n    description: Partner-integration request volume (allocation meter)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - partner\n      - endpoint\n  - name: loads_tendered\n    description: Loads tendered to Heartland Express via the API\n    unit: load\n    aggregation: sum\n    dimensions:\n      - partner\n      - lane\n  - name: tracking_events\n    description: Shipment status / tracking events delivered\n    unit: event\n    aggregation: sum\n    dimensions:\n      - partner\n      - event_type\napis:\n  - name: Heartland Express API\n    baseURL: https://api.heartlandexpress.com\n    tags:\n      - Trucking\n      - Transportation\n      - Logistics\n    serviceName: Heartland Express API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Load Tendered\n    metric: billed_cost / loads_tendered\n    target: TBD\n  - name: Cost per Tracking\
-  \ Event\n    metric: billed_cost / tracking_events\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Heartland Express\nproviderId: heartland-express\npublisherName: Heartland Express\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Trucking\n  - Transportation\n  - Logistics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Heartland Express API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Heartland Express\n  ServiceCategory: Developer Tools / API\n  ProviderName: Heartland Express\n  PublisherName: Heartland Express\n  InvoiceIssuerName: Heartland Express\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Heartland Express API\n    baseURL: https://api.heartlandexpress.com\n    tags:\n      - Trucking\n      - Transportation\n      - Logistics\n    serviceName: Heartland Express API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/heartland-express/refs/heads/main/finops/heartland-express-finops.yml
-sources:
-- https://www.heartlandexpress.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Trucking

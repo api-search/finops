@@ -18,79 +18,65 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  - Refund
-  pricingCategory: Commission / Take Rate (per partner agreement)
-description: FOCUS-aligned FinOps stub for Hilton. Partner-gated; commission and per-booking economics govern the FinOps shape, with rates set in bilateral connectivity agreements.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Hilton API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Hilton Worldwide Holdings Inc.
-  PricingCategory: Commission
-  PricingUnit: booking
+  InvoiceIssuerName: Hilton
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Hilton
-  PublisherName: Hilton Worldwide Holdings Inc.
-  ServiceCategory: Hospitality / Travel
+  PublisherName: Hilton
+  ServiceCategory: Developer Tools / API
   ServiceName: Hilton
 layout: finops
 meters:
 - aggregation: sum
-  description: Reservations confirmed through the partner connectivity API
+  description: Count of billable API requests
   dimensions:
-  - partner_id
-  - brand
-  - property_id
-  - market
-  - rate_code
-  name: bookings
-  unit: booking
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Room nights generated
+  description: Bytes returned over the network in API responses
   dimensions:
-  - partner_id
-  - brand
-  - property_id
-  name: room_nights
-  unit: room-night
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Gross dollar value of confirmed bookings
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - partner_id
-  - brand
-  - property_id
-  name: gross_booking_value
-  unit: USD
-- aggregation: sum
-  description: Commission paid (or due) to the partner
-  dimensions:
-  - partner_id
-  - brand
-  name: commissions
-  unit: USD
-- aggregation: sum
-  description: Hilton Honors points issued or accrued via the partner
-  dimensions:
-  - partner_id
-  - brand
-  name: loyalty_points_issued
-  unit: point
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Hilton Finops
 provider_name: Hilton
 provider_slug: hilton
-publisher_name: Hilton Worldwide Holdings Inc.
-service_category: Hospitality / Travel
+publisher_name: Hilton
+service_category: API
 slug: hilton-finops
 source_filename: hilton-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.hilton.com/en/corporate/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Hilton\nproviderId: hilton\npublisherName: Hilton Worldwide Holdings Inc.\nserviceCategory: Hospitality / Travel\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Hospitality\n  - Hotels\n  - Travel\n  - Reservations\n  - Loyalty\n  - FinOps\n  - FOCUS\nnotes: Hilton's API surface is partner-gated; FinOps for a Hilton integration is typically a take-rate /\n  commission shape (booking commission to OTAs, channel-management fees, loyalty-points reciprocity) plus\n  bilateral partner-program fees. No public price book exists; this stub captures the right meter shape.\ndescription: 'FOCUS-aligned FinOps stub for Hilton. Partner-gated; commission and per-booking economics\n\
-  \  govern the FinOps shape, with rates set in bilateral connectivity agreements.'\nsources:\n  - https://www.hilton.com/en/corporate/\nbillingModel:\n  pricingCategory: Commission / Take Rate (per partner agreement)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: Hilton\n  ServiceCategory: Hospitality / Travel\n  ProviderName: Hilton\n  PublisherName: Hilton Worldwide Holdings Inc.\n  InvoiceIssuerName: Hilton Worldwide Holdings Inc.\n  PricingCategory: Commission\n  PricingUnit: booking\n  BillingCurrency: USD\n  ChargeCategory: Usage\nprinciples:\n  - name: Visibility\n    description: Reconcile booking activity through the partner portal's reporting feeds (booking,\n      cancellation, no-show, loyalty-event events) against Hilton statements.\n  - name: Allocation\n    description: Tag bookings by partner channel, brand, market, and corporate-rate code so commission\n\
-  \      and revenue-share are attributable per business unit.\n  - name: Optimization\n    description: Cost levers are commission renegotiation, parity enforcement, and shifting traffic to\n      lower-commission direct or loyalty channels.\n  - name: Accountability\n    description: Distribution / commercial team owns commission accounts; technology team owns\n      connectivity uptime and 429 / error rates.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Rate Optimization\n      - Workload Optimization\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\n\
-  meters:\n  - name: bookings\n    description: Reservations confirmed through the partner connectivity API\n    unit: booking\n    aggregation: sum\n    dimensions:\n      - partner_id\n      - brand\n      - property_id\n      - market\n      - rate_code\n  - name: room_nights\n    description: Room nights generated\n    unit: room-night\n    aggregation: sum\n    dimensions:\n      - partner_id\n      - brand\n      - property_id\n  - name: gross_booking_value\n    description: Gross dollar value of confirmed bookings\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - partner_id\n      - brand\n      - property_id\n  - name: commissions\n    description: Commission paid (or due) to the partner\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - partner_id\n      - brand\n  - name: loyalty_points_issued\n    description: Hilton Honors points issued or accrued via the partner\n    unit: point\n    aggregation: sum\n    dimensions:\n      - partner_id\n      - brand\n\
-  apis:\n  - name: Hilton Developer API\n    baseURL: https://api.hilton.com\n    tags:\n      - Hospitality\n      - Hotels\n      - Reservations\n      - Loyalty\n    serviceName: Hilton Developer API\n    serviceCategory: Hospitality / Travel\nunitEconomics:\n  - name: Effective Commission Rate\n    metric: commissions / gross_booking_value\n    target: per partner agreement\n  - name: Cost per Booking\n    metric: commissions / bookings\n    target: per partner agreement\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Hilton\nproviderId: hilton\npublisherName: Hilton\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Hospitality\n  - Hotels\n  - Travel\n  - Reservations\n  - Loyalty\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Hilton API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Hilton\n  ServiceCategory: Developer Tools / API\n  ProviderName: Hilton\n  PublisherName: Hilton\n  InvoiceIssuerName: Hilton\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n\
+  \      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Hilton Developer API\n    baseURL: https://api.hilton.com\n    tags:\n      - Hospitality\n      - Hotels\n      - Loyalty\n      - Reservations\n      - Travel\n    serviceName: Hilton Developer API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/hilton/refs/heads/main/finops/hilton-finops.yml
-sources:
-- https://www.hilton.com/en/corporate/
+sources: []
 specification: FinOps Framework
 tags:
 - Hospitality
@@ -99,5 +85,6 @@ tags:
 - Reservations
 - Loyalty
 - FinOps
+- Cost Management
 - FOCUS
 ---

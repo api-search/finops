@@ -7,49 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Mandate
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Advisory Fees / AUM-Based
-description: 'FinOps view of Evercore Inc: no metered SaaS billing surface. Fees are advisory and engagement-based (retainers, success fees, AUM percentages) invoiced per mandate.'
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Evercore Inc API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Evercore Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Evercore Inc
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Evercore Inc
-  PublisherName: Evercore Inc.
-  ServiceCategory: Investment Banking / Advisory
+  PublisherName: Evercore Inc
+  ServiceCategory: Developer Tools / API
   ServiceName: Evercore Inc
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - mandate
-  name: advisory_fees
-  unit: USD
-- aggregation: max
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - account
-  name: aum_basis_points
-  unit: basis_point
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Evercore Finops
 provider_name: Evercore Inc
 provider_slug: evercore
-publisher_name: Evercore Inc.
-service_category: Investment Banking / Advisory
+publisher_name: Evercore Inc
+service_category: API
 slug: evercore-finops
 source_filename: evercore-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.evercore.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Evercore Inc\nproviderId: evercore\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Investment Banking\n  - Advisory\ndescription: 'FinOps view of Evercore Inc: no metered SaaS billing surface. Fees are advisory and engagement-based\n  (retainers, success fees, AUM percentages) invoiced per mandate.'\nsources:\n  - https://www.evercore.com\nnotes: Not a metered API surface; FinOps is contract-tracking against advisory engagement letters.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Evercore Inc.\nserviceCategory: Investment Banking / Advisory\nbillingModel:\n  pricingCategory: Advisory Fees / AUM-Based\n  billingFrequency:\
-  \ Per-Mandate\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Evercore Inc\n  ServiceCategory: Investment Banking / Advisory\n  ProviderName: Evercore Inc\n  PublisherName: Evercore Inc.\n  InvoiceIssuerName: Evercore Inc.\n  BillingCurrency: USD\nmeters:\n  - name: advisory_fees\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - mandate\n  - name: aum_basis_points\n    unit: basis_point\n    aggregation: max\n    dimensions:\n      - account\nprinciples:\n  - name: Visibility\n    description: Track Evercore advisory and AUM fees in your AP/treasury system; reconcile invoices\n      against the engagement letter.\n  - name: Allocation\n    description: Tag fees to the deal, fund, or account they relate to.\n  - name: Optimization\n    description: Negotiate fee caps and success-fee thresholds at engagement-letter signing.\n  - name: Accountability\n    description: Deal sponsor or fund treasurer owns the relationship and approves\
-  \ fee invoices.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Evercore Inc\nproviderId: evercore\npublisherName: Evercore Inc\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Investment Banking\n  - Advisory\n  - Wealth Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Evercore Inc API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Evercore Inc\n  ServiceCategory: Developer Tools / API\n  ProviderName: Evercore Inc\n  PublisherName: Evercore Inc\n  InvoiceIssuerName: Evercore Inc\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Evercore Inc API\n    baseURL: https://api.evercore.com\n    tags:\n      - Investment Banking\n      - Advisory\n      - Wealth Management\n    serviceName: Evercore Inc API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/evercore/refs/heads/main/finops/evercore-finops.yml
-sources:
-- https://www.evercore.com
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Investment Banking
 - Advisory
+- Wealth Management
+- FinOps
+- Cost Management
+- FOCUS
 ---

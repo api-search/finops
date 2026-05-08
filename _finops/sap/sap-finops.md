@@ -31,52 +31,85 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/sap/refs/heads/main/openapi/sap-ai-core-openapi.yml
 billing_model:
-  billingCurrency: USD/EUR/varies
-  billingFrequency: Per-Invoice
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Enterprise Contract (CPEA / BTPEA / PAYG)
-description: FOCUS-aligned FinOps placeholder for SAP. SAP markets a contract- and partner-mediated portfolio (CPEA, BTPEA, pay-as-you-go consumption units) without a public, machine-readable rate card; meters and billing model below are intentionally generic until per-service billing terms can be sourced.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the SAP API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: SAP SE
+  ChargeCategory: Usage
+  InvoiceIssuerName: SAP
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: SAP
-  PublisherName: SAP SE
-  ServiceCategory: Enterprise Software
+  PublisherName: SAP
+  ServiceCategory: Developer Tools / API
   ServiceName: SAP
 layout: finops
 meters:
 - aggregation: sum
-  description: Consumption against the customer's CPEA/BTPEA contract or pay-as-you-go entitlement; reconcile to actual SAP-published meters per service.
+  description: Count of billable API requests
   dimensions:
-  - service
+  - api
+  - endpoint
+  - tier
   - region
-  name: contracted_consumption
-  unit: varies
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Sap Finops
 provider_name: SAP
 provider_slug: sap
-publisher_name: SAP SE
-service_category: Enterprise Software / Cloud Platform
+publisher_name: SAP
+service_category: API
 slug: sap-finops
 source_filename: sap-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.sap.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: SAP\nproviderId: sap\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - SAP\n  - Enterprise\n  - BTP\ndescription: FOCUS-aligned FinOps placeholder for SAP. SAP markets a contract- and partner-mediated portfolio\n  (CPEA, BTPEA, pay-as-you-go consumption units) without a public, machine-readable rate card; meters\n  and billing model below are intentionally generic until per-service billing terms can be sourced.\nsources:\n  - https://www.sap.com\n  - https://store.sap.com\nnotes: SAP corporate pricing and BTP Discovery Center pages are gated against automated fetches; meters\n  and FOCUS columns should be reconciled per product (S/4HANA Cloud, BTP, Ariba, SuccessFactors, Concur,\n  etc.) once published terms are available.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n\
-  \  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: SAP SE\nserviceCategory: Enterprise Software / Cloud Platform\nbillingModel:\n  pricingCategory: Enterprise Contract (CPEA / BTPEA / PAYG)\n  billingFrequency: Per-Invoice\n  billingCurrency: USD/EUR/varies\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: SAP\n  ServiceCategory: Enterprise Software\n  ProviderName: SAP\n  PublisherName: SAP SE\n  InvoiceIssuerName: SAP SE\n  BillingCurrency: USD\nmeters:\n  - name: contracted_consumption\n    description: Consumption against the customer's CPEA/BTPEA contract or pay-as-you-go entitlement;\n      reconcile to actual SAP-published meters per service.\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - service\n      - region\nprinciples:\n  - name: Visibility\n    description: Use SAP for Me and the BTP Cockpit (where applicable) to view\
-  \ consumption against entitlements;\n      detailed line items appear on the SAP invoice and CPEA balance reports.\n  - name: Allocation\n    description: Allocate by SAP global account, subaccount, and directory; map subaccounts to internal\n      cost centers in the BTP cockpit.\n  - name: Optimization\n    description: Track CPEA/BTPEA balance burn, right-size BTP service plans, and prefer reserved capacity\n      where SAP offers it; verify per-service through SAP sales since published rates are limited.\n  - name: Accountability\n    description: Designate a SAP global-account billing owner; reconcile invoices monthly with SAP for\n      Me reports and contract entitlements.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: SAP\nproviderId: sap\npublisherName: SAP\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - BTP\n  - Business Applications\n  - Cloud\n  - Data Management\n  - Enterprise\n  - ERP\n  - Integration\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the SAP API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: SAP\n  ServiceCategory: Developer Tools / API\n  ProviderName: SAP\n  PublisherName: SAP\n  InvoiceIssuerName: SAP\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: SAP Business One Service Layer API\n    baseURL: ''\n    tags:\n      - Business Management\n      - Enterprise\n      - ERP\n    serviceName: SAP Business One Service Layer API\n    serviceCategory: API\n  - name: SAP S/4HANA Cloud API\n    baseURL: ''\n    tags:\n      - Cloud\n      - Enterprise Resource Planning\n      - ERP\n      - S/4HANA\n    serviceName: SAP S/4HANA Cloud API\n    serviceCategory: API\n  - name: SAP SuccessFactors API\n    baseURL: ''\n    tags:\n      - HCM\n      - HR\n      - Human Resources\n      - Talent Management\n    serviceName: SAP SuccessFactors API\n    serviceCategory: API\n  - name: SAP Ariba APIs\n    baseURL: ''\n    tags:\n      - Procurement\n      - Sourcing\n      - Supplier\
+  \ Management\n      - Supply Chain\n    serviceName: SAP Ariba APIs\n    serviceCategory: API\n  - name: SAP Cloud Platform Integration Suite\n    baseURL: ''\n    tags:\n      - Cloud Platform\n      - Integration\n      - iPaaS\n      - Middleware\n    serviceName: SAP Cloud Platform Integration Suite\n    serviceCategory: API\n  - name: SAP Commerce Cloud API\n    baseURL: ''\n    tags:\n      - Commerce\n      - E-Commerce\n      - OCC\n      - Retail\n    serviceName: SAP Commerce Cloud API\n    serviceCategory: API\n  - name: SAP Analytics Cloud API\n    baseURL: ''\n    tags:\n      - Analytics\n      - BI\n      - Business Intelligence\n      - Planning\n    serviceName: SAP Analytics Cloud API\n    serviceCategory: API\n  - name: SAP Concur API\n    baseURL: ''\n    tags:\n      - Concur\n      - Expense Management\n      - Invoice\n      - Travel\n    serviceName: SAP Concur API\n    serviceCategory: API\n  - name: SAP Fieldglass API\n    baseURL: ''\n    tags:\n      - Contingent\
+  \ Workforce\n      - External Workers\n      - Vendor Management\n      - VMS\n    serviceName: SAP Fieldglass API\n    serviceCategory: API\n  - name: SAP BTP Core Services API\n    baseURL: ''\n    tags:\n      - BTP\n      - Cloud Management\n      - Cloud Platform\n      - Platform Services\n    serviceName: SAP BTP Core Services API\n    serviceCategory: API\n  - name: SAP Datasphere API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Data Integration\n      - Data Warehousing\n      - Datasphere\n    serviceName: SAP Datasphere API\n    serviceCategory: API\n  - name: SAP Event Mesh API\n    baseURL: ''\n    tags:\n      - AMQP\n      - Event-Driven\n      - Messaging\n      - MQTT\n    serviceName: SAP Event Mesh API\n    serviceCategory: API\n  - name: SAP Master Data Integration API\n    baseURL: ''\n    tags:\n      - Data Integration\n      - Data Quality\n      - Master Data\n      - MDI\n    serviceName: SAP Master Data Integration API\n    serviceCategory: API\n \
+  \ - name: SAP Signavio Process Manager API\n    baseURL: ''\n    tags:\n      - BPM\n      - BPMN\n      - Process Management\n      - Process Mining\n    serviceName: SAP Signavio Process Manager API\n    serviceCategory: API\n  - name: SAP Document Management Service API\n    baseURL: ''\n    tags:\n      - BTP\n      - CMIS\n      - Content Management\n      - Document Management\n    serviceName: SAP Document Management Service API\n    serviceCategory: API\n  - name: SAP Integration Suite API Management\n    baseURL: ''\n    tags:\n      - API Gateway\n      - API Management\n      - API Proxy\n      - Integration Suite\n    serviceName: SAP Integration Suite API Management\n    serviceCategory: API\n  - name: SAP AI Core API\n    baseURL: ''\n    tags:\n      - AI Core\n      - Artificial Intelligence\n      - BTP\n      - Machine Learning\n    serviceName: SAP AI Core API\n    serviceCategory: API\n  - name: SAP Emarsys Customer Engagement API\n    baseURL: ''\n    tags:\n     \
+  \ - CRM\n      - Customer Engagement\n      - Email Marketing\n      - Marketing Automation\n    serviceName: SAP Emarsys Customer Engagement API\n    serviceCategory: API\n  - name: SAP Build Work Zone API\n    baseURL: ''\n    tags:\n      - BTP\n      - Digital Workplace\n      - Portal\n      - Work Zone\n    serviceName: SAP Build Work Zone API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sap/refs/heads/main/finops/sap-finops.yml
-sources:
-- https://www.sap.com
-- https://store.sap.com
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- SAP
-- Enterprise
+- AI
 - BTP
+- Business Applications
+- Cloud
+- Data Management
+- Enterprise
+- ERP
+- Integration
+- FinOps
+- Cost Management
+- FOCUS
 ---

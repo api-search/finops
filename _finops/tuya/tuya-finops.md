@@ -7,54 +7,80 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contract
-description: Tuya operates the Tuya IoT Development Platform with project-scoped cloud usage; no public self-serve price list or FOCUS-aligned billing export is published, and Cloud Development Packages are quoted per project. FinOps shape is therefore documented at the Contact Sales level pending vendor disclosure.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Tuya API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Tuya Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Tuya
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Tuya
-  PublisherName: Tuya Inc.
-  ServiceCategory: IoT Cloud Platform
-  ServiceName: Tuya IoT Development Platform
+  PublisherName: Tuya
+  ServiceCategory: Developer Tools / API
+  ServiceName: Tuya
 layout: finops
 meters:
 - aggregation: sum
-  description: Contracted Cloud Development Package line scoped to the project.
+  description: Count of billable API requests
   dimensions:
-  - project
-  name: cloud_development_package
-  unit: month
-- aggregation: max
-  description: Devices connected through the Tuya cloud under the project (basis for sizing the package).
-  dimensions:
-  - project
+  - api
+  - endpoint
+  - tier
   - region
-  name: connected_devices
-  unit: device
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Tuya Finops
 provider_name: Tuya
 provider_slug: tuya
-publisher_name: Tuya Inc.
-service_category: IoT Cloud Platform
+publisher_name: Tuya
+service_category: API
 slug: tuya-finops
 source_filename: tuya-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.tuya.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Tuya\nproviderId: tuya\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - IoT\n  - Smart Home\n  - Cloud Platform\n  - FinOps\n  - FOCUS\ndescription: Tuya operates the Tuya IoT Development Platform with project-scoped cloud usage; no public\n  self-serve price list or FOCUS-aligned billing export is published, and Cloud Development Packages are\n  quoted per project. FinOps shape is therefore documented at the Contact Sales level pending vendor disclosure.\nsources:\n  - https://developer.tuya.com/\n  - https://www.tuya.com/\nnotes: No public pricing endpoint reachable; Cloud Development Package prices are quoted per engagement.\n  Meters listed reflect typical IoT-platform billable lines but per-unit prices are not public.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec:\
-  \ FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Tuya Inc.\nserviceCategory: IoT Cloud Platform\nbillingModel:\n  pricingCategory: Contract\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Tuya IoT Development Platform\n  ServiceCategory: IoT Cloud Platform\n  ProviderName: Tuya\n  PublisherName: Tuya Inc.\n  InvoiceIssuerName: Tuya Inc.\n  BillingCurrency: USD\nmeters:\n  - name: cloud_development_package\n    description: Contracted Cloud Development Package line scoped to the project.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - project\n  - name: connected_devices\n    description: Devices connected through the Tuya cloud under the project (basis for sizing the package).\n    unit: device\n    aggregation: max\n    dimensions:\n      - project\n      - region\nprinciples:\n  - name: Visibility\n    description: Visibility is\
-  \ via the Tuya developer console (project-scoped device counts and API call\n      logs); a public FOCUS export is not published.\n  - name: Allocation\n    description: Allocate Tuya spend per project / product line; Tuya's project model already maps cleanly\n      to a product or SKU in your portfolio.\n  - name: Optimization\n    description: Optimization happens by package right-sizing at contract renewal and by avoiding over-provisioning\n      of value-added services (AI, voice, OTA) that are not actively used by the device fleet.\n  - name: Accountability\n    description: An IoT product or hardware-platform owner manages the Tuya relationship per project;\n      finance approves the per-project Cloud Development Package contract.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Tuya\nproviderId: tuya\npublisherName: Tuya\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - IoT\n  - Smart Home\n  - Devices\n  - Cloud Platform\n  - Automation\n  - Industrial IoT\n  - Device Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Tuya API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Tuya\n  ServiceCategory: Developer Tools / API\n  ProviderName: Tuya\n  PublisherName: Tuya\n  InvoiceIssuerName: Tuya\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
+  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Tuya Device Management API\n    baseURL: https://openapi.tuyaus.com\n    tags:\n      - Devices\n      - IoT\n      - Device Management\n    serviceName: Tuya Device Management API\n    serviceCategory: API\n  - name: Tuya Smart Home API\n    baseURL: https://openapi.tuyaus.com\n    tags:\n      - Smart Home\n      - IoT\n      - Automation\n      - Scene Management\n    serviceName: Tuya Smart Home API\n    serviceCategory: API\n  - name: Tuya Authorization API\n    baseURL: https://openapi.tuyaus.com\n    tags:\n      - Authentication\n      - Authorization\n      - Tokens\n    serviceName: Tuya Authorization API\n    serviceCategory: API\n  - name: Tuya Industry API\n    baseURL: https://openapi.tuyaus.com\n\
+  \    tags:\n      - Industrial IoT\n      - Enterprise\n      - Asset Management\n    serviceName: Tuya Industry API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tuya/refs/heads/main/finops/tuya-finops.yml
-sources:
-- https://developer.tuya.com/
-- https://www.tuya.com/
+sources: []
 specification: FinOps Framework
 tags:
 - IoT
 - Smart Home
+- Devices
 - Cloud Platform
+- Automation
+- Industrial IoT
+- Device Management
 - FinOps
+- Cost Management
 - FOCUS
 ---

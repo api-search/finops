@@ -103,89 +103,77 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Pay-As-You-Go + Committed Use
-description: 'FOCUS-aligned FinOps for Azure Monitor: per-GB ingestion + per-GB-month retention on Log Analytics (Analytics PAYG, Basic, Archive) with optional daily Commitment Tiers, plus per-million-sample custom metrics and per-rule alert pricing.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Azure Monitor API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Corporation
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Observability
+  InvoiceIssuerName: Azure Monitor
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Azure Monitor
+  PublisherName: Azure Monitor
+  ServiceCategory: Developer Tools / API
   ServiceName: Azure Monitor
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - workspace
-  - region
-  - table
-  - source
-  name: analytics_logs_ingestion_gb
-  unit: GB
-- aggregation: sum
-  dimensions:
-  - workspace
-  - table
-  name: basic_logs_ingestion_gb
-  unit: GB
-- aggregation: avg
-  dimensions:
-  - workspace
+  - api
+  - endpoint
   - tier
-  name: log_retention_gb_month
-  unit: GB-month
-- aggregation: avg
-  dimensions:
-  - workspace
-  name: log_archive_gb_month
-  unit: GB-month
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - workspace
-  name: basic_logs_search_gb
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - resource
-  - region
-  name: custom_metrics_samples
-  unit: sample
-- aggregation: max
-  dimensions:
-  - rule_type
-  - severity
-  name: alert_rules
-  unit: rule-month
-- aggregation: sum
-  dimensions:
-  - channel
-  name: notification_messages
-  unit: message
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Azure Monitor Finops
 provider_name: Azure Monitor
 provider_slug: microsoft-azure-monitor
-publisher_name: Microsoft Corporation
-service_category: Observability / Monitoring
+publisher_name: Azure Monitor
+service_category: API
 slug: microsoft-azure-monitor-finops
 source_filename: microsoft-azure-monitor-finops.yml
 source_heading: FinOps Profile
-source_url: https://azure.microsoft.com/en-us/pricing/details/monitor/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Azure Monitor\nproviderId: microsoft-azure-monitor\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Observability\n  - Microsoft Azure\ndescription: 'FOCUS-aligned FinOps for Azure Monitor: per-GB ingestion + per-GB-month retention on\n  Log Analytics (Analytics PAYG, Basic, Archive) with optional daily Commitment Tiers, plus per-million-sample\n  custom metrics and per-rule alert pricing.'\nsources:\n  - https://azure.microsoft.com/en-us/pricing/details/monitor/\n  - https://learn.microsoft.com/en-us/azure/azure-monitor/logs/cost-logs\n  - https://learn.microsoft.com/en-us/azure/azure-monitor/fundamentals/cost-usage\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
-  publisherName: Microsoft Corporation\nserviceCategory: Observability / Monitoring\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Committed Use\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Azure Monitor\n  ServiceCategory: Observability\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: analytics_logs_ingestion_gb\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - workspace\n      - region\n      - table\n      - source\n  - name: basic_logs_ingestion_gb\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - workspace\n      - table\n  - name: log_retention_gb_month\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - workspace\n      - tier\n  - name: log_archive_gb_month\n    unit: GB-month\n\
-  \    aggregation: avg\n    dimensions:\n      - workspace\n  - name: basic_logs_search_gb\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - workspace\n  - name: custom_metrics_samples\n    unit: sample\n    aggregation: sum\n    dimensions:\n      - resource\n      - region\n  - name: alert_rules\n    unit: rule-month\n    aggregation: max\n    dimensions:\n      - rule_type\n      - severity\n  - name: notification_messages\n    unit: message\n    aggregation: sum\n    dimensions:\n      - channel\nprinciples:\n  - name: Visibility\n    description: Use Azure Monitor's Usage and Estimated Costs pane and Cost Management to break\n      down spend by workspace, table, and resource type; the Usage table inside the workspace gives\n      per-table GB ingested.\n  - name: Allocation\n    description: Use multi-workspace, multi-resource-group designs aligned to teams; tag workspaces\n      with cost-center; route per-application telemetry to per-team workspaces; use cluster-level\n\
-  \      commit pooling across workspaces.\n  - name: Optimization\n    description: Switch verbose tables to Basic Logs; archive cold data; tune Application Insights\n      sampling; use Data Collection Rule transformations to drop noisy columns; right-size Commitment\n      Tier; set daily caps; pre-aggregate custom metrics.\n  - name: Accountability\n    description: Assign workspace owners as cost owners; alert on daily ingestion drift; review\n      Commitment Tier vs PAYG break-even quarterly; review unused alert rules and stale data sources\n      monthly.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Azure Monitor\nproviderId: microsoft-azure-monitor\npublisherName: Azure Monitor\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Application Insights\n  - Cloud\n  - Logs\n  - Metrics\n  - Monitoring\n  - Observability\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Azure Monitor API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Azure Monitor\n  ServiceCategory: Developer Tools / API\n  ProviderName: Azure Monitor\n  PublisherName: Azure Monitor\n  InvoiceIssuerName: Azure Monitor\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network\
+  \ in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Azure Monitor Metrics API\n    baseURL: https://management.azure.com\n    tags:\n      - Metrics\n      - Performance\n      - Resource Monitoring\n      - Time Series\n    serviceName: Azure Monitor Metrics API\n    serviceCategory: API\n  - name: Azure Monitor Metric Definitions API\n    baseURL: https://management.azure.com\n    tags:\n      - Definitions\n      - Metadata\n      - Metrics\n      - Resource Monitoring\n    serviceName: Azure Monitor Metric Definitions API\n    serviceCategory: API\n  - name: Azure Monitor Metrics Batch API\n    baseURL: https://management.azure.com\n    tags:\n      - Batch\n      - High Volume\n      - Metrics\n\
+  \      - Performance\n    serviceName: Azure Monitor Metrics Batch API\n    serviceCategory: API\n  - name: Azure Monitor Logs API\n    baseURL: https://api.loganalytics.io\n    tags:\n      - Analytics\n      - KQL\n      - Logs\n      - Query\n    serviceName: Azure Monitor Logs API\n    serviceCategory: API\n  - name: Azure Monitor Logs Ingestion API\n    baseURL: https://management.azure.com\n    tags:\n      - Custom Logs\n      - Data Collection\n      - Ingestion\n      - Logs\n    serviceName: Azure Monitor Logs Ingestion API\n    serviceCategory: API\n  - name: Azure Monitor Alerts API\n    baseURL: https://management.azure.com\n    tags:\n      - Action Groups\n      - Alerts\n      - Monitoring\n      - Notifications\n    serviceName: Azure Monitor Alerts API\n    serviceCategory: API\n  - name: Azure Monitor Scheduled Query Rules API\n    baseURL: https://management.azure.com\n    tags:\n      - Alerts\n      - Automation\n      - Log Search\n      - Scheduled Query\n    serviceName:\
+  \ Azure Monitor Scheduled Query Rules API\n    serviceCategory: API\n  - name: Azure Monitor Action Groups API\n    baseURL: https://management.azure.com\n    tags:\n      - Action Groups\n      - Automation\n      - Notifications\n      - Webhooks\n    serviceName: Azure Monitor Action Groups API\n    serviceCategory: API\n  - name: Azure Monitor Autoscale API\n    baseURL: https://management.azure.com\n    tags:\n      - Autoscale\n      - Capacity Management\n      - Performance\n      - Scaling\n    serviceName: Azure Monitor Autoscale API\n    serviceCategory: API\n  - name: Azure Application Insights API\n    baseURL: https://api.applicationinsights.io\n    tags:\n      - APM\n      - Application Performance\n      - Telemetry\n      - Tracing\n    serviceName: Azure Application Insights API\n    serviceCategory: API\n  - name: Azure Monitor Diagnostic Settings API\n    baseURL: https://management.azure.com\n    tags:\n      - Configuration\n      - Diagnostics\n      - Logs\n  \
+  \    - Routing\n    serviceName: Azure Monitor Diagnostic Settings API\n    serviceCategory: API\n  - name: Azure Monitor Activity Log API\n    baseURL: https://management.azure.com\n    tags:\n      - Activity Log\n      - Audit\n      - Compliance\n      - Events\n    serviceName: Azure Monitor Activity Log API\n    serviceCategory: API\n  - name: Azure Monitor Data Collection Rules API\n    baseURL: https://management.azure.com\n    tags:\n      - Configuration\n      - Data Collection\n      - Ingestion\n      - Rules\n    serviceName: Azure Monitor Data Collection Rules API\n    serviceCategory: API\n  - name: Azure Monitor Data Collection Endpoints API\n    baseURL: https://management.azure.com\n    tags:\n      - Configuration\n      - Data Collection\n      - Endpoints\n      - Ingestion\n    serviceName: Azure Monitor Data Collection Endpoints API\n    serviceCategory: API\n  - name: Azure Monitor Private Link Scopes API\n    baseURL: https://management.azure.com\n    tags:\n\
+  \      - Configuration\n      - Networking\n      - Private Link\n      - Security\n    serviceName: Azure Monitor Private Link Scopes API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-monitor/refs/heads/main/finops/microsoft-azure-monitor-finops.yml
-sources:
-- https://azure.microsoft.com/en-us/pricing/details/monitor/
-- https://learn.microsoft.com/en-us/azure/azure-monitor/logs/cost-logs
-- https://learn.microsoft.com/en-us/azure/azure-monitor/fundamentals/cost-usage
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Application Insights
+- Cloud
+- Logs
+- Metrics
+- Monitoring
 - Observability
-- Microsoft Azure
+- FinOps
+- Cost Management
+- FOCUS
 ---

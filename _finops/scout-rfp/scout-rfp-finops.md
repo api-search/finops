@@ -14,45 +14,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/scout-rfp/refs/heads/main/openapi/scout-rfp-events-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Subscription
-description: FinOps shape for Scout RFP / Workday Strategic Sourcing — a quote-based enterprise SaaS subscription billed through Workday's master agreement. No public usage-meter pricing exists; cost allocation is driven by the negotiated subscription line.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Scout RFP API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Workday, Inc.
-  ProviderName: Workday
-  PublisherName: Workday, Inc.
-  ServiceCategory: Procurement / Sourcing SaaS
-  ServiceName: Workday Strategic Sourcing
+  ChargeCategory: Usage
+  InvoiceIssuerName: Scout RFP
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Scout RFP
+  PublisherName: Scout RFP
+  ServiceCategory: Developer Tools / API
+  ServiceName: Scout RFP
 layout: finops
 meters:
 - aggregation: sum
-  description: Negotiated enterprise subscription line item billed via Workday master agreement
-  name: enterprise_subscription
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Scout Rfp Finops
 provider_name: Scout RFP
 provider_slug: scout-rfp
-publisher_name: Workday, Inc.
-service_category: Procurement / Sourcing SaaS
+publisher_name: Scout RFP
+service_category: API
 slug: scout-rfp-finops
 source_filename: scout-rfp-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.workday.com/en-us/products/spend-management/strategic-sourcing.html
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Scout RFP\nproviderId: scout-rfp\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Procurement\n  - Sourcing\n  - RFP\n  - Workday\n  - FinOps\n  - FOCUS\ndescription: FinOps shape for Scout RFP / Workday Strategic Sourcing — a quote-based enterprise SaaS subscription\n  billed through Workday's master agreement. No public usage-meter pricing exists; cost allocation is\n  driven by the negotiated subscription line.\nsources:\n  - https://www.workday.com/en-us/products/spend-management/strategic-sourcing.html\nnotes: Scout RFP is sold as part of a Workday enterprise contract. Public meters, FOCUS column mappings,\n  and cost levers were not reconcilable from open documentation.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl:\
-  \ https://focus.finops.org/focus-specification/v1-3/\npublisherName: Workday, Inc.\nserviceCategory: Procurement / Sourcing SaaS\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Workday Strategic Sourcing\n  ServiceCategory: Procurement / Sourcing SaaS\n  ProviderName: Workday\n  PublisherName: Workday, Inc.\n  InvoiceIssuerName: Workday, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: enterprise_subscription\n    description: Negotiated enterprise subscription line item billed via Workday master agreement\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Spend visibility is limited to the Workday subscription invoice and any internal allocation\n      Workday admins do via the customer's own ERP. Scout RFP itself does not expose a consumption API.\n  - name: Allocation\n    description: Allocate the subscription to the procurement\
-  \ / sourcing cost center; show-back to business\n      units that run the most events / RFPs based on internal Scout activity reports.\n  - name: Optimization\n    description: Optimization happens at contract negotiation and module bundling time, not by tuning\n      API usage. Track adoption (events run, suppliers engaged) to justify the subscription.\n  - name: Accountability\n    description: Procurement / Sourcing leadership owns the Scout RFP line. Workday CSM is the escalation\n      point for entitlement questions.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Scout RFP\nproviderId: scout-rfp\npublisherName: Scout RFP\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Procurement\n  - Sourcing\n  - RFP\n  - Supply Chain\n  - Workday\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Scout RFP API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Scout RFP\n  ServiceCategory: Developer Tools / API\n  ProviderName: Scout RFP\n  PublisherName: Scout RFP\n  InvoiceIssuerName: Scout RFP\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n   \
+  \ dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Workday Strategic Sourcing API\n    baseURL: ''\n    tags:\n      - Procurement\n      - Sourcing\n      - RFP\n      - Workday\n      - Events\n    serviceName: Workday Strategic Sourcing API\n    serviceCategory: API\n  - name: Events API\n    baseURL: ''\n    tags:\n      - Events\n      - RFP\n      - Procurement\n      - Sourcing\n    serviceName: Events API\n    serviceCategory: API\n  - name: Suppliers API\n    baseURL: ''\n    tags:\n      - Suppliers\n      - Procurement\n      - Vendor Management\n    serviceName: Suppliers API\n    serviceCategory: API\n  - name: Contracts API\n    baseURL: ''\n    tags:\n      - Contracts\n      - Procurement\n      - Legal\n    serviceName: Contracts API\n\
+  \    serviceCategory: API\n  - name: Awards API\n    baseURL: ''\n    tags:\n      - Awards\n      - Procurement\n      - Sourcing\n    serviceName: Awards API\n    serviceCategory: API\n  - name: Attachments API\n    baseURL: ''\n    tags:\n      - Attachments\n      - Files\n      - Procurement\n    serviceName: Attachments API\n    serviceCategory: API\n  - name: Payments API\n    baseURL: ''\n    tags:\n      - Payments\n      - Procurement\n      - Finance\n    serviceName: Payments API\n    serviceCategory: API\n  - name: Projects API\n    baseURL: ''\n    tags:\n      - Projects\n      - Procurement\n      - Organization\n    serviceName: Projects API\n    serviceCategory: API\n  - name: Reports API\n    baseURL: ''\n    tags:\n      - Reports\n      - Analytics\n      - Procurement\n    serviceName: Reports API\n    serviceCategory: API\n  - name: SCIM Users API\n    baseURL: ''\n    tags:\n      - SCIM\n      - User Management\n      - Identity\n      - SSO\n    serviceName: SCIM\
+  \ Users API\n    serviceCategory: API\n  - name: Spend Categories API\n    baseURL: ''\n    tags:\n      - Spend Categories\n      - Procurement\n      - Classification\n    serviceName: Spend Categories API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/scout-rfp/refs/heads/main/finops/scout-rfp-finops.yml
-sources:
-- https://www.workday.com/en-us/products/spend-management/strategic-sourcing.html
+sources: []
 specification: FinOps Framework
 tags:
 - Procurement
 - Sourcing
 - RFP
+- Supply Chain
 - Workday
 - FinOps
+- Cost Management
 - FOCUS
 ---

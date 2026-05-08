@@ -7,53 +7,74 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Contract / Negotiated
-description: FOCUS-aligned FinOps placeholder for Encompass Health. The company does not publish public API pricing; FinOps integration would be defined under the partner contract and invoiced by the operating entity.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Encompass Health API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Encompass Health Corporation
+  InvoiceIssuerName: Encompass Health
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Encompass Health
-  PublisherName: Encompass Health Corporation
-  ServiceCategory: Healthcare Integration
-  ServiceName: Encompass Health API
+  PublisherName: Encompass Health
+  ServiceCategory: Developer Tools / API
+  ServiceName: Encompass Health
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
   - endpoint
-  - partner
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - partner
-  name: contract_fee
-  unit: month
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Encompass Health Finops
 provider_name: Encompass Health
 provider_slug: encompass-health
-publisher_name: Encompass Health Corporation
-service_category: Healthcare Integration
+publisher_name: Encompass Health
+service_category: API
 slug: encompass-health-finops
 source_filename: encompass-health-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.encompasshealth.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Encompass Health\nproviderId: encompass-health\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Healthcare\n  - Rehabilitation\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps placeholder for Encompass Health. The company does not publish public\n  API pricing; FinOps integration would be defined under the partner contract and invoiced by the operating\n  entity.\nnotes: No public billing or usage API was located. Meters and billing model below are scaffold values;\n  reconcile against a signed partner agreement before relying on them.\nsources:\n  - https://www.encompasshealth.com\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Encompass Health\
-  \ Corporation\nserviceCategory: Healthcare Integration\nbillingModel:\n  pricingCategory: Contract / Negotiated\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Encompass Health API\n  ServiceCategory: Healthcare Integration\n  ProviderName: Encompass Health\n  PublisherName: Encompass Health Corporation\n  InvoiceIssuerName: Encompass Health Corporation\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - partner\n  - name: contract_fee\n    unit: month\n    aggregation: sum\n    dimensions:\n      - partner\nprinciples:\n  - name: Visibility\n    description: Consumption visibility is delivered through partner reporting cadences agreed in the contract;\n      there is no public usage API.\n  - name: Allocation\n    description: Allocate cost by partner agreement, business\
-  \ unit, and integration use case as defined\n      in the master services agreement.\n  - name: Optimization\n    description: Optimization levers are batching, caching, and renegotiating contract terms at renewal;\n      no public discount programs are documented.\n  - name: Accountability\n    description: The contracting business unit owns the spend; reviews follow the contract cadence with\n      the Encompass Health account team.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Encompass Health\nproviderId: encompass-health\npublisherName: Encompass Health\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Healthcare\n  - Rehabilitation\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Encompass Health API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Encompass Health\n  ServiceCategory: Developer Tools / API\n  ProviderName: Encompass Health\n  PublisherName: Encompass Health\n  InvoiceIssuerName: Encompass Health\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Encompass Health API\n    baseURL: https://api.encompasshealth.com\n    tags:\n      - Healthcare\n      - Rehabilitation\n    serviceName: Encompass Health API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/encompass-health/refs/heads/main/finops/encompass-health-finops.yml
-sources:
-- https://www.encompasshealth.com
+sources: []
 specification: FinOps Framework
 tags:
 - Healthcare
 - Rehabilitation
 - FinOps
+- Cost Management
 - FOCUS
 ---

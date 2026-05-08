@@ -16,60 +16,68 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription
-description: 'FOCUS-aligned FinOps for Brandfetch: a free Logo API with a soft 500K-monthly fair-use ceiling, plus a flat $99/month Brand API subscription capped at 2,500 calls and Enterprise custom plans for higher volume and SLA.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Brand API (Brandfetch) API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Brandfetch
-  PricingCategory: Standard
-  PricingUnit: subscription-month
-  ProviderName: Brandfetch
-  PublisherName: Brandfetch
-  ServiceCategory: Brand Data API
-  ServiceName: Brandfetch
+  ChargeCategory: Usage
+  InvoiceIssuerName: Brand API (Brandfetch)
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Brand API (Brandfetch)
+  PublisherName: Brand API (Brandfetch)
+  ServiceCategory: Developer Tools / API
+  ServiceName: Brand API (Brandfetch)
 layout: finops
 meters:
 - aggregation: sum
-  description: Calls to the Logo API; metered for fair-use review against the 500K monthly soft cap.
+  description: Count of billable API requests
   dimensions:
-  - domain
-  - api_key
-  name: logo_api_requests
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: Calls to the Brand API; counted against the 2,500/month subscription cap.
+  description: Bytes returned over the network in API responses
   dimensions:
-  - domain
-  - api_key
-  name: brand_api_calls
-  unit: request
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Brand API subscription fee billed monthly ($99/month, ~20% off annual).
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - plan
-  - billing_cycle
-  name: subscription_month
-  unit: month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Brand Api Finops
 provider_name: Brand API (Brandfetch)
 provider_slug: brand-api
-publisher_name: Brandfetch
-service_category: Brand Data API
+publisher_name: Brand API (Brandfetch)
+service_category: API
 slug: brand-api-finops
 source_filename: brand-api-finops.yml
 source_heading: FinOps Profile
-source_url: https://brandfetch.com/developers/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Brand API (Brandfetch)\nproviderId: brand-api\npublisherName: Brandfetch\nserviceCategory: Brand Data API\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Brands\n  - Logos\n  - Brand Assets\n  - Company Data\n  - Firmographics\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Brandfetch: a free Logo API with a soft 500K-monthly fair-use\n  ceiling, plus a flat $99/month Brand API subscription capped at 2,500 calls and Enterprise custom\n  plans for higher volume and SLA.'\nsources:\n  - https://brandfetch.com/developers/pricing\n  - https://docs.brandfetch.com/logo-api/rate-limits\nbillingModel:\n  pricingCategory:\
-  \ Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Brandfetch\n  ServiceCategory: Brand Data API\n  ProviderName: Brandfetch\n  PublisherName: Brandfetch\n  InvoiceIssuerName: Brandfetch\n  BillingCurrency: USD\n  PricingCategory: Standard\n  PricingUnit: subscription-month\nmeters:\n  - name: logo_api_requests\n    description: Calls to the Logo API; metered for fair-use review against the 500K monthly soft cap.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - domain\n      - api_key\n  - name: brand_api_calls\n    description: Calls to the Brand API; counted against the 2,500/month subscription cap.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - domain\n      - api_key\n  - name: subscription_month\n    description: Brand API subscription fee billed monthly ($99/month, ~20% off annual).\n    unit: month\n    aggregation: sum\n    dimensions:\n\
-  \      - plan\n      - billing_cycle\nprinciples:\n  - name: Visibility\n    description: Track Logo API request volume per consumer / domain and reconcile against the 500K\n      soft monthly ceiling and the 2,500 hard Brand API cap; pull invoices from the Brandfetch dashboard.\n  - name: Allocation\n    description: Issue separate API keys per consuming product or surface so logo and brand-data spend\n      can be attributed cleanly.\n  - name: Optimization\n    description: Cache logo URLs and brand records aggressively at the CDN / edge to stay within per-IP\n      and per-customer 5-minute throughput windows; reserve Brand API calls for surfaces that need rich\n      brand metadata; switch to Enterprise when sustained volume exceeds the Brand API hard cap.\n  - name: Accountability\n    description: Designate a brand-platform owner; alert when 5-minute or monthly thresholds approach\n      exhaustion; budget annual billing for the 20% discount on Brand API.\nmaintainers:\n  - FN:\
-  \ Kin Lane\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Brand API (Brandfetch)\nproviderId: brand-api\npublisherName: Brand API (Brandfetch)\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Brands\n  - Logos\n  - Brand Assets\n  - Company Data\n  - Firmographics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Brand API (Brandfetch) API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Brand API (Brandfetch)\n  ServiceCategory: Developer Tools / API\n  ProviderName: Brand API (Brandfetch)\n  PublisherName: Brand API (Brandfetch)\n  InvoiceIssuerName: Brand API (Brandfetch)\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
+  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Brandfetch Brand API\n    baseURL: ''\n    tags:\n      - Brands\n      - Logos\n      - Colors\n      - Fonts\n      - Firmographics\n    serviceName: Brandfetch Brand API\n    serviceCategory: API\n  - name: Brandfetch Logo Link API\n    baseURL: ''\n    tags:\n      - Logos\n      - CDN\n      - Brand Assets\n    serviceName: Brandfetch Logo Link API\n    serviceCategory: API\n  - name: Brandfetch Brand Search API\n    baseURL: ''\n    tags:\n      - Brand Search\n      - Autocomplete\n      - Domain Matching\n    serviceName: Brandfetch Brand Search API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost\
+  \ per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/brand-api/refs/heads/main/finops/brand-api-finops.yml
-sources:
-- https://brandfetch.com/developers/pricing
-- https://docs.brandfetch.com/logo-api/rate-limits
+sources: []
 specification: FinOps Framework
 tags:
 - Brands
@@ -78,5 +86,6 @@ tags:
 - Company Data
 - Firmographics
 - FinOps
+- Cost Management
 - FOCUS
 ---

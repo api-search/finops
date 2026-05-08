@@ -14,87 +14,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/stigg/refs/heads/main/openapi/stigg-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly or Annual
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Tiered Subscription + Usage-Based Add-Ons
-description: FOCUS-aligned FinOps definition for Stigg. Stigg is itself a pricing/entitlement platform billed as a tiered SaaS subscription (Sandbox / Growth / Scale) plus per-seat and per-subscription metered charges and per-GB event metering.
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Stigg API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Stigg Ltd.
+  InvoiceIssuerName: Stigg
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Stigg
-  PublisherName: Stigg Ltd.
-  ServiceCategory: Pricing & Entitlements Platform
+  PublisherName: Stigg
+  ServiceCategory: Developer Tools / API
   ServiceName: Stigg
 layout: finops
 meters:
 - aggregation: sum
-  description: Monthly or annual base platform fee for the Growth or Scale plan
+  description: Count of billable API requests
   dimensions:
-  - plan
-  name: base_subscription
-  unit: month
-- aggregation: max
-  description: Active team-member seats charged per month
-  dimensions:
-  - role
-  name: seats
-  unit: seat
-- aggregation: count
-  description: Self-service subscriptions managed in Stigg billed at $0.32 each
-  dimensions:
-  - plan
-  - product
-  name: self_service_subscriptions
-  unit: subscription
-- aggregation: count
-  description: Custom (wire/ACH) subscriptions billed at $4.70 each
-  dimensions:
-  - plan
-  - product
-  name: custom_subscriptions
-  unit: subscription
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Advanced event metering data processed/stored, billed per GB per month
+  description: Bytes returned over the network in API responses
   dimensions:
-  - feature
-  - environment
-  name: event_metering_volume
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
 - aggregation: sum
-  description: Optional per-integration add-on charges (Slack support, AWS Marketplace, Snowflake, BigQuery, Salesforce native)
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - integration
-  name: integration_addons
-  unit: month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Stigg Finops
 provider_name: Stigg
 provider_slug: stigg
-publisher_name: Stigg Ltd.
-service_category: Pricing & Entitlements Platform
+publisher_name: Stigg
+service_category: API
 slug: stigg-finops
 source_filename: stigg-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.stigg.io/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Stigg\nproviderId: stigg\npublisherName: Stigg Ltd.\nserviceCategory: Pricing & Entitlements Platform\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Pricing\n  - Billing\n  - Entitlements\n  - Usage-Based Billing\n  - SaaS\ndescription: FOCUS-aligned FinOps definition for Stigg. Stigg is itself a pricing/entitlement platform\n  billed as a tiered SaaS subscription (Sandbox / Growth / Scale) plus per-seat and per-subscription metered\n  charges and per-GB event metering.\nsources:\n  - https://www.stigg.io/pricing\nbillingModel:\n  pricingCategory: Tiered Subscription + Usage-Based Add-Ons\n  billingFrequency:\
-  \ Monthly or Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Stigg\n  ServiceCategory: Pricing & Entitlements Platform\n  ProviderName: Stigg\n  PublisherName: Stigg Ltd.\n  InvoiceIssuerName: Stigg Ltd.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: base_subscription\n    description: Monthly or annual base platform fee for the Growth or Scale plan\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n  - name: seats\n    description: Active team-member seats charged per month\n    unit: seat\n    aggregation: max\n    dimensions:\n      - role\n  - name: self_service_subscriptions\n    description: Self-service subscriptions managed in Stigg billed at $0.32 each\n    unit: subscription\n    aggregation: count\n    dimensions:\n      - plan\n      - product\n  - name: custom_subscriptions\n    description: Custom (wire/ACH) subscriptions billed\
-  \ at $4.70 each\n    unit: subscription\n    aggregation: count\n    dimensions:\n      - plan\n      - product\n  - name: event_metering_volume\n    description: Advanced event metering data processed/stored, billed per GB per month\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - feature\n      - environment\n  - name: integration_addons\n    description: Optional per-integration add-on charges (Slack support, AWS Marketplace, Snowflake,\n      BigQuery, Salesforce native)\n    unit: month\n    aggregation: sum\n    dimensions:\n      - integration\nprinciples:\n  - name: Visibility\n    description: Use the Stigg admin console and customer-portal usage views, plus the Stripe/Zuora\n      integration export, to surface subscription counts, seats, and event-metering GB to product/finance.\n  - name: Allocation\n    description: Tag subscriptions with environment (Sandbox vs Production) and product to attribute\n      Stigg cost to the customer-facing product line that drives\
-  \ subscription volume.\n  - name: Optimization\n    description: Levers include consolidating non-production environments under Sandbox, choosing annual\n      billing for the 20% discount, batching event ingestion to reduce GB-month, and avoiding wire/ACH\n      subscription type ($4.70) where self-service ($0.32) is acceptable.\n  - name: Accountability\n    description: Designate a Stigg admin per workspace; route invoices to the platform-engineering or\n      monetization owner; review subscription growth and event GB monthly against the Growth plan budget.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Stigg\nproviderId: stigg\npublisherName: Stigg\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Pricing\n  - Billing\n  - Entitlements\n  - Usage-Based Billing\n  - SaaS\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Stigg API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Stigg\n  ServiceCategory: Developer Tools / API\n  ProviderName: Stigg\n  PublisherName: Stigg\n  InvoiceIssuerName: Stigg\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n  \
+  \    - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Stigg GraphQL API\n    baseURL: ''\n    tags:\n      - GraphQL\n      - Entitlements\n      - Subscriptions\n      - Billing\n    serviceName: Stigg GraphQL API\n    serviceCategory: API\n  - name: Stigg REST API\n    baseURL: ''\n    tags:\n      - REST\n      - Entitlements\n      - Subscriptions\n      - Billing\n    serviceName: Stigg REST API\n    serviceCategory: API\n  - name: Stigg Node.js SDK\n    baseURL: ''\n    tags:\n      - Node.js\n      - TypeScript\n      - SDK\n    serviceName: Stigg Node.js SDK\n    serviceCategory: API\n  - name: Stigg Python SDK\n    baseURL: ''\n    tags:\n      - Python\n      - SDK\n    serviceName: Stigg Python SDK\n    serviceCategory: API\n  - name: Stigg Go SDK\n    baseURL:\
+  \ ''\n    tags:\n      - Go\n      - SDK\n    serviceName: Stigg Go SDK\n    serviceCategory: API\n  - name: Stigg React SDK\n    baseURL: ''\n    tags:\n      - React\n      - Frontend\n      - SDK\n    serviceName: Stigg React SDK\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/stigg/refs/heads/main/finops/stigg-finops.yml
-sources:
-- https://www.stigg.io/pricing
+sources: []
 specification: FinOps Framework
 tags:
 - FinOps
-- FOCUS
 - Pricing
 - Billing
 - Entitlements
 - Usage-Based Billing
 - SaaS
+- FinOps
+- Cost Management
+- FOCUS
 ---

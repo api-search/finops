@@ -13,66 +13,81 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/swift/refs/heads/main/openapi/swift-swiftref-api-openapi.yml
 billing_model:
-  billingCurrency: EUR
-  billingFrequency: Annual + Per-Message Settlement
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Member-Tiered Cooperative Pricing
-description: SWIFT bills members under the cooperative's published-but-member-only pricing schedule (annual support charges, traffic charges by message class, service-specific fees). This artifact captures publisher and category surface only; meters are placeholders pending member-only pricing access.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the SWIFT API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
-  BillingCurrency: EUR
-  InvoiceIssuerName: S.W.I.F.T. SC
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: SWIFT
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: SWIFT
-  PublisherName: S.W.I.F.T. SC
-  ServiceCategory: Financial Messaging
+  PublisherName: SWIFT
+  ServiceCategory: Developer Tools / API
   ServiceName: SWIFT
 layout: finops
 meters:
 - aggregation: sum
-  description: SWIFT message traffic billed by tier and message type (FIN, MX, ISO 20022); rates per member's traffic band
+  description: Count of billable API requests
   dimensions:
-  - message_type
-  - service
-  - member_tier
-  name: messaging_traffic
-  unit: message
-- aggregation: max
-  description: Annual support and membership fee scaled by member share class
-  dimensions:
-  - member_class
-  name: annual_membership
-  unit: year
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Service-specific fees (gpi, KYC Registry, Sanctions Screening, Transaction Screening, Compliance Analytics)
+  description: Bytes returned over the network in API responses
   dimensions:
-  - service
-  name: service_charges
-  unit: varies
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Swift Finops
 provider_name: SWIFT
 provider_slug: swift
-publisher_name: S.W.I.F.T. SC
-service_category: Financial Messaging & Cross-Border Payments
+publisher_name: SWIFT
+service_category: API
 slug: swift-finops
 source_filename: swift-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.swift.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: SWIFT\nproviderId: swift\npublisherName: S.W.I.F.T. SC\nserviceCategory: Financial Messaging & Cross-Border Payments\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Banking\n  - Financial Messaging\n  - Payments\n  - ISO 20022\ndescription: SWIFT bills members under the cooperative's published-but-member-only pricing schedule\n  (annual support charges, traffic charges by message class, service-specific fees). This artifact captures\n  publisher and category surface only; meters are placeholders pending member-only pricing access.\nsources:\n  - https://www.swift.com\nnotes: 'Reconciliation marked\
-  \ false: SWIFT pricing is private to members. No public per-call rate card.'\nbillingModel:\n  pricingCategory: Member-Tiered Cooperative Pricing\n  billingFrequency: Annual + Per-Message Settlement\n  billingCurrency: EUR\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: SWIFT\n  ServiceCategory: Financial Messaging\n  ProviderName: SWIFT\n  PublisherName: S.W.I.F.T. SC\n  InvoiceIssuerName: S.W.I.F.T. SC\n  BillingCurrency: EUR\nmeters:\n  - name: messaging_traffic\n    description: SWIFT message traffic billed by tier and message type (FIN, MX, ISO 20022); rates per\n      member's traffic band\n    unit: message\n    aggregation: sum\n    dimensions:\n      - message_type\n      - service\n      - member_tier\n  - name: annual_membership\n    description: Annual support and membership fee scaled by member share class\n    unit: year\n    aggregation: max\n    dimensions:\n      - member_class\n  - name: service_charges\n \
-  \   description: Service-specific fees (gpi, KYC Registry, Sanctions Screening, Transaction Screening,\n      Compliance Analytics)\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - service\nprinciples:\n  - name: Visibility\n    description: Visibility into SWIFT spend is via the member's SWIFTNet billing files and the swift.com\n      member portal, not a public usage API.\n  - name: Allocation\n    description: Allocate by message type and originating business line; SWIFT bill files itemize traffic\n      by service and BIC.\n  - name: Optimization\n    description: Optimization levers include traffic-band selection at year-end, consolidating BICs,\n      using Alliance Cloud or Lite2 to reduce on-prem operating cost, and leaning on shared services.\n  - name: Accountability\n    description: Account ownership rests with the institution's payments operations and SWIFT relationship\n      manager; review against the annual SWIFT pricing notification.\nmaintainers:\n \
-  \ - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: SWIFT\nproviderId: swift\npublisherName: SWIFT\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Banking\n  - Cross-Border Payments\n  - Financial Messaging\n  - Financial Services\n  - GPI\n  - ISO 20022\n  - Payments\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the SWIFT API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
+  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: SWIFT\n  ServiceCategory: Developer Tools / API\n  ProviderName: SWIFT\n  PublisherName: SWIFT\n  InvoiceIssuerName: SWIFT\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n\
+  \    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: SwiftRef API\n    baseURL: https://api.swift.com/swiftrefdata\n    tags:\n      - BIC Validation\n      - Financial Reference Data\n      - IBAN Validation\n      - LEI Validation\n      - Reference Data\n      - SwiftRef\n    serviceName: SwiftRef API\n    serviceCategory: API\n  - name: SWIFT GPI API\n    baseURL: https://api.swift.com/swift-apigateway\n    tags:\n      - Cross-Border Payments\n      - GPI\n      - ISO 20022\n      - Payment Tracking\n      - Payments\n      - UETR\n    serviceName: SWIFT GPI API\n    serviceCategory: API\n  - name: Payment Pre-validation API\n    baseURL: ''\n    tags:\n      - Compliance\n      - Payment Pre-validation\n      - Payments\n  \
+  \    - Risk Management\n      - Straight-Through Processing\n    serviceName: Payment Pre-validation API\n    serviceCategory: API\n  - name: Transaction Screening API\n    baseURL: ''\n    tags:\n      - AML\n      - Compliance\n      - Payments\n      - Sanctions Screening\n      - Transaction Screening\n    serviceName: Transaction Screening API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/swift/refs/heads/main/finops/swift-finops.yml
-sources:
-- https://www.swift.com
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Banking
+- Cross-Border Payments
 - Financial Messaging
-- Payments
+- Financial Services
+- GPI
 - ISO 20022
+- Payments
+- FinOps
+- Cost Management
+- FOCUS
 ---

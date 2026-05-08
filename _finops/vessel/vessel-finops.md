@@ -22,51 +22,78 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Tiered Subscription
-description: Vessel bills on a connection-tier subscription model (Start, Launch, Custom) rather than per API call. Cost scales with the number of customer SaaS integrations active, not request volume; Launch and Custom are quoted directly.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Vessel API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
+  ChargeCategory: Usage
   InvoiceIssuerName: Vessel
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Vessel
   PublisherName: Vessel
-  ServiceCategory: Integration Platform
-  ServiceName: Vessel Unified API
+  ServiceCategory: Developer Tools / API
+  ServiceName: Vessel
 layout: finops
 meters:
-- aggregation: max
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - environment
-  - integration_provider
-  name: connections_active
-  unit: connection
-- aggregation: max
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - plan_tier
-  name: plan_subscription
-  unit: month
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Vessel Finops
 provider_name: Vessel
 provider_slug: vessel
 publisher_name: Vessel
-service_category: Unified API / Integrations
+service_category: API
 slug: vessel-finops
 source_filename: vessel-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.vessel.dev/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Vessel\nproviderId: vessel\npublisherName: Vessel\nserviceCategory: Unified API / Integrations\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Unified API\n  - Integrations\ndescription: Vessel bills on a connection-tier subscription model (Start, Launch, Custom) rather\n  than per API call. Cost scales with the number of customer SaaS integrations active, not request\n  volume; Launch and Custom are quoted directly.\nsources:\n  - https://www.vessel.dev/pricing\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n\
-  \  ServiceName: Vessel Unified API\n  ServiceCategory: Integration Platform\n  ProviderName: Vessel\n  PublisherName: Vessel\n  InvoiceIssuerName: Vessel\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: connections_active\n    unit: connection\n    aggregation: max\n    dimensions:\n      - environment\n      - integration_provider\n  - name: plan_subscription\n    unit: month\n    aggregation: max\n    dimensions:\n      - plan_tier\nprinciples:\n  - name: Visibility\n    description: Track active connections in the Vessel dashboard against the plan ceiling (5 / 20\n      / unlimited); since billing is plan-tier based, dashboard connection count is the leading\n      cost indicator.\n  - name: Allocation\n    description: Tag each Vessel connection with the consuming customer / tenant and the destination\n      SaaS provider; allocate the plan fee across active connections for showback.\n  - name: Optimization\n    description: Decommission stale connections; promote\
-  \ prototypes from Start to Launch only when\n      they cross the 5-connection ceiling; consolidate to Custom when whitelabeling or unlimited\n      connections is required to avoid per-tenant escalations.\n  - name: Accountability\n    description: The integrating product team owns the Vessel plan and connection lifecycle; finance\n      reconciles the monthly subscription against the contracted Launch / Custom rate.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Vessel\nproviderId: vessel\npublisherName: Vessel\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - CRM\n  - Embedded Integrations\n  - GTM\n  - Integrations\n  - iPaaS\n  - Sales Engagement\n  - Unified API\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Vessel API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Vessel\n  ServiceCategory: Developer Tools / API\n  ProviderName: Vessel\n  PublisherName: Vessel\n  InvoiceIssuerName: Vessel\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Vessel Platform API\n    baseURL: ''\n    tags:\n      - Authentication\n      - Connections\n      - Integrations\n      - Passthrough\n      - Webhooks\n    serviceName: Vessel Platform API\n    serviceCategory: API\n  - name: Vessel CRM API\n    baseURL: ''\n    tags:\n      - Accounts\n      - CRM\n      - Contacts\n      - Deals\n      - Leads\n      - Unified API\n    serviceName: Vessel CRM API\n    serviceCategory: API\n  - name: Vessel Actions API\n    baseURL: ''\n    tags:\n      - Actions\n      - Automation\n      - Integrations\n      - Validation\n    serviceName: Vessel Actions API\n    serviceCategory: API\n  - name: Vessel Unified API\n    baseURL: ''\n    tags:\n      - CRM\n\
+  \      - Chat\n      - Dialers\n      - Marketing Automation\n      - Normalized\n      - Sales Engagement\n      - Unified API\n    serviceName: Vessel Unified API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/vessel/refs/heads/main/finops/vessel-finops.yml
-sources:
-- https://www.vessel.dev/pricing
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Unified API
+- CRM
+- Embedded Integrations
+- GTM
 - Integrations
+- iPaaS
+- Sales Engagement
+- Unified API
+- FinOps
+- Cost Management
+- FOCUS
 ---

@@ -38,71 +38,77 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/nuget/refs/heads/main/openapi/nuget-package-content-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: None
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  chargeFrequency: None
-  pricingCategory: Free / Public Service
-description: 'FOCUS-aligned FinOps for nuget.org: the public registry is free of charge. Commercial spend for private NuGet feeds is on Azure Artifacts (per-user) or GitHub Packages (per-org), not nuget.org itself.'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the NuGet API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: N/A (free service for public feed)
-  PricingCategory: Free
+  InvoiceIssuerName: NuGet
+  PricingCategory: Usage-Based
   PricingUnit: request
   ProviderName: NuGet
-  PublisherName: .NET Foundation / Microsoft Corporation
-  ServiceCategory: Developer Tools / Package Registry
+  PublisherName: NuGet
+  ServiceCategory: Developer Tools / API
   ServiceName: NuGet
 layout: finops
 meters:
 - aggregation: sum
-  description: Total .nupkg downloads from nuget.org
-  dimensions:
-  - package_id
-  - version
-  name: package_downloads
-  unit: download
-- aggregation: sum
-  description: Bytes egressed by .nupkg downloads
-  dimensions:
-  - package_id
-  name: package_egress_bytes
-  unit: GB
-- aggregation: sum
-  description: Search and metadata requests
+  description: Count of billable API requests
   dimensions:
   - api
-  name: search_requests
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: Catalog API pages consumed by mirroring/ingestion clients
-  name: catalog_pages_processed
-  unit: page
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Nuget Finops
 provider_name: NuGet
 provider_slug: nuget
-publisher_name: .NET Foundation / Microsoft Corporation
-service_category: Developer Tools / Package Registry
+publisher_name: NuGet
+service_category: API
 slug: nuget-finops
 source_filename: nuget-finops.yml
 source_heading: FinOps Profile
-source_url: https://learn.microsoft.com/en-us/nuget/api/overview
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: NuGet\nproviderId: nuget\npublisherName: .NET Foundation / Microsoft Corporation\nserviceCategory: Developer Tools / Package Registry\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Package Management\n  - .NET\n  - Packages\n  - Registry\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for nuget.org: the public registry is free of charge. Commercial spend\n  for private NuGet feeds is on Azure Artifacts (per-user) or GitHub Packages (per-org), not nuget.org\n  itself.'\nsources:\n  - https://learn.microsoft.com/en-us/nuget/api/overview\n  - https://azure.microsoft.com/en-us/pricing/details/devops/azure-devops-services/\n\
-  \  - https://github.com/pricing\nprinciples:\n  - name: Visibility\n    description: nuget.org does not invoice consumers; visibility is about restore cost and time. Track\n      package download bytes, restore duration, and CI cache hit rate. For Azure Artifacts or GitHub Packages,\n      use the respective billing dashboards.\n  - name: Allocation\n    description: Allocate package storage and Actions/Pipelines minutes to the publishing org/team. Tag\n      private feeds by repo or product so each owner sees their share.\n  - name: Optimization\n    description: Cache restored packages in CI (e.g. actions/cache, NuGet.config globalPackagesFolder).\n      Use a proxy feed (Azure Artifacts upstream, JFrog, Sonatype) for high-volume monorepos to reduce\n      egress from nuget.org and avoid throttling.\n  - name: Accountability\n    description: Even though nuget.org is free, runaway CI restores cost time and money downstream. Assign\n      an owner for the package cache, restore performance,\
-  \ and any private feed billing.\nbillingModel:\n  pricingCategory: Free / Public Service\n  billingFrequency: None\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n  chargeFrequency: None\nfocusColumns:\n  ServiceName: NuGet\n  ServiceCategory: Developer Tools / Package Registry\n  ProviderName: NuGet\n  PublisherName: .NET Foundation / Microsoft Corporation\n  InvoiceIssuerName: N/A (free service for public feed)\n  PricingCategory: Free\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: package_downloads\n    description: Total .nupkg downloads from nuget.org\n    unit: download\n    aggregation: sum\n    dimensions:\n      - package_id\n      - version\n  - name: package_egress_bytes\n    description: Bytes egressed by .nupkg downloads\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - package_id\n  - name: search_requests\n    description: Search and metadata requests\n    unit: request\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n  - name: catalog_pages_processed\n    description: Catalog API pages consumed by mirroring/ingestion clients\n    unit: page\n    aggregation: sum\napis:\n  - name: NuGet Server API\n    baseURL: https://api.nuget.org/v3/index.json\n    tags:\n      - Package Management\n      - .NET\n      - Registry\n    serviceName: NuGet Server API\n    serviceCategory: Package Registry\n  - name: NuGet Catalog API\n    baseURL: https://api.nuget.org/v3/catalog0/index.json\n    tags:\n      - Catalog\n      - Event Log\n    serviceName: NuGet Catalog API\n    serviceCategory: Package Registry\n  - name: NuGet Search API\n    baseURL: https://azuresearch-usnc.nuget.org/query\n    tags:\n      - Search\n      - Discovery\n    serviceName: NuGet Search API\n    serviceCategory: Package Registry\n  - name: NuGet Package Metadata API\n    baseURL: https://api.nuget.org/v3/registration5-gz-semver2\n    tags:\n      - Metadata\n      - Versions\n    serviceName: NuGet Package Metadata API\n\
-  \    serviceCategory: Package Registry\n  - name: NuGet Package Content API\n    baseURL: https://api.nuget.org/v3-flatcontainer\n    tags:\n      - Package Download\n      - NuPkg\n    serviceName: NuGet Package Content API\n    serviceCategory: Package Registry\nunitEconomics:\n  - name: Restore time per CI build\n    metric: ci_restore_seconds / ci_build_count\n    target: minimize via package cache\n  - name: Egress per build\n    metric: package_egress_bytes / ci_build_count\n    target: '< 100MB sustained via cache'\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: NuGet\nproviderId: nuget\npublisherName: NuGet\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Package Management\n  - .NET\n  - Packages\n  - Dependencies\n  - Software Distribution\n  - Registry\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the NuGet API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
+  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: NuGet\n  ServiceCategory: Developer Tools / API\n  ProviderName: NuGet\n  PublisherName: NuGet\n  InvoiceIssuerName: NuGet\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
+  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: NuGet Server API\n    baseURL: ''\n    tags:\n      - Package Management\n      - .NET\n      - Packages\n      - Registry\n      - Dependencies\n    serviceName: NuGet Server API\n    serviceCategory: API\n  - name: NuGet Catalog API\n    baseURL: ''\n    tags:\n      - Package Management\n      - .NET\n      - Catalog\n      - Event Log\n      - Packages\n    serviceName: NuGet Catalog API\n    serviceCategory: API\n  - name: NuGet Search API\n    baseURL: ''\n    tags:\n      - Package Management\n      - .NET\n      - Search\n      - Discovery\n      - Packages\n    serviceName: NuGet Search API\n    serviceCategory: API\n  - name: NuGet Package Metadata API\n    baseURL: ''\n    tags:\n      - Package\
+  \ Management\n      - .NET\n      - Metadata\n      - Package Registry\n      - Versions\n    serviceName: NuGet Package Metadata API\n    serviceCategory: API\n  - name: NuGet Package Content API\n    baseURL: ''\n    tags:\n      - Package Management\n      - .NET\n      - Package Download\n      - Content\n      - NuPkg\n    serviceName: NuGet Package Content API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/nuget/refs/heads/main/finops/nuget-finops.yml
-sources:
-- https://learn.microsoft.com/en-us/nuget/api/overview
-- https://azure.microsoft.com/en-us/pricing/details/devops/azure-devops-services/
-- https://github.com/pricing
+sources: []
 specification: FinOps Framework
 tags:
 - Package Management
 - .NET
 - Packages
+- Dependencies
+- Software Distribution
 - Registry
 - FinOps
 - Cost Management

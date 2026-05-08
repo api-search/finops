@@ -31,58 +31,72 @@ billing_model:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Contracted Per-Message + Connectivity Fee
-description: 'FinOps shape for Traiana: contracted post-trade network fees billed by CME Group, typically scaled by message volume, asset class, and counterparty connections. No public meter rates are published; this artifact captures structural meters.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Traiana API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: CME Group Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Traiana
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Traiana
-  PublisherName: CME Group Inc.
-  ServiceCategory: Post-Trade Network
+  PublisherName: Traiana
+  ServiceCategory: Developer Tools / API
   ServiceName: Traiana
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of post-trade messages (matches, allocations, novations, give-ups) processed through the Traiana network.
+  description: Count of billable API requests
   dimensions:
-  - asset_class
-  - service
-  - counterparty
-  name: post_trade_messages
-  unit: message
-- aggregation: avg
-  description: Active counterparty connections / sessions enabled on the network for the institution.
-  dimensions:
-  - asset_class
+  - api
+  - endpoint
+  - tier
   - region
-  name: counterparty_connections
-  unit: connection-month
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Recurring network connectivity / membership fee separate from per-message pricing.
-  name: connectivity_fee
-  unit: month
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Traiana Finops
 provider_name: Traiana
 provider_slug: traiana
-publisher_name: CME Group Inc.
-service_category: Post-Trade Network
+publisher_name: Traiana
+service_category: API
 slug: traiana-finops
 source_filename: traiana-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.cmegroup.com/services/traiana.html
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Traiana\nproviderId: traiana\npublisherName: CME Group Inc.\nserviceCategory: Post-Trade Network\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Post-Trade Processing\n  - Foreign Exchange\n  - Fintech\n  - FinOps\n  - FOCUS\ndescription: 'FinOps shape for Traiana: contracted post-trade network fees billed by CME Group, typically\n  scaled by message volume, asset class, and counterparty connections. No public meter rates are published;\n  this artifact captures structural meters.'\nsources:\n  - https://www.cmegroup.com/services/traiana.html\nnotes: Pricing not publicly retrievable; meters are descriptive and unpriced.\n\
-  billingModel:\n  pricingCategory: Contracted Per-Message + Connectivity Fee\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Traiana\n  ServiceCategory: Post-Trade Network\n  ProviderName: Traiana\n  PublisherName: CME Group Inc.\n  InvoiceIssuerName: CME Group Inc.\n  BillingCurrency: USD\nmeters:\n  - name: post_trade_messages\n    description: Count of post-trade messages (matches, allocations, novations, give-ups) processed through\n      the Traiana network.\n    unit: message\n    aggregation: sum\n    dimensions:\n      - asset_class\n      - service\n      - counterparty\n  - name: counterparty_connections\n    description: Active counterparty connections / sessions enabled on the network for the institution.\n    unit: connection-month\n    aggregation: avg\n    dimensions:\n      - asset_class\n      - region\n  - name: connectivity_fee\n    description: Recurring\
-  \ network connectivity / membership fee separate from per-message pricing.\n    unit: month\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Reconcile the monthly CME Group invoice against your message logs by service line (FX\n      Match, Harmony, etc.); request a per-asset-class breakdown from the relationship manager.\n  - name: Allocation\n    description: Allocate fees to the trading desk / asset class generating the post-trade volume; tag\n      messages with the originating book or strategy.\n  - name: Optimization\n    description: Right-size connected counterparties to those actually trading; consolidate redundant\n      sessions; review service-line subscriptions (give-up, allocations, risk) annually against active\n      use.\n  - name: Accountability\n    description: Operations / middle-office head owns Traiana costs and the network agreement; trading\n      desks are accountable for the volume they generate.\nmaintainers:\n  - FN: Kin Lane\n   \
-  \ email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Traiana\nproviderId: traiana\npublisherName: Traiana\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Fintech\n  - Foreign Exchange\n  - Post-Trade Processing\n  - Risk Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Traiana API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Traiana\n  ServiceCategory: Developer Tools / API\n  ProviderName: Traiana\n  PublisherName: Traiana\n  InvoiceIssuerName: Traiana\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Traiana Harmony Trade Processing API\n    baseURL: ''\n    tags:\n      - Fintech\n      - Foreign Exchange\n      - Post-Trade Processing\n      - Trade Matching\n    serviceName: Traiana Harmony Trade Processing API\n    serviceCategory: API\n  - name: Traiana Harmony CreditLink API\n    baseURL: ''\n    tags:\n      - Credit Risk\n      - Fintech\n      - Foreign Exchange\n      - Risk Management\n    serviceName: Traiana Harmony CreditLink API\n    serviceCategory: API\n  - name: Traiana Harmony NetLink API\n    baseURL: ''\n    tags:\n      - Fintech\n      - Netting\n      - Settlement\n      - Trade Compression\n    serviceName: Traiana Harmony NetLink API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost\
+  \ per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/traiana/refs/heads/main/finops/traiana-finops.yml
-sources:
-- https://www.cmegroup.com/services/traiana.html
+sources: []
 specification: FinOps Framework
 tags:
-- Post-Trade Processing
-- Foreign Exchange
 - Fintech
+- Foreign Exchange
+- Post-Trade Processing
+- Risk Management
 - FinOps
+- Cost Management
 - FOCUS
 ---

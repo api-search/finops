@@ -39,48 +39,77 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Tiered Subscription by Volume
-description: FOCUS-aligned FinOps for Rollbar.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Rollbar API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Rollbar
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Rollbar
   PublisherName: Rollbar
-  ServiceCategory: Error Monitoring
+  ServiceCategory: Developer Tools / API
   ServiceName: Rollbar
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - project
-  - environment
-  name: occurrences
-  unit: occurrence
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  name: session_replays
-  unit: replay
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  name: credits_used
-  unit: credit
-- aggregation: max
-  name: user_seats
-  unit: seat-month
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Rollbar Finops
 provider_name: Rollbar
 provider_slug: rollbar
 publisher_name: Rollbar
-service_category: Error Monitoring
+service_category: API
 slug: rollbar-finops
 source_filename: rollbar-finops.yml
 source_heading: FinOps Profile
-source_url: https://rollbar.com/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Rollbar\nproviderId: rollbar\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Error Monitoring\ndescription: FOCUS-aligned FinOps for Rollbar.\nsources:\n  - https://rollbar.com/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Rollbar\nserviceCategory: Error Monitoring\nbillingModel:\n  pricingCategory: Tiered Subscription by Volume\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Rollbar\n  ServiceCategory: Error Monitoring\n  ProviderName: Rollbar\n  PublisherName: Rollbar\n  BillingCurrency: USD\nmeters:\n  - name: occurrences\n    unit: occurrence\n    aggregation: sum\n    dimensions:\n\
-  \      - project\n      - environment\n  - name: session_replays\n    unit: replay\n    aggregation: sum\n  - name: credits_used\n    unit: credit\n    aggregation: sum\n  - name: user_seats\n    unit: seat-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track Rollbar consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Rollbar\nproviderId: rollbar\npublisherName: Rollbar\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Error Tracking\n  - Monitoring\n  - Debugging\n  - DevOps\n  - Application Performance\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Rollbar API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Rollbar\n  ServiceCategory: Developer Tools / API\n  ProviderName: Rollbar\n  PublisherName: Rollbar\n  InvoiceIssuerName: Rollbar\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n  \
+  \  dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Rollbar REST API\n    baseURL: https://api.rollbar.com/api/1\n    tags:\n      - Error Tracking\n      - Monitoring\n      - REST\n      - Projects\n      - Teams\n    serviceName: Rollbar REST API\n    serviceCategory: API\n  - name: Rollbar Deployment API\n    baseURL: https://api.rollbar.com/api/1\n    tags:\n      - Deployment\n      - Release Management\n      - Error Tracking\n      - REST\n      - DevOps\n    serviceName: Rollbar Deployment API\n    serviceCategory: API\n  - name: Rollbar Metrics API\n    baseURL: https://api.rollbar.com/api/1\n    tags:\n      - Metrics\n      - Analytics\n      - Error Tracking\n      - REST\n      - Monitoring\n    serviceName: Rollbar Metrics API\n    serviceCategory:\
+  \ API\n  - name: Rollbar RQL API\n    baseURL: https://api.rollbar.com/api/1\n    tags:\n      - Query Language\n      - Analytics\n      - Error Tracking\n      - REST\n      - SQL\n    serviceName: Rollbar RQL API\n    serviceCategory: API\n  - name: Rollbar Webhooks\n    baseURL: https://api.rollbar.com\n    tags:\n      - Webhooks\n      - Event-Driven\n      - Notifications\n      - AsyncAPI\n      - Monitoring\n    serviceName: Rollbar Webhooks\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/rollbar/refs/heads/main/finops/rollbar-finops.yml
-sources:
-- https://rollbar.com/pricing/
+sources: []
 specification: FinOps Framework
 tags:
+- Error Tracking
+- Monitoring
+- Debugging
+- DevOps
+- Application Performance
 - FinOps
+- Cost Management
 - FOCUS
-- Error Monitoring
 ---

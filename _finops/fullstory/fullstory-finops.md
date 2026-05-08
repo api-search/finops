@@ -9,69 +9,101 @@ api_specs:
 - filename: fullstory-server-api-openapi.yml
   format: yaml
   label: FullStory Server API
-  slug: server-api
+  slug: fullstory-server-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/fullstory/refs/heads/main/openapi/fullstory-server-api-openapi.yml
-- filename: fullstory-segments-export-api-openapi.yml
-  format: yaml
-  label: FullStory Segments Export API
-  slug: segments-export-api
-  spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/fullstory/refs/heads/main/openapi/fullstory-segments-export-api-openapi.yml
 - filename: fullstory-sessions-api-openapi.yml
   format: yaml
   label: FullStory Sessions API
-  slug: sessions-api
+  slug: fullstory-sessions-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/fullstory/refs/heads/main/openapi/fullstory-sessions-api-openapi.yml
+- filename: fullstory-segments-export-api-openapi.yml
+  format: yaml
+  label: FullStory Segments Export API
+  slug: fullstory-segments-export-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/fullstory/refs/heads/main/openapi/fullstory-segments-export-api-openapi.yml
 - filename: fullstory-webhooks-api-openapi.yml
   format: yaml
   label: FullStory Webhooks API
-  slug: webhooks-api
+  slug: fullstory-webhooks-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/fullstory/refs/heads/main/openapi/fullstory-webhooks-api-openapi.yml
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Custom Annual Contract
-description: FOCUS-aligned FinOps for Fullstory.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the FullStory API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ProviderName: Fullstory
-  PublisherName: Fullstory
-  ServiceCategory: Digital Experience Intelligence
-  ServiceName: Fullstory
+  ChargeCategory: Usage
+  InvoiceIssuerName: FullStory
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: FullStory
+  PublisherName: FullStory
+  ServiceCategory: Developer Tools / API
+  ServiceName: FullStory
 layout: finops
 meters:
-- aggregation: max
-  name: monthly_unique_visitors
-  unit: user
 - aggregation: sum
-  name: session_replays
-  unit: replay
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  name: events
-  unit: event
-- aggregation: max
-  name: user_seats
-  unit: seat-month
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Fullstory Finops
 provider_name: FullStory
 provider_slug: fullstory
-publisher_name: Fullstory
-service_category: Digital Experience Intelligence
+publisher_name: FullStory
+service_category: API
 slug: fullstory-finops
 source_filename: fullstory-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.fullstory.com/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Fullstory\nproviderId: fullstory\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Digital Experience Intelligence\ndescription: FOCUS-aligned FinOps for Fullstory.\nsources:\n  - https://www.fullstory.com/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Fullstory\nserviceCategory: Digital Experience Intelligence\nbillingModel:\n  pricingCategory: Custom Annual Contract\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Fullstory\n  ServiceCategory: Digital Experience Intelligence\n  ProviderName: Fullstory\n  PublisherName: Fullstory\n  BillingCurrency: USD\nmeters:\n  - name: monthly_unique_visitors\n\
-  \    unit: user\n    aggregation: max\n  - name: session_replays\n    unit: replay\n    aggregation: sum\n  - name: events\n    unit: event\n    aggregation: sum\n  - name: user_seats\n    unit: seat-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track Fullstory consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: FullStory\nproviderId: fullstory\npublisherName: FullStory\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Session Replay\n  - Product Analytics\n  - Digital Experience\n  - Behavioral Analytics\n  - Frontend Monitoring\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the FullStory API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: FullStory\n  ServiceCategory: Developer Tools / API\n  ProviderName: FullStory\n  PublisherName: FullStory\n  InvoiceIssuerName: FullStory\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: FullStory Server API\n    baseURL: https://api.fullstory.com\n    tags:\n      - Behavioral Analytics\n      - Session Replay\n      - REST\n    serviceName: FullStory Server API\n    serviceCategory: API\n  - name: FullStory Sessions API\n    baseURL: https://api.fullstory.com\n    tags:\n      - Session Replay\n      - REST\n    serviceName: FullStory Sessions API\n    serviceCategory: API\n  - name: FullStory Segments Export API\n    baseURL: https://api.fullstory.com\n    tags:\n      - Analytics\n      - Export\n      - REST\n    serviceName: FullStory Segments Export API\n    serviceCategory: API\n  - name: FullStory Webhooks API\n    baseURL: https://api.fullstory.com\n\
+  \    tags:\n      - Webhooks\n      - Events\n      - REST\n    serviceName: FullStory Webhooks API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/fullstory/refs/heads/main/finops/fullstory-finops.yml
-sources:
-- https://www.fullstory.com/pricing/
+sources: []
 specification: FinOps Framework
 tags:
+- Session Replay
+- Product Analytics
+- Digital Experience
+- Behavioral Analytics
+- Frontend Monitoring
 - FinOps
+- Cost Management
 - FOCUS
-- Digital Experience Intelligence
 ---

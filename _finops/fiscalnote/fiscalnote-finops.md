@@ -32,77 +32,78 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/fiscalnote/refs/heads/main/openapi/fiscalnote-organization-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Tiered Subscription
-description: FOCUS-aligned FinOps mapping for FiscalNote — annual subscription SaaS with seat-based and tier-gated pricing across PolicyNote, CQ, and Roll Call products. API access is bundled with the subscription rather than separately metered.
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the FiscalNote API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: FiscalNote, Inc.
-  ProviderName: FiscalNote, Inc.
-  PublisherName: FiscalNote, Inc.
-  ServiceCategory: Government / Policy Intelligence
+  ChargeCategory: Usage
+  InvoiceIssuerName: FiscalNote
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: FiscalNote
+  PublisherName: FiscalNote
+  ServiceCategory: Developer Tools / API
   ServiceName: FiscalNote
 layout: finops
 meters:
-- aggregation: max
-  description: Named-user seats on PolicyNote / CQ / Roll Call
-  dimensions:
-  - product
-  - tier
-  - team
-  name: seats
-  unit: seat-month
-- aggregation: max
-  description: Tier license fee (Platform Only / Essential / Advanced) on PolicyNote
-  dimensions:
-  - product
-  - tier
-  name: tier_license
-  unit: month
 - aggregation: sum
-  description: Hands-on analyst curation hours bundled with Essential / Advanced tiers
-  dimensions:
-  - product
-  - tier
-  name: analyst_services
-  unit: hour
-- aggregation: sum
-  description: Optional API usage where contract specifies a metered API add-on
+  description: Count of billable API requests
   dimensions:
   - api
   - endpoint
-  name: api_calls
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Fiscalnote Finops
 provider_name: FiscalNote
 provider_slug: fiscalnote
-publisher_name: FiscalNote, Inc.
-service_category: Government / Policy Intelligence
+publisher_name: FiscalNote
+service_category: API
 slug: fiscalnote-finops
 source_filename: fiscalnote-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.fiscalnote.com/products
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: FiscalNote\nproviderId: fiscalnote\npublisherName: FiscalNote, Inc.\nserviceCategory: Government / Policy Intelligence\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Government\n  - Legislation\n  - Policy\n  - Political Intelligence\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps mapping for FiscalNote — annual subscription SaaS with seat-based and tier-gated pricing across PolicyNote, CQ, and Roll Call products. API access is bundled with the subscription rather than separately metered.\nnotes: No public pricing or invoice schema; meters reflect the expected invoice lines (seat-month, tier license, professional-services\
-  \ analyst hours).\nsources:\n  - https://www.fiscalnote.com/products\n  - https://fiscalnote.com/policynote-plans\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: FiscalNote\n  ServiceCategory: Government / Policy Intelligence\n  ProviderName: FiscalNote, Inc.\n  PublisherName: FiscalNote, Inc.\n  InvoiceIssuerName: FiscalNote, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: seats\n    description: Named-user seats on PolicyNote / CQ / Roll Call\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - product\n      - tier\n      - team\n  - name: tier_license\n    description: Tier license fee (Platform Only / Essential / Advanced) on PolicyNote\n    unit: month\n    aggregation: max\n    dimensions:\n      - product\n      - tier\n  - name: analyst_services\n    description:\
-  \ Hands-on analyst curation hours bundled with Essential / Advanced tiers\n    unit: hour\n    aggregation: sum\n    dimensions:\n      - product\n      - tier\n  - name: api_calls\n    description: Optional API usage where contract specifies a metered API add-on\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\nprinciples:\n  - name: Visibility\n    description: Pull seat-utilization reports from FiscalNote admin to track license waste; reconcile against the annual invoice.\n  - name: Allocation\n    description: Allocate seats by team/issue area in the FiscalNote admin so chargeback is unambiguous.\n  - name: Optimization\n    description: Right-size tier (Platform Only vs Essential) based on whether analyst curation is actually consumed; consolidate seats from departing employees promptly.\n  - name: Accountability\n    description: Government-affairs leader owns the contract; finance reviews seat utilization and tier appropriateness ahead of\
-  \ each annual renewal.\nmaintainers: []\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: FiscalNote\nproviderId: fiscalnote\npublisherName: FiscalNote\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Government\n  - Legislation\n  - Policy\n  - Political Intelligence\n  - Regulation\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the FiscalNote API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
+  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: FiscalNote\n  ServiceCategory: Developer Tools / API\n  ProviderName: FiscalNote\n  PublisherName: FiscalNote\n  InvoiceIssuerName: FiscalNote\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n\
+  \    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: FiscalNote PolicyNote API\n    baseURL: https://api.fiscalnote.com\n    tags:\n      - AI Agents\n      - Compliance\n      - Legislation\n      - MCP\n      - Policy\n      - Regulation\n    serviceName: FiscalNote PolicyNote API\n    serviceCategory: API\n  - name: FiscalNote AppData API\n    baseURL: https://api.fiscalnote.com\n    tags:\n      - Bills\n      - Government Data\n      - Legislation\n      - Regulation\n    serviceName: FiscalNote AppData API\n    serviceCategory: API\n  - name: FiscalNote People API\n    baseURL: https://api.fiscalnote.com\n    tags:\n      - Government Officials\n      - Legislators\n      - Politicians\n    serviceName: FiscalNote People API\n\
+  \    serviceCategory: API\n  - name: FiscalNote Organization API\n    baseURL: https://api.fiscalnote.com\n    tags:\n      - Committees\n      - Federal Agencies\n      - Government Organizations\n    serviceName: FiscalNote Organization API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/fiscalnote/refs/heads/main/finops/fiscalnote-finops.yml
-sources:
-- https://www.fiscalnote.com/products
-- https://fiscalnote.com/policynote-plans
+sources: []
 specification: FinOps Framework
 tags:
 - Government
 - Legislation
 - Policy
 - Political Intelligence
+- Regulation
 - FinOps
+- Cost Management
 - FOCUS
 ---

@@ -37,93 +37,74 @@ billing_model:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Pay-As-You-Go + Committed Use
-description: 'FOCUS-aligned FinOps for Azure Storage: per-GB-month capacity, per-10K-transaction operations, per-GB egress, and tier-based pricing (Hot/Cool/Cold/Archive on Blob; Standard/Premium on Files). Reserved Capacity covers Block Blob and Azure Files for committed workloads.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Azure Storage Account API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Corporation
-  PricingCategory: Pay-As-You-Go
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Storage
-  ServiceName: Azure Storage
+  InvoiceIssuerName: Azure Storage Account
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Azure Storage Account
+  PublisherName: Azure Storage Account
+  ServiceCategory: Developer Tools / API
+  ServiceName: Azure Storage Account
 layout: finops
 meters:
-- aggregation: avg
-  description: Block / page / append blob storage by access tier
-  dimensions:
-  - access_tier
-  - redundancy
-  - region
-  - account
-  name: blob_capacity
-  unit: GB-month
 - aggregation: sum
-  description: Read / write / list / scan operations on blob storage
+  description: Count of billable API requests
   dimensions:
-  - operation_type
-  - access_tier
-  - region
-  name: blob_transactions
-  unit: operation
-- aggregation: avg
-  description: Azure Files capacity
-  dimensions:
+  - api
+  - endpoint
   - tier
-  - redundancy
   - region
-  name: file_capacity
-  unit: GB-month
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Azure Files SMB/NFS operations
+  description: Bytes returned over the network in API responses
   dimensions:
-  - operation_type
+  - api
   - region
-  name: file_transactions
-  unit: operation
-- aggregation: sum
-  description: Queue and Table operations
-  dimensions:
-  - service
-  - region
-  name: queue_table_transactions
-  unit: operation
-- aggregation: sum
-  description: Cold / Archive retrieval throughput charges
-  dimensions:
-  - tier
-  name: data_retrieval
+  - consumer
+  name: data_egress
   unit: GB
 - aggregation: sum
-  description: Cross-region / internet egress
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - source_region
-  - destination
-  name: egress_bandwidth
-  unit: GB
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Azure Storage Account Finops
 provider_name: Azure Storage Account
 provider_slug: azure-storage-account
-publisher_name: Microsoft Corporation
-service_category: Storage
+publisher_name: Azure Storage Account
+service_category: API
 slug: azure-storage-account-finops
 source_filename: azure-storage-account-finops.yml
 source_heading: FinOps Profile
-source_url: https://azure.microsoft.com/en-us/pricing/details/storage/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Azure Storage Account\nproviderId: azure-storage-account\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Storage\n  - Blob\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Azure Storage: per-GB-month capacity, per-10K-transaction operations,\n  per-GB egress, and tier-based pricing (Hot/Cool/Cold/Archive on Blob; Standard/Premium on Files). Reserved\n  Capacity covers Block Blob and Azure Files for committed workloads.'\nsources:\n  - https://azure.microsoft.com/en-us/pricing/details/storage/\n  - https://learn.microsoft.com/en-us/azure/storage/common/scalability-targets-standard-account\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
-  \ Microsoft Corporation\nserviceCategory: Storage\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Committed Use\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Azure Storage\n  ServiceCategory: Storage\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  PricingCategory: Pay-As-You-Go\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: blob_capacity\n    description: Block / page / append blob storage by access tier\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - access_tier\n      - redundancy\n      - region\n      - account\n  - name: blob_transactions\n    description: Read / write / list / scan operations on blob storage\n    unit: operation\n    aggregation: sum\n    dimensions:\n      - operation_type\n      - access_tier\n      - region\n  - name: file_capacity\n  \
-  \  description: Azure Files capacity\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - tier\n      - redundancy\n      - region\n  - name: file_transactions\n    description: Azure Files SMB/NFS operations\n    unit: operation\n    aggregation: sum\n    dimensions:\n      - operation_type\n      - region\n  - name: queue_table_transactions\n    description: Queue and Table operations\n    unit: operation\n    aggregation: sum\n    dimensions:\n      - service\n      - region\n  - name: data_retrieval\n    description: Cold / Archive retrieval throughput charges\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - tier\n  - name: egress_bandwidth\n    description: Cross-region / internet egress\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - source_region\n      - destination\nprinciples:\n  - name: Visibility\n    description: Use Storage Insights, Storage Analytics metrics, and Azure Cost Management cost-per-account\n      breakdowns to view capacity,\
-  \ transaction, and egress costs.\n  - name: Allocation\n    description: Apply tags to storage accounts; use one account per workload; map costs by tag/container/blob\n      prefix using Storage Inventory and cost-allocation rules.\n  - name: Optimization\n    description: Use lifecycle management to tier blobs Hot -> Cool -> Cold -> Archive automatically;\n      enable blob versioning carefully (cost grows with versions); right-size redundancy (LRS vs GRS);\n      buy Reserved Capacity for steady-state; use private endpoints to avoid egress.\n  - name: Accountability\n    description: Set per-account alerts on capacity and transaction growth; assign account owners; review\n      lifecycle policies and orphan blobs/snapshots monthly.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Azure Storage Account\nproviderId: azure-storage-account\npublisherName: Azure Storage Account\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Azure\n  - Blob Storage\n  - Cloud Storage\n  - File Storage\n  - Microsoft\n  - Storage\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Azure Storage Account API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Azure Storage Account\n  ServiceCategory: Developer Tools / API\n  ProviderName: Azure Storage Account\n  PublisherName: Azure Storage Account\n  InvoiceIssuerName: Azure Storage Account\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
+  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Azure Blob Storage API\n    baseURL: https://{account}.blob.core.windows.net\n    tags:\n      - Blob Storage\n      - Object Storage\n      - Unstructured Data\n    serviceName: Azure Blob Storage API\n    serviceCategory: API\n  - name: Azure Queue Storage API\n    baseURL: https://{account}.queue.core.windows.net\n    tags:\n      - Asynchronous Processing\n      - Message Queue\n      - Queue Storage\n    serviceName: Azure Queue Storage API\n    serviceCategory: API\n  - name: Azure Table Storage API\n    baseURL: https://{account}.table.core.windows.net\n    tags:\n      - NoSQL\n      - Structured\
+  \ Data\n      - Table Storage\n    serviceName: Azure Table Storage API\n    serviceCategory: API\n  - name: Azure File Storage API\n    baseURL: https://{account}.file.core.windows.net\n    tags:\n      - File Shares\n      - File Storage\n      - SMB\n    serviceName: Azure File Storage API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/azure-storage-account/refs/heads/main/finops/azure-storage-account-finops.yml
-sources:
-- https://azure.microsoft.com/en-us/pricing/details/storage/
-- https://learn.microsoft.com/en-us/azure/storage/common/scalability-targets-standard-account
+sources: []
 specification: FinOps Framework
 tags:
+- Azure
+- Blob Storage
+- Cloud Storage
+- File Storage
+- Microsoft
 - Storage
-- Blob
 - FinOps
+- Cost Management
 - FOCUS
 ---

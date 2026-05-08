@@ -19,66 +19,80 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/gandi/refs/heads/main/openapi/livedns-openapi-original.yml
 billing_model:
-  billingCurrency: USD/EUR
-  billingFrequency: Per-Invoice
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
-  - Refund
+  - Credit
   - Adjustment
-  pricingCategory: Per-Resource Purchase
-description: 'FOCUS-aligned FinOps for Gandi: per-resource purchase model. Charges accrue on domain registration / renewal / transfer (per TLD per year), mailbox subscriptions, and any optional add-ons. The Public API itself is free for account holders.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Gandi API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Gandi SAS
+  ChargeCategory: Usage
+  InvoiceIssuerName: Gandi
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Gandi
-  PublisherName: Gandi SAS
-  ServiceCategory: Domain Registrar & DNS
+  PublisherName: Gandi
+  ServiceCategory: Developer Tools / API
   ServiceName: Gandi
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - tld
-  - action
-  name: domain_registrations
-  unit: domain-year
-- aggregation: max
-  dimensions:
-  - plan
-  name: mailboxes
-  unit: mailbox-month
-- aggregation: sum
-  dimensions:
-  - type
-  name: ssl_certificates
-  unit: certificate
-- aggregation: sum
-  dimensions:
-  - api_product
-  name: api_calls
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Gandi Finops
 provider_name: Gandi
 provider_slug: gandi
-publisher_name: Gandi SAS
-service_category: Domain Registrar & DNS
+publisher_name: Gandi
+service_category: API
 slug: gandi-finops
 source_filename: gandi-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.gandi.net/en/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Gandi\nproviderId: gandi\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Domains\n  - DNS\n  - Registrar\ndescription: 'FOCUS-aligned FinOps for Gandi: per-resource purchase model. Charges accrue on\n  domain registration / renewal / transfer (per TLD per year), mailbox subscriptions, and any\n  optional add-ons. The Public API itself is free for account holders.'\nsources:\n  - https://www.gandi.net/en/pricing\n  - https://api.gandi.net/docs/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Gandi SAS\nserviceCategory: Domain Registrar & DNS\nbillingModel:\n  pricingCategory: Per-Resource Purchase\n  billingFrequency: Per-Invoice\n\
-  \  billingCurrency: USD/EUR\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Refund\n    - Adjustment\nfocusColumns:\n  ServiceName: Gandi\n  ServiceCategory: Domain Registrar & DNS\n  ProviderName: Gandi\n  PublisherName: Gandi SAS\n  InvoiceIssuerName: Gandi SAS\n  BillingCurrency: USD\nmeters:\n  - name: domain_registrations\n    unit: domain-year\n    aggregation: sum\n    dimensions:\n      - tld\n      - action\n  - name: mailboxes\n    unit: mailbox-month\n    aggregation: max\n    dimensions:\n      - plan\n  - name: ssl_certificates\n    unit: certificate\n    aggregation: sum\n    dimensions:\n      - type\n  - name: api_calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_product\nprinciples:\n  - name: Visibility\n    description: Use the Gandi Billing API and the account billing dashboard to enumerate\n      registered resources and upcoming renewals; reconcile against invoices.\n  - name: Allocation\n    description: Tag domains to projects/teams\
-  \ via Gandi's organization model; segregate API\n      tokens (PATs) per consumer to attribute API-driven purchases.\n  - name: Optimization\n    description: Take advantage of promotional first-year TLDs; consolidate renewal cycles;\n      use included free SSL and DNS rather than separate vendors.\n  - name: Accountability\n    description: Domain ops owns renewal calendar; finance reviews TLD-mix and registrar-fee\n      variance at quarter-end.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Gandi\nproviderId: gandi\npublisherName: Gandi\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - DNS\n  - Domains\n  - Domain Registrar\n  - Email\n  - Hosting\n  - Certificates\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Gandi API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Gandi\n  ServiceCategory: Developer Tools / API\n  ProviderName: Gandi\n  PublisherName: Gandi\n  InvoiceIssuerName: Gandi\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n  \
+  \    - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Gandi Domain API\n    baseURL: https://api.gandi.net/v5/domain\n    tags:\n      - Domains\n      - Domain Registrar\n    serviceName: Gandi Domain API\n    serviceCategory: API\n  - name: Gandi LiveDNS API\n    baseURL: https://api.gandi.net/v5/livedns\n    tags:\n      - DNS\n      - Domains\n    serviceName: Gandi LiveDNS API\n    serviceCategory: API\n  - name: Gandi Certificate API\n    baseURL: ''\n    tags:\n      - Certificates\n      - SSL\n    serviceName: Gandi Certificate API\n    serviceCategory: API\n  - name: Gandi Email API\n    baseURL: ''\n    tags:\n      - Email\n    serviceName: Gandi Email API\n    serviceCategory: API\n  - name: Gandi Billing API\n    baseURL: ''\n    tags:\n      - Billing\n   \
+  \ serviceName: Gandi Billing API\n    serviceCategory: API\n  - name: Gandi Organization API\n    baseURL: ''\n    tags:\n      - Organization\n      - Users\n    serviceName: Gandi Organization API\n    serviceCategory: API\n  - name: Gandi Web Hosting API\n    baseURL: ''\n    tags:\n      - Hosting\n    serviceName: Gandi Web Hosting API\n    serviceCategory: API\n  - name: Gandi Cloud VPS API\n    baseURL: ''\n    tags:\n      - Cloud\n      - VPS\n    serviceName: Gandi Cloud VPS API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/gandi/refs/heads/main/finops/gandi-finops.yml
-sources:
-- https://www.gandi.net/en/pricing
-- https://api.gandi.net/docs/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Domains
 - DNS
-- Registrar
+- Domains
+- Domain Registrar
+- Email
+- Hosting
+- Certificates
+- FinOps
+- Cost Management
+- FOCUS
 ---

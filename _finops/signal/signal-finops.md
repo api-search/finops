@@ -14,44 +14,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/signal/refs/heads/main/openapi/signal-server-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: N/A
-  chargeCategories: []
-  pricingCategory: Donation-Funded / Non-Commercial
-description: FOCUS-aligned FinOps placeholder for Signal. Signal is a donation-funded non-profit; there is no commercial API, no invoice issued to consumers of the service, and no FOCUS data export. This artifact is included for catalog completeness only.
+  billingFrequency: Monthly
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Signal API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Signal Foundation
+  ChargeCategory: Usage
+  InvoiceIssuerName: Signal
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Signal
-  PublisherName: Signal Messenger, LLC
-  ServiceCategory: Messaging (Non-Commercial)
+  PublisherName: Signal
+  ServiceCategory: Developer Tools / API
   ServiceName: Signal
 layout: finops
 meters:
 - aggregation: sum
-  description: Signal does not bill consumers and emits no usage meter for FinOps purposes.
-  name: not_applicable
-  unit: varies
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Signal Finops
 provider_name: Signal
 provider_slug: signal
-publisher_name: Signal Messenger, LLC / Signal Foundation
-service_category: Messaging (Non-Commercial)
+publisher_name: Signal
+service_category: API
 slug: signal-finops
 source_filename: signal-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.signal.org/donate/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Signal\nproviderId: signal\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Messaging\n  - Privacy\n  - Open Source\n  - Non-Profit\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps placeholder for Signal. Signal is a donation-funded non-profit;\n  there is no commercial API, no invoice issued to consumers of the service, and no FOCUS data export.\n  This artifact is included for catalog completeness only.\nsources:\n  - https://www.signal.org/donate/\nnotes: Signal is non-commercial. No billing model, FOCUS columns, or meters apply; this artifact\n  exists solely so consumers understand the absence of a billable surface.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
-  publisherName: Signal Messenger, LLC / Signal Foundation\nserviceCategory: Messaging (Non-Commercial)\nbillingModel:\n  pricingCategory: Donation-Funded / Non-Commercial\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories: []\nfocusColumns:\n  ServiceName: Signal\n  ServiceCategory: Messaging (Non-Commercial)\n  ProviderName: Signal\n  PublisherName: Signal Messenger, LLC\n  InvoiceIssuerName: Signal Foundation\n  BillingCurrency: USD\nmeters:\n  - name: not_applicable\n    description: Signal does not bill consumers and emits no usage meter for FinOps purposes.\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: There is no consumer-facing spend on Signal; visibility is limited to optional donations\n      that an organization may make to the Signal Foundation.\n  - name: Allocation\n    description: Donations may be allocated to the philanthropy/community-investment cost center if\n      a company chooses to support Signal.\n\
-  \  - name: Optimization\n    description: Not applicable — there is no usage cost to optimize.\n  - name: Accountability\n    description: If donating, the giving entity (foundation, philanthropy, or executive sponsor) owns\n      the donation decision; engineering does not own a spend line.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Signal\nproviderId: signal\npublisherName: Signal\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Encryption\n  - Messaging\n  - Security\n  - Cryptography\n  - Open Source\n  - Privacy\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Signal API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Signal\n  ServiceCategory: Developer Tools / API\n  ProviderName: Signal\n  PublisherName: Signal\n  InvoiceIssuerName: Signal\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Signal Protocol Specifications\n    baseURL: ''\n    tags:\n      - Encryption\n      - Messaging\n      - Cryptography\n      - Security\n      - Protocols\n    serviceName: Signal Protocol Specifications\n    serviceCategory: API\n  - name: Signal libsignal SDK\n    baseURL: ''\n    tags:\n      - SDK\n      - Encryption\n      - Cryptography\n      - Java\n      - Swift\n      - TypeScript\n      - Rust\n    serviceName: Signal libsignal SDK\n    serviceCategory: API\n  - name: Signal Server\n    baseURL: https://chat.signal.org\n    tags:\n      - Messaging\n      - Server\n      - Backend\n      - Encryption\n      - Open Source\n    serviceName: Signal Server\n    serviceCategory: API\n  - name: Signal Android\
+  \ SDK\n    baseURL: ''\n    tags:\n      - Android\n      - Mobile\n      - Messaging\n      - Encryption\n      - Open Source\n    serviceName: Signal Android SDK\n    serviceCategory: API\n  - name: Signal iOS SDK\n    baseURL: ''\n    tags:\n      - iOS\n      - Mobile\n      - Messaging\n      - Encryption\n      - Open Source\n    serviceName: Signal iOS SDK\n    serviceCategory: API\n  - name: Signal Desktop SDK\n    baseURL: ''\n    tags:\n      - Desktop\n      - Electron\n      - Messaging\n      - Encryption\n      - Open Source\n    serviceName: Signal Desktop SDK\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/signal/refs/heads/main/finops/signal-finops.yml
-sources:
-- https://www.signal.org/donate/
+sources: []
 specification: FinOps Framework
 tags:
+- Encryption
 - Messaging
-- Privacy
+- Security
+- Cryptography
 - Open Source
-- Non-Profit
+- Privacy
 - FinOps
+- Cost Management
 - FOCUS
 ---

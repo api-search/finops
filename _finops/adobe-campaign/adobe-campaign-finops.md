@@ -20,61 +20,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/adobe-campaign/refs/heads/main/openapi/adobe-campaign-classic-openapi-original.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Enterprise Contract
-description: 'FOCUS-aligned FinOps shape for Adobe Campaign: enterprise contract licensing keyed to active profile count, channels enabled, and annual message-volume commit. API access is included.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Adobe Campaign API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Adobe Inc.
-  ProviderName: Adobe
-  PublisherName: Adobe Inc.
-  ServiceCategory: Marketing Automation
+  ChargeCategory: Usage
+  InvoiceIssuerName: Adobe Campaign
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Adobe Campaign
+  PublisherName: Adobe Campaign
+  ServiceCategory: Developer Tools / API
   ServiceName: Adobe Campaign
 layout: finops
 meters:
-- aggregation: max
-  description: Marketable profiles tracked against the contracted profile commit
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - segment
+  - api
+  - endpoint
+  - tier
   - region
-  name: active_profiles
-  unit: profile-month
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Outbound messages across all channels (email, SMS, push, direct mail)
+  description: Bytes returned over the network in API responses
   dimensions:
-  - channel
-  - campaign
-  name: messages_sent
-  unit: message
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Campaign workflow runs (used for capacity planning, not billed separately)
-  name: workflow_executions
-  unit: execution
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Adobe Campaign Finops
 provider_name: Adobe Campaign
 provider_slug: adobe-campaign
-publisher_name: Adobe Inc.
-service_category: Marketing Automation
+publisher_name: Adobe Campaign
+service_category: API
 slug: adobe-campaign-finops
 source_filename: adobe-campaign-finops.yml
 source_heading: FinOps Profile
-source_url: https://business.adobe.com/products/campaign/adobe-campaign.html
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Adobe Campaign\nproviderId: adobe-campaign\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Marketing\n  - Campaign Management\nnotes: >-\n  Adobe Campaign pricing is contract-specific. FinOps levers focus on profile\n  hygiene, channel mix optimization, and message-volume forecasting against\n  the annual commit.\ndescription: >-\n  FOCUS-aligned FinOps shape for Adobe Campaign: enterprise contract\n  licensing keyed to active profile count, channels enabled, and annual\n  message-volume commit. API access is included.\nsources:\n  - https://business.adobe.com/products/campaign/adobe-campaign.html\n  - https://developer.adobe.com/campaign-standard-apis/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl:\
-  \ https://focus.finops.org/focus-specification/v1-3/\npublisherName: Adobe Inc.\nserviceCategory: Marketing Automation\nbillingModel:\n  pricingCategory: Enterprise Contract\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Adobe Campaign\n  ServiceCategory: Marketing Automation\n  ProviderName: Adobe\n  PublisherName: Adobe Inc.\n  InvoiceIssuerName: Adobe Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: active_profiles\n    description: Marketable profiles tracked against the contracted profile commit\n    unit: profile-month\n    aggregation: max\n    dimensions:\n      - segment\n      - region\n  - name: messages_sent\n    description: Outbound messages across all channels (email, SMS, push, direct mail)\n    unit: message\n    aggregation: sum\n    dimensions:\n      - channel\n      - campaign\n  - name: workflow_executions\n    description: Campaign workflow\
-  \ runs (used for capacity planning, not billed separately)\n    unit: execution\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: >-\n      Use the Adobe Campaign Reporting workspace and the message-volume\n      dashboard to track consumption against the contracted commit.\n  - name: Allocation\n    description: >-\n      Tag campaigns and workflows with brand / business-unit metadata so\n      message volume rolls up to the consuming team.\n  - name: Optimization\n    description: >-\n      Suppress dormant profiles to reduce profile commit; consolidate\n      send-time-optimization windows; deduplicate cross-channel pressure\n      and reduce send frequency to lower volume against commit.\n  - name: Accountability\n    description: >-\n      Marketing Ops owns the active-profile and message-volume commit;\n      Adobe TAM runs quarterly business reviews against the contract.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Adobe Campaign\nproviderId: adobe-campaign\npublisherName: Adobe Campaign\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Campaign Management\n  - Customer Experience\n  - Email Marketing\n  - Marketing Automation\n  - Multi-Channel Marketing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Adobe Campaign API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name:\
+  \ Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  -\
+  \ name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Adobe Campaign\n  ServiceCategory: Developer Tools / API\n  ProviderName: Adobe Campaign\n  PublisherName: Adobe Campaign\n  InvoiceIssuerName: Adobe Campaign\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
+  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Adobe Campaign Standard API\n    baseURL: https://mc.adobe.io/{ORGANIZATION}/campaign\n    tags:\n      - Email\n      - Marketing\n      - Profiles\n      - REST API\n      - Workflows\n    serviceName: Adobe Campaign Standard API\n    serviceCategory: API\n  - name: Adobe Campaign Classic API\n    baseURL: https://{instance}.campaign.adobe.com\n    tags:\n      - Campaign Classic\n      - Delivery\n      - JavaScript\n      - SOAP API\n    serviceName: Adobe Campaign Classic API\n    serviceCategory: API\n  - name: Adobe Campaign Classic JavaScript SDK\n    baseURL: https://{instance}.campaign.adobe.com\n    tags:\n\
+  \      - Campaign Classic\n      - JavaScript SDK\n      - Node.js\n      - Open Source\n      - SOAP Wrapper\n    serviceName: Adobe Campaign Classic JavaScript SDK\n    serviceCategory: API\n  - name: Adobe I/O Campaign Standard SDK\n    baseURL: https://mc.adobe.io/{ORGANIZATION}/campaign\n    tags:\n      - Adobe I/O\n      - App Builder\n      - Campaign Standard\n      - JavaScript SDK\n      - Node.js\n    serviceName: Adobe I/O Campaign Standard SDK\n    serviceCategory: API\n  - name: Adobe Experience Platform Mobile SDK - Campaign Extensions\n    baseURL: https://api.example.com\n    tags:\n      - Android\n      - In-App Messaging\n      - iOS\n      - Mobile SDK\n      - Push Notifications\n    serviceName: Adobe Experience Platform Mobile SDK - Campaign Extensions\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n\
+  \    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/adobe-campaign/refs/heads/main/finops/adobe-campaign-finops.yml
-sources:
-- https://business.adobe.com/products/campaign/adobe-campaign.html
-- https://developer.adobe.com/campaign-standard-apis/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Marketing
 - Campaign Management
+- Customer Experience
+- Email Marketing
+- Marketing Automation
+- Multi-Channel Marketing
+- FinOps
+- Cost Management
+- FOCUS
 ---

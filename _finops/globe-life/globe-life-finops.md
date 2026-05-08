@@ -9,50 +9,73 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  - Refund
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Insurance Premium
-description: 'FinOps framing for Globe Life: insurance carrier with policyholder-facing premium revenue rather than API consumption costs. Not a typical FinOps-billed surface.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Globe Life API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Globe Life Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Globe Life
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Globe Life
-  PublisherName: Globe Life Inc.
-  ServiceCategory: Insurance
+  PublisherName: Globe Life
+  ServiceCategory: Developer Tools / API
   ServiceName: Globe Life
 layout: finops
 meters:
 - aggregation: sum
-  description: Monthly insurance premium charged per active policy
+  description: Count of billable API requests
   dimensions:
-  - product_line
-  - state
-  name: policy_premium
-  unit: policy-month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Insurance claim payouts (revenue offset, not API cost)
-  name: claims_paid
-  unit: claim
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Globe Life Finops
 provider_name: Globe Life
 provider_slug: globe-life
-publisher_name: Globe Life Inc.
-service_category: Insurance
+publisher_name: Globe Life
+service_category: API
 slug: globe-life-finops
 source_filename: globe-life-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.globelifeinsurance.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Globe Life\nproviderId: globe-life\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Insurance\n  - Life Insurance\ndescription: 'FinOps framing for Globe Life: insurance carrier with policyholder-facing premium revenue\n  rather than API consumption costs. Not a typical FinOps-billed surface.'\nnotes: Reconcile only if Globe Life launches a developer-facing platform with consumption pricing.\nsources:\n  - https://www.globelifeinsurance.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Globe Life Inc.\nserviceCategory: Insurance\nbillingModel:\n  pricingCategory: Insurance Premium\n  billingFrequency: Monthly\n  billingCurrency:\
-  \ USD\n  chargeCategories:\n    - Purchase\n    - Refund\n    - Adjustment\nfocusColumns:\n  ServiceName: Globe Life\n  ServiceCategory: Insurance\n  ProviderName: Globe Life\n  PublisherName: Globe Life Inc.\n  InvoiceIssuerName: Globe Life Inc.\n  BillingCurrency: USD\nmeters:\n  - name: policy_premium\n    description: Monthly insurance premium charged per active policy\n    unit: policy-month\n    aggregation: sum\n    dimensions:\n      - product_line\n      - state\n  - name: claims_paid\n    description: Insurance claim payouts (revenue offset, not API cost)\n    unit: claim\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Track active policies and premium ledgers via Globe Life policyholder statements.\n  - name: Allocation\n    description: For corporate-paid group policies, allocate premium cost to the covered employee population.\n  - name: Optimization\n    description: Review coverage adequacy and term selection at renewal; consolidate riders where\
-  \ possible.\n  - name: Accountability\n    description: HR/benefits team owns group-policy spend; individual policyholders own personal premiums.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Globe Life\nproviderId: globe-life\npublisherName: Globe Life\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Insurance\n  - Life Insurance\n  - Financial Services\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Globe Life API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Globe Life\n  ServiceCategory: Developer Tools / API\n  ProviderName: Globe Life\n  PublisherName: Globe Life\n  InvoiceIssuerName: Globe Life\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Globe Life API\n    baseURL: https://api.globelifeinsurance.com\n    tags:\n      - Insurance\n      - Life Insurance\n      - Financial Services\n    serviceName: Globe Life API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/globe-life/refs/heads/main/finops/globe-life-finops.yml
-sources:
-- https://www.globelifeinsurance.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Insurance
 - Life Insurance
+- Financial Services
+- FinOps
+- Cost Management
+- FOCUS
 ---

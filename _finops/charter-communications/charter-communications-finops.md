@@ -25,57 +25,77 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Subscription + Usage (Contract)
-description: 'FOCUS-aligned FinOps framing for Charter Communications: enterprise telecom and NaaS services billed by contract; API access bundled with Spectrum Enterprise / Bryte IQ service charges rather than separately metered.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Charter Communications API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Charter Communications, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Charter Communications
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Charter Communications
-  PublisherName: Charter Communications, Inc.
-  ServiceCategory: Telecommunications
-  ServiceName: Spectrum Enterprise / Bryte IQ
+  PublisherName: Charter Communications
+  ServiceCategory: Developer Tools / API
+  ServiceName: Charter Communications
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - service
-  - location
-  name: connectivity_circuits
-  unit: circuit-month
-- aggregation: max
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - service
-  - location
-  name: bandwidth_committed
-  unit: Mbps-month
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  name: naas_qod_sessions
-  unit: session
-- aggregation: sum
-  name: managed_services
-  unit: service-month
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Charter Communications Finops
 provider_name: Charter Communications
 provider_slug: charter-communications
-publisher_name: Charter Communications, Inc.
-service_category: Telecommunications / Broadband
+publisher_name: Charter Communications
+service_category: API
 slug: charter-communications-finops
 source_filename: charter-communications-finops.yml
 source_heading: FinOps Profile
-source_url: https://enterprise.spectrum.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Charter Communications\nproviderId: charter-communications\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Telecommunications\n  - Broadband\ndescription: 'FOCUS-aligned FinOps framing for Charter Communications: enterprise telecom and NaaS services\n  billed by contract; API access bundled with Spectrum Enterprise / Bryte IQ service charges rather\n  than separately metered.'\nnotes: API consumption is not separately priced. Meters reflect bundled telecom / NaaS billing surface.\nsources:\n  - https://enterprise.spectrum.com/\n  - https://www.brytenetwork.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Charter Communications,\
-  \ Inc.\nserviceCategory: Telecommunications / Broadband\nbillingModel:\n  pricingCategory: Subscription + Usage (Contract)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Spectrum Enterprise / Bryte IQ\n  ServiceCategory: Telecommunications\n  ProviderName: Charter Communications\n  PublisherName: Charter Communications, Inc.\n  InvoiceIssuerName: Charter Communications, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: connectivity_circuits\n    unit: circuit-month\n    aggregation: sum\n    dimensions:\n      - service\n      - location\n  - name: bandwidth_committed\n    unit: Mbps-month\n    aggregation: max\n    dimensions:\n      - service\n      - location\n  - name: naas_qod_sessions\n    unit: session\n    aggregation: sum\n  - name: managed_services\n    unit: service-month\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Use\
-  \ the Spectrum Enterprise customer portal and Bryte IQ usage reports for invoice and\n      service inventory data.\n  - name: Allocation\n    description: Allocate by site / circuit ID / NaaS subscription; tag in CMDB for chargeback.\n  - name: Optimization\n    description: Right-size committed bandwidth, exercise NaaS dynamic capacity for bursty workloads,\n      and consolidate sites at strategic POPs.\n  - name: Accountability\n    description: Telecom / network team owns Charter invoices; review monthly against forecast and SLA\n      credits.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Charter Communications\nproviderId: charter-communications\npublisherName: Charter Communications\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Broadband\n  - Cable\n  - CAMARA\n  - Enterprise\n  - Network as a Service\n  - NaaS\n  - Spectrum\n  - Telecommunications\n  - Ticketing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Charter Communications API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and\
+  \ finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud\
+  \ Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Charter Communications\n  ServiceCategory: Developer Tools / API\n  ProviderName: Charter Communications\n  PublisherName: Charter Communications\n  InvoiceIssuerName: Charter Communications\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n\
+  \      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Charter Communications Spectrum Enterprise API\n    baseURL: https://enterprise.spectrum.com/api\n    tags:\n      - Enterprise\n      - Networking\n      - Telecommunications\n      - Ticketing\n    serviceName: Charter Communications Spectrum Enterprise API\n    serviceCategory: API\n  - name: Charter Communications Bryte IQ API\n    baseURL: https://api.charter.com\n    tags:\n      - CAMARA\n      - NaaS\n      - Network as a Service\n      - Telecommunications\n    serviceName: Charter Communications Bryte IQ API\n    serviceCategory:\
+  \ API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/charter-communications/refs/heads/main/finops/charter-communications-finops.yml
-sources:
-- https://enterprise.spectrum.com/
-- https://www.brytenetwork.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Telecommunications
 - Broadband
+- Cable
+- CAMARA
+- Enterprise
+- Network as a Service
+- NaaS
+- Spectrum
+- Telecommunications
+- Ticketing
+- FinOps
+- Cost Management
+- FOCUS
 ---

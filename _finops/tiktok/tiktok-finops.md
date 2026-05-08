@@ -26,59 +26,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/tiktok/refs/heads/main/openapi/tiktok-data-portability-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: N/A
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Free / Approval-Gated
-description: 'FOCUS-aligned FinOps for the TikTok developer APIs: free, approval-gated access with no per-call billing. FinOps focus is on quota burn and approval-tier entitlements rather than cost.'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the TikTok API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
+  InvoiceIssuerName: TikTok
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: TikTok
-  PublisherName: TikTok Pte. Ltd.
-  ServiceCategory: Social Platform APIs
-  ServiceName: TikTok Developer Platform
+  PublisherName: TikTok
+  ServiceCategory: Developer Tools / API
+  ServiceName: TikTok
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - client_key
+  - api
   - endpoint
-  name: user_info_requests
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - client_key
-  - endpoint
-  name: video_query_requests
-  unit: request
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - client_key
+  - api
   - endpoint
-  name: video_list_requests
-  unit: request
+  - tier
+  name: compute_seconds
+  unit: second
 name: Tiktok Finops
 provider_name: TikTok
 provider_slug: tiktok
-publisher_name: TikTok Pte. Ltd.
-service_category: Social Platform APIs
+publisher_name: TikTok
+service_category: API
 slug: tiktok-finops
 source_filename: tiktok-finops.yml
 source_heading: FinOps Profile
-source_url: https://developers.tiktok.com/products
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: TikTok\nproviderId: tiktok\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Social\n  - Video\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for the TikTok developer APIs: free, approval-gated access with no\n  per-call billing. FinOps focus is on quota burn and approval-tier entitlements rather than cost.'\nsources:\n  - https://developers.tiktok.com/products\n  - https://developers.tiktok.com/doc/tiktok-api-v2-rate-limit\n  - https://focus.finops.org/focus-specification/v1-3/\nnotes: TikTok does not bill developers per call. There is no usage-based invoice surface; FinOps observability\n  is limited to internal telemetry against the published 600 rpm per-endpoint limits.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n\
-  \  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: TikTok Pte. Ltd.\nserviceCategory: Social Platform APIs\nbillingModel:\n  pricingCategory: Free / Approval-Gated\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: TikTok Developer Platform\n  ServiceCategory: Social Platform APIs\n  ProviderName: TikTok\n  PublisherName: TikTok Pte. Ltd.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: user_info_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - client_key\n      - endpoint\n  - name: video_query_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - client_key\n      - endpoint\n  - name: video_list_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - client_key\n      - endpoint\nprinciples:\n  - name: Visibility\n    description: Track per-client_key request volume against the 600 rpm sliding window for\
-  \ /v2/user/info,\n      /v2/video/query, and /v2/video/list to anticipate 429s.\n  - name: Allocation\n    description: Issue distinct client keys per app so quota burn and approval-tier entitlements (Research,\n      Commercial Content) can be attributed to the consuming product team.\n  - name: Optimization\n    description: Cache user_info responses, batch video queries, and avoid redundant list polls; request\n      a quota raise via TikTok Support before redesigning around the limit.\n  - name: Accountability\n    description: Designate a developer-relations owner accountable for the TikTok app review status,\n      approval-tier renewals, and Support tickets for limit increases.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: TikTok\nproviderId: tiktok\npublisherName: TikTok\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Advertising\n  - Commerce\n  - Content\n  - E-Commerce\n  - Social Media\n  - Video\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the TikTok API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the\
+  \ consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: TikTok\n  ServiceCategory: Developer Tools / API\n  ProviderName: TikTok\n  PublisherName: TikTok\n  InvoiceIssuerName: TikTok\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: TikTok API for Business\n    baseURL: https://business-api.tiktok.com\n    tags:\n      - Advertising\n      - Campaigns\n      - Marketing\n      - Social Media\n    serviceName: TikTok API for Business\n    serviceCategory: API\n  - name: TikTok Shop API\n    baseURL: https://open-api.tiktokglobalshop.com\n    tags:\n      - Commerce\n      - E-Commerce\n      - Products\n      - Orders\n    serviceName: TikTok Shop API\n    serviceCategory: API\n  - name: TikTok Data Portability API\n    baseURL: https://open.tiktokapis.com\n    tags:\n      - Data Portability\n      - Privacy\n      - User Data\n    serviceName: TikTok Data Portability API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n\
+  \    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tiktok/refs/heads/main/finops/tiktok-finops.yml
-sources:
-- https://developers.tiktok.com/products
-- https://developers.tiktok.com/doc/tiktok-api-v2-rate-limit
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
-- Social
+- Advertising
+- Commerce
+- Content
+- E-Commerce
+- Social Media
 - Video
 - FinOps
+- Cost Management
 - FOCUS
 ---

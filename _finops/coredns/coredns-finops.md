@@ -19,71 +19,86 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/coredns/refs/heads/main/openapi/coredns-metrics-openapi.yml
 billing_model:
-  billingCurrency: N/A
-  billingFrequency: N/A
-  chargeCategories: []
-  chargeFrequency: N/A
-  pricingCategory: Open Source (No Charge)
-description: FinOps shape for CoreDNS - an Apache 2.0 / CNCF Graduated open-source DNS server. There is no upstream invoice. Operator cost is borne by the underlying Kubernetes / cloud platform compute consumed by CoreDNS pods and any DNS-egress charges from upstream resolvers.
+  billingCurrency: USD
+  billingFrequency: Monthly
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the CoreDNS API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
-  BillingCurrency: N/A
-  ChargeCategory: N/A
-  PricingCategory: Free
-  ProviderName: CoreDNS Project
-  PublisherName: CoreDNS Authors / CNCF
-  ServiceCategory: Open Source DNS
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: CoreDNS
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: CoreDNS
+  PublisherName: CoreDNS
+  ServiceCategory: Developer Tools / API
   ServiceName: CoreDNS
 layout: finops
 meters:
 - aggregation: sum
-  description: CoreDNS pods running in the cluster (compute time consumed, billed by the underlying Kubernetes platform)
+  description: Count of billable API requests
   dimensions:
-  - cluster
-  - namespace
-  name: coredns_pods
-  unit: pod-hour
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: DNS queries processed (operational metric exported via the Prometheus plugin; not directly billed by CoreDNS)
+  description: Bytes returned over the network in API responses
   dimensions:
-  - cluster
-  - zone
-  - rcode
-  name: dns_queries
-  unit: query
-- aggregation: sum
-  description: Bytes egressed to upstream resolvers via the forward plugin (drives cloud-egress charges)
-  dimensions:
-  - cluster
-  - upstream
-  name: upstream_egress
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Coredns Finops
 provider_name: CoreDNS
 provider_slug: coredns
-publisher_name: CoreDNS Authors / CNCF
-service_category: Open Source DNS
+publisher_name: CoreDNS
+service_category: API
 slug: coredns-finops
 source_filename: coredns-finops.yml
 source_heading: FinOps Profile
-source_url: https://coredns.io/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CoreDNS\nproviderId: coredns\npublisherName: CoreDNS Authors / CNCF\nserviceCategory: Open Source DNS\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Apache 2.0\n  - CNCF\n  - DNS\n  - Kubernetes\n  - Networking\n  - Open Source\n  - Service Discovery\n  - FinOps\n  - FOCUS\ndescription: FinOps shape for CoreDNS - an Apache 2.0 / CNCF Graduated open-source DNS server. There\n  is no upstream invoice. Operator cost is borne by the underlying Kubernetes / cloud platform compute\n  consumed by CoreDNS pods and any DNS-egress charges from upstream resolvers.\nsources:\n  - https://coredns.io/\n  - https://github.com/coredns/coredns\n\
-  \  - https://www.cncf.io/projects/coredns/\nbillingModel:\n  pricingCategory: Open Source (No Charge)\n  billingFrequency: N/A\n  billingCurrency: N/A\n  chargeCategories: []\n  chargeFrequency: N/A\nfocusColumns:\n  ServiceName: CoreDNS\n  ServiceCategory: Open Source DNS\n  ProviderName: CoreDNS Project\n  PublisherName: CoreDNS Authors / CNCF\n  PricingCategory: Free\n  BillingCurrency: N/A\n  ChargeCategory: N/A\nmeters:\n  - name: coredns_pods\n    description: CoreDNS pods running in the cluster (compute time consumed, billed by the underlying\n      Kubernetes platform)\n    unit: pod-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - namespace\n  - name: dns_queries\n    description: DNS queries processed (operational metric exported via the Prometheus plugin; not\n      directly billed by CoreDNS)\n    unit: query\n    aggregation: sum\n    dimensions:\n      - cluster\n      - zone\n      - rcode\n  - name: upstream_egress\n    description: Bytes egressed to\
-  \ upstream resolvers via the forward plugin (drives cloud-egress charges)\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - cluster\n      - upstream\nprinciples:\n  - name: Visibility\n    description: CoreDNS itself is free; observe cost via the Prometheus /metrics endpoint (request\n      counters, latency histograms) joined to FOCUS-aligned cluster billing.\n  - name: Allocation\n    description: Allocate the cost of CoreDNS pods to platform / cluster-services budgets; the per-tenant\n      \"DNS cost\" is typically rolled into a shared platform charge rather than per-namespace.\n  - name: Optimization\n    description: Tune the cache plugin TTL to reduce upstream lookups; adjust replica count and resource\n      requests to actual QPS; use autopath / minimal to shorten search-domain lookups in Kubernetes;\n      throttle abusive sources with the ratelimit plugin to avoid CPU spikes.\n  - name: Accountability\n    description: Assign a platform-team owner for CoreDNS; alert\
-  \ on SERVFAIL rate, cache-miss ratio,\n      and pod CPU saturation; review upgrade cadence aligned with CNCF release schedule.\nnotes: CoreDNS is open-source with no upstream commercial billing. FinOps for CoreDNS is really FinOps\n  for the Kubernetes / cloud platform that hosts it. Reconciled is false because there is no provider\n  rate card or invoice to reconcile against.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CoreDNS\nproviderId: coredns\npublisherName: CoreDNS\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Apache 2.0\n  - Cloud Native\n  - CNCF\n  - DNS\n  - Go\n  - Graduated\n  - Kubernetes\n  - Networking\n  - Open Source\n  - Plugins\n  - Prometheus\n  - Service Discovery\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the CoreDNS API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n  \
+  \    real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n     \
+  \ - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: CoreDNS\n  ServiceCategory: Developer Tools / API\n  ProviderName: CoreDNS\n  PublisherName: CoreDNS\n  InvoiceIssuerName: CoreDNS\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
+  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: CoreDNS DNS Interface\n    baseURL: ''\n    tags:\n      - DNS\n      - DoH\n      - DoQ\n      - DoT\n      - Kubernetes\n      - Service Discovery\n    serviceName: CoreDNS DNS Interface\n    serviceCategory: API\n  - name: CoreDNS Plugin API\n    baseURL: ''\n    tags:\n      - Extensibility\n      - Plugins\n    serviceName: CoreDNS Plugin API\n    serviceCategory: API\n  - name: CoreDNS Health API\n    baseURL: http://localhost:8080\n    tags:\n      - Health Check\n      - Kubernetes\n      - Observability\n      - Readiness\n    serviceName: CoreDNS Health API\n    serviceCategory: API\n  - name: CoreDNS Metrics\
+  \ API\n    baseURL: http://localhost:9153\n    tags:\n      - Metrics\n      - Monitoring\n      - Observability\n      - Prometheus\n    serviceName: CoreDNS Metrics API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/coredns/refs/heads/main/finops/coredns-finops.yml
-sources:
-- https://coredns.io/
-- https://github.com/coredns/coredns
-- https://www.cncf.io/projects/coredns/
+sources: []
 specification: FinOps Framework
 tags:
 - Apache 2.0
+- Cloud Native
 - CNCF
 - DNS
+- Go
+- Graduated
 - Kubernetes
 - Networking
 - Open Source
+- Plugins
+- Prometheus
 - Service Discovery
 - FinOps
+- Cost Management
 - FOCUS
 ---

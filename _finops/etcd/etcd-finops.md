@@ -14,65 +14,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/etcd/refs/heads/main/openapi/etcd-http-gateway-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: N/A
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Open Source (no direct cost)
-description: 'FinOps view of etcd: no vendor invoice. Direct cost is the underlying compute, storage (low-latency SSD), and networking required to run a quorum-typically-3 cluster. When etcd is consumed via managed Kubernetes (EKS, GKE, AKS), its cost is bundled into the control-plane fee on the cloud bill.'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Etcd API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: N/A (open source)
-  ProviderName: etcd
-  PublisherName: Cloud Native Computing Foundation
-  ServiceCategory: Distributed Systems / Key-Value Store
-  ServiceName: etcd
+  ChargeCategory: Usage
+  InvoiceIssuerName: Etcd
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Etcd
+  PublisherName: Etcd
+  ServiceCategory: Developer Tools / API
+  ServiceName: Etcd
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - cluster
+  - api
+  - endpoint
+  - tier
   - region
-  - instance_type
-  name: compute_hours
-  unit: instance-hour
-- aggregation: max
-  dimensions:
-  - cluster
-  - region
-  name: ssd_storage
-  unit: GB-month
-- aggregation: max
-  dimensions:
-  - cluster
-  name: backup_storage
-  unit: GB-month
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - cluster
+  - api
   - region
-  name: network_egress
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Etcd Finops
 provider_name: Etcd
 provider_slug: etcd
-publisher_name: Cloud Native Computing Foundation
-service_category: Distributed Systems / Key-Value Store
+publisher_name: Etcd
+service_category: API
 slug: etcd-finops
 source_filename: etcd-finops.yml
 source_heading: FinOps Profile
-source_url: https://etcd.io/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Etcd\nproviderId: etcd\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Open Source\n  - Distributed Systems\n  - Kubernetes\ndescription: 'FinOps view of etcd: no vendor invoice. Direct cost is the underlying compute, storage\n  (low-latency SSD), and networking required to run a quorum-typically-3 cluster. When etcd is consumed\n  via managed Kubernetes (EKS, GKE, AKS), its cost is bundled into the control-plane fee on the cloud\n  bill.'\nsources:\n  - https://etcd.io/\n  - https://www.cncf.io/projects/etcd/\nnotes: No vendor invoice from the etcd project. FinOps surface is infrastructure cost (self-hosted) or\n  a portion of managed-Kubernetes control-plane spend.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
-  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Cloud Native Computing Foundation\nserviceCategory: Distributed Systems / Key-Value Store\nbillingModel:\n  pricingCategory: Open Source (no direct cost)\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: etcd\n  ServiceCategory: Distributed Systems / Key-Value Store\n  ProviderName: etcd\n  PublisherName: Cloud Native Computing Foundation\n  InvoiceIssuerName: N/A (open source)\n  BillingCurrency: USD\nmeters:\n  - name: compute_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - region\n      - instance_type\n  - name: ssd_storage\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - cluster\n      - region\n  - name: backup_storage\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - cluster\n  - name: network_egress\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
-  \      - cluster\n      - region\nprinciples:\n  - name: Visibility\n    description: Scrape etcd's Prometheus metrics (mvcc_db_total_size_in_bytes, disk fsync latency, leader\n      changes) and join with cloud cost data per cluster.\n  - name: Allocation\n    description: Tag etcd nodes/disks per cluster and per environment so platform-team cost is attributable\n      to consuming Kubernetes/control-plane workloads.\n  - name: Optimization\n    description: Co-locate etcd peers on low-latency NVMe SSD; right-size CPU/memory; use defrag and\n      compaction to keep DB small; consolidate small clusters where multi-tenant model permits.\n  - name: Accountability\n    description: Platform team owns etcd cluster cost; charge back to consuming Kubernetes control-plane\n      tenants on a per-cluster or per-namespace basis.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Etcd\nproviderId: etcd\npublisherName: Etcd\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud Native\n  - Consensus\n  - Distributed Systems\n  - Graduated\n  - Key-Value Store\n  - Kubernetes\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Etcd API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
+  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Etcd\n  ServiceCategory: Developer Tools / API\n  ProviderName: Etcd\n  PublisherName: Etcd\n  InvoiceIssuerName: Etcd\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
+  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: etcd gRPC API\n    baseURL: ''\n    tags:\n      - Cluster Management\n      - gRPC\n      - Key-Value\n      - Lease\n      - Watch\n    serviceName: etcd gRPC API\n    serviceCategory: API\n  - name: etcd HTTP Gateway API\n    baseURL: ''\n    tags:\n      - Gateway\n      - gRPC\n      - HTTP\n      - REST\n    serviceName: etcd HTTP Gateway API\n    serviceCategory: API\n  - name: etcd Concurrency API\n    baseURL: ''\n    tags:\n      - Concurrency\n      - Coordination\n      - Distributed Locking\n      - Leader Election\n    serviceName: etcd Concurrency API\n    serviceCategory: API\n  - name: etcd Metrics API\n    baseURL: ''\n    tags:\n      - Metrics\n      - Monitoring\n      - Observability\n\
+  \      - Prometheus\n    serviceName: etcd Metrics API\n    serviceCategory: API\n  - name: etcd v2 HTTP API\n    baseURL: ''\n    tags:\n      - Deprecated\n      - HTTP\n      - Key-Value\n      - REST\n    serviceName: etcd v2 HTTP API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/etcd/refs/heads/main/finops/etcd-finops.yml
-sources:
-- https://etcd.io/
-- https://www.cncf.io/projects/etcd/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Open Source
+- Cloud Native
+- Consensus
 - Distributed Systems
+- Graduated
+- Key-Value Store
 - Kubernetes
+- FinOps
+- Cost Management
+- FOCUS
 ---

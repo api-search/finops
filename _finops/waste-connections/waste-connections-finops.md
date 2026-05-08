@@ -9,47 +9,76 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Service Contract
-description: FinOps view of Waste Connections at the corporate level. Waste Connections does not bill API consumption; what flows on its invoices is scheduled service (collection, disposal, recycling) priced under the bilateral service contract.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Waste Connections API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Waste Connections, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Waste Connections
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Waste Connections
-  PublisherName: Waste Connections, Inc.
-  ServiceCategory: Environmental / Waste Services
-  ServiceName: Waste Connections Services
+  PublisherName: Waste Connections
+  ServiceCategory: Developer Tools / API
+  ServiceName: Waste Connections
 layout: finops
 meters:
 - aggregation: sum
-  description: Scheduled waste / recycling pickup events delivered under the customer service agreement (out-of-scope for software FinOps; included to give the FOCUS row a unit of measure).
+  description: Count of billable API requests
   dimensions:
-  - account
-  - service_type
-  name: service_pickup
-  unit: pickup
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Waste Connections Finops
 provider_name: Waste Connections
 provider_slug: waste-connections
-publisher_name: Waste Connections, Inc.
-service_category: Environmental / Waste Services
+publisher_name: Waste Connections
+service_category: API
 slug: waste-connections-finops
 source_filename: waste-connections-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.wasteconnections.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Waste Connections\nproviderId: waste-connections\npublisherName: Waste Connections, Inc.\nserviceCategory: Environmental / Waste Services\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Waste Management\n  - Environmental Services\n  - FinOps\n  - FOCUS\ndescription: FinOps view of Waste Connections at the corporate level. Waste\n  Connections does not bill API consumption; what flows on its invoices is\n  scheduled service (collection, disposal, recycling) priced under the\n  bilateral service contract.\nsources:\n  - https://www.wasteconnections.com/\nnotes: No API invoice surface. FOCUS attribution maps onto the bilateral\n  service contract, not a metered\
-  \ API line.\nbillingModel:\n  pricingCategory: Service Contract\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Waste Connections Services\n  ServiceCategory: Environmental / Waste Services\n  ProviderName: Waste Connections\n  PublisherName: Waste Connections, Inc.\n  InvoiceIssuerName: Waste Connections, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: service_pickup\n    description: Scheduled waste / recycling pickup events delivered under\n      the customer service agreement (out-of-scope for software FinOps;\n      included to give the FOCUS row a unit of measure).\n    unit: pickup\n    aggregation: sum\n    dimensions:\n      - account\n      - service_type\nprinciples:\n  - name: Visibility\n    description: Track service-line usage via the Waste Connections\n      customer portal; reconcile against the monthly invoice.\n  - name: Allocation\n    description:\
-  \ Allocate environmental-service spend to the consuming\n      site / property / cost-center based on the service account.\n  - name: Optimization\n    description: Optimize collection cadence, dumpster sizing, and\n      recycling-stream contamination to reduce monthly service charges.\n  - name: Accountability\n    description: Facilities / property-management owns the service\n      contract and per-site allocation.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Waste Connections\nproviderId: waste-connections\npublisherName: Waste Connections\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Environmental Services\n  - Fortune 500\n  - Recycling\n  - Solid Waste\n  - Sustainability\n  - Waste Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Waste Connections API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  -\
+  \ name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n\
+  \  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Waste Connections\n  ServiceCategory: Developer Tools / API\n  ProviderName: Waste Connections\n  PublisherName: Waste Connections\n  InvoiceIssuerName: Waste Connections\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
+  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Waste Connections Customer Portal\n    baseURL: ''\n    tags:\n      - Customer Portal\n      - Account Management\n      - Billing\n    serviceName: Waste Connections Customer Portal\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/waste-connections/refs/heads/main/finops/waste-connections-finops.yml
-sources:
-- https://www.wasteconnections.com/
+sources: []
 specification: FinOps Framework
 tags:
-- Waste Management
 - Environmental Services
+- Fortune 500
+- Recycling
+- Solid Waste
+- Sustainability
+- Waste Management
 - FinOps
+- Cost Management
 - FOCUS
 ---

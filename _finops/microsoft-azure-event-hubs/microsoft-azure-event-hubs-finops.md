@@ -31,70 +31,73 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Pay-As-You-Go
-description: 'FOCUS-aligned FinOps for Azure Event Hubs: hourly per-TU (Basic/Standard), per-PU (Premium), and per-CU (Dedicated) billing plus per-million ingress events on Basic and Standard.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Azure Event Hubs API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Corporation
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Messaging
+  InvoiceIssuerName: Azure Event Hubs
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Azure Event Hubs
+  PublisherName: Azure Event Hubs
+  ServiceCategory: Developer Tools / API
   ServiceName: Azure Event Hubs
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
+  - endpoint
   - tier
   - region
-  - namespace
-  name: throughput_unit_hours
-  unit: instance-hour
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
+  - api
   - region
-  - namespace
-  name: processing_unit_hours
-  unit: instance-hour
-- aggregation: sum
-  dimensions:
-  - region
-  - cluster
-  name: capacity_unit_hours
-  unit: instance-hour
-- aggregation: sum
-  dimensions:
-  - namespace
-  - eventhub
-  name: ingress_events
-  unit: event
-- aggregation: sum
-  dimensions:
-  - namespace
-  - destination
-  name: capture_storage
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Azure Event Hubs Finops
 provider_name: Azure Event Hubs
 provider_slug: microsoft-azure-event-hubs
-publisher_name: Microsoft Corporation
-service_category: Messaging / Event Streaming
+publisher_name: Azure Event Hubs
+service_category: API
 slug: microsoft-azure-event-hubs-finops
 source_filename: microsoft-azure-event-hubs-finops.yml
 source_heading: FinOps Profile
-source_url: https://azure.microsoft.com/en-us/pricing/details/event-hubs/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Azure Event Hubs\nproviderId: microsoft-azure-event-hubs\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Event Streaming\n  - Microsoft Azure\ndescription: 'FOCUS-aligned FinOps for Azure Event Hubs: hourly per-TU (Basic/Standard), per-PU (Premium),\n  and per-CU (Dedicated) billing plus per-million ingress events on Basic and Standard.'\nsources:\n  - https://azure.microsoft.com/en-us/pricing/details/event-hubs/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Microsoft Corporation\nserviceCategory: Messaging / Event Streaming\nbillingModel:\n  pricingCategory: Pay-As-You-Go\n  billingFrequency: Monthly\n  billingCurrency: USD\n\
-  \  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Azure Event Hubs\n  ServiceCategory: Messaging\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: throughput_unit_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - tier\n      - region\n      - namespace\n  - name: processing_unit_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - region\n      - namespace\n  - name: capacity_unit_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - region\n      - cluster\n  - name: ingress_events\n    unit: event\n    aggregation: sum\n    dimensions:\n      - namespace\n      - eventhub\n  - name: capture_storage\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - namespace\n      - destination\nprinciples:\n\
-  \  - name: Visibility\n    description: Use Azure Monitor metrics (Incoming Messages, Throttled Requests, Successful Requests)\n      and Cost Management cost analysis grouped by namespace.\n  - name: Allocation\n    description: Use namespace-per-team or per-product separation; tag namespaces with cost-center\n      tags; route data through dedicated namespaces for chargeback.\n  - name: Optimization\n    description: Right-size TUs/PUs; enable Auto-Inflate on Standard to avoid over-provisioning;\n      consolidate low-volume namespaces; move stable high-volume workloads to Dedicated CUs for unit\n      cost savings; use Capture instead of consumer-side ETL.\n  - name: Accountability\n    description: Assign namespace owners; alert on Throttled Requests metric; review tier choice\n      quarterly against ingress and retention needs.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Azure Event Hubs\nproviderId: microsoft-azure-event-hubs\npublisherName: Azure Event Hubs\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Big Data\n  - Event Streaming\n  - IoT\n  - Message Ingestion\n  - Real-Time Processing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Azure Event Hubs API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Azure Event Hubs\n  ServiceCategory: Developer Tools / API\n  ProviderName: Azure Event Hubs\n  PublisherName: Azure Event Hubs\n  InvoiceIssuerName: Azure Event Hubs\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
+  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Azure Event Hubs REST API\n    baseURL: https://management.azure.com\n    tags:\n      - Events\n      - Management\n      - Streaming\n    serviceName: Azure Event Hubs REST API\n    serviceCategory: API\n  - name: Azure Event Hubs Data Plane API\n    baseURL: https://{namespace}.servicebus.windows.net\n    tags:\n      - Data Plane\n      - Receive Events\n      - Send Events\n    serviceName: Azure Event Hubs Data Plane API\n    serviceCategory: API\n  - name: Azure Event Hubs Messaging API\n    baseURL: https://{namespace}.servicebus.windows.net\n    tags:\n      - AMQP\n      - AsyncAPI\n      - Event Streaming\n\
+  \      - Kafka\n      - Messaging\n    serviceName: Azure Event Hubs Messaging API\n    serviceCategory: API\n  - name: Azure Event Hubs SDK\n    baseURL: https://{namespace}.servicebus.windows.net\n    tags:\n      - Client Library\n      - SDK\n    serviceName: Azure Event Hubs SDK\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-event-hubs/refs/heads/main/finops/microsoft-azure-event-hubs-finops.yml
-sources:
-- https://azure.microsoft.com/en-us/pricing/details/event-hubs/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Big Data
 - Event Streaming
-- Microsoft Azure
+- IoT
+- Message Ingestion
+- Real-Time Processing
+- FinOps
+- Cost Management
+- FOCUS
 ---

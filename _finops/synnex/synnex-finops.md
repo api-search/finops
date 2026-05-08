@@ -13,62 +13,79 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/synnex/refs/heads/main/openapi/synnex-streamone-ion-openapi.yml
 billing_model:
-  billingCurrency: USD (settlement varies by region)
-  billingFrequency: Per-Order / Subscription Settlement
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  - Refund
-  pricingCategory: Reseller Pass-Through
-description: TD SYNNEX's APIs (StreamOne ION, Digital Bridge) drive reseller order, subscription, and entitlement workflows; settlement happens through the distribution agreement (cost-plus on resold cloud and IT product), not as a per-API charge.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Synnex API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: TD SYNNEX Corporation
-  ProviderName: TD SYNNEX
-  PublisherName: TD SYNNEX Corporation
-  ServiceCategory: IT Distribution / Cloud Marketplace
-  ServiceName: TD SYNNEX APIs (StreamOne ION, Digital Bridge)
+  ChargeCategory: Usage
+  InvoiceIssuerName: Synnex
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Synnex
+  PublisherName: Synnex
+  ServiceCategory: Developer Tools / API
+  ServiceName: Synnex
 layout: finops
 meters:
-- aggregation: max
-  description: Active resold cloud subscriptions managed via StreamOne ION (CSP seats, Google Workspace seats, etc.).
-  dimensions:
-  - vendor
-  - end_customer
-  name: cloud_subscriptions
-  unit: subscription-month
 - aggregation: sum
-  description: Orders placed through the API (StreamOne ION orders, Digital Bridge product orders).
+  description: Count of billable API requests
   dimensions:
-  - vendor
-  - end_customer
-  name: orders
-  unit: order
-- aggregation: sum
-  description: Product / pricing lookup calls; not separately billed but useful for capacity planning.
-  name: catalog_lookups
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Synnex Finops
 provider_name: Synnex
 provider_slug: synnex
-publisher_name: TD SYNNEX Corporation
-service_category: IT Distribution / Cloud Marketplace
+publisher_name: Synnex
+service_category: API
 slug: synnex-finops
 source_filename: synnex-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.tdsynnex.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Synnex\nproviderId: synnex\npublisherName: TD SYNNEX Corporation\nserviceCategory: IT Distribution / Cloud Marketplace\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - IT Distribution\n  - Cloud Marketplace\n  - FinOps\n  - FOCUS\ndescription: TD SYNNEX's APIs (StreamOne ION, Digital Bridge) drive reseller order, subscription, and entitlement workflows; settlement happens through the distribution agreement (cost-plus on resold cloud and IT product), not as a per-API charge.\nsources:\n  - https://www.tdsynnex.com\n  - https://docs.streamone.cloud/\nnotes: No FOCUS-aligned per-call billing surface. Cost / margin reconciles\
-  \ at the resold-product level (Microsoft CSP, Google Workspace, hardware SKUs) through TD SYNNEX's reseller settlement.\nbillingModel:\n  pricingCategory: Reseller Pass-Through\n  billingFrequency: Per-Order / Subscription Settlement\n  billingCurrency: 'USD (settlement varies by region)'\n  chargeCategories:\n    - Purchase\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: TD SYNNEX APIs (StreamOne ION, Digital Bridge)\n  ServiceCategory: IT Distribution / Cloud Marketplace\n  ProviderName: TD SYNNEX\n  PublisherName: TD SYNNEX Corporation\n  InvoiceIssuerName: TD SYNNEX Corporation\n  BillingCurrency: USD\nmeters:\n  - name: cloud_subscriptions\n    description: Active resold cloud subscriptions managed via StreamOne ION (CSP seats, Google Workspace seats, etc.).\n    unit: subscription-month\n    aggregation: max\n    dimensions:\n      - vendor\n      - end_customer\n  - name: orders\n    description: Orders placed through the API (StreamOne ION orders, Digital Bridge\
-  \ product orders).\n    unit: order\n    aggregation: sum\n    dimensions:\n      - vendor\n      - end_customer\n  - name: catalog_lookups\n    description: Product / pricing lookup calls; not separately billed but useful for capacity planning.\n    unit: request\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Resellers reconcile API-driven activity against TD SYNNEX reseller reporting; subscription, order, and renewal data are exposed through the partner reporting endpoints.\n  - name: Allocation\n    description: Allocate by end-customer and vendor (Microsoft, Google, hardware OEM) - the same dimensions TD SYNNEX uses on the reseller statement.\n  - name: Optimization\n    description: Optimize by automating renewal and cancellation flows, batching catalog syncs, and using StreamOne ION reports to surface dormant subscriptions before settlement.\n  - name: Accountability\n    description: Reseller's commercial team owns end-customer P&L; TD SYNNEX partner-management\
-  \ owns the distribution-agreement relationship and settlement timing.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Synnex\nproviderId: synnex\npublisherName: Synnex\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Technology Distribution\n  - IT Distribution\n  - Cloud Marketplace\n  - Fortune 100\n  - Supply Chain\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Synnex API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Synnex\n  ServiceCategory: Developer Tools / API\n  ProviderName: Synnex\n  PublisherName: Synnex\n  InvoiceIssuerName: Synnex\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: TD SYNNEX StreamOne ION API\n    baseURL: https://ion.tdsynnex.com/api/v3\n    tags:\n      - Cloud Marketplace\n      - IT Distribution\n      - Subscription Management\n      - Order Management\n      - Partner API\n    serviceName: TD SYNNEX StreamOne ION API\n    serviceCategory: API\n  - name: TD SYNNEX Digital Bridge API\n    baseURL: https://api.tdsynnex.com\n    tags:\n      - IT Distribution\n      - Products\n      - Pricing\n      - Orders\n      - Partner Integration\n    serviceName: TD SYNNEX Digital Bridge API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n\
+  \    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/synnex/refs/heads/main/finops/synnex-finops.yml
-sources:
-- https://www.tdsynnex.com
-- https://docs.streamone.cloud/
+sources: []
 specification: FinOps Framework
 tags:
+- Technology Distribution
 - IT Distribution
 - Cloud Marketplace
+- Fortune 100
+- Supply Chain
 - FinOps
+- Cost Management
 - FOCUS
 ---

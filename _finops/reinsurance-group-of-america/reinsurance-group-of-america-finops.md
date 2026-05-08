@@ -6,43 +6,80 @@ aligned_with:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
-  billingCurrency: USD (settlement varies)
-  billingFrequency: Per-Invoice
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contact Sales
-description: FinOps shape for RGA. Pricing is governed by reinsurance treaties and service contracts rather than by metered API consumption.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Reinsurance Group of America API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Reinsurance Group of America, Incorporated
+  ChargeCategory: Usage
+  InvoiceIssuerName: Reinsurance Group of America
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Reinsurance Group of America
-  PublisherName: Reinsurance Group of America, Incorporated
-  ServiceCategory: Reinsurance
-  ServiceName: RGA
+  PublisherName: Reinsurance Group of America
+  ServiceCategory: Developer Tools / API
+  ServiceName: Reinsurance Group of America
 layout: finops
 meters:
 - aggregation: sum
-  name: treaty_term
-  unit: month
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Reinsurance Group Of America Finops
 provider_name: Reinsurance Group of America
 provider_slug: reinsurance-group-of-america
-publisher_name: Reinsurance Group of America, Incorporated
-service_category: Reinsurance
+publisher_name: Reinsurance Group of America
+service_category: API
 slug: reinsurance-group-of-america-finops
 source_filename: reinsurance-group-of-america-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.rgare.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Reinsurance Group of America\nproviderId: reinsurance-group-of-america\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Reinsurance\n  - Insurance\ndescription: FinOps shape for RGA. Pricing is governed by reinsurance treaties and service contracts\n  rather than by metered API consumption.\nsources:\n  - https://www.rgare.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Reinsurance Group of America, Incorporated\nserviceCategory: Reinsurance\nbillingModel:\n  pricingCategory: Contact Sales\n  billingFrequency: Per-Invoice\n  billingCurrency: USD (settlement varies)\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName:\
-  \ RGA\n  ServiceCategory: Reinsurance\n  ProviderName: Reinsurance Group of America\n  PublisherName: Reinsurance Group of America, Incorporated\n  InvoiceIssuerName: Reinsurance Group of America, Incorporated\n  BillingCurrency: USD\nmeters:\n  - name: treaty_term\n    unit: month\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Visibility comes from treaty statements and cedant-portal reports; no programmatic API\n      usage feed.\n  - name: Allocation\n    description: Allocate to the ceding insurer / product line covered by the treaty; portal access\n      is not separately metered.\n  - name: Optimization\n    description: Optimization is treaty-level — adjust retention, scope, and structure at renewal rather\n      than tuning request volume.\n  - name: Accountability\n    description: Owner is the cedant's reinsurance / treaty-management function.\nnotes: Treaty- and contract-driven; no metered API surface. Generic FOCUS per-call meters removed.\nmaintainers:\n\
-  \  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Reinsurance Group of America\nproviderId: reinsurance-group-of-america\npublisherName: Reinsurance Group of America\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Financial Services\n  - Health Insurance\n  - Insurance Technology\n  - Life Insurance\n  - Reinsurance\n  - Underwriting\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Reinsurance Group of America API surface. Provides a\n  FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the\n  provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product,\
+  \ and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n     \
+  \ - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Reinsurance Group of America\n  ServiceCategory: Developer Tools / API\n  ProviderName: Reinsurance Group of America\n  PublisherName: Reinsurance Group of America\n  InvoiceIssuerName: Reinsurance Group of America\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: AURA NEXT Automated Underwriting API\n    baseURL: https://api.rgare.com/aura\n    tags:\n      - Automated Underwriting\n      - Decision Management\n      - Insurance\n      - Life Insurance\n      - SaaS\n      - Underwriting\n    serviceName: AURA NEXT Automated Underwriting API\n    serviceCategory: API\n  - name: Digital Health Data Risk Scoring API\n    baseURL: https://api.rgare.com/dhd\n    tags:\n      - Digital Health\n      - Electronic Health Records\n      - Life Insurance\n      - Risk\
+  \ Scoring\n      - Underwriting\n    serviceName: Digital Health Data Risk Scoring API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/reinsurance-group-of-america/refs/heads/main/finops/reinsurance-group-of-america-finops.yml
-sources:
-- https://www.rgare.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Financial Services
+- Health Insurance
+- Insurance Technology
+- Life Insurance
 - Reinsurance
-- Insurance
+- Underwriting
+- FinOps
+- Cost Management
+- FOCUS
 ---

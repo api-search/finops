@@ -5,79 +5,87 @@ aligned_with:
   dataSpecVersion: '1.3'
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
+api_specs:
+- filename: humana-openapi.yml
+  format: yaml
+  label: Humana FHIR Clinical Data API
+  slug: humana-fhir-clinical-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/humana/refs/heads/main/openapi/humana-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: N/A
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Regulatory Free Access (no fee)
-description: 'FOCUS-aligned FinOps for Humana FHIR APIs: regulatory free access (no vendor invoice), cost surface is the consumer''s own infrastructure (request volume, data egress, identity / consent flow, member outreach) rather than per-call API charges from Humana.'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Humana API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: N/A (no Humana invoice for API access)
+  InvoiceIssuerName: Humana
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Humana
-  PublisherName: Humana Inc.
-  ServiceCategory: Healthcare Interoperability
-  ServiceName: Humana FHIR APIs
+  PublisherName: Humana
+  ServiceCategory: Developer Tools / API
+  ServiceName: Humana
 layout: finops
 meters:
 - aggregation: sum
-  description: Member-authorized FHIR R4 queries against Patient Access endpoints; not billed but tracked for capacity and rate-limit purposes.
+  description: Count of billable API requests
   dimensions:
-  - resource_type
-  - app
-  name: patient_access_requests
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: Public Provider Directory FHIR queries.
+  description: Bytes returned over the network in API responses
   dimensions:
-  - resource_type
-  - app
-  name: provider_directory_requests
-  unit: request
-- aggregation: sum
-  description: Public Drug Formulary FHIR queries.
-  dimensions:
-  - resource_type
-  - app
-  name: drug_formulary_requests
-  unit: request
-- aggregation: sum
-  description: SMART on FHIR consent flows initiated and completed; useful for measuring application activation.
-  dimensions:
-  - app
-  name: oauth_member_authorizations
-  unit: authorization
-- aggregation: sum
-  description: PHI / FHIR resource bytes returned; informs the consumer's own storage and processing cost.
-  dimensions:
-  - resource_type
-  - app
+  - api
+  - region
+  - consumer
   name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Humana Finops
 provider_name: Humana
 provider_slug: humana
-publisher_name: Humana Inc.
-service_category: Healthcare Interoperability
+publisher_name: Humana
+service_category: API
 slug: humana-finops
 source_filename: humana-finops.yml
 source_heading: FinOps Profile
-source_url: https://developers.humana.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Humana\nproviderId: humana\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - FHIR\n  - Healthcare\n  - CMS\ndescription: 'FOCUS-aligned FinOps for Humana FHIR APIs: regulatory free access (no vendor invoice),\n  cost surface is the consumer''s own infrastructure (request volume, data egress, identity / consent\n  flow, member outreach) rather than per-call API charges from Humana.'\nsources:\n  - https://developers.humana.com/\n  - https://www.cms.gov/regulations-and-guidance/guidance/interoperability/index\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Humana Inc.\nserviceCategory: Healthcare Interoperability\nbillingModel:\n\
-  \  pricingCategory: Regulatory Free Access (no fee)\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Humana FHIR APIs\n  ServiceCategory: Healthcare Interoperability\n  ProviderName: Humana\n  PublisherName: Humana Inc.\n  InvoiceIssuerName: N/A (no Humana invoice for API access)\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: patient_access_requests\n    description: Member-authorized FHIR R4 queries against Patient Access endpoints; not billed but\n      tracked for capacity and rate-limit purposes.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - resource_type\n      - app\n  - name: provider_directory_requests\n    description: Public Provider Directory FHIR queries.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - resource_type\n      - app\n  - name: drug_formulary_requests\n    description: Public Drug Formulary FHIR queries.\n    unit: request\n    aggregation:\
-  \ sum\n    dimensions:\n      - resource_type\n      - app\n  - name: oauth_member_authorizations\n    description: SMART on FHIR consent flows initiated and completed; useful for measuring application\n      activation.\n    unit: authorization\n    aggregation: sum\n    dimensions:\n      - app\n  - name: data_egress\n    description: PHI / FHIR resource bytes returned; informs the consumer's own storage and processing\n      cost.\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - resource_type\n      - app\nprinciples:\n  - name: Visibility\n    description: Humana does not invoice for API access. Track request and member-authorization volumes\n      via your application's own logging (token issuance, FHIR request audit). Reconcile against\n      Humana CapabilityStatement and any sandbox vs production rate-limit guidance.\n  - name: Allocation\n    description: Tag FHIR requests with the originating product feature (member portal, claims explorer,\n      care management\
-  \ workflow) so that downstream storage and processing cost can be allocated.\n  - name: Optimization\n    description: Use bulk-data ($export) operations where supported to amortize request overhead.\n      Cache reference data (Provider Directory, Drug Formulary) since they do not require member\n      consent. Use _summary and _elements parameters to reduce payload size and downstream egress\n      cost.\n  - name: Accountability\n    description: Even though API access is free, operational risk is real - mishandled member PHI\n      triggers HIPAA exposure. Establish clear data-retention windows and a periodic audit of which\n      member tokens are still active.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Humana\nproviderId: humana\npublisherName: Humana\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FHIR\n  - Health Insurance\n  - Healthcare\n  - Interoperability\n  - Medicare\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Humana API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Humana\n  ServiceCategory: Developer Tools / API\n  ProviderName: Humana\n  PublisherName: Humana\n  InvoiceIssuerName: Humana\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Humana FHIR Clinical Data API\n    baseURL: https://fhir.humana.com/api\n    tags:\n      - Clinical Data\n      - FHIR\n      - Healthcare\n    serviceName: Humana FHIR Clinical Data API\n    serviceCategory: API\n  - name: Humana FHIR Medication API\n    baseURL: https://fhir.humana.com/api\n    tags:\n      - FHIR\n      - Formulary\n      - Medications\n    serviceName: Humana FHIR Medication API\n    serviceCategory: API\n  - name: Humana FHIR Coverage and Benefits API\n    baseURL: https://fhir.humana.com/api\n    tags:\n      - Coverage\n      - FHIR\n      - Insurance\n    serviceName: Humana FHIR Coverage and Benefits API\n    serviceCategory: API\n  - name: Humana FHIR Provider Directory API\n    baseURL: https://fhir.humana.com/api\n\
+  \    tags:\n      - FHIR\n      - Provider Directory\n    serviceName: Humana FHIR Provider Directory API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/humana/refs/heads/main/finops/humana-finops.yml
-sources:
-- https://developers.humana.com/
-- https://www.cms.gov/regulations-and-guidance/guidance/interoperability/index
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - FHIR
+- Health Insurance
 - Healthcare
-- CMS
+- Interoperability
+- Medicare
+- FinOps
+- Cost Management
+- FOCUS
 ---

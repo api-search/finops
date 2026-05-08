@@ -31,68 +31,71 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/metro-transit/refs/heads/main/openapi/metro-transit-schedule-openapi.json
 billing_model:
-  billingCurrency: N/A
-  billingFrequency: N/A
-  chargeCategories: []
-  pricingCategory: Free / Open Data
-description: 'FOCUS-aligned FinOps shape for Metro Transit: a free, open-data API surface (GTFS, GTFS-realtime, NexTrip / REST). There is no provider-side cost to the API consumer; FinOps focus shifts to the consumer-side compute / egress / storage cost of polling and serving the public data, plus the Metropolitan Council''s own publishing cost (which is not invoiced to consumers).'
+  billingCurrency: USD
+  billingFrequency: Monthly
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Metro Transit API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
-  BillingCurrency: N/A
-  ChargeCategory: N/A
-  InvoiceIssuerName: N/A (free / open data)
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Metro Transit
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Metro Transit
-  PublisherName: Metropolitan Council
-  ServiceCategory: Public Transit Open Data
-  ServiceName: Metro Transit Open Data API
+  PublisherName: Metro Transit
+  ServiceCategory: Developer Tools / API
+  ServiceName: Metro Transit
 layout: finops
 meters:
 - aggregation: sum
-  description: Number of polls against GTFS-realtime feeds (consumer-side).
+  description: Count of billable API requests
   dimensions:
-  - feed
-  - consumer_app
-  name: realtime_polls
-  unit: request
-- aggregation: sum
-  description: GTFS static zip downloads (current + next-week + flex).
-  dimensions:
-  - feed
-  - consumer_app
-  name: gtfs_downloads
-  unit: download
-- aggregation: sum
-  description: REST API requests (NexTrip, alerts, trip planner, schedule).
-  dimensions:
+  - api
   - endpoint
-  - consumer_app
-  name: rest_requests
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes downloaded from svc.metrotransit.org (consumer-side accounting).
+  description: Bytes returned over the network in API responses
   dimensions:
-  - feed
-  - consumer_app
+  - api
+  - region
+  - consumer
   name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Metro Transit Finops
 provider_name: Metro Transit
 provider_slug: metro-transit
-publisher_name: Metropolitan Council (Metro Transit)
-service_category: Public Transit Open Data
+publisher_name: Metro Transit
+service_category: API
 slug: metro-transit-finops
 source_filename: metro-transit-finops.yml
 source_heading: FinOps Profile
-source_url: https://svc.metrotransit.org/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Metro Transit\nproviderId: metro-transit\npublisherName: Metropolitan Council (Metro Transit)\nserviceCategory: Public Transit Open Data\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Minneapolis\n  - Minnesota\n  - Public Transportation\n  - Real-Time\n  - Transit\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps shape for Metro Transit: a free, open-data API surface (GTFS, GTFS-realtime,\n  NexTrip / REST). There is no provider-side cost to the API consumer; FinOps focus shifts to the\n  consumer-side compute / egress / storage cost of polling and serving the public data, plus the\n  Metropolitan Council''s\
-  \ own publishing cost (which is not invoiced to consumers).'\nsources:\n  - https://svc.metrotransit.org/\n  - https://www.metrotransit.org/developers\nprinciples:\n  - name: Visibility\n    description: There is no Metro Transit invoice to track. Instead, monitor consumer-side metrics —\n      poll rate per feed, bytes downloaded, cache hit rate — to understand the cost the public data\n      surface generates inside your own infrastructure.\n  - name: Allocation\n    description: Allocate consumer-side cost (egress, compute, storage of GTFS archive) by the application\n      or product feature consuming the data (commuter app, signage, internal analytics, ML training).\n  - name: Optimization\n    description: Cache GTFS-realtime feeds at a single edge / proxy and fan out to clients (instead of\n      having each client poll svc.metrotransit.org directly). Use Last-Modified for the static GTFS zip\n      to skip re-downloads. Match poll cadence to the 5-second refresh interval — polling\
-  \ faster is\n      pure waste.\n  - name: Accountability\n    description: Designate a data-feed owner inside the consuming organization who tracks polling\n      behavior, ensures attribution, and responds promptly if Metro Transit reports excessive load.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Reporting and Analytics\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Workload Optimization\n      - Architecting for Cloud\n  - name: Manage the FinOps Practice\n    capabilities:\n      - Onboarding Workloads\nbillingModel:\n  pricingCategory: Free / Open Data\n  billingFrequency: N/A\n  billingCurrency: N/A\n  chargeCategories: []\nfocusColumns:\n  ServiceName: Metro Transit Open Data API\n  ServiceCategory: Public Transit Open Data\n  ProviderName: Metro Transit\n  PublisherName: Metropolitan Council\n  InvoiceIssuerName:\
-  \ N/A (free / open data)\n  BillingCurrency: N/A\n  ChargeCategory: N/A\nmeters:\n  - name: realtime_polls\n    description: Number of polls against GTFS-realtime feeds (consumer-side).\n    unit: request\n    aggregation: sum\n    dimensions:\n      - feed\n      - consumer_app\n  - name: gtfs_downloads\n    description: GTFS static zip downloads (current + next-week + flex).\n    unit: download\n    aggregation: sum\n    dimensions:\n      - feed\n      - consumer_app\n  - name: rest_requests\n    description: REST API requests (NexTrip, alerts, trip planner, schedule).\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - consumer_app\n  - name: data_egress\n    description: Bytes downloaded from svc.metrotransit.org (consumer-side accounting).\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - feed\n      - consumer_app\napis:\n  - name: Metro Transit NexTrip API\n    baseURL: https://svc.metrotransit.org/nextripv2\n    tags:\n      - Departures\n\
-  \      - Real-Time\n      - Transit\n    serviceName: Metro Transit NexTrip API\n    serviceCategory: API\n  - name: Metro Transit Service Alerts API\n    baseURL: https://svc.metrotransit.org/alerts\n    tags:\n      - Alerts\n      - Real-Time\n      - Transit\n    serviceName: Metro Transit Service Alerts API\n    serviceCategory: API\n  - name: Metro Transit Trip Planner API\n    baseURL: https://svc.metrotransit.org/tripplanner\n    tags:\n      - Trip Planner\n      - Routing\n      - Transit\n    serviceName: Metro Transit Trip Planner API\n    serviceCategory: API\n  - name: Metro Transit Schedule API\n    baseURL: https://svc.metrotransit.org/schedule\n    tags:\n      - Schedule\n      - Timetable\n      - Transit\n    serviceName: Metro Transit Schedule API\n    serviceCategory: API\nunitEconomics:\n  - name: Internal Cost per Public-Data Poll\n    metric: consumer_infra_cost / realtime_polls\n    target: minimize via shared edge cache\n  - name: Cache Hit Rate\n    metric:\
-  \ cache_hits / (cache_hits + origin_polls)\n    target: '> 0.95'\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Metro Transit\nproviderId: metro-transit\npublisherName: Metro Transit\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Minneapolis\n  - Minnesota\n  - Public Transportation\n  - Real-Time\n  - Transit\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Metro Transit API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Metro Transit\n  ServiceCategory: Developer Tools / API\n  ProviderName: Metro Transit\n  PublisherName: Metro Transit\n  InvoiceIssuerName: Metro Transit\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Metro Transit NexTrip API\n    baseURL: https://svc.metrotransit.org/nextripv2\n    tags:\n      - Departures\n      - Real-Time\n      - Transit\n    serviceName: Metro Transit NexTrip API\n    serviceCategory: API\n  - name: Metro Transit Service Alerts API\n    baseURL: https://svc.metrotransit.org/alerts\n    tags:\n      - Alerts\n      - Real-Time\n      - Transit\n    serviceName: Metro Transit Service Alerts API\n    serviceCategory: API\n  - name: Metro Transit Trip Planner API\n    baseURL: https://svc.metrotransit.org/tripplanner\n    tags:\n      - Trip Planner\n      - Routing\n      - Transit\n    serviceName: Metro Transit Trip Planner API\n    serviceCategory:\
+  \ API\n  - name: Metro Transit Schedule API\n    baseURL: https://svc.metrotransit.org/schedule\n    tags:\n      - Schedule\n      - Timetable\n      - Transit\n    serviceName: Metro Transit Schedule API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/metro-transit/refs/heads/main/finops/metro-transit-finops.yml
-sources:
-- https://svc.metrotransit.org/
-- https://www.metrotransit.org/developers
+sources: []
 specification: FinOps Framework
 tags:
 - Minneapolis
@@ -101,5 +104,6 @@ tags:
 - Real-Time
 - Transit
 - FinOps
+- Cost Management
 - FOCUS
 ---

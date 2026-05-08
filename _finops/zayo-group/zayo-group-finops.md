@@ -11,58 +11,71 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  pricingCategory: Contact Sales
-description: 'Zayo Group''s commercial model is a sales-negotiated carrier contract; this
-
-  artifact is a Contact Sales placeholder pending the customer''s master service
-
-  agreement.
-
-  '
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Zayo Group Holdings API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Zayo Group, LLC
-  ProviderName: Zayo Group
-  PublisherName: Zayo Group, LLC
-  ServiceCategory: Network Connectivity
-  ServiceName: Zayo Group
+  ChargeCategory: Usage
+  InvoiceIssuerName: Zayo Group Holdings
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Zayo Group Holdings
+  PublisherName: Zayo Group Holdings
+  ServiceCategory: Developer Tools / API
+  ServiceName: Zayo Group Holdings
 layout: finops
 meters:
-- aggregation: count
-  description: Active circuits / wavelengths / dark fiber strands under contract; the typical primary line item on Zayo invoices.
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - circuit_id
-  - service_type
-  - route
-  name: circuits
-  unit: circuit-month
-- aggregation: max
-  description: Committed and burstable bandwidth on Ethernet / IP / dedicated internet services.
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - circuit_id
-  - service_type
-  name: bandwidth
-  unit: Mbps
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Zayo Group Finops
 provider_name: Zayo Group Holdings
 provider_slug: zayo-group
-publisher_name: Zayo Group, LLC
-service_category: Network Connectivity
+publisher_name: Zayo Group Holdings
+service_category: API
 slug: zayo-group-finops
 source_filename: zayo-group-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.zayo.com/products/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Zayo Group Holdings\nproviderId: zayo-group\npublisherName: Zayo Group, LLC\nserviceCategory: Network Connectivity\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Fiber\n  - Network\n  - Telecom\n  - FinOps\n  - FOCUS\ndescription: |\n  Zayo Group's commercial model is a sales-negotiated carrier contract; this\n  artifact is a Contact Sales placeholder pending the customer's master service\n  agreement.\nsources:\n  - https://www.zayo.com/products/\nnotes: |\n  Zayo does not publish per-meter pricing publicly. Meter and FOCUS column values\n  below are minimal placeholders pending the signed Zayo MSA / service order.\n\
-  billingModel:\n  pricingCategory: Contact Sales\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\nfocusColumns:\n  ServiceName: Zayo Group\n  ServiceCategory: Network Connectivity\n  ProviderName: Zayo Group\n  PublisherName: Zayo Group, LLC\n  InvoiceIssuerName: Zayo Group, LLC\n  BillingCurrency: USD\nmeters:\n  - name: circuits\n    description: Active circuits / wavelengths / dark fiber strands under contract; the\n      typical primary line item on Zayo invoices.\n    unit: circuit-month\n    aggregation: count\n    dimensions:\n      - circuit_id\n      - service_type\n      - route\n  - name: bandwidth\n    description: Committed and burstable bandwidth on Ethernet / IP / dedicated internet\n      services.\n    unit: Mbps\n    aggregation: max\n    dimensions:\n      - circuit_id\n      - service_type\nprinciples:\n  - name: Visibility\n    description: Visibility comes from monthly Tranzact / customer-portal invoices and\n\
-  \      service inventory; Zayo does not expose a public usage API.\n  - name: Allocation\n    description: Allocate spend by circuit ID, route (A-Z endpoints), and consuming\n      business unit / data center.\n  - name: Optimization\n    description: Optimize via term length (1 / 3 / 5 year), grooming under-utilized\n      circuits, and consolidating redundant routes during contract renewal.\n  - name: Accountability\n    description: Spend ownership sits with the network / infrastructure lead who signs\n      the Zayo MSA and individual service orders.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Zayo Group Holdings\nproviderId: zayo-group\npublisherName: Zayo Group Holdings\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Fiber\n  - Network\n  - Infrastructure\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Zayo Group Holdings API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Zayo Group Holdings\n  ServiceCategory: Developer Tools / API\n  ProviderName: Zayo Group Holdings\n  PublisherName: Zayo Group Holdings\n  InvoiceIssuerName: Zayo Group Holdings\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Zayo Group Holdings API\n    baseURL: https://api.zayo.com\n    tags:\n      - Fiber\n      - Network\n      - Infrastructure\n    serviceName: Zayo Group Holdings API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/zayo-group/refs/heads/main/finops/zayo-group-finops.yml
-sources:
-- https://www.zayo.com/products/
+sources: []
 specification: FinOps Framework
 tags:
 - Fiber
 - Network
-- Telecom
+- Infrastructure
 - FinOps
+- Cost Management
 - FOCUS
 ---

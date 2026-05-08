@@ -19,62 +19,82 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/siemens-mindsphere/refs/heads/main/openapi/siemens-mindsphere-iot-timeseries-openapi.yml
 billing_model:
-  billingCurrency: EUR/USD
-  billingFrequency: Per-Contract
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Enterprise IIoT Subscription
-description: FOCUS-aligned FinOps placeholder for Siemens MindSphere/Insights Hub. Pricing is contracted rather than self-service; cost is driven by tenant size, asset/agent counts, ingested data volume, and named users rather than per-API-call charges.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Siemens MindSphere API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
-  BillingCurrency: EUR
-  InvoiceIssuerName: Siemens AG
-  ProviderName: Siemens
-  PublisherName: Siemens AG
-  ServiceCategory: Industrial IoT
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Siemens MindSphere
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Siemens MindSphere
+  PublisherName: Siemens MindSphere
+  ServiceCategory: Developer Tools / API
   ServiceName: Siemens MindSphere
 layout: finops
 meters:
 - aggregation: sum
-  description: Tenant subscription fee covering platform access, included assets, and base data ingest.
+  description: Count of billable API requests
   dimensions:
-  - tenant
+  - api
+  - endpoint
+  - tier
   - region
-  name: tenant_subscription
-  unit: month
-- aggregation: max
-  description: Number of connected industrial assets/agents against the contracted ceiling; primary MindSphere/Insights Hub sizing dimension.
-  dimensions:
-  - tenant
-  - asset_type
-  name: asset_or_agent_count
-  unit: asset
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Time-series and event data volume ingested into the tenant; usually capped per contract.
+  description: Bytes returned over the network in API responses
   dimensions:
-  - tenant
-  - source
-  name: data_ingest
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Siemens Mindsphere Finops
 provider_name: Siemens MindSphere
 provider_slug: siemens-mindsphere
-publisher_name: Siemens AG
-service_category: Industrial IoT
+publisher_name: Siemens MindSphere
+service_category: API
 slug: siemens-mindsphere-finops
 source_filename: siemens-mindsphere-finops.yml
 source_heading: FinOps Profile
-source_url: https://siemens.mindsphere.io/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Siemens MindSphere\nproviderId: siemens-mindsphere\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Industrial IoT\n  - IIoT\n  - Insights Hub\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps placeholder for Siemens MindSphere/Insights Hub. Pricing is contracted\n  rather than self-service; cost is driven by tenant size, asset/agent counts, ingested data volume,\n  and named users rather than per-API-call charges.\nsources:\n  - https://siemens.mindsphere.io/\nnotes: No public billing model documented. FinOps treatment is contract-driven; reconciliation pending\n  tenant-specific invoice and capacity terms.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
-  publisherName: Siemens AG\nserviceCategory: Industrial IoT\nbillingModel:\n  pricingCategory: Enterprise IIoT Subscription\n  billingFrequency: Per-Contract\n  billingCurrency: EUR/USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Siemens MindSphere\n  ServiceCategory: Industrial IoT\n  ProviderName: Siemens\n  PublisherName: Siemens AG\n  InvoiceIssuerName: Siemens AG\n  BillingCurrency: EUR\nmeters:\n  - name: tenant_subscription\n    description: Tenant subscription fee covering platform access, included assets, and base data ingest.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tenant\n      - region\n  - name: asset_or_agent_count\n    description: Number of connected industrial assets/agents against the contracted ceiling; primary\n      MindSphere/Insights Hub sizing dimension.\n    unit: asset\n    aggregation: max\n    dimensions:\n      - tenant\n      - asset_type\n  - name: data_ingest\n    description: Time-series and event data volume\
-  \ ingested into the tenant; usually capped per contract.\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - tenant\n      - source\nprinciples:\n  - name: Visibility\n    description: Visibility is via the tenant admin console (assets, agents, data volume) and the\n      Siemens enterprise invoice; no FOCUS export is publicly documented.\n  - name: Allocation\n    description: Allocate by tenant, plant/site, asset family, and the engineering team operating\n      the connected equipment.\n  - name: Optimization\n    description: Optimize by retiring offline assets, sampling time-series at appropriate rates, and\n      right-sizing tenant capacity at renewal rather than running at burst headroom continuously.\n  - name: Accountability\n    description: OT plant managers and central IIoT platform owners share accountability; procurement\n      owns the contract and renewal terms.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Siemens MindSphere\nproviderId: siemens-mindsphere\npublisherName: Siemens MindSphere\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - IoT\n  - Industrial\n  - Digital Twin\n  - Time Series\n  - Asset Management\n  - Industrial IoT\n  - Insights Hub\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Siemens MindSphere API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
+  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
+  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Siemens MindSphere\n  ServiceCategory: Developer Tools / API\n  ProviderName: Siemens MindSphere\n  PublisherName: Siemens MindSphere\n  InvoiceIssuerName: Siemens MindSphere\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name:\
+  \ data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Siemens MindSphere Asset Management API\n    baseURL: https://gateway.eu1.mindsphere.io/api/assetmanagement/v3\n    tags:\n      - IoT\n      - Asset Management\n      - Digital Twin\n      - Industrial\n    serviceName: Siemens MindSphere Asset Management API\n    serviceCategory: API\n  - name: Siemens MindSphere IoT Time Series API\n    baseURL: https://gateway.eu1.mindsphere.io/api/iottimeseries/v3\n    tags:\n      - IoT\n      - Time Series\n      - Telemetry\n      - Industrial\n    serviceName: Siemens MindSphere IoT Time Series API\n    serviceCategory: API\n  - name: Siemens\
+  \ MindSphere Identity Management API\n    baseURL: ''\n    tags:\n      - Identity\n      - Access Management\n      - Users\n      - Industrial\n    serviceName: Siemens MindSphere Identity Management API\n    serviceCategory: API\n  - name: Siemens MindSphere IoT File Service API\n    baseURL: ''\n    tags:\n      - IoT\n      - File Management\n      - Storage\n      - Industrial\n    serviceName: Siemens MindSphere IoT File Service API\n    serviceCategory: API\n  - name: Siemens MindSphere Event Management API\n    baseURL: ''\n    tags:\n      - IoT\n      - Events\n      - Alerts\n      - Industrial\n    serviceName: Siemens MindSphere Event Management API\n    serviceCategory: API\n  - name: Siemens MindSphere Agent Management API\n    baseURL: ''\n    tags:\n      - IoT\n      - Connectivity\n      - Agent\n      - Industrial\n    serviceName: Siemens MindSphere Agent Management API\n    serviceCategory: API\n  - name: Siemens MindConnect Node.js SDK\n    baseURL: ''\n    tags:\n\
+  \      - SDK\n      - Node.js\n      - TypeScript\n      - IoT\n      - Connectivity\n    serviceName: Siemens MindConnect Node.js SDK\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/siemens-mindsphere/refs/heads/main/finops/siemens-mindsphere-finops.yml
-sources:
-- https://siemens.mindsphere.io/
+sources: []
 specification: FinOps Framework
 tags:
+- IoT
+- Industrial
+- Digital Twin
+- Time Series
+- Asset Management
 - Industrial IoT
-- IIoT
 - Insights Hub
 - FinOps
+- Cost Management
 - FOCUS
 ---

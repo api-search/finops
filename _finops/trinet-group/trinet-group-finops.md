@@ -9,45 +9,77 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contract / Negotiated
-description: FinOps shape for TriNet cannot be reconciled from public sources; pricing is consultative-only and PEO billing is delivered via traditional invoice rather than a usage API.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the TriNet Group API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: TriNet Group, Inc.
-  ProviderName: TriNet
-  PublisherName: TriNet Group, Inc.
-  ServiceCategory: HR / PEO
-  ServiceName: TriNet
+  ChargeCategory: Usage
+  InvoiceIssuerName: TriNet Group
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: TriNet Group
+  PublisherName: TriNet Group
+  ServiceCategory: Developer Tools / API
+  ServiceName: TriNet Group
 layout: finops
 meters:
-- aggregation: avg
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - state
-  - benefits_plan
-  name: worksite_employees
-  unit: seat
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Trinet Group Finops
 provider_name: TriNet Group
 provider_slug: trinet-group
-publisher_name: TriNet Group, Inc.
-service_category: HR / PEO
+publisher_name: TriNet Group
+service_category: API
 slug: trinet-group-finops
 source_filename: trinet-group-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.trinet.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: TriNet Group\nproviderId: trinet-group\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - HR\n  - PEO\n  - Benefits\n  - Payroll\n  - FinOps\n  - FOCUS\ndescription: FinOps shape for TriNet cannot be reconciled from public sources; pricing is\n  consultative-only and PEO billing is delivered via traditional invoice rather than a usage API.\nsources:\n  - https://www.trinet.com\nnotes: TriNet is a PEO; pricing is per-company-quote and consumption telemetry for any partner\n  integration sits inside the authenticated partner portal. FOCUS columns and meters can only be\n  validated against the executed PEO contract.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
-  \ TriNet Group, Inc.\nserviceCategory: HR / PEO\nbillingModel:\n  pricingCategory: Contract / Negotiated\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: TriNet\n  ServiceCategory: HR / PEO\n  ProviderName: TriNet\n  PublisherName: TriNet Group, Inc.\n  InvoiceIssuerName: TriNet Group, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: worksite_employees\n    unit: seat\n    aggregation: avg\n    dimensions:\n      - state\n      - benefits_plan\nprinciples:\n  - name: Visibility\n    description: Worksite employee count, benefits enrollment, and payroll runs are visible inside\n      the TriNet platform; finance reconciles against the monthly PEO invoice.\n  - name: Allocation\n    description: Allocate cost per worksite employee, state, and benefits plan using TriNet's\n      existing employee record dimensions.\n  - name: Optimization\n    description: Optimization is contractual — review benefits plan mix and PEO\
-  \ scope at renewal.\n  - name: Accountability\n    description: HR / People Operations owns the TriNet relationship; finance manages the monthly\n      PEO invoice cycle.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: TriNet Group\nproviderId: trinet-group\npublisherName: TriNet Group\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Benefits\n  - Compliance\n  - Human Resources\n  - Payroll\n  - Professional Employer Organization\n  - Risk Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the TriNet Group API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: TriNet Group\n  ServiceCategory: Developer Tools / API\n  ProviderName: TriNet Group\n  PublisherName: TriNet Group\n  InvoiceIssuerName: TriNet Group\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned\
+  \ over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: TriNet Company API\n    baseURL: https://api.trinet.com\n    tags:\n      - Company\n      - Departments\n      - Human Resources\n      - Holidays\n      - Workers Compensation\n    serviceName: TriNet Company API\n    serviceCategory: API\n  - name: TriNet Employees API\n    baseURL: https://api.trinet.com\n    tags:\n      - Employees\n      - Human Resources\n      - Onboarding\n      - Workforce Management\n    serviceName: TriNet Employees API\n    serviceCategory: API\n  - name: TriNet Payroll API\n    baseURL: https://api.trinet.com\n    tags:\n      - Compensation\n      - Human Resources\n      - Pay\n      - Payroll\n\
+  \    serviceName: TriNet Payroll API\n    serviceCategory: API\n  - name: TriNet Identity API\n    baseURL: https://api.trinet.com\n    tags:\n      - Authentication\n      - Identity\n      - Security\n    serviceName: TriNet Identity API\n    serviceCategory: API\n  - name: TriNet Manage Employee API\n    baseURL: https://api.trinet.com\n    tags:\n      - Employee Management\n      - Human Resources\n      - Roles\n      - Workforce Management\n    serviceName: TriNet Manage Employee API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/trinet-group/refs/heads/main/finops/trinet-group-finops.yml
-sources:
-- https://www.trinet.com
+sources: []
 specification: FinOps Framework
 tags:
-- HR
-- PEO
 - Benefits
+- Compliance
+- Human Resources
 - Payroll
+- Professional Employer Organization
+- Risk Management
 - FinOps
+- Cost Management
 - FOCUS
 ---

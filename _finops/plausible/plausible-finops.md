@@ -28,80 +28,77 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  - Refund
-  pricingCategory: Tiered Subscription
-description: FOCUS-aligned FinOps for Plausible Analytics - tiered SaaS subscription gated by monthly pageview volume, sites, team members, and API quota. Bills monthly or annually in USD on a single invoice line per site/account.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Plausible API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Plausible Insights OU
-  PricingCategory: Subscription
+  ChargeCategory: Usage
+  InvoiceIssuerName: Plausible
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Plausible
-  PublisherName: Plausible Insights OU
-  ServiceCategory: Analytics
-  ServiceName: Plausible Analytics
-  ServiceSubcategory: Web Analytics
+  PublisherName: Plausible
+  ServiceCategory: Developer Tools / API
+  ServiceName: Plausible
 layout: finops
 meters:
 - aggregation: sum
-  description: Monthly subscription fee for the chosen tier (Starter / Growth / Business / Enterprise).
+  description: Count of billable API requests
   dimensions:
-  - plan
-  - billing_cycle
-  name: subscription_month
-  unit: month
-- aggregation: sum
-  description: Pageviews included in the chosen tier; overage triggers an upgrade rather than metered billing.
-  dimensions:
-  - site
-  - plan
-  name: monthly_pageviews_included
-  unit: pageview
-- aggregation: count
-  description: Number of sites tracked under the account; capped per plan.
-  dimensions:
-  - plan
-  name: sites_included
-  unit: site
-- aggregation: count
-  description: Number of team members on the account; capped per plan.
-  dimensions:
-  - plan
-  name: team_seats
-  unit: seat
-- aggregation: sum
-  description: Stats API request count; not separately billed but governed by the per-hour quota tied to the plan.
-  dimensions:
-  - api_key
-  - plan
-  name: stats_api_calls
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Plausible Finops
 provider_name: Plausible
 provider_slug: plausible
-publisher_name: Plausible Insights OU
-service_category: Analytics
+publisher_name: Plausible
+service_category: API
 slug: plausible-finops
 source_filename: plausible-finops.yml
 source_heading: FinOps Profile
-source_url: https://plausible.io/#pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Plausible\nproviderId: plausible\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Analytics\n  - Web Analytics\n  - SaaS\n  - Privacy\ndescription: FOCUS-aligned FinOps for Plausible Analytics - tiered SaaS subscription gated by monthly\n  pageview volume, sites, team members, and API quota. Bills monthly or annually in USD on a single\n  invoice line per site/account.\nsources:\n  - https://plausible.io/#pricing\n  - https://plausible.io/docs/stats-api\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Plausible Insights OU\nserviceCategory: Analytics\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n\
-  \  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: Plausible Analytics\n  ServiceCategory: Analytics\n  ServiceSubcategory: Web Analytics\n  ProviderName: Plausible\n  PublisherName: Plausible Insights OU\n  InvoiceIssuerName: Plausible Insights OU\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingCategory: Subscription\nmeters:\n  - name: subscription_month\n    description: Monthly subscription fee for the chosen tier (Starter / Growth / Business / Enterprise).\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n      - billing_cycle\n  - name: monthly_pageviews_included\n    description: Pageviews included in the chosen tier; overage triggers an upgrade rather than\n      metered billing.\n    unit: pageview\n    aggregation: sum\n    dimensions:\n      - site\n      - plan\n  - name: sites_included\n    description: Number of sites tracked under the account; capped per\
-  \ plan.\n    unit: site\n    aggregation: count\n    dimensions:\n      - plan\n  - name: team_seats\n    description: Number of team members on the account; capped per plan.\n    unit: seat\n    aggregation: count\n    dimensions:\n      - plan\n  - name: stats_api_calls\n    description: Stats API request count; not separately billed but governed by the per-hour quota\n      tied to the plan.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_key\n      - plan\nprinciples:\n  - name: Visibility\n    description: Pageview consumption is visible in the Plausible dashboard; subscription cost is\n      visible on the billing page and via Stripe-issued invoices.\n  - name: Allocation\n    description: Allocate cost per site or per team by tagging Plausible sites to a product/team and\n      mapping subscription tier and seat count to the owner.\n  - name: Optimization\n    description: Right-size the plan to the smallest pageview tier that fits monthly traffic; switch\n\
-  \      to annual billing for the published discount; consolidate sites under one Business plan rather\n      than running multiple Starter accounts.\n  - name: Accountability\n    description: Account owner receives upgrade prompts when pageview limits are exceeded; finance\n      and analytics-team owner should jointly review monthly pageview trend versus tier.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Plausible\nproviderId: plausible\npublisherName: Plausible\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Cookie-Free\n  - GDPR\n  - Open Source\n  - Privacy\n  - Web Analytics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Plausible API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
+  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Plausible\n  ServiceCategory: Developer Tools / API\n  ProviderName: Plausible\n  PublisherName: Plausible\n  InvoiceIssuerName: Plausible\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n  \
+  \  aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Plausible Stats API\n    baseURL: https://plausible.io/api/v2\n    tags:\n      - Analytics\n      - Metrics\n      - Reporting\n      - Statistics\n    serviceName: Plausible Stats API\n    serviceCategory: API\n  - name: Plausible Events API\n    baseURL: https://plausible.io/api\n    tags:\n      - Analytics\n      - Events\n      - Pageviews\n      - Tracking\n    serviceName: Plausible Events API\n    serviceCategory: API\n  - name: Plausible Sites API\n    baseURL: https://plausible.io/api/v1/sites\n    tags:\n      - Analytics\n      - Management\n      - Provisioning\n      - Sites\n    serviceName: Plausible Sites API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost\
+  \ per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/plausible/refs/heads/main/finops/plausible-finops.yml
-sources:
-- https://plausible.io/#pricing
-- https://plausible.io/docs/stats-api
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
 - Analytics
-- Web Analytics
-- SaaS
+- Cookie-Free
+- GDPR
+- Open Source
 - Privacy
+- Web Analytics
+- FinOps
+- Cost Management
+- FOCUS
 ---

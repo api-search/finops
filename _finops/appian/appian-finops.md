@@ -7,80 +7,81 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Tiered Subscription
-description: 'FOCUS-aligned FinOps view for Appian: per-user / per-app / per-month subscription priced by named edition (Standard / Advanced / Premium). Primary cost drivers are user seats, app count, and AI Actions consumption (200K/500K/1M monthly cap by edition). RPA bot count and data-source row counts are tier-included rather than separately metered.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Appian API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Appian Corporation
-  PricingCategory: Tiered Subscription
+  ChargeCategory: Usage
+  InvoiceIssuerName: Appian
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Appian
-  PublisherName: Appian Corporation
-  ServiceCategory: Low-Code / Process Automation
-  ServiceName: Appian Platform
+  PublisherName: Appian
+  ServiceCategory: Developer Tools / API
+  ServiceName: Appian
 layout: finops
 meters:
-- aggregation: max
-  description: Active named users on the Appian platform per month
-  dimensions:
-  - edition
-  - app
-  name: user_seats
-  unit: seat
-- aggregation: max
-  description: Distinct apps in scope of the per-user-per-app subscription
-  dimensions:
-  - edition
-  - environment
-  name: applications
-  unit: app
 - aggregation: sum
-  description: AI Actions consumed against the monthly tier allotment (Copilot, Agent Studio, DocCenter)
+  description: Count of billable API requests
   dimensions:
-  - edition
-  - feature
-  name: ai_actions
-  unit: action
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: RPA bot executions against the bot allotment
+  description: Bytes returned over the network in API responses
   dimensions:
-  - bot
-  - environment
-  name: rpa_bot_runs
-  unit: bot-run
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Portal end-user sessions for cost attribution where portals are the primary surface
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - portal
-  - app
-  name: portal_traffic
-  unit: session
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Appian Finops
 provider_name: Appian
 provider_slug: appian
-publisher_name: Appian Corporation
-service_category: Low-Code / Process Automation
+publisher_name: Appian
+service_category: API
 slug: appian-finops
 source_filename: appian-finops.yml
 source_heading: FinOps Profile
-source_url: https://appian.com/products/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Appian\nproviderId: appian\npublisherName: Appian Corporation\nserviceCategory: Low-Code / Process Automation\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Low Code\n  - Process Automation\n  - RPA\ndescription: 'FOCUS-aligned FinOps view for Appian: per-user / per-app / per-month subscription priced\n  by named edition (Standard / Advanced / Premium). Primary cost drivers are user seats, app count, and\n  AI Actions consumption (200K/500K/1M monthly cap by edition). RPA bot count and data-source row counts\n  are tier-included rather than separately metered.'\nsources:\n  - https://appian.com/products/pricing\n\
-  billingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: Appian Platform\n  ServiceCategory: Low-Code / Process Automation\n  ProviderName: Appian\n  PublisherName: Appian Corporation\n  InvoiceIssuerName: Appian Corporation\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingCategory: Tiered Subscription\nmeters:\n  - name: user_seats\n    description: Active named users on the Appian platform per month\n    unit: seat\n    aggregation: max\n    dimensions:\n      - edition\n      - app\n  - name: applications\n    description: Distinct apps in scope of the per-user-per-app subscription\n    unit: app\n    aggregation: max\n    dimensions:\n      - edition\n      - environment\n  - name: ai_actions\n    description: AI Actions consumed against the monthly tier allotment (Copilot, Agent Studio, DocCenter)\n    unit: action\n    aggregation:\
-  \ sum\n    dimensions:\n      - edition\n      - feature\n  - name: rpa_bot_runs\n    description: RPA bot executions against the bot allotment\n    unit: bot-run\n    aggregation: sum\n    dimensions:\n      - bot\n      - environment\n  - name: portal_traffic\n    description: Portal end-user sessions for cost attribution where portals are the primary surface\n    unit: session\n    aggregation: sum\n    dimensions:\n      - portal\n      - app\nprinciples:\n  - name: Visibility\n    description: Use Appian's License Center, Process HQ, and AI usage dashboards to track seat utilization,\n      AI Action burn-rate, and RPA bot runs.\n  - name: Allocation\n    description: Tag apps and processes with business-unit metadata; allocate per-user-per-app cost back\n      to consuming product owners.\n  - name: Optimization\n    description: Right-size editions per app (Standard for transactional apps without AI; Advanced/Premium\n      where AI features are exercised); reclaim inactive seats;\
-  \ sample AI Actions during prototyping;\n      consolidate small apps to share data sources.\n  - name: Accountability\n    description: Center of Excellence (COE) owns the Appian contract; product owners accountable for app-level\n      seat count, AI Action consumption, and RPA bot ROI.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Appian\nproviderId: appian\npublisherName: Appian\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Automation\n  - BPM\n  - Business Process Management\n  - Enterprise Software\n  - Low-Code\n  - Process Automation\n  - RPA\n  - Workflow\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Appian API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Appian\n  ServiceCategory: Developer Tools / API\n  ProviderName: Appian\n  PublisherName: Appian\n  InvoiceIssuerName: Appian\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API\
+  \ responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Appian Application Package Details API\n    baseURL: ''\n    tags:\n      - Deployment\n      - Packages\n    serviceName: Appian Application Package Details API\n    serviceCategory: API\n  - name: Appian Deployment REST API\n    baseURL: ''\n    tags:\n      - CI/CD\n      - Deployment\n      - Packages\n    serviceName: Appian Deployment REST API\n    serviceCategory: API\n  - name: Appian Web APIs\n    baseURL: ''\n    tags:\n      - Integration\n      - REST\n      - Web API\n    serviceName: Appian Web APIs\n    serviceCategory: API\n  - name: Appian RPA REST API\n    baseURL: ''\n    tags:\n      - Robotic Process Automation\n      - RPA\n    serviceName:\
+  \ Appian RPA REST API\n    serviceCategory: API\n  - name: Appian Integration SDK\n    baseURL: ''\n    tags:\n      - Connected Systems\n      - Integration\n      - Plug-Ins\n      - SDK\n    serviceName: Appian Integration SDK\n    serviceCategory: API\n  - name: Appian UI SDK\n    baseURL: ''\n    tags:\n      - Components\n      - Plug-Ins\n      - SDK\n      - UI\n    serviceName: Appian UI SDK\n    serviceCategory: API\n  - name: Appian Suite API\n    baseURL: ''\n    tags:\n      - Extensibility\n      - Java\n      - Plug-Ins\n    serviceName: Appian Suite API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n  - FN: Appian Corporation\n    email: support@appian.com\n    url: https://www.appian.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/appian/refs/heads/main/finops/appian-finops.yml
-sources:
-- https://appian.com/products/pricing
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Low Code
+- Automation
+- BPM
+- Business Process Management
+- Enterprise Software
+- Low-Code
 - Process Automation
 - RPA
+- Workflow
+- FinOps
+- Cost Management
+- FOCUS
 ---

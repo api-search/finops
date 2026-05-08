@@ -43,64 +43,74 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Pay-As-You-Go + Committed Use
-description: 'FOCUS-aligned FinOps for Azure API Management: hourly per-scale-unit billing on classic and v2 tiers, plus per-million-call metering on the Consumption tier.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Microsoft Azure API Management API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Corporation
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Integration / API Gateway
-  ServiceName: Azure API Management
+  InvoiceIssuerName: Microsoft Azure API Management
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Microsoft Azure API Management
+  PublisherName: Microsoft Azure API Management
+  ServiceCategory: Developer Tools / API
+  ServiceName: Microsoft Azure API Management
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - tier
-  - region
-  - resource
-  name: scale_unit_hours
-  unit: instance-hour
-- aggregation: sum
-  dimensions:
-  - region
   - api
-  name: consumption_calls
-  unit: call
-- aggregation: max
-  dimensions:
+  - endpoint
   - tier
-  name: cache_storage
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - region
-  - direction
-  name: data_transfer
-  unit: GB
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Azure Api Management Finops
 provider_name: Microsoft Azure API Management
 provider_slug: microsoft-azure-api-management
-publisher_name: Microsoft Corporation
-service_category: Integration / API Gateway
+publisher_name: Microsoft Azure API Management
+service_category: API
 slug: microsoft-azure-api-management-finops
 source_filename: microsoft-azure-api-management-finops.yml
 source_heading: FinOps Profile
-source_url: https://azure.microsoft.com/en-us/pricing/details/api-management/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Microsoft Azure API Management\nproviderId: microsoft-azure-api-management\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - API Management\n  - Microsoft Azure\ndescription: 'FOCUS-aligned FinOps for Azure API Management: hourly per-scale-unit billing on classic\n  and v2 tiers, plus per-million-call metering on the Consumption tier.'\nsources:\n  - https://azure.microsoft.com/en-us/pricing/details/api-management/\n  - https://learn.microsoft.com/en-us/azure/api-management/plan-manage-costs\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Microsoft Corporation\nserviceCategory: Integration / API Gateway\nbillingModel:\n  pricingCategory:\
-  \ Pay-As-You-Go + Committed Use\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Azure API Management\n  ServiceCategory: Integration / API Gateway\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: scale_unit_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - tier\n      - region\n      - resource\n  - name: consumption_calls\n    unit: call\n    aggregation: sum\n    dimensions:\n      - region\n      - api\n  - name: cache_storage\n    unit: GB\n    aggregation: max\n    dimensions:\n      - tier\n  - name: data_transfer\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - region\n      - direction\nprinciples:\n  - name: Visibility\n    description: Use Azure Cost Management cost analysis filtered\
-  \ on resource type 'Microsoft.ApiManagement/service'\n      and the service's diagnostic logs to break down per-API and per-product call volume.\n  - name: Allocation\n    description: Tag API Management instances with cost-center and product tags; group APIs into\n      Products with subscription keys per consumer team for chargeback.\n  - name: Optimization\n    description: Right-size scale units; use Consumption tier for spiky workloads; consolidate dev/test\n      onto Developer tier; use Premium multi-region only where required; apply caching policies to\n      reduce backend cost.\n  - name: Accountability\n    description: Assign API product owners as cost owners; alert on scale-unit count drift; review\n      autoscale settings on v2 tiers to avoid runaway scale-out.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Azure API Management\nproviderId: microsoft-azure-api-management\npublisherName: Microsoft Azure API Management\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI Gateway\n  - API Gateway\n  - API Management\n  - Enterprise\n  - Microsoft Azure\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Azure API Management API surface. Provides\n  a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across\n  the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n\
+  \      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n   \
+  \   - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Azure API Management\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Azure API Management\n  PublisherName: Microsoft Azure API Management\n  InvoiceIssuerName: Microsoft Azure API Management\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      -\
+  \ endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Azure API Management REST API\n    baseURL: https://management.azure.com/\n    tags:\n      - Azure Resource Manager\n      - Configuration\n      - Management Plane\n      - REST\n    serviceName: Azure API Management REST API\n    serviceCategory: API\n  - name: Azure API Management Gateway\n    baseURL: https://azure-api.net\n    tags:\n      - API Gateway\n      - Policies\n      - Proxy\n      - Traffic Management\n    serviceName: Azure API Management Gateway\n    serviceCategory: API\n  - name: Azure API Management\
+  \ Self-Hosted Gateway\n    baseURL: https://mcr.microsoft.com/product/azure-api-management/gateway\n    tags:\n      - Hybrid\n      - Kubernetes\n      - On-Premises\n      - Self-Hosted\n    serviceName: Azure API Management Self-Hosted Gateway\n    serviceCategory: API\n  - name: Azure API Management AI Gateway\n    baseURL: https://management.azure.com/\n    tags:\n      - AI Gateway\n      - Azure OpenAI\n      - LLM\n      - MCP\n    serviceName: Azure API Management AI Gateway\n    serviceCategory: API\n  - name: Azure API Management Developer Portal\n    baseURL: https://developer.azure-api.net\n    tags:\n      - API Discovery\n      - Developer Portal\n      - Documentation\n      - Self-Service\n    serviceName: Azure API Management Developer Portal\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target:\
+  \ TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-api-management/refs/heads/main/finops/microsoft-azure-api-management-finops.yml
-sources:
-- https://azure.microsoft.com/en-us/pricing/details/api-management/
-- https://learn.microsoft.com/en-us/azure/api-management/plan-manage-costs
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- AI Gateway
+- API Gateway
 - API Management
+- Enterprise
 - Microsoft Azure
+- FinOps
+- Cost Management
+- FOCUS
 ---

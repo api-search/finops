@@ -14,47 +14,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/spring-boot-3/refs/heads/main/openapi/spring-boot-3-actuator-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Contract
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contact Sales
-description: FOCUS-aligned FinOps placeholder for Spring Boot 3. The framework is free and open-source; the FinOps surface lives in the optional Tanzu Spring support contract and in the cloud / runtime cost of the applications it powers.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Spring Boot 3 API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Broadcom Inc.
-  ProviderName: Spring Boot (VMware Tanzu)
-  PublisherName: Broadcom Inc.
-  ServiceCategory: Open-Source Framework
+  ChargeCategory: Usage
+  InvoiceIssuerName: Spring Boot 3
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Spring Boot 3
+  PublisherName: Spring Boot 3
+  ServiceCategory: Developer Tools / API
   ServiceName: Spring Boot 3
 layout: finops
 meters:
 - aggregation: sum
-  description: Tanzu Spring support subscription that covers Spring Boot. Billing basis is contractual; not publicly disclosed.
+  description: Count of billable API requests
   dimensions:
-  - support_tier
-  name: tanzu_spring_support
-  unit: varies
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Spring Boot 3 Finops
 provider_name: Spring Boot 3
 provider_slug: spring-boot-3
-publisher_name: Broadcom Inc. (VMware Tanzu)
-service_category: Open-Source Framework
+publisher_name: Spring Boot 3
+service_category: API
 slug: spring-boot-3-finops
 source_filename: spring-boot-3-finops.yml
 source_heading: FinOps Profile
-source_url: https://spring.io/projects/spring-boot
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Spring Boot 3\nproviderId: spring-boot-3\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Framework\n  - Java\n  - Spring Boot\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps placeholder for Spring Boot 3. The framework\n  is free and open-source; the FinOps surface lives in the optional Tanzu Spring\n  support contract and in the cloud / runtime cost of the applications it\n  powers.\nsources:\n  - https://spring.io/projects/spring-boot\n  - https://enterprise.spring.io/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Broadcom Inc. (VMware Tanzu)\nserviceCategory: Open-Source Framework\nbillingModel:\n  pricingCategory: Contact Sales\n  billingFrequency:\
-  \ Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Spring Boot 3\n  ServiceCategory: Open-Source Framework\n  ProviderName: Spring Boot (VMware Tanzu)\n  PublisherName: Broadcom Inc.\n  InvoiceIssuerName: Broadcom Inc.\n  BillingCurrency: USD\nmeters:\n  - name: tanzu_spring_support\n    description: Tanzu Spring support subscription that covers Spring Boot.\n      Billing basis is contractual; not publicly disclosed.\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - support_tier\nprinciples:\n  - name: Visibility\n    description: Use Spring Boot Actuator metrics exposed via Micrometer\n      (Prometheus, Datadog, Dynatrace, Elastic) to attribute runtime cost to\n      requests and tenants. The framework itself emits no billing telemetry.\n  - name: Allocation\n    description: Allocate Tanzu support fees to the platform team that contracts\n      the subscription; allocate runtime spend per application using cloud-tag\n\
-  \      / Kubernetes namespace conventions and Boot's `info` and `metrics`\n      endpoints.\n  - name: Optimization\n    description: Reduce cloud runtime cost with GraalVM native images, Spring\n      Boot 3's AOT processing, and lazy initialization. Tune actuator scrape\n      intervals to balance observability cost. Choose JVM heap and CDS image\n      settings to fit the deployment shape.\n  - name: Accountability\n    description: Tanzu support cost owned by the platform team. Per-application\n      compute and observability cost owned by the workload team operating the\n      Spring Boot service.\nnotes: Open-source library; per-call FinOps applies to the runtime of the\n  consuming application, not to Spring Boot itself.\nmaintainers:\n  - name: VMware Tanzu (Broadcom)\n    email: spring-team@vmware.com\n    url: https://spring.io/team\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Spring Boot 3\nproviderId: spring-boot-3\npublisherName: Spring Boot 3\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Enterprise\n  - Framework\n  - Java\n  - Microservices\n  - REST API\n  - Spring Boot\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Spring Boot 3 API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
+  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
+  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Spring Boot 3\n  ServiceCategory: Developer Tools / API\n  ProviderName: Spring Boot 3\n  PublisherName: Spring Boot 3\n  InvoiceIssuerName: Spring Boot 3\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in\
+  \ API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Spring Boot Actuator API\n    baseURL: http://localhost:8080/actuator\n    tags:\n      - Health Check\n      - Management\n      - Metrics\n      - Monitoring\n    serviceName: Spring Boot Actuator API\n    serviceCategory: API\n  - name: Spring Boot Core Framework\n    baseURL: https://github.com/spring-projects/spring-boot\n    tags:\n      - Auto-Configuration\n      - Embedded Server\n      - Framework\n      - Java\n    serviceName: Spring Boot Core Framework\n    serviceCategory: API\n  - name: Spring Web MVC API\n    baseURL: http://localhost:8080\n    tags:\n      - HTTP\n      - MVC\n      - REST\n      - Web\n    serviceName: Spring Web MVC\
+  \ API\n    serviceCategory: API\n  - name: Spring Data REST API\n    baseURL: http://localhost:8080/api\n    tags:\n      - CRUD\n      - Data\n      - HAL\n      - REST\n    serviceName: Spring Data REST API\n    serviceCategory: API\n  - name: Spring Security API\n    baseURL: http://localhost:8080\n    tags:\n      - Authentication\n      - Authorization\n      - OAuth2\n      - Security\n    serviceName: Spring Security API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: VMware Tanzu (Broadcom)\n    email: spring-team@vmware.com\n    url: https://spring.io/team\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/spring-boot-3/refs/heads/main/finops/spring-boot-3-finops.yml
-sources:
-- https://spring.io/projects/spring-boot
-- https://enterprise.spring.io/
+sources: []
 specification: FinOps Framework
 tags:
+- Enterprise
 - Framework
 - Java
+- Microservices
+- REST API
 - Spring Boot
 - FinOps
+- Cost Management
 - FOCUS
 ---

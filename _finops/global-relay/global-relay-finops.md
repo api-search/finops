@@ -34,61 +34,76 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Per-Seat Subscription
-description: 'FOCUS-aligned FinOps for Global Relay: per-seat compliance archiving subscription with custom-priced storage/retention overlays. Specific rates are not publicly posted.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Global Relay API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Global Relay Communications Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Global Relay
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Global Relay
-  PublisherName: Global Relay Communications Inc.
-  ServiceCategory: Compliance Archiving
+  PublisherName: Global Relay
+  ServiceCategory: Developer Tools / API
   ServiceName: Global Relay
 layout: finops
 meters:
-- aggregation: max
-  description: Active users covered by Global Relay Archive
-  dimensions:
-  - business_unit
-  - data_source
-  name: archived_seats
-  unit: seat
 - aggregation: sum
-  description: Stored archive volume across all data sources
+  description: Count of billable API requests
   dimensions:
-  - data_source
-  - retention_class
-  name: archive_storage
-  unit: GB-month
-- aggregation: max
-  description: Number of active communication-source connectors
-  name: connector_count
-  unit: connector
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Messages reviewed via supervision/surveillance modules
-  name: supervisory_review_volume
-  unit: message
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Global Relay Finops
 provider_name: Global Relay
 provider_slug: global-relay
-publisher_name: Global Relay Communications Inc.
-service_category: Compliance / Archiving
+publisher_name: Global Relay
+service_category: API
 slug: global-relay-finops
 source_filename: global-relay-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.globalrelay.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Global Relay\nproviderId: global-relay\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Compliance\n  - Archiving\ndescription: 'FOCUS-aligned FinOps for Global Relay: per-seat compliance archiving subscription with custom-priced\n  storage/retention overlays. Specific rates are not publicly posted.'\nnotes: Reconcile when a published rate card is referenced.\nsources:\n  - https://www.globalrelay.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Global Relay Communications Inc.\nserviceCategory: Compliance / Archiving\nbillingModel:\n  pricingCategory: Per-Seat Subscription\n  billingFrequency: Monthly\n  billingCurrency:\
-  \ USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: Global Relay\n  ServiceCategory: Compliance Archiving\n  ProviderName: Global Relay\n  PublisherName: Global Relay Communications Inc.\n  InvoiceIssuerName: Global Relay Communications Inc.\n  BillingCurrency: USD\nmeters:\n  - name: archived_seats\n    description: Active users covered by Global Relay Archive\n    unit: seat\n    aggregation: max\n    dimensions:\n      - business_unit\n      - data_source\n  - name: archive_storage\n    description: Stored archive volume across all data sources\n    unit: GB-month\n    aggregation: sum\n    dimensions:\n      - data_source\n      - retention_class\n  - name: connector_count\n    description: Number of active communication-source connectors\n    unit: connector\n    aggregation: max\n  - name: supervisory_review_volume\n    description: Messages reviewed via supervision/surveillance modules\n    unit: message\n    aggregation: sum\n\
-  principles:\n  - name: Visibility\n    description: Use the Global Relay reporting console to track licensed seat count, ingest volume,\n      and retention growth per data source.\n  - name: Allocation\n    description: Allocate seat costs to the regulated-business-unit owner; storage and retention overlays\n      to the legal/compliance budget.\n  - name: Optimization\n    description: Right-size seats by deactivating departed users promptly; tune retention class to regulatory\n      minimum; consolidate fragmented connectors.\n  - name: Accountability\n    description: Compliance and IT operations co-own Global Relay spend; renewal review is annual with\n      vendor.\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Global Relay\nproviderId: global-relay\npublisherName: Global Relay\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Archiving\n  - Compliance\n  - Data Retention\n  - Email Security\n  - Regulatory Compliance\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Global Relay API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
+  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
+  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Global Relay\n  ServiceCategory: Developer Tools / API\n  ProviderName: Global Relay\n  PublisherName: Global Relay\n  InvoiceIssuerName: Global Relay\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API\
+  \ responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Global Relay Conversation Archiving API\n    baseURL: ''\n    tags:\n      - Archiving\n      - Compliance\n      - Messaging\n    serviceName: Global Relay Conversation Archiving API\n    serviceCategory: API\n  - name: Global Relay Email Archiving API\n    baseURL: ''\n    tags:\n      - Archiving\n      - Compliance\n      - Email\n    serviceName: Global Relay Email Archiving API\n    serviceCategory: API\n  - name: Global Relay Voice Archiving API\n    baseURL: ''\n    tags:\n      - Archiving\n      - Compliance\n      - Voice\n    serviceName: Global Relay Voice Archiving API\n    serviceCategory: API\n  - name: Global Relay Event Archiving API\n\
+  \    baseURL: ''\n    tags:\n      - Archiving\n      - Collaboration\n      - Compliance\n      - Social Media\n    serviceName: Global Relay Event Archiving API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/global-relay/refs/heads/main/finops/global-relay-finops.yml
-sources:
-- https://www.globalrelay.com/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Compliance
 - Archiving
+- Compliance
+- Data Retention
+- Email Security
+- Regulatory Compliance
+- FinOps
+- Cost Management
+- FOCUS
 ---

@@ -37,70 +37,74 @@ billing_model:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Tiered Subscription (bundled with Microsoft 365)
-description: 'FOCUS-aligned FinOps for Microsoft Planner: basic Planner is bundled with all paid Microsoft 365 SKUs; advanced Project capabilities are sold as Planner Plan 1 / 3 / 5 per-user-per-month subscriptions. APIs included with the seat licence; no per-call charge.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Microsoft Planner API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Microsoft Corporation
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Project and Task Management
+  ChargeCategory: Usage
+  InvoiceIssuerName: Microsoft Planner
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Microsoft Planner
+  PublisherName: Microsoft Planner
+  ServiceCategory: Developer Tools / API
   ServiceName: Microsoft Planner
 layout: finops
 meters:
 - aggregation: sum
-  description: Microsoft 365 seats that grant basic Planner
+  description: Count of billable API requests
   dimensions:
-  - tenant
-  - sku
-  name: m365_seats
-  unit: seat
-- aggregation: sum
-  description: Planner Plan 1 / 3 / 5 seats (formerly Project Plan 1 / 3 / 5)
-  dimensions:
-  - tenant
-  - sku
-  name: planner_premium_seats
-  unit: seat
-- aggregation: sum
-  description: Microsoft Graph planner API calls (no charge; tracked for throttling)
-  dimensions:
-  - application
-  - tenant
-  name: planner_api_requests
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
-- aggregation: max
-  description: Plans currently owned by Microsoft 365 Groups in the tenant
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - tenant
-  name: active_plans
-  unit: plan
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Planner Finops
 provider_name: Microsoft Planner
 provider_slug: microsoft-planner
-publisher_name: Microsoft Corporation
-service_category: Project and Task Management
+publisher_name: Microsoft Planner
+service_category: API
 slug: microsoft-planner-finops
 source_filename: microsoft-planner-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.microsoft.com/en-us/microsoft-365/planner/microsoft-planner-pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Planner\nproviderId: microsoft-planner\npublisherName: Microsoft Corporation\nserviceCategory: Project and Task Management\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Project Management\n  - Tasks\n  - Microsoft 365\n  - Planner\n  - Microsoft\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Microsoft Planner: basic Planner is bundled with all paid Microsoft\n  365 SKUs; advanced Project capabilities are sold as Planner Plan 1 / 3 / 5 per-user-per-month subscriptions.\n  APIs included with the seat licence; no per-call charge.'\nsources:\n  - https://www.microsoft.com/en-us/microsoft-365/planner/microsoft-planner-pricing\n\
-  \  - https://learn.microsoft.com/en-us/graph/api/resources/planner-overview\nbillingModel:\n  pricingCategory: Tiered Subscription (bundled with Microsoft 365)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Microsoft Planner\n  ServiceCategory: Project and Task Management\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: m365_seats\n    description: Microsoft 365 seats that grant basic Planner\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - tenant\n      - sku\n  - name: planner_premium_seats\n    description: Planner Plan 1 / 3 / 5 seats (formerly Project Plan 1 / 3 / 5)\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - tenant\n      - sku\n  - name: planner_api_requests\n    description: Microsoft Graph planner\
-  \ API calls (no charge; tracked for throttling)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - application\n      - tenant\n  - name: active_plans\n    description: Plans currently owned by Microsoft 365 Groups in the tenant\n    unit: plan\n    aggregation: max\n    dimensions:\n      - tenant\nprinciples:\n  - name: Visibility\n    description: Use Microsoft 365 admin centre licence reports for seat utilisation; capture Microsoft\n      Graph throttling telemetry from request-id and x-ms-throttle headers for Planner API consumers.\n  - name: Allocation\n    description: Tag premium Planner Plan 1 / 3 / 5 seats to projects / business-units via Entra group-based\n      licensing.\n  - name: Optimization\n    description: Stay on basic Planner for routine task management; reserve Plan 3 / 5 for portfolio-managed\n      projects; replace polling code with Graph change notifications.\n  - name: Accountability\n    description: Project Management Office (PMO) owns Plan\
-  \ 3 / 5 utilisation; workplace IT owns the M365\n      SKU mix; engineering owns Graph API consumption.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Planner\nproviderId: microsoft-planner\npublisherName: Microsoft Planner\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Collaboration\n  - Microsoft 365\n  - Productivity\n  - Project Management\n  - Task Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Planner API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Planner\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Planner\n  PublisherName: Microsoft Planner\n  InvoiceIssuerName: Microsoft Planner\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
+  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Microsoft Planner API\n    baseURL: https://graph.microsoft.com/v1.0/planner\n    tags:\n      - Assignments\n      - Buckets\n      - Microsoft Graph\n      - Plans\n      - Tasks\n    serviceName: Microsoft Planner API\n    serviceCategory: API\n  - name: Microsoft Graph Plans API\n    baseURL: https://graph.microsoft.com/v1.0/planner/plans\n    tags:\n      - Microsoft Graph\n      - Planner\n      - Plans\n    serviceName: Microsoft Graph Plans API\n    serviceCategory: API\n  - name: Microsoft Graph Tasks API\n    baseURL: https://graph.microsoft.com/v1.0/planner/tasks\n    tags:\n      - Assignments\n      -\
+  \ Microsoft Graph\n      - Planner\n      - Tasks\n    serviceName: Microsoft Graph Tasks API\n    serviceCategory: API\n  - name: Microsoft Graph Buckets API\n    baseURL: https://graph.microsoft.com/v1.0/planner/buckets\n    tags:\n      - Buckets\n      - Microsoft Graph\n      - Organization\n      - Planner\n    serviceName: Microsoft Graph Buckets API\n    serviceCategory: API\n  - name: Microsoft Graph Planner API (Beta)\n    baseURL: https://graph.microsoft.com/beta/planner\n    tags:\n      - Beta\n      - Microsoft Graph\n      - Planner\n      - Preview\n      - Rosters\n    serviceName: Microsoft Graph Planner API (Beta)\n    serviceCategory: API\n  - name: Microsoft Graph Business Scenarios Planner API (Beta)\n    baseURL: https://graph.microsoft.com/beta/solutions/businessScenarios\n    tags:\n      - Beta\n      - Business Scenarios\n      - Integration\n      - Microsoft Graph\n      - Planner\n    serviceName: Microsoft Graph Business Scenarios Planner API (Beta)\n   \
+  \ serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-planner/refs/heads/main/finops/microsoft-planner-finops.yml
-sources:
-- https://www.microsoft.com/en-us/microsoft-365/planner/microsoft-planner-pricing
-- https://learn.microsoft.com/en-us/graph/api/resources/planner-overview
+sources: []
 specification: FinOps Framework
 tags:
-- Project Management
-- Tasks
+- Collaboration
 - Microsoft 365
-- Planner
-- Microsoft
+- Productivity
+- Project Management
+- Task Management
 - FinOps
+- Cost Management
 - FOCUS
 ---

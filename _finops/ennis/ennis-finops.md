@@ -7,59 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Contract / Negotiated
-description: FOCUS-aligned FinOps placeholder for Ennis Inc. The company does not publish public API pricing; cost is defined under the distributor/partner contract.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Ennis Inc API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Ennis, Inc.
+  InvoiceIssuerName: Ennis Inc
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Ennis Inc
-  PublisherName: Ennis, Inc.
-  ServiceCategory: Print & Forms Integration
-  ServiceName: Ennis Inc API
+  PublisherName: Ennis Inc
+  ServiceCategory: Developer Tools / API
+  ServiceName: Ennis Inc
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
   - endpoint
-  - distributor
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - product
-  - distributor
-  name: print_orders
-  unit: order
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - contract
-  name: contract_fee
-  unit: month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Ennis Finops
 provider_name: Ennis Inc
 provider_slug: ennis
-publisher_name: Ennis, Inc.
-service_category: Print & Forms Integration
+publisher_name: Ennis Inc
+service_category: API
 slug: ennis-finops
 source_filename: ennis-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.ennis.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Ennis Inc\nproviderId: ennis\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Business Forms\n  - Printing\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps placeholder for Ennis Inc. The company does not publish public API pricing;\n  cost is defined under the distributor/partner contract.\nnotes: No public billing or usage API was located. Reconcile against the signed distributor agreement.\nsources:\n  - https://www.ennis.com\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Ennis, Inc.\nserviceCategory: Print & Forms Integration\nbillingModel:\n  pricingCategory: Contract / Negotiated\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n\
-  \  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Ennis Inc API\n  ServiceCategory: Print & Forms Integration\n  ProviderName: Ennis Inc\n  PublisherName: Ennis, Inc.\n  InvoiceIssuerName: Ennis, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - distributor\n  - name: print_orders\n    unit: order\n    aggregation: sum\n    dimensions:\n      - product\n      - distributor\n  - name: contract_fee\n    unit: month\n    aggregation: sum\n    dimensions:\n      - contract\nprinciples:\n  - name: Visibility\n    description: Visibility is delivered through distributor reporting and the monthly invoice; no public\n      usage API.\n  - name: Allocation\n    description: Allocate cost by distributor and product line per the distributor agreement.\n  - name: Optimization\n    description: Optimization levers are order batching,\
-  \ plate reuse, and renegotiating distributor terms.\n  - name: Accountability\n    description: The contracting distributor owns spend; reviews follow the agreement cadence with the\n      Ennis account team.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Ennis Inc\nproviderId: ennis\npublisherName: Ennis Inc\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Business Forms\n  - Printing\n  - Promotional\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Ennis Inc API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
+  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
+  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Ennis Inc\n  ServiceCategory: Developer Tools / API\n  ProviderName: Ennis Inc\n  PublisherName: Ennis Inc\n  InvoiceIssuerName: Ennis Inc\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      -\
+  \ api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Ennis Inc API\n    baseURL: https://api.ennis.com\n    tags:\n      - Business Forms\n      - Printing\n      - Promotional\n    serviceName: Ennis Inc API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/ennis/refs/heads/main/finops/ennis-finops.yml
-sources:
-- https://www.ennis.com
+sources: []
 specification: FinOps Framework
 tags:
 - Business Forms
 - Printing
+- Promotional
 - FinOps
+- Cost Management
 - FOCUS
 ---

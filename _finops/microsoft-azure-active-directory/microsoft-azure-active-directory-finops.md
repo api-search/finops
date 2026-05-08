@@ -25,74 +25,81 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Tiered Subscription
-description: 'FOCUS-aligned FinOps for Microsoft Entra ID: per-user-per-month subscription licenses (Free, P1, P2, Suite) plus standalone add-ons (Internet/Private Access, ID Governance, Workload ID) and usage-based External ID monthly active users.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Microsoft Azure Active Directory API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Corporation
-  ProviderName: Microsoft
-  PublisherName: Microsoft Corporation
-  ServiceCategory: Identity
-  ServiceName: Microsoft Entra ID
+  InvoiceIssuerName: Microsoft Azure Active Directory
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Microsoft Azure Active Directory
+  PublisherName: Microsoft Azure Active Directory
+  ServiceCategory: Developer Tools / API
+  ServiceName: Microsoft Azure Active Directory
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - tenant
-  - department
-  name: entra_id_seat_p1
-  unit: seat-month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - tenant
-  - department
-  name: entra_id_seat_p2
-  unit: seat-month
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  name: entra_suite_seat
-  unit: seat-month
-- aggregation: sum
-  name: entra_id_governance_seat
-  unit: seat-month
-- aggregation: sum
-  name: entra_internet_access_seat
-  unit: seat-month
-- aggregation: sum
-  name: entra_private_access_seat
-  unit: seat-month
-- aggregation: sum
-  name: entra_workload_identity
-  unit: workload_identity-month
-- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - tenant
-  - app
-  name: external_id_mau
-  unit: monthly_active_user
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Microsoft Azure Active Directory Finops
 provider_name: Microsoft Azure Active Directory
 provider_slug: microsoft-azure-active-directory
-publisher_name: Microsoft Corporation
-service_category: Identity
+publisher_name: Microsoft Azure Active Directory
+service_category: API
 slug: microsoft-azure-active-directory-finops
 source_filename: microsoft-azure-active-directory-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.microsoft.com/en-us/security/business/microsoft-entra-pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Microsoft Azure Active Directory\nproviderId: microsoft-azure-active-directory\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Identity\n  - Microsoft Entra\ndescription: 'FOCUS-aligned FinOps for Microsoft Entra ID: per-user-per-month subscription licenses\n  (Free, P1, P2, Suite) plus standalone add-ons (Internet/Private Access, ID Governance, Workload ID)\n  and usage-based External ID monthly active users.'\nsources:\n  - https://www.microsoft.com/en-us/security/business/microsoft-entra-pricing\n  - https://azure.microsoft.com/en-us/pricing/details/active-directory/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Microsoft\
-  \ Corporation\nserviceCategory: Identity\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Microsoft Entra ID\n  ServiceCategory: Identity\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: entra_id_seat_p1\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - tenant\n      - department\n  - name: entra_id_seat_p2\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - tenant\n      - department\n  - name: entra_suite_seat\n    unit: seat-month\n    aggregation: sum\n  - name: entra_id_governance_seat\n    unit: seat-month\n    aggregation: sum\n  - name: entra_internet_access_seat\n    unit: seat-month\n    aggregation: sum\n  - name: entra_private_access_seat\n\
-  \    unit: seat-month\n    aggregation: sum\n  - name: entra_workload_identity\n    unit: workload_identity-month\n    aggregation: sum\n  - name: external_id_mau\n    unit: monthly_active_user\n    aggregation: sum\n    dimensions:\n      - tenant\n      - app\nprinciples:\n  - name: Visibility\n    description: Use the Microsoft 365 admin center license usage reports and Azure Cost Management\n      to view Entra ID, External ID, and add-on consumption. Export usage to a Log Analytics workspace\n      for detailed reporting.\n  - name: Allocation\n    description: Tag licensed users via Microsoft 365 license groups and Entra group-based licensing\n      to attribute spend to departments and cost centers.\n  - name: Optimization\n    description: Reclaim unused P1/P2 licenses with access reviews; right-size between Free, P1, and\n      P2 based on per-user feature consumption; switch eligible CIAM workloads from B2C legacy to\n      External ID free MAU tier.\n  - name: Accountability\n\
-  \    description: Assign license budget owners per business unit; review annually at Microsoft Enterprise\n      Agreement true-up; alert on access-review completions and over-provisioning.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Azure Active Directory\nproviderId: microsoft-azure-active-directory\npublisherName: Microsoft Azure Active Directory\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Authentication\n  - Authorization\n  - Identity\n  - Microsoft\n  - Microsoft Entra\n  - OAuth\n  - OpenID Connect\n  - SAML\n  - SCIM\n  - Single Sign-On\n  - Zero Trust\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Azure Active Directory API surface. Provides\n  a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across\n  the provider's APIs.\nprinciples:\n  - name: Visibility\n    description:\
+  \ Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n   \
+  \   - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Azure Active Directory\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Azure Active Directory\n  PublisherName: Microsoft Azure Active Directory\n  InvoiceIssuerName: Microsoft Azure Active Directory\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable\
+  \ API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Microsoft Graph API\n    baseURL: https://graph.microsoft.com\n    tags:\n      - Graph\n      - Groups\n      - Identity\n      - Users\n    serviceName: Microsoft Graph API\n    serviceCategory: API\n  - name: Microsoft Graph Identity and Access API\n    baseURL: https://graph.microsoft.com\n    tags:\n      - Access Management\n      - Authentication Methods\n      - Conditional Access\n      - Identity\n      - Identity Governance\n\
+  \    serviceName: Microsoft Graph Identity and Access API\n    serviceCategory: API\n  - name: Azure AD Graph API (Deprecated)\n    baseURL: https://graph.windows.net\n    tags:\n      - Deprecated\n      - Identity\n      - Legacy\n    serviceName: Azure AD Graph API (Deprecated)\n    serviceCategory: API\n  - name: Azure AD Authentication Library (ADAL)\n    baseURL: ''\n    tags:\n      - Authentication\n      - Legacy\n      - Library\n    serviceName: Azure AD Authentication Library (ADAL)\n    serviceCategory: API\n  - name: Microsoft Authentication Library (MSAL)\n    baseURL: ''\n    tags:\n      - Authentication\n      - Library\n      - OAuth\n      - OpenID Connect\n    serviceName: Microsoft Authentication Library (MSAL)\n    serviceCategory: API\n  - name: Microsoft Identity Platform\n    baseURL: https://login.microsoftonline.com\n    tags:\n      - App Registration\n      - Authentication\n      - Authorization\n      - OAuth\n      - OpenID Connect\n    serviceName: Microsoft\
+  \ Identity Platform\n    serviceCategory: API\n  - name: Microsoft Entra Verified ID API\n    baseURL: https://verifiedid.did.msidentity.com\n    tags:\n      - Decentralized Identity\n      - Identity Verification\n      - Verifiable Credentials\n      - W3C\n    serviceName: Microsoft Entra Verified ID API\n    serviceCategory: API\n  - name: Microsoft Entra ID Governance API\n    baseURL: https://graph.microsoft.com\n    tags:\n      - Access Reviews\n      - Entitlement Management\n      - Governance\n      - Lifecycle Workflows\n      - Privileged Identity Management\n    serviceName: Microsoft Entra ID Governance API\n    serviceCategory: API\n  - name: Microsoft Entra SCIM Provisioning API\n    baseURL: ''\n    tags:\n      - Automation\n      - Group Management\n      - Provisioning\n      - SCIM\n      - User Management\n    serviceName: Microsoft Entra SCIM Provisioning API\n    serviceCategory: API\n  - name: Microsoft Entra PowerShell\n    baseURL: ''\n    tags:\n      - Automation\n\
+  \      - CLI\n      - PowerShell\n      - Scripting\n    serviceName: Microsoft Entra PowerShell\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Microsoft\n    email: azuread@microsoft.com\n    url: https://azure.microsoft.com/en-us/services/active-directory/\n  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-active-directory/refs/heads/main/finops/microsoft-azure-active-directory-finops.yml
-sources:
-- https://www.microsoft.com/en-us/security/business/microsoft-entra-pricing
-- https://azure.microsoft.com/en-us/pricing/details/active-directory/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Authentication
+- Authorization
 - Identity
+- Microsoft
 - Microsoft Entra
+- OAuth
+- OpenID Connect
+- SAML
+- SCIM
+- Single Sign-On
+- Zero Trust
+- FinOps
+- Cost Management
+- FOCUS
 ---

@@ -32,52 +32,83 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/workday-extend/refs/heads/main/openapi/workday-extend-graph-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Subscription
-description: FOCUS-aligned FinOps stub for Workday Extend. Extend is sold as an add-on platform entitlement to existing Workday tenants; there is no public per-app-call price and no public usage API, so meters describe contractual entitlement rather than runtime telemetry.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Workday Extend API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Workday, Inc.
-  ProviderName: Workday
-  PublisherName: Workday, Inc.
-  ServiceCategory: Low-Code Platform
+  ChargeCategory: Usage
+  InvoiceIssuerName: Workday Extend
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Workday Extend
+  PublisherName: Workday Extend
+  ServiceCategory: Developer Tools / API
   ServiceName: Workday Extend
 layout: finops
 meters:
-- aggregation: max
-  description: Annual Workday Extend platform entitlement attached to the parent Workday tenant subscription.
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - tenant
-  name: extend_entitlement
-  unit: month
-- aggregation: max
-  description: Count of Extend apps deployed against the tenant; tracked by Workday for entitlement governance rather than per-app billing.
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - tenant
-  - app
-  name: extend_apps_in_use
-  unit: app
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Workday Extend Finops
 provider_name: Workday Extend
 provider_slug: workday-extend
-publisher_name: Workday, Inc.
-service_category: Low-Code Platform
+publisher_name: Workday Extend
+service_category: API
 slug: workday-extend-finops
 source_filename: workday-extend-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.workday.com/en-us/enterprise-resource-planning.html
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Workday Extend\nproviderId: workday-extend\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Low-Code\n  - Custom Applications\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps stub for Workday Extend. Extend is sold as an add-on platform entitlement to existing Workday tenants; there is no public per-app-call price and no public usage API, so meters describe contractual entitlement rather than runtime telemetry.\nsources:\n  - https://www.workday.com/en-us/enterprise-resource-planning.html\nnotes: No public pricing or usage API exists. Scaffold api_request and compute meters have been removed.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
-  \ Workday, Inc.\nserviceCategory: Low-Code Platform\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Workday Extend\n  ServiceCategory: Low-Code Platform\n  ProviderName: Workday\n  PublisherName: Workday, Inc.\n  InvoiceIssuerName: Workday, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: extend_entitlement\n    description: Annual Workday Extend platform entitlement attached to the parent Workday tenant subscription.\n    unit: month\n    aggregation: max\n    dimensions:\n      - tenant\n  - name: extend_apps_in_use\n    description: Count of Extend apps deployed against the tenant; tracked by Workday for entitlement governance rather than per-app billing.\n    unit: app\n    aggregation: max\n    dimensions:\n      - tenant\n      - app\nprinciples:\n  - name: Visibility\n    description: Track Extend value by maintaining an inventory of deployed Extend apps and their\
-  \ owners; raw API call telemetry is not exposed externally, so cost-justification relies on app-level adoption metrics.\n  - name: Allocation\n    description: Allocate the Extend entitlement back to the product or business unit that requested each app; charge incremental development effort to the sponsoring team.\n  - name: Optimization\n    description: Retire unused Extend apps before renewal, consolidate overlapping ones, and prefer configuring native Workday capability before building custom Extend apps to avoid duplicative platform spend.\n  - name: Accountability\n    description: A platform owner inside the Workday Center of Excellence should approve new Extend app builds, review utilization quarterly, and consolidate the Extend SKU into the broader Workday renewal conversation.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Workday Extend\nproviderId: workday-extend\npublisherName: Workday Extend\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Automation\n  - Custom Applications\n  - Enterprise\n  - Extensions\n  - HCM\n  - Human Capital Management\n  - Integration\n  - Orchestration\n  - PaaS\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Workday Extend API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in\
+  \ near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n\
+  \      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Workday Extend\n  ServiceCategory: Developer Tools / API\n  ProviderName: Workday Extend\n  PublisherName: Workday Extend\n  InvoiceIssuerName: Workday Extend\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n \
+  \ - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Workday Extend REST API\n    baseURL: https://api.workday.com/extend/v1\n    tags:\n      - Custom Applications\n      - Extensions\n      - Integration\n      - Orchestrations\n    serviceName: Workday Extend REST API\n    serviceCategory: API\n  - name: Workday Orchestration API\n    baseURL: https://api.workday.com/orchestrate/v1\n    tags:\n      - Automation\n      - Business Processes\n      - Orchestrations\n      - Workflows\n    serviceName: Workday Orchestration API\n    serviceCategory: API\n  - name: Workday Custom Objects API\n    baseURL: https://api.workday.com/customObjects/v1\n\
+  \    tags:\n      - Custom Fields\n      - Custom Objects\n      - Data Model\n      - Schema\n    serviceName: Workday Custom Objects API\n    serviceCategory: API\n  - name: Workday Graph API\n    baseURL: https://api.workday.com/\n    tags:\n      - Business Objects\n      - Data Query\n      - Graph API\n      - Relationships\n    serviceName: Workday Graph API\n    serviceCategory: API\n  - name: Workday Orchestrate Insights API\n    baseURL: https://api.workday.com/orchestrate/insights\n    tags:\n      - Analytics\n      - Insights\n      - Monitoring\n      - Orchestrations\n    serviceName: Workday Orchestrate Insights API\n    serviceCategory: API\n  - name: Workday Illuminate AI API\n    baseURL: https://api.workday.com/\n    tags:\n      - Artificial Intelligence\n      - Document Intelligence\n      - Machine Learning\n      - Natural Language Processing\n    serviceName: Workday Illuminate AI API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n\
+  \    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/workday-extend/refs/heads/main/finops/workday-extend-finops.yml
-sources:
-- https://www.workday.com/en-us/enterprise-resource-planning.html
+sources: []
 specification: FinOps Framework
 tags:
-- Low-Code
+- Automation
 - Custom Applications
+- Enterprise
+- Extensions
+- HCM
+- Human Capital Management
+- Integration
+- Orchestration
+- PaaS
 - FinOps
+- Cost Management
 - FOCUS
 ---

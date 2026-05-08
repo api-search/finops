@@ -7,54 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Contract / Negotiated
-description: FOCUS-aligned FinOps placeholder for Ensign Group. The company does not publish public API pricing; cost is defined under the HIPAA partner agreement.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Ensign Group API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: The Ensign Group, Inc.
+  InvoiceIssuerName: Ensign Group
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Ensign Group
-  PublisherName: The Ensign Group, Inc.
-  ServiceCategory: Healthcare / Post-Acute Integration
-  ServiceName: Ensign Group API
+  PublisherName: Ensign Group
+  ServiceCategory: Developer Tools / API
+  ServiceName: Ensign Group
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
+  - api
   - endpoint
-  - partner
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - contract
-  name: contract_fee
-  unit: month
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Ensign Group Finops
 provider_name: Ensign Group
 provider_slug: ensign-group
-publisher_name: The Ensign Group, Inc.
-service_category: Healthcare / Post-Acute Integration
+publisher_name: Ensign Group
+service_category: API
 slug: ensign-group-finops
 source_filename: ensign-group-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.ensigngroup.net
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Ensign Group\nproviderId: ensign-group\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Senior Living\n  - Healthcare\n  - Post-Acute\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps placeholder for Ensign Group. The company does not publish public API\n  pricing; cost is defined under the HIPAA partner agreement.\nnotes: No public billing or usage API was located. Reconcile against the signed Business Associate Agreement\n  and partner contract.\nsources:\n  - https://www.ensigngroup.net\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: The Ensign Group, Inc.\nserviceCategory: Healthcare / Post-Acute Integration\nbillingModel:\n  pricingCategory:\
-  \ Contract / Negotiated\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Ensign Group API\n  ServiceCategory: Healthcare / Post-Acute Integration\n  ProviderName: Ensign Group\n  PublisherName: The Ensign Group, Inc.\n  InvoiceIssuerName: The Ensign Group, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - partner\n  - name: contract_fee\n    unit: month\n    aggregation: sum\n    dimensions:\n      - contract\nprinciples:\n  - name: Visibility\n    description: Visibility is delivered through partner reporting agreed in the BAA; no public usage API.\n  - name: Allocation\n    description: Allocate cost by partner agreement and operating subsidiary per the master services agreement.\n  - name: Optimization\n    description: Optimization levers are batching, caching,\
-  \ and renegotiating partner terms at renewal.\n  - name: Accountability\n    description: The contracting partner owns spend; reviews follow contract cadence with the Ensign account\n      team and Privacy Officer.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Ensign Group\nproviderId: ensign-group\npublisherName: Ensign Group\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Senior Living\n  - Healthcare\n  - Post-Acute\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Ensign Group API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
+  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
+  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Ensign Group\n  ServiceCategory: Developer Tools / API\n  ProviderName: Ensign Group\n  PublisherName: Ensign Group\n  InvoiceIssuerName: Ensign Group\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Ensign Group API\n    baseURL: https://api.ensigngroup.net\n    tags:\n      - Senior Living\n      - Healthcare\n      - Post-Acute\n    serviceName: Ensign Group API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/ensign-group/refs/heads/main/finops/ensign-group-finops.yml
-sources:
-- https://www.ensigngroup.net
+sources: []
 specification: FinOps Framework
 tags:
 - Senior Living
 - Healthcare
 - Post-Acute
 - FinOps
+- Cost Management
 - FOCUS
 ---

@@ -7,57 +7,69 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Subscription
-description: 'FOCUS-aligned FinOps placeholder for H.B. Fuller: enterprise / partner API access bundled into a commercial agreement, not metered as a standalone SaaS line. Meters describe partner-integration volume rather than billable units.'
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the H.B. Fuller Company API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
+  ChargeCategory: Usage
   InvoiceIssuerName: H.B. Fuller Company
-  PricingCategory: Subscription
-  PricingUnit: partner-agreement
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: H.B. Fuller Company
   PublisherName: H.B. Fuller Company
-  ServiceCategory: Industrial / Manufacturer Partner API
-  ServiceName: H.B. Fuller Company API
+  ServiceCategory: Developer Tools / API
+  ServiceName: H.B. Fuller Company
 layout: finops
 meters:
 - aggregation: sum
-  description: Partner-integration request volume (allocation meter)
+  description: Count of billable API requests
   dimensions:
-  - partner
+  - api
   - endpoint
-  - business_unit
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Order-related transactions submitted via the API
+  description: Bytes returned over the network in API responses
   dimensions:
-  - partner
-  - product_line
-  name: orders_submitted
-  unit: order
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: H B Fuller Finops
 provider_name: H.B. Fuller Company
 provider_slug: h-b-fuller
 publisher_name: H.B. Fuller Company
-service_category: Industrial / Manufacturer Partner API
+service_category: API
 slug: h-b-fuller-finops
 source_filename: h-b-fuller-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.hbfuller.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: H.B. Fuller Company\nproviderId: h-b-fuller\npublisherName: H.B. Fuller Company\nserviceCategory: Industrial / Manufacturer Partner API\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Adhesives\n  - Sealants\n  - Chemical\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps placeholder for H.B. Fuller: enterprise / partner API access\n  bundled into a commercial agreement, not metered as a standalone SaaS line. Meters describe\n  partner-integration volume rather than billable units.'\nnotes: No public commercial model is published. The shape below treats API consumption as a\n  partner-allocation\
-  \ surface; replace meters when a billable model is documented.\nsources:\n  - https://www.hbfuller.com/\nprinciples:\n  - name: Visibility\n    description: Track partner-integration volume via the H.B. Fuller partner gateway logs and\n      reconcile against the partner agreement.\n  - name: Allocation\n    description: Allocate integration cost across business units (packaging, hygiene, engineering\n      adhesives, construction) using the calling partner system.\n  - name: Optimization\n    description: Cache product / SDS / availability lookups; batch order-status polls; consolidate\n      partner integrations through a single gateway.\n  - name: Accountability\n    description: Assign a partner-program owner; review API usage quarterly against contract terms.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n\
-  \      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: H.B. Fuller Company API\n  ServiceCategory: Industrial / Manufacturer Partner API\n  ProviderName: H.B. Fuller Company\n  PublisherName: H.B. Fuller Company\n  InvoiceIssuerName: H.B. Fuller Company\n  PricingCategory: Subscription\n\
-  \  PricingUnit: partner-agreement\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: api_requests\n    description: Partner-integration request volume (allocation meter)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - partner\n      - endpoint\n      - business_unit\n  - name: orders_submitted\n    description: Order-related transactions submitted via the API\n    unit: order\n    aggregation: sum\n    dimensions:\n      - partner\n      - product_line\napis:\n  - name: H.B. Fuller Company API\n    baseURL: https://api.hbfuller.com\n    tags:\n      - Adhesives\n      - Sealants\n      - Chemical\n    serviceName: H.B. Fuller Company API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Partner Integration\n    metric: billed_cost / active_partners\n    target: TBD\n  - name: Cost per Order Transaction\n    metric: billed_cost / orders_submitted\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: H.B. Fuller Company\nproviderId: h-b-fuller\npublisherName: H.B. Fuller Company\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Adhesives\n  - Sealants\n  - Chemical\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the H.B. Fuller Company API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: H.B. Fuller Company\n  ServiceCategory: Developer Tools / API\n  ProviderName: H.B. Fuller Company\n  PublisherName: H.B. Fuller Company\n  InvoiceIssuerName: H.B. Fuller Company\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
+  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: H.B. Fuller Company API\n    baseURL: https://api.hbfuller.com\n    tags:\n      - Adhesives\n      - Sealants\n      - Chemical\n    serviceName: H.B. Fuller Company API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/h-b-fuller/refs/heads/main/finops/h-b-fuller-finops.yml
-sources:
-- https://www.hbfuller.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Adhesives

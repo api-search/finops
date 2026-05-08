@@ -26,43 +26,73 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/realtor/refs/heads/main/openapi/realtor-property-data-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Contract
-description: FOCUS-aligned FinOps framing for realtor.com data partnerships. No public usage meter or billing API is documented; commercial terms are negotiated.
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the realtor API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Move, Inc.
-  ProviderName: Realtor.com
-  PublisherName: Move, Inc.
-  ServiceCategory: Real Estate Data
-  ServiceName: Realtor.com Data API
+  ChargeCategory: Usage
+  InvoiceIssuerName: realtor
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: realtor
+  PublisherName: realtor
+  ServiceCategory: Developer Tools / API
+  ServiceName: realtor
 layout: finops
 meters:
 - aggregation: sum
-  description: Annual data-partnership fee with Move, Inc.
-  name: partnership_contract
-  unit: contract
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Realtor Finops
 provider_name: realtor
 provider_slug: realtor
-publisher_name: Move, Inc.
-service_category: Real Estate Data
+publisher_name: realtor
+service_category: API
 slug: realtor-finops
 source_filename: realtor-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.realtor.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: realtor\nproviderId: realtor\npublisherName: Move, Inc.\nserviceCategory: Real Estate Data\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Real Estate\n  - Listings\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps framing for realtor.com data partnerships. No public usage\n  meter or billing API is documented; commercial terms are negotiated.\nsources:\n  - https://www.realtor.com/\nnotes: realtor.com developer/billing pages are gated; meters and FOCUS columns reflect a contract-level\n  shape rather than a fetched billing surface.\nbillingModel:\n  pricingCategory: Contract\n  billingFrequency: Annual\n  billingCurrency:\
-  \ USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Realtor.com Data API\n  ServiceCategory: Real Estate Data\n  ProviderName: Realtor.com\n  PublisherName: Move, Inc.\n  InvoiceIssuerName: Move, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: partnership_contract\n    description: Annual data-partnership fee with Move, Inc.\n    unit: contract\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Spend is invoiced at contract level; any usage telemetry is exchanged bilaterally\n      under the partnership agreement.\n  - name: Allocation\n    description: Allocate against the consuming line-of-business cost center; per-call attribution\n      is not exposed.\n  - name: Optimization\n    description: Renegotiate scope, geographic coverage, and refresh frequency at contract renewal.\n  - name: Accountability\n    description: The product team consuming listing data co-owns the contract with procurement.\nmaintainers:\n  - FN: Kin Lane\n    email:\
-  \ kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: realtor\nproviderId: realtor\npublisherName: realtor\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the realtor API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n\
+  \  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n\
+  \      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: realtor\n  ServiceCategory: Developer Tools / API\n  ProviderName: realtor\n  PublisherName: realtor\n  InvoiceIssuerName: realtor\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description:\
+  \ Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Realtor.com Connections Plus API\n    baseURL: https://api.example.com\n    tags:\n      - Agents\n      - Brokers\n      - CRM\n      - Leads\n      - Real Estate\n    serviceName: Realtor.com Connections Plus API\n    serviceCategory: API\n  - name: Realtor.com Lead Delivery API\n    baseURL: https://api.example.com\n    tags:\n      - CRM Integration\n      - Delivery\n      - Leads\n      - Notifications\n      - Real Estate\n    serviceName: Realtor.com Lead Delivery API\n    serviceCategory: API\n  - name: Realtor.com Property Data API\n    baseURL: https://realtor.p.rapidapi.com\n    tags:\n      - MLS\n      - Property Data\n      - Property Listings\n      - Real Estate\n      - Search\n    serviceName: Realtor.com Property Data API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K\
+  \ Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/realtor/refs/heads/main/finops/realtor-finops.yml
-sources:
-- https://www.realtor.com/
+sources: []
 specification: FinOps Framework
 tags:
-- Real Estate
-- Listings
 - FinOps
+- Cost Management
 - FOCUS
 ---

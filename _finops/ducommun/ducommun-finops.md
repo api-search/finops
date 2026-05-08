@@ -7,52 +7,75 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Not Applicable
-  chargeCategories: []
-  pricingCategory: Not Applicable (No Public API)
-description: FOCUS-aligned FinOps shape for Ducommun trading-partner integrations. Ducommun does not invoice for API consumption; the billable transactions are physical orders / shipments under the customer or supplier master agreement.
+  billingFrequency: Monthly
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Ducommun API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Not Applicable
+  ChargeCategory: Usage
+  InvoiceIssuerName: Ducommun
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Ducommun
-  PublisherName: Ducommun Incorporated
-  ServiceCategory: Aerospace & Defense Manufacturing
-  ServiceName: Ducommun (B2B Integration)
+  PublisherName: Ducommun
+  ServiceCategory: Developer Tools / API
+  ServiceName: Ducommun
 layout: finops
 meters:
-- aggregation: count
-  description: EDI documents exchanged with Ducommun (PO / ASN / invoice)
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - document_type
-  - direction
-  name: edi_documents
-  unit: document
-- aggregation: count
-  description: Physical orders / shipments billed under the master agreement
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - program
-  name: orders
-  unit: order
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Ducommun Finops
 provider_name: Ducommun
 provider_slug: ducommun
-publisher_name: Ducommun Incorporated
-service_category: Aerospace & Defense Manufacturing
+publisher_name: Ducommun
+service_category: API
 slug: ducommun-finops
 source_filename: ducommun-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.ducommun.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Ducommun\nproviderId: ducommun\npublisherName: Ducommun Incorporated\nserviceCategory: Aerospace & Defense Manufacturing\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Aerospace\n  - Defense\n  - Manufacturing\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for Ducommun trading-partner integrations. Ducommun does not\n  invoice for API consumption; the billable transactions are physical orders / shipments under the customer\n  or supplier master agreement.\nnotes: No public API or invoiced API consumption; reconciled=false.\nsources:\n  - https://www.ducommun.com/\nbillingModel:\n  pricingCategory: Not\
-  \ Applicable (No Public API)\n  billingFrequency: Not Applicable\n  billingCurrency: USD\n  chargeCategories: []\nfocusColumns:\n  ServiceName: Ducommun (B2B Integration)\n  ServiceCategory: Aerospace & Defense Manufacturing\n  ProviderName: Ducommun\n  PublisherName: Ducommun Incorporated\n  InvoiceIssuerName: Not Applicable\n  BillingCurrency: USD\nmeters:\n  - name: edi_documents\n    description: EDI documents exchanged with Ducommun (PO / ASN / invoice)\n    unit: document\n    aggregation: count\n    dimensions:\n      - document_type\n      - direction\n  - name: orders\n    description: Physical orders / shipments billed under the master agreement\n    unit: order\n    aggregation: count\n    dimensions:\n      - program\nprinciples:\n  - name: Visibility\n    description: Track EDI/PLM volumes in the consumer's integration platform; physical billing flows\n      through the customer/supplier master agreement, not an API meter.\n  - name: Allocation\n    description: Allocate integration\
-  \ cost to the aerospace or defense program owning the trading-partner\n      relationship.\n  - name: Optimization\n    description: Use ASN automation; minimise manual portal sessions; consolidate EDI flows where the\n      master agreement permits.\n  - name: Accountability\n    description: Procurement / customer-relations owner is accountable for the master agreement and integration\n      uptime; ITAR/EAR compliance owner reviews exchanges.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Ducommun\nproviderId: ducommun\npublisherName: Ducommun\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Aerospace\n  - Defense\n  - Manufacturing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Ducommun API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Ducommun\n  ServiceCategory: Developer Tools / API\n  ProviderName: Ducommun\n  PublisherName: Ducommun\n  InvoiceIssuerName: Ducommun\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
+  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Ducommun API\n    baseURL: https://api.ducommun.com\n    tags:\n      - Aerospace\n      - Defense\n      - Manufacturing\n    serviceName: Ducommun API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/ducommun/refs/heads/main/finops/ducommun-finops.yml
-sources:
-- https://www.ducommun.com/
+sources: []
 specification: FinOps Framework
 tags:
 - Aerospace
 - Defense
 - Manufacturing
 - FinOps
+- Cost Management
 - FOCUS
 ---

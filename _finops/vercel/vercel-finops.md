@@ -27,67 +27,75 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Subscription + Usage-Based
-description: FOCUS-aligned FinOps for Vercel.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Vercel API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Vercel
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Vercel
-  PublisherName: Vercel Inc.
-  ServiceCategory: Edge Hosting
+  PublisherName: Vercel
+  ServiceCategory: Developer Tools / API
   ServiceName: Vercel
 layout: finops
 meters:
-- aggregation: max
-  name: developer_seats
-  unit: seat-month
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - project
-  - edge_region
-  name: bandwidth
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
 - aggregation: sum
-  name: edge_requests
-  unit: request
-- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - project
-  - function
-  name: fn_invocations
-  unit: invocation
-- aggregation: sum
-  name: active_cpu_hours
-  unit: cpu-hour
-- aggregation: sum
-  name: provisioned_memory
-  unit: GB-hour
-- aggregation: sum
-  name: image_transformations
-  unit: transformation
-- aggregation: max
-  name: blob_storage
-  unit: GB-month
-- aggregation: sum
-  name: kv_requests
-  unit: request
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Vercel Finops
 provider_name: Vercel
 provider_slug: vercel
-publisher_name: Vercel Inc.
-service_category: Edge Hosting
+publisher_name: Vercel
+service_category: API
 slug: vercel-finops
 source_filename: vercel-finops.yml
 source_heading: FinOps Profile
-source_url: https://vercel.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Vercel\nproviderId: vercel\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Hosting\ndescription: FOCUS-aligned FinOps for Vercel.\nsources:\n  - https://vercel.com/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Vercel Inc.\nserviceCategory: Edge Hosting\nbillingModel:\n  pricingCategory: Subscription + Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Vercel\n  ServiceCategory: Edge Hosting\n  ProviderName: Vercel\n  PublisherName: Vercel Inc.\n  BillingCurrency: USD\nmeters:\n  - name: developer_seats\n    unit: seat-month\n    aggregation: max\n  - name: bandwidth\n    unit:\
-  \ GB\n    aggregation: sum\n    dimensions:\n      - project\n      - edge_region\n  - name: edge_requests\n    unit: request\n    aggregation: sum\n  - name: fn_invocations\n    unit: invocation\n    aggregation: sum\n    dimensions:\n      - project\n      - function\n  - name: active_cpu_hours\n    unit: cpu-hour\n    aggregation: sum\n  - name: provisioned_memory\n    unit: GB-hour\n    aggregation: sum\n  - name: image_transformations\n    unit: transformation\n    aggregation: sum\n  - name: blob_storage\n    unit: GB-month\n    aggregation: max\n  - name: kv_requests\n    unit: request\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Use Usage page and per-project breakdown; configure billing alerts at $X/day.\n  - name: Allocation\n    description: One project per app/feature; teams for cost-center isolation.\n  - name: Optimization\n    description: Cache aggressively at the edge; downgrade ISR frequency; profile fn duration.\n  - name: Accountability\n\
-  \    description: Hard spend limits per team; weekly usage review during high-velocity periods.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Vercel\nproviderId: vercel\npublisherName: Vercel\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI Gateways\n  - Gateways\n  - Observability\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Vercel API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
+  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
+  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Vercel\n  ServiceCategory: Developer Tools / API\n  ProviderName: Vercel\n  PublisherName: Vercel\n  InvoiceIssuerName: Vercel\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      -\
+  \ consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Vercel\n    baseURL: ''\n    tags: []\n    serviceName: Vercel\n    serviceCategory: API\n  - name: Vercel REST API\n    baseURL: ''\n    tags:\n      - Access Groups\n      - Billing\n      - Certificates\n      - Deployments\n      - DNS\n      - Domains\n      - Edge Config\n      - Environment Variables\n      - Projects\n      - Teams\n      - Webhooks\n    serviceName: Vercel REST API\n    serviceCategory: API\n  - name: Vercel AI Gateway API\n    baseURL: ''\n    tags:\n      - AI\n      - AI Gateway\n      - LLM\n      - Machine Learning\n      - Models\n    serviceName: Vercel AI Gateway API\n    serviceCategory: API\n  - name: V0 Platform API\n    baseURL: ''\n    tags:\n      - AI\n      - App Builder\n      - Code Generation\n    serviceName:\
+  \ V0 Platform API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/vercel/refs/heads/main/finops/vercel-finops.yml
-sources:
-- https://vercel.com/pricing
+sources: []
 specification: FinOps Framework
 tags:
+- AI Gateways
+- Gateways
+- Observability
 - FinOps
+- Cost Management
 - FOCUS
-- Hosting
 ---

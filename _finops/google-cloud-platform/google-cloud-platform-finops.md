@@ -223,120 +223,86 @@ api_specs:
   spec_type: OpenAPI
   url: https://redis.googleapis.com/$discovery/rest?version=v1
 billing_model:
-  billingCurrency: USD/EUR/GBP/JPY
+  billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
-  - Adjustment
-  - Refund
   - Credit
-  pricingCategory: Pay-As-You-Go + Committed Use
-description: 'FOCUS-aligned FinOps for Google Cloud Platform: a multi-product Pay-As-You-Go cloud with layered Sustained Use Discounts, Committed Use Discounts (1y/3y), and negotiated enterprise agreements. Cloud Billing supports a native FOCUS-formatted detailed export to BigQuery for canonical cost-and-usage visibility.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Google Cloud Platform API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Google LLC
-  ProviderName: Google Cloud
-  PublisherName: Google LLC
-  ServiceCategory: Cloud Platform
+  InvoiceIssuerName: Google Cloud Platform
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Google Cloud Platform
+  PublisherName: Google Cloud Platform
+  ServiceCategory: Developer Tools / API
   ServiceName: Google Cloud Platform
 layout: finops
 meters:
 - aggregation: sum
-  description: Provisioned VM and container compute time
+  description: Count of billable API requests
   dimensions:
-  - service
-  - machine_type
-  - region
-  - zone
-  - project
-  - sku
-  name: compute_instance_hours
-  unit: instance-hour
-- aggregation: sum
-  description: Object, block, and database storage retained
-  dimensions:
-  - service
-  - storage_class
-  - region
-  - project
-  name: storage_gb_month
-  unit: GB-month
-- aggregation: sum
-  description: Internet, inter-region, and inter-zone egress
-  dimensions:
-  - source_region
-  - destination
+  - api
+  - endpoint
   - tier
-  - project
-  name: network_egress
-  unit: GB
-- aggregation: sum
-  description: Per-API operation count (Cloud Storage class A/B, Pub/Sub messages, etc.)
-  dimensions:
-  - service
-  - operation
   - region
-  - project
+  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Tokens/characters/seconds consumed by Vertex AI and Gemini API
+  description: Bytes returned over the network in API responses
   dimensions:
-  - model
+  - api
   - region
-  - project
-  name: ai_inference
-  unit: varies
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Slot/CPU/memory hours covered by 1y/3y commitments
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - commitment_id
-  - region
-  - resource
-  name: cud_consumption
-  unit: varies
-- aggregation: sum
-  description: Sustained Use Discount credits applied
-  dimensions:
-  - service
-  - region
-  name: sud_credits
-  unit: USD
-- aggregation: sum
-  description: Standard / Enhanced / Premium Cloud Support fees
-  dimensions:
+  - api
+  - endpoint
   - tier
-  name: support_charge
-  unit: USD-month
+  name: compute_seconds
+  unit: second
 name: Google Cloud Platform Finops
 provider_name: Google Cloud Platform
 provider_slug: google-cloud-platform
-publisher_name: Google LLC
-service_category: Cloud Platform
+publisher_name: Google Cloud Platform
+service_category: API
 slug: google-cloud-platform-finops
 source_filename: google-cloud-platform-finops.yml
 source_heading: FinOps Profile
-source_url: https://cloud.google.com/billing/docs/how-to/export-data-bigquery
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Cloud Platform\nproviderId: google-cloud-platform\npublisherName: Google LLC\nserviceCategory: Cloud Platform\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Cloud Platform\n  - Multi-Product\n  - Google Cloud\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Google Cloud Platform: a multi-product Pay-As-You-Go cloud with\n  layered Sustained Use Discounts, Committed Use Discounts (1y/3y), and negotiated enterprise agreements.\n  Cloud Billing supports a native FOCUS-formatted detailed export to BigQuery for canonical cost-and-usage\n  visibility.'\nsources:\n  - https://cloud.google.com/billing/docs/how-to/export-data-bigquery\n\
-  \  - https://cloud.google.com/billing/docs/how-to/budgets\n  - https://cloud.google.com/billing/docs/how-to/manage-budget\n  - https://focus.finops.org/\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Committed Use\n  billingFrequency: Monthly\n  billingCurrency: USD/EUR/GBP/JPY\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\n    - Credit\nfocusColumns:\n  ServiceName: Google Cloud Platform\n  ServiceCategory: Cloud Platform\n  ProviderName: Google Cloud\n  PublisherName: Google LLC\n  InvoiceIssuerName: Google LLC\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: compute_instance_hours\n    description: Provisioned VM and container compute time\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - service\n      - machine_type\n      - region\n      - zone\n      - project\n      - sku\n  - name: storage_gb_month\n    description: Object, block, and database storage retained\n    unit: GB-month\n  \
-  \  aggregation: sum\n    dimensions:\n      - service\n      - storage_class\n      - region\n      - project\n  - name: network_egress\n    description: Internet, inter-region, and inter-zone egress\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - source_region\n      - destination\n      - tier\n      - project\n  - name: api_requests\n    description: Per-API operation count (Cloud Storage class A/B, Pub/Sub messages, etc.)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - service\n      - operation\n      - region\n      - project\n  - name: ai_inference\n    description: Tokens/characters/seconds consumed by Vertex AI and Gemini API\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - model\n      - region\n      - project\n  - name: cud_consumption\n    description: Slot/CPU/memory hours covered by 1y/3y commitments\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - commitment_id\n      - region\n      - resource\n  - name:\
-  \ sud_credits\n    description: Sustained Use Discount credits applied\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - service\n      - region\n  - name: support_charge\n    description: Standard / Enhanced / Premium Cloud Support fees\n    unit: USD-month\n    aggregation: sum\n    dimensions:\n      - tier\napis:\n  - name: Cloud Resource Manager API\n    baseURL: https://cloudresourcemanager.googleapis.com\n    serviceName: Cloud Resource Manager API\n    serviceCategory: Management\n  - name: Cloud Billing API\n    baseURL: https://cloudbilling.googleapis.com\n    serviceName: Cloud Billing API\n    serviceCategory: Billing\n  - name: Cloud Service Usage API\n    baseURL: https://serviceusage.googleapis.com\n    serviceName: Service Usage API\n    serviceCategory: Management\n  - name: Cloud Asset API\n    baseURL: https://cloudasset.googleapis.com\n    serviceName: Cloud Asset API\n    serviceCategory: Management\nprinciples:\n  - name: Visibility\n    description:\
-  \ Enable Cloud Billing detailed (FOCUS-formatted) export to BigQuery; use the Reports tab\n      and Cost Table report for daily slice-and-dice; consume Recommender suggestions surfaced in Cost\n      Insights.\n  - name: Allocation\n    description: Use folders + projects as the primary allocation hierarchy; tag resources with labels\n      (team, env, app, costCenter); pivot the FOCUS export by labels for chargeback/showback.\n  - name: Optimization\n    description: Apply CUDs (1y/3y) for steady-state workloads; let SUDs accrue automatically; use the\n      Active Assist Recommender for rightsizing, idle-resource cleanup, and CUD purchase recommendations;\n      adopt Spot/Preemptible VMs for fault-tolerant batch.\n  - name: Accountability\n    description: Assign budget owners per project/folder; configure Cloud Billing budget alerts at 50/80/100/120%\n      with Pub/Sub triggers for automation; review monthly variance against forecast in the FinOps practice\n      forum.\nmaintainers:\n\
-  \  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Cloud Platform\nproviderId: google-cloud-platform\npublisherName: Google Cloud Platform\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Management\n  - Cloud Computing\n  - Infrastructure\n  - Platform as a Service\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Google Cloud Platform API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Google Cloud Platform\n  ServiceCategory: Developer Tools / API\n  ProviderName: Google Cloud Platform\n  PublisherName: Google Cloud Platform\n  InvoiceIssuerName: Google Cloud Platform\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
+  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Google Compute Engine API\n    baseURL: https://compute.googleapis.com\n    tags:\n      - Compute\n      - Infrastructure\n      - Virtual Machines\n    serviceName: Google Compute Engine API\n    serviceCategory: API\n  - name: Google Cloud Storage API\n    baseURL: https://storage.googleapis.com\n    tags:\n      - Files\n      - Object Storage\n      - Storage\n    serviceName: Google Cloud Storage API\n    serviceCategory: API\n  - name: Google Cloud Functions API\n    baseURL: https://cloudfunctions.googleapis.com\n    tags:\n      - Event-Driven\n      - Functions\n      - Serverless\n    serviceName:\
+  \ Google Cloud Functions API\n    serviceCategory: API\n  - name: Google Kubernetes Engine API\n    baseURL: https://container.googleapis.com\n    tags:\n      - Containers\n      - Kubernetes\n      - Orchestration\n    serviceName: Google Kubernetes Engine API\n    serviceCategory: API\n  - name: Google BigQuery API\n    baseURL: https://bigquery.googleapis.com\n    tags:\n      - Analytics\n      - Big Data\n      - Data Warehouse\n    serviceName: Google BigQuery API\n    serviceCategory: API\n  - name: Google Cloud Pub/Sub API\n    baseURL: https://pubsub.googleapis.com\n    tags:\n      - Event Streaming\n      - Messaging\n      - Pub/Sub\n    serviceName: Google Cloud Pub/Sub API\n    serviceCategory: API\n  - name: Google Cloud Vision API\n    baseURL: https://vision.googleapis.com\n    tags:\n      - AI\n      - Computer Vision\n      - Machine Learning\n    serviceName: Google Cloud Vision API\n    serviceCategory: API\n  - name: Google Cloud Vertex AI API\n    baseURL: https://aiplatform.googleapis.com\n\
+  \    tags:\n      - AI\n      - Generative AI\n      - Machine Learning\n      - MLOps\n    serviceName: Google Cloud Vertex AI API\n    serviceCategory: API\n  - name: Google Cloud Natural Language API\n    baseURL: https://language.googleapis.com\n    tags:\n      - AI\n      - Machine Learning\n      - Natural Language Processing\n      - Text Analysis\n    serviceName: Google Cloud Natural Language API\n    serviceCategory: API\n  - name: Google Cloud Speech-to-Text API\n    baseURL: https://speech.googleapis.com\n    tags:\n      - AI\n      - Audio\n      - Machine Learning\n      - Speech Recognition\n    serviceName: Google Cloud Speech-to-Text API\n    serviceCategory: API\n  - name: Google Cloud Translation API\n    baseURL: https://translate.googleapis.com\n    tags:\n      - AI\n      - Language\n      - Machine Learning\n      - Translation\n    serviceName: Google Cloud Translation API\n    serviceCategory: API\n  - name: Google Cloud Run API\n    baseURL: https://run.googleapis.com\n\
+  \    tags:\n      - Compute\n      - Containers\n      - Serverless\n    serviceName: Google Cloud Run API\n    serviceCategory: API\n  - name: Google Cloud SQL Admin API\n    baseURL: https://sqladmin.googleapis.com\n    tags:\n      - Managed Database\n      - MySQL\n      - PostgreSQL\n      - Relational Database\n      - SQL Server\n    serviceName: Google Cloud SQL Admin API\n    serviceCategory: API\n  - name: Google Cloud Spanner API\n    baseURL: https://spanner.googleapis.com\n    tags:\n      - Distributed Database\n      - Global Database\n      - NewSQL\n      - Relational Database\n    serviceName: Google Cloud Spanner API\n    serviceCategory: API\n  - name: Google Cloud Firestore API\n    baseURL: https://firestore.googleapis.com\n    tags:\n      - Document Database\n      - NoSQL\n      - Real-Time\n      - Serverless\n    serviceName: Google Cloud Firestore API\n    serviceCategory: API\n  - name: Google Cloud Bigtable Admin API\n    baseURL: https://bigtableadmin.googleapis.com\n\
+  \    tags:\n      - Analytics\n      - Big Data\n      - NoSQL\n      - Wide Column Store\n    serviceName: Google Cloud Bigtable Admin API\n    serviceCategory: API\n  - name: Google Cloud IAM API\n    baseURL: https://iam.googleapis.com\n    tags:\n      - Access Management\n      - Authorization\n      - Identity\n      - Security\n    serviceName: Google Cloud IAM API\n    serviceCategory: API\n  - name: Google Cloud DNS API\n    baseURL: https://dns.googleapis.com\n    tags:\n      - DNS\n      - Domain Management\n      - Networking\n    serviceName: Google Cloud DNS API\n    serviceCategory: API\n  - name: Google Cloud Logging API\n    baseURL: https://logging.googleapis.com\n    tags:\n      - Logging\n      - Monitoring\n      - Observability\n      - Operations\n    serviceName: Google Cloud Logging API\n    serviceCategory: API\n  - name: Google Cloud Monitoring API\n    baseURL: https://monitoring.googleapis.com\n    tags:\n      - Alerting\n      - Metrics\n      - Monitoring\n\
+  \      - Observability\n    serviceName: Google Cloud Monitoring API\n    serviceCategory: API\n  - name: Google Cloud Dataflow API\n    baseURL: https://dataflow.googleapis.com\n    tags:\n      - Apache Beam\n      - Batch Processing\n      - Data Pipeline\n      - Streaming Analytics\n    serviceName: Google Cloud Dataflow API\n    serviceCategory: API\n  - name: Google Cloud Dataproc API\n    baseURL: https://dataproc.googleapis.com\n    tags:\n      - Apache Hadoop\n      - Apache Spark\n      - Batch Processing\n      - Big Data\n    serviceName: Google Cloud Dataproc API\n    serviceCategory: API\n  - name: Google Cloud Key Management Service API\n    baseURL: https://cloudkms.googleapis.com\n    tags:\n      - Cryptography\n      - Encryption\n      - Key Management\n      - Security\n    serviceName: Google Cloud Key Management Service API\n    serviceCategory: API\n  - name: Google Cloud Secret Manager API\n    baseURL: https://secretmanager.googleapis.com\n    tags:\n      -\
+  \ Configuration Management\n      - Secrets\n      - Security\n    serviceName: Google Cloud Secret Manager API\n    serviceCategory: API\n  - name: Google Cloud Artifact Registry API\n    baseURL: https://artifactregistry.googleapis.com\n    tags:\n      - CI/CD\n      - Container Registry\n      - DevOps\n      - Package Management\n    serviceName: Google Cloud Artifact Registry API\n    serviceCategory: API\n  - name: Google Cloud Build API\n    baseURL: https://cloudbuild.googleapis.com\n    tags:\n      - Build\n      - CI/CD\n      - Continuous Integration\n      - DevOps\n    serviceName: Google Cloud Build API\n    serviceCategory: API\n  - name: Google Cloud Resource Manager API\n    baseURL: https://cloudresourcemanager.googleapis.com\n    tags:\n      - Governance\n      - Organizations\n      - Projects\n      - Resource Management\n    serviceName: Google Cloud Resource Manager API\n    serviceCategory: API\n  - name: Google Cloud Tasks API\n    baseURL: https://cloudtasks.googleapis.com\n\
+  \    tags:\n      - Asynchronous Processing\n      - Distributed Systems\n      - Task Queue\n    serviceName: Google Cloud Tasks API\n    serviceCategory: API\n  - name: Google Cloud Scheduler API\n    baseURL: https://cloudscheduler.googleapis.com\n    tags:\n      - Automation\n      - Cron Jobs\n      - Scheduling\n    serviceName: Google Cloud Scheduler API\n    serviceCategory: API\n  - name: Google Cloud Text-to-Speech API\n    baseURL: https://texttospeech.googleapis.com\n    tags:\n      - AI\n      - Audio\n      - Machine Learning\n      - Speech Synthesis\n    serviceName: Google Cloud Text-to-Speech API\n    serviceCategory: API\n  - name: Google Cloud API Gateway API\n    baseURL: https://apigateway.googleapis.com\n    tags:\n      - API Gateway\n      - API Management\n      - Security\n    serviceName: Google Cloud API Gateway API\n    serviceCategory: API\n  - name: Google Cloud Workflows API\n    baseURL: https://workflows.googleapis.com\n    tags:\n      - Automation\n\
+  \      - Serverless\n      - Workflow Orchestration\n    serviceName: Google Cloud Workflows API\n    serviceCategory: API\n  - name: Google Cloud Deploy API\n    baseURL: https://clouddeploy.googleapis.com\n    tags:\n      - CI/CD\n      - Continuous Delivery\n      - Deployment\n      - DevOps\n    serviceName: Google Cloud Deploy API\n    serviceCategory: API\n  - name: Google Dialogflow CX API\n    baseURL: https://dialogflow.googleapis.com\n    tags:\n      - AI\n      - Chatbots\n      - Conversational AI\n      - Natural Language Understanding\n    serviceName: Google Dialogflow CX API\n    serviceCategory: API\n  - name: Google Cloud Sensitive Data Protection API\n    baseURL: https://dlp.googleapis.com\n    tags:\n      - Data Loss Prevention\n      - Data Protection\n      - Privacy\n      - Security\n    serviceName: Google Cloud Sensitive Data Protection API\n    serviceCategory: API\n  - name: Google Cloud Memorystore for Redis API\n    baseURL: https://redis.googleapis.com\n\
+  \    tags:\n      - Caching\n      - In-Memory Database\n      - Managed Database\n      - Redis\n    serviceName: Google Cloud Memorystore for Redis API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/google-cloud-platform/refs/heads/main/finops/google-cloud-platform-finops.yml
-sources:
-- https://cloud.google.com/billing/docs/how-to/export-data-bigquery
-- https://cloud.google.com/billing/docs/how-to/budgets
-- https://cloud.google.com/billing/docs/how-to/manage-budget
-- https://focus.finops.org/
+sources: []
 specification: FinOps Framework
 tags:
-- Cloud Platform
-- Multi-Product
-- Google Cloud
+- API Management
+- Cloud Computing
+- Infrastructure
+- Platform as a Service
 - FinOps
+- Cost Management
 - FOCUS
 ---

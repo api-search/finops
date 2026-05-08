@@ -32,54 +32,78 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/snow-software/refs/heads/main/openapi/snow-software-computers-openapi.json
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  pricingCategory: Subscription (Contact Sales)
-description: 'FOCUS-aligned FinOps placeholder for Snow Software (now Flexera): pricing is contact-sales, invoicing flows through Flexera, and meter detail depends on the customer''s Snow Atlas tenant.'
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Snow Software API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Flexera Software LLC
-  ProviderName: Snow (Flexera)
-  PublisherName: Flexera Software LLC
-  ServiceCategory: Software Asset Management
-  ServiceName: Snow Software Asset Management
+  ChargeCategory: Usage
+  InvoiceIssuerName: Snow Software
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Snow Software
+  PublisherName: Snow Software
+  ServiceCategory: Developer Tools / API
+  ServiceName: Snow Software
 layout: finops
 meters:
-- aggregation: max
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - asset_type
-  name: managed_assets
-  unit: device
-- aggregation: max
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - publisher
-  name: saas_applications
-  unit: application
-- aggregation: max
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - business_unit
-  name: managed_users
-  unit: user
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Snow Software Finops
 provider_name: Snow Software
 provider_slug: snow-software
-publisher_name: Flexera Software LLC
-service_category: Software Asset Management
+publisher_name: Snow Software
+service_category: API
 slug: snow-software-finops
 source_filename: snow-software-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.flexera.com/products/snow
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Snow Software\nproviderId: snow-software\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Software Asset Management\n  - SaaS Management\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps placeholder for Snow Software (now Flexera): pricing is contact-sales,\n  invoicing flows through Flexera, and meter detail depends on the customer''s Snow Atlas tenant.'\nsources:\n  - https://www.flexera.com/products/snow\nnotes: Snow Software was acquired by Flexera; flexera.com publishes no per-seat or per-asset price sheet\n  for the Snow product family. FOCUS columns and meters here describe the consumption shape (managed\n  assets, SaaS apps, users) but unit prices cannot be reconciled without a customer order form.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec:\
-  \ FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Flexera Software LLC\nserviceCategory: Software Asset Management\nbillingModel:\n  pricingCategory: Subscription (Contact Sales)\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Snow Software Asset Management\n  ServiceCategory: Software Asset Management\n  ProviderName: Snow (Flexera)\n  PublisherName: Flexera Software LLC\n  InvoiceIssuerName: Flexera Software LLC\n  BillingCurrency: USD\nmeters:\n  - name: managed_assets\n    unit: device\n    aggregation: max\n    dimensions:\n      - asset_type\n  - name: saas_applications\n    unit: application\n    aggregation: max\n    dimensions:\n      - publisher\n  - name: managed_users\n    unit: user\n    aggregation: max\n    dimensions:\n      - business_unit\nprinciples:\n  - name: Visibility\n    description: Use Snow Atlas dashboards to surface installed\
-  \ software, SaaS subscriptions, and entitlement\n      gaps per business unit.\n  - name: Allocation\n    description: Tag each managed asset / SaaS application to a cost center and contract to enable chargeback\n      and renewal-by-owner.\n  - name: Optimization\n    description: Reclaim unused SaaS seats, true-down over-licensed software, and consolidate redundant\n      applications surfaced by Snow Risk Monitor and the SaaS Management module.\n  - name: Accountability\n    description: Snow Atlas administrators review entitlement-vs-installed deltas and SaaS usage at each\n      renewal cycle with finance and procurement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Snow Software\nproviderId: snow-software\npublisherName: Snow Software\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud License Management\n  - FinOps\n  - IT Asset Management\n  - SaaS Management\n  - Software Asset Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Snow Software API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Snow Software\n  ServiceCategory: Developer Tools / API\n  ProviderName: Snow Software\n  PublisherName: Snow Software\n  InvoiceIssuerName: Snow Software\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned\
+  \ over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Snow Atlas SAM Licenses API\n    baseURL: ''\n    tags:\n      - IT Asset Management\n      - License Management\n      - Software Asset Management\n    serviceName: Snow Atlas SAM Licenses API\n    serviceCategory: API\n  - name: Snow Atlas SaaS Applications API\n    baseURL: ''\n    tags:\n      - SaaS Management\n      - Software Asset Management\n      - Spend Optimization\n    serviceName: Snow Atlas SaaS Applications API\n    serviceCategory: API\n  - name: Snow Atlas SaaS Subscriptions API\n    baseURL: ''\n    tags:\n      - Contract Management\n      - SaaS Management\n      - Subscription Management\n    serviceName: Snow\
+  \ Atlas SaaS Subscriptions API\n    serviceCategory: API\n  - name: Snow Atlas SAM Computers API\n    baseURL: ''\n    tags:\n      - Hardware Asset Management\n      - IT Asset Management\n      - Inventory\n    serviceName: Snow Atlas SAM Computers API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/snow-software/refs/heads/main/finops/snow-software-finops.yml
-sources:
-- https://www.flexera.com/products/snow
+sources: []
 specification: FinOps Framework
 tags:
-- Software Asset Management
-- SaaS Management
+- Cloud License Management
 - FinOps
+- IT Asset Management
+- SaaS Management
+- Software Asset Management
+- FinOps
+- Cost Management
 - FOCUS
 ---

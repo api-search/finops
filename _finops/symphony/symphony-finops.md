@@ -44,54 +44,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/symphony/refs/heads/main/openapi/community-connect-openapi-original.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Annual
+  billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
-  pricingCategory: Subscription (Enterprise)
-description: Symphony is a contact-sales enterprise collaboration platform; APIs are included with the tenancy. There is no published per-call pricing or FOCUS-aligned cost export, so FinOps shape is approximated against the negotiated tenancy / seat invoice.
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Symphony API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Symphony Communication Services, LLC
+  ChargeCategory: Usage
+  InvoiceIssuerName: Symphony
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Symphony
-  PublisherName: Symphony Communication Services, LLC
-  ServiceCategory: Secure Collaboration / Messaging
+  PublisherName: Symphony
+  ServiceCategory: Developer Tools / API
   ServiceName: Symphony
 layout: finops
 meters:
 - aggregation: sum
-  description: Symphony pod tenancy - the foundational commercial unit covering Pod and Agent API access.
-  name: pod_tenancy
-  unit: month
-- aggregation: max
-  description: Licensed user seats on the pod; the primary per-user commercial unit.
-  name: licensed_seats
-  unit: seat
-- aggregation: count
-  description: Cross-tenant Community Connect relationships, typically negotiated separately.
-  name: community_connect_relationships
-  unit: relationship
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Symphony Finops
 provider_name: Symphony
 provider_slug: symphony
-publisher_name: Symphony Communication Services, LLC
-service_category: Secure Collaboration / Messaging
+publisher_name: Symphony
+service_category: API
 slug: symphony-finops
 source_filename: symphony-finops.yml
 source_heading: FinOps Profile
-source_url: https://symphony.com
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Symphony\nproviderId: symphony\npublisherName: Symphony Communication Services, LLC\nserviceCategory: Secure Collaboration / Messaging\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Secure Messaging\n  - Financial Services\n  - Collaboration\n  - FinOps\n  - FOCUS\ndescription: Symphony is a contact-sales enterprise collaboration platform; APIs are included with the tenancy. There is no published per-call pricing or FOCUS-aligned cost export, so FinOps shape is approximated against the negotiated tenancy / seat invoice.\nsources:\n  - https://symphony.com\n  - https://docs.developers.symphony.com\nnotes: No public per-call\
-  \ pricing or FOCUS-aligned billing export. Cost data must be reconciled from the negotiated Symphony tenancy invoice (typically per-pod plus per-seat).\nbillingModel:\n  pricingCategory: Subscription (Enterprise)\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: Symphony\n  ServiceCategory: Secure Collaboration / Messaging\n  ProviderName: Symphony\n  PublisherName: Symphony Communication Services, LLC\n  InvoiceIssuerName: Symphony Communication Services, LLC\n  BillingCurrency: USD\nmeters:\n  - name: pod_tenancy\n    description: Symphony pod tenancy - the foundational commercial unit covering Pod and Agent API access.\n    unit: month\n    aggregation: sum\n  - name: licensed_seats\n    description: Licensed user seats on the pod; the primary per-user commercial unit.\n    unit: seat\n    aggregation: max\n  - name: community_connect_relationships\n    description: Cross-tenant Community Connect relationships,\
-  \ typically negotiated separately.\n    unit: relationship\n    aggregation: count\nprinciples:\n  - name: Visibility\n    description: Pod administrators see seat consumption and bot/app inventory through the Symphony admin console; cost reconciliation happens against the negotiated invoice rather than a usage API.\n  - name: Allocation\n    description: Allocate by business unit to seat counts and named bots; Community Connect cost can be allocated to the cross-firm relationship that owns it.\n  - name: Optimization\n    description: Optimize by reclaiming inactive seats, consolidating bots that hold redundant entitlements, and bundling Community Connect relationships at contract renewal.\n  - name: Accountability\n    description: Pod owner (typically central IT or compliance) and the Symphony account team jointly own commercial reviews; line-of-business sponsors own seat allocations.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Symphony\nproviderId: symphony\npublisherName: Symphony\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Collaboration\n  - Communication\n  - Financial Services\n  - Messaging\n  - Secure Communication\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Symphony API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
+  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Symphony\n  ServiceCategory: Developer Tools / API\n  ProviderName: Symphony\n  PublisherName: Symphony\n  InvoiceIssuerName: Symphony\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Symphony Pod API\n    baseURL: https://acme.symphony.com\n    tags:\n      - Certificates\n      - Connections\n      - Messaging\n      - Presence\n      - Rooms\n      - Streams\n      - User Management\n      - Users\n    serviceName: Symphony Pod API\n    serviceCategory: API\n  - name: Symphony Agent API\n    baseURL: https://acme.symphony.com\n    tags:\n      - Attachment\n      - Bots\n      - Data Loss Prevention\n      - Datafeed\n      - Encryption\n      - Messaging\n      - Real-Time\n      - Signals\n      - Streams\n    serviceName: Symphony Agent API\n    serviceCategory: API\n  - name: Symphony Authenticator API\n    baseURL: https://acme.symphony.com\n    tags:\n      - Authentication\n\
+  \      - Bots\n      - Certificates\n      - Session\n      - TLS\n    serviceName: Symphony Authenticator API\n    serviceCategory: API\n  - name: Symphony Login API\n    baseURL: https://acme.symphony.com\n    tags:\n      - Authentication\n      - Bots\n      - JWT\n      - OAuth2\n      - Public Key\n      - RSA\n      - Session\n    serviceName: Symphony Login API\n    serviceCategory: API\n  - name: Symphony Profile Manager API\n    baseURL: https://acme.symphony.com/profile-manager\n    tags:\n      - Directory\n      - Groups\n      - Profiles\n      - User Management\n      - Users\n    serviceName: Symphony Profile Manager API\n    serviceCategory: API\n  - name: Symphony Community Connect API\n    baseURL: https://acme.symphony.com\n    tags:\n      - Collaboration\n      - Community\n      - Onboarding\n      - Tenants\n      - Users\n    serviceName: Symphony Community Connect API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost\
+  \ / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/symphony/refs/heads/main/finops/symphony-finops.yml
-sources:
-- https://symphony.com
-- https://docs.developers.symphony.com
+sources: []
 specification: FinOps Framework
 tags:
-- Secure Messaging
-- Financial Services
 - Collaboration
+- Communication
+- Financial Services
+- Messaging
+- Secure Communication
 - FinOps
+- Cost Management
 - FOCUS
 ---

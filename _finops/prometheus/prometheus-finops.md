@@ -32,56 +32,78 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/prometheus/refs/heads/main/openapi/prometheus-alertmanager-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: On-Demand
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Open Source
-description: FOCUS-aligned FinOps shape for Prometheus. Prometheus has no vendor invoice — it is Apache 2.0 software. The FinOps surface is therefore the operator's own infrastructure cost (compute, storage, network) for running the server, exporters, and remote-write / long-term-storage backends.
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Prometheus API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: n/a (self-hosted)
+  ChargeCategory: Usage
+  InvoiceIssuerName: Prometheus
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Prometheus
-  PublisherName: Cloud Native Computing Foundation
-  ServiceCategory: Observability
+  PublisherName: Prometheus
+  ServiceCategory: Developer Tools / API
   ServiceName: Prometheus
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - role
-  - environment
-  name: compute_hours
-  unit: instance-hour
-- aggregation: max
-  dimensions:
-  - retention_tier
-  name: persistent_storage
-  unit: GB-month
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - destination
-  name: network_egress
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Prometheus Finops
 provider_name: Prometheus
 provider_slug: prometheus
-publisher_name: Cloud Native Computing Foundation
-service_category: Observability
+publisher_name: Prometheus
+service_category: API
 slug: prometheus-finops
 source_filename: prometheus-finops.yml
 source_heading: FinOps Profile
-source_url: https://prometheus.io/docs/introduction/overview/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Prometheus\nproviderId: prometheus\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Observability\n  - Monitoring\n  - Open Source\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for Prometheus. Prometheus has no vendor invoice — it is Apache\n  2.0 software. The FinOps surface is therefore the operator's own infrastructure cost (compute, storage,\n  network) for running the server, exporters, and remote-write / long-term-storage backends.\nnotes: There is no Prometheus vendor billing. Cost lives in the underlying infrastructure provider (AWS,\n  GCP, on-prem) and is observable via that provider's FOCUS export, not via Prometheus.\nsources:\n  - https://prometheus.io/docs/introduction/overview/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n\
-  \  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Cloud Native Computing Foundation\nserviceCategory: Observability\nbillingModel:\n  pricingCategory: Open Source\n  billingFrequency: On-Demand\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Prometheus\n  ServiceCategory: Observability\n  ProviderName: Prometheus\n  PublisherName: Cloud Native Computing Foundation\n  InvoiceIssuerName: 'n/a (self-hosted)'\n  BillingCurrency: USD\nmeters:\n  - name: compute_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - role\n      - environment\n  - name: persistent_storage\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - retention_tier\n  - name: network_egress\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - destination\nprinciples:\n  - name: Visibility\n    description: Cost visibility comes from the infrastructure provider's FOCUS / billing\
-  \ export, not\n      from Prometheus itself; Prometheus can however scrape and report its own resource consumption\n      (process_resident_memory_bytes, prometheus_tsdb_head_series).\n  - name: Allocation\n    description: Allocate Prometheus infrastructure cost by Kubernetes namespace, team, or environment\n      using cloud-provider tags; tenancy lives in your deployment topology, not in the binary.\n  - name: Optimization\n    description: Right-size scrape interval, retention, and series cardinality; offload long-term storage\n      to remote_write (Thanos, Mimir, Cortex) and tune `queue_config`.\n  - name: Accountability\n    description: Spend is owned by the platform / SRE team operating the Prometheus stack; there is\n      no vendor invoice.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Prometheus\nproviderId: prometheus\npublisherName: Prometheus\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Alerting\n  - Metrics\n  - Monitoring\n  - Observability\n  - Time Series\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Prometheus API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
+  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Prometheus\n  ServiceCategory: Developer Tools / API\n  ProviderName: Prometheus\n  PublisherName: Prometheus\n  InvoiceIssuerName: Prometheus\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Prometheus HTTP API\n    baseURL: ''\n    tags:\n      - Metrics\n      - PromQL\n      - Query\n      - Time Series\n    serviceName: Prometheus HTTP API\n    serviceCategory: API\n  - name: Prometheus Management API\n    baseURL: ''\n    tags:\n      - Administration\n      - Management\n      - Monitoring\n    serviceName: Prometheus Management API\n    serviceCategory: API\n  - name: Prometheus Pushgateway API\n    baseURL: ''\n    tags:\n      - Batch Jobs\n      - Metrics\n      - Pushgateway\n    serviceName: Prometheus Pushgateway API\n    serviceCategory: API\n  - name: Prometheus Alertmanager API\n    baseURL: ''\n    tags:\n      - Alerting\n      - Notifications\n      - Silences\n\
+  \    serviceName: Prometheus Alertmanager API\n    serviceCategory: API\n  - name: Prometheus Remote Write API\n    baseURL: ''\n    tags:\n      - Integration\n      - Remote Write\n      - Storage\n      - Time Series\n    serviceName: Prometheus Remote Write API\n    serviceCategory: API\n  - name: Prometheus Client Libraries\n    baseURL: ''\n    tags:\n      - Client Libraries\n      - Instrumentation\n      - Metrics\n      - SDK\n    serviceName: Prometheus Client Libraries\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/prometheus/refs/heads/main/finops/prometheus-finops.yml
-sources:
-- https://prometheus.io/docs/introduction/overview/
+sources: []
 specification: FinOps Framework
 tags:
-- Observability
+- Alerting
+- Metrics
 - Monitoring
-- Open Source
+- Observability
+- Time Series
 - FinOps
+- Cost Management
 - FOCUS
 ---

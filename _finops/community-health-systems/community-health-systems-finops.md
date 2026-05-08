@@ -14,53 +14,81 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/community-health-systems/refs/heads/main/openapi/chs-patient-access-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Encounter
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  - Refund
-  pricingCategory: Healthcare Services
-description: 'FOCUS-aligned FinOps for Community Health Systems: a hospital operator without a commercial API surface. CHS pays vendors (EHR, RCM, payers) rather than billing API consumers. Meters here capture vendor invoice abstractions, not consumption-metered API revenue.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Community Health Systems API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: Community Health Systems, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Community Health Systems
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Community Health Systems
-  PublisherName: Community Health Systems, Inc.
-  ServiceCategory: Healthcare
+  PublisherName: Community Health Systems
+  ServiceCategory: Developer Tools / API
   ServiceName: Community Health Systems
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - facility
-  - service_line
-  name: patient_encounters
-  unit: encounter
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  name: ehr_subscription
-  unit: month
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  name: rcm_services
-  unit: claim
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Community Health Systems Finops
 provider_name: Community Health Systems
 provider_slug: community-health-systems
-publisher_name: Community Health Systems, Inc.
-service_category: Healthcare
+publisher_name: Community Health Systems
+service_category: API
 slug: community-health-systems-finops
 source_filename: community-health-systems-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.chs.net/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Community Health Systems\nproviderId: community-health-systems\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Healthcare\ndescription: 'FOCUS-aligned FinOps for Community Health Systems: a hospital operator without a commercial\n  API surface. CHS pays vendors (EHR, RCM, payers) rather than billing API consumers. Meters here capture\n  vendor invoice abstractions, not consumption-metered API revenue.'\nsources:\n  - https://www.chs.net/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Community Health Systems, Inc.\nserviceCategory: Healthcare\nbillingModel:\n  pricingCategory: Healthcare Services\n  billingFrequency: Per-Encounter\n\
-  \  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: Community Health Systems\n  ServiceCategory: Healthcare\n  ProviderName: Community Health Systems\n  PublisherName: Community Health Systems, Inc.\n  InvoiceIssuerName: Community Health Systems, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: patient_encounters\n    unit: encounter\n    aggregation: sum\n    dimensions:\n      - facility\n      - service_line\n  - name: ehr_subscription\n    unit: month\n    aggregation: sum\n  - name: rcm_services\n    unit: claim\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Track EHR vendor consumption (storage, transactions) against contract; reconcile vendor\n      invoices monthly.\n  - name: Allocation\n    description: Tag IT spend to facility, service line, or revenue cycle function.\n  - name: Optimization\n    description: Consolidate vendor contracts across acquisitions; renegotiate\
-  \ at renewal.\n  - name: Accountability\n    description: CIO/CFO own enterprise vendor relationships; facility CFOs own local IT chargeback.\nnotes: CHS is not an API publisher; meters here are invoice abstractions for the operator's IT spend.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Community Health Systems\nproviderId: community-health-systems\npublisherName: Community Health Systems\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - CMS-9115-F\n  - FHIR\n  - Healthcare\n  - Hospitals\n  - Interoperability\n  - Patient Access\n  - Provider Directory\n  - SMART-on-FHIR\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Community Health Systems API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product,\
+  \ and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n     \
+  \ - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Community Health Systems\n  ServiceCategory: Developer Tools / API\n  ProviderName: Community Health Systems\n  PublisherName: Community Health Systems\n  InvoiceIssuerName: Community Health Systems\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n  \
+  \    - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Community Health Systems Patient Access API\n    baseURL: https://api.chs.net/fhir/r4\n    tags:\n      - CMS-9115-F\n      - FHIR\n      - Healthcare\n      - Interoperability\n      - Patient Access\n      - SMART-on-FHIR\n    serviceName: Community Health Systems Patient Access API\n    serviceCategory: API\n  - name: Community Health Systems Provider Directory API\n    baseURL: https://api.chs.net/fhir/r4\n    tags:\n      - CMS-9115-F\n      - FHIR\n      - Healthcare\n      - Interoperability\n      - Provider\
+  \ Directory\n    serviceName: Community Health Systems Provider Directory API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/community-health-systems/refs/heads/main/finops/community-health-systems-finops.yml
-sources:
-- https://www.chs.net/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- CMS-9115-F
+- FHIR
 - Healthcare
+- Hospitals
+- Interoperability
+- Patient Access
+- Provider Directory
+- SMART-on-FHIR
+- FinOps
+- Cost Management
+- FOCUS
 ---

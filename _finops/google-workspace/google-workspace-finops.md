@@ -16,76 +16,82 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Purchase
   - Usage
+  - Purchase
   - Tax
-  - Adjustment
   - Credit
-  pricingCategory: Tiered Subscription
-description: 'FOCUS-aligned FinOps for Google Workspace: per-user-per-month seat subscription with pooled storage, billed monthly or annually. Workspace REST APIs are bundled with the seat license at no per-call charge; cost is therefore measured in seats and storage, not in API calls.'
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Google Workspace API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Google LLC
-  ProviderName: Google
-  PublisherName: Google LLC
-  ServiceCategory: Productivity / Collaboration SaaS
+  ChargeCategory: Usage
+  InvoiceIssuerName: Google Workspace
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Google Workspace
+  PublisherName: Google Workspace
+  ServiceCategory: Developer Tools / API
   ServiceName: Google Workspace
 layout: finops
 meters:
-- aggregation: max
-  description: Active Workspace seats by edition
-  dimensions:
-  - edition
-  - org_unit
-  - billing_account
-  name: workspace_seats
-  unit: seat
-- aggregation: avg
-  description: Pooled storage consumed across the domain
-  dimensions:
-  - org_unit
-  - service
-  name: pooled_storage
-  unit: GB-month
-- aggregation: avg
-  description: Storage consumed by Meet recordings
-  name: meet_recordings_storage
-  unit: GB-month
-- aggregation: avg
-  description: Vault retention storage for Business Plus / Enterprise
-  name: vault_retention
-  unit: GB-month
 - aggregation: sum
-  description: Workspace API call volume (operational metric — not directly billed)
+  description: Count of billable API requests
   dimensions:
   - api
-  - org_unit
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Google Workspace Finops
 provider_name: Google Workspace
 provider_slug: google-workspace
-publisher_name: Google LLC
-service_category: Productivity / Collaboration SaaS
+publisher_name: Google Workspace
+service_category: API
 slug: google-workspace-finops
 source_filename: google-workspace-finops.yml
 source_heading: FinOps Profile
-source_url: https://workspace.google.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Workspace\nproviderId: google-workspace\npublisherName: Google LLC\nserviceCategory: Productivity / Collaboration SaaS\ncreated: '2026-05-04'\nmodified: '2026-05-05'\ntags:\n  - FinOps\n  - FOCUS\n  - Productivity\n  - Collaboration\n  - Email\n  - Storage\nreconciled: true\ndescription: 'FOCUS-aligned FinOps for Google Workspace: per-user-per-month seat subscription with\n  pooled storage, billed monthly or annually. Workspace REST APIs are bundled with the seat license at\n  no per-call charge; cost is therefore measured in seats and storage, not in API calls.'\nsources:\n  - https://workspace.google.com/pricing\n  - https://support.google.com/a/answer/7232932\n\
-  billingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Google Workspace\n  ServiceCategory: Productivity / Collaboration SaaS\n  ProviderName: Google\n  PublisherName: Google LLC\n  InvoiceIssuerName: Google LLC\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: workspace_seats\n    description: Active Workspace seats by edition\n    unit: seat\n    aggregation: max\n    dimensions:\n      - edition\n      - org_unit\n      - billing_account\n  - name: pooled_storage\n    description: Pooled storage consumed across the domain\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - org_unit\n      - service\n  - name: meet_recordings_storage\n    description: Storage consumed by Meet recordings\n    unit: GB-month\n    aggregation: avg\n  - name: vault_retention\n    description: Vault\
-  \ retention storage for Business Plus / Enterprise\n    unit: GB-month\n    aggregation: avg\n  - name: api_requests\n    description: Workspace API call volume (operational metric — not directly billed)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - org_unit\nprinciples:\n  - name: Visibility\n    description: Use the Admin SDK Reports API (or BigQuery audit log export) and the Workspace\n      Admin Console billing report to see seat counts, storage consumption, and API call patterns.\n  - name: Allocation\n    description: Place users in Organizational Units mapped to cost centers; assign editions per OU\n      so seat charges roll up to the right business owner.\n  - name: Optimization\n    description: Right-size editions per OU (Business Standard for general staff, Plus for\n      compliance-heavy roles); reclaim seats from inactive accounts; archive Vault data on retention\n      policy; purge stale Drive shared drives.\n  - name: Accountability\n\
-  \    description: Designate a Workspace billing owner per division; review monthly Admin Console\n      reports for seat / storage growth vs. forecast and catch rogue automation hitting API quotas.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Workspace\nproviderId: google-workspace\npublisherName: Google Workspace\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Calendar\n  - Collaboration\n  - Email\n  - Productivity\n  - Storage\n  - Video Conferencing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Google Workspace API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
+  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
+  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Google Workspace\n  ServiceCategory: Developer Tools / API\n  ProviderName: Google Workspace\n  PublisherName: Google Workspace\n  InvoiceIssuerName: Google Workspace\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over\
+  \ the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Gmail API\n    baseURL: https://gmail.googleapis.com\n    tags:\n      - Email\n      - Messaging\n    serviceName: Gmail API\n    serviceCategory: API\n  - name: Google Drive API\n    baseURL: https://www.googleapis.com/drive/v3\n    tags:\n      - Cloud\n      - Files\n      - Storage\n    serviceName: Google Drive API\n    serviceCategory: API\n  - name: Google Calendar API\n    baseURL: https://www.googleapis.com/calendar/v3\n    tags:\n      - Calendar\n      - Events\n      - Scheduling\n    serviceName: Google Calendar API\n    serviceCategory: API\n  - name: Google Meet REST API\n    baseURL: https://meet.googleapis.com\n    tags:\n\
+  \      - Conferencing\n      - Meetings\n      - Video\n    serviceName: Google Meet REST API\n    serviceCategory: API\n  - name: Google Docs API\n    baseURL: https://docs.googleapis.com\n    tags:\n      - Collaboration\n      - Documents\n      - Word Processing\n    serviceName: Google Docs API\n    serviceCategory: API\n  - name: Google Sheets API\n    baseURL: https://sheets.googleapis.com\n    tags:\n      - Analytics\n      - Data\n      - Spreadsheets\n    serviceName: Google Sheets API\n    serviceCategory: API\n  - name: Google Slides API\n    baseURL: https://slides.googleapis.com\n    tags:\n      - Presentations\n      - Slides\n    serviceName: Google Slides API\n    serviceCategory: API\n  - name: Admin SDK Directory API\n    baseURL: https://admin.googleapis.com\n    tags:\n      - Admin\n      - Groups\n      - Management\n      - Users\n    serviceName: Admin SDK Directory API\n    serviceCategory: API\n  - name: Google Chat API\n    baseURL: https://chat.googleapis.com\n\
+  \    tags:\n      - Chat\n      - Collaboration\n      - Messaging\n    serviceName: Google Chat API\n    serviceCategory: API\n  - name: Admin SDK Reports API\n    baseURL: https://admin.googleapis.com\n    tags:\n      - Admin\n      - Audit\n      - Reports\n      - Usage\n    serviceName: Admin SDK Reports API\n    serviceCategory: API\n  - name: Google Forms API\n    baseURL: https://forms.googleapis.com\n    tags:\n      - Forms\n      - Quizzes\n      - Surveys\n    serviceName: Google Forms API\n    serviceCategory: API\n  - name: Google Tasks API\n    baseURL: https://tasks.googleapis.com\n    tags:\n      - Productivity\n      - Tasks\n      - To-Do\n    serviceName: Google Tasks API\n    serviceCategory: API\n  - name: Google Keep API\n    baseURL: https://keep.googleapis.com\n    tags:\n      - Notes\n      - Productivity\n    serviceName: Google Keep API\n    serviceCategory: API\n  - name: Google Vault API\n    baseURL: https://vault.googleapis.com\n    tags:\n      - Compliance\n\
+  \      - Ediscovery\n      - Legal\n    serviceName: Google Vault API\n    serviceCategory: API\n  - name: Google Classroom API\n    baseURL: https://classroom.googleapis.com\n    tags:\n      - Classroom\n      - Education\n      - Learning\n    serviceName: Google Classroom API\n    serviceCategory: API\n  - name: People API\n    baseURL: https://people.googleapis.com\n    tags:\n      - Contacts\n      - Directory\n      - People\n    serviceName: People API\n    serviceCategory: API\n  - name: Google Cloud Search API\n    baseURL: https://cloudsearch.googleapis.com\n    tags:\n      - Enterprise Search\n      - Indexing\n      - Search\n    serviceName: Google Cloud Search API\n    serviceCategory: API\n  - name: Drive Activity API\n    baseURL: https://driveactivity.googleapis.com\n    tags:\n      - Activity\n      - Audit\n      - Drive\n    serviceName: Drive Activity API\n    serviceCategory: API\n  - name: Drive Labels API\n    baseURL: https://drivelabels.googleapis.com\n  \
+  \  tags:\n      - Drive\n      - Labels\n      - Metadata\n    serviceName: Drive Labels API\n    serviceCategory: API\n  - name: Alert Center API\n    baseURL: https://alertcenter.googleapis.com\n    tags:\n      - Admin\n      - Alerts\n      - Security\n    serviceName: Alert Center API\n    serviceCategory: API\n  - name: Groups Settings API\n    baseURL: https://www.googleapis.com/groups/v1\n    tags:\n      - Admin\n      - Groups\n      - Settings\n    serviceName: Groups Settings API\n    serviceCategory: API\n  - name: Groups Migration API\n    baseURL: https://groupsmigration.googleapis.com\n    tags:\n      - Admin\n      - Groups\n      - Migration\n    serviceName: Groups Migration API\n    serviceCategory: API\n  - name: Admin SDK Data Transfer API\n    baseURL: https://admin.googleapis.com\n    tags:\n      - Admin\n      - Data Transfer\n      - Migration\n    serviceName: Admin SDK Data Transfer API\n    serviceCategory: API\n  - name: Enterprise License Manager API\n\
+  \    baseURL: https://licensing.googleapis.com\n    tags:\n      - Admin\n      - Licensing\n      - Management\n    serviceName: Enterprise License Manager API\n    serviceCategory: API\n  - name: Google Workspace Reseller API\n    baseURL: https://reseller.googleapis.com\n    tags:\n      - Admin\n      - Reseller\n      - Subscriptions\n    serviceName: Google Workspace Reseller API\n    serviceCategory: API\n  - name: Gmail Postmaster Tools API\n    baseURL: https://gmailpostmastertools.googleapis.com\n    tags:\n      - Deliverability\n      - Email\n      - Postmaster\n    serviceName: Gmail Postmaster Tools API\n    serviceCategory: API\n  - name: Google Workspace Marketplace API\n    baseURL: https://appsmarket.googleapis.com\n    tags:\n      - Apps\n      - Licensing\n      - Marketplace\n    serviceName: Google Workspace Marketplace API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n\
+  \  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/google-workspace/refs/heads/main/finops/google-workspace-finops.yml
-sources:
-- https://workspace.google.com/pricing
-- https://support.google.com/a/answer/7232932
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
-- Productivity
+- Calendar
 - Collaboration
 - Email
+- Productivity
 - Storage
+- Video Conferencing
+- FinOps
+- Cost Management
+- FOCUS
 ---

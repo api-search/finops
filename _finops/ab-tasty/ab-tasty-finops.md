@@ -13,72 +13,79 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/ab-tasty/refs/heads/main/openapi/decision-api-openapi.yml
 billing_model:
-  billingCurrency: USD/EUR
-  billingFrequency: Annual
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
+  - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Subscription
-description: AB Tasty is sold as an annual contract priced by traffic volume and feature scope. There is no public per-call price; FinOps mapping focuses on the contract structure and traffic-tier meters.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the AB Tasty API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: AB Tasty SAS
-  PricingCategory: Subscription
+  ChargeCategory: Usage
+  InvoiceIssuerName: AB Tasty
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: AB Tasty
-  PublisherName: AB Tasty SAS
-  ServiceCategory: Experimentation / Personalization
+  PublisherName: AB Tasty
+  ServiceCategory: Developer Tools / API
   ServiceName: AB Tasty
 layout: finops
 meters:
-- aggregation: max
-  description: Tracked unique visitors per month — typical traffic-tier meter for experimentation contracts.
+- aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - site
+  - api
+  - endpoint
+  - tier
   - region
-  name: monthly_unique_visitors
-  unit: visitor
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  description: Pageviews subjected to experimentation / personalization rules.
+  description: Bytes returned over the network in API responses
   dimensions:
-  - site
-  - campaign
-  name: pageviews
-  unit: pageview
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  description: Feature-flag evaluations served by Flagship / release-management SDKs.
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - environment
-  - feature
-  name: feature_flag_evaluations
-  unit: evaluation
-- aggregation: count
-  description: Annual subscription line item.
-  dimensions:
-  - plan
-  name: contract_year
-  unit: year
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Ab Tasty Finops
 provider_name: AB Tasty
 provider_slug: ab-tasty
-publisher_name: AB Tasty SAS
-service_category: Experimentation / Personalization
+publisher_name: AB Tasty
+service_category: API
 slug: ab-tasty-finops
 source_filename: ab-tasty-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.abtasty.com/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: AB Tasty\nproviderId: ab-tasty\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Experimentation\n  - A/B Testing\n  - Personalization\n  - Feature Flags\n  - FinOps\n  - FOCUS\ndescription: AB Tasty is sold as an annual contract priced by traffic volume and feature scope. There\n  is no public per-call price; FinOps mapping focuses on the contract structure and traffic-tier meters.\nnotes: No public developer pricing — placeholder only. Plan price is quoted per opportunity by AB Tasty\n  sales.\nsources:\n  - https://www.abtasty.com/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: AB Tasty SAS\nserviceCategory: Experimentation / Personalization\n\
-  billingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD/EUR\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: AB Tasty\n  ServiceCategory: Experimentation / Personalization\n  ProviderName: AB Tasty\n  PublisherName: AB Tasty SAS\n  InvoiceIssuerName: AB Tasty SAS\n  BillingCurrency: USD\n  PricingCategory: Subscription\nmeters:\n  - name: monthly_unique_visitors\n    description: Tracked unique visitors per month — typical traffic-tier meter for experimentation contracts.\n    unit: visitor\n    aggregation: max\n    dimensions:\n      - site\n      - region\n  - name: pageviews\n    description: Pageviews subjected to experimentation / personalization rules.\n    unit: pageview\n    aggregation: sum\n    dimensions:\n      - site\n      - campaign\n  - name: feature_flag_evaluations\n    description: Feature-flag evaluations served by Flagship / release-management SDKs.\n    unit: evaluation\n    aggregation:\
-  \ sum\n    dimensions:\n      - environment\n      - feature\n  - name: contract_year\n    description: Annual subscription line item.\n    unit: year\n    aggregation: count\n    dimensions:\n      - plan\nprinciples:\n  - name: Visibility\n    description: Use AB Tasty dashboards and the analytics export to track campaign volume against the\n      contracted traffic ceiling each month.\n  - name: Allocation\n    description: Tag campaigns and feature flags by product team / business unit so cost can be allocated\n      against the products driving experimentation volume.\n  - name: Optimization\n    description: Sunset stale campaigns and stop running long-tail experiments to keep traffic inside\n      the contracted tier; consolidate environments.\n  - name: Accountability\n    description: Growth / product leadership owns the AB Tasty subscription; engineering owns Flagship\n      SDK integrations. Review traffic vs contract ceiling monthly with the AB Tasty CSM.\nmaintainers:\n  -\
-  \ FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: AB Tasty\nproviderId: ab-tasty\npublisherName: AB Tasty\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Aggregation\n  - Experimentation\n  - Feature Flags\n  - Personalization\n  - A/B Testing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the AB Tasty API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
+  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
+  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: AB Tasty\n  ServiceCategory: Developer Tools / API\n  ProviderName: AB Tasty\n  PublisherName: AB Tasty\n  InvoiceIssuerName: AB Tasty\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: AB Tasty Decision API\n    baseURL: ''\n    tags:\n      - Decision\n      - Experimentation\n      - Feature Flags\n      - Server Side\n    serviceName: AB Tasty Decision API\n    serviceCategory: API\n  - name: AB Tasty Remote Control API\n    baseURL: ''\n    tags:\n      - Remote Control\n      - Campaigns\n      - Experimentation\n    serviceName: AB Tasty Remote Control API\n    serviceCategory: API\n  - name: AB Tasty Public API\n    baseURL: ''\n    tags:\n      - Campaigns\n      - Integrations\n      - Management\n    serviceName: AB Tasty Public API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target:\
+  \ TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/ab-tasty/refs/heads/main/finops/ab-tasty-finops.yml
-sources:
-- https://www.abtasty.com/pricing/
+sources: []
 specification: FinOps Framework
 tags:
+- Aggregation
 - Experimentation
-- A/B Testing
-- Personalization
 - Feature Flags
+- Personalization
+- A/B Testing
 - FinOps
+- Cost Management
 - FOCUS
 ---

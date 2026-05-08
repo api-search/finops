@@ -6,77 +6,91 @@ aligned_with:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
-  billingCurrency: USD/EUR/GBP/multi-currency
-  billingFrequency: Per Policy / Periodic Settlement
+  billingCurrency: USD
+  billingFrequency: Monthly
   chargeCategories:
+  - Usage
   - Purchase
-  - Adjustment
-  - Refund
   - Tax
-  pricingCategory: Take Rate (Premium / Commission)
-description: 'FOCUS-aligned FinOps for Chubb Studio: the cost shape for distributors is insurance economics (written premium, commission, ceded premium, claims) rather than per-API-call usage. Chubb does not bill partners for API access; cost flows through the partner agreement and policy-level settlement.'
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Chubb API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Purchase
-  InvoiceIssuerName: Chubb Limited (or local Chubb underwriting entity)
-  PricingCategory: Take Rate
+  ChargeCategory: Usage
+  InvoiceIssuerName: Chubb
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Chubb
-  PublisherName: Chubb Limited
-  ServiceCategory: Insurance / Embedded Insurance
-  ServiceName: Chubb Studio
+  PublisherName: Chubb
+  ServiceCategory: Developer Tools / API
+  ServiceName: Chubb
 layout: finops
 meters:
 - aggregation: sum
-  description: Gross written premium for policies issued through the partner channel
+  description: Count of billable API requests
   dimensions:
-  - line
-  - country
-  - partner
-  name: written_premium
-  unit: policy
-- aggregation: sum
-  description: Commission / take-rate paid to the distributing partner
-  dimensions:
-  - line
-  - partner
-  name: commission
-  unit: policy
-- aggregation: sum
-  description: Claims paid against policies in the partner book
-  dimensions:
-  - line
-  - country
-  name: claims_incurred
-  unit: claim
-- aggregation: sum
-  description: API calls against Chubb Studio (operational signal, not a billing meter)
-  dimensions:
-  - partner
-  - environment
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Chubb Finops
 provider_name: Chubb
 provider_slug: chubb
-publisher_name: Chubb Limited
-service_category: Insurance / Embedded Insurance
+publisher_name: Chubb
+service_category: API
 slug: chubb-finops
 source_filename: chubb-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.chubb.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Chubb\nproviderId: chubb\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Embedded Insurance\n  - Insurance\n  - Partner Integration\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Chubb Studio: the cost shape for distributors is insurance\n  economics (written premium, commission, ceded premium, claims) rather than per-API-call usage.\n  Chubb does not bill partners for API access; cost flows through the partner agreement and\n  policy-level settlement.'\nnotes: Chubb does not expose a metered-API billing surface. The FinOps shape below reflects the\n  partner-agreement economics that govern Chubb Studio distribution.\nsources:\n  - https://www.chubb.com/\n  - https://chubbstudio.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
-  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Chubb Limited\nserviceCategory: Insurance / Embedded Insurance\nbillingModel:\n  pricingCategory: Take Rate (Premium / Commission)\n  billingFrequency: Per Policy / Periodic Settlement\n  billingCurrency: USD/EUR/GBP/multi-currency\n  chargeCategories:\n    - Purchase\n    - Adjustment\n    - Refund\n    - Tax\nfocusColumns:\n  ServiceName: Chubb Studio\n  ServiceCategory: Insurance / Embedded Insurance\n  ProviderName: Chubb\n  PublisherName: Chubb Limited\n  InvoiceIssuerName: Chubb Limited (or local Chubb underwriting entity)\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingCategory: Take Rate\nmeters:\n  - name: written_premium\n    description: Gross written premium for policies issued through the partner channel\n    unit: policy\n    aggregation: sum\n    dimensions:\n      - line\n      - country\n      - partner\n  - name: commission\n    description: Commission / take-rate\
-  \ paid to the distributing partner\n    unit: policy\n    aggregation: sum\n    dimensions:\n      - line\n      - partner\n  - name: claims_incurred\n    description: Claims paid against policies in the partner book\n    unit: claim\n    aggregation: sum\n    dimensions:\n      - line\n      - country\n  - name: api_requests\n    description: API calls against Chubb Studio (operational signal, not a billing meter)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - partner\n      - environment\nprinciples:\n  - name: Visibility\n    description: Track partner-channel performance through Chubb Studio dashboards, monthly\n      bordereau reports, and ceded-premium statements.\n  - name: Allocation\n    description: Allocate written-premium, commission, and claims by line of business, country, and\n      partner so each distribution channel can be P&L'd separately.\n  - name: Optimization\n    description: Tune product mix, partner pricing, and underwriting filters to lift\
-  \ loss ratio and\n      acquisition margin; consolidate low-volume partners on shared API tenants.\n  - name: Accountability\n    description: Underwriting owns loss ratio; distribution / partnerships owns commission economics;\n      finance owns ceded-premium and claims settlement; technology owns Chubb Studio uptime and\n      integration certification.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Chubb\nproviderId: chubb\npublisherName: Chubb\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Accident and Health\n  - Auto Insurance\n  - Claims\n  - Commercial Insurance\n  - Cyber Insurance\n  - Embedded Insurance\n  - Fortune 500\n  - Homeowners\n  - Insurance\n  - Life Insurance\n  - Marine\n  - Personal Insurance\n  - Property and Casualty\n  - Reinsurance\n  - Risk Management\n  - Travel Insurance\n  - Valuables\n  - Workers Compensation\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Chubb API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting\
+  \ across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name:\
+  \ Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Chubb\n  ServiceCategory: Developer Tools / API\n  ProviderName: Chubb\n  PublisherName: Chubb\n  InvoiceIssuerName: Chubb\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit:\
+  \ request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Chubb Studio\n    baseURL: ''\n    tags:\n      - Embedded Insurance\n      - Partner Integration\n    serviceName: Chubb Studio\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/chubb/refs/heads/main/finops/chubb-finops.yml
-sources:
-- https://www.chubb.com/
-- https://chubbstudio.com/
+sources: []
 specification: FinOps Framework
 tags:
+- Accident and Health
+- Auto Insurance
+- Claims
+- Commercial Insurance
+- Cyber Insurance
 - Embedded Insurance
+- Fortune 500
+- Homeowners
 - Insurance
-- Partner Integration
+- Life Insurance
+- Marine
+- Personal Insurance
+- Property and Casualty
+- Reinsurance
+- Risk Management
+- Travel Insurance
+- Valuables
+- Workers Compensation
 - FinOps
+- Cost Management
 - FOCUS
 ---

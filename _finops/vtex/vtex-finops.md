@@ -273,45 +273,87 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  pricingCategory: Subscription + GMV-Based
-description: FOCUS-aligned FinOps for VTEX.
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the VTEX API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: VTEX
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: VTEX
   PublisherName: VTEX
-  ServiceCategory: Composable Commerce
+  ServiceCategory: Developer Tools / API
   ServiceName: VTEX
 layout: finops
 meters:
 - aggregation: sum
-  name: subscription
-  unit: month
+  description: Count of billable API requests
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
-  name: gmv
-  unit: USD
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
-  name: orders
-  unit: order
-- aggregation: sum
-  name: marketplace_transactions
-  unit: transaction
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Vtex Finops
 provider_name: VTEX
 provider_slug: vtex
 publisher_name: VTEX
-service_category: Composable Commerce
+service_category: API
 slug: vtex-finops
 source_filename: vtex-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.vtex.com/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: VTEX\nproviderId: vtex\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Composable Commerce\ndescription: FOCUS-aligned FinOps for VTEX.\nsources:\n  - https://www.vtex.com/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: VTEX\nserviceCategory: Composable Commerce\nbillingModel:\n  pricingCategory: Subscription + GMV-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: VTEX\n  ServiceCategory: Composable Commerce\n  ProviderName: VTEX\n  PublisherName: VTEX\n  BillingCurrency: USD\nmeters:\n  - name: subscription\n    unit: month\n    aggregation: sum\n  - name: gmv\n    unit: USD\n\
-  \    aggregation: sum\n  - name: orders\n    unit: order\n    aggregation: sum\n  - name: marketplace_transactions\n    unit: transaction\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Track VTEX consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: VTEX\nproviderId: vtex\npublisherName: VTEX\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Commerce\n  - E-Commerce\n  - Retail\n  - Marketplace\n  - Payments\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the VTEX API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
+  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
+  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: VTEX\n  ServiceCategory: Developer Tools / API\n  ProviderName: VTEX\n  PublisherName: VTEX\n  InvoiceIssuerName: VTEX\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
+  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: VTEX Anti-Fraud Provider API\n    baseURL: https://{providerApiEndpoint}\n    tags:\n      - Anti-Fraud\n      - Fraud Prevention\n      - Payments\n      - Security\n    serviceName: VTEX Anti-Fraud Provider API\n    serviceCategory: API\n  - name: VTEX Buyer Organization API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - B2B\n      - Commerce\n      - Organizations\n      - Purchasing\n    serviceName: VTEX Buyer Organization API\n    serviceCategory: API\n  - name: VTEX Catalog API - Seller Portal\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Catalog\n      - Commerce\n      - Marketplace\n      - Seller\n    serviceName: VTEX Catalog API - Seller Portal\n    serviceCategory: API\n\
+  \  - name: VTEX Catalog API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Catalog\n      - Commerce\n      - Products\n      - SKU\n    serviceName: VTEX Catalog API\n    serviceCategory: API\n  - name: VTEX Checkout API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Cart\n      - Checkout\n      - Commerce\n      - Orders\n    serviceName: VTEX Checkout API\n    serviceCategory: API\n  - name: VTEX Customer Credit API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - B2B\n      - Commerce\n      - Credit\n      - Finance\n    serviceName: VTEX Customer Credit API\n    serviceCategory: API\n  - name: VTEX Data Subject Rights API\n    baseURL: https://api.vtex.com\n    tags:\n      - Compliance\n      - Data Privacy\n      - GDPR\n      - Privacy\n    serviceName: VTEX Data Subject Rights API\n    serviceCategory: API\n  - name: VTEX DO API\n    baseURL: https://{accountName}.{environment}.com.br/api/do\n\
+  \    tags:\n      - Commerce\n      - Operations\n      - Tasks\n      - Workflow\n    serviceName: VTEX DO API\n    serviceCategory: API\n  - name: VTEX Gift Card Hub API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Commerce\n      - Gift Cards\n      - Payments\n      - Promotions\n    serviceName: VTEX Gift Card Hub API\n    serviceCategory: API\n  - name: VTEX Gift Card API\n    baseURL: https://{accountName}.{environment}.com.br/api/\n    tags:\n      - Commerce\n      - Gift Cards\n      - Payments\n      - Promotions\n    serviceName: VTEX Gift Card API\n    serviceCategory: API\n  - name: VTEX Gift Card Provider Protocol API\n    baseURL: https://{providerApiEndpoint}\n    tags:\n      - Commerce\n      - Gift Cards\n      - Integration\n      - Payments\n    serviceName: VTEX Gift Card Provider Protocol API\n    serviceCategory: API\n  - name: VTEX Headless CMS API\n    baseURL: https://{accountName}.myvtex.com\n    tags:\n      - CMS\n      - Commerce\n\
+  \      - Content Management\n      - Headless\n    serviceName: VTEX Headless CMS API\n    serviceCategory: API\n  - name: VTEX ID API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Authentication\n      - Commerce\n      - Identity\n      - Security\n    serviceName: VTEX ID API\n    serviceCategory: API\n  - name: VTEX Intelligent Search Events API\n    baseURL: https://sp.vtex.com/event-api/v1/{accountName}\n    tags:\n      - Analytics\n      - Commerce\n      - Events\n      - Search\n    serviceName: VTEX Intelligent Search Events API\n    serviceCategory: API\n  - name: VTEX Intelligent Search API\n    baseURL: https://{accountName}.{environment}.com.br/api/io/_v/api/intelligent-search\n    tags:\n      - AI\n      - Commerce\n      - Product Discovery\n      - Search\n    serviceName: VTEX Intelligent Search API\n    serviceCategory: API\n  - name: VTEX Legacy CMS Portal API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n    \
+  \  - CMS\n      - Commerce\n      - Content Management\n      - Legacy\n    serviceName: VTEX Legacy CMS Portal API\n    serviceCategory: API\n  - name: VTEX Legacy Search API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Catalog\n      - Commerce\n      - Legacy\n      - Search\n    serviceName: VTEX Legacy Search API\n    serviceCategory: API\n  - name: VTEX License Manager API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Access Control\n      - Authorization\n      - Commerce\n      - Permissions\n    serviceName: VTEX License Manager API\n    serviceCategory: API\n  - name: VTEX Logistics API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Commerce\n      - Fulfillment\n      - Inventory\n      - Logistics\n    serviceName: VTEX Logistics API\n    serviceCategory: API\n  - name: VTEX Marketplace API\n    baseURL: https://{accountName}.{environment}.com.br/api\n    tags:\n      - Commerce\n \
+  \     - Marketplace\n      - Multi-Seller\n      - Retail\n    serviceName: VTEX Marketplace API\n    serviceCategory: API\n  - name: VTEX Marketplace Protocol - External Mapper API\n    baseURL: https://portal.{environment}.com.br\n    tags:\n      - Catalog\n      - Integration\n      - Marketplace\n      - Protocol\n    serviceName: VTEX Marketplace Protocol - External Mapper API\n    serviceCategory: API\n  - name: VTEX Marketplace Protocol - External Orders API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Integration\n      - Marketplace\n      - Orders\n      - Protocol\n    serviceName: VTEX Marketplace Protocol - External Orders API\n    serviceCategory: API\n  - name: VTEX Marketplace Protocol - External Seller Fulfillment API\n    baseURL: https://{fulfillmentEndpoint}\n    tags:\n      - Fulfillment\n      - Integration\n      - Marketplace\n      - Seller\n    serviceName: VTEX Marketplace Protocol - External Seller Fulfillment API\n    serviceCategory:\
+  \ API\n  - name: VTEX Marketplace Protocol - External Seller Marketplace API\n    baseURL: https://{marketplaceServicesEndpoint}\n    tags:\n      - Integration\n      - Marketplace\n      - Protocol\n      - Seller\n    serviceName: VTEX Marketplace Protocol - External Seller Marketplace API\n    serviceCategory: API\n  - name: VTEX Master Data API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Commerce\n      - Customer Data\n      - Data Management\n      - NoSQL\n    serviceName: VTEX Master Data API\n    serviceCategory: API\n  - name: VTEX Message Center API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Commerce\n      - Email\n      - Messaging\n      - Notifications\n    serviceName: VTEX Message Center API\n    serviceCategory: API\n  - name: VTEX Orders API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Commerce\n      - Fulfillment\n      - Order Management\n      - Orders\n    serviceName:\
+  \ VTEX Orders API\n    serviceCategory: API\n  - name: VTEX Orders API - PII Data Architecture\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Commerce\n      - Data Privacy\n      - Orders\n      - PII\n    serviceName: VTEX Orders API - PII Data Architecture\n    serviceCategory: API\n  - name: VTEX Payment Provider Protocol API\n    baseURL: https://{providerApiEndpoint}\n    tags:\n      - Commerce\n      - Fintech\n      - Payments\n      - Protocol\n    serviceName: VTEX Payment Provider Protocol API\n    serviceCategory: API\n  - name: VTEX Payments Gateway API\n    baseURL: https://{accountName}.vtexpayments.com.br\n    tags:\n      - Commerce\n      - Fintech\n      - Payments\n      - Transactions\n    serviceName: VTEX Payments Gateway API\n    serviceCategory: API\n  - name: VTEX Pick and Pack Last Mile Protocol API\n    baseURL: https://auth.pickingnpacking.com/{environment}\n    tags:\n      - Commerce\n      - Delivery\n      - Logistics\n  \
+  \    - Last Mile\n    serviceName: VTEX Pick and Pack Last Mile Protocol API\n    serviceCategory: API\n  - name: VTEX Policies System API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Commerce\n      - Configuration\n      - Policies\n      - Rules\n    serviceName: VTEX Policies System API\n    serviceCategory: API\n  - name: VTEX Pricing Hub API\n    baseURL: https://prchub.{environment}.com.br\n    tags:\n      - Commerce\n      - Integration\n      - Pricing\n      - Protocol\n    serviceName: VTEX Pricing Hub API\n    serviceCategory: API\n  - name: VTEX Pricing API\n    baseURL: https://api.vtex.com/{accountName}\n    tags:\n      - Commerce\n      - Pricing\n      - Retail\n      - Trade Policy\n    serviceName: VTEX Pricing API\n    serviceCategory: API\n  - name: VTEX Profile System API - PII Data Architecture\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Commerce\n      - Customer Profiles\n      - Data Privacy\n\
+  \      - PII\n    serviceName: VTEX Profile System API - PII Data Architecture\n    serviceCategory: API\n  - name: VTEX Promotions and Taxes API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Commerce\n      - Discounts\n      - Promotions\n      - Taxes\n    serviceName: VTEX Promotions and Taxes API\n    serviceCategory: API\n  - name: VTEX Reviews and Ratings API\n    baseURL: https://{accountName}.myvtex.com\n    tags:\n      - Commerce\n      - Customer Feedback\n      - Ratings\n      - Reviews\n    serviceName: VTEX Reviews and Ratings API\n    serviceCategory: API\n  - name: VTEX Sent Offers API\n    baseURL: https://portal.{environment}.com.br\n    tags:\n      - Commerce\n      - Marketplace\n      - Offers\n      - Seller\n    serviceName: VTEX Sent Offers API\n    serviceCategory: API\n  - name: VTEX Session Manager API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Commerce\n      - Context\n      - Sessions\n  \
+  \    - Storefront\n    serviceName: VTEX Session Manager API\n    serviceCategory: API\n  - name: VTEX Shipping Network API\n    baseURL: https://app.io.vtex.com\n    tags:\n      - Commerce\n      - Logistics\n      - Shipping\n      - Tracking\n    serviceName: VTEX Shipping Network API\n    serviceCategory: API\n  - name: VTEX SKU Bindings API\n    baseURL: https://{accountName}.{environment}.com.br/api\n    tags:\n      - Catalog\n      - Commerce\n      - Marketplace\n      - SKU\n    serviceName: VTEX SKU Bindings API\n    serviceCategory: API\n  - name: VTEX Subscriptions API\n    baseURL: https://{accountName}.{environment}.com.br\n    tags:\n      - Commerce\n      - Recurring\n      - Retail\n      - Subscriptions\n    serviceName: VTEX Subscriptions API\n    serviceCategory: API\n  - name: VTEX Suggestions API\n    baseURL: https://api.vtex.com/{accountName}\n    tags:\n      - Catalog\n      - Commerce\n      - Marketplace\n      - Seller\n    serviceName: VTEX Suggestions\
+  \ API\n    serviceCategory: API\n  - name: VTEX Tracking API\n    baseURL: https://api.vtextracking.com/receiver\n    tags:\n      - Commerce\n      - Logistics\n      - Shipping\n      - Tracking\n    serviceName: VTEX Tracking API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/vtex/refs/heads/main/finops/vtex-finops.yml
-sources:
-- https://www.vtex.com/pricing/
+sources: []
 specification: FinOps Framework
 tags:
+- Commerce
+- E-Commerce
+- Retail
+- Marketplace
+- Payments
 - FinOps
+- Cost Management
 - FOCUS
-- Composable Commerce
 ---

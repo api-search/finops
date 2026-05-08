@@ -12,73 +12,76 @@ billing_model:
   - Usage
   - Purchase
   - Tax
+  - Credit
   - Adjustment
-  - Refund
-  pricingCategory: Regulated Utility Tariff + Partner Contract
-description: FOCUS-aligned FinOps for CenterPoint Energy's integration surfaces. The Smart Meter Texas TPSP and Green Button Connect My Data APIs are free under regulator / consortium policy; the only invoice surfaces visible to a partner are (a) the underlying utility bill driven by metered consumption and (b) any Centerpoint Connect partner contract for the contractor / field-service platform.
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the CenterPoint Energy API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  InvoiceIssuerName: CenterPoint Energy, Inc.
+  ChargeCategory: Usage
+  InvoiceIssuerName: CenterPoint Energy
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: CenterPoint Energy
-  PublisherName: CenterPoint Energy, Inc.
-  ServiceCategory: Utility Data
-  ServiceName: CenterPoint Energy APIs
+  PublisherName: CenterPoint Energy
+  ServiceCategory: Developer Tools / API
+  ServiceName: CenterPoint Energy
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - tpsp
-  - account
-  name: smt_usage_inquiries
-  unit: request
-- aggregation: count
-  dimensions:
-  - third_party
-  name: green_button_authorizations
-  unit: authorization
-- aggregation: sum
-  dimensions:
-  - account
-  - service_class
-  name: interval_kwh_delivered
-  unit: kWh
-- aggregation: sum
-  dimensions:
-  - partner
-  - operation
-  name: cpc_api_requests
-  unit: request
-- aggregation: sum
-  dimensions:
-  - account
-  - service_class
+  - api
+  - endpoint
+  - tier
   - region
-  name: utility_invoiced_amount
-  unit: USD
+  - consumer
+  name: api_requests
+  unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Centerpoint Energy Finops
 provider_name: CenterPoint Energy
 provider_slug: centerpoint-energy
-publisher_name: CenterPoint Energy, Inc.
-service_category: Utility (Energy + Gas)
+publisher_name: CenterPoint Energy
+service_category: API
 slug: centerpoint-energy-finops
 source_filename: centerpoint-energy-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.smartmetertexas.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: CenterPoint Energy\nproviderId: centerpoint-energy\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Energy\n  - Utility\n  - Smart Meter\n  - Green Button\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for CenterPoint Energy''s integration surfaces. The Smart Meter Texas\n  TPSP and Green Button Connect My Data APIs are free under regulator / consortium policy; the only\n  invoice surfaces visible to a partner are (a) the underlying utility bill driven by metered consumption\n  and (b) any Centerpoint Connect partner contract for the contractor / field-service platform.'\nnotes: API access is free (SMT, Green Button) or partner-contracted (Centerpoint Connect). Meters track\n  usage and invoice signals rather than per-call charges.\nsources:\n  - https://www.smartmetertexas.com/\n  - https://www.energy.gov/data/green-button\n\
-  \  - https://api-portal.centerpointconnect.io/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: CenterPoint Energy, Inc.\nserviceCategory: Utility (Energy + Gas)\nbillingModel:\n  pricingCategory: Regulated Utility Tariff + Partner Contract\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: CenterPoint Energy APIs\n  ServiceCategory: Utility Data\n  ProviderName: CenterPoint Energy\n  PublisherName: CenterPoint Energy, Inc.\n  InvoiceIssuerName: CenterPoint Energy, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: smt_usage_inquiries\n    unit: request\n    aggregation: sum\n    dimensions:\n      - tpsp\n      - account\n  - name: green_button_authorizations\n    unit: authorization\n\
-  \    aggregation: count\n    dimensions:\n      - third_party\n  - name: interval_kwh_delivered\n    unit: kWh\n    aggregation: sum\n    dimensions:\n      - account\n      - service_class\n  - name: cpc_api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - partner\n      - operation\n  - name: utility_invoiced_amount\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - account\n      - service_class\n      - region\nprinciples:\n  - name: Visibility\n    description: Pull SMT TPSP usage exports nightly to see authorized account interval data, and combine\n      with the customer's CenterPoint utility bill to reconcile observed kWh with billed kWh.\n  - name: Allocation\n    description: Tag SMT / Green Button authorizations with the consuming product team and the customer's\n      cost center so utility-data costs are allocated where the data drives business outcomes.\n  - name: Optimization\n    description: Use Green Button bulk authorization windows\
-  \ rather than continuous polling; align SMT\n      requests with the overnight batch cadence; cache results that don't change intra-day.\n  - name: Accountability\n    description: Energy / facilities lead owns the utility bill; integration platform owner manages SMT\n      TPSP registration and Green Button consent flows; partner ops owns the Centerpoint Connect contract.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CenterPoint Energy\nproviderId: centerpoint-energy\npublisherName: CenterPoint Energy\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Electricity\n  - Energy\n  - Fortune 500\n  - Green Button\n  - Natural Gas\n  - Smart Meter\n  - Usage Data\n  - Utility\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the CenterPoint Energy API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
+  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
+  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: CenterPoint Energy\n  ServiceCategory: Developer Tools / API\n  ProviderName: CenterPoint Energy\n  PublisherName: CenterPoint Energy\n  InvoiceIssuerName: CenterPoint Energy\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name:\
+  \ data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: CenterPoint Energy Usage History Inquiry API\n    baseURL: ''\n    tags:\n      - Billing History\n      - Interval Data\n      - Smart Meter Texas\n      - Usage\n    serviceName: CenterPoint Energy Usage History Inquiry API\n    serviceCategory: API\n  - name: CenterPoint Energy Green Button Connect My Data\n    baseURL: ''\n    tags:\n      - Energy Usage\n      - Green Button\n      - Interval Data\n      - Open Data\n    serviceName: CenterPoint Energy Green Button Connect My Data\n    serviceCategory: API\n  - name: Centerpoint Connect Services API\n    baseURL: ''\n    tags:\n \
+  \     - Field Service\n      - Integration\n      - Partner\n    serviceName: Centerpoint Connect Services API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/centerpoint-energy/refs/heads/main/finops/centerpoint-energy-finops.yml
-sources:
-- https://www.smartmetertexas.com/
-- https://www.energy.gov/data/green-button
-- https://api-portal.centerpointconnect.io/
+sources: []
 specification: FinOps Framework
 tags:
+- Electricity
 - Energy
-- Utility
-- Smart Meter
+- Fortune 500
 - Green Button
+- Natural Gas
+- Smart Meter
+- Usage Data
+- Utility
 - FinOps
+- Cost Management
 - FOCUS
 ---

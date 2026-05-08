@@ -30,91 +30,87 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Credit
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Tiered Subscription + Pay-As-You-Go
-description: 'FOCUS-aligned FinOps for Choreo: tiered subscription (Developer / Team / Enterprise) combined with pass-through infrastructure billing once free credits are exhausted. Per-component Team pricing plus monthly resource credits creates a hybrid Subscription + Pay-As-You-Go shape on Team and Enterprise.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Choreo API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: WSO2 LLC
-  PricingCategory: Subscription
-  ProviderName: WSO2
-  PublisherName: WSO2 LLC
-  ServiceCategory: Internal Developer Platform
+  InvoiceIssuerName: Choreo
+  PricingCategory: Usage-Based
+  PricingUnit: request
+  ProviderName: Choreo
+  PublisherName: Choreo
+  ServiceCategory: Developer Tools / API
   ServiceName: Choreo
 layout: finops
 meters:
 - aggregation: sum
-  description: Number of components subscribed under the Team plan
-  dimensions:
-  - project
-  - organization
-  name: component_subscription
-  unit: component-month
-- aggregation: sum
-  description: CI builds executed
-  dimensions:
-  - project
-  - component
-  name: builds
-  unit: build
-- aggregation: sum
-  description: Deployments executed
-  dimensions:
-  - project
-  - environment
-  name: deployments
-  unit: deployment
-- aggregation: sum
-  description: API requests served through Choreo gateways
+  description: Count of billable API requests
   dimensions:
   - api
-  - environment
-  - subscription
+  - endpoint
+  - tier
+  - region
+  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Log MB ingested (per day, with retention by plan)
+  description: Bytes returned over the network in API responses
   dimensions:
-  - component
-  - environment
-  name: log_volume
-  unit: MB-day
-- aggregation: sum
-  description: vCPU, RAM, storage, and network consumed on the Choreo data plane (pass-through on Team and Enterprise)
-  dimensions:
-  - resource_type
-  - environment
+  - api
   - region
-  name: infrastructure
-  unit: varies
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Choreo Finops
 provider_name: Choreo
 provider_slug: choreo
-publisher_name: WSO2 LLC
-service_category: Internal Developer Platform
+publisher_name: Choreo
+service_category: API
 slug: choreo-finops
 source_filename: choreo-finops.yml
 source_heading: FinOps Profile
-source_url: https://wso2.com/choreo/pricing/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Choreo\nproviderId: choreo\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - API Management\n  - Cloud Native\n  - Internal Developer Platform\n  - Kubernetes\n  - Platform Engineering\n  - WSO2\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Choreo: tiered subscription (Developer / Team / Enterprise)\n  combined with pass-through infrastructure billing once free credits are exhausted. Per-component\n  Team pricing plus monthly resource credits creates a hybrid Subscription + Pay-As-You-Go shape on\n  Team and Enterprise.'\nsources:\n  - https://wso2.com/choreo/pricing/\n  - https://wso2.com/choreo/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
-  \ WSO2 LLC\nserviceCategory: Internal Developer Platform\nbillingModel:\n  pricingCategory: Tiered Subscription + Pay-As-You-Go\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Credit\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Choreo\n  ServiceCategory: Internal Developer Platform\n  ProviderName: WSO2\n  PublisherName: WSO2 LLC\n  InvoiceIssuerName: WSO2 LLC\n  BillingCurrency: USD\n  ChargeCategory: Usage\n  PricingCategory: Subscription\nmeters:\n  - name: component_subscription\n    description: Number of components subscribed under the Team plan\n    unit: component-month\n    aggregation: sum\n    dimensions:\n      - project\n      - organization\n  - name: builds\n    description: CI builds executed\n    unit: build\n    aggregation: sum\n    dimensions:\n      - project\n      - component\n  - name: deployments\n    description: Deployments executed\n    unit: deployment\n    aggregation: sum\n    dimensions:\n\
-  \      - project\n      - environment\n  - name: api_requests\n    description: API requests served through Choreo gateways\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - environment\n      - subscription\n  - name: log_volume\n    description: Log MB ingested (per day, with retention by plan)\n    unit: MB-day\n    aggregation: sum\n    dimensions:\n      - component\n      - environment\n  - name: infrastructure\n    description: vCPU, RAM, storage, and network consumed on the Choreo data plane (pass-through on\n      Team and Enterprise)\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - resource_type\n      - environment\n      - region\nprinciples:\n  - name: Visibility\n    description: Use the Choreo console's Cost Insights and consumption dashboards to track resource\n      credit burn-down, build / deployment counts, and request volumes per project.\n  - name: Allocation\n    description: Tag spend by Choreo project, environment,\
-  \ and team — the per-component Team pricing\n      makes component ownership the natural showback boundary.\n  - name: Optimization\n    description: Right-size component CPU/RAM, scale to zero where possible, prune unused builds and\n      old logs, and consolidate components before crossing the next per-component price step.\n  - name: Accountability\n    description: Platform team owns the Choreo subscription tier; product engineering owns per-component\n      consumption; finance reconciles WSO2 invoices and the in-product credit ledger.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Choreo\nproviderId: choreo\npublisherName: Choreo\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI Apps\n  - API Management\n  - CI/CD\n  - Cloud Native\n  - DevOps\n  - Developer Portal\n  - FinOps\n  - IDE\n  - Internal Developer Platform\n  - Kubernetes\n  - Lifecycle\n  - Observability\n  - Orchestration\n  - Platform Engineering\n  - Pro-Code API Composition\n  - Unified\n  - WSO2\n  - Workflows\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Choreo API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n\
+  \  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n\
+  \      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Choreo\n  ServiceCategory: Developer Tools / API\n  ProviderName: Choreo\n  PublisherName: Choreo\n  InvoiceIssuerName: Choreo\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Choreo API Management API\n    baseURL: ''\n    tags:\n      - API Management\n      - Builds\n      - Components\n      - Deployments\n      - Lifecycle\n      - Organizations\n      - Projects\n    serviceName: Choreo API Management API\n    serviceCategory: API\n  - name: Choreo Developer Portal API\n    baseURL: ''\n    tags:\n      - API Keys\n      - API Marketplace\n      - Applications\n      - Developer Portal\n      - OAuth\n      - Subscriptions\n    serviceName: Choreo Developer Portal API\n\
+  \    serviceCategory: API\n  - name: Choreo Insights API\n    baseURL: ''\n    tags:\n      - Alerts\n      - Analytics\n      - Logs\n      - Metrics\n      - Monitoring\n      - Observability\n    serviceName: Choreo Insights API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/choreo/refs/heads/main/finops/choreo-finops.yml
-sources:
-- https://wso2.com/choreo/pricing/
-- https://wso2.com/choreo/
+sources: []
 specification: FinOps Framework
 tags:
+- AI Apps
 - API Management
+- CI/CD
 - Cloud Native
+- DevOps
+- Developer Portal
+- FinOps
+- IDE
 - Internal Developer Platform
 - Kubernetes
+- Lifecycle
+- Observability
+- Orchestration
 - Platform Engineering
+- Pro-Code API Composition
+- Unified
 - WSO2
+- Workflows
 - FinOps
+- Cost Management
 - FOCUS
 ---

@@ -26,58 +26,78 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/walgreens/refs/heads/main/openapi/walgreens-vaccine-scheduling-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Per-Invoice
+  billingFrequency: Monthly
   chargeCategories:
-  - Adjustment
+  - Usage
+  - Purchase
+  - Tax
   - Credit
-  pricingCategory: Revenue Share
-description: FinOps view of the Walgreens Developer Program. There is no publicly metered API price; the commercial model is approval-based partner access with a revenue-share commission for the Photo Prints API. FOCUS mapping is partial because no per-call cost surface is exposed - what flows to FinOps is the partner-share settlement.
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Walgreens API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Adjustment
-  InvoiceIssuerName: Walgreen Co.
+  ChargeCategory: Usage
+  InvoiceIssuerName: Walgreens
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Walgreens
-  PublisherName: Walgreen Co.
-  ServiceCategory: Retail / Pharmacy Partner API
-  ServiceName: Walgreens Developer Program
+  PublisherName: Walgreens
+  ServiceCategory: Developer Tools / API
+  ServiceName: Walgreens
 layout: finops
 meters:
 - aggregation: sum
-  description: Successful Photo Prints orders eligible for partner revenue-share commission.
-  dimensions:
-  - partner
-  - product
-  name: photo_print_orders
-  unit: order
-- aggregation: sum
-  description: Successful Walgreens partner-API requests, attributed by API key (used for capacity and audit, not direct billing).
+  description: Count of billable API requests
   dimensions:
   - api
-  - api_key
-  name: api_calls
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
+- aggregation: sum
+  description: Bytes returned over the network in API responses
+  dimensions:
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Walgreens Finops
 provider_name: Walgreens
 provider_slug: walgreens
-publisher_name: Walgreen Co.
-service_category: Retail / Pharmacy Partner API
+publisher_name: Walgreens
+service_category: API
 slug: walgreens-finops
 source_filename: walgreens-finops.yml
 source_heading: FinOps Profile
-source_url: https://developer.walgreens.com/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Walgreens\nproviderId: walgreens\npublisherName: Walgreen Co.\nserviceCategory: Retail / Pharmacy Partner API\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Pharmacy\n  - Retail\n  - Healthcare\n  - FinOps\n  - FOCUS\ndescription: FinOps view of the Walgreens Developer Program. There is no\n  publicly metered API price; the commercial model is approval-based partner\n  access with a revenue-share commission for the Photo Prints API. FOCUS\n  mapping is partial because no per-call cost surface is exposed - what flows\n  to FinOps is the partner-share settlement.\nsources:\n  - https://developer.walgreens.com/\n  - https://developer.walgreens.com/apis\nnotes:\
-  \ No published per-call price; no Walgreens-issued usage / billing API for\n  partners. FOCUS records depend on the partner-share statements issued under\n  the integration agreement.\nbillingModel:\n  pricingCategory: Revenue Share\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Walgreens Developer Program\n  ServiceCategory: Retail / Pharmacy Partner API\n  ProviderName: Walgreens\n  PublisherName: Walgreen Co.\n  InvoiceIssuerName: Walgreen Co.\n  BillingCurrency: USD\n  ChargeCategory: Adjustment\nmeters:\n  - name: photo_print_orders\n    description: Successful Photo Prints orders eligible for partner\n      revenue-share commission.\n    unit: order\n    aggregation: sum\n    dimensions:\n      - partner\n      - product\n  - name: api_calls\n    description: Successful Walgreens partner-API requests, attributed by API\n      key (used for capacity and audit, not direct billing).\n    unit:\
-  \ request\n    aggregation: sum\n    dimensions:\n      - api\n      - api_key\nprinciples:\n  - name: Visibility\n    description: Track Photo Prints order volume and revenue-share statements\n      issued by Walgreens; reconcile partner-side order events against the\n      monthly Walgreens settlement.\n  - name: Allocation\n    description: Attribute partner-share revenue (and any Walgreens-side fees)\n      to the consuming product or storefront via the API key dimension.\n  - name: Optimization\n    description: Optimize conversion on partner integrations (Photo Prints,\n      Add to Cart) to grow share-based earnings; reduce latency on\n      Store Locator / Store Inventory to keep dependent apps inside any\n      negotiated SLA.\n  - name: Accountability\n    description: Partnership / business-development owns the Walgreens\n      revenue-share contract; engineering owns API-key hygiene and\n      throttling-respecting clients.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n\
-  \    url: https://apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Walgreens\nproviderId: walgreens\npublisherName: Walgreens\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Pharmacy\n  - Healthcare\n  - Retail\n  - Prescriptions\n  - Vaccines\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Walgreens API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
+  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
+  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Walgreens\n  ServiceCategory: Developer Tools / API\n  ProviderName: Walgreens\n  PublisherName: Walgreens\n  InvoiceIssuerName: Walgreens\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n   \
+  \ dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Walgreens Store Locator API\n    baseURL: https://services.walgreens.com\n    tags:\n      - Store Locator\n      - Retail\n      - Pharmacy\n      - Geolocation\n    serviceName: Walgreens Store Locator API\n    serviceCategory: API\n  - name: Walgreens Prescription Refill API\n    baseURL: https://services.walgreens.com\n    tags:\n      - Pharmacy\n      - Prescriptions\n      - Healthcare\n      - Mobile\n    serviceName: Walgreens Prescription Refill API\n    serviceCategory: API\n  - name: Walgreens Vaccine Scheduling API\n    baseURL: https://services.walgreens.com\n    tags:\n      - Vaccines\n      - Healthcare\n      - Scheduling\n      - Immunizations\n    serviceName: Walgreens Vaccine Scheduling\
+  \ API\n    serviceCategory: API\n  - name: Walgreens Photo Prints API\n    baseURL: https://services.walgreens.com\n    tags:\n      - Photo Printing\n      - Retail\n      - Mobile\n    serviceName: Walgreens Photo Prints API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/walgreens/refs/heads/main/finops/walgreens-finops.yml
-sources:
-- https://developer.walgreens.com/
-- https://developer.walgreens.com/apis
+sources: []
 specification: FinOps Framework
 tags:
 - Pharmacy
-- Retail
 - Healthcare
+- Retail
+- Prescriptions
+- Vaccines
 - FinOps
+- Cost Management
 - FOCUS
 ---

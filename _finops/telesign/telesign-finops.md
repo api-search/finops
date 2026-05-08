@@ -35,81 +35,76 @@ billing_model:
   billingFrequency: Monthly
   chargeCategories:
   - Usage
-  - Credit
+  - Purchase
   - Tax
+  - Credit
   - Adjustment
-  pricingCategory: Pay-As-You-Go
-description: 'FOCUS-aligned FinOps for Telesign: pay-as-you-go per-message and per-request charges with destination-country pricing for SMS/Voice and per-lookup pricing for PhoneID, Score, and Verify, plus negotiated volume packaging.'
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Telesign API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Telesign Corporation
+  InvoiceIssuerName: Telesign
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Telesign
-  PublisherName: Telesign Corporation
-  ServiceCategory: Communications
+  PublisherName: Telesign
+  ServiceCategory: Developer Tools / API
   ServiceName: Telesign
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - destination_country
-  - sender_id
-  - message_class
-  name: sms_messages
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - destination_country
-  - call_type
-  name: voice_calls
-  unit: request
+  - api
+  - region
+  - consumer
+  name: data_egress
+  unit: GB
 - aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - product_variant
-  - country
-  name: phoneid_lookups
-  unit: request
-- aggregation: sum
-  dimensions:
-  - product_variant
-  - country
-  name: score_requests
-  unit: request
-- aggregation: sum
-  dimensions:
-  - channel
-  - country
-  name: verify_requests
-  unit: request
-- aggregation: sum
-  dimensions:
-  - product
-  name: trial_credits_consumed
-  unit: request
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Telesign Finops
 provider_name: Telesign
 provider_slug: telesign
-publisher_name: Telesign Corporation
-service_category: Communications
+publisher_name: Telesign
+service_category: API
 slug: telesign-finops
 source_filename: telesign-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.telesign.com/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Telesign\nproviderId: telesign\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Communications\n  - SMS\n  - Phone Intelligence\n  - Verification\ndescription: >-\n  FOCUS-aligned FinOps for Telesign: pay-as-you-go per-message and per-request charges with destination-country\n  pricing for SMS/Voice and per-lookup pricing for PhoneID, Score, and Verify, plus negotiated volume packaging.\nsources:\n  - https://www.telesign.com/pricing\n  - https://www.telesign.com/pricing/sms\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Telesign Corporation\nserviceCategory: Communications\n\
-  billingModel:\n  pricingCategory: Pay-As-You-Go\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Credit\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Telesign\n  ServiceCategory: Communications\n  ProviderName: Telesign\n  PublisherName: Telesign Corporation\n  InvoiceIssuerName: Telesign Corporation\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: sms_messages\n    unit: request\n    aggregation: sum\n    dimensions:\n      - destination_country\n      - sender_id\n      - message_class\n  - name: voice_calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - destination_country\n      - call_type\n  - name: phoneid_lookups\n    unit: request\n    aggregation: sum\n    dimensions:\n      - product_variant\n      - country\n  - name: score_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - product_variant\n      - country\n  - name: verify_requests\n    unit: request\n\
-  \    aggregation: sum\n    dimensions:\n      - channel\n      - country\n  - name: trial_credits_consumed\n    unit: request\n    aggregation: sum\n    dimensions:\n      - product\nprinciples:\n  - name: Visibility\n    description: Use the Telesign customer portal usage and transactions exports to attribute consumption\n      by API and destination country at near-real-time granularity.\n  - name: Allocation\n    description: Tag traffic via separate API keys / sub-accounts per consuming team or product line so\n      Telesign invoice line items can be split for chargeback.\n  - name: Optimization\n    description: Lower SMS spend by routing OTP traffic through Verify (which can fall back to lower-cost\n      channels), caching PhoneID lookups for the documented validity window, and negotiating committed-use\n      packaging once monthly volume stabilizes.\n  - name: Accountability\n    description: Assign a budget owner per Telesign sub-account and review high-cost destination countries\n\
-  \      and Verify fallback rates monthly with the account manager.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Telesign\nproviderId: telesign\npublisherName: Telesign\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Authentication\n  - Communications\n  - Fraud Prevention\n  - Phone Intelligence\n  - SMS\n  - Verification\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Telesign API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
+  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
+  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Telesign\n  ServiceCategory: Developer Tools / API\n  ProviderName: Telesign\n  PublisherName: Telesign\n  InvoiceIssuerName: Telesign\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Telesign SMS API\n    baseURL: https://rest-ww.telesign.com/v1\n    tags:\n      - Alerts\n      - Messaging\n      - Notifications\n      - OTP\n      - SMS\n    serviceName: Telesign SMS API\n    serviceCategory: API\n  - name: Telesign PhoneID API\n    baseURL: https://rest-ww.telesign.com/v1\n    tags:\n      - Carrier Data\n      - Fraud Prevention\n      - Identity Verification\n      - Phone Intelligence\n      - Risk Assessment\n    serviceName: Telesign PhoneID API\n    serviceCategory: API\n  - name: Telesign Verify API\n    baseURL: https://rest-ww.telesign.com/v1\n    tags:\n      - Authentication\n      - MFA\n      - OTP\n      - Two-Factor Authentication\n  \
+  \    - Verification\n    serviceName: Telesign Verify API\n    serviceCategory: API\n  - name: Telesign Score API\n    baseURL: https://rest-ww.telesign.com/v1\n    tags:\n      - Fraud Detection\n      - Phone Intelligence\n      - Risk Scoring\n    serviceName: Telesign Score API\n    serviceCategory: API\n  - name: Telesign Voice API\n    baseURL: https://rest-ww.telesign.com/v1\n    tags:\n      - OTP\n      - Telecommunications\n      - Voice\n    serviceName: Telesign Voice API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/telesign/refs/heads/main/finops/telesign-finops.yml
-sources:
-- https://www.telesign.com/pricing
-- https://www.telesign.com/pricing/sms
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Authentication
 - Communications
-- SMS
+- Fraud Prevention
 - Phone Intelligence
+- SMS
 - Verification
+- FinOps
+- Cost Management
+- FOCUS
 ---

@@ -44,62 +44,78 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/thanos/refs/heads/main/openapi/thanos-compact-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: On-Demand
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Open Source
-description: 'FOCUS-aligned FinOps for Thanos: Thanos itself is free Apache 2.0 software; the FinOps surface is the underlying object storage (S3 / GCS / Azure Blob), compute, and egress that operators incur when running Thanos as long-term storage for Prometheus metrics.'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the Thanos API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: Thanos
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: Thanos
-  PublisherName: Thanos contributors (CNCF)
-  ServiceCategory: Observability
+  PublisherName: Thanos
+  ServiceCategory: Developer Tools / API
   ServiceName: Thanos
 layout: finops
 meters:
-- aggregation: avg
-  dimensions:
-  - storage_class
-  - retention_tier
-  name: object_storage_bytes
-  unit: GB-month
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - operation
-  - component
-  name: object_storage_requests
+  - api
+  - endpoint
+  - tier
+  - region
+  - consumer
+  name: api_requests
   unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - component
-  name: query_compute_hours
-  unit: instance-hour
-- aggregation: sum
-  dimensions:
-  - direction
-  name: cross_az_egress
+  - api
+  - region
+  - consumer
+  name: data_egress
   unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
+  dimensions:
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Thanos Finops
 provider_name: Thanos
 provider_slug: thanos
-publisher_name: Thanos contributors (CNCF)
-service_category: Observability
+publisher_name: Thanos
+service_category: API
 slug: thanos-finops
 source_filename: thanos-finops.yml
 source_heading: FinOps Profile
-source_url: https://thanos.io/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Thanos\nproviderId: thanos\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Observability\n  - Open Source\ndescription: >-\n  FOCUS-aligned FinOps for Thanos: Thanos itself is free Apache 2.0 software; the FinOps surface is the\n  underlying object storage (S3 / GCS / Azure Blob), compute, and egress that operators incur when running\n  Thanos as long-term storage for Prometheus metrics.\nsources:\n  - https://thanos.io/\n  - https://thanos.io/tip/operating/cross-cluster-tls-communication.md/\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Thanos contributors (CNCF)\nserviceCategory:\
-  \ Observability\nbillingModel:\n  pricingCategory: Open Source\n  billingFrequency: On-Demand\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Thanos\n  ServiceCategory: Observability\n  ProviderName: Thanos\n  PublisherName: Thanos contributors (CNCF)\n  BillingCurrency: USD\nmeters:\n  - name: object_storage_bytes\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - storage_class\n      - retention_tier\n  - name: object_storage_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - operation\n      - component\n  - name: query_compute_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - component\n  - name: cross_az_egress\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - direction\nprinciples:\n  - name: Visibility\n    description: Thanos itself emits Prometheus metrics for storage requests, blocks, and query latency;\n      pair these with the cloud object-store provider's\
-  \ billing export to attribute spend.\n  - name: Allocation\n    description: Tag Thanos components by team / environment / tenant in the cloud where they run so object-storage\n      and compute spend is allocable in FOCUS-aligned exports.\n  - name: Optimization\n    description: Right-size retention, enable downsampling (5m/1h) for older data, configure storage classes\n      / tiering on the object store, tune Compactor cadence, and place Querier near data to reduce egress.\n  - name: Accountability\n    description: Observability platform team owns Thanos infra spend and reviews per-tenant cardinality\n      and retention against an agreed budget.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Thanos\nproviderId: thanos\npublisherName: Thanos\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Metrics\n  - Monitoring\n  - Observability\n  - Prometheus\n  - Time Series Database\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Thanos API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the\
+  \ consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
+  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Thanos\n  ServiceCategory: Developer Tools / API\n  ProviderName: Thanos\n  PublisherName: Thanos\n  InvoiceIssuerName: Thanos\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
+  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Thanos Query API\n    baseURL: http://localhost:9090\n    tags:\n      - Metrics\n      - Monitoring\n      - PromQL\n      - Query\n      - Time Series\n    serviceName: Thanos Query API\n    serviceCategory: API\n  - name: Thanos Store Gateway API\n    baseURL: http://localhost:10902\n    tags:\n      - Metrics\n      - Monitoring\n      - Object Storage\n      - Store\n      - Time Series\n    serviceName: Thanos Store Gateway API\n    serviceCategory: API\n  - name: Thanos Sidecar API\n    baseURL: http://localhost:10902\n    tags:\n      - Metrics\n      - Monitoring\n      - Prometheus\n      - Sidecar\n      - Store\n    serviceName: Thanos Sidecar API\n    serviceCategory: API\n  - name: Thanos Ruler API\n  \
+  \  baseURL: http://localhost:10902\n    tags:\n      - Alerting\n      - Metrics\n      - Monitoring\n      - Prometheus\n      - Rules\n    serviceName: Thanos Ruler API\n    serviceCategory: API\n  - name: Thanos Receive API\n    baseURL: http://localhost:10902\n    tags:\n      - Metrics\n      - Monitoring\n      - Receive\n      - Remote Write\n      - Time Series\n    serviceName: Thanos Receive API\n    serviceCategory: API\n  - name: Thanos Compact API\n    baseURL: http://localhost:10902\n    tags:\n      - Compaction\n      - Downsampling\n      - Monitoring\n      - Object Storage\n      - Retention\n    serviceName: Thanos Compact API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    url: http://apievangelist.com\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/thanos/refs/heads/main/finops/thanos-finops.yml
-sources:
-- https://thanos.io/
-- https://thanos.io/tip/operating/cross-cluster-tls-communication.md/
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- Metrics
+- Monitoring
 - Observability
-- Open Source
+- Prometheus
+- Time Series Database
+- FinOps
+- Cost Management
+- FOCUS
 ---

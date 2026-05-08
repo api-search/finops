@@ -14,57 +14,81 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/tensorflow/refs/heads/main/openapi/tensorflow-serving-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: On-Demand
+  billingFrequency: Monthly
   chargeCategories:
   - Usage
-  pricingCategory: Open Source
-description: 'FOCUS-aligned FinOps for TensorFlow: TensorFlow itself is free open-source software (Apache 2.0); the FinOps surface is the underlying compute, accelerator, and storage spend incurred by training and serving TensorFlow workloads on cloud or on-prem infrastructure.'
+  - Purchase
+  - Tax
+  - Credit
+  - Adjustment
+  chargeFrequency: Recurring
+  pricingCategory: Usage-Based
+description: FinOps framework definition for the TensorFlow API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
 focus_columns:
   BillingCurrency: USD
+  ChargeCategory: Usage
+  InvoiceIssuerName: TensorFlow
+  PricingCategory: Usage-Based
+  PricingUnit: request
   ProviderName: TensorFlow
-  PublisherName: TensorFlow contributors / Google LLC
-  ServiceCategory: Machine Learning Framework
+  PublisherName: TensorFlow
+  ServiceCategory: Developer Tools / API
   ServiceName: TensorFlow
 layout: finops
 meters:
 - aggregation: sum
+  description: Count of billable API requests
   dimensions:
-  - accelerator_type
+  - api
+  - endpoint
+  - tier
   - region
-  name: training_accelerator_hours
-  unit: instance-hour
+  - consumer
+  name: api_requests
+  unit: request
 - aggregation: sum
+  description: Bytes returned over the network in API responses
   dimensions:
-  - accelerator_type
+  - api
   - region
-  name: inference_accelerator_hours
-  unit: instance-hour
-- aggregation: avg
+  - consumer
+  name: data_egress
+  unit: GB
+- aggregation: sum
+  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - storage_class
-  name: model_storage
-  unit: GB-month
+  - api
+  - endpoint
+  - tier
+  name: compute_seconds
+  unit: second
 name: Tensorflow Finops
 provider_name: TensorFlow
 provider_slug: tensorflow
-publisher_name: TensorFlow contributors / Google LLC (project sponsor)
-service_category: Machine Learning Framework
+publisher_name: TensorFlow
+service_category: API
 slug: tensorflow-finops
 source_filename: tensorflow-finops.yml
 source_heading: FinOps Profile
-source_url: https://www.tensorflow.org/
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: TensorFlow\nproviderId: tensorflow\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Machine Learning\n  - Open Source\ndescription: >-\n  FOCUS-aligned FinOps for TensorFlow: TensorFlow itself is free open-source software (Apache 2.0); the\n  FinOps surface is the underlying compute, accelerator, and storage spend incurred by training and serving\n  TensorFlow workloads on cloud or on-prem infrastructure.\nsources:\n  - https://www.tensorflow.org/\n  - https://github.com/tensorflow/tensorflow/blob/master/LICENSE\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: TensorFlow contributors\
-  \ / Google LLC (project sponsor)\nserviceCategory: Machine Learning Framework\nbillingModel:\n  pricingCategory: Open Source\n  billingFrequency: On-Demand\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: TensorFlow\n  ServiceCategory: Machine Learning Framework\n  ProviderName: TensorFlow\n  PublisherName: TensorFlow contributors / Google LLC\n  BillingCurrency: USD\nmeters:\n  - name: training_accelerator_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - accelerator_type\n      - region\n  - name: inference_accelerator_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - accelerator_type\n      - region\n  - name: model_storage\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - storage_class\nprinciples:\n  - name: Visibility\n    description: TensorFlow itself emits no billing telemetry; visibility comes from the underlying cloud\n      provider's cost / usage reports (e.g.\
-  \ GCP Billing export, AWS CUR) and from MLOps tracking (TensorBoard\n      run metadata, TFX pipeline metrics).\n  - name: Allocation\n    description: Tag training and inference jobs with project / experiment / model_id labels at the cloud\n      resource level so FOCUS BillingAccountId / tags can attribute spend back to the model owner.\n  - name: Optimization\n    description: Reduce TensorFlow infrastructure cost via mixed-precision training, distillation / quantization\n      for inference, batch and concurrency tuning in TensorFlow Serving, spot/preemptible accelerators\n      for training, and selective use of TPUs vs GPUs for the workload shape.\n  - name: Accountability\n    description: Model owner / ML platform team is accountable for per-model training and serving spend\n      and reviews unit cost per prediction or per training run on a regular cadence.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: ''
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: TensorFlow\nproviderId: tensorflow\npublisherName: TensorFlow\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - Deep Learning\n  - JavaScript\n  - Machine Learning\n  - Model Serving\n  - Neural Networks\n  - Open Source\n  - Python\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the TensorFlow API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
+  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
+  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: TensorFlow\n  ServiceCategory: Developer Tools / API\n  ProviderName: TensorFlow\n  PublisherName: TensorFlow\n  InvoiceIssuerName: TensorFlow\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the\
+  \ network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: TensorFlow Serving REST API\n    baseURL: http://host:8501\n    tags:\n      - Inference\n      - Model Serving\n      - Production\n      - REST API\n    serviceName: TensorFlow Serving REST API\n    serviceCategory: API\n  - name: TensorFlow Core API\n    baseURL: https://www.tensorflow.org/api_docs\n    tags:\n      - Core API\n      - Machine Learning\n      - Python\n    serviceName: TensorFlow Core API\n    serviceCategory: API\n  - name: TensorFlow.js API\n    baseURL: https://cdn.jsdelivr.net/npm/@tensorflow/tfjs\n    tags:\n      - Browser\n      - JavaScript\n      - Node.js\n    serviceName: TensorFlow.js API\n    serviceCategory:\
+  \ API\n  - name: TensorFlow Lite API\n    baseURL: https://www.tensorflow.org/lite/api_docs\n    tags:\n      - Edge Computing\n      - Embedded\n      - Mobile\n      - On-Device AI\n    serviceName: TensorFlow Lite API\n    serviceCategory: API\n  - name: TensorFlow Hub API\n    baseURL: https://tfhub.dev/\n    tags:\n      - Model Repository\n      - Pre-Trained Models\n      - Transfer Learning\n    serviceName: TensorFlow Hub API\n    serviceCategory: API\n  - name: TensorBoard API\n    baseURL: ''\n    tags:\n      - Model Debugging\n      - Monitoring\n      - Visualization\n    serviceName: TensorBoard API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Google Brain Team\n    email: tensorflow@googlegroups.com\n    url: https://www.tensorflow.org/\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tensorflow/refs/heads/main/finops/tensorflow-finops.yml
-sources:
-- https://www.tensorflow.org/
-- https://github.com/tensorflow/tensorflow/blob/master/LICENSE
-- https://focus.finops.org/focus-specification/v1-3/
+sources: []
 specification: FinOps Framework
 tags:
-- FinOps
-- FOCUS
+- AI
+- Deep Learning
+- JavaScript
 - Machine Learning
+- Model Serving
+- Neural Networks
 - Open Source
+- Python
+- FinOps
+- Cost Management
+- FOCUS
 ---
