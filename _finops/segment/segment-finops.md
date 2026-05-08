@@ -39,72 +39,50 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the segment API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: MTU + Event-Based (custom contract)
+description: FOCUS-aligned FinOps for Twilio Segment.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: segment
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: segment
-  PublisherName: segment
-  ServiceCategory: Developer Tools / API
-  ServiceName: segment
+  ProviderName: Twilio Segment
+  PublisherName: Twilio Segment
+  ServiceCategory: Customer Data Platform
+  ServiceName: Twilio Segment
 layout: finops
 meters:
+- aggregation: max
+  name: monthly_tracked_users
+  unit: MTU
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - source
+  name: tracked_events
+  unit: event
+- aggregation: max
+  name: destinations_active
+  unit: destination-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  name: function_invocations
+  unit: invocation
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: reverse_etl_rows
+  unit: row
 name: Segment Finops
 provider_name: segment
 provider_slug: segment
-publisher_name: segment
-service_category: API
+publisher_name: Twilio Segment
+service_category: Customer Data Platform
 slug: segment-finops
 source_filename: segment-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: segment\nproviderId: segment\npublisherName: segment\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the segment API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n\
-  \  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n\
-  \      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: segment\n  ServiceCategory: Developer Tools / API\n  ProviderName: segment\n  PublisherName: segment\n  InvoiceIssuerName: segment\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description:\
-  \ Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Segment Public API\n    baseURL: https://api.segmentapis.com\n    tags:\n      - Analytics\n      - Customer Data\n      - Destinations\n      - Sources\n      - Workspace Management\n    serviceName: Segment Public API\n    serviceCategory: API\n  - name: Segment HTTP Tracking API\n    baseURL: https://api.segment.io\n    tags:\n      - Analytics\n      - Customer Data\n      - Events\n      - Tracking\n    serviceName: Segment HTTP Tracking API\n    serviceCategory: API\n  - name: Segment Profile API\n    baseURL: https://profiles.segment.com\n    tags:\n      - Customer Data\n      - Identity Resolution\n      - Profiles\n      - Unify\n    serviceName: Segment Profile API\n    serviceCategory: API\n  - name: Segment Config API\n    baseURL: https://platform.segmentapis.com\n    tags:\n      - Configuration\n\
-  \      - Destinations\n      - Legacy\n      - Sources\n      - Workspace Management\n    serviceName: Segment Config API\n    serviceCategory: API\n  - name: Segment Pixel Tracking API\n    baseURL: https://api.segment.io\n    tags:\n      - Analytics\n      - Email\n      - Pixel\n      - Tracking\n    serviceName: Segment Pixel Tracking API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://www.twilio.com/en-us/pricing/customer-data
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Twilio Segment\nproviderId: segment\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Customer Data Platform\ndescription: FOCUS-aligned FinOps for Twilio Segment.\nsources:\n  - https://www.twilio.com/en-us/pricing/customer-data\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Twilio Segment\nserviceCategory: Customer Data Platform\nbillingModel:\n  pricingCategory: MTU + Event-Based (custom contract)\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Twilio Segment\n  ServiceCategory: Customer Data Platform\n  ProviderName: Twilio Segment\n  PublisherName: Twilio Segment\n  BillingCurrency: USD\n\
+  meters:\n  - name: monthly_tracked_users\n    unit: MTU\n    aggregation: max\n  - name: tracked_events\n    unit: event\n    aggregation: sum\n    dimensions:\n      - source\n  - name: destinations_active\n    unit: destination-month\n    aggregation: max\n  - name: function_invocations\n    unit: invocation\n    aggregation: sum\n  - name: reverse_etl_rows\n    unit: row\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Track Twilio Segment consumption monthly via admin/billing exports.\n  - name: Allocation\n    description: Tag seats/usage to teams or cost centers for chargeback.\n  - name: Optimization\n    description: Right-size tier and seat count quarterly; reclaim inactive seats.\n  - name: Accountability\n    description: Set spend alerts and renew at observed active utilization.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/segment/refs/heads/main/finops/segment-finops.yml
-sources: []
+sources:
+- https://www.twilio.com/en-us/pricing/customer-data
 specification: FinOps Framework
 tags:
 - FinOps
-- Cost Management
 - FOCUS
+- Customer Data Platform
 ---

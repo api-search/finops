@@ -126,68 +126,103 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Deel API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Tax
+  pricingCategory: Subscription Per Seat
+description: Deel's commercial billing model is predominantly per-worker-month pricing across Contractor, EOR, US PEO, Global/US Payroll, Deel HR, and Deel IT product lines, with pass-through costs for benefits, immigration, and recruitment events. This artifact maps Deel charges to FOCUS columns for FinOps allocation and reporting.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
   InvoiceIssuerName: Deel
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Deel
   PublisherName: Deel
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: HR
   ServiceName: Deel
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Active contractors managed under Deel Contractor or CoR plans.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - legal_entity
+  - country
+  - cost_center
+  name: contractor_seats
+  unit: contractor-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Active EOR employees billed at Standard or Enterprise tier.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
+  - country
   - tier
-  name: compute_seconds
-  unit: second
+  - cost_center
+  name: eor_seats
+  unit: employee-month
+- aggregation: sum
+  description: Active US PEO co-employees.
+  dimensions:
+  - state
+  - cost_center
+  name: us_peo_seats
+  unit: employee-month
+- aggregation: sum
+  description: Active employees on Deel Global or US managed payroll.
+  dimensions:
+  - country
+  - cost_center
+  name: managed_payroll_seats
+  unit: employee-month
+- aggregation: sum
+  description: Active employees with Deel HR Core / Recruit / Develop / Full bundles.
+  dimensions:
+  - module
+  - cost_center
+  name: hr_module_seats
+  unit: employee-month
+- aggregation: sum
+  description: Active users on Deel IT plans (Platform / Starter / Growth / Scale).
+  dimensions:
+  - tier
+  - cost_center
+  name: it_seats
+  unit: user-month
+- aggregation: sum
+  description: MDM, endpoint protection, and device lifecycle management add-ons.
+  dimensions:
+  - service
+  - cost_center
+  name: device_management
+  unit: device-month
+- aggregation: count
+  description: One-time recruitment fees for sourced hires.
+  dimensions:
+  - role
+  - country
+  name: per_hire_fees
+  unit: hires
+- aggregation: sum
+  description: Benefits premiums, immigration filings, background checks, and equipment costs.
+  dimensions:
+  - service
+  - country
+  name: pass_through_costs
+  unit: events
 name: Deel Finops
 provider_name: Deel
 provider_slug: deel
 publisher_name: Deel
-service_category: API
+service_category: HR
 slug: deel-finops
 source_filename: deel-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Deel\nproviderId: deel\npublisherName: Deel\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - HR\n  - Payroll\n  - Global Hiring\n  - EOR\n  - Contractors\n  - Compliance\n  - SCIM\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Deel API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Deel\n  ServiceCategory: Developer Tools / API\n  ProviderName: Deel\n  PublisherName: Deel\n  InvoiceIssuerName: Deel\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      -\
-  \ api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Deel People API\n    baseURL: ''\n    tags:\n      - People\n      - Workers\n      - Employees\n    serviceName: Deel People API\n    serviceCategory: API\n  - name: Deel Organizations API\n    baseURL: ''\n    tags:\n      - Organizations\n      - Teams\n      - Departments\n      - Locations\n    serviceName: Deel Organizations API\n    serviceCategory: API\n  - name: Deel Contracts API\n    baseURL: ''\n    tags:\n      - Contracts\n      - Agreements\n      - Documents\n    serviceName: Deel Contracts API\n    serviceCategory: API\n  - name: Deel Time Off API\n    baseURL: ''\n    tags:\n      - Time Off\n      - Leave\n      - PTO\n      - Holidays\n    serviceName: Deel Time Off API\n    serviceCategory: API\n  - name:\
-  \ Deel Time Tracking API\n    baseURL: ''\n    tags:\n      - Time Tracking\n      - Timesheets\n      - Shifts\n    serviceName: Deel Time Tracking API\n    serviceCategory: API\n  - name: Deel Payroll API\n    baseURL: ''\n    tags:\n      - Payroll\n      - Payslips\n      - Adjustments\n    serviceName: Deel Payroll API\n    serviceCategory: API\n  - name: Deel Invoices API\n    baseURL: ''\n    tags:\n      - Invoices\n      - Adjustments\n      - Milestones\n      - Tasks\n    serviceName: Deel Invoices API\n    serviceCategory: API\n  - name: Deel Expenses API\n    baseURL: ''\n    tags:\n      - Expenses\n      - Reimbursements\n    serviceName: Deel Expenses API\n    serviceCategory: API\n  - name: Deel EOR API\n    baseURL: ''\n    tags:\n      - EOR\n      - Global Hiring\n      - Benefits\n      - Onboarding\n    serviceName: Deel EOR API\n    serviceCategory: API\n  - name: Deel Background Checks API\n    baseURL: ''\n    tags:\n      - Background Checks\n      - KYC\n   \
-  \   - Verification\n    serviceName: Deel Background Checks API\n    serviceCategory: API\n  - name: Deel Immigration API\n    baseURL: ''\n    tags:\n      - Immigration\n      - Mobility\n      - Visas\n    serviceName: Deel Immigration API\n    serviceCategory: API\n  - name: Deel IT API\n    baseURL: ''\n    tags:\n      - IT\n      - Devices\n      - Equipment\n      - MDM\n    serviceName: Deel IT API\n    serviceCategory: API\n  - name: Deel SCIM API\n    baseURL: ''\n    tags:\n      - SCIM\n      - Identity\n      - Provisioning\n    serviceName: Deel SCIM API\n    serviceCategory: API\n  - name: Deel ATS API\n    baseURL: ''\n    tags:\n      - ATS\n      - Recruiting\n      - Candidates\n    serviceName: Deel ATS API\n    serviceCategory: API\n  - name: Deel Accounting API\n    baseURL: ''\n    tags:\n      - Accounting\n      - GL\n      - Invoices\n    serviceName: Deel Accounting API\n    serviceCategory: API\n  - name: Deel Lookups API\n    baseURL: ''\n    tags:\n     \
-  \ - Lookups\n      - Reference Data\n      - Countries\n      - Currencies\n    serviceName: Deel Lookups API\n    serviceCategory: API\n  - name: Deel Webhooks API\n    baseURL: ''\n    tags:\n      - Webhooks\n      - Events\n    serviceName: Deel Webhooks API\n    serviceCategory: API\n  - name: Deel OAuth & Apps API\n    baseURL: ''\n    tags:\n      - OAuth\n      - Apps\n      - Marketplace\n    serviceName: Deel OAuth & Apps API\n    serviceCategory: API\n  - name: Deel MCP Server\n    baseURL: ''\n    tags:\n      - MCP\n      - AI Agents\n    serviceName: Deel MCP Server\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.deel.com/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Deel\nproviderId: deel\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n  - HR\n  - Payroll\n  - Global Hiring\n  - EOR\n  - Contractors\n  - FinOps\n  - FOCUS\ndescription: >-\n  Deel's commercial billing model is predominantly per-worker-month pricing\n  across Contractor, EOR, US PEO, Global/US Payroll, Deel HR, and Deel IT\n  product lines, with pass-through costs for benefits, immigration, and\n  recruitment events. This artifact maps Deel charges to FOCUS columns for\n  FinOps allocation and reporting.\nsources:\n  - https://www.deel.com/pricing/\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
+  \ Deel\nserviceCategory: HR\nbillingModel:\n  pricingCategory: Subscription Per Seat\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\n    - Tax\nfocusColumns:\n  ServiceName: Deel\n  ServiceCategory: HR\n  ProviderName: Deel\n  PublisherName: Deel\n  InvoiceIssuerName: Deel\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: contractor_seats\n    description: Active contractors managed under Deel Contractor or CoR plans.\n    unit: contractor-month\n    aggregation: sum\n    dimensions:\n      - legal_entity\n      - country\n      - cost_center\n  - name: eor_seats\n    description: Active EOR employees billed at Standard or Enterprise tier.\n    unit: employee-month\n    aggregation: sum\n    dimensions:\n      - country\n      - tier\n      - cost_center\n  - name: us_peo_seats\n    description: Active US PEO co-employees.\n    unit: employee-month\n    aggregation: sum\n    dimensions:\n     \
+  \ - state\n      - cost_center\n  - name: managed_payroll_seats\n    description: Active employees on Deel Global or US managed payroll.\n    unit: employee-month\n    aggregation: sum\n    dimensions:\n      - country\n      - cost_center\n  - name: hr_module_seats\n    description: Active employees with Deel HR Core / Recruit / Develop / Full bundles.\n    unit: employee-month\n    aggregation: sum\n    dimensions:\n      - module\n      - cost_center\n  - name: it_seats\n    description: Active users on Deel IT plans (Platform / Starter / Growth / Scale).\n    unit: user-month\n    aggregation: sum\n    dimensions:\n      - tier\n      - cost_center\n  - name: device_management\n    description: MDM, endpoint protection, and device lifecycle management add-ons.\n    unit: device-month\n    aggregation: sum\n    dimensions:\n      - service\n      - cost_center\n  - name: per_hire_fees\n    description: One-time recruitment fees for sourced hires.\n    unit: hires\n    aggregation: count\n\
+  \    dimensions:\n      - role\n      - country\n  - name: pass_through_costs\n    description: Benefits premiums, immigration filings, background checks, and equipment costs.\n    unit: events\n    aggregation: sum\n    dimensions:\n      - service\n      - country\nprinciples:\n  - name: Visibility\n    description: >-\n      Pull Deel monthly invoices and usage exports; tag invoice line items by\n      legal entity, country, and cost center for attribution.\n  - name: Allocation\n    description: >-\n      Allocate per-seat charges to consuming business units via cost-center\n      tags; allocate pass-through costs (benefits, immigration) to the worker\n      and team.\n  - name: Optimization\n    description: >-\n      Audit headcount monthly to remove inactive contractors and right-size\n      EOR vs. local entity vs. CoR options; consolidate HR module bundles.\n  - name: Accountability\n    description: >-\n      Assign a Deel contract owner; review billing against negotiated terms,\n\
+  \      especially Enterprise EOR thresholds and bundle discounts.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/deel/refs/heads/main/finops/deel-finops.yml
-sources: []
+sources:
+- https://www.deel.com/pricing/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - HR
@@ -195,9 +230,6 @@ tags:
 - Global Hiring
 - EOR
 - Contractors
-- Compliance
-- SCIM
 - FinOps
-- Cost Management
 - FOCUS
 ---

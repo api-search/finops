@@ -14,76 +14,51 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/lowes/refs/heads/main/openapi/lowes-product-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Contract
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Lowe's API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Contract
+description: 'FOCUS-aligned FinOps stub for Lowe''s: APIs are partner-contracted rather than publicly priced; FinOps treatment is contract-driven with negotiated meters per integration.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Lowe's
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Lowe's Companies, Inc.
   ProviderName: Lowe's
-  PublisherName: Lowe's
-  ServiceCategory: Developer Tools / API
-  ServiceName: Lowe's
+  PublisherName: Lowe's Companies, Inc.
+  ServiceCategory: Retail
+  ServiceName: Lowe's APIs
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - integration
+  - partner
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - integration
+  name: contracted_volume
+  unit: varies
 name: Lowes Finops
 provider_name: Lowe's
 provider_slug: lowes
-publisher_name: Lowe's
-service_category: API
+publisher_name: Lowe's Companies, Inc.
+service_category: Retail
 slug: lowes-finops
 source_filename: lowes-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Lowe's\nproviderId: lowes\npublisherName: Lowe's\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Ecommerce\n  - Home Improvement\n  - Products\n  - Retail\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Lowe's API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Lowe's\n  ServiceCategory: Developer Tools / API\n  ProviderName: Lowe's\n  PublisherName: Lowe's\n  InvoiceIssuerName: Lowe's\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n     \
-  \ - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Lowe's Product API\n    baseURL: https://apis.lowes.com\n    tags:\n      - Ecommerce\n      - Home Improvement\n      - Inventory\n      - Products\n      - Retail\n      - Stores\n    serviceName: Lowe's Product API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.lowes.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Lowe's\nproviderId: lowes\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Retail\ndescription: 'FOCUS-aligned FinOps stub for Lowe''s: APIs are partner-contracted rather than publicly\n  priced; FinOps treatment is contract-driven with negotiated meters per integration.'\nsources:\n  - https://www.lowes.com\nnotes: No public pricing / billing documentation; values are contract-driven scaffold pointers.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Lowe's Companies, Inc.\nserviceCategory: Retail\nbillingModel:\n  pricingCategory: Contract\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n\
+  \    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Lowe's APIs\n  ServiceCategory: Retail\n  ProviderName: Lowe's\n  PublisherName: Lowe's Companies, Inc.\n  InvoiceIssuerName: Lowe's Companies, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - integration\n      - partner\n  - name: contracted_volume\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - integration\nprinciples:\n  - name: Visibility\n    description: Track partner-API consumption against contracted volume; reconcile against monthly\n      partner statements.\n  - name: Allocation\n    description: Tag requests by integration program (supplier, marketplace, fulfillment) for partner-side\n      chargeback.\n  - name: Optimization\n    description: Batch supplier feeds and marketplace updates; cache product data on the partner side to\n      stay within contracted volumes.\n  - name: Accountability\n    description: Partner-side\
+  \ owners reconcile contract terms quarterly; escalate variances through the\n      Lowe's partner team.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/lowes/refs/heads/main/finops/lowes-finops.yml
-sources: []
+sources:
+- https://www.lowes.com
 specification: FinOps Framework
 tags:
-- Ecommerce
-- Home Improvement
-- Products
-- Retail
 - FinOps
-- Cost Management
 - FOCUS
+- Retail
 ---

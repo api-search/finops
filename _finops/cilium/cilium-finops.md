@@ -26,78 +26,74 @@ api_specs:
   url: https://github.com/cilium/cilium/blob/main/api/v1/operator/openapi.yaml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: N/A (upstream) / Annual (Isovalent Enterprise)
   chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Cilium API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Purchase
+  pricingCategory: Open Source (Optional Commercial Subscription)
+description: 'FOCUS-aligned FinOps for Cilium: the upstream project itself is free (Apache 2.0). The cost surface is internal — compute / memory consumed by cilium-agent, Hubble, Hubble Relay, and Tetragon DaemonSets in customer clusters, plus the optional Isovalent Enterprise subscription (Cisco) for organizations that want a supported distribution. There is no metered billing surface exposed by Cilium itself.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Cilium
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Cilium
-  PublisherName: Cilium
-  ServiceCategory: Developer Tools / API
+  ChargeCategory: Adjustment
+  InvoiceIssuerName: N/A (upstream); Cisco / Isovalent for Enterprise
+  PricingCategory: Open Source
+  ProviderName: Cilium / CNCF
+  PublisherName: Cilium Authors / CNCF
+  ServiceCategory: Cloud Native Networking & Security
   ServiceName: Cilium
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: vCPU and RAM consumed by cilium-agent DaemonSets across cluster nodes
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - cluster
+  - node_pool
+  name: agent_overhead
+  unit: vCPU-hour
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Resources consumed by Hubble and Hubble Relay (observability stack)
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - cluster
+  name: hubble_overhead
+  unit: vCPU-hour
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Resources consumed by Tetragon DaemonSets (runtime security)
   dimensions:
-  - api
-  - endpoint
+  - cluster
+  name: tetragon_overhead
+  unit: vCPU-hour
+- aggregation: sum
+  description: Optional Isovalent Enterprise / Cisco subscription line (when purchased)
+  dimensions:
   - tier
-  name: compute_seconds
-  unit: second
+  name: enterprise_subscription
+  unit: month
 name: Cilium Finops
 provider_name: Cilium
 provider_slug: cilium
-publisher_name: Cilium
-service_category: API
+publisher_name: Cilium Authors / CNCF
+service_category: Cloud Native Networking & Security
 slug: cilium-finops
 source_filename: cilium-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Cilium\nproviderId: cilium\npublisherName: Cilium\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud Native\n  - eBPF\n  - Kubernetes\n  - Networking\n  - Security\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Cilium API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
-  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
-  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Cilium\n  ServiceCategory: Developer Tools / API\n  ProviderName: Cilium\n  PublisherName: Cilium\n  InvoiceIssuerName: Cilium\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n\
-  \      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Cilium API\n    baseURL: https://localhost/v1\n    tags:\n      - eBPF\n      - Kubernetes\n      - Networking\n      - Security\n    serviceName: Cilium API\n    serviceCategory: API\n  - name: Hubble API\n    baseURL: ''\n    tags:\n      - eBPF\n      - Kubernetes\n      - Networking\n      - Observability\n    serviceName: Hubble API\n    serviceCategory: API\n  - name: Tetragon API\n    baseURL: ''\n    tags:\n      - eBPF\n      - Kubernetes\n      - Observability\n      - Security\n    serviceName: Tetragon API\n    serviceCategory: API\n  - name: Cilium Operator API\n    baseURL: https://localhost/v1\n    tags:\n      - eBPF\n      - Kubernetes\n      - Networking\n      - Operations\n    serviceName: Cilium Operator API\n\
-  \    serviceCategory: API\n  - name: Hubble Relay API\n    baseURL: ''\n    tags:\n      - gRPC\n      - Kubernetes\n      - Networking\n      - Observability\n    serviceName: Hubble Relay API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://cilium.io/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Cilium\nproviderId: cilium\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Cloud Native\n  - eBPF\n  - Kubernetes\n  - Networking\n  - Open Source\n  - Security\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Cilium: the upstream project itself is free (Apache 2.0). The\n  cost surface is internal — compute / memory consumed by cilium-agent, Hubble, Hubble Relay, and\n  Tetragon DaemonSets in customer clusters, plus the optional Isovalent Enterprise subscription\n  (Cisco) for organizations that want a supported distribution. There is no metered billing surface\n  exposed by Cilium itself.'\nnotes: Cilium is free and open source. Cost surfaces below describe internal infrastructure cost\n  (cluster overhead) and optional commercial subscription cost.\nsources:\n  - https://cilium.io/\n  - https://docs.cilium.io/\n  -\
+  \ https://isovalent.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Cilium Authors / CNCF\nserviceCategory: Cloud Native Networking & Security\nbillingModel:\n  pricingCategory: Open Source (Optional Commercial Subscription)\n  billingFrequency: N/A (upstream) / Annual (Isovalent Enterprise)\n  billingCurrency: USD\n  chargeCategories:\n    - Adjustment\n    - Purchase\nfocusColumns:\n  ServiceName: Cilium\n  ServiceCategory: Cloud Native Networking & Security\n  ProviderName: Cilium / CNCF\n  PublisherName: Cilium Authors / CNCF\n  InvoiceIssuerName: N/A (upstream); Cisco / Isovalent for Enterprise\n  BillingCurrency: USD\n  ChargeCategory: Adjustment\n  PricingCategory: Open Source\nmeters:\n  - name: agent_overhead\n    description: vCPU and RAM consumed by cilium-agent DaemonSets across cluster\
+  \ nodes\n    unit: vCPU-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - node_pool\n  - name: hubble_overhead\n    description: Resources consumed by Hubble and Hubble Relay (observability stack)\n    unit: vCPU-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n  - name: tetragon_overhead\n    description: Resources consumed by Tetragon DaemonSets (runtime security)\n    unit: vCPU-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n  - name: enterprise_subscription\n    description: Optional Isovalent Enterprise / Cisco subscription line (when purchased)\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\nprinciples:\n  - name: Visibility\n    description: Track Cilium's cluster overhead through Kubernetes resource usage (cAdvisor,\n      kube-state-metrics, Prometheus) and tag DaemonSet cost back to platform engineering.\n  - name: Allocation\n    description: Allocate Cilium overhead to the platform / networking cost center;\
+  \ allocate\n      Hubble / Tetragon overhead to the security observability team if separately funded.\n  - name: Optimization\n    description: Tune Hubble flow retention, Tetragon policy footprint, and cilium-agent memory\n      limits to reduce per-node overhead; only enable Cluster Mesh and advanced features where they\n      pay back in security or operational simplification.\n  - name: Accountability\n    description: Platform engineering owns Cilium runtime cost and version cadence; security owns\n      Tetragon policy; finance reviews any Isovalent Enterprise subscription against the value\n      delivered (support, hardening, certified releases).\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cilium/refs/heads/main/finops/cilium-finops.yml
-sources: []
+sources:
+- https://cilium.io/
+- https://docs.cilium.io/
+- https://isovalent.com/
 specification: FinOps Framework
 tags:
 - Cloud Native
 - eBPF
 - Kubernetes
 - Networking
+- Open Source
 - Security
 - FinOps
-- Cost Management
 - FOCUS
 ---

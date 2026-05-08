@@ -50,74 +50,71 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/automation-anywhere/refs/heads/main/openapi/automation-anywhere-repository-management-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
+  - Adjustment
   - Tax
   - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the automation-anywhere API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription
+description: 'FOCUS-aligned FinOps for Automation Anywhere: subscription-based platform license sized by edition and licensed bot count, with separately licensed AI Agent Studio and Document Automation add-ons.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: automation-anywhere
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: automation-anywhere
-  PublisherName: automation-anywhere
-  ServiceCategory: Developer Tools / API
-  ServiceName: automation-anywhere
+  InvoiceIssuerName: Automation Anywhere, Inc.
+  ProviderName: Automation Anywhere
+  PublisherName: Automation Anywhere, Inc.
+  ServiceCategory: RPA / Intelligent Automation
+  ServiceName: Automation Anywhere
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - bot_type
+  - edition
+  name: licensed_bots
+  unit: bot
+- aggregation: sum
+  dimensions:
+  - edition
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: control_room_subscription
+  unit: month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - model
+  - bot
+  name: ai_agent_studio_usage
+  unit: invocation
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - document_type
+  name: document_automation_pages
+  unit: page
+- aggregation: max
+  name: copilot_seats
+  unit: seat
 name: Automation Anywhere Finops
 provider_name: automation-anywhere
 provider_slug: automation-anywhere
-publisher_name: automation-anywhere
-service_category: API
+publisher_name: Automation Anywhere, Inc.
+service_category: RPA / Intelligent Automation
 slug: automation-anywhere-finops
 source_filename: automation-anywhere-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: automation-anywhere\nproviderId: automation-anywhere\npublisherName: automation-anywhere\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the automation-anywhere API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
-  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
-  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: automation-anywhere\n  ServiceCategory: Developer Tools / API\n  ProviderName: automation-anywhere\n  PublisherName: automation-anywhere\n  InvoiceIssuerName: automation-anywhere\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
-  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Automation Anywhere Control Room API\n    baseURL: https://automationanywhere-be-prod.automationanywhere.com\n    tags:\n      - Automation\n      - Bot Management\n      - Enterprise\n      - REST\n      - RPA\n    serviceName: Automation Anywhere Control Room API\n    serviceCategory: API\n  - name: Automation Anywhere Bot Deploy API\n    baseURL: https://automationanywhere-be-prod.automationanywhere.com\n    tags:\n      - Automation\n      - Bot Deployment\n      - Enterprise\n      - Orchestration\n      - RPA\n    serviceName: Automation Anywhere Bot Deploy API\n    serviceCategory: API\n  - name: Automation Anywhere Workload Management API\n    baseURL: https://automationanywhere-be-prod.automationanywhere.com\n\
-  \    tags:\n      - Automation\n      - Queues\n      - RPA\n      - Work Items\n      - Workload Management\n    serviceName: Automation Anywhere Workload Management API\n    serviceCategory: API\n  - name: Automation Anywhere Bot Insight API\n    baseURL: https://automationanywhere-be-prod.automationanywhere.com\n    tags:\n      - Analytics\n      - Bot Monitoring\n      - Business Intelligence\n      - Reporting\n      - RPA\n    serviceName: Automation Anywhere Bot Insight API\n    serviceCategory: API\n  - name: Automation Anywhere API Task Execution API\n    baseURL: https://automationanywhere-be-prod.automationanywhere.com\n    tags:\n      - API Task\n      - Automation\n      - Bot Execution\n      - Integration\n      - RPA\n    serviceName: Automation Anywhere API Task Execution API\n    serviceCategory: API\n  - name: Automation Anywhere Credential Vault API\n    baseURL: https://automationanywhere-be-prod.automationanywhere.com\n    tags:\n      - Credentials\n      - Enterprise\n\
-  \      - RPA\n      - Secrets Management\n      - Security\n    serviceName: Automation Anywhere Credential Vault API\n    serviceCategory: API\n  - name: Automation Anywhere Package SDK\n    baseURL: https://api.example.com\n    tags:\n      - Bot Development\n      - Custom Packages\n      - Extensions\n      - Java\n      - SDK\n    serviceName: Automation Anywhere Package SDK\n    serviceCategory: API\n  - name: Automation Anywhere Repository Management API\n    baseURL: https://automationanywhere-be-prod.automationanywhere.com\n    tags:\n      - Bot Lifecycle\n      - DevOps\n      - File Management\n      - Repository\n      - RPA\n    serviceName: Automation Anywhere Repository Management API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://www.automationanywhere.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Automation Anywhere\nproviderId: automation-anywhere\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nnotes: Automation Anywhere pricing is not publicly posted; this artifact models the FinOps shape of an\n  Automation 360 deployment. Per-edition prices and bot counts come from the customer's signed order\n  form.\ntags:\n  - FinOps\n  - FOCUS\n  - RPA\n  - Intelligent Automation\ndescription: 'FOCUS-aligned FinOps for Automation Anywhere: subscription-based platform license sized\n  by edition and licensed bot count, with separately licensed AI Agent Studio and Document Automation\n  add-ons.'\nsources:\n  - https://www.automationanywhere.com/\n  - https://www.automationanywhere.com/products/automation-360\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
+  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Automation Anywhere, Inc.\nserviceCategory: RPA / Intelligent Automation\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\n    - Tax\n    - Credit\nfocusColumns:\n  ServiceName: Automation Anywhere\n  ServiceCategory: RPA / Intelligent Automation\n  ProviderName: Automation Anywhere\n  PublisherName: Automation Anywhere, Inc.\n  InvoiceIssuerName: Automation Anywhere, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: licensed_bots\n    unit: bot\n    aggregation: max\n    dimensions:\n      - bot_type\n      - edition\n  - name: control_room_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - edition\n      - region\n  - name: ai_agent_studio_usage\n    unit: invocation\n    aggregation: sum\n    dimensions:\n      - model\n      - bot\n  - name: document_automation_pages\n\
+  \    unit: page\n    aggregation: sum\n    dimensions:\n      - document_type\n  - name: copilot_seats\n    unit: seat\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Use the Control Room's Bot Insight dashboards and the Activity API to see bot run\n      counts, durations, and queue throughput. Match against the order-form bot allocation to detect\n      under-utilization.\n  - name: Allocation\n    description: Tag bots and queues by business unit / process owner; chargeback by attributing bot\n      run minutes to the requesting team.\n  - name: Optimization\n    description: Right-size by retiring idle bots, consolidating attended licenses where the same user\n      uses multiple, and using AI Agent Studio for long-tail processes instead of dedicated bots.\n  - name: Accountability\n    description: Center of Excellence (CoE) typically owns Automation Anywhere spend; bot owners are\n      named on each automation and review utilization quarterly.\nmaintainers:\n\
+  \  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/automation-anywhere/refs/heads/main/finops/automation-anywhere-finops.yml
-sources: []
+sources:
+- https://www.automationanywhere.com/
+- https://www.automationanywhere.com/products/automation-360
 specification: FinOps Framework
 tags:
 - FinOps
-- Cost Management
 - FOCUS
+- RPA
+- Intelligent Automation
 ---

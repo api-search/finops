@@ -94,89 +94,78 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Abstract API API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  - Credit
+  pricingCategory: Tiered Subscription
+description: FOCUS-aligned FinOps for Abstract API — tiered subscription with selectable monthly request volume per product. Each product (email, phone, IP, company) is a separate billable line and meter.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Abstract API
-  PricingCategory: Usage-Based
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Abstract API, Inc.
+  PricingCategory: Tiered Subscription
   PricingUnit: request
   ProviderName: Abstract API
-  PublisherName: Abstract API
-  ServiceCategory: Developer Tools / API
+  PublisherName: Abstract API, Inc.
+  ServiceCategory: Data Validation / Enrichment
   ServiceName: Abstract API
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Selected monthly request volume for the active plan/product (e.g., 5k, 25k, 150k).
   dimensions:
-  - api
-  - endpoint
+  - product
+  - plan
   - tier
-  - region
-  - consumer
-  name: api_requests
+  name: monthly_request_quota
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Actual request count made against the API key, drawn from the monthly quota.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - product
+  - api_key
+  - status_code
+  name: requests_consumed
+  unit: request
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Count of 429 throttled responses (signals that the 3 req/sec ceiling is being hit).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - product
+  - api_key
+  name: rate_throttle_events
+  unit: event
+- aggregation: count
+  description: Monthly subscription line item for the active plan tier.
+  dimensions:
+  - product
+  - plan
+  name: plan_month
+  unit: month
 name: Abstract Api Finops
 provider_name: Abstract API
 provider_slug: abstract-api
-publisher_name: Abstract API
-service_category: API
+publisher_name: Abstract API, Inc.
+service_category: Data Validation / Enrichment
 slug: abstract-api-finops
 source_filename: abstract-api-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Abstract API\nproviderId: abstract-api\npublisherName: Abstract API\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Avatars\n  - Company Enrichment\n  - Contacts\n  - Currencies\n  - Email Validation\n  - Exchange Rates\n  - IBAN Validation\n  - Image Processing\n  - IP Geolocation\n  - IP Intelligence\n  - Phone Validation\n  - Public Holidays\n  - Screenshots\n  - Timezones\n  - VAT Validation\n  - Web Scraping\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Abstract API API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's\
-  \ APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n\
-  \    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Abstract API\n  ServiceCategory: Developer Tools / API\n  ProviderName: Abstract API\n  PublisherName: Abstract API\n  InvoiceIssuerName: Abstract API\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit:\
-  \ request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Email Reputation API\n    baseURL: https://emailreputation.abstractapi.com/v1/\n    tags:\n      - Email Validation\n      - Email Reputation\n      - Fraud Detection\n    serviceName: Email Reputation API\n    serviceCategory: API\n  - name: Phone Intelligence API\n    baseURL: https://phoneintelligence.abstractapi.com/v1/\n    tags:\n      - Phone Validation\n      - Phone Intelligence\n      - Fraud Detection\n    serviceName: Phone Intelligence API\n\
-  \    serviceCategory: API\n  - name: IP Geolocation API\n    baseURL: https://ipgeolocation.abstractapi.com/v1/\n    tags:\n      - IP Geolocation\n      - IP Addresses\n      - Geolocation\n    serviceName: IP Geolocation API\n    serviceCategory: API\n  - name: IP Intelligence API\n    baseURL: https://ip-intelligence.abstractapi.com/v1/\n    tags:\n      - IP Intelligence\n      - IP Addresses\n      - Security\n      - Fraud Detection\n    serviceName: IP Intelligence API\n    serviceCategory: API\n  - name: Company Enrichment API\n    baseURL: https://companyenrichment.abstractapi.com/v1/\n    tags:\n      - Company Enrichment\n      - Business Data\n      - Data Enrichment\n    serviceName: Company Enrichment API\n    serviceCategory: API\n  - name: Exchange Rates API\n    baseURL: https://exchange-rates.abstractapi.com/v1/\n    tags:\n      - Currencies\n      - Exchange Rates\n      - Finance\n    serviceName: Exchange Rates API\n    serviceCategory: API\n  - name: Public Holidays\
-  \ API\n    baseURL: https://holidays.abstractapi.com/v1/\n    tags:\n      - Public Holidays\n      - Calendar\n      - Global Data\n    serviceName: Public Holidays API\n    serviceCategory: API\n  - name: Timezone API\n    baseURL: https://timezone.abstractapi.com/v1/\n    tags:\n      - Timezones\n      - Time\n      - Date\n      - Calendar\n    serviceName: Timezone API\n    serviceCategory: API\n  - name: VAT Validation API\n    baseURL: https://vat.abstractapi.com/v1/\n    tags:\n      - VAT Validation\n      - Finance\n      - Compliance\n      - Tax\n    serviceName: VAT Validation API\n    serviceCategory: API\n  - name: IBAN Validation API\n    baseURL: https://ibanvalidation.abstractapi.com/v1/\n    tags:\n      - IBAN Validation\n      - Finance\n      - Banking\n    serviceName: IBAN Validation API\n    serviceCategory: API\n  - name: Website Screenshot API\n    baseURL: https://screenshot.abstractapi.com/v1/\n    tags:\n      - Screenshots\n      - Web Capture\n      - Images\n\
-  \    serviceName: Website Screenshot API\n    serviceCategory: API\n  - name: Image Processing API\n    baseURL: https://images.abstractapi.com/v1/\n    tags:\n      - Image Processing\n      - Images\n      - Optimization\n    serviceName: Image Processing API\n    serviceCategory: API\n  - name: Web Scraping API\n    baseURL: https://scrape.abstractapi.com/v1/\n    tags:\n      - Web Scraping\n      - Data Extraction\n      - HTML\n    serviceName: Web Scraping API\n    serviceCategory: API\n  - name: Avatars API\n    baseURL: https://avatars.abstractapi.com/v1/\n    tags:\n      - Avatars\n      - Images\n      - User Interface\n    serviceName: Avatars API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.abstractapi.com/api/email-verification-validation-api
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Abstract API\nproviderId: abstract-api\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Data Validation\n  - Geolocation\n  - Email Verification\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for Abstract API — tiered subscription with selectable monthly request\n  volume per product. Each product (email, phone, IP, company) is a separate billable line and meter.\nsources:\n  - https://www.abstractapi.com/api/email-verification-validation-api\n  - https://docs.abstractapi.com/\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Abstract API, Inc.\nserviceCategory: Data Validation / Enrichment\n\
+  billingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\n    - Refund\n    - Credit\nfocusColumns:\n  ServiceName: Abstract API\n  ServiceCategory: Data Validation / Enrichment\n  ProviderName: Abstract API\n  PublisherName: Abstract API, Inc.\n  InvoiceIssuerName: Abstract API, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingCategory: Tiered Subscription\n  PricingUnit: request\nmeters:\n  - name: monthly_request_quota\n    description: Selected monthly request volume for the active plan/product (e.g., 5k, 25k, 150k).\n    unit: request\n    aggregation: max\n    dimensions:\n      - product\n      - plan\n      - tier\n  - name: requests_consumed\n    description: Actual request count made against the API key, drawn from the monthly quota.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - product\n      - api_key\n      - status_code\n\
+  \  - name: rate_throttle_events\n    description: Count of 429 throttled responses (signals that the 3 req/sec ceiling is being hit).\n    unit: event\n    aggregation: sum\n    dimensions:\n      - product\n      - api_key\n  - name: plan_month\n    description: Monthly subscription line item for the active plan tier.\n    unit: month\n    aggregation: count\n    dimensions:\n      - product\n      - plan\nprinciples:\n  - name: Visibility\n    description: Use the Abstract API dashboard's request-counter and the per-product usage page to track\n      consumption against the selected monthly volume tier.\n  - name: Allocation\n    description: Issue separate API keys per product / service / environment so requests can be attributed\n      to consuming applications when reconciling the monthly invoice.\n  - name: Optimization\n    description: Cache validation results client-side (especially email and IP enrichment) to stay inside\n      the tier; right-size the monthly volume sub-tier\
+  \ each renewal cycle and switch to annual for the\n      10% discount when usage is steady.\n  - name: Accountability\n    description: Engineering owns API key issuance and caching; the consuming product team owns the monthly\n      request budget; finance owns the renewal decision and annual-vs-monthly billing trade-off.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/abstract-api/refs/heads/main/finops/abstract-api-finops.yml
-sources: []
+sources:
+- https://www.abstractapi.com/api/email-verification-validation-api
+- https://docs.abstractapi.com/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
-- Avatars
-- Company Enrichment
-- Contacts
-- Currencies
-- Email Validation
-- Exchange Rates
-- IBAN Validation
-- Image Processing
-- IP Geolocation
-- IP Intelligence
-- Phone Validation
-- Public Holidays
-- Screenshots
-- Timezones
-- VAT Validation
-- Web Scraping
+- Data Validation
+- Geolocation
+- Email Verification
 - FinOps
-- Cost Management
 - FOCUS
 ---

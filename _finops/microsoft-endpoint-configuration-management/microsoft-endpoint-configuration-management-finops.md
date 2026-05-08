@@ -37,77 +37,67 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Microsoft Endpoint Configuration Management API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription
+description: 'FOCUS-aligned FinOps for Microsoft Configuration Manager: per-user (Microsoft 365 / Intune) or per-device (System Center / Core CAL) subscription bundled with the Microsoft Intune family or an Enterprise Agreement; no per-call API charge.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Endpoint Configuration Management
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Microsoft Endpoint Configuration Management
-  PublisherName: Microsoft Endpoint Configuration Management
-  ServiceCategory: Developer Tools / API
-  ServiceName: Microsoft Endpoint Configuration Management
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Microsoft Corporation
+  ProviderName: Microsoft
+  PublisherName: Microsoft Corporation
+  ServiceCategory: Endpoint Management
+  ServiceName: Microsoft Configuration Manager
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Count of devices currently managed by a Configuration Manager site
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - site
+  - device_type
+  - os
+  name: managed_devices
+  unit: device
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Microsoft Intune Plan 1 seats granting Configuration Manager co-management rights
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  - tenant
+  - sku
+  name: intune_seats
+  unit: seat
+- aggregation: sum
+  description: Microsoft 365 E3 / E5 seats that include Configuration Manager + Intune entitlement
+  dimensions:
+  - tenant
+  - sku
+  name: m365_seats
+  unit: seat
+- aggregation: sum
+  description: Cloud Management Gateway data egress (Azure)
+  name: cmg_egress
   unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Microsoft Endpoint Configuration Management Finops
 provider_name: Microsoft Endpoint Configuration Management
 provider_slug: microsoft-endpoint-configuration-management
-publisher_name: Microsoft Endpoint Configuration Management
-service_category: API
+publisher_name: Microsoft Corporation
+service_category: Endpoint Management
 slug: microsoft-endpoint-configuration-management-finops
 source_filename: microsoft-endpoint-configuration-management-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Endpoint Configuration Management\nproviderId: microsoft-endpoint-configuration-management\npublisherName: Microsoft Endpoint Configuration Management\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Compliance\n  - Configuration Management\n  - Device Management\n  - Endpoint Management\n  - Mobile Device Management\n  - Patch Management\n  - Software Deployment\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Endpoint Configuration Management API surface.\n  Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting\n  across the provider's APIs.\n\
-  principles:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n\
-  \      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Endpoint Configuration Management\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Endpoint Configuration Management\n  PublisherName: Microsoft Endpoint Configuration Management\n  InvoiceIssuerName: Microsoft Endpoint Configuration Management\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory:\
-  \ Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Configuration Manager REST API\n    baseURL: https://{siteserver}/AdminService\n    tags:\n      - Admin Service\n      - Configuration Manager\n      - REST API\n    serviceName: Configuration Manager REST API\n    serviceCategory: API\n  - name: Configuration Manager PowerShell Cmdlets\n    baseURL: ''\n    tags:\n      - Automation\n      - Configuration\
-  \ Manager\n      - PowerShell\n      - Scripting\n    serviceName: Configuration Manager PowerShell Cmdlets\n    serviceCategory: API\n  - name: Configuration Manager SDK\n    baseURL: ''\n    tags:\n      - Configuration Manager\n      - Development\n      - SDK\n      - WMI\n    serviceName: Configuration Manager SDK\n    serviceCategory: API\n  - name: Microsoft Intune Graph API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Compliance\n      - Device Management\n      - Intune\n      - Microsoft Graph\n    serviceName: Microsoft Intune Graph API\n    serviceCategory: API\n  - name: Intune Data Warehouse API\n    baseURL: https://fef.{location}.manage.microsoft.com/ReportingService/DataWarehouseFEService\n    tags:\n      - Data Warehouse\n      - Intune\n      - OData\n      - Reporting\n    serviceName: Intune Data Warehouse API\n    serviceCategory: API\n  - name: Intune App SDK\n    baseURL: ''\n    tags:\n      - App Protection\n      - Intune\n      - Mobile\
-  \ Apps\n      - SDK\n    serviceName: Intune App SDK\n    serviceCategory: API\n  - name: Intune Reporting Export API\n    baseURL: https://graph.microsoft.com/v1.0/deviceManagement/reports\n    tags:\n      - Export\n      - Intune\n      - Microsoft Graph\n      - Reporting\n    serviceName: Intune Reporting Export API\n    serviceCategory: API\n  - name: Intune App Wrapping Tool\n    baseURL: ''\n    tags:\n      - Android\n      - App Protection\n      - Intune\n      - iOS\n      - Mobile Apps\n    serviceName: Intune App Wrapping Tool\n    serviceCategory: API\n  - name: Intune PowerShell SDK\n    baseURL: ''\n    tags:\n      - Automation\n      - Intune\n      - PowerShell\n      - SDK\n    serviceName: Intune PowerShell SDK\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN:\
-  \ Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://learn.microsoft.com/en-us/intune/configmgr/core/understand/configuration-manager-faq
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Endpoint Configuration Management\nproviderId: microsoft-endpoint-configuration-management\npublisherName: Microsoft Corporation\nserviceCategory: Endpoint Management\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Endpoint Management\n  - Configuration Manager\n  - Microsoft\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Microsoft Configuration Manager: per-user (Microsoft 365 / Intune)\n  or per-device (System Center / Core CAL) subscription bundled with the Microsoft Intune family or an\n  Enterprise Agreement; no per-call API charge.'\nsources:\n  - https://learn.microsoft.com/en-us/intune/configmgr/core/understand/configuration-manager-faq\n\
+  \  - https://www.microsoft.com/en-us/security/business/microsoft-intune-pricing\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Microsoft Configuration Manager\n  ServiceCategory: Endpoint Management\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: managed_devices\n    description: Count of devices currently managed by a Configuration Manager site\n    unit: device\n    aggregation: max\n    dimensions:\n      - site\n      - device_type\n      - os\n  - name: intune_seats\n    description: Microsoft Intune Plan 1 seats granting Configuration Manager co-management rights\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - tenant\n      - sku\n  - name: m365_seats\n    description: Microsoft\
+  \ 365 E3 / E5 seats that include Configuration Manager + Intune entitlement\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - tenant\n      - sku\n  - name: cmg_egress\n    description: Cloud Management Gateway data egress (Azure)\n    unit: GB\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Use the Configuration Manager console + AdminService REST API for on-prem inventory;\n      Microsoft 365 admin centre and Cost Management for the seat licences.\n  - name: Allocation\n    description: Tag managed devices with collection / OU / cost-centre; flow seat costs from Microsoft\n      365 admin centre to teams.\n  - name: Optimization\n    description: Consolidate Configuration Manager sites to reduce SQL and management-point footprint;\n      use co-management with Intune to retire legacy site servers; right-size the Cloud Management Gateway.\n  - name: Accountability\n    description: Endpoint engineering owns site-server health and CMG sizing; IT\
+  \ finance owns the M365\n      / Intune SKU mix.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-endpoint-configuration-management/refs/heads/main/finops/microsoft-endpoint-configuration-management-finops.yml
-sources: []
+sources:
+- https://learn.microsoft.com/en-us/intune/configmgr/core/understand/configuration-manager-faq
+- https://www.microsoft.com/en-us/security/business/microsoft-intune-pricing
 specification: FinOps Framework
 tags:
-- Compliance
-- Configuration Management
-- Device Management
 - Endpoint Management
-- Mobile Device Management
-- Patch Management
-- Software Deployment
+- Configuration Manager
+- Microsoft
 - FinOps
-- Cost Management
 - FOCUS
 ---

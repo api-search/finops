@@ -10,77 +10,73 @@ billing_model:
   billingFrequency: Monthly
   chargeCategories:
   - Usage
-  - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Citigroup API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  - Credit
+  pricingCategory: Take Rate + Per-Transaction Fees
+description: FOCUS-aligned FinOps shape for Citi's developer APIs. Cost is driven by Citi's underlying banking, payments, FX, and treasury services - APIs themselves are not separately metered; charges flow from per-transaction wire / ACH / FX fees and account-level service charges in the master cash- management agreement.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Citigroup
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Citigroup
-  PublisherName: Citigroup
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Citibank, N.A.
+  ProviderName: Citi
+  PublisherName: Citibank, N.A.
+  ServiceCategory: Banking
   ServiceName: Citigroup
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Wire / ACH / SWIFT payments initiated via CitiConnect / Citi Developer Hub APIs.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - rail
+  - currency
+  - geography
+  name: payment_transactions
+  unit: transaction
+- aggregation: sum
+  description: Notional FX volume executed via Citi Velocity APIs.
+  dimensions:
+  - currency_pair
+  - tenor
+  name: fx_volume
+  unit: notional
+- aggregation: max
+  description: Monthly account-level service charges (statement reporting, balance reporting, reconciliation files).
+  dimensions:
+  - account_type
+  - geography
+  name: account_services
+  unit: account-month
+- aggregation: sum
+  description: API call counts (informational; not directly billed).
+  dimensions:
+  - api_product
+  - environment
+  name: api_calls
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Citigroup Finops
 provider_name: Citigroup
 provider_slug: citigroup
-publisher_name: Citigroup
-service_category: API
+publisher_name: Citibank, N.A.
+service_category: Banking
 slug: citigroup-finops
 source_filename: citigroup-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Citigroup\nproviderId: citigroup\npublisherName: Citigroup\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Banking\n  - Financial Services\n  - FX\n  - Open Banking\n  - Payments\n  - Treasury\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Citigroup API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
-  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Citigroup\n  ServiceCategory: Developer Tools / API\n  ProviderName: Citigroup\n  PublisherName: Citigroup\n  InvoiceIssuerName: Citigroup\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n  \
-  \  aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Citi Accounts and Transactions API\n    baseURL: ''\n    tags:\n      - Accounts\n      - Balances\n      - Banking\n      - Statements\n      - Transactions\n    serviceName: Citi Accounts and Transactions API\n    serviceCategory: API\n  - name: Citi Money Movement API\n    baseURL: ''\n    tags:\n      - ACH\n      - Money Movement\n      - Payment Initiation\n      - Payments\n      - Wire Transfer\n    serviceName: Citi Money Movement API\n    serviceCategory: API\n  - name: Citi Authorize API\n    baseURL: ''\n    tags:\n      - Authorization\n      - Consent\n      - OAuth\n      - SCA\n    serviceName: Citi Authorize API\n    serviceCategory: API\n  - name: Citi Customers\
-  \ API\n    baseURL: ''\n    tags:\n      - Customers\n      - Identity\n      - KYC\n      - Profiles\n    serviceName: Citi Customers API\n    serviceCategory: API\n  - name: Citi Onboarding API\n    baseURL: ''\n    tags:\n      - Account Opening\n      - Customer Onboarding\n      - KYC\n      - Origination\n    serviceName: Citi Onboarding API\n    serviceCategory: API\n  - name: Citi Pay with Points API\n    baseURL: ''\n    tags:\n      - Loyalty\n      - Pay with Points\n      - Rewards\n    serviceName: Citi Pay with Points API\n    serviceCategory: API\n  - name: Citi Utilities API\n    baseURL: ''\n    tags:\n      - FX Rates\n      - Locator\n      - Reference Data\n      - Utilities\n    serviceName: Citi Utilities API\n    serviceCategory: API\n  - name: CitiConnect API\n    baseURL: ''\n    tags:\n      - CitiConnect\n      - Corporate Banking\n      - ERP Integration\n      - Treasury\n      - TTS\n    serviceName: CitiConnect API\n    serviceCategory: API\nunitEconomics:\n\
-  \  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://developer.citi.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Citigroup\nproviderId: citigroup\npublisherName: Citibank, N.A.\nserviceCategory: Banking\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Banking\n  - Financial Services\n  - Payments\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for Citi's developer APIs. Cost is driven by Citi's underlying\n  banking, payments, FX, and treasury services - APIs themselves are not separately metered; charges\n  flow from per-transaction wire / ACH / FX fees and account-level service charges in the master cash-\n  management agreement.\nnotes: Per-API meters below are placeholders that mirror typical Citi cash-management\
+  \ / payments line\n  items. Real billing arrives through bank account analysis statements rather than a developer\n  invoice.\nsources:\n  - https://developer.citi.com\n  - https://www.citibank.com/tts/sa/index.jsp\nbillingModel:\n  pricingCategory: Take Rate + Per-Transaction Fees\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Tax\n    - Adjustment\n    - Refund\n    - Credit\nfocusColumns:\n  ServiceName: Citigroup\n  ServiceCategory: Banking\n  ProviderName: Citi\n  PublisherName: Citibank, N.A.\n  InvoiceIssuerName: Citibank, N.A.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: payment_transactions\n    description: Wire / ACH / SWIFT payments initiated via CitiConnect / Citi Developer Hub APIs.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - rail\n      - currency\n      - geography\n  - name: fx_volume\n    description: Notional FX volume executed via Citi Velocity APIs.\n    unit: notional\n\
+  \    aggregation: sum\n    dimensions:\n      - currency_pair\n      - tenor\n  - name: account_services\n    description: Monthly account-level service charges (statement reporting, balance reporting,\n      reconciliation files).\n    unit: account-month\n    aggregation: max\n    dimensions:\n      - account_type\n      - geography\n  - name: api_calls\n    description: API call counts (informational; not directly billed).\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_product\n      - environment\nprinciples:\n  - name: Visibility\n    description: Use Citi's Account Analysis (Citi AccountLink / EDI 822) statements and the Citi\n      Developer Hub usage dashboard to track per-product API consumption alongside transaction fees.\n  - name: Allocation\n    description: Tag every API client / app to a Citi account number and business unit so wire / ACH\n      / FX line items can be attributed back to the consuming team.\n  - name: Optimization\n    description:\
+  \ Batch low-priority payments to lower per-transaction rails (ACH vs wire), reuse\n      OAuth tokens, and reduce intra-day balance-reporting polling cadence.\n  - name: Accountability\n    description: Treasury operations owns Citi service-fee budgets; partner integration owners are\n      accountable for clean reconciliation and exception management to avoid investigation fees.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/citigroup/refs/heads/main/finops/citigroup-finops.yml
-sources: []
+sources:
+- https://developer.citi.com
+- https://www.citibank.com/tts/sa/index.jsp
 specification: FinOps Framework
 tags:
 - Banking
 - Financial Services
-- FX
-- Open Banking
 - Payments
-- Treasury
 - FinOps
-- Cost Management
 - FOCUS
 ---

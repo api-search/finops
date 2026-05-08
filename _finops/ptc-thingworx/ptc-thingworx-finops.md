@@ -20,73 +20,46 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/ptc-thingworx/refs/heads/main/asyncapi/ptc-thingworx-websocket-asyncapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the ptc-thingworx API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription
+description: FOCUS-aligned FinOps shape for PTC ThingWorx — quote-based enterprise IoT platform license, not a metered API consumption surface.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: ptc-thingworx
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: ptc-thingworx
-  PublisherName: ptc-thingworx
-  ServiceCategory: Developer Tools / API
-  ServiceName: ptc-thingworx
+  InvoiceIssuerName: PTC Inc.
+  ProviderName: PTC
+  PublisherName: PTC Inc.
+  ServiceCategory: Industrial IoT Platform
+  ServiceName: ThingWorx
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: platform_subscription
+  unit: month
+- aggregation: max
+  name: connected_assets
+  unit: asset
 name: Ptc Thingworx Finops
 provider_name: ptc-thingworx
 provider_slug: ptc-thingworx
-publisher_name: ptc-thingworx
-service_category: API
+publisher_name: PTC Inc.
+service_category: Industrial IoT Platform
 slug: ptc-thingworx-finops
 source_filename: ptc-thingworx-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: ptc-thingworx\nproviderId: ptc-thingworx\npublisherName: ptc-thingworx\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the ptc-thingworx API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature\
-  \ so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n\
-  \      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: ptc-thingworx\n  ServiceCategory: Developer Tools / API\n  ProviderName: ptc-thingworx\n  PublisherName: ptc-thingworx\n  InvoiceIssuerName: ptc-thingworx\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
-  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: PTC ThingWorx REST API\n    baseURL: https://api.thingworx.example.com/Thingworx\n    tags:\n      - Digital Twin\n      - IoT\n      - Manufacturing\n      - REST\n    serviceName: PTC ThingWorx REST API\n    serviceCategory: API\n  - name: PTC ThingWorx WebSocket/AlwaysOn API\n    baseURL: https://api.thingworx.example.com\n    tags:\n      - IoT\n      - Manufacturing\n      - Real-Time\n      - WebSocket\n    serviceName: PTC ThingWorx WebSocket/AlwaysOn API\n    serviceCategory: API\n  - name: PTC Windchill REST API\n    baseURL: https://api.windchill.example.com\n    tags:\n      - CAD\n      - Manufacturing\n      - PDM\n      - PLM\n      - REST\n    serviceName: PTC Windchill REST API\n    serviceCategory: API\nunitEconomics:\n  - name:\
-  \ Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.ptc.com/en/products/thingworx
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: ptc-thingworx\nproviderId: ptc-thingworx\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - IoT\n  - Industrial\n  - Manufacturing\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for PTC ThingWorx — quote-based enterprise IoT platform license,\n  not a metered API consumption surface.\nnotes: ThingWorx is licensed by deployment and connected-asset count under a contract; there is no public\n  consumption-billing API.\nsources:\n  - https://www.ptc.com/en/products/thingworx\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: PTC Inc.\nserviceCategory: Industrial IoT Platform\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency:\
+  \ Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: ThingWorx\n  ServiceCategory: Industrial IoT Platform\n  ProviderName: PTC\n  PublisherName: PTC Inc.\n  InvoiceIssuerName: PTC Inc.\n  BillingCurrency: USD\nmeters:\n  - name: platform_subscription\n    unit: month\n    aggregation: sum\n  - name: connected_assets\n    unit: asset\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Cost visibility flows from the PTC subscription invoice plus the customer's own platform-sizing\n      and connected-asset telemetry inside ThingWorx.\n  - name: Allocation\n    description: Allocate by line of business, plant / site, and asset family using ThingWorx's own modeling\n      surface.\n  - name: Optimization\n    description: Right-size the deployment (CPU / memory / persistence provider), retire stale assets,\n      and renegotiate the licensed asset count at renewal.\n  - name: Accountability\n    description: Spend is owned\
+  \ by the OT / digital-thread / smart-manufacturing program that signs\n      the master license agreement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/ptc-thingworx/refs/heads/main/finops/ptc-thingworx-finops.yml
-sources: []
+sources:
+- https://www.ptc.com/en/products/thingworx
 specification: FinOps Framework
 tags:
+- IoT
+- Industrial
+- Manufacturing
 - FinOps
-- Cost Management
 - FOCUS
 ---

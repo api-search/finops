@@ -34,72 +34,71 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
+  - Adjustment
   - Tax
   - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the availity API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Per-Transaction
+description: 'FOCUS-aligned FinOps for Availity: two-sided market with payer-funded provider portal (zero cost to provider) plus per-transaction clearinghouse fees and subscription RCM/Pro tiers billed to trading partners.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: availity
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: availity
-  PublisherName: availity
-  ServiceCategory: Developer Tools / API
-  ServiceName: availity
+  InvoiceIssuerName: Availity, LLC
+  ProviderName: Availity
+  PublisherName: Availity, LLC
+  ServiceCategory: Healthcare Network / Clearinghouse
+  ServiceName: Availity
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - transaction_set
+  - payer
+  - real_time_or_batch
+  name: x12_transactions
+  unit: transaction
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - payer
+  name: eligibility_lookups
+  unit: lookup
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - payer
+  - line_of_business
+  name: claim_submissions
+  unit: claim
+- aggregation: sum
+  name: era_records
+  unit: record
+- aggregation: max
+  name: essentials_pro_seats
+  unit: seat
+- aggregation: sum
+  name: rcm_subscription
+  unit: month
 name: Availity Finops
 provider_name: availity
 provider_slug: availity
-publisher_name: availity
-service_category: API
+publisher_name: Availity, LLC
+service_category: Healthcare Network / Clearinghouse
 slug: availity-finops
 source_filename: availity-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: availity\nproviderId: availity\npublisherName: availity\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the availity API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n\
-  \  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n\
-  \      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: availity\n  ServiceCategory: Developer Tools / API\n  ProviderName: availity\n  PublisherName: availity\n  InvoiceIssuerName: availity\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description:\
-  \ Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Availity Eligibility & Benefits API\n    baseURL: https://api.availity.com\n    tags:\n      - Benefits\n      - EDI\n      - Eligibility\n      - Healthcare\n      - X12 270/271\n    serviceName: Availity Eligibility & Benefits API\n    serviceCategory: API\n  - name: Availity Claim Status API\n    baseURL: https://api.availity.com\n    tags:\n      - Claims\n      - Clearinghouse\n      - EDI\n      - Healthcare\n      - X12 276/277\n    serviceName: Availity Claim Status API\n    serviceCategory: API\n  - name: Availity Claim Attachments API\n    baseURL: https://api.availity.com\n    tags:\n      - Attachments\n      - Claims\n      - Clearinghouse\n      - EDI\n      - Healthcare\n    serviceName: Availity Claim Attachments API\n    serviceCategory: API\n  - name: Availity Service Reviews (Prior Authorization)\
-  \ API\n    baseURL: https://api.availity.com\n    tags:\n      - EDI\n      - Healthcare\n      - Prior Authorization\n      - Service Reviews\n      - X12 278\n    serviceName: Availity Service Reviews (Prior Authorization) API\n    serviceCategory: API\n  - name: Availity Healthcare HIPAA Transactions API\n    baseURL: https://api.availity.com\n    tags:\n      - Clearinghouse\n      - EDI\n      - Healthcare\n      - HIPAA\n    serviceName: Availity Healthcare HIPAA Transactions API\n    serviceCategory: API\n  - name: Availity Patient Cost Estimator API\n    baseURL: https://api.availity.com\n    tags:\n      - Cost Estimation\n      - Healthcare\n      - Patient Financial Responsibility\n      - Price Transparency\n    serviceName: Availity Patient Cost Estimator API\n    serviceCategory: API\n  - name: Availity Eligibility & Benefits Value-Add APIs\n    baseURL: https://api.availity.com\n    tags:\n      - Care Reminders\n      - EDI\n      - Eligibility\n      - Healthcare\n   \
-  \   - Member ID Card\n    serviceName: Availity Eligibility & Benefits Value-Add APIs\n    serviceCategory: API\n  - name: Availity Payer List API\n    baseURL: https://api.availity.com\n    tags:\n      - Clearinghouse\n      - Healthcare\n      - Payer Network\n      - Reference Data\n    serviceName: Availity Payer List API\n    serviceCategory: API\n  - name: Availity Configurations API\n    baseURL: https://api.availity.com\n    tags:\n      - Configuration\n      - Healthcare\n      - Payer Requirements\n      - Provider Validation\n    serviceName: Availity Configurations API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.availity.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Availity\nproviderId: availity\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nnotes: Availity pricing is two-sided. Provider-side Essentials is free (paid by health plans). Trading\n  partner / clearinghouse and Essentials Pro are quote-based. This artifact models both sides.\ntags:\n  - FinOps\n  - FOCUS\n  - Healthcare\n  - HIPAA\n  - X12 EDI\n  - Clearinghouse\ndescription: 'FOCUS-aligned FinOps for Availity: two-sided market with payer-funded provider portal\n  (zero cost to provider) plus per-transaction clearinghouse fees and subscription RCM/Pro tiers\n  billed to trading partners.'\nsources:\n  - https://www.availity.com/\n  - https://www.availity.com/products\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
+  publisherName: Availity, LLC\nserviceCategory: Healthcare Network / Clearinghouse\nbillingModel:\n  pricingCategory: Subscription + Per-Transaction\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\n    - Tax\n    - Credit\nfocusColumns:\n  ServiceName: Availity\n  ServiceCategory: Healthcare Network / Clearinghouse\n  ProviderName: Availity\n  PublisherName: Availity, LLC\n  InvoiceIssuerName: Availity, LLC\n  BillingCurrency: USD\nmeters:\n  - name: x12_transactions\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - transaction_set\n      - payer\n      - real_time_or_batch\n  - name: eligibility_lookups\n    unit: lookup\n    aggregation: sum\n    dimensions:\n      - payer\n  - name: claim_submissions\n    unit: claim\n    aggregation: sum\n    dimensions:\n      - payer\n      - line_of_business\n  - name: era_records\n    unit: record\n    aggregation: sum\n  - name: essentials_pro_seats\n\
+  \    unit: seat\n    aggregation: max\n  - name: rcm_subscription\n    unit: month\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Use the Availity reporting dashboards (Trading Partner reports, RCM dashboards) to\n      see transaction counts by payer and transaction set; reconcile against monthly invoices.\n  - name: Allocation\n    description: Allocate by line of business (medical vs dental vs vision), payer, and submitting\n      provider TIN; tag claims with internal cost-center / location codes.\n  - name: Optimization\n    description: Move from batch X12 to real-time eligibility for high-touch encounters; consolidate\n      vendor connections through Availity to drop redundant clearinghouse fees.\n  - name: Accountability\n    description: Revenue cycle director typically owns Availity spend; payer-relations team owns\n      configurations for participating health plans.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/availity/refs/heads/main/finops/availity-finops.yml
-sources: []
+sources:
+- https://www.availity.com/
+- https://www.availity.com/products
 specification: FinOps Framework
 tags:
 - FinOps
-- Cost Management
 - FOCUS
+- Healthcare
+- HIPAA
+- X12 EDI
+- Clearinghouse
 ---

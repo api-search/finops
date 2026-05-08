@@ -14,82 +14,77 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/ciena/refs/heads/main/openapi/ciena-blue-planet-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Project / Annual Support
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Ciena API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: License + Hardware + Services
+description: 'FOCUS-aligned FinOps for Ciena: telecom-vendor capex + opex shape. Network operators pay for hardware (optical / packet platforms), perpetual or term software licenses (Blue Planet, MCP), support, and professional services. APIs are bundled into the software entitlement and not separately metered.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Ciena
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Ciena Corporation
+  PricingCategory: License + Hardware
   ProviderName: Ciena
-  PublisherName: Ciena
-  ServiceCategory: Developer Tools / API
-  ServiceName: Ciena
+  PublisherName: Ciena Corporation
+  ServiceCategory: Network Infrastructure / SDN
+  ServiceName: Ciena Blue Planet / MCP
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Blue Planet or MCP software license line items
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - product
+  - sku
+  name: software_license
+  unit: license-year
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Optical and packet platform hardware purchases
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - platform
+  - site
+  name: hardware_capex
+  unit: chassis
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Annual support and maintenance contract
   dimensions:
-  - api
-  - endpoint
   - tier
-  name: compute_seconds
-  unit: second
+  - product
+  name: support_subscription
+  unit: month
+- aggregation: sum
+  description: Implementation, integration, and customization services
+  dimensions:
+  - project
+  name: professional_services
+  unit: hour
 name: Ciena Finops
 provider_name: Ciena
 provider_slug: ciena
-publisher_name: Ciena
-service_category: API
+publisher_name: Ciena Corporation
+service_category: Network Infrastructure / SDN
 slug: ciena-finops
 source_filename: ciena-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Ciena\nproviderId: ciena\npublisherName: Ciena\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - MEF\n  - NETCONF\n  - Network Automation\n  - Network Management\n  - Optical\n  - RESTCONF\n  - SDN\n  - Telecom\n  - TM Forum\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Ciena API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
-  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Ciena\n  ServiceCategory: Developer Tools / API\n  ProviderName: Ciena\n  PublisherName: Ciena\n  InvoiceIssuerName: Ciena\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n\
-  \    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Ciena Blue Planet Open API\n    baseURL: https://api.blueplanet.com/bpocore/market/api/v1\n    tags:\n      - MEF\n      - Network Automation\n      - Optical\n      - SDN\n      - Telecom\n      - TM Forum\n    serviceName: Ciena Blue Planet Open API\n    serviceCategory: API\n  - name: Ciena MCP (Manage, Control and Plan) API\n    baseURL: https://api.ciena.com/mcp\n    tags:\n      - NETCONF\n      - Network Management\n      - RESTCONF\n      - SDN\n      - Telecom\n    serviceName: Ciena MCP (Manage, Control and Plan) API\n    serviceCategory: API\n  - name: Ciena Emulation Cloud API\n    baseURL: https://developer.ciena.com\n    tags:\n      - Developer Tools\n      - SDN\n\
-  \      - Telecom\n      - Testing\n    serviceName: Ciena Emulation Cloud API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.ciena.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Ciena\nproviderId: ciena\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - MEF\n  - Network Automation\n  - Optical\n  - SDN\n  - Telecom\n  - TM Forum\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Ciena: telecom-vendor capex + opex shape. Network operators\n  pay for hardware (optical / packet platforms), perpetual or term software licenses (Blue Planet,\n  MCP), support, and professional services. APIs are bundled into the software entitlement and not\n  separately metered.'\nnotes: Ciena does not expose a per-API metered billing surface. The FinOps shape below reflects the\n  carrier-vendor commercial structure.\nsources:\n  - https://www.ciena.com/\n  - https://www.blueplanet.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
+  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Ciena Corporation\nserviceCategory: Network Infrastructure / SDN\nbillingModel:\n  pricingCategory: License + Hardware + Services\n  billingFrequency: Per-Project / Annual Support\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Ciena Blue Planet / MCP\n  ServiceCategory: Network Infrastructure / SDN\n  ProviderName: Ciena\n  PublisherName: Ciena Corporation\n  InvoiceIssuerName: Ciena Corporation\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingCategory: License + Hardware\nmeters:\n  - name: software_license\n    description: Blue Planet or MCP software license line items\n    unit: license-year\n    aggregation: sum\n    dimensions:\n      - product\n      - sku\n  - name: hardware_capex\n    description: Optical and packet platform hardware purchases\n    unit: chassis\n    aggregation: sum\n   \
+  \ dimensions:\n      - platform\n      - site\n  - name: support_subscription\n    description: Annual support and maintenance contract\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\n      - product\n  - name: professional_services\n    description: Implementation, integration, and customization services\n    unit: hour\n    aggregation: sum\n    dimensions:\n      - project\nprinciples:\n  - name: Visibility\n    description: Track Ciena spend through purchase orders, hardware asset registers, software\n      entitlement records in the Ciena customer portal, and annual support invoices.\n  - name: Allocation\n    description: Allocate hardware and license cost to network domains (metro, long-haul, DCI) and\n      service products (Ethernet, wavelength, IP transit) so each carrier service line carries its\n      vendor cost.\n  - name: Optimization\n    description: Align refresh cycles with network growth, negotiate multi-year support, consolidate\n      management\
+  \ on MCP / Blue Planet to reduce OSS sprawl, and use Emulation Cloud to validate\n      automation before paying for production licenses.\n  - name: Accountability\n    description: Network engineering owns design and capacity; operations owns MCP / Blue Planet\n      runtime; supply chain and finance own purchase orders and asset lifecycle.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/ciena/refs/heads/main/finops/ciena-finops.yml
-sources: []
+sources:
+- https://www.ciena.com/
+- https://www.blueplanet.com/
 specification: FinOps Framework
 tags:
 - MEF
-- NETCONF
 - Network Automation
-- Network Management
 - Optical
-- RESTCONF
 - SDN
 - Telecom
 - TM Forum
 - FinOps
-- Cost Management
 - FOCUS
 ---

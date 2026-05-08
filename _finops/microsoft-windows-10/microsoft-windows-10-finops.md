@@ -110,81 +110,70 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-background-tasks-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Microsoft Windows 10 API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Credit
+  pricingCategory: Subscription
+description: 'FOCUS-aligned FinOps for Windows 10: post-EOS the primary spend lever is per-device, per-year Extended Security Updates (ESU) under Volume Licensing, with cumulative pricing that doubles each year (Year 1 $61, Year 2 $122, Year 3 $244). Windows 10 VMs running on Microsoft cloud services receive ESU at no additional charge.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Windows 10
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Microsoft Windows 10
-  PublisherName: Microsoft Windows 10
-  ServiceCategory: Developer Tools / API
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Microsoft Corporation
+  PricingUnit: device-year
+  ProviderName: Microsoft
+  PublisherName: Microsoft Corporation
+  ServiceCategory: Operating System
   ServiceName: Microsoft Windows 10
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - tenant
+  - device
+  name: esu_year_1_devices
+  unit: device-year
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - tenant
+  - device
+  name: esu_year_2_devices
+  unit: device-year
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - tenant
+  - device
+  name: esu_year_3_devices
+  unit: device-year
+- aggregation: sum
+  dimensions:
+  - cloud_service
+  - tenant
+  name: esu_cloud_entitled_devices
+  unit: device-year
 name: Microsoft Windows 10 Finops
 provider_name: Microsoft Windows 10
 provider_slug: microsoft-windows-10
-publisher_name: Microsoft Windows 10
-service_category: API
+publisher_name: Microsoft Corporation
+service_category: Operating System / Endpoint
 slug: microsoft-windows-10-finops
 source_filename: microsoft-windows-10-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Windows 10\nproviderId: microsoft-windows-10\npublisherName: Microsoft Windows 10\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Desktop\n  - Operating System\n  - UWP\n  - Win32\n  - Windows\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Windows 10 API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
-  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Windows 10\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Windows 10\n  PublisherName: Microsoft Windows 10\n  InvoiceIssuerName: Microsoft Windows 10\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes\
-  \ returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Windows Runtime (WinRT) API\n    baseURL: https://api.windows.com\n    tags:\n      - Universal Apps\n      - UWP\n      - Windows Runtime\n      - WinRT\n    serviceName: Windows Runtime (WinRT) API\n    serviceCategory: API\n  - name: Win32 API\n    baseURL: https://api.windows.com\n    tags:\n      - Desktop\n      - Native\n      - System Programming\n      - Win32\n    serviceName: Win32 API\n    serviceCategory: API\n  - name: Windows Notifications API\n    baseURL: https://api.windows.com\n    tags:\n      - Notifications\n      - Tiles\n      - Toast\n      - User Interface\n    serviceName: Windows Notifications\
-  \ API\n    serviceCategory: API\n  - name: Windows ML API\n    baseURL: https://api.windows.com\n    tags:\n      - Artificial Intelligence\n      - Inference\n      - Machine Learning\n      - ONNX\n    serviceName: Windows ML API\n    serviceCategory: API\n  - name: Windows Storage API\n    baseURL: https://api.windows.com\n    tags:\n      - Data Management\n      - File System\n      - Files\n      - Storage\n    serviceName: Windows Storage API\n    serviceCategory: API\n  - name: Windows Cortana API\n    baseURL: https://api.windows.com\n    tags:\n      - Cortana\n      - Digital Assistant\n      - Voice\n      - Voice Commands\n    serviceName: Windows Cortana API\n    serviceCategory: API\n  - name: Windows Ink API\n    baseURL: https://api.windows.com\n    tags:\n      - Ink\n      - Input\n      - Pen\n      - Stylus\n    serviceName: Windows Ink API\n    serviceCategory: API\n  - name: Windows Composition API\n    baseURL: https://api.windows.com\n    tags:\n      - Animations\n\
-  \      - Composition\n      - Graphics\n      - Visual Layer\n    serviceName: Windows Composition API\n    serviceCategory: API\n  - name: DirectX Graphics API\n    baseURL: https://api.windows.com\n    tags:\n      - DirectX\n      - Gaming\n      - Graphics\n      - Rendering\n    serviceName: DirectX Graphics API\n    serviceCategory: API\n  - name: Windows Media Capture API\n    baseURL: https://api.windows.com\n    tags:\n      - Audio\n      - Camera\n      - Media\n      - Video Capture\n    serviceName: Windows Media Capture API\n    serviceCategory: API\n  - name: Windows Networking API\n    baseURL: https://api.windows.com\n    tags:\n      - HTTP\n      - Networking\n      - Sockets\n      - WebSockets\n    serviceName: Windows Networking API\n    serviceCategory: API\n  - name: Windows Bluetooth API\n    baseURL: https://api.windows.com\n    tags:\n      - Bluetooth\n      - Devices\n      - IoT\n      - Wireless\n    serviceName: Windows Bluetooth API\n    serviceCategory:\
-  \ API\n  - name: Windows Geolocation API\n    baseURL: https://api.windows.com\n    tags:\n      - Geolocation\n      - GPS\n      - Location\n      - Maps\n    serviceName: Windows Geolocation API\n    serviceCategory: API\n  - name: Windows Sensors API\n    baseURL: https://api.windows.com\n    tags:\n      - Devices\n      - Hardware\n      - IoT\n      - Sensors\n    serviceName: Windows Sensors API\n    serviceCategory: API\n  - name: Windows Hello Authentication API\n    baseURL: https://api.windows.com\n    tags:\n      - Authentication\n      - Biometrics\n      - Identity\n      - Security\n    serviceName: Windows Hello Authentication API\n    serviceCategory: API\n  - name: WinUI API\n    baseURL: https://api.windows.com\n    tags:\n      - Controls\n      - Fluent Design\n      - User Interface\n      - XAML\n    serviceName: WinUI API\n    serviceCategory: API\n  - name: Windows Background Tasks API\n    baseURL: https://api.windows.com\n    tags:\n      - App Lifecycle\n\
-  \      - Background Tasks\n      - Scheduling\n    serviceName: Windows Background Tasks API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://learn.microsoft.com/en-us/windows/whats-new/extended-security-updates
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Microsoft Windows 10\nproviderId: microsoft-windows-10\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Cost Management\n  - Microsoft\n  - Operating System\ndescription: 'FOCUS-aligned FinOps for Windows 10: post-EOS the primary spend lever is per-device,\n  per-year Extended Security Updates (ESU) under Volume Licensing, with cumulative pricing that doubles\n  each year (Year 1 $61, Year 2 $122, Year 3 $244). Windows 10 VMs running on Microsoft cloud services\n  receive ESU at no additional charge.'\nsources:\n  - https://learn.microsoft.com/en-us/windows/whats-new/extended-security-updates\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
+  \ Microsoft Corporation\nserviceCategory: Operating System / Endpoint\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Microsoft Windows 10\n  ServiceCategory: Operating System\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  PricingUnit: device-year\n  ChargeCategory: Purchase\nmeters:\n  - name: esu_year_1_devices\n    unit: device-year\n    aggregation: sum\n    dimensions:\n      - tenant\n      - device\n  - name: esu_year_2_devices\n    unit: device-year\n    aggregation: sum\n    dimensions:\n      - tenant\n      - device\n  - name: esu_year_3_devices\n    unit: device-year\n    aggregation: sum\n    dimensions:\n      - tenant\n      - device\n  - name: esu_cloud_entitled_devices\n    unit: device-year\n    aggregation: sum\n    dimensions:\n\
+  \      - cloud_service\n      - tenant\nprinciples:\n  - name: Visibility\n    description: Pull ESU enrollment counts from Microsoft 365 admin center Volume Licensing Product\n      Details; cross-reference with Intune device inventory to identify devices still on Windows 10\n      22H2.\n  - name: Allocation\n    description: Tag ESU charges by business unit / OU; allocate cloud-entitled (no-cost) ESU separately\n      from Volume Licensing ESU so the migration value is visible.\n  - name: Optimization\n    description: Migrate eligible devices to Windows 11 to avoid the year-2 ($122) and year-3 ($244)\n      ESU price escalations; move stragglers to Windows 365 / Azure Virtual Desktop where ESU is free;\n      decommission Windows 10 devices on hardware ineligible for Windows 11.\n  - name: Accountability\n    description: Assign an ESU budget owner per business unit; review remaining Windows 10 inventory\n      monthly; require approval for new ESU year purchases.\nmaintainers:\n \
+  \ - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/finops/microsoft-windows-10-finops.yml
-sources: []
+sources:
+- https://learn.microsoft.com/en-us/windows/whats-new/extended-security-updates
 specification: FinOps Framework
 tags:
-- Desktop
-- Operating System
-- UWP
-- Win32
-- Windows
 - FinOps
-- Cost Management
 - FOCUS
+- Cost Management
+- Microsoft
+- Operating System
 ---

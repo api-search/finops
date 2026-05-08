@@ -49,79 +49,57 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Chase API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  pricingCategory: Partner Contract + Interchange
+description: 'FOCUS-aligned FinOps framing for Chase developer APIs: API access is partner-contracted; underlying revenue/cost flows from interchange, rewards economics, and partner integration fees rather than a separate per-API price list.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Chase
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: JPMorgan Chase Bank, N.A.
   ProviderName: Chase
-  PublisherName: Chase
-  ServiceCategory: Developer Tools / API
-  ServiceName: Chase
+  PublisherName: JPMorgan Chase Bank, N.A.
+  ServiceCategory: Financial Services
+  ServiceName: Chase Developer APIs
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  name: fdx_consents
+  unit: consent
+- aggregation: sum
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - dataType
+  name: aggregation_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - merchant
+  name: points_redemption_transactions
+  unit: transaction
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - merchant
+  name: points_redeemed
+  unit: point
 name: Chase Finops
 provider_name: Chase
 provider_slug: chase
-publisher_name: Chase
-service_category: API
+publisher_name: JPMorgan Chase Bank, N.A.
+service_category: Financial Services / Banking
 slug: chase-finops
 source_filename: chase-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Chase\nproviderId: chase\npublisherName: Chase\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Account Aggregation\n  - Banking\n  - Consent\n  - Credit Cards\n  - FDX\n  - Financial Services\n  - Loyalty\n  - Open Banking\n  - Pay with Points\n  - Rewards\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Chase API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  -\
-  \ name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n\
-  \  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Chase\n  ServiceCategory: Developer Tools / API\n  ProviderName: Chase\n  PublisherName: Chase\n  InvoiceIssuerName: Chase\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network\
-  \ in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Chase Account and Customer Information API\n    baseURL: https://api.chase.com/aggregation/fdx\n    tags:\n      - Account Aggregation\n      - FDX\n      - Open Banking\n    serviceName: Chase Account and Customer Information API\n    serviceCategory: API\n  - name: Chase Account Aggregation User Consent API\n    baseURL: https://api.chase.com/aggregation/consent\n    tags:\n      - Consent\n      - FDX\n      - Open Banking\n    serviceName: Chase Account Aggregation User Consent API\n    serviceCategory: API\n  - name: Chase Rewards Balance API\n    baseURL: https://api.chase.com/loyalty/rewards-balance\n    tags:\n      - Loyalty\n      - Rewards\n\
-  \    serviceName: Chase Rewards Balance API\n    serviceCategory: API\n  - name: Chase Loyalty Pay with Points Order Service API\n    baseURL: https://api.chase.com/loyalty/pay-with-points/orders\n    tags:\n      - Loyalty\n      - Payments\n      - Rewards\n    serviceName: Chase Loyalty Pay with Points Order Service API\n    serviceCategory: API\n  - name: Chase Loyalty Pay with Points Enrollment Service API\n    baseURL: https://api.chase.com/loyalty/pay-with-points/enrollment\n    tags:\n      - Loyalty\n      - Payments\n      - Rewards\n    serviceName: Chase Loyalty Pay with Points Enrollment Service API\n    serviceCategory: API\n  - name: Chase Loyalty PCI Merchant Relationship Manager API\n    baseURL: https://api.chase.com/loyalty/merchant-relationship-manager\n    tags:\n      - Loyalty\n      - Merchants\n      - PCI\n    serviceName: Chase Loyalty PCI Merchant Relationship Manager API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric:\
-  \ billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://developer.chase.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Chase\nproviderId: chase\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Banking\n  - Open Banking\ndescription: 'FOCUS-aligned FinOps framing for Chase developer APIs: API access is partner-contracted;\n  underlying revenue/cost flows from interchange, rewards economics, and partner integration fees rather\n  than a separate per-API price list.'\nnotes: APIs are not separately priced; meters reflect partner integration billing surface.\nsources:\n  - https://developer.chase.com/\n  - https://www.jpmorganchase.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: JPMorgan Chase Bank, N.A.\nserviceCategory: Financial Services /\
+  \ Banking\nbillingModel:\n  pricingCategory: Partner Contract + Interchange\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: Chase Developer APIs\n  ServiceCategory: Financial Services\n  ProviderName: Chase\n  PublisherName: JPMorgan Chase Bank, N.A.\n  InvoiceIssuerName: JPMorgan Chase Bank, N.A.\n  BillingCurrency: USD\nmeters:\n  - name: fdx_consents\n    unit: consent\n    aggregation: sum\n  - name: aggregation_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - dataType\n  - name: points_redemption_transactions\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - merchant\n  - name: points_redeemed\n    unit: point\n    aggregation: sum\n    dimensions:\n      - merchant\nprinciples:\n  - name: Visibility\n    description: Track FDX consent counts, aggregation request volume, and Pay with Points redemption\n   \
+  \   reports through the partner portal.\n  - name: Allocation\n    description: Allocate by merchant ID / aggregator ID; tie redemption costs to the corresponding loyalty\n      campaign.\n  - name: Optimization\n    description: Cache FDX data within consent windows, batch read requests, and tune redemption UX to\n      lift conversion without inflating points liability.\n  - name: Accountability\n    description: Partner relationship owner reviews monthly partner statements and FDX consent telemetry;\n      treasury / loyalty finance owns points liability.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/chase/refs/heads/main/finops/chase-finops.yml
-sources: []
+sources:
+- https://developer.chase.com/
+- https://www.jpmorganchase.com/
 specification: FinOps Framework
 tags:
-- Account Aggregation
-- Banking
-- Consent
-- Credit Cards
-- FDX
-- Financial Services
-- Loyalty
-- Open Banking
-- Pay with Points
-- Rewards
 - FinOps
-- Cost Management
 - FOCUS
+- Banking
+- Open Banking
 ---

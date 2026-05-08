@@ -32,70 +32,37 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/telefon/refs/heads/main/openapi/telefon-recording-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Telefon API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Unverified
+description: FinOps shape for the telefon.com slug could not be reconciled. No pricing, billing, or usage-export surface is publicly reachable.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
   InvoiceIssuerName: Telefon
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Telefon
   PublisherName: Telefon
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Communications / CPaaS
   ServiceName: Telefon
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: unverified_usage
+  unit: varies
 name: Telefon Finops
 provider_name: Telefon
 provider_slug: telefon
 publisher_name: Telefon
-service_category: API
+service_category: Communications / CPaaS
 slug: telefon-finops
 source_filename: telefon-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Telefon\nproviderId: telefon\npublisherName: Telefon\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Call Recording\n  - Communications\n  - CPaaS\n  - Global Coverage\n  - Messaging\n  - Number Provisioning\n  - SMS\n  - Telephony\n  - Voice\n  - VoIP\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Telefon API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name:\
-  \ Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  -\
-  \ name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Telefon\n  ServiceCategory: Developer Tools / API\n  ProviderName: Telefon\n  PublisherName: Telefon\n  InvoiceIssuerName: Telefon\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the\
-  \ network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Telefon Voice API\n    baseURL: https://api.telefon.com/v1/voice\n    tags:\n      - Calls\n      - Communications\n      - IVR\n      - SIP Trunking\n      - Telephony\n      - TTS\n      - Voice\n      - WebRTC\n    serviceName: Telefon Voice API\n    serviceCategory: API\n  - name: Telefon SMS API\n    baseURL: https://api.telefon.com/v1/sms\n    tags:\n      - A2P Messaging\n      - Communications\n      - Messaging\n      - MMS\n      - SMS\n      - Two-Way SMS\n      - Unicode\n    serviceName: Telefon SMS API\n    serviceCategory: API\n  - name: Telefon Number Management API\n    baseURL: https://api.telefon.com/v1/numbers\n    tags:\n\
-  \      - DID\n      - Number Management\n      - Number Portability\n      - Number Provisioning\n      - Phone Numbers\n      - Short Codes\n      - Toll-Free\n    serviceName: Telefon Number Management API\n    serviceCategory: API\n  - name: Telefon Call Recording API\n    baseURL: https://api.telefon.com/v1/recording\n    tags:\n      - AI Transcription\n      - Audio\n      - Call Recording\n      - Compliance\n      - Dual Channel\n      - PII Redaction\n      - Storage\n      - Transcription\n    serviceName: Telefon Call Recording API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Telefon API Team\n    email: api@telefon.com\n"
+source_url: https://www.telefon.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Telefon\nproviderId: telefon\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Call Recording\n  - Communications\n  - CPaaS\n  - Global Coverage\n  - Messaging\n  - Number Provisioning\n  - SMS\n  - Telephony\n  - Voice\n  - VoIP\n  - FinOps\n  - FOCUS\ndescription: FinOps shape for the telefon.com slug could not be reconciled. No pricing, billing, or\n  usage-export surface is publicly reachable.\nsources:\n  - https://www.telefon.com/\nnotes: Provider identity is unverified. FOCUS columns capture the slug name only; meters are not\n  reconciled to real billing lines.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Telefon\nserviceCategory: Communications\
+  \ / CPaaS\nbillingModel:\n  pricingCategory: Unverified\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Telefon\n  ServiceCategory: Communications / CPaaS\n  ProviderName: Telefon\n  PublisherName: Telefon\n  InvoiceIssuerName: Telefon\n  BillingCurrency: USD\nmeters:\n  - name: unverified_usage\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: No public usage-export surface is documented for this slug.\n  - name: Allocation\n    description: Allocation cannot be modeled until a real billing surface is identified.\n  - name: Optimization\n    description: No documented cost levers; this artifact is a placeholder.\n  - name: Accountability\n    description: Accountability cannot be assigned until the provider entry is verified.\nmaintainers:\n  - name: Telefon API Team\n    email: api@telefon.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/telefon/refs/heads/main/finops/telefon-finops.yml
-sources: []
+sources:
+- https://www.telefon.com/
 specification: FinOps Framework
 tags:
 - Call Recording
@@ -109,6 +76,5 @@ tags:
 - Voice
 - VoIP
 - FinOps
-- Cost Management
 - FOCUS
 ---

@@ -7,74 +7,61 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Minerals Technologies API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  pricingCategory: Custom Contract
+description: FinOps for Minerals Technologies does not map to a cloud / API consumption model; commercial spend is governed by negotiated B2B supply contracts denominated in shipped product units (tons, pounds, pallets) rather than API meters.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Minerals Technologies
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Minerals Technologies, Inc.
   ProviderName: Minerals Technologies
-  PublisherName: Minerals Technologies
-  ServiceCategory: Developer Tools / API
+  PublisherName: Minerals Technologies, Inc.
+  ServiceCategory: Industrial Materials
   ServiceName: Minerals Technologies
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - product
+  - facility
+  - customer
+  name: shipped_tons
+  unit: ton
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - product
+  - sku
+  name: shipped_units
+  unit: varies
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - contract
+  - customer
+  name: contract_value
+  unit: USD
 name: Minerals Technologies Finops
 provider_name: Minerals Technologies
 provider_slug: minerals-technologies
-publisher_name: Minerals Technologies
-service_category: API
+publisher_name: Minerals Technologies, Inc.
+service_category: Industrial Materials
 slug: minerals-technologies-finops
 source_filename: minerals-technologies-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Minerals Technologies\nproviderId: minerals-technologies\npublisherName: Minerals Technologies\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Specialty Minerals\n  - Chemical\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Minerals Technologies API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
-  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
-  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Minerals Technologies\n  ServiceCategory: Developer Tools / API\n  ProviderName: Minerals Technologies\n  PublisherName: Minerals Technologies\n  InvoiceIssuerName: Minerals Technologies\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the\
-  \ network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Minerals Technologies API\n    baseURL: https://api.mineralstech.com\n    tags:\n      - Specialty Minerals\n      - Chemical\n    serviceName: Minerals Technologies API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.mineralstech.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Minerals Technologies\nproviderId: minerals-technologies\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Industrial\ndescription: 'FinOps for Minerals Technologies does not map to a cloud / API consumption model;\n  commercial spend is governed by negotiated B2B supply contracts denominated in shipped product\n  units (tons, pounds, pallets) rather than API meters.'\nsources:\n  - https://www.mineralstech.com/\nnotes: Industrial supplier without a public API. FinOps mapping is structural only; meters reflect\n  procurement-style line items.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Minerals Technologies, Inc.\nserviceCategory:\
+  \ Industrial Materials\nbillingModel:\n  pricingCategory: Custom Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: Minerals Technologies\n  ServiceCategory: Industrial Materials\n  ProviderName: Minerals Technologies\n  PublisherName: Minerals Technologies, Inc.\n  InvoiceIssuerName: Minerals Technologies, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: shipped_tons\n    unit: ton\n    aggregation: sum\n    dimensions:\n      - product\n      - facility\n      - customer\n  - name: shipped_units\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - product\n      - sku\n  - name: contract_value\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - contract\n      - customer\nprinciples:\n  - name: Visibility\n    description: Procurement teams should track Minerals Technologies invoices and shipments through\n \
+  \     the ERP / SAP receivables system; no programmatic usage feed is available.\n  - name: Allocation\n    description: Allocate invoiced cost to receiving plant / business unit using purchase-order line\n      metadata.\n  - name: Optimization\n    description: Negotiate volume tiers per contract; review supplier consolidation versus Imerys /\n      US Concrete alternatives.\n  - name: Accountability\n    description: Accountable to plant procurement / supply-chain leadership; reconcile shipped tonnage\n      against PO commitments.\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/minerals-technologies/refs/heads/main/finops/minerals-technologies-finops.yml
-sources: []
+sources:
+- https://www.mineralstech.com/
 specification: FinOps Framework
 tags:
-- Specialty Minerals
-- Chemical
 - FinOps
-- Cost Management
 - FOCUS
+- Industrial
 ---

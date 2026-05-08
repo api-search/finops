@@ -16,71 +16,66 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the midjourney API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription
+description: 'FOCUS-aligned FinOps for Midjourney: tiered consumer subscription billed monthly (or annually at a discount) with implicit Fast GPU-minute budgets per tier. There is no usage-based meter exposed to customers beyond the included entitlement.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: midjourney
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: midjourney
-  PublisherName: midjourney
-  ServiceCategory: Developer Tools / API
-  ServiceName: midjourney
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Midjourney, Inc.
+  PricingUnit: seat-month
+  ProviderName: Midjourney
+  PublisherName: Midjourney, Inc.
+  ServiceCategory: AI Infrastructure
+  ServiceName: Midjourney
+  ServiceSubcategory: Image Generation
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
   - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - billing_cadence
+  name: subscription_seats
+  unit: seat-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
+  - account
   - tier
-  name: compute_seconds
-  unit: second
+  name: fast_gpu_minutes_consumed
+  unit: gpu-minute
+- aggregation: sum
+  dimensions:
+  - account
+  - tier
+  name: relax_gpu_minutes_consumed
+  unit: gpu-minute
+- aggregation: sum
+  dimensions:
+  - account
+  name: fast_topup_purchases
+  unit: gpu-minute
 name: Midjourney Finops
 provider_name: midjourney
 provider_slug: midjourney
-publisher_name: midjourney
-service_category: API
+publisher_name: Midjourney, Inc.
+service_category: AI / Image Generation
 slug: midjourney-finops
 source_filename: midjourney-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: midjourney\nproviderId: midjourney\npublisherName: midjourney\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the midjourney API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can\
-  \ be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing\
-  \ and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: midjourney\n  ServiceCategory: Developer Tools / API\n  ProviderName: midjourney\n  PublisherName: midjourney\n  InvoiceIssuerName: midjourney\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name:\
-  \ compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Midjourney Image Generation API\n    baseURL: https://api.midjourney.com\n    tags:\n      - AI\n      - Creative Tools\n      - Generative AI\n      - Image Generation\n      - Text to Image\n    serviceName: Midjourney Image Generation API\n    serviceCategory: API\n  - name: Midjourney Web Application\n    baseURL: https://api.example.com\n    tags:\n      - AI\n      - Creative Tools\n      - Image Generation\n      - User Interface\n      - Web Application\n    serviceName: Midjourney Web Application\n    serviceCategory: API\n  - name: Midjourney Discord Bot\n    baseURL: https://api.example.com\n    tags:\n      - AI\n      - Bot\n      - Chat Interface\n      - Discord\n      - Image Generation\n    serviceName: Midjourney Discord Bot\n    serviceCategory: API\nunitEconomics:\n\
-  \  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://docs.midjourney.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Midjourney\nproviderId: midjourney\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Cost Management\n  - AI\n  - Image Generation\ndescription: 'FOCUS-aligned FinOps for Midjourney: tiered consumer subscription billed monthly (or\n  annually at a discount) with implicit Fast GPU-minute budgets per tier. There is no usage-based meter\n  exposed to customers beyond the included entitlement.'\nsources:\n  - https://docs.midjourney.com\nnotes: docs.midjourney.com refused automated fetches (403). Reconciliation deferred — confirm tier\n  prices and Fast GPU minute allotments from the live page.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
+  \ Midjourney, Inc.\nserviceCategory: AI / Image Generation\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Midjourney\n  ServiceCategory: AI Infrastructure\n  ServiceSubcategory: Image Generation\n  ProviderName: Midjourney\n  PublisherName: Midjourney, Inc.\n  InvoiceIssuerName: Midjourney, Inc.\n  BillingCurrency: USD\n  PricingUnit: seat-month\n  ChargeCategory: Purchase\nmeters:\n  - name: subscription_seats\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - tier\n      - billing_cadence\n  - name: fast_gpu_minutes_consumed\n    unit: gpu-minute\n    aggregation: sum\n    dimensions:\n      - account\n      - tier\n  - name: relax_gpu_minutes_consumed\n    unit: gpu-minute\n    aggregation: sum\n    dimensions:\n      - account\n      - tier\n  - name: fast_topup_purchases\n    unit: gpu-minute\n    aggregation:\
+  \ sum\n    dimensions:\n      - account\nprinciples:\n  - name: Visibility\n    description: Track Fast GPU minutes consumed via the Midjourney account info command (e.g.\n      /info on Discord); inspect monthly invoice for tier and any Fast top-up purchases.\n  - name: Allocation\n    description: Allocate seats by user/team; Stealth-mode usage may indicate an enterprise / brand\n      project worth tagging separately for chargeback.\n  - name: Optimization\n    description: Move heavy users to higher tiers (better $/minute) before paying top-ups; rely on\n      Relax mode for non-urgent ideation; downgrade when Fast minutes consistently underused.\n  - name: Accountability\n    description: Designate a creative-team owner per seat; review monthly Fast-minute usage versus\n      tier entitlement.\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/midjourney/refs/heads/main/finops/midjourney-finops.yml
-sources: []
+sources:
+- https://docs.midjourney.com
 specification: FinOps Framework
 tags:
 - FinOps
-- Cost Management
 - FOCUS
+- Cost Management
+- AI
+- Image Generation
 ---

@@ -20,72 +20,64 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/intel/refs/heads/main/openapi/intel-oneapi-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the intel API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Free + Optional Support
+description: FOCUS-aligned FinOps shape for Intel developer APIs. Both Intel Trust Authority and Intel oneAPI are free at the API / toolkit level; the only invoiced lines are optional support subscriptions (Intel Trust Authority paid support, Intel Priority Support for oneAPI). FinOps practice for Intel APIs therefore focuses on operational telemetry (attestation request volume, rate-limit headroom) and on support-renewal accountability rather than per-call cost accounting.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: intel
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: intel
-  PublisherName: intel
-  ServiceCategory: Developer Tools / API
-  ServiceName: intel
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Intel Corporation
+  PricingCategory: Free
+  PricingUnit: not-applicable
+  ProviderName: Intel
+  PublisherName: Intel Corporation
+  ServiceCategory: Confidential Computing + Developer Tools
+  ServiceName: Intel Developer APIs
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Trust Authority attestation requests issued by the customer
   dimensions:
-  - api
-  - endpoint
-  - tier
   - region
-  - consumer
-  name: api_requests
+  - tee_type
+  - workload
+  name: attestation_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+- aggregation: max
+  description: Active paid support subscriptions (Trust Authority and oneAPI Priority Support)
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
+  - product
   - tier
-  name: compute_seconds
-  unit: second
+  name: support_subscriptions
+  unit: subscription-month
 name: Intel Finops
 provider_name: intel
 provider_slug: intel
-publisher_name: intel
-service_category: API
+publisher_name: Intel Corporation
+service_category: Confidential Computing + Developer Tools
 slug: intel-finops
 source_filename: intel-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: intel\nproviderId: intel\npublisherName: intel\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the intel API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  -\
-  \ name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n\
-  \      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: intel\n  ServiceCategory: Developer Tools / API\n  ProviderName: intel\n  PublisherName: intel\n  InvoiceIssuerName: intel\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description:\
-  \ Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Intel Trust Authority API\n    baseURL: https://api.trustauthority.intel.com\n    tags:\n      - Attestation\n      - Confidential Computing\n      - Security\n      - Trust\n    serviceName: Intel Trust Authority API\n    serviceCategory: API\n  - name: Intel oneAPI\n    baseURL: https://api-portal.intel.com\n    tags:\n      - Accelerators\n      - AI\n      - Compute\n      - GPU\n      - Heterogeneous Computing\n    serviceName: Intel oneAPI\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://docs.trustauthority.intel.com/main/articles/restapi-intro.html
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Intel\nproviderId: intel\npublisherName: Intel Corporation\nserviceCategory: Confidential Computing + Developer Tools\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Confidential Computing\n  - Attestation\n  - oneAPI\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for Intel developer APIs. Both Intel Trust Authority and Intel\n  oneAPI are free at the API / toolkit level; the only invoiced lines are optional support subscriptions\n  (Intel Trust Authority paid support, Intel Priority Support for oneAPI). FinOps practice for Intel\n  APIs therefore focuses on operational telemetry (attestation request\
+  \ volume, rate-limit headroom)\n  and on support-renewal accountability rather than per-call cost accounting.\nnotes: No usage-based invoice for the API itself. The 'cost' to track is operational - request volume,\n  region selection, and support entitlement utilization. Reconcile against the customer's Intel Priority\n  Support and Trust Authority support contracts.\nsources:\n  - https://docs.trustauthority.intel.com/main/articles/restapi-intro.html\n  - https://www.intel.com/content/www/us/en/developer/tools/oneapi/overview.html\nprinciples:\n  - name: Visibility\n    description: Track Intel Trust Authority attestation request volume per workload and per region;\n      surface oneAPI Priority Support ticket usage in Intel's support portal.\n  - name: Allocation\n    description: Tag attestation requests by workload / cluster / cost-center so request volume can be\n      attributed; map oneAPI Priority Support entitlement to product teams.\n  - name: Optimization\n    description: Cache\
+  \ attestation tokens for their full validity; co-locate workloads with the closest\n      Trust Authority region (US or EU) to reduce latency; align oneAPI support tier to active toolkit\n      usage at renewal.\n  - name: Accountability\n    description: Designate a confidential-computing owner for Trust Authority and a developer-experience\n      owner for oneAPI; review attestation-volume growth and support-ticket spend annually.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n  - name: Quantify Business Value\n    capabilities:\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Workload Optimization\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - Invoicing and Chargeback\n      - Onboarding Workloads\nbillingModel:\n  pricingCategory: Free\
+  \ + Optional Support\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Intel Developer APIs\n  ServiceCategory: Confidential Computing + Developer Tools\n  ProviderName: Intel\n  PublisherName: Intel Corporation\n  InvoiceIssuerName: Intel Corporation\n  PricingCategory: Free\n  PricingUnit: not-applicable\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: attestation_requests\n    description: Trust Authority attestation requests issued by the customer\n    unit: request\n    aggregation: sum\n    dimensions:\n      - region\n      - tee_type\n      - workload\n  - name: support_subscriptions\n    description: Active paid support subscriptions (Trust Authority and oneAPI Priority Support)\n    unit: subscription-month\n    aggregation: max\n    dimensions:\n      - product\n      - tier\napis:\n  - name: Intel Trust Authority API\n    baseURL:\
+  \ https://api.trustauthority.intel.com\n    serviceCategory: API\n  - name: Intel oneAPI\n    baseURL: https://api-portal.intel.com\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Active Workload\n    metric: support_cost / active_workloads\n    target: TBD\n  - name: Attestation Requests per Workload\n    metric: attestation_requests / active_workloads\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/intel/refs/heads/main/finops/intel-finops.yml
-sources: []
+sources:
+- https://docs.trustauthority.intel.com/main/articles/restapi-intro.html
+- https://www.intel.com/content/www/us/en/developer/tools/oneapi/overview.html
 specification: FinOps Framework
 tags:
+- Confidential Computing
+- Attestation
+- oneAPI
 - FinOps
-- Cost Management
 - FOCUS
 ---

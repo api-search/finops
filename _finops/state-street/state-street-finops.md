@@ -20,73 +20,43 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/state-street/refs/heads/main/openapi/state-street-fund-connect-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Contract
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the State Street API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Contract
+description: State Street has a developer portal for institutional API products but no public, metered billing surface. Costs land inside the broader institutional client agreement; there is no FOCUS-billable per-call price list to reconcile.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: State Street
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: State Street Corporation
   ProviderName: State Street
-  PublisherName: State Street
-  ServiceCategory: Developer Tools / API
+  PublisherName: State Street Corporation
+  ServiceCategory: Financial Services / Asset Servicing
   ServiceName: State Street
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  description: Placeholder for line items defined in a State Street institutional / partner contract.
+  name: contracted_engagement
+  unit: varies
 name: State Street Finops
 provider_name: State Street
 provider_slug: state-street
-publisher_name: State Street
-service_category: API
+publisher_name: State Street Corporation
+service_category: Financial Services / Asset Servicing
 slug: state-street-finops
 source_filename: state-street-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: State Street\nproviderId: state-street\npublisherName: State Street\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the State Street API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so\
-  \ cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n\
-  \      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: State Street\n  ServiceCategory: Developer Tools / API\n  ProviderName: State Street\n  PublisherName: State Street\n  InvoiceIssuerName: State Street\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
-  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Alpha Data Platform API\n    baseURL: https://api.statestreet.com/v1\n    tags:\n      - Financial Services\n      - Investment Management\n      - Portfolio\n      - Data Platform\n      - Institutional\n    serviceName: Alpha Data Platform API\n    serviceCategory: API\n  - name: Fund Connect API\n    baseURL: https://api.statestreet.com/v1/fund-connect\n    tags:\n      - Financial Services\n      - ETF\n      - Fund Management\n      - Order Management\n      - Institutional\n    serviceName: Fund Connect API\n    serviceCategory: API\n  - name: Investment Accounting API\n    baseURL: https://api.statestreet.com/v1/accounting\n    tags:\n      - Financial Services\n      - Accounting\n      - NAV\n      - Performance\n      - Institutional\n\
-  \    serviceName: Investment Accounting API\n    serviceCategory: API\n  - name: Performance Analytics API\n    baseURL: https://api.statestreet.com/v1/analytics\n    tags:\n      - Financial Services\n      - Analytics\n      - Performance\n      - Risk\n      - Institutional\n    serviceName: Performance Analytics API\n    serviceCategory: API\n  - name: Sample Transactions API\n    baseURL: https://api.statestreet.com/v1\n    tags:\n      - Financial Services\n      - Developer\n      - Reference\n      - Onboarding\n      - Sample\n    serviceName: Sample Transactions API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://developer.statestreet.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: State Street\nproviderId: state-street\npublisherName: State Street Corporation\nserviceCategory: Financial Services / Asset Servicing\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Financial Services\n  - Asset Servicing\ndescription: State Street has a developer portal for institutional API products but no public, metered\n  billing surface. Costs land inside the broader institutional client agreement; there is no FOCUS-billable\n  per-call price list to reconcile.\nsources:\n  - https://developer.statestreet.com/\nnotes: No public State Street API pricing or invoice surface. Meters and FOCUS\
+  \ columns are placeholders\n  pending a contracted engagement.\nbillingModel:\n  pricingCategory: Contract\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: State Street\n  ServiceCategory: Financial Services / Asset Servicing\n  ProviderName: State Street\n  PublisherName: State Street Corporation\n  InvoiceIssuerName: State Street Corporation\n  BillingCurrency: USD\nmeters:\n  - name: contracted_engagement\n    description: Placeholder for line items defined in a State Street institutional / partner contract.\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Visibility comes from the State Street client reporting workflow tied to the underlying\n      asset-servicing contract — there is no public usage / billing API.\n  - name: Allocation\n    description: Allocate the institutional engagement cost in your own ERP; State Street does not\n      surface a self-serve cost\
+  \ breakdown for API consumption.\n  - name: Optimization\n    description: Optimization happens via contract review, scope renegotiation, or product-mix changes\n      with the API Platform Management team.\n  - name: Accountability\n    description: A named institutional client owner should hold the State Street engagement cost line\n      and renewal cycle.\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/state-street/refs/heads/main/finops/state-street-finops.yml
-sources: []
+sources:
+- https://developer.statestreet.com/
 specification: FinOps Framework
 tags:
 - FinOps
-- Cost Management
 - FOCUS
+- Financial Services
+- Asset Servicing
 ---

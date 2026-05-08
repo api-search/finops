@@ -13,81 +13,88 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/minimax-ai/refs/heads/main/openapi/minimax-ai-openapi.json
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: USD/CNY
+  billingFrequency: Monthly / On-Demand
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the MiniMax API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Mixed (Usage and Subscription)
+description: 'FOCUS-aligned FinOps profile for MiniMax. Mixed billing model: PAYG token/character/second metering plus subscription Token Plan, Audio Subscription, and Video Packages.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
   InvoiceIssuerName: MiniMax
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: MiniMax
   PublisherName: MiniMax
-  ServiceCategory: Developer Tools / API
-  ServiceName: MiniMax
+  ServiceCategory: AI and Machine Learning
+  ServiceName: MiniMax Platform
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Input tokens for text models.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - model
+  - account
+  name: text_input_tokens
+  unit: tokens
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Output tokens for text models.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - model
+  - account
+  name: text_output_tokens
+  unit: tokens
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Characters synthesized.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - voice_model
+  - account
+  name: speech_characters
+  unit: characters
+- aggregation: sum
+  description: Generated video seconds.
+  dimensions:
+  - video_model
+  - account
+  name: video_seconds
+  unit: seconds
+- aggregation: sum
+  description: Images generated.
+  dimensions:
+  - model
+  - account
+  name: image_generations
+  unit: images
+- aggregation: sum
+  description: Music tracks generated.
+  dimensions:
+  - model
+  - account
+  name: music_generations
+  unit: tracks
 name: Minimax Ai Finops
 provider_name: MiniMax
 provider_slug: minimax-ai
 publisher_name: MiniMax
-service_category: API
+service_category: AI and Machine Learning
 slug: minimax-ai-finops
 source_filename: minimax-ai-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: MiniMax\nproviderId: minimax-ai\npublisherName: MiniMax\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - LLM\n  - Inference\n  - Multimodal\n  - Voice\n  - Video\n  - Music\n  - Image\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the MiniMax API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
-  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
-  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: MiniMax\n  ServiceCategory: Developer Tools / API\n  ProviderName: MiniMax\n  PublisherName: MiniMax\n  InvoiceIssuerName: MiniMax\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: MiniMax Platform API\n    baseURL: https://api.minimax.io\n    tags:\n      - AI\n      - LLM\n      - Chat Completions\n      - Image Generation\n      - Video Generation\n      - Audio\n      - Music\n      - Voice Cloning\n      - Files\n    serviceName: MiniMax Platform API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://platform.minimax.io/docs/pricing/overview
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: MiniMax\nproviderId: minimax-ai\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- AI\n- LLM\n- Multimodal\n- FinOps\n- FOCUS\ndescription: >-\n  FOCUS-aligned FinOps profile for MiniMax. Mixed billing model: PAYG token/character/second\n  metering plus subscription Token Plan, Audio Subscription, and Video Packages.\nnotes: >-\n  Multi-modality means meter dimensions span tokens, characters, seconds, and image counts.\n  Subscription products map to FOCUS Purchase; consumption maps to Usage.\nsources:\n- https://platform.minimax.io/docs/pricing/overview\n- https://platform.minimax.io/docs/guides/rate-limits\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
+  publisherName: MiniMax\nserviceCategory: AI and Machine Learning\nbillingModel:\n  pricingCategory: Mixed (Usage and Subscription)\n  billingFrequency: Monthly / On-Demand\n  billingCurrency: USD/CNY\n  chargeCategories:\n  - Usage\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: MiniMax Platform\n  ServiceCategory: AI and Machine Learning\n  ProviderName: MiniMax\n  PublisherName: MiniMax\n  InvoiceIssuerName: MiniMax\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n- name: text_input_tokens\n  description: Input tokens for text models.\n  unit: tokens\n  aggregation: sum\n  dimensions: [model, account]\n- name: text_output_tokens\n  description: Output tokens for text models.\n  unit: tokens\n  aggregation: sum\n  dimensions: [model, account]\n- name: speech_characters\n  description: Characters synthesized.\n  unit: characters\n  aggregation: sum\n  dimensions: [voice_model, account]\n- name: video_seconds\n  description: Generated video seconds.\n  unit: seconds\n\
+  \  aggregation: sum\n  dimensions: [video_model, account]\n- name: image_generations\n  description: Images generated.\n  unit: images\n  aggregation: sum\n  dimensions: [model, account]\n- name: music_generations\n  description: Music tracks generated.\n  unit: tracks\n  aggregation: sum\n  dimensions: [model, account]\nprinciples:\n- name: Visibility\n  description: Console exports usage by modality; balance API tracks prepaid spend.\n- name: Allocation\n  description: Tag API keys to attribute multi-modal spend across teams.\n- name: Optimization\n  description: Use highspeed variants for latency-sensitive paths; switch to Token Plan if monthly token spend stabilizes.\n- name: Accountability\n  description: Subscription products require renewal review; PAYG requires balance alerting.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/minimax-ai/refs/heads/main/finops/minimax-ai-finops.yml
-sources: []
+sources:
+- https://platform.minimax.io/docs/pricing/overview
+- https://platform.minimax.io/docs/guides/rate-limits
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - AI
 - LLM
-- Inference
 - Multimodal
-- Voice
-- Video
-- Music
-- Image
 - FinOps
-- Cost Management
 - FOCUS
 ---

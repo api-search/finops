@@ -26,81 +26,76 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/salesforce-service-cloud/refs/heads/main/openapi/salesforce-live-agent-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Salesforce Service Cloud API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Credit
+  pricingCategory: Tiered Subscription
+description: FOCUS-aligned FinOps artifact for Salesforce Service Cloud. Pricing is gated; meters and principles describe the expected billing surface. Salesforce publishes per-edition pricing on its product pages, but those pages are not retrievable via automated fetch (HTTP 403). All editions are sold via Salesforce Sales; API access is included with the underlying CRM license rather than priced as a discrete API SKU. Treat this artifact as a contact-sales placeholder until pricing pages can be reconciled manually.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Salesforce Service Cloud
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Salesforce, Inc.
   ProviderName: Salesforce Service Cloud
-  PublisherName: Salesforce Service Cloud
-  ServiceCategory: Developer Tools / API
+  PublisherName: Salesforce, Inc.
+  ServiceCategory: Customer Service Platform
   ServiceName: Salesforce Service Cloud
+  ServiceSubcategory: Customer Service Management
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - edition
+  - license_type
+  - org
+  name: user_subscription
+  unit: seat-month
+- aggregation: sum
+  dimensions:
+  - edition
+  - org
+  - named_credential
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+- aggregation: max
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  - org
+  - object
+  name: data_storage
+  unit: GB-month
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - org
+  name: file_storage
+  unit: GB-month
 name: Salesforce Service Cloud Finops
 provider_name: Salesforce Service Cloud
 provider_slug: salesforce-service-cloud
-publisher_name: Salesforce Service Cloud
-service_category: API
+publisher_name: Salesforce, Inc.
+service_category: Customer Service Platform
 slug: salesforce-service-cloud-finops
 source_filename: salesforce-service-cloud-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Salesforce Service Cloud\nproviderId: salesforce-service-cloud\npublisherName: Salesforce Service Cloud\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Case Management\n  - CRM\n  - Customer Service\n  - Help Desk\n  - Support\n  - Ticketing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Salesforce Service Cloud API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
-  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
-  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Salesforce Service Cloud\n  ServiceCategory: Developer Tools / API\n  ProviderName: Salesforce Service Cloud\n  PublisherName: Salesforce Service Cloud\n  InvoiceIssuerName: Salesforce Service Cloud\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n\
-  \      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Salesforce Service Cloud REST API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/\n    tags:\n      - Accounts\n      - Cases\n      - Contacts\n      - REST\n    serviceName: Salesforce Service Cloud REST API\n    serviceCategory: API\n  - name: Salesforce Service Cloud SOAP API\n    baseURL: https://yourInstance.salesforce.com/services/Soap/c/59.0/\n    tags:\n      - Enterprise\n      - Integration\n      - SOAP\n    serviceName: Salesforce Service Cloud SOAP API\n    serviceCategory: API\n  - name: Service Cloud Streaming API\n    baseURL:\
-  \ https://yourInstance.salesforce.com/cometd/59.0/\n    tags:\n      - Events\n      - Push Notifications\n      - Real-Time\n      - Streaming\n    serviceName: Service Cloud Streaming API\n    serviceCategory: API\n  - name: Live Agent REST API\n    baseURL: https://yourInstance.salesforce.com/chat/rest/\n    tags:\n      - Agent\n      - Live Chat\n      - Real-Time Support\n    serviceName: Live Agent REST API\n    serviceCategory: API\n  - name: Knowledge API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/knowledge/\n    tags:\n      - Articles\n      - Content Management\n      - Knowledge Base\n    serviceName: Knowledge API\n    serviceCategory: API\n  - name: Einstein Bot API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/einstein/bots/\n    tags:\n      - AI\n      - Automation\n      - Chatbot\n      - Einstein\n    serviceName: Einstein Bot API\n    serviceCategory: API\n  - name: Omni-Channel API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/\n\
-  \    tags:\n      - Agent Presence\n      - Omni-Channel\n      - Routing\n      - Work Distribution\n    serviceName: Omni-Channel API\n    serviceCategory: API\n  - name: Service Cloud Voice Telephony Integration API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/\n    tags:\n      - Call Center\n      - Real-Time\n      - Telephony\n      - Voice\n    serviceName: Service Cloud Voice Telephony Integration API\n    serviceCategory: API\n  - name: Service Cloud Voice for Partner Telephony API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/\n    tags:\n      - Connector\n      - Integration\n      - Partner Telephony\n      - Voice\n    serviceName: Service Cloud Voice for Partner Telephony API\n    serviceCategory: API\n  - name: Agentforce Service Agent API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/\n    tags:\n      - Agentforce\n      - AI\n      - Automation\n      - Service Agent\n    serviceName: Agentforce\
-  \ Service Agent API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: https://www.salesforce.com/service/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Salesforce Service Cloud\nproviderId: salesforce-service-cloud\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n- Case Management\n- Customer Service\n- CRM\n- Salesforce\n- Service Cloud\n- FinOps\n- FOCUS\ndescription: FOCUS-aligned FinOps artifact for Salesforce Service Cloud. Pricing is gated; meters and\n  principles describe the expected billing surface. Salesforce publishes per-edition pricing on its product\n  pages, but those pages are not retrievable via automated fetch (HTTP 403). All editions are sold via\n  Salesforce Sales; API access is included with the underlying CRM license rather than priced as a discrete\n  API SKU. Treat this artifact as a contact-sales placeholder until pricing pages can be reconciled manually.\nsources:\n- https://www.salesforce.com/service/pricing/\n- https://focus.finops.org/focus-specification/v1-3/\n\
+  - https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Salesforce, Inc.\nserviceCategory: Customer Service Platform\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n  - Purchase\n  - Usage\n  - Tax\n  - Adjustment\n  - Credit\nfocusColumns:\n  ServiceName: Salesforce Service Cloud\n  ServiceCategory: Customer Service Platform\n  ServiceSubcategory: Customer Service Management\n  ProviderName: Salesforce Service Cloud\n  PublisherName: Salesforce, Inc.\n  InvoiceIssuerName: Salesforce, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n- name: user_subscription\n  unit: seat-month\n  aggregation: sum\n  dimensions:\n  - edition\n  - license_type\n  - org\n- name: api_requests\n  unit:\
+  \ request\n  aggregation: sum\n  dimensions:\n  - edition\n  - org\n  - named_credential\n- name: data_storage\n  unit: GB-month\n  aggregation: max\n  dimensions:\n  - org\n  - object\n- name: file_storage\n  unit: GB-month\n  aggregation: max\n  dimensions:\n  - org\nprinciples:\n- name: Visibility\n  description: Monitor Setup > System Overview for licensed users, API requests over the trailing 24 hours,\n    and data/file storage. Use the Event Monitoring (Shield) API for per-user request telemetry where\n    licensed.\n- name: Allocation\n  description: Tag each consuming integration with a Connected App / Named Credential and attribute API\n    consumption by Connected App in Event Monitoring.\n- name: Optimization\n  description: Reduce API consumption by using Composite, SOQL Query, and Bulk API 2.0 instead of per-record\n    REST calls; right-size editions at renewal; archive to Big Objects to reduce data-storage overage.\n- name: Accountability\n  description: CRM platform owner\
+  \ is accountable for per-org consumption and renewal terms; integration\n    owners are accountable for staying within the org-wide 24-hour API quota.\nnotes: Salesforce publishes per-edition pricing on its product pages, but those pages are not retrievable\n  via automated fetch (HTTP 403). All editions are sold via Salesforce Sales; API access is included with\n  the underlying CRM license rather than priced as a discrete API SKU. Treat this artifact as a contact-sales\n  placeholder until pricing pages can be reconciled manually.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/salesforce-service-cloud/refs/heads/main/finops/salesforce-service-cloud-finops.yml
-sources: []
+sources:
+- https://www.salesforce.com/service/pricing/
+- https://focus.finops.org/focus-specification/v1-3/
+- https://www.finops.org/framework/
 specification: FinOps Framework
 tags:
 - Case Management
-- CRM
 - Customer Service
-- Help Desk
-- Support
-- Ticketing
+- CRM
+- Salesforce
+- Service Cloud
 - FinOps
-- Cost Management
 - FOCUS
 ---

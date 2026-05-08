@@ -14,79 +14,74 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/aspentech/refs/heads/main/openapi/aspentech-inmation-web-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the AspenTech API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Enterprise License (Subscription)
+description: FOCUS-aligned FinOps shape for AspenTech — enterprise-licensed industrial software with APIs bundled into the platform license. There is no per-API consumption meter; cost optimization centers on license tier, tag/process counts, and concurrent user counts.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: AspenTech
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Aspen Technology, Inc.
+  PricingCategory: Enterprise License
   ProviderName: AspenTech
-  PublisherName: AspenTech
-  ServiceCategory: Developer Tools / API
+  PublisherName: Aspen Technology, Inc.
+  ServiceCategory: Industrial Software
   ServiceName: AspenTech
+  ServiceSubcategory: Process Optimization & Industrial IoT
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Annual aspenONE / AIoT Hub / Inmation enterprise license fee
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - product
+  - site
+  name: platform_license
+  unit: year
+- aggregation: max
+  description: Inmation tag / process variable count licensed
+  dimensions:
+  - site
+  name: tag_count
+  unit: tag
+- aggregation: max
+  description: Concurrent named-user or floating-user license entitlement
+  dimensions:
+  - product
+  - site
+  name: concurrent_users
+  unit: seat
+- aggregation: sum
+  description: Activity-only meter; API access is included in the platform license
+  dimensions:
+  - product
+  - site
+  name: api_calls
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Aspentech Finops
 provider_name: AspenTech
 provider_slug: aspentech
-publisher_name: AspenTech
-service_category: API
+publisher_name: Aspen Technology, Inc.
+service_category: Industrial Software / Process Optimization
 slug: aspentech-finops
 source_filename: aspentech-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: AspenTech\nproviderId: aspentech\npublisherName: AspenTech\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Industrial IoT\n  - Process Optimization\n  - Manufacturing\n  - Energy\n  - Chemicals\n  - Time Series\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the AspenTech API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
-  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
-  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: AspenTech\n  ServiceCategory: Developer Tools / API\n  ProviderName: AspenTech\n  PublisherName: AspenTech\n  InvoiceIssuerName: AspenTech\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
-  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: AspenTech Inmation Web API\n    baseURL: http://hostname:8002\n    tags:\n      - Industrial IoT\n      - Manufacturing\n      - Process Optimization\n      - REST\n      - Time Series\n      - WebSocket\n    serviceName: AspenTech Inmation Web API\n    serviceCategory: API\n  - name: AspenTech aspenONE API\n    baseURL: https://api.aspentech.com\n    tags:\n      - Energy\n      - Manufacturing\n      - Process Engineering\n      - Process Optimization\n      - Simulation\n    serviceName: AspenTech aspenONE API\n    serviceCategory: API\n  - name: AspenTech Inmation Simple Call Interface (SCI) API\n    baseURL: http://hostname:8002\n    tags:\n      - Industrial\
-  \ IoT\n      - Manufacturing\n      - Process Optimization\n      - REST\n    serviceName: AspenTech Inmation Simple Call Interface (SCI) API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.aspentech.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: AspenTech\nproviderId: aspentech\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Industrial IoT\n  - Process Optimization\n  - Manufacturing\n  - Energy\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for AspenTech — enterprise-licensed industrial software with\n  APIs bundled into the platform license. There is no per-API consumption meter; cost optimization\n  centers on license tier, tag/process counts, and concurrent user counts.\nsources:\n  - https://www.aspentech.com/\n  - https://focus.finops.org/focus-specification/v1-3/\nnotes: APIs are bundled with platform licenses; no separate API billing line. Meters below proxy the\n  underlying platform sizing levers.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n\
+  \  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Aspen Technology, Inc.\nserviceCategory: Industrial Software / Process Optimization\nbillingModel:\n  pricingCategory: Enterprise License (Subscription)\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: AspenTech\n  ServiceCategory: Industrial Software\n  ServiceSubcategory: Process Optimization & Industrial IoT\n  ProviderName: AspenTech\n  PublisherName: Aspen Technology, Inc.\n  InvoiceIssuerName: Aspen Technology, Inc.\n  BillingCurrency: USD\n  PricingCategory: Enterprise License\nmeters:\n  - name: platform_license\n    description: Annual aspenONE / AIoT Hub / Inmation enterprise license fee\n    unit: year\n    aggregation: max\n    dimensions:\n      - product\n      - site\n  - name: tag_count\n    description: Inmation tag / process variable count licensed\n    unit: tag\n    aggregation: max\n \
+  \   dimensions:\n      - site\n  - name: concurrent_users\n    description: Concurrent named-user or floating-user license entitlement\n    unit: seat\n    aggregation: max\n    dimensions:\n      - product\n      - site\n  - name: api_calls\n    description: Activity-only meter; API access is included in the platform license\n    unit: request\n    aggregation: sum\n    dimensions:\n      - product\n      - site\nprinciples:\n  - name: Visibility\n    description: Use Inmation server admin dashboards and the AspenTech license-management portal to\n      surface tag-count consumption and concurrent-user peaks against entitlement.\n  - name: Allocation\n    description: Allocate license cost by site / refinery / plant using AspenTech's site-keyed entitlements\n      and Inmation namespaces; tag spend by business unit in the consumer's CMDB.\n  - name: Optimization\n    description: Right-size tag-count entitlements annually; consolidate Inmation servers where possible;\n      retire unused\
+  \ aspenONE seats at renewal.\n  - name: Accountability\n    description: Plant IT / process-control engineers own AspenTech spend; renewal cycles are typically\n      annual with site-by-site review.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/aspentech/refs/heads/main/finops/aspentech-finops.yml
-sources: []
+sources:
+- https://www.aspentech.com/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Industrial IoT
 - Process Optimization
 - Manufacturing
 - Energy
-- Chemicals
-- Time Series
 - FinOps
-- Cost Management
 - FOCUS
 ---

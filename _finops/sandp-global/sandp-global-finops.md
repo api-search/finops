@@ -20,80 +20,67 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/sandp-global/refs/heads/main/openapi/sandp-global-commodity-insights-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the S&P Global API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription / Licensed
+description: FOCUS-aligned FinOps artifact for S&P Global. Pricing is gated; meters and principles describe the expected billing surface. S&P Global APIs and data feeds (Market Intelligence, Capital IQ, Indices, Ratings, Platts) are sold under enterprise data licenses. There is no public price list; access is via contract with S&P Global sales.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: S&P Global
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: S&P Global Inc.
   ProviderName: S&P Global
-  PublisherName: S&P Global
-  ServiceCategory: Developer Tools / API
+  PublisherName: S&P Global Inc.
+  ServiceCategory: Financial Market Data
   ServiceName: S&P Global
+  ServiceSubcategory: Market Data / Indices
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - product
+  - user_count
+  name: data_license
+  unit: month
+- aggregation: sum
+  dimensions:
+  - product
+  - feed
+  - client_id
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  - product
+  - feed
+  name: data_volume
   unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Sandp Global Finops
 provider_name: S&P Global
 provider_slug: sandp-global
-publisher_name: S&P Global
-service_category: API
+publisher_name: S&P Global Inc.
+service_category: Financial Market Data
 slug: sandp-global-finops
 source_filename: sandp-global-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: S&P Global\nproviderId: sandp-global\npublisherName: S&P Global\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Financial Data\n  - Market Intelligence\n  - Commodity Insights\n  - Credit Ratings\n  - Analytics\n  - Fortune 500\n  - Enterprise\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the S&P Global API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: S&P Global\n  ServiceCategory: Developer Tools / API\n  ProviderName: S&P Global\n  PublisherName: S&P Global\n  InvoiceIssuerName: S&P Global\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the\
-  \ network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: S&P Capital IQ API\n    baseURL: ''\n    tags:\n      - Financial Data\n      - Fundamentals\n      - Credit Ratings\n      - Market Intelligence\n      - REST\n    serviceName: S&P Capital IQ API\n    serviceCategory: API\n  - name: S&P Global Commodity Insights API\n    baseURL: ''\n    tags:\n      - Commodity Data\n      - Energy\n      - Metals\n      - Platts\n      - Price Assessments\n      - REST\n    serviceName: S&P Global Commodity Insights API\n    serviceCategory: API\n  - name: S&P Global Marketplace Catalog API\n    baseURL: ''\n    tags:\n      - Data Catalog\n      - Marketplace\n      - Discovery\n      - REST\n    serviceName:\
-  \ S&P Global Marketplace Catalog API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.spglobal.com/marketintelligence/en/solutions/marketplace
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: S&P Global\nproviderId: sandp-global\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n- Capital Markets\n- Financial Data\n- Indices\n- Market Intelligence\n- Ratings\n- FinOps\n- FOCUS\ndescription: FOCUS-aligned FinOps artifact for S&P Global. Pricing is gated; meters and principles describe\n  the expected billing surface. S&P Global APIs and data feeds (Market Intelligence, Capital IQ, Indices,\n  Ratings, Platts) are sold under enterprise data licenses. There is no public price list; access is via\n  contract with S&P Global sales.\nsources:\n- https://www.spglobal.com/marketintelligence/en/solutions/marketplace\n- https://focus.finops.org/focus-specification/v1-3/\n- https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
+  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: S&P Global Inc.\nserviceCategory: Financial Market Data\nbillingModel:\n  pricingCategory: Subscription / Licensed\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n  - Purchase\n  - Tax\n  - Adjustment\nfocusColumns:\n  ServiceName: S&P Global\n  ServiceCategory: Financial Market Data\n  ServiceSubcategory: Market Data / Indices\n  ProviderName: S&P Global\n  PublisherName: S&P Global Inc.\n  InvoiceIssuerName: S&P Global Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n- name: data_license\n  unit: month\n  aggregation: max\n  dimensions:\n  - product\n  - user_count\n- name: api_requests\n  unit: request\n  aggregation: sum\n  dimensions:\n  - product\n  - feed\n  - client_id\n- name: data_volume\n  unit: GB\n  aggregation: sum\n  dimensions:\n  - product\n  - feed\nprinciples:\n- name: Visibility\n  description: Track consumption per data feed (Capital\
+  \ IQ, Xpressfeed, Marketplace, Indices) using S&P\n    Global's customer portal; reconcile against the negotiated user / record / redistribution caps in\n    your contract.\n- name: Allocation\n  description: Tag every downstream consumer (desk, application, fund) so usage caps and redistribution\n    clauses can be attributed; required for audit response.\n- name: Optimization\n  description: Right-size feed scope at renewal — drop unused universes / regions; use delta files (Xpressfeed)\n    instead of full snapshots to cut data-volume charges; consolidate users under enterprise licenses\n    where it lowers per-seat cost.\n- name: Accountability\n  description: Market-data manager owns S&P Global vendor relationship, audit responses, and license-cap\n    monitoring.\nnotes: S&P Global APIs and data feeds (Market Intelligence, Capital IQ, Indices, Ratings, Platts) are\n  sold under enterprise data licenses. There is no public price list; access is via contract with S&P\n  Global sales.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sandp-global/refs/heads/main/finops/sandp-global-finops.yml
-sources: []
+sources:
+- https://www.spglobal.com/marketintelligence/en/solutions/marketplace
+- https://focus.finops.org/focus-specification/v1-3/
+- https://www.finops.org/framework/
 specification: FinOps Framework
 tags:
+- Capital Markets
 - Financial Data
+- Indices
 - Market Intelligence
-- Commodity Insights
-- Credit Ratings
-- Analytics
-- Fortune 500
-- Enterprise
+- Ratings
 - FinOps
-- Cost Management
 - FOCUS
 ---

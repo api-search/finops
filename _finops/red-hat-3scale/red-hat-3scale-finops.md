@@ -38,79 +38,47 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/red-hat-3scale/refs/heads/main/openapi/red-hat-3scale-apicast-management-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Red Hat 3scale API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription
+description: FOCUS-aligned FinOps shape for Red Hat 3scale. Pricing is contact-sales, so the meter list reflects subscription/term structure rather than usage-based billing.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Red Hat 3scale
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Red Hat 3scale
-  PublisherName: Red Hat 3scale
-  ServiceCategory: Developer Tools / API
-  ServiceName: Red Hat 3scale
+  InvoiceIssuerName: Red Hat, Inc.
+  ProviderName: Red Hat
+  PublisherName: Red Hat, Inc.
+  ServiceCategory: API Management
+  ServiceName: Red Hat 3scale API Management
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Annual 3scale subscription (sized by deployment scope and call volume)
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - deployment_model
+  - support_level
+  - term_length
+  name: subscription_term
+  unit: contract
 name: Red Hat 3Scale Finops
 provider_name: Red Hat 3scale
 provider_slug: red-hat-3scale
-publisher_name: Red Hat 3scale
-service_category: API
+publisher_name: Red Hat, Inc.
+service_category: API Management
 slug: red-hat-3scale-finops
 source_filename: red-hat-3scale-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Red Hat 3scale\nproviderId: red-hat-3scale\npublisherName: Red Hat 3scale\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Gateway\n  - API Management\n  - Developer Portal\n  - Enterprise\n  - Red Hat\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Red Hat 3scale API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
-  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
-  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Red Hat 3scale\n  ServiceCategory: Developer Tools / API\n  ProviderName: Red Hat 3scale\n  PublisherName: Red Hat 3scale\n  InvoiceIssuerName: Red Hat 3scale\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network\
-  \ in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Red Hat 3scale Service Management API\n    baseURL: https://su1.3scale.net\n    tags:\n      - Access Control\n      - API Management\n      - Authorization\n      - Traffic Management\n    serviceName: Red Hat 3scale Service Management API\n    serviceCategory: API\n  - name: Red Hat 3scale Account Management API\n    baseURL: https://{your-domain}-admin.3scale.net\n    tags:\n      - Account Management\n      - API Management\n      - Applications\n      - Developer Portal\n    serviceName: Red Hat 3scale Account Management API\n    serviceCategory: API\n  - name: Red Hat 3scale Analytics API\n    baseURL: https://{your-domain}-admin.3scale.net\n\
-  \    tags:\n      - Analytics\n      - API Management\n      - Metrics\n      - Reporting\n    serviceName: Red Hat 3scale Analytics API\n    serviceCategory: API\n  - name: Red Hat 3scale Billing API\n    baseURL: https://{your-domain}-admin.3scale.net\n    tags:\n      - API Management\n      - Billing\n      - Invoices\n      - Monetization\n    serviceName: Red Hat 3scale Billing API\n    serviceCategory: API\n  - name: Red Hat 3scale Webhooks\n    baseURL: ''\n    tags:\n      - API Management\n      - Events\n      - Notifications\n      - Webhooks\n    serviceName: Red Hat 3scale Webhooks\n    serviceCategory: API\n  - name: Red Hat 3scale APIcast Management API\n    baseURL: http://localhost:8090\n    tags:\n      - API Gateway\n      - Configuration\n      - Health Checks\n      - Management\n    serviceName: Red Hat 3scale APIcast Management API\n    serviceCategory: API\n  - name: Red Hat 3scale Toolbox CLI\n    baseURL: ''\n    tags:\n      - API Management\n      - Automation\n\
-  \      - CLI\n      - DevOps\n    serviceName: Red Hat 3scale Toolbox CLI\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.redhat.com/en/technologies/jboss-middleware/3scale
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Red Hat 3scale\nproviderId: red-hat-3scale\npublisherName: Red Hat, Inc.\nserviceCategory: API Management\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - API Management\n  - Gateway\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for Red Hat 3scale. Pricing is contact-sales, so the\n  meter list reflects subscription/term structure rather than usage-based billing.\nsources:\n  - https://www.redhat.com/en/technologies/jboss-middleware/3scale\nnotes: No public price list or usage-billing API; FOCUS columns reflect the assumed annual-subscription\n  shape, not a fetched billing surface.\nbillingModel:\n\
+  \  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Red Hat 3scale API Management\n  ServiceCategory: API Management\n  ProviderName: Red Hat\n  PublisherName: Red Hat, Inc.\n  InvoiceIssuerName: Red Hat, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: subscription_term\n    description: Annual 3scale subscription (sized by deployment scope and call volume)\n    unit: contract\n    aggregation: sum\n    dimensions:\n      - deployment_model\n      - support_level\n      - term_length\nprinciples:\n  - name: Visibility\n    description: 3scale's own analytics service exposes per-application and per-method call\n      counts that customers can use for internal showback against the Red Hat subscription cost.\n  - name: Allocation\n    description: Allocate the 3scale subscription to the platform team that operates the gateway;\n      use 3scale account/application metadata to attribute downstream\
+  \ API spend to consumers.\n  - name: Optimization\n    description: Right-size deployment topology (single vs multi-tenant, OpenShift-native vs\n      hosted), consolidate API portfolios behind a shared 3scale instance, and renegotiate term\n      length at renewal.\n  - name: Accountability\n    description: Platform engineering owns the 3scale subscription; product API teams own their\n      consumer plan design.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/red-hat-3scale/refs/heads/main/finops/red-hat-3scale-finops.yml
-sources: []
+sources:
+- https://www.redhat.com/en/technologies/jboss-middleware/3scale
 specification: FinOps Framework
 tags:
-- API Gateway
 - API Management
-- Developer Portal
-- Enterprise
-- Red Hat
+- Gateway
 - FinOps
-- Cost Management
 - FOCUS
 ---

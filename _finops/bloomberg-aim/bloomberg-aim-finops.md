@@ -26,78 +26,67 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/bloomberg-aim/refs/heads/main/openapi/bloomberg-http-api.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Bloomberg AIM API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Enterprise Subscription (Negotiated)
+description: 'FOCUS-aligned FinOps placeholder for Bloomberg AIM: enterprise buy-side OMS / IBOR platform billed under a contract-negotiated annual subscription typically combined with named-user seats and Bloomberg market-data feeds.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Bloomberg AIM
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Bloomberg AIM
-  PublisherName: Bloomberg AIM
-  ServiceCategory: Developer Tools / API
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Bloomberg L.P.
+  ProviderName: Bloomberg
+  PublisherName: Bloomberg L.P.
+  ServiceCategory: Buy-side OMS / IBOR
   ServiceName: Bloomberg AIM
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - module
+  - tenant
+  name: aim_subscription
+  unit: year
+- aggregation: max
+  dimensions:
+  - tenant
+  - role
+  name: aim_named_users
+  unit: seat
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - asset_class
+  - venue
+  name: aim_orders
+  unit: order
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - feed
+  - exchange
+  name: market_data_passthrough
+  unit: record
 name: Bloomberg Aim Finops
 provider_name: Bloomberg AIM
 provider_slug: bloomberg-aim
-publisher_name: Bloomberg AIM
-service_category: API
+publisher_name: Bloomberg L.P.
+service_category: Buy-side OMS / IBOR
 slug: bloomberg-aim-finops
 source_filename: bloomberg-aim-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Bloomberg AIM\nproviderId: bloomberg-aim\npublisherName: Bloomberg AIM\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Financial Data\n  - Market Data\n  - Order Management\n  - Portfolio Management\n  - Trading\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Bloomberg AIM API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
-  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Bloomberg AIM\n  ServiceCategory: Developer Tools / API\n  ProviderName: Bloomberg AIM\n  PublisherName: Bloomberg AIM\n  InvoiceIssuerName: Bloomberg AIM\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network\
-  \ in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Bloomberg Data License API\n    baseURL: https://api.bloomberg.com/eap\n    tags:\n      - Financial Data\n      - Market Data\n      - Pricing Data\n      - Reference Data\n    serviceName: Bloomberg Data License API\n    serviceCategory: API\n  - name: Bloomberg Server API (SAPI)\n    baseURL: ''\n    tags:\n      - Financial Analytics\n      - Market Data\n      - Real-Time Data\n      - Server API\n    serviceName: Bloomberg Server API (SAPI)\n    serviceCategory: API\n  - name: Bloomberg EMSX API\n    baseURL: https://localhost:3000\n    tags:\n      - Equities\n      - Execution Management\n      - Order Management\n      - Trading\n    serviceName:\
-  \ Bloomberg EMSX API\n    serviceCategory: API\n  - name: Bloomberg HTTP API\n    baseURL: https://localhost:3000\n    tags:\n      - Historical Data\n      - HTTP API\n      - Market Data\n      - Reference Data\n      - Streaming\n    serviceName: Bloomberg HTTP API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.bloomberg.com/professional/products/bloomberg-terminal/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Bloomberg AIM\nproviderId: bloomberg-aim\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Order Management\n  - Portfolio Management\n  - Trading\ndescription: 'FOCUS-aligned FinOps placeholder for Bloomberg AIM: enterprise buy-side OMS / IBOR\n  platform billed under a contract-negotiated annual subscription typically combined with named-user\n  seats and Bloomberg market-data feeds.'\nsources:\n  - https://www.bloomberg.com/professional/products/bloomberg-terminal/\nnotes: AIM commercial terms are bundled into the Bloomberg Enterprise contract; reconcile against\n  the active subscription for actual fee structure.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
+  publisherName: Bloomberg L.P.\nserviceCategory: Buy-side OMS / IBOR\nbillingModel:\n  pricingCategory: Enterprise Subscription (Negotiated)\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Bloomberg AIM\n  ServiceCategory: Buy-side OMS / IBOR\n  ProviderName: Bloomberg\n  PublisherName: Bloomberg L.P.\n  InvoiceIssuerName: Bloomberg L.P.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: aim_subscription\n    unit: year\n    aggregation: sum\n    dimensions:\n      - module\n      - tenant\n  - name: aim_named_users\n    unit: seat\n    aggregation: max\n    dimensions:\n      - tenant\n      - role\n  - name: aim_orders\n    unit: order\n    aggregation: sum\n    dimensions:\n      - asset_class\n      - venue\n  - name: market_data_passthrough\n    unit: record\n    aggregation: sum\n    dimensions:\n      - feed\n      - exchange\nprinciples:\n  - name: Visibility\n\
+  \    description: Use AIM administration and Bloomberg client-services usage reports to track\n      module activation, named-user counts, and order throughput.\n  - name: Allocation\n    description: Map AIM tenants and modules to the consuming desk / strategy for chargeback;\n      reconcile against the bundled Bloomberg Enterprise invoice.\n  - name: Optimization\n    description: Reclaim unused AIM seats during annual renewal; align AIM module mix with\n      portfolio strategy; consolidate market-data passthrough into shared B-PIPE rather than\n      per-AIM-tenant feeds where possible.\n  - name: Accountability\n    description: Designate an AIM contract owner per legal entity; review utilization quarterly\n      with Bloomberg Enterprise client services.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/bloomberg-aim/refs/heads/main/finops/bloomberg-aim-finops.yml
-sources: []
+sources:
+- https://www.bloomberg.com/professional/products/bloomberg-terminal/
 specification: FinOps Framework
 tags:
-- Financial Data
-- Market Data
+- FinOps
+- FOCUS
 - Order Management
 - Portfolio Management
 - Trading
-- FinOps
-- Cost Management
-- FOCUS
 ---

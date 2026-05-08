@@ -45,73 +45,48 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the freshworks API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Per-Agent Subscription
+description: FOCUS-aligned FinOps for Freshworks.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: freshworks
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: freshworks
-  PublisherName: freshworks
-  ServiceCategory: Developer Tools / API
-  ServiceName: freshworks
+  ProviderName: Freshworks
+  PublisherName: Freshworks
+  ServiceCategory: Customer Support / CRM
+  ServiceName: Freshworks
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
+  - product
   - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: agent_seats
+  unit: seat-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  name: freddy_ai_sessions
+  unit: session
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: tickets_created
+  unit: ticket
+- aggregation: max
+  name: collaborators
+  unit: collaborator-month
 name: Freshworks Finops
 provider_name: freshworks
 provider_slug: freshworks
-publisher_name: freshworks
-service_category: API
+publisher_name: Freshworks
+service_category: Customer Support / CRM
 slug: freshworks-finops
 source_filename: freshworks-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: freshworks\nproviderId: freshworks\npublisherName: freshworks\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the freshworks API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can\
-  \ be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing\
-  \ and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: freshworks\n  ServiceCategory: Developer Tools / API\n  ProviderName: freshworks\n  PublisherName: freshworks\n  InvoiceIssuerName: freshworks\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name:\
-  \ compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Freshworks Freshdesk API\n    baseURL: https://domain.freshdesk.com/api/v2\n    tags:\n      - Agents\n      - Contacts\n      - Customer Support\n      - Helpdesk\n      - Ticketing\n    serviceName: Freshworks Freshdesk API\n    serviceCategory: API\n  - name: Freshworks Freshservice API\n    baseURL: https://domain.freshservice.com/api/v2\n    tags:\n      - Asset Management\n      - IT Service Management\n      - ITSM\n      - Service Desk\n      - Ticketing\n    serviceName: Freshworks Freshservice API\n    serviceCategory: API\n  - name: Freshworks Freshsales API\n    baseURL: https://domain.myfreshworks.com/crm/sales/api\n    tags:\n      - Contacts\n      - CRM\n      - Deals\n      - Leads\n      - Sales\n    serviceName: Freshworks Freshsales API\n    serviceCategory:\
-  \ API\n  - name: Freshworks Freshchat API\n    baseURL: https://api.freshchat.com/v2\n    tags:\n      - Chat\n      - Conversations\n      - Customer Engagement\n      - Live Chat\n      - Messaging\n    serviceName: Freshworks Freshchat API\n    serviceCategory: API\n  - name: Freshworks Freshcaller API\n    baseURL: https://domain.freshcaller.com/api/v1\n    tags:\n      - Call Center\n      - Contact Center\n      - Phone\n      - Telephony\n      - Voice\n    serviceName: Freshworks Freshcaller API\n    serviceCategory: API\n  - name: Freshworks Freshteam API\n    baseURL: https://domain.freshteam.com/api\n    tags:\n      - Applicant Tracking\n      - Employees\n      - HR\n      - Human Resources\n      - Recruiting\n    serviceName: Freshworks Freshteam API\n    serviceCategory: API\n  - name: Freshworks Freshmarketer API\n    baseURL: https://api.example.com\n    tags:\n      - Analytics\n      - Campaigns\n      - Email Marketing\n      - Marketing\n      - Marketing Automation\n\
-  \    serviceName: Freshworks Freshmarketer API\n    serviceCategory: API\n  - name: Freshworks App SDK\n    baseURL: https://api.example.com\n    tags:\n      - App Development\n      - Extensions\n      - Integrations\n      - Platform\n      - SDK\n    serviceName: Freshworks App SDK\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://www.freshworks.com/freshdesk/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Freshworks\nproviderId: freshworks\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Customer Support / CRM\ndescription: FOCUS-aligned FinOps for Freshworks.\nsources:\n  - https://www.freshworks.com/freshdesk/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Freshworks\nserviceCategory: Customer Support / CRM\nbillingModel:\n  pricingCategory: Per-Agent Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Freshworks\n  ServiceCategory: Customer Support / CRM\n  ProviderName: Freshworks\n  PublisherName: Freshworks\n  BillingCurrency: USD\nmeters:\n  - name: agent_seats\n    unit:\
+  \ seat-month\n    aggregation: max\n    dimensions:\n      - product\n      - tier\n  - name: freddy_ai_sessions\n    unit: session\n    aggregation: sum\n  - name: tickets_created\n    unit: ticket\n    aggregation: sum\n  - name: collaborators\n    unit: collaborator-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track Freshworks consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/freshworks/refs/heads/main/finops/freshworks-finops.yml
-sources: []
+sources:
+- https://www.freshworks.com/freshdesk/pricing/
 specification: FinOps Framework
 tags:
 - FinOps
-- Cost Management
 - FOCUS
+- Customer Support / CRM
 ---

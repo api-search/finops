@@ -63,73 +63,48 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the honeycomb API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Per-Event Tiered Subscription
+description: FOCUS-aligned FinOps for Honeycomb.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: honeycomb
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: honeycomb
-  PublisherName: honeycomb
-  ServiceCategory: Developer Tools / API
-  ServiceName: honeycomb
+  ProviderName: Honeycomb
+  PublisherName: Honeycomb
+  ServiceCategory: Observability
+  ServiceName: Honeycomb
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - environment
+  - dataset
+  name: events_ingested
+  unit: event
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: metrics_data_points
+  unit: datapoint
+- aggregation: max
+  name: triggers_active
+  unit: trigger-month
+- aggregation: max
+  name: slos_active
+  unit: slo-month
 name: Honeycomb Finops
 provider_name: honeycomb
 provider_slug: honeycomb
-publisher_name: honeycomb
-service_category: API
+publisher_name: Honeycomb
+service_category: Observability
 slug: honeycomb-finops
 source_filename: honeycomb-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: honeycomb\nproviderId: honeycomb\npublisherName: honeycomb\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the honeycomb API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be\
-  \ allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing\
-  \ and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: honeycomb\n  ServiceCategory: Developer Tools / API\n  ProviderName: honeycomb\n  PublisherName: honeycomb\n  InvoiceIssuerName: honeycomb\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n\
-  \    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Honeycomb API\n    baseURL: https://api.honeycomb.io\n    tags:\n      - Debugging\n      - Monitoring\n      - Observability\n      - Telemetry\n      - Tracing\n    serviceName: Honeycomb API\n    serviceCategory: API\n  - name: Honeycomb Events API\n    baseURL: https://api.honeycomb.io\n    tags:\n      - Events\n      - Ingestion\n      - Observability\n      - Telemetry\n    serviceName: Honeycomb Events API\n    serviceCategory: API\n  - name: Honeycomb Queries API\n    baseURL: https://api.honeycomb.io\n    tags:\n      - Analytics\n      - Data Analysis\n      - Observability\n      - Queries\n    serviceName: Honeycomb Queries API\n    serviceCategory: API\n  - name: Honeycomb SLOs API\n    baseURL: https://api.honeycomb.io\n    tags:\n      - Observability\n      - Reliability\n\
-  \      - Service Level Objectives\n      - SLOs\n    serviceName: Honeycomb SLOs API\n    serviceCategory: API\n  - name: Honeycomb Datasets API\n    baseURL: https://api.honeycomb.io\n    tags:\n      - Data Management\n      - Datasets\n      - Observability\n    serviceName: Honeycomb Datasets API\n    serviceCategory: API\n  - name: Honeycomb Boards API\n    baseURL: https://api.honeycomb.io\n    tags:\n      - Dashboards\n      - Observability\n      - Visualization\n    serviceName: Honeycomb Boards API\n    serviceCategory: API\n  - name: Honeycomb Markers API\n    baseURL: https://api.honeycomb.io\n    tags:\n      - Annotations\n      - Deployments\n      - Markers\n      - Observability\n    serviceName: Honeycomb Markers API\n    serviceCategory: API\n  - name: Honeycomb Triggers API\n    baseURL: https://api.honeycomb.io\n    tags:\n      - Alerts\n      - Monitoring\n      - Notifications\n      - Observability\n    serviceName: Honeycomb Triggers API\n    serviceCategory:\
-  \ API\n  - name: Honeycomb Environments API\n    baseURL: https://api.honeycomb.io\n    tags:\n      - Administration\n      - Environments\n      - Observability\n    serviceName: Honeycomb Environments API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://www.honeycomb.io/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Honeycomb\nproviderId: honeycomb\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Observability\ndescription: FOCUS-aligned FinOps for Honeycomb.\nsources:\n  - https://www.honeycomb.io/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Honeycomb\nserviceCategory: Observability\nbillingModel:\n  pricingCategory: Per-Event Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Honeycomb\n  ServiceCategory: Observability\n  ProviderName: Honeycomb\n  PublisherName: Honeycomb\n  BillingCurrency: USD\nmeters:\n  - name: events_ingested\n    unit: event\n    aggregation: sum\n  \
+  \  dimensions:\n      - environment\n      - dataset\n  - name: metrics_data_points\n    unit: datapoint\n    aggregation: sum\n  - name: triggers_active\n    unit: trigger-month\n    aggregation: max\n  - name: slos_active\n    unit: slo-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track Honeycomb consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/honeycomb/refs/heads/main/finops/honeycomb-finops.yml
-sources: []
+sources:
+- https://www.honeycomb.io/pricing
 specification: FinOps Framework
 tags:
 - FinOps
-- Cost Management
 - FOCUS
+- Observability
 ---

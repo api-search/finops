@@ -7,74 +7,56 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Conduent API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Enterprise Services Contract
+description: 'FOCUS-aligned FinOps for Conduent: services-bundled enterprise BPO contract; API consumption is not separately billed but is governed by the master services agreement.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Conduent
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Conduent Business Services, LLC
   ProviderName: Conduent
-  PublisherName: Conduent
-  ServiceCategory: Developer Tools / API
+  PublisherName: Conduent Business Services, LLC
+  ServiceCategory: Business Process Services
   ServiceName: Conduent
 layout: finops
 meters:
+- aggregation: max
+  description: Conduent enterprise services / BPO contract value
+  dimensions:
+  - product
+  - tenant
+  name: services_contract
+  unit: month
 - aggregation: sum
-  description: Count of billable API requests
+  description: Internal-only meter for chargeback within the customer organization. Not billed externally.
   dimensions:
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - consumer_app
+  name: api_calls_internal
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Conduent Finops
 provider_name: Conduent
 provider_slug: conduent
-publisher_name: Conduent
-service_category: API
+publisher_name: Conduent Business Services, LLC
+service_category: Business Process Services
 slug: conduent-finops
 source_filename: conduent-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Conduent\nproviderId: conduent\npublisherName: Conduent\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Business Process Services\n  - Technology\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Conduent API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
-  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
-  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Conduent\n  ServiceCategory: Developer Tools / API\n  ProviderName: Conduent\n  PublisherName: Conduent\n  InvoiceIssuerName: Conduent\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
-  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Conduent API\n    baseURL: https://api.conduent.com\n    tags:\n      - Business Process Services\n      - Technology\n    serviceName: Conduent API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.conduent.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Conduent\nproviderId: conduent\npublisherName: Conduent Business Services, LLC\nserviceCategory: Business Process Services\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Business Process Services\n  - Technology\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Conduent: services-bundled enterprise BPO contract; API consumption\n  is not separately billed but is governed by the master services agreement.'\nnotes: Conduent is a BPO services company; API access is bundled into the broader services contract.\n  Per-call billing is not exposed.\nsources:\n  - https://www.conduent.com\nbillingModel:\n  pricingCategory:\
+  \ Enterprise Services Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Conduent\n  ServiceCategory: Business Process Services\n  ProviderName: Conduent\n  PublisherName: Conduent Business Services, LLC\n  InvoiceIssuerName: Conduent Business Services, LLC\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: services_contract\n    description: Conduent enterprise services / BPO contract value\n    unit: month\n    aggregation: max\n    dimensions:\n      - product\n      - tenant\n  - name: api_calls_internal\n    description: Internal-only meter for chargeback within the customer organization. Not billed externally.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - consumer_app\nprinciples:\n  - name: Visibility\n    description: Track API usage internally via consumer application credentials; consult the Conduent\n      account\
+  \ team for usage reporting tied to the services contract.\n  - name: Allocation\n    description: Allocate the bundled services contract across business units using the underlying business-process\n      activity (transactions, cases, calls handled).\n  - name: Optimization\n    description: Optimize through scope refinement on the services contract — review unused integrations\n      and module activation at renewal.\n  - name: Accountability\n    description: Operations / vendor-management owners typically hold the Conduent contract; integration\n      owners are accountable for staying within negotiated API capacity.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/conduent/refs/heads/main/finops/conduent-finops.yml
-sources: []
+sources:
+- https://www.conduent.com
 specification: FinOps Framework
 tags:
 - Business Process Services
 - Technology
 - FinOps
-- Cost Management
 - FOCUS
 ---

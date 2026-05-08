@@ -38,78 +38,71 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/kubernetes-services/refs/heads/main/openapi/kubernetes-network-policies-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: N/A
   chargeCategories:
   - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Kubernetes Services API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Open Source (no license fee)
+description: 'FOCUS-aligned FinOps for the Kubernetes Services API: the abstraction itself is free open source, but real spend appears on the cloud-provider invoice when Services of type LoadBalancer provision cloud LBs, when NodePort/ClusterIP traffic crosses zones, or when external IPs and egress are billed. FinOps signal therefore comes from the underlying cloud bill, allocated back to Services via labels and CCM annotations.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Kubernetes Services
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Kubernetes Services
-  PublisherName: Kubernetes Services
-  ServiceCategory: Developer Tools / API
+  ProviderName: Kubernetes (CNCF)
+  PublisherName: Cloud Native Computing Foundation
+  ServiceCategory: Container Orchestration / Networking
   ServiceName: Kubernetes Services
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - cluster
+  - cloud_provider
+  - lb_type
+  name: load_balancer_hours
+  unit: instance-hour
+- aggregation: max
+  dimensions:
+  - service
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: public_ip_count
+  unit: ip
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  - service
+  - source_zone
+  - destination_zone
+  name: cross_zone_egress
   unit: GB
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - service
+  - lb_type
+  name: data_processed
+  unit: GB
+- aggregation: max
+  dimensions:
+  - service
+  name: endpoint_count
+  unit: endpoint
 name: Kubernetes Services Finops
 provider_name: Kubernetes Services
 provider_slug: kubernetes-services
-publisher_name: Kubernetes Services
-service_category: API
+publisher_name: Cloud Native Computing Foundation (CNCF)
+service_category: Open Source / Container Networking
 slug: kubernetes-services-finops
 source_filename: kubernetes-services-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Kubernetes Services\nproviderId: kubernetes-services\npublisherName: Kubernetes Services\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Container Orchestration\n  - Kubernetes\n  - Load Balancing\n  - Networking\n  - Service Discovery\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Kubernetes Services API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name:\
-  \ Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  -\
-  \ name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Kubernetes Services\n  ServiceCategory: Developer Tools / API\n  ProviderName: Kubernetes Services\n  PublisherName: Kubernetes Services\n  InvoiceIssuerName: Kubernetes Services\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
-  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Kubernetes Services\n    baseURL: ''\n    tags:\n      - Kubernetes\n      - Load Balancing\n      - Networking\n      - Service Discovery\n    serviceName: Kubernetes Services\n    serviceCategory: API\n  - name: Kubernetes Ingress\n    baseURL: ''\n    tags:\n      - HTTP\n      - Kubernetes\n      - Load Balancing\n      - Networking\n    serviceName: Kubernetes Ingress\n    serviceCategory: API\n  - name: Kubernetes Gateway API\n    baseURL: ''\n    tags:\n      - Gateway\n      - Kubernetes\n      - Networking\n      - Traffic Management\n    serviceName: Kubernetes Gateway API\n    serviceCategory:\
-  \ API\n  - name: Kubernetes EndpointSlices\n    baseURL: ''\n    tags:\n      - Kubernetes\n      - Networking\n      - Service Discovery\n      - Topology\n    serviceName: Kubernetes EndpointSlices\n    serviceCategory: API\n  - name: Kubernetes Network Policies\n    baseURL: ''\n    tags:\n      - Kubernetes\n      - Networking\n      - Policy\n      - Security\n    serviceName: Kubernetes Network Policies\n    serviceCategory: API\n  - name: Kubernetes DNS for Services and Pods\n    baseURL: ''\n    tags:\n      - DNS\n      - Kubernetes\n      - Networking\n      - Service Discovery\n    serviceName: Kubernetes DNS for Services and Pods\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://kubernetes.io/docs/concepts/services-networking/service/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Kubernetes Services\nproviderId: kubernetes-services\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Kubernetes\n  - Networking\n  - Open Source\ndescription: 'FOCUS-aligned FinOps for the Kubernetes Services API: the abstraction itself is free open\n  source, but real spend appears on the cloud-provider invoice when Services of type LoadBalancer provision\n  cloud LBs, when NodePort/ClusterIP traffic crosses zones, or when external IPs and egress are billed.\n  FinOps signal therefore comes from the underlying cloud bill, allocated back to Services via labels\n  and CCM annotations.'\nsources:\n  - https://kubernetes.io/docs/concepts/services-networking/service/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n\
+  \  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Cloud Native Computing Foundation (CNCF)\nserviceCategory: Open Source / Container Networking\nbillingModel:\n  pricingCategory: Open Source (no license fee)\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Kubernetes Services\n  ServiceCategory: Container Orchestration / Networking\n  ProviderName: Kubernetes (CNCF)\n  PublisherName: Cloud Native Computing Foundation\n  BillingCurrency: USD\nmeters:\n  - name: load_balancer_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - cloud_provider\n      - lb_type\n  - name: public_ip_count\n    unit: ip\n    aggregation: max\n    dimensions:\n      - service\n      - region\n  - name: cross_zone_egress\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - service\n      - source_zone\n      - destination_zone\n  - name: data_processed\n    unit:\
+  \ GB\n    aggregation: sum\n    dimensions:\n      - service\n      - lb_type\n  - name: endpoint_count\n    unit: endpoint\n    aggregation: max\n    dimensions:\n      - service\nprinciples:\n  - name: Visibility\n    description: Use OpenCost / Kubecost network attribution and cloud-provider LB tags to surface per-Service\n      cloud spend; correlate Service annotations with FOCUS BilledCost from the cloud invoice.\n  - name: Allocation\n    description: Tag Services with team/product/environment labels; ensure cloud-provider Cloud Controller\n      Manager (CCM) propagates those labels to LB resources so the bill carries the same allocation dimensions.\n  - name: Optimization\n    description: Consolidate small per-app LBs behind shared Ingress / Gateway API; use ClusterIP + Ingress\n      instead of one LoadBalancer Service per app; enable topology-aware routing to keep traffic in-zone\n      and reduce egress; consider internal LBs where external exposure is unnecessary.\n  - name:\
+  \ Accountability\n    description: Platform team owns the shared Ingress / Gateway and the CCM configuration; product teams\n      own the Services they create. Review LB sprawl monthly; deprecate Services without active endpoints.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/kubernetes-services/refs/heads/main/finops/kubernetes-services-finops.yml
-sources: []
+sources:
+- https://kubernetes.io/docs/concepts/services-networking/service/
 specification: FinOps Framework
 tags:
-- Container Orchestration
-- Kubernetes
-- Load Balancing
-- Networking
-- Service Discovery
 - FinOps
-- Cost Management
 - FOCUS
+- Kubernetes
+- Networking
+- Open Source
 ---

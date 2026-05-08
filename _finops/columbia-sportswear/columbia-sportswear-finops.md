@@ -7,82 +7,55 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Columbia Sportswear API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  pricingCategory: Wholesale / Purchase Order
+description: 'FOCUS-aligned FinOps for Columbia Sportswear: no public API/SaaS surface — Columbia is a retailer, not a platform vendor. Meters below cover wholesale/partner data exchange invoice abstractions.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Columbia Sportswear
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Columbia Sportswear Company
   ProviderName: Columbia Sportswear
-  PublisherName: Columbia Sportswear
-  ServiceCategory: Developer Tools / API
+  PublisherName: Columbia Sportswear Company
+  ServiceCategory: Retail
   ServiceName: Columbia Sportswear
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - sku
+  - season
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: wholesale_units
+  unit: unit
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
+  - account
   - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: order_value
+  unit: USD
 name: Columbia Sportswear Finops
 provider_name: Columbia Sportswear
 provider_slug: columbia-sportswear
-publisher_name: Columbia Sportswear
-service_category: API
+publisher_name: Columbia Sportswear Company
+service_category: Retail
 slug: columbia-sportswear-finops
 source_filename: columbia-sportswear-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Columbia Sportswear\nproviderId: columbia-sportswear\npublisherName: Columbia Sportswear\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Apparel\n  - B2B\n  - Consumer Management\n  - Cognitive\n  - Footwear\n  - Order Management\n  - Outdoor\n  - Product Lifecycle\n  - Retail\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Columbia Sportswear API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams\
-  \ in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n\
-  \      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Columbia Sportswear\n  ServiceCategory: Developer Tools / API\n  ProviderName: Columbia Sportswear\n  PublisherName: Columbia Sportswear\n  InvoiceIssuerName: Columbia Sportswear\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n\
-  \      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Columbia Sportswear Digital Developer Portal\n    baseURL: ''\n    tags:\n      - Cognitive\n      - Consumer Management\n      - Order Management\n      - Partner APIs\n      - Product Lifecycle\n      - Translation\n      - Weather\n    serviceName: Columbia Sportswear Digital Developer Portal\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n\
-  \    email: kin@apievangelist.com\n"
+source_url: https://www.columbia.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Columbia Sportswear\nproviderId: columbia-sportswear\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Retail\n  - Apparel\ndescription: 'FOCUS-aligned FinOps for Columbia Sportswear: no public API/SaaS surface — Columbia is a\n  retailer, not a platform vendor. Meters below cover wholesale/partner data exchange invoice abstractions.'\nsources:\n  - https://www.columbia.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Columbia Sportswear Company\nserviceCategory: Retail\nbillingModel:\n  pricingCategory: Wholesale / Purchase Order\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n\
+  \    - Tax\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: Columbia Sportswear\n  ServiceCategory: Retail\n  ProviderName: Columbia Sportswear\n  PublisherName: Columbia Sportswear Company\n  InvoiceIssuerName: Columbia Sportswear Company\n  BillingCurrency: USD\nmeters:\n  - name: wholesale_units\n    unit: unit\n    aggregation: sum\n    dimensions:\n      - sku\n      - season\n      - region\n  - name: order_value\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - account\n      - region\nprinciples:\n  - name: Visibility\n    description: Reconcile Columbia invoices and EDI 810/856 documents against purchase orders and ASNs.\n  - name: Allocation\n    description: Tag wholesale POs to retail location, banner, or e-commerce channel.\n  - name: Optimization\n    description: Right-size seasonal buys; manage markdown reserves; coordinate freight terms with Columbia\n      logistics.\n  - name: Accountability\n    description: Merchandising owns buy quantities;\
+  \ finance owns AP and reconciliation.\nnotes: No public API/SaaS pricing; this is a retail/wholesale relationship, not an API consumption relationship.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/columbia-sportswear/refs/heads/main/finops/columbia-sportswear-finops.yml
-sources: []
+sources:
+- https://www.columbia.com/
 specification: FinOps Framework
 tags:
-- Apparel
-- B2B
-- Consumer Management
-- Cognitive
-- Footwear
-- Order Management
-- Outdoor
-- Product Lifecycle
-- Retail
 - FinOps
-- Cost Management
 - FOCUS
+- Retail
+- Apparel
 ---

@@ -13,79 +13,101 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/zhipu-ai/refs/heads/main/openapi/zhipu-ai-openapi.json
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: USD/CNY
+  billingFrequency: On-Demand (Recharge) / Monthly
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Zhipu AI API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Mixed (Usage and Subscription)
+description: 'FOCUS-aligned FinOps profile for Z.ai / Zhipu AI. Two commercial paths: prepaid API balance consumed against per-million-token rates per model, plus GLM Coding Plan subscription with capped usage windows.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
   InvoiceIssuerName: Zhipu AI
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Zhipu AI
   PublisherName: Zhipu AI
-  ServiceCategory: Developer Tools / API
-  ServiceName: Zhipu AI
+  ServiceCategory: AI and Machine Learning
+  ServiceName: Z.ai Open Platform
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Input tokens by model.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - model
+  - account
+  name: input_tokens
+  unit: tokens
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Cached input tokens (currently free).
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - model
+  - account
+  name: cached_input_tokens
+  unit: tokens
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Output tokens by model.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - model
+  - account
+  name: output_tokens
+  unit: tokens
+- aggregation: sum
+  description: Images generated.
+  dimensions:
+  - model
+  - account
+  name: image_generations
+  unit: images
+- aggregation: sum
+  description: Videos generated.
+  dimensions:
+  - model
+  - account
+  name: video_generations
+  unit: videos
+- aggregation: sum
+  description: Web search tool invocations.
+  dimensions:
+  - account
+  name: web_search_calls
+  unit: calls
+- aggregation: sum
+  description: Audio transcription tokens.
+  dimensions:
+  - model
+  - account
+  name: audio_transcription_tokens
+  unit: tokens
+- aggregation: sum
+  description: Agent service tokens.
+  dimensions:
+  - agent
+  - account
+  name: agent_tokens
+  unit: tokens
 name: Zhipu Ai Finops
 provider_name: Zhipu AI
 provider_slug: zhipu-ai
 publisher_name: Zhipu AI
-service_category: API
+service_category: AI and Machine Learning
 slug: zhipu-ai-finops
 source_filename: zhipu-ai-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Zhipu AI\nproviderId: zhipu-ai\npublisherName: Zhipu AI\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - LLM\n  - Inference\n  - GLM\n  - ChatGLM\n  - Multimodal\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Zhipu AI API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Zhipu AI\n  ServiceCategory: Developer Tools / API\n  ProviderName: Zhipu AI\n  PublisherName: Zhipu AI\n  InvoiceIssuerName: Zhipu AI\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Z.ai Open Platform API\n    baseURL: https://api.z.ai/api\n    tags:\n      - AI\n      - LLM\n      - Chat Completions\n      - Vision\n      - Image Generation\n      - Video Generation\n      - Embeddings\n      - Fine Tuning\n      - Web Search\n    serviceName: Z.ai Open Platform API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://docs.z.ai/guides/overview/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Zhipu AI\nproviderId: zhipu-ai\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- AI\n- LLM\n- GLM\n- FinOps\n- FOCUS\ndescription: >-\n  FOCUS-aligned FinOps profile for Z.ai / Zhipu AI. Two commercial paths: prepaid API balance\n  consumed against per-million-token rates per model, plus GLM Coding Plan subscription with\n  capped usage windows.\nnotes: >-\n  Cached input storage is currently free (limited-time). Plan deductions are weighted by\n  peak/off-peak windows for some models.\nsources:\n- https://docs.z.ai/guides/overview/pricing\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Zhipu AI\nserviceCategory:\
+  \ AI and Machine Learning\nbillingModel:\n  pricingCategory: Mixed (Usage and Subscription)\n  billingFrequency: On-Demand (Recharge) / Monthly\n  billingCurrency: USD/CNY\n  chargeCategories:\n  - Usage\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: Z.ai Open Platform\n  ServiceCategory: AI and Machine Learning\n  ProviderName: Zhipu AI\n  PublisherName: Zhipu AI\n  InvoiceIssuerName: Zhipu AI\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n- name: input_tokens\n  description: Input tokens by model.\n  unit: tokens\n  aggregation: sum\n  dimensions: [model, account]\n- name: cached_input_tokens\n  description: Cached input tokens (currently free).\n  unit: tokens\n  aggregation: sum\n  dimensions: [model, account]\n- name: output_tokens\n  description: Output tokens by model.\n  unit: tokens\n  aggregation: sum\n  dimensions: [model, account]\n- name: image_generations\n  description: Images generated.\n  unit: images\n  aggregation: sum\n  dimensions: [model,\
+  \ account]\n- name: video_generations\n  description: Videos generated.\n  unit: videos\n  aggregation: sum\n  dimensions: [model, account]\n- name: web_search_calls\n  description: Web search tool invocations.\n  unit: calls\n  aggregation: sum\n  dimensions: [account]\n- name: audio_transcription_tokens\n  description: Audio transcription tokens.\n  unit: tokens\n  aggregation: sum\n  dimensions: [model, account]\n- name: agent_tokens\n  description: Agent service tokens.\n  unit: tokens\n  aggregation: sum\n  dimensions: [agent, account]\nprinciples:\n- name: Visibility\n  description: Console reports balance and consumption per model; coding plan dashboards show window utilization.\n- name: Allocation\n  description: Tag API keys per workload; coding-plan seats per developer.\n- name: Optimization\n  description: Use Flash variants (free or near-free) for non-critical paths; off-peak windows reduce coding-plan deductions.\n- name: Accountability\n  description: Track GLM Coding Plan\
+  \ window utilization; renew or right-size at billing cycle.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/zhipu-ai/refs/heads/main/finops/zhipu-ai-finops.yml
-sources: []
+sources:
+- https://docs.z.ai/guides/overview/pricing
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - AI
 - LLM
-- Inference
 - GLM
-- ChatGLM
-- Multimodal
 - FinOps
-- Cost Management
 - FOCUS
 ---

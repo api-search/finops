@@ -14,83 +14,62 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/rook/refs/heads/main/openapi/rook-ceph-object-storage-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: None
   chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Rook API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Open Source
+description: Rook is Apache 2.0 open-source software hosted by the CNCF; it does not issue invoices. The relevant FinOps surface is the underlying compute, storage, and network capacity the operator consumes on the host Kubernetes cluster, plus any optional commercial-support contract with a vendor such as Clyso or Red Hat (OpenShift Data Foundation).
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Rook
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Rook
-  PublisherName: Rook
-  ServiceCategory: Developer Tools / API
+  ProviderName: Rook (CNCF)
+  PublisherName: Cloud Native Computing Foundation
+  ServiceCategory: Cloud Native Storage Orchestration
   ServiceName: Rook
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Provisioned Ceph storage capacity managed by Rook (block, file, object); cost is incurred on the host cloud / on-prem hardware, not by Rook.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - storage_class
+  - cluster
+  name: storage_capacity
+  unit: GB-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: CPU and memory consumed by Rook operator pods, OSDs, MONs, MGRs, and RGWs on the host Kubernetes cluster.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - component
+  - node
+  name: compute_resources
+  unit: cpu-hour
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Annual subscription with a third-party support vendor (Clyso, Red Hat ODF). Optional.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - vendor
+  name: vendor_support_contract
+  unit: month
 name: Rook Finops
 provider_name: Rook
 provider_slug: rook
-publisher_name: Rook
-service_category: API
+publisher_name: Cloud Native Computing Foundation
+service_category: Cloud Native Storage Orchestration
 slug: rook-finops
 source_filename: rook-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Rook\nproviderId: rook\npublisherName: Rook\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Block Storage\n  - CNCF\n  - Ceph\n  - Cloud Native\n  - File Storage\n  - Graduated\n  - Kubernetes\n  - Object Storage\n  - Orchestration\n  - Storage\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Rook API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Rook\n  ServiceCategory: Developer Tools / API\n  ProviderName: Rook\n  PublisherName: Rook\n  InvoiceIssuerName: Rook\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
-  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Rook Ceph Custom Resource API\n    baseURL: ''\n    tags:\n      - Ceph\n      - CRD\n      - Declarative\n      - Kubernetes\n      - Storage\n    serviceName: Rook Ceph Custom Resource API\n    serviceCategory: API\n  - name: Rook Ceph Object Storage API\n    baseURL: ''\n    tags:\n      - Ceph\n      - Object Storage\n      - S3\n      - Storage\n      - Swift\n    serviceName: Rook Ceph Object Storage API\n    serviceCategory: API\n  - name: Rook Ceph Block Storage API\n    baseURL: ''\n    tags:\n      - Block Storage\n      - Ceph\n      - Kubernetes\n      - PersistentVolume\n      - RBD\n    serviceName: Rook Ceph Block Storage API\n    serviceCategory: API\n\
-  \  - name: Rook Ceph Shared Filesystem API\n    baseURL: ''\n    tags:\n      - CephFS\n      - File Storage\n      - Kubernetes\n      - POSIX\n      - Shared Filesystem\n    serviceName: Rook Ceph Shared Filesystem API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://rook.io/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Rook\nproviderId: rook\npublisherName: Cloud Native Computing Foundation\nserviceCategory: Cloud Native Storage Orchestration\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Rook\n  - Ceph\n  - Kubernetes\n  - Open Source\n  - FinOps\n  - FOCUS\ndescription: >-\n  Rook is Apache 2.0 open-source software hosted by the CNCF; it does not issue invoices.\n  The relevant FinOps surface is the underlying compute, storage, and network capacity the\n  operator consumes on the host Kubernetes cluster, plus any optional commercial-support\n  contract with a vendor such as Clyso or Red Hat (OpenShift Data Foundation).\nsources:\n\
+  \  - https://rook.io/\n  - https://github.com/rook/rook\nbillingModel:\n  pricingCategory: Open Source\n  billingFrequency: None\n  billingCurrency: USD\n  chargeCategories:\n    - Adjustment\nfocusColumns:\n  ServiceName: Rook\n  ServiceCategory: Cloud Native Storage Orchestration\n  ProviderName: Rook (CNCF)\n  PublisherName: Cloud Native Computing Foundation\n  BillingCurrency: USD\nmeters:\n  - name: storage_capacity\n    description: >-\n      Provisioned Ceph storage capacity managed by Rook (block, file, object); cost is\n      incurred on the host cloud / on-prem hardware, not by Rook.\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - storage_class\n      - cluster\n  - name: compute_resources\n    description: >-\n      CPU and memory consumed by Rook operator pods, OSDs, MONs, MGRs, and RGWs on the host\n      Kubernetes cluster.\n    unit: cpu-hour\n    aggregation: sum\n    dimensions:\n      - component\n      - node\n  - name: vendor_support_contract\n \
+  \   description: >-\n      Annual subscription with a third-party support vendor (Clyso, Red Hat ODF). Optional.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - vendor\nprinciples:\n  - name: Visibility\n    description: >-\n      Track Rook-managed storage usage with Ceph dashboards, Prometheus exports from the\n      Rook operator, and the host cloud/cluster cost surface; there is no Rook-issued usage\n      API.\n  - name: Allocation\n    description: >-\n      Tag Rook namespaces, storage classes, and CephBlockPools to the consuming workload so\n      that capacity and IO can be attributed back to the team that owns the data.\n  - name: Optimization\n    description: >-\n      Right-size OSD count, choose appropriate replication vs erasure-coding, set per-pool\n      quotas, and tier rarely accessed data to lower-cost storage classes; consolidate small\n      Ceph clusters to amortize MON/MGR overhead.\n  - name: Accountability\n    description: >-\n      Platform\
+  \ engineering owns the Rook/Ceph cluster; consuming teams own per-namespace and\n      per-pool quotas. Treat any vendor-support contract as a normal SaaS line item under\n      platform budget.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/rook/refs/heads/main/finops/rook-finops.yml
-sources: []
+sources:
+- https://rook.io/
+- https://github.com/rook/rook
 specification: FinOps Framework
 tags:
-- Block Storage
-- CNCF
+- Rook
 - Ceph
-- Cloud Native
-- File Storage
-- Graduated
 - Kubernetes
-- Object Storage
-- Orchestration
-- Storage
+- Open Source
 - FinOps
-- Cost Management
 - FOCUS
 ---

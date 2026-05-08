@@ -56,80 +56,77 @@ api_specs:
   url: https://console.redhat.com/api/inventory/v1/openapi.json
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Red Hat Enterprise Linux 8 API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription
+description: FOCUS-aligned FinOps shape for Red Hat Enterprise Linux subscriptions. Billing is per-system / per-socket-pair / per-hypervisor on annual or multi-year terms; cloud-marketplace (AWS / Azure / GCP) consumption shifts the same SKUs onto pay-as-you-go hourly metering.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Red Hat Enterprise Linux 8
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Red Hat Enterprise Linux 8
-  PublisherName: Red Hat Enterprise Linux 8
-  ServiceCategory: Developer Tools / API
-  ServiceName: Red Hat Enterprise Linux 8
+  InvoiceIssuerName: Red Hat, Inc.
+  ProviderName: Red Hat
+  PublisherName: Red Hat, Inc.
+  ServiceCategory: Operating System Subscription
+  ServiceName: Red Hat Enterprise Linux
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Annual RHEL Server subscription per pair of sockets / pair of virtual guests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - sku
+  - support_level
+  - architecture
+  name: server_subscription
+  unit: socket-pair-year
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Annual RHEL Workstation subscription per system
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - sku
+  - support_level
+  name: workstation_subscription
+  unit: system-year
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Annual RHEL for Virtual Datacenters subscription per hypervisor (unlimited guests)
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - sku
+  - support_level
+  name: virtual_datacenter_subscription
+  unit: hypervisor-year
+- aggregation: sum
+  description: Annual RHEL for SAP Solutions subscription
+  dimensions:
+  - sku
+  - support_level
+  name: sap_subscription
+  unit: socket-pair-year
+- aggregation: sum
+  description: Annual RHEL for IBM Power Little Endian subscription
+  dimensions:
+  - sku
+  - support_level
+  name: power_le_subscription
+  unit: socket-pair-year
 name: Red Hat Enterprise Linux 8 Finops
 provider_name: Red Hat Enterprise Linux 8
 provider_slug: red-hat-enterprise-linux-8
-publisher_name: Red Hat Enterprise Linux 8
-service_category: API
+publisher_name: Red Hat, Inc.
+service_category: Operating System Subscription
 slug: red-hat-enterprise-linux-8-finops
 source_filename: red-hat-enterprise-linux-8-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Red Hat Enterprise Linux 8\nproviderId: red-hat-enterprise-linux-8\npublisherName: Red Hat Enterprise Linux 8\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Enterprise\n  - Linux\n  - Operating System\n  - Red Hat\n  - RHEL\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Red Hat Enterprise Linux 8 API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Red Hat Enterprise Linux 8\n  ServiceCategory: Developer Tools / API\n  ProviderName: Red Hat Enterprise Linux 8\n  PublisherName: Red Hat Enterprise Linux 8\n  InvoiceIssuerName: Red Hat Enterprise Linux 8\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n\
-  \  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: RHEL 8 Subscription Management API\n    baseURL: https://api.access.redhat.com/management/v1\n    tags:\n      - Entitlements\n      - Registration\n      - Subscriptions\n      - System Management\n    serviceName: RHEL 8 Subscription Management API\n    serviceCategory: API\n  - name: RHEL 8 Insights API\n    baseURL: https://console.redhat.com/api/insights/v1\n    tags:\n      - Analytics\n      - Compliance\n      - Monitoring\n      - Predictive Analytics\n      - Security\n      - Vulnerabilities\n    serviceName: RHEL 8 Insights API\n    serviceCategory: API\n  - name:\
-  \ RHEL 8 Image Builder API\n    baseURL: https://console.redhat.com/api/image-builder/v1\n    tags:\n      - Cloud\n      - Deployment\n      - Image Builder\n      - Infrastructure\n      - Provisioning\n    serviceName: RHEL 8 Image Builder API\n    serviceCategory: API\n  - name: RHEL 8 Patch Management API\n    baseURL: https://console.redhat.com/api/patch/v3\n    tags:\n      - Errata\n      - Packages\n      - Patch Management\n      - Security\n      - Updates\n    serviceName: RHEL 8 Patch Management API\n    serviceCategory: API\n  - name: RHEL 8 Vulnerability Management API\n    baseURL: https://console.redhat.com/api/vulnerability/v1\n    tags:\n      - CVE\n      - Risk Management\n      - Security\n      - Vulnerabilities\n    serviceName: RHEL 8 Vulnerability Management API\n    serviceCategory: API\n  - name: RHEL 8 Compliance API\n    baseURL: https://console.redhat.com/api/compliance/v2\n    tags:\n      - Compliance\n      - SCAP\n      - Security\n      - STIG\n    serviceName:\
-  \ RHEL 8 Compliance API\n    serviceCategory: API\n  - name: RHEL 8 Security Data API\n    baseURL: https://access.redhat.com/labs/securitydataapi\n    tags:\n      - Advisories\n      - CVE\n      - OVAL\n      - Public Data\n      - Security\n    serviceName: RHEL 8 Security Data API\n    serviceCategory: API\n  - name: RHEL 8 Host Inventory API\n    baseURL: https://console.redhat.com/api/inventory/v1\n    tags:\n      - Asset Management\n      - Inventory\n      - System Management\n    serviceName: RHEL 8 Host Inventory API\n    serviceCategory: API\n  - name: RHEL 8 Cockpit Web Console API\n    baseURL: https://localhost:9090/cockpit\n    tags:\n      - Management\n      - System Administration\n      - UI\n      - Web Console\n    serviceName: RHEL 8 Cockpit Web Console API\n    serviceCategory: API\n  - name: RHEL 8 System Roles API\n    baseURL: https://console.redhat.com/ansible/automation-hub/\n    tags:\n      - Ansible\n      - Automation\n      - Configuration Management\n\
-  \      - System Roles\n    serviceName: RHEL 8 System Roles API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.redhat.com/en/store/linux-platforms
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Red Hat Enterprise Linux 8\nproviderId: red-hat-enterprise-linux-8\npublisherName: Red Hat, Inc.\nserviceCategory: Operating System Subscription\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Linux\n  - Operating System\n  - Subscription\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for Red Hat Enterprise Linux subscriptions. Billing is\n  per-system / per-socket-pair / per-hypervisor on annual or multi-year terms; cloud-marketplace\n  (AWS / Azure / GCP) consumption shifts the same SKUs onto pay-as-you-go hourly metering.\nsources:\n  - https://www.redhat.com/en/store/linux-platforms\nbillingModel:\n\
+  \  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Red Hat Enterprise Linux\n  ServiceCategory: Operating System Subscription\n  ProviderName: Red Hat\n  PublisherName: Red Hat, Inc.\n  InvoiceIssuerName: Red Hat, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: server_subscription\n    description: Annual RHEL Server subscription per pair of sockets / pair of virtual guests\n    unit: socket-pair-year\n    aggregation: sum\n    dimensions:\n      - sku\n      - support_level\n      - architecture\n  - name: workstation_subscription\n    description: Annual RHEL Workstation subscription per system\n    unit: system-year\n    aggregation: sum\n    dimensions:\n      - sku\n      - support_level\n  - name: virtual_datacenter_subscription\n    description: Annual RHEL for Virtual Datacenters subscription per hypervisor (unlimited guests)\n    unit: hypervisor-year\n    aggregation: sum\n\
+  \    dimensions:\n      - sku\n      - support_level\n  - name: sap_subscription\n    description: Annual RHEL for SAP Solutions subscription\n    unit: socket-pair-year\n    aggregation: sum\n    dimensions:\n      - sku\n      - support_level\n  - name: power_le_subscription\n    description: Annual RHEL for IBM Power Little Endian subscription\n    unit: socket-pair-year\n    aggregation: sum\n    dimensions:\n      - sku\n      - support_level\nprinciples:\n  - name: Visibility\n    description: Use Red Hat Subscription Management and Red Hat Insights to inventory which\n      systems are consuming which RHEL SKUs against active entitlements.\n  - name: Allocation\n    description: Allocate entitlement consumption to teams via Red Hat Customer Portal account\n      hierarchy or via host-level CMDB tags; cloud-marketplace RHEL is allocated through the\n      cloud bill instead.\n  - name: Optimization\n    description: Convert dense virtualization estates from per-socket Server SKUs\
+  \ to RH00002\n      (Virtual Datacenter) for unlimited guests; consolidate SAP workloads on RH00764; commit\n      to multi-year terms for renewal discount.\n  - name: Accountability\n    description: Procurement owns the master Red Hat agreement; platform/infrastructure teams\n      own per-system entitlement consumption.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/red-hat-enterprise-linux-8/refs/heads/main/finops/red-hat-enterprise-linux-8-finops.yml
-sources: []
+sources:
+- https://www.redhat.com/en/store/linux-platforms
 specification: FinOps Framework
 tags:
-- Enterprise
 - Linux
 - Operating System
-- Red Hat
-- RHEL
+- Subscription
 - FinOps
-- Cost Management
 - FOCUS
 ---

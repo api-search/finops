@@ -6,79 +6,59 @@ aligned_with:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: CNY/USD
+  billingFrequency: On-Demand (Recharge)
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the 01.AI API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Usage Based (Prepaid)
+description: FOCUS-aligned FinOps profile for 01.AI / Lingyiwanwu. Pay-as-you-go usage billing against prepaid balance, plus free self-hosted open-weight option for Yi-34B and smaller variants.
 focus_columns:
-  BillingCurrency: USD
+  BillingCurrency: CNY
   ChargeCategory: Usage
   InvoiceIssuerName: 01.AI
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: 01.AI
   PublisherName: 01.AI
-  ServiceCategory: Developer Tools / API
-  ServiceName: 01.AI
+  ServiceCategory: AI and Machine Learning
+  ServiceName: Lingyiwanwu Platform
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Input tokens by Yi model.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - model
+  - account
+  name: input_tokens
+  unit: tokens
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Output tokens by Yi model.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - model
+  - account
+  name: output_tokens
+  unit: tokens
 name: 01 Ai Finops
 provider_name: 01.AI
 provider_slug: 01-ai
 publisher_name: 01.AI
-service_category: API
+service_category: AI and Machine Learning
 slug: 01-ai-finops
 source_filename: 01-ai-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: 01.AI\nproviderId: 01-ai\npublisherName: 01.AI\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - LLM\n  - Yi\n  - Open Source\n  - Foundation Models\n  - Inference\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the 01.AI API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
-  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
-  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: 01.AI\n  ServiceCategory: Developer Tools / API\n  ProviderName: 01.AI\n  PublisherName: 01.AI\n  InvoiceIssuerName: 01.AI\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n  \
-  \    - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Lingyiwanwu Platform API\n    baseURL: https://api.lingyiwanwu.com/v1\n    tags:\n      - AI\n      - LLM\n      - Chat Completions\n      - Vision\n      - OpenAI Compatible\n      - Yi\n    serviceName: Lingyiwanwu Platform API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://platform.lingyiwanwu.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: 01.AI\nproviderId: 01-ai\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- AI\n- LLM\n- Yi\n- FinOps\n- FOCUS\ndescription: >-\n  FOCUS-aligned FinOps profile for 01.AI / Lingyiwanwu. Pay-as-you-go usage billing against\n  prepaid balance, plus free self-hosted open-weight option for Yi-34B and smaller variants.\nnotes: Pricing primarily published in CNY on the Lingyiwanwu console; Yi-Lightning ~$0.14/M tokens.\nsources:\n- https://platform.lingyiwanwu.com/\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: 01.AI\nserviceCategory: AI and Machine Learning\nbillingModel:\n  pricingCategory: Usage Based (Prepaid)\n\
+  \  billingFrequency: On-Demand (Recharge)\n  billingCurrency: CNY/USD\n  chargeCategories:\n  - Usage\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: Lingyiwanwu Platform\n  ServiceCategory: AI and Machine Learning\n  ProviderName: 01.AI\n  PublisherName: 01.AI\n  InvoiceIssuerName: 01.AI\n  BillingCurrency: CNY\n  ChargeCategory: Usage\nmeters:\n- name: input_tokens\n  description: Input tokens by Yi model.\n  unit: tokens\n  aggregation: sum\n  dimensions: [model, account]\n- name: output_tokens\n  description: Output tokens by Yi model.\n  unit: tokens\n  aggregation: sum\n  dimensions: [model, account]\nprinciples:\n- name: Visibility\n  description: Lingyiwanwu console reports balance and usage; track spend per API key.\n- name: Allocation\n  description: Tag API keys by workload to attribute Yi spend.\n- name: Optimization\n  description: Use Yi-Lightning-Lite for non-critical paths; consider self-hosted Yi-34B for batch workloads.\n- name: Accountability\n  description:\
+  \ Set balance alerts; reconcile invoice currency exposure.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/01-ai/refs/heads/main/finops/01-ai-finops.yml
-sources: []
+sources:
+- https://platform.lingyiwanwu.com/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - AI
 - LLM
 - Yi
-- Open Source
-- Foundation Models
-- Inference
 - FinOps
-- Cost Management
 - FOCUS
 ---

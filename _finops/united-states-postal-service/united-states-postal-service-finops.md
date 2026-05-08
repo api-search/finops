@@ -32,81 +32,63 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/united-states-postal-service/refs/heads/main/openapi/united-states-postal-service-carrier-pickup-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Continuous Settlement
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the United States Postal Service API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Pay-Per-Label (postage)
+description: FOCUS-aligned FinOps for USPS Developer APIs. The APIs themselves are not metered as a per-call charge. Real spend lives downstream - postage paid per shipping label via an Enterprise Payment Account. The API surface is the cost-control point for label generation, address validation efficiency, and tracking polling rather than itself a billable line.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
+  ChargeCategory: Purchase
   InvoiceIssuerName: United States Postal Service
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: United States Postal Service
   PublisherName: United States Postal Service
-  ServiceCategory: Developer Tools / API
-  ServiceName: United States Postal Service
+  ServiceCategory: Postal / Shipping
+  ServiceName: USPS Developer APIs
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Labels generated through the Labels APIs; postage cost is debited from the Enterprise Payment Account per label based on USPS rate cards.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - service_class
+  - origin_zip
+  - destination_zip
+  - weight
+  name: shipping_labels
+  unit: label
+- aggregation: sum
+  description: Calls to the Addresses API for validation; not separately billed but tracked against portal quota.
+  name: address_validation_calls
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  description: Calls to the Tracking API; not separately billed but tracked against portal quota.
+  name: tracking_calls
+  unit: request
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  description: Calls to Domestic / International Pricing APIs for rate quoting; not separately billed.
+  name: pricing_calls
+  unit: request
 name: United States Postal Service Finops
 provider_name: United States Postal Service
 provider_slug: united-states-postal-service
 publisher_name: United States Postal Service
-service_category: API
+service_category: Postal / Shipping
 slug: united-states-postal-service-finops
 source_filename: united-states-postal-service-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: United States Postal Service\nproviderId: united-states-postal-service\npublisherName: United States Postal Service\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Government\n  - Postal Service\n  - Shipping\n  - Logistics\n  - Address Validation\n  - Package Tracking\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the United States Postal Service API surface. Provides a\n  FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the\n  provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance\
-  \ teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n\
-  \      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: United States Postal Service\n  ServiceCategory: Developer Tools / API\n  ProviderName: United States Postal Service\n  PublisherName: United States Postal Service\n  InvoiceIssuerName: United States Postal Service\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n\
-  \      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: USPS Addresses API\n    baseURL: https://apis.usps.com\n    tags:\n      - Addresses\n      - Address Validation\n      - Government\n    serviceName: USPS Addresses API\n    serviceCategory: API\n  - name: USPS Tracking API\n    baseURL: https://apis.usps.com\n    tags:\n      - Tracking\n      - Package Tracking\n      - Government\n    serviceName: USPS Tracking API\n    serviceCategory: API\n  - name: USPS Domestic Prices API\n    baseURL: https://apis.usps.com\n    tags:\n      - Pricing\n      - Postage\n      - Shipping\n\
-  \      - Government\n    serviceName: USPS Domestic Prices API\n    serviceCategory: API\n  - name: USPS Carrier Pickup API\n    baseURL: https://apis.usps.com\n    tags:\n      - Carrier Pickup\n      - Shipping\n      - Government\n    serviceName: USPS Carrier Pickup API\n    serviceCategory: API\n  - name: USPS International Prices API\n    baseURL: https://apis.usps.com\n    tags:\n      - International\n      - Pricing\n      - Postage\n      - Government\n    serviceName: USPS International Prices API\n    serviceCategory: API\n  - name: USPS Domestic Labels API\n    baseURL: https://apis.usps.com\n    tags:\n      - Labels\n      - Shipping\n      - Government\n    serviceName: USPS Domestic Labels API\n    serviceCategory: API\n  - name: USPS International Labels API\n    baseURL: https://apis.usps.com\n    tags:\n      - International\n      - Labels\n      - Shipping\n      - Government\n    serviceName: USPS International Labels API\n    serviceCategory: API\n  - name: USPS\
-  \ Locations API\n    baseURL: https://apis.usps.com\n    tags:\n      - Locations\n      - Post Offices\n      - Government\n    serviceName: USPS Locations API\n    serviceCategory: API\n  - name: USPS Service Standards API\n    baseURL: https://apis.usps.com\n    tags:\n      - Service Standards\n      - Delivery\n      - Government\n    serviceName: USPS Service Standards API\n    serviceCategory: API\n  - name: USPS Shipping Options API\n    baseURL: https://apis.usps.com\n    tags:\n      - Shipping\n      - Pricing\n      - Government\n    serviceName: USPS Shipping Options API\n    serviceCategory: API\n  - name: USPS SCAN Forms API\n    baseURL: https://apis.usps.com\n    tags:\n      - SCAN Forms\n      - Shipping\n      - Government\n    serviceName: USPS SCAN Forms API\n    serviceCategory: API\n  - name: USPS OAuth API\n    baseURL: https://apis.usps.com\n    tags:\n      - Authentication\n      - OAuth\n      - Government\n    serviceName: USPS OAuth API\n    serviceCategory:\
-  \ API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://developers.usps.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: United States Postal Service\nproviderId: united-states-postal-service\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Government\n  - Postal Service\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for USPS Developer APIs. The APIs themselves are not metered as\n  a per-call charge. Real spend lives downstream - postage paid per shipping label via an Enterprise\n  Payment Account. The API surface is the cost-control point for label generation, address validation\n  efficiency, and tracking polling rather than itself a billable line.\nsources:\n  - https://developers.usps.com\n  - https://developers.usps.com/getting-started\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
+  publisherName: United States Postal Service\nserviceCategory: Postal / Shipping\nbillingModel:\n  pricingCategory: Pay-Per-Label (postage)\n  billingFrequency: Continuous Settlement\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: USPS Developer APIs\n  ServiceCategory: Postal / Shipping\n  ProviderName: United States Postal Service\n  PublisherName: United States Postal Service\n  InvoiceIssuerName: United States Postal Service\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: shipping_labels\n    description: Labels generated through the Labels APIs; postage cost is debited from the Enterprise\n      Payment Account per label based on USPS rate cards.\n    unit: label\n    aggregation: sum\n    dimensions:\n      - service_class\n      - origin_zip\n      - destination_zip\n      - weight\n  - name: address_validation_calls\n    description: Calls to the Addresses API for validation; not separately billed but tracked against\n\
+  \      portal quota.\n    unit: request\n    aggregation: sum\n  - name: tracking_calls\n    description: Calls to the Tracking API; not separately billed but tracked against portal quota.\n    unit: request\n    aggregation: sum\n  - name: pricing_calls\n    description: Calls to Domestic / International Pricing APIs for rate quoting; not separately\n      billed.\n    unit: request\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: USPS does not expose a usage API for cost; track Enterprise Payment Account postage\n      debits and correlate to label-creation events from your own integration logs.\n  - name: Allocation\n    description: Tag every Labels API call with cost-center, customer-order, and origin-warehouse\n      so postage debits can be allocated post-fact via internal reconciliation.\n  - name: Optimization\n    description: Reduce postage spend by selecting the right service class per shipment, cleansing\n      addresses up-front via the Addresses\
+  \ API, and avoiding redundant label re-generation. Reduce\n      portal quota pressure by caching address-validation and pricing responses.\n  - name: Accountability\n    description: Assign Enterprise Payment Account ownership to a finance/operations stakeholder;\n      submit USPS API service requests to right-size quota for the production workload.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/united-states-postal-service/refs/heads/main/finops/united-states-postal-service-finops.yml
-sources: []
+sources:
+- https://developers.usps.com
+- https://developers.usps.com/getting-started
 specification: FinOps Framework
 tags:
 - Government
 - Postal Service
-- Shipping
-- Logistics
-- Address Validation
-- Package Tracking
 - FinOps
-- Cost Management
 - FOCUS
 ---

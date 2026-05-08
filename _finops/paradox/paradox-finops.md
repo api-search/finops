@@ -62,84 +62,63 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/paradox/refs/heads/main/openapi/paradox-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Paradox API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription (Enterprise)
+description: Structural FinOps definition for Paradox. Subscription-based HR tech sold via sales motion; meters reflect plausible enterprise shape pending contract.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Paradox
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Paradox, Inc.
   ProviderName: Paradox
-  PublisherName: Paradox
-  ServiceCategory: Developer Tools / API
+  PublisherName: Paradox, Inc.
+  ServiceCategory: HR Technology
   ServiceName: Paradox
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Hires or applications processed through Olivia (typical HR-tech billable unit)
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - org
+  - location
+  name: hires_processed
+  unit: hire
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: SMS / chat conversations handled by Olivia
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  - channel
+  - org
+  name: messages_sent
+  unit: message
+- aggregation: max
+  description: Recruiter seats with access to Paradox
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - org
+  name: subscription_seats
+  unit: seat-month
 name: Paradox Finops
 provider_name: Paradox
 provider_slug: paradox
-publisher_name: Paradox
-service_category: API
+publisher_name: Paradox, Inc.
+service_category: HR Technology
 slug: paradox-finops
 source_filename: paradox-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Paradox\nproviderId: paradox\npublisherName: Paradox\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Artificial Intelligence\n  - Candidate Screening\n  - Chatbot\n  - Conversational AI\n  - Hiring Automation\n  - HR Technology\n  - Interview Scheduling\n  - Recruiting\n  - SMS\n  - Talent Acquisition\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Paradox API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product,\
-  \ and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n     \
-  \ - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Paradox\n  ServiceCategory: Developer Tools / API\n  ProviderName: Paradox\n  PublisherName: Paradox\n  InvoiceIssuerName: Paradox\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name:\
-  \ data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Paradox Conversational AI API\n    baseURL: https://api.paradox.ai\n    tags:\n      - AI\n      - Candidate Experience\n      - Chatbot\n      - Conversational AI\n      - HR Technology\n      - Recruiting\n    serviceName: Paradox Conversational AI API\n    serviceCategory: API\n  - name: Paradox Company API\n    baseURL: https://api.paradox.ai/api/v1/public\n    tags:\n      - AI Assistant\n      - Company\n      - Conversations\n      - Groups\n    serviceName: Paradox Company API\n    serviceCategory: API\n  - name: Paradox Candidates API\n    baseURL: https://api.paradox.ai/api/v1/public\n\
-  \    tags:\n      - Candidates\n      - Messaging\n      - Recruiting\n      - Screening\n    serviceName: Paradox Candidates API\n    serviceCategory: API\n  - name: Paradox Users API\n    baseURL: https://api.paradox.ai/api/v1/public\n    tags:\n      - Administration\n      - Roles\n      - Users\n    serviceName: Paradox Users API\n    serviceCategory: API\n  - name: Paradox Scheduling API\n    baseURL: https://api.paradox.ai/api/v1/public\n    tags:\n      - Calendars\n      - Interviews\n      - Scheduling\n    serviceName: Paradox Scheduling API\n    serviceCategory: API\n  - name: Paradox Locations API\n    baseURL: https://api.paradox.ai/api/v1/public\n    tags:\n      - Job Sites\n      - Locations\n      - Rooms\n    serviceName: Paradox Locations API\n    serviceCategory: API\n  - name: Paradox Reporting API\n    baseURL: https://api.paradox.ai/api/v1/public\n    tags:\n      - Analytics\n      - Data\n      - Reporting\n    serviceName: Paradox Reporting API\n    serviceCategory:\
-  \ API\n  - name: Paradox Candidate Attributes API\n    baseURL: https://api.paradox.ai/api/v1/public\n    tags:\n      - Attributes\n      - Candidates\n      - Custom Fields\n    serviceName: Paradox Candidate Attributes API\n    serviceCategory: API\n  - name: Paradox User Permissions API\n    baseURL: https://api.paradox.ai/api/v1/public\n    tags:\n      - Access Control\n      - Permissions\n      - Users\n    serviceName: Paradox User Permissions API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: https://www.paradox.ai/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Paradox\nproviderId: paradox\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nnotes: No public pricing or usage API. Structural FinOps placeholder; meters reflect typical\n  HR-tech subscription shape pending contract disclosure.\ntags:\n  - FinOps\n  - FOCUS\n  - HR Technology\n  - Conversational AI\n  - Recruiting\ndescription: Structural FinOps definition for Paradox. Subscription-based HR tech sold via\n  sales motion; meters reflect plausible enterprise shape pending contract.\nsources:\n  - https://www.paradox.ai/pricing\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Paradox, Inc.\nserviceCategory:\
+  \ HR Technology\nbillingModel:\n  pricingCategory: Subscription (Enterprise)\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\nfocusColumns:\n  ServiceName: Paradox\n  ServiceCategory: HR Technology\n  ProviderName: Paradox\n  PublisherName: Paradox, Inc.\n  InvoiceIssuerName: Paradox, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: hires_processed\n    description: Hires or applications processed through Olivia (typical HR-tech billable\n      unit)\n    unit: hire\n    aggregation: sum\n    dimensions:\n      - org\n      - location\n  - name: messages_sent\n    description: SMS / chat conversations handled by Olivia\n    unit: message\n    aggregation: sum\n    dimensions:\n      - channel\n      - org\n  - name: subscription_seats\n    description: Recruiter seats with access to Paradox\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - org\nprinciples:\n  - name: Visibility\n    description:\
+  \ Visibility relies on Paradox reporting dashboards; usage breakdown is contract-\n      and tenant-specific.\n  - name: Allocation\n    description: Allocate by hiring location/org and recruiter team using Paradox's role-based\n      access model.\n  - name: Optimization\n    description: Optimize by routing high-volume requisitions through Olivia automation and\n      retiring unused recruiter seats.\n  - name: Accountability\n    description: Talent-acquisition leader accountable for Paradox spend; reviews at renewal\n      against hires/messages realized.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/paradox/refs/heads/main/finops/paradox-finops.yml
-sources: []
+sources:
+- https://www.paradox.ai/pricing
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
-- Artificial Intelligence
-- Candidate Screening
-- Chatbot
-- Conversational AI
-- Hiring Automation
-- HR Technology
-- Interview Scheduling
-- Recruiting
-- SMS
-- Talent Acquisition
 - FinOps
-- Cost Management
 - FOCUS
+- HR Technology
+- Conversational AI
+- Recruiting
 ---

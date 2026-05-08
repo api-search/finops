@@ -48,73 +48,77 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Envestnet API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Usage
+description: FOCUS-aligned FinOps view for Envestnet | Yodlee. Yodlee bills FIs and FinTechs under enterprise subscription contracts, typically combining product subscriptions with usage components such as connected end-users, account refreshes, and verification calls. List pricing is not published; FinOps tracks contracted fees and per-product usage against the customer agreement.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Envestnet
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Envestnet, Inc.
   ProviderName: Envestnet
-  PublisherName: Envestnet
-  ServiceCategory: Developer Tools / API
-  ServiceName: Envestnet
+  PublisherName: Envestnet, Inc.
+  ServiceCategory: Financial Data / Open Banking
+  ServiceName: Envestnet | Yodlee APIs
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - product
+  - customer
+  name: connected_end_users
+  unit: user-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - product
+  - data_source
+  - customer
+  name: account_refreshes
+  unit: refresh
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - verification_type
+  - customer
+  name: verification_calls
+  unit: call
+- aggregation: sum
+  dimensions:
+  - customer
+  name: credit_accelerator_files
+  unit: file
+- aggregation: sum
+  dimensions:
+  - product
+  - customer
+  name: insights_calls
+  unit: call
+- aggregation: sum
+  dimensions:
+  - product
+  - customer
+  name: subscription_fee
+  unit: month
 name: Envestnet Finops
 provider_name: Envestnet
 provider_slug: envestnet
-publisher_name: Envestnet
-service_category: API
+publisher_name: Envestnet, Inc.
+service_category: Financial Data / Open Banking
 slug: envestnet-finops
 source_filename: envestnet-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Envestnet\nproviderId: envestnet\npublisherName: Envestnet\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Financial\n  - Wealth Management\n  - Open Banking\n  - Account Aggregation\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Envestnet API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
-  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
-  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Envestnet\n  ServiceCategory: Developer Tools / API\n  ProviderName: Envestnet\n  PublisherName: Envestnet\n  InvoiceIssuerName: Envestnet\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Envestnet Account Aggregation API\n    baseURL: ''\n    tags:\n      - Account Aggregation\n      - Open Banking\n    serviceName: Envestnet Account Aggregation API\n    serviceCategory: API\n  - name: Envestnet Account Token APIs\n    baseURL: ''\n    tags:\n      - Account Token\n      - Payments\n    serviceName: Envestnet Account Token APIs\n    serviceCategory: API\n  - name: Envestnet Account Verification APIs\n    baseURL: ''\n    tags:\n      - Verification\n      - Payments\n    serviceName: Envestnet Account Verification APIs\n    serviceCategory: API\n  - name: Envestnet Credit Accelerator API\n    baseURL: ''\n    tags:\n      - Credit\n      - Underwriting\n    serviceName: Envestnet\
-  \ Credit Accelerator API\n    serviceCategory: API\n  - name: Envestnet Insights API\n    baseURL: ''\n    tags:\n      - Insights\n      - Personalization\n    serviceName: Envestnet Insights API\n    serviceCategory: API\n  - name: Envestnet Personalized View API\n    baseURL: ''\n    tags:\n      - Personalized Views\n      - Transactions\n    serviceName: Envestnet Personalized View API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.envestnet.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Envestnet\nproviderId: envestnet\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Financial\n  - Open Banking\n  - Account Aggregation\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps view for Envestnet | Yodlee. Yodlee bills FIs and FinTechs under enterprise\n  subscription contracts, typically combining product subscriptions with usage components such as connected\n  end-users, account refreshes, and verification calls. List pricing is not published; FinOps tracks contracted\n  fees and per-product usage against the customer agreement.\nnotes: List prices are not published on developer.envestnet.com. Reconcile FinOps against the executed\n  Yodlee agreement and the per-product usage statements provided to the customer.\nsources:\n  - https://www.envestnet.com/\n  - https://developer.envestnet.com/\nalignedWith:\n  framework:\
+  \ FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Envestnet, Inc.\nserviceCategory: Financial Data / Open Banking\nbillingModel:\n  pricingCategory: Subscription + Usage\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Envestnet | Yodlee APIs\n  ServiceCategory: Financial Data / Open Banking\n  ProviderName: Envestnet\n  PublisherName: Envestnet, Inc.\n  InvoiceIssuerName: Envestnet, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: connected_end_users\n    unit: user-month\n    aggregation: max\n    dimensions:\n      - product\n      - customer\n  - name: account_refreshes\n    unit: refresh\n    aggregation: sum\n    dimensions:\n      - product\n      - data_source\n      - customer\n  - name: verification_calls\n\
+  \    unit: call\n    aggregation: sum\n    dimensions:\n      - verification_type\n      - customer\n  - name: credit_accelerator_files\n    unit: file\n    aggregation: sum\n    dimensions:\n      - customer\n  - name: insights_calls\n    unit: call\n    aggregation: sum\n    dimensions:\n      - product\n      - customer\n  - name: subscription_fee\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\n      - customer\nprinciples:\n  - name: Visibility\n    description: Track per-product usage (aggregation, verification, token, credit, insights, views) against\n      the contract and reconcile to monthly Yodlee usage statements.\n  - name: Allocation\n    description: Allocate spend by FinTech product line, end-user cohort, and Yodlee product family.\n  - name: Optimization\n    description: Optimization levers include refresh-cadence tuning, deduplicated aggregation across products,\n      and selective verification (not every aggregation flow needs a verification\
+  \ call).\n  - name: Accountability\n    description: The FI/FinTech product owner reconciles spend against the Yodlee agreement and engages\n      Envestnet account management for renewal and tier changes.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/envestnet/refs/heads/main/finops/envestnet-finops.yml
-sources: []
+sources:
+- https://www.envestnet.com/
+- https://developer.envestnet.com/
 specification: FinOps Framework
 tags:
 - Financial
-- Wealth Management
 - Open Banking
 - Account Aggregation
 - FinOps
-- Cost Management
 - FOCUS
 ---

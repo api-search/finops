@@ -37,72 +37,59 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Tyk API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription + Usage-Based
+description: 'FOCUS-aligned FinOps for Tyk: hybrid model combining a free open-source gateway, a usage-based Core SaaS tier, a flat-rate Professional subscription, and a custom-contract Enterprise tier.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Tyk
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Tyk Technologies Ltd
   ProviderName: Tyk
-  PublisherName: Tyk
-  ServiceCategory: Developer Tools / API
+  PublisherName: Tyk Technologies Ltd
+  ServiceCategory: API Management
   ServiceName: Tyk
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Requests proxied through the Tyk gateway (Core / consumption-based tier)
   dimensions:
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - environment
+  - deployment_mode
+  name: gateway_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Flat Professional / Enterprise subscription term
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
   - tier
-  name: compute_seconds
-  unit: second
+  name: subscription_period
+  unit: month
+- aggregation: max
+  description: Number of distinct gateway environments (cloud, hybrid, self-managed)
+  dimensions:
+  - deployment_mode
+  name: deployment_environments
+  unit: environment
 name: Tyk Finops
 provider_name: Tyk
 provider_slug: tyk
-publisher_name: Tyk
-service_category: API
+publisher_name: Tyk Technologies Ltd
+service_category: API Management
 slug: tyk-finops
 source_filename: tyk-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Tyk\nproviderId: tyk\npublisherName: Tyk\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Gateway\n  - API Management\n  - GraphQL\n  - Open Source\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Tyk API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
-  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
-  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Tyk\n  ServiceCategory: Developer Tools / API\n  ProviderName: Tyk\n  PublisherName: Tyk\n  InvoiceIssuerName: Tyk\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n\
-  \  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Tyk Gateway API\n    baseURL: https://tyk.io/\n    tags:\n      - Administration\n      - Gateway\n      - Open Source\n      - REST API\n    serviceName: Tyk Gateway API\n    serviceCategory: API\n  - name: Tyk Dashboard API\n    baseURL: https://tyk.io/\n    tags:\n      - Administration\n      - Dashboard\n      - Management\n      - REST API\n    serviceName: Tyk Dashboard API\n    serviceCategory: API\n  - name: Tyk Dashboard Admin API\n    baseURL: https://tyk.io/\n    tags:\n      - Admin\n      - Dashboard\n      - Multi-Tenant\n      - REST API\n    serviceName: Tyk Dashboard Admin API\n    serviceCategory: API\n  - name: Tyk MDCB API\n    baseURL: https://tyk.io/\n    tags:\n      - MDCB\n      - Multi-Data Center\n      - REST API\n      - Synchronization\n\
-  \    serviceName: Tyk MDCB API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://tyk.io/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Tyk\nproviderId: tyk\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - API Gateway\n  - API Management\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Tyk: hybrid model combining a free open-source gateway, a usage-based\n  Core SaaS tier, a flat-rate Professional subscription, and a custom-contract Enterprise tier.'\nsources:\n  - https://tyk.io/pricing/\n  - https://tyk.io/docs/api-management/rate-limit/\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Tyk Technologies Ltd\nserviceCategory: API Management\nbillingModel:\n  pricingCategory: Tiered Subscription + Usage-Based\n  billingFrequency:\
+  \ Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Tyk\n  ServiceCategory: API Management\n  ProviderName: Tyk\n  PublisherName: Tyk Technologies Ltd\n  InvoiceIssuerName: Tyk Technologies Ltd\n  BillingCurrency: USD\nmeters:\n  - name: gateway_requests\n    description: Requests proxied through the Tyk gateway (Core / consumption-based tier)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - environment\n      - deployment_mode\n  - name: subscription_period\n    description: Flat Professional / Enterprise subscription term\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\n  - name: deployment_environments\n    description: Number of distinct gateway environments (cloud, hybrid, self-managed)\n    unit: environment\n    aggregation: max\n    dimensions:\n      - deployment_mode\nprinciples:\n  - name: Visibility\n    description: Use Tyk Dashboard\
+  \ analytics and the gateway's exported metrics (Prometheus, OpenTelemetry)\n      to surface request volume and tier consumption per API.\n  - name: Allocation\n    description: Tag API definitions and policies with consuming team / product so gateway-level usage\n      can be attributed back to internal cost centers.\n  - name: Optimization\n    description: Choose the lowest-cost deployment mode (open-source self-managed vs Tyk Cloud) per workload;\n      use rate-limit smoothing and caching policies to avoid pushing upstream usage beyond Core thresholds.\n  - name: Accountability\n    description: Assign API and gateway environment owners; review consumption against the chosen tier\n      (Core vs Professional vs Enterprise) at each renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tyk/refs/heads/main/finops/tyk-finops.yml
-sources: []
+sources:
+- https://tyk.io/pricing/
+- https://tyk.io/docs/api-management/rate-limit/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - API Gateway
 - API Management
-- GraphQL
-- Open Source
 - FinOps
-- Cost Management
 - FOCUS
 ---

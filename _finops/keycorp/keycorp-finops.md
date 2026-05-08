@@ -11,75 +11,67 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the KeyCorp API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Negotiated Contract (Bank Fees)
+description: 'FinOps shape for KeyCorp/KeyBank: per-transaction banking fees plus monthly treasury / cash-management charges bundled into the commercial-banking contract. No public API tariff.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: KeyCorp
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: KeyBank N.A.
   ProviderName: KeyCorp
-  PublisherName: KeyCorp
-  ServiceCategory: Developer Tools / API
-  ServiceName: KeyCorp
+  PublisherName: KeyBank N.A.
+  ServiceCategory: Banking
+  ServiceName: KeyBank
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  dimensions:
+  - account
+  - sec_code
+  name: ach_originations
+  unit: transaction
+- aggregation: sum
+  dimensions:
+  - account
+  - direction
+  name: wire_transfers
+  unit: transaction
+- aggregation: sum
+  dimensions:
+  - account
+  name: rtp_payments
+  unit: transaction
+- aggregation: sum
   dimensions:
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - account
+  name: account_inquiries
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  name: account_validations
+  unit: request
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: monthly_service_fee
+  unit: month
 name: Keycorp Finops
 provider_name: KeyCorp
 provider_slug: keycorp
-publisher_name: KeyCorp
-service_category: API
+publisher_name: KeyBank N.A.
+service_category: Banking
 slug: keycorp-finops
 source_filename: keycorp-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: KeyCorp\nproviderId: keycorp\npublisherName: KeyCorp\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Banking\n  - Commercial Banking\n  - Financial Services\n  - Fortune 500\n  - Payments\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the KeyCorp API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
-  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
-  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: KeyCorp\n  ServiceCategory: Developer Tools / API\n  ProviderName: KeyCorp\n  PublisherName: KeyCorp\n  InvoiceIssuerName: KeyCorp\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n  \
-  \  dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: KeyBank Account Information API\n    baseURL: ''\n    tags:\n      - Account Information\n      - Commercial Banking\n    serviceName: KeyBank Account Information API\n    serviceCategory: API\n  - name: KeyBank ACH Origination API\n    baseURL: ''\n    tags:\n      - ACH\n      - Payments\n    serviceName: KeyBank ACH Origination API\n    serviceCategory: API\n  - name: KeyBank Wire Transfer API\n    baseURL: ''\n    tags:\n      - Payments\n      - Wire Transfer\n    serviceName: KeyBank Wire Transfer API\n    serviceCategory: API\n  - name: KeyBank RTP Send Payment API\n    baseURL: ''\n    tags:\n      - Payments\n      - Real-Time Payments\n    serviceName: KeyBank RTP Send Payment API\n    serviceCategory:\
-  \ API\n  - name: KeyBank Account Validation API\n    baseURL: ''\n    tags:\n      - Account Validation\n      - Payments\n    serviceName: KeyBank Account Validation API\n    serviceCategory: API\n  - name: KeyBank ACH Inquiry API\n    baseURL: ''\n    tags:\n      - ACH\n      - Inquiry\n    serviceName: KeyBank ACH Inquiry API\n    serviceCategory: API\n  - name: KeyBank Wire Inquiry API\n    baseURL: ''\n    tags:\n      - Inquiry\n      - Wire Transfer\n    serviceName: KeyBank Wire Inquiry API\n    serviceCategory: API\n  - name: KeyBank RTP Inquiry API\n    baseURL: ''\n    tags:\n      - Inquiry\n      - Real-Time Payments\n    serviceName: KeyBank RTP Inquiry API\n    serviceCategory: API\n  - name: KeyBank Previous Day API\n    baseURL: ''\n    tags:\n      - Account Information\n      - Reporting\n    serviceName: KeyBank Previous Day API\n    serviceCategory: API\n  - name: KeyBank Intraday API\n    baseURL: ''\n    tags:\n      - Account Information\n      - Reporting\n  \
-  \  serviceName: KeyBank Intraday API\n    serviceCategory: API\n  - name: KeyBank Check Services API\n    baseURL: ''\n    tags:\n      - Check Services\n      - Commercial Banking\n    serviceName: KeyBank Check Services API\n    serviceCategory: API\n  - name: KeyBank Webhooks\n    baseURL: ''\n    tags:\n      - Events\n      - Webhooks\n    serviceName: KeyBank Webhooks\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://developer.key.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: KeyCorp\nproviderId: keycorp\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Banking\n  - Commercial Banking\n  - Payments\ndescription: 'FinOps shape for KeyCorp/KeyBank: per-transaction banking fees plus monthly treasury / cash-management\n  charges bundled into the commercial-banking contract. No public API tariff.'\nsources:\n  - https://developer.key.com/\nnotes: KeyBank API consumption fees are not published; they roll up into the treasury-services bank-fee\n  analysis statement. Reconcile from actual customer bank statements when available.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: KeyBank N.A.\nserviceCategory:\
+  \ Banking\nbillingModel:\n  pricingCategory: Negotiated Contract (Bank Fees)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: KeyBank\n  ServiceCategory: Banking\n  ProviderName: KeyCorp\n  PublisherName: KeyBank N.A.\n  InvoiceIssuerName: KeyBank N.A.\n  BillingCurrency: USD\nmeters:\n  - name: ach_originations\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - account\n      - sec_code\n  - name: wire_transfers\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - account\n      - direction\n  - name: rtp_payments\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - account\n  - name: account_inquiries\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - account\n  - name: account_validations\n    unit: request\n    aggregation: sum\n  - name: monthly_service_fee\n    unit: month\n    aggregation: sum\n\
+  principles:\n  - name: Visibility\n    description: Pull KeyBank's monthly account-analysis statement (AFP service codes) and reconcile against\n      API-driven payment volume from your treasury-management system.\n  - name: Allocation\n    description: Tag originated payments with internal cost-center metadata so per-business-unit ACH/Wire/RTP\n      activity can be attributed.\n  - name: Optimization\n    description: Route low-urgency disbursements through ACH instead of Wire/RTP; use Account Validation\n      to reduce return/repair fees.\n  - name: Accountability\n    description: Treasury and AP owners review the monthly bank-fee analysis statement, dispute exceptions,\n      and negotiate the next contract cycle on actual API/transaction volume.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/keycorp/refs/heads/main/finops/keycorp-finops.yml
-sources: []
+sources:
+- https://developer.key.com/
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
 - Banking
 - Commercial Banking
-- Financial Services
-- Fortune 500
 - Payments
-- FinOps
-- Cost Management
-- FOCUS
 ---

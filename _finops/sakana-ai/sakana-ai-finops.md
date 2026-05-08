@@ -11,74 +11,56 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Sakana AI API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Beta (Pricing TBD)
+description: FOCUS-aligned FinOps placeholder for Sakana AI Fugu. Billing model not yet published as Fugu is in beta. Anticipated meter dimensions include orchestrated-task counts and underlying-model token spend pass-through.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
   InvoiceIssuerName: Sakana AI
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Sakana AI
   PublisherName: Sakana AI
-  ServiceCategory: Developer Tools / API
-  ServiceName: Sakana AI
+  ServiceCategory: AI and Machine Learning
+  ServiceName: Sakana Fugu
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Tasks routed by Fugu (anticipated meter).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - variant
+  - account
+  name: orchestrated_tasks
+  unit: tasks
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Pass-through cost of underlying frontier model calls (anticipated).
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - provider
+  - model
+  - account
+  name: underlying_model_spend
+  unit: usd
 name: Sakana Ai Finops
 provider_name: Sakana AI
 provider_slug: sakana-ai
 publisher_name: Sakana AI
-service_category: API
+service_category: AI and Machine Learning
 slug: sakana-ai-finops
 source_filename: sakana-ai-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sakana AI\nproviderId: sakana-ai\npublisherName: Sakana AI\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - LLM\n  - Research\n  - Foundation Models\n  - Multi-Agent\n  - Orchestration\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sakana AI API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
-  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sakana AI\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sakana AI\n  PublisherName: Sakana AI\n  InvoiceIssuerName: Sakana AI\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n  \
-  \  aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Sakana Fugu API (Beta)\n    baseURL: https://api.sakana.ai\n    tags:\n      - AI\n      - LLM\n      - Multi-Agent\n      - Orchestration\n      - OpenAI Compatible\n      - Beta\n    serviceName: Sakana Fugu API (Beta)\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://sakana.ai/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Sakana AI\nproviderId: sakana-ai\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: false\ntags:\n- AI\n- LLM\n- Research\n- Multi-Agent\n- FinOps\n- FOCUS\ndescription: >-\n  FOCUS-aligned FinOps placeholder for Sakana AI Fugu. Billing model not yet published as\n  Fugu is in beta. Anticipated meter dimensions include orchestrated-task counts and\n  underlying-model token spend pass-through.\nnotes: Update once Fugu pricing surfaces.\nsources:\n- https://sakana.ai/\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Sakana AI\nserviceCategory: AI and Machine Learning\nbillingModel:\n  pricingCategory: Beta (Pricing TBD)\n\
+  \  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n  - Usage\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: Sakana Fugu\n  ServiceCategory: AI and Machine Learning\n  ProviderName: Sakana AI\n  PublisherName: Sakana AI\n  InvoiceIssuerName: Sakana AI\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n- name: orchestrated_tasks\n  description: Tasks routed by Fugu (anticipated meter).\n  unit: tasks\n  aggregation: sum\n  dimensions: [variant, account]\n- name: underlying_model_spend\n  description: Pass-through cost of underlying frontier model calls (anticipated).\n  unit: usd\n  aggregation: sum\n  dimensions: [provider, model, account]\nprinciples:\n- name: Visibility\n  description: Beta participants should track Fugu usage and underlying model costs separately.\n- name: Allocation\n  description: Use API key per workload/team; map underlying model spend to consumers.\n- name: Optimization\n  description: Choose Fugu Mini for low-latency\
+  \ paths; Fugu Ultra for complex orchestrations.\n- name: Accountability\n  description: Engage Sakana for production pricing once GA.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sakana-ai/refs/heads/main/finops/sakana-ai-finops.yml
-sources: []
+sources:
+- https://sakana.ai/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - AI
 - LLM
 - Research
-- Foundation Models
 - Multi-Agent
-- Orchestration
 - FinOps
-- Cost Management
 - FOCUS
 ---

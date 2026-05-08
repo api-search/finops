@@ -14,70 +14,48 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/aqua-security/refs/heads/main/openapi/aqua-security-api.yaml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Aqua Security API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Custom / Contract
+description: FOCUS-aligned FinOps placeholder for Aqua Security. No public billing-model details, meters, or invoice schema are published; this artifact records the absence so consumers know to source commercial terms from the provider directly.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Aqua Security
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Aqua Security Software Ltd.
   ProviderName: Aqua Security
-  PublisherName: Aqua Security
-  ServiceCategory: Developer Tools / API
+  PublisherName: Aqua Security Software Ltd.
+  ServiceCategory: Cloud Native Security
   ServiceName: Aqua Security
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Catch-all meter for contract-governed consumption. Replace with provider-specific line items once an invoice or usage schema is available.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
+  - contract
   - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: contract_usage
+  unit: varies
 name: Aqua Security Finops
 provider_name: Aqua Security
 provider_slug: aqua-security
-publisher_name: Aqua Security
-service_category: API
+publisher_name: Aqua Security Software Ltd.
+service_category: Security
 slug: aqua-security-finops
 source_filename: aqua-security-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Aqua Security\nproviderId: aqua-security\npublisherName: Aqua Security\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud Native\n  - Containers\n  - Kubernetes\n  - Runtime Protection\n  - Security\n  - Vulnerability Scanning\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Aqua Security API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Aqua Security\n  ServiceCategory: Developer Tools / API\n  ProviderName: Aqua Security\n  PublisherName: Aqua Security\n  InvoiceIssuerName: Aqua Security\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned\
-  \ over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Aqua Security\n    baseURL: ''\n    tags:\n      - Cloud Native Security\n      - Container Security\n      - Kubernetes\n      - Runtime Protection\n      - Security\n      - Vulnerability Scanning\n      - CSPM\n      - DevSecOps\n    serviceName: Aqua Security\n    serviceCategory: API\n  - name: Trivy\n    baseURL: ''\n    tags:\n      - Container Scanning\n      - Open Source\n      - Vulnerability Scanner\n      - SBOM\n      - Kubernetes Security\n    serviceName: Trivy\n    serviceCategory: API\n  - name: Tracee\n    baseURL: ''\n    tags:\n      - eBPF\n      - Runtime Security\n      - Linux Security\n      - Forensics\n\
-  \      - Open Source\n    serviceName: Tracee\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.aquasec.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Aqua Security\nproviderId: aqua-security\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n- Cloud Native\n- Containers\n- Kubernetes\n- Runtime Protection\n- Security\n- Vulnerability Scanning\n- FinOps\n- Cost Management\n- FOCUS\ndescription: FOCUS-aligned FinOps placeholder for Aqua Security. No public billing-model details, meters,\n  or invoice schema are published; this artifact records the absence so consumers know to source commercial\n  terms from the provider directly.\nnotes: Aqua Security uses consumption-based enterprise pricing — Dev Security is priced per code repository\n  and Cloud Security per workload (EC2 instance, Fargate container, Lambda function, etc.). No public\n  per-tier prices, free tier, or quotas are published; the pricing page directs prospects to Request a\n  Trial / Get a Demo.\nsources:\n- https://www.aquasec.com\n\
+  - https://focus.finops.org/focus-specification/v1-3/\n- https://www.aquasec.com/pricing/\n- https://docs.aquasec.com\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Aqua Security Software Ltd.\nserviceCategory: Security\nbillingModel:\n  pricingCategory: Custom / Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n  - Usage\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: Aqua Security\n  ServiceCategory: Cloud Native Security\n  ProviderName: Aqua Security\n  PublisherName: Aqua Security Software Ltd.\n  InvoiceIssuerName: Aqua Security Software Ltd.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n- name: contract_usage\n  description: Catch-all meter for contract-governed consumption. Replace with provider-specific line\n    items once an invoice\
+  \ or usage schema is available.\n  unit: varies\n  aggregation: sum\n  dimensions:\n  - contract\n  - consumer\nprinciples:\n- name: Visibility\n  description: Because the provider does not publish a usage API or self-serve billing dashboard, request\n    invoice copies and contract usage exports directly from the account team and load them into your own\n    FinOps tooling.\n- name: Allocation\n  description: Allocate spend by tagging invoice line items to consuming business units in your ERP /\n    FinOps store; no provider-side tagging surface is available.\n- name: Optimization\n  description: Optimization levers are commercial — renegotiate volume commitments, consolidate accounts,\n    or align contract scope with actual usage at renewal.\n- name: Accountability\n  description: Assign a contract owner who reviews invoices against the negotiated agreement, since usage\n    drift cannot be detected from a published meter feed.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/aqua-security/refs/heads/main/finops/aqua-security-finops.yml
-sources: []
+sources:
+- https://www.aquasec.com
+- https://focus.finops.org/focus-specification/v1-3/
+- https://www.aquasec.com/pricing/
+- https://docs.aquasec.com
 specification: FinOps Framework
 tags:
 - Cloud Native

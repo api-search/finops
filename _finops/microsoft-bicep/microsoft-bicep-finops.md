@@ -19,71 +19,73 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-bicep/refs/heads/main/openapi/microsoft-bicep-template-specs-openapi.yml
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: N/A
+  billingFrequency: N/A — no direct billing
   chargeCategories:
   - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Microsoft Bicep API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  chargeFrequency: Recurring (only on deployed resources)
+  pricingCategory: Free / Open Source (deployment cost flows through to deployed resources)
+description: FOCUS-aligned FinOps for Microsoft Bicep — Bicep itself is free and open-source, so the FinOps focus is on the cost of resources Bicep deploys. Bicep's role in FinOps is to enforce tagging, cost-aware module patterns, and policy-as-code across all Azure deployments. No direct billing line items for Bicep; meters represent governance signals (deployment volume, tag coverage) rather than charges.
 focus_columns:
-  BillingCurrency: USD
+  BillingCurrency: N/A
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Bicep
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Microsoft Bicep
-  PublisherName: Microsoft Bicep
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: N/A
+  PricingCategory: Free
+  PricingUnit: N/A
+  ProviderName: Microsoft Corporation
+  PublisherName: Microsoft Corporation
+  ServiceCategory: Developer Tools
   ServiceName: Microsoft Bicep
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: count
+  description: Count of Bicep / ARM deployments invoked (governance signal, not billable).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  - subscription
+  - resource_group
+  - principal
+  name: deployments_executed
+  unit: deployment
+- aggregation: count
+  description: Resources created/updated by Bicep deployments — drives downstream Azure cost.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  - resource_type
+  - subscription
+  - tags_completeness
+  name: resources_deployed
+  unit: resource
+- aggregation: count
+  description: Failed deployments (waste signal — points to mis-sized resources or quota blockers).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - error_code
+  name: deployment_failures
+  unit: failure
+- aggregation: avg
+  description: Percent of Bicep-deployed resources carrying required cost-allocation tags.
+  dimensions:
+  - subscription
+  - required_tag
+  name: tag_coverage
+  unit: percent
 name: Microsoft Bicep Finops
 provider_name: Microsoft Bicep
 provider_slug: microsoft-bicep
-publisher_name: Microsoft Bicep
-service_category: API
+publisher_name: Microsoft Corporation
+service_category: Developer Tools / Infrastructure as Code
 slug: microsoft-bicep-finops
 source_filename: microsoft-bicep-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Bicep\nproviderId: microsoft-bicep\npublisherName: Microsoft Bicep\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - ARM Templates\n  - Azure\n  - Cloud\n  - Deployment\n  - DevOps\n  - Infrastructure as Code\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Bicep API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
-  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Bicep\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Bicep\n  PublisherName: Microsoft Bicep\n  InvoiceIssuerName: Microsoft Bicep\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the\
-  \ network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Bicep CLI\n    baseURL: https://github.com/Azure/bicep\n    tags: []\n    serviceName: Bicep CLI\n    serviceCategory: API\n  - name: Bicep Language Server\n    baseURL: https://github.com/Azure/bicep\n    tags: []\n    serviceName: Bicep Language Server\n    serviceCategory: API\n  - name: Bicep Deployments REST API\n    baseURL: https://management.azure.com\n    tags: []\n    serviceName: Bicep Deployments REST API\n    serviceCategory: API\n  - name: Bicep Template Specs REST API\n    baseURL: https://management.azure.com\n    tags: []\n    serviceName: Bicep Template Specs REST API\n    serviceCategory: API\nunitEconomics:\n  - name:\
-  \ Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/overview
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Bicep\nproviderId: microsoft-bicep\npublisherName: Microsoft Corporation\nserviceCategory: Developer Tools / Infrastructure as Code\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - ARM Templates\n  - Azure\n  - Cloud\n  - Deployment\n  - DevOps\n  - Infrastructure as Code\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for Microsoft Bicep — Bicep itself is free and open-source,\n  so the FinOps focus is on the cost of resources Bicep deploys. Bicep's role in FinOps is to\n  enforce tagging, cost-aware module patterns, and policy-as-code across all Azure deployments.\n  No direct billing line items for\
+  \ Bicep; meters represent governance signals (deployment\n  volume, tag coverage) rather than charges.\nsources:\n  - https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/overview\n  - https://learn.microsoft.com/en-us/azure/cost-management-billing/\n  - https://focus.finops.org/focus-specification/v1-3/\nbillingModel:\n  pricingCategory: Free / Open Source (deployment cost flows through to deployed resources)\n  billingFrequency: N/A — no direct billing\n  billingCurrency: N/A\n  chargeCategories:\n    - Usage\n  chargeFrequency: Recurring (only on deployed resources)\nfocusColumns:\n  ServiceName: Microsoft Bicep\n  ServiceCategory: Developer Tools\n  ProviderName: Microsoft Corporation\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: N/A\n  PricingCategory: Free\n  PricingUnit: N/A\n  BillingCurrency: N/A\n  ChargeCategory: Usage\nmeters:\n  - name: deployments_executed\n    description: Count of Bicep / ARM deployments invoked (governance signal, not billable).\n\
+  \    unit: deployment\n    aggregation: count\n    dimensions:\n      - subscription\n      - resource_group\n      - principal\n  - name: resources_deployed\n    description: Resources created/updated by Bicep deployments — drives downstream Azure cost.\n    unit: resource\n    aggregation: count\n    dimensions:\n      - resource_type\n      - subscription\n      - tags_completeness\n  - name: deployment_failures\n    description: Failed deployments (waste signal — points to mis-sized resources or quota\n      blockers).\n    unit: failure\n    aggregation: count\n    dimensions:\n      - error_code\n  - name: tag_coverage\n    description: Percent of Bicep-deployed resources carrying required cost-allocation tags.\n    unit: percent\n    aggregation: avg\n    dimensions:\n      - subscription\n      - required_tag\nprinciples:\n  - name: Visibility\n    description: Use Azure Resource Graph to inventory all resources and trace each back to its\n      Bicep deployment. Combine with Cost\
+  \ Management to attribute spend to the team that owns\n      the Bicep template (via tags). Pipeline logs (Azure Pipelines / GitHub Actions) reveal\n      who ran which deployment.\n  - name: Allocation\n    description: Codify required tags (CostCenter, Owner, Environment, App) directly in the\n      Bicep template. Use Bicep parameters with @allowed() to enforce environment values.\n      Bicep modules should always pass tag dictionaries to deployed resources.\n  - name: Optimization\n    description: Build cost-aware Bicep modules — default to lower-cost SKUs (Standard SSD,\n      B-series, basic LB) and require explicit override for premium. Use param objects with\n      cost-tier presets (dev / staging / prod). Enforce Azure Policy via Bicep deployments to\n      block disallowed expensive SKUs. Use what-if to preview deltas before committing\n      production changes.\n  - name: Accountability\n    description: Bicep templates live in version control with CODEOWNERS-style approval\
+  \ gates.\n      Pipelines validate cost-policy compliance before deployment. FinOps team reviews new\n      Bicep modules quarterly to ensure cost guardrails remain current.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://github.com/Azure/bicep\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-bicep/refs/heads/main/finops/microsoft-bicep-finops.yml
-sources: []
+sources:
+- https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/overview
+- https://learn.microsoft.com/en-us/azure/cost-management-billing/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - ARM Templates
@@ -93,6 +95,5 @@ tags:
 - DevOps
 - Infrastructure as Code
 - FinOps
-- Cost Management
 - FOCUS
 ---

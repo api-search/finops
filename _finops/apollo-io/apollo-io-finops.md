@@ -16,80 +16,93 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Apollo.io API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Tax
+  pricingCategory: Subscription Per Seat With Usage Credits
+description: Apollo.io bills per-seat-per-month subscriptions with separate monthly credit pools for searches, enrichments, mobile-number reveals, exports, and dialer minutes. Heavy-usage workspaces purchase credit top-ups or upgrade tier. This artifact maps Apollo charges to FOCUS columns for FinOps allocation across go-to-market cost centers.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
+  ChargeCategory: Purchase
   InvoiceIssuerName: Apollo.io
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Apollo.io
   PublisherName: Apollo.io
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Sales Intelligence
   ServiceName: Apollo.io
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Active seats on Free / Basic / Professional / Organization tiers.
   dimensions:
-  - api
-  - endpoint
   - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - team
+  - cost_center
+  name: apollo_seats
+  unit: seat-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Search credits consumed by people / organization search calls.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - integration
+  - user
+  name: apollo_search_credits
+  unit: credits
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Enrichment credits consumed by people / org enrichment calls.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - integration
+  - user
+  name: apollo_enrichment_credits
+  unit: credits
+- aggregation: sum
+  description: Mobile-number-reveal credits consumed.
+  dimensions:
+  - user
+  - cost_center
+  name: apollo_mobile_credits
+  unit: credits
+- aggregation: sum
+  description: Export credits consumed when exporting people / accounts.
+  dimensions:
+  - user
+  - cost_center
+  name: apollo_export_credits
+  unit: credits
+- aggregation: sum
+  description: Dialer minutes used through Apollo's calling feature.
+  dimensions:
+  - user
+  - country
+  name: apollo_dialer_minutes
+  unit: minutes
+- aggregation: sum
+  description: Outbound sequence emails sent.
+  dimensions:
+  - sequence
+  - user
+  name: apollo_email_sends
+  unit: messages
 name: Apollo Io Finops
 provider_name: Apollo.io
 provider_slug: apollo-io
 publisher_name: Apollo.io
-service_category: API
+service_category: Sales Intelligence
 slug: apollo-io-finops
 source_filename: apollo-io-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Apollo.io\nproviderId: apollo-io\npublisherName: Apollo.io\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Sales Intelligence\n  - Prospecting\n  - Engagement\n  - B2B Data\n  - Enrichment\n  - SaaS\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Apollo.io API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Apollo.io\n  ServiceCategory: Developer Tools / API\n  ProviderName: Apollo.io\n  PublisherName: Apollo.io\n  InvoiceIssuerName: Apollo.io\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n  \
-  \  aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Apollo People Search API\n    baseURL: ''\n    tags:\n      - People\n      - Search\n      - Prospecting\n    serviceName: Apollo People Search API\n    serviceCategory: API\n  - name: Apollo Organization Search API\n    baseURL: ''\n    tags:\n      - Organizations\n      - Companies\n      - Search\n    serviceName: Apollo Organization Search API\n    serviceCategory: API\n  - name: Apollo People Enrichment API\n    baseURL: ''\n    tags:\n      - People\n      - Enrichment\n    serviceName: Apollo People Enrichment API\n    serviceCategory: API\n  - name: Apollo Organization Enrichment API\n    baseURL: ''\n    tags:\n      - Organizations\n      - Enrichment\n    serviceName:\
-  \ Apollo Organization Enrichment API\n    serviceCategory: API\n  - name: Apollo Bulk People Enrichment API\n    baseURL: ''\n    tags:\n      - Bulk Enrichment\n      - People\n    serviceName: Apollo Bulk People Enrichment API\n    serviceCategory: API\n  - name: Apollo Bulk Organization Enrichment API\n    baseURL: ''\n    tags:\n      - Bulk Enrichment\n      - Organizations\n    serviceName: Apollo Bulk Organization Enrichment API\n    serviceCategory: API\n  - name: Apollo Contacts API\n    baseURL: ''\n    tags:\n      - Contacts\n      - CRM\n    serviceName: Apollo Contacts API\n    serviceCategory: API\n  - name: Apollo Accounts API\n    baseURL: ''\n    tags:\n      - Accounts\n      - CRM\n    serviceName: Apollo Accounts API\n    serviceCategory: API\n  - name: Apollo Deals API\n    baseURL: ''\n    tags:\n      - Deals\n      - Opportunities\n      - Pipeline\n    serviceName: Apollo Deals API\n    serviceCategory: API\n  - name: Apollo Sequences API\n    baseURL: ''\n  \
-  \  tags:\n      - Sequences\n      - Cadences\n      - Outreach\n    serviceName: Apollo Sequences API\n    serviceCategory: API\n  - name: Apollo Email Accounts API\n    baseURL: ''\n    tags:\n      - Email Accounts\n      - SMTP\n    serviceName: Apollo Email Accounts API\n    serviceCategory: API\n  - name: Apollo Emails API\n    baseURL: ''\n    tags:\n      - Emails\n      - Tracking\n    serviceName: Apollo Emails API\n    serviceCategory: API\n  - name: Apollo Calls API\n    baseURL: ''\n    tags:\n      - Calls\n      - Telephony\n    serviceName: Apollo Calls API\n    serviceCategory: API\n  - name: Apollo Tasks API\n    baseURL: ''\n    tags:\n      - Tasks\n    serviceName: Apollo Tasks API\n    serviceCategory: API\n  - name: Apollo Meetings API\n    baseURL: ''\n    tags:\n      - Meetings\n      - Scheduling\n    serviceName: Apollo Meetings API\n    serviceCategory: API\n  - name: Apollo Custom Fields API\n    baseURL: ''\n    tags:\n      - Custom Fields\n      - Metadata\n\
-  \    serviceName: Apollo Custom Fields API\n    serviceCategory: API\n  - name: Apollo Lists API\n    baseURL: ''\n    tags:\n      - Lists\n      - Segments\n    serviceName: Apollo Lists API\n    serviceCategory: API\n  - name: Apollo Tags API\n    baseURL: ''\n    tags:\n      - Tags\n    serviceName: Apollo Tags API\n    serviceCategory: API\n  - name: Apollo Users API\n    baseURL: ''\n    tags:\n      - Users\n    serviceName: Apollo Users API\n    serviceCategory: API\n  - name: Apollo Analytics API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Reporting\n    serviceName: Apollo Analytics API\n    serviceCategory: API\n  - name: Apollo API Usage API\n    baseURL: ''\n    tags:\n      - Usage\n      - Credits\n    serviceName: Apollo API Usage API\n    serviceCategory: API\n  - name: Apollo Webhooks API\n    baseURL: ''\n    tags:\n      - Webhooks\n      - Events\n    serviceName: Apollo Webhooks API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n\
-  \    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.apollo.io/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Apollo.io\nproviderId: apollo-io\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n  - Sales Intelligence\n  - B2B Data\n  - FinOps\n  - FOCUS\ndescription: >-\n  Apollo.io bills per-seat-per-month subscriptions with separate monthly\n  credit pools for searches, enrichments, mobile-number reveals, exports,\n  and dialer minutes. Heavy-usage workspaces purchase credit top-ups or\n  upgrade tier. This artifact maps Apollo charges to FOCUS columns for\n  FinOps allocation across go-to-market cost centers.\nsources:\n  - https://www.apollo.io/pricing\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Apollo.io\n\
+  serviceCategory: Sales Intelligence\nbillingModel:\n  pricingCategory: Subscription Per Seat With Usage Credits\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\n    - Tax\nfocusColumns:\n  ServiceName: Apollo.io\n  ServiceCategory: Sales Intelligence\n  ProviderName: Apollo.io\n  PublisherName: Apollo.io\n  InvoiceIssuerName: Apollo.io\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: apollo_seats\n    description: Active seats on Free / Basic / Professional / Organization tiers.\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - tier\n      - team\n      - cost_center\n  - name: apollo_search_credits\n    description: Search credits consumed by people / organization search calls.\n    unit: credits\n    aggregation: sum\n    dimensions:\n      - integration\n      - user\n  - name: apollo_enrichment_credits\n    description: Enrichment credits consumed by people / org enrichment\
+  \ calls.\n    unit: credits\n    aggregation: sum\n    dimensions:\n      - integration\n      - user\n  - name: apollo_mobile_credits\n    description: Mobile-number-reveal credits consumed.\n    unit: credits\n    aggregation: sum\n    dimensions:\n      - user\n      - cost_center\n  - name: apollo_export_credits\n    description: Export credits consumed when exporting people / accounts.\n    unit: credits\n    aggregation: sum\n    dimensions:\n      - user\n      - cost_center\n  - name: apollo_dialer_minutes\n    description: Dialer minutes used through Apollo's calling feature.\n    unit: minutes\n    aggregation: sum\n    dimensions:\n      - user\n      - country\n  - name: apollo_email_sends\n    description: Outbound sequence emails sent.\n    unit: messages\n    aggregation: sum\n    dimensions:\n      - sequence\n      - user\nprinciples:\n  - name: Visibility\n    description: >-\n      Track Apollo's API Usage endpoint to monitor remaining search /\n      enrichment / mobile\
+  \ credits weekly; pull monthly invoices for seat\n      and credit-topup charges.\n  - name: Allocation\n    description: >-\n      Allocate seat costs by team; allocate credit consumption by\n      sourcing campaign or integration via tags and lists.\n  - name: Optimization\n    description: >-\n      Use bulk enrichment endpoints (up to 10 records per call) for the\n      best per-record price; cache enrichments to avoid double-paying;\n      audit unused seats monthly.\n  - name: Accountability\n    description: >-\n      Designate Sales Operations / Marketing Ops as contract owner;\n      review credit consumption monthly and right-size at renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/apollo-io/refs/heads/main/finops/apollo-io-finops.yml
-sources: []
+sources:
+- https://www.apollo.io/pricing
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Sales Intelligence
-- Prospecting
-- Engagement
 - B2B Data
-- Enrichment
-- SaaS
 - FinOps
-- Cost Management
 - FOCUS
 ---

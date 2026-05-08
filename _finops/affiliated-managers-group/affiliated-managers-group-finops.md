@@ -7,78 +7,58 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Quarterly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Affiliated Managers Group API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription
+description: 'FOCUS-aligned FinOps for AMG: investor-fee structures (management + performance) charged at the fund/account level by Affiliates.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Affiliated Managers Group
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: AMG Affiliate (per fund)
   ProviderName: Affiliated Managers Group
-  PublisherName: Affiliated Managers Group
-  ServiceCategory: Developer Tools / API
-  ServiceName: Affiliated Managers Group
+  PublisherName: Affiliated Managers Group, Inc.
+  ServiceCategory: Investment Management
+  ServiceName: AMG Affiliate Funds
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: avg
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - affiliate
+  - fund
+  name: assets_under_management
+  unit: USD
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - affiliate
+  - fund
+  name: management_fee
+  unit: USD
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - affiliate
+  - fund
+  name: performance_fee
+  unit: USD
 name: Affiliated Managers Group Finops
 provider_name: Affiliated Managers Group
 provider_slug: affiliated-managers-group
-publisher_name: Affiliated Managers Group
-service_category: API
+publisher_name: Affiliated Managers Group, Inc.
+service_category: Investment Management
 slug: affiliated-managers-group-finops
 source_filename: affiliated-managers-group-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Affiliated Managers Group\nproviderId: affiliated-managers-group\npublisherName: Affiliated Managers Group\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Asset Management\n  - Investment Management\n  - Financial Services\n  - Wealth Management\n  - Institutional Investing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Affiliated Managers Group API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance\
-  \ teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n\
-  \      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Affiliated Managers Group\n  ServiceCategory: Developer Tools / API\n  ProviderName: Affiliated Managers Group\n  PublisherName: Affiliated Managers Group\n  InvoiceIssuerName: Affiliated Managers Group\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n     \
-  \ - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: AMG Wealth Platform\n    baseURL: ''\n    tags:\n      - Wealth Management\n      - Financial Advisors\n      - Mutual Funds\n      - Separately Managed Accounts\n      - Alternative Investments\n    serviceName: AMG Wealth Platform\n    serviceCategory: API\n  - name: AMG Investor Relations\n    baseURL: ''\n    tags:\n      - Investor Relations\n      - Public Company\n      - Financial Data\n      - SEC Filings\n      - Corporate Governance\n    serviceName: AMG Investor Relations\n    serviceCategory: API\nunitEconomics:\n  - name:\
-  \ Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://www.amg.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Affiliated Managers Group\nproviderId: affiliated-managers-group\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nnotes: AMG operates as a holding company for autonomous investment Affiliates. Costs to LPs\n  are fund-level management and performance fees, not API consumption.\ntags:\n  - FinOps\n  - FOCUS\n  - Asset Management\n  - Financial Services\ndescription: 'FOCUS-aligned FinOps for AMG: investor-fee structures (management + performance)\n  charged at the fund/account level by Affiliates.'\nsources:\n  - https://www.amg.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Affiliated Managers Group, Inc.\nserviceCategory: Investment Management\nbillingModel:\n\
+  \  pricingCategory: Subscription\n  billingFrequency: Quarterly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: AMG Affiliate Funds\n  ServiceCategory: Investment Management\n  ProviderName: Affiliated Managers Group\n  PublisherName: Affiliated Managers Group, Inc.\n  InvoiceIssuerName: AMG Affiliate (per fund)\n  BillingCurrency: USD\nmeters:\n  - name: assets_under_management\n    unit: USD\n    aggregation: avg\n    dimensions:\n      - affiliate\n      - fund\n  - name: management_fee\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - affiliate\n      - fund\n  - name: performance_fee\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - affiliate\n      - fund\nprinciples:\n  - name: Visibility\n    description: Reconcile fund statements against custodial AUM data; track management/performance\n      fee accruals quarterly.\n  - name: Allocation\n    description: Attribute fees by mandate, account,\
+  \ and affiliate.\n  - name: Optimization\n    description: Negotiate fee breakpoints at scale; consolidate share classes; review benchmark\n      alignment.\n  - name: Accountability\n    description: Assign investment-committee owner; quarterly fee variance review.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/affiliated-managers-group/refs/heads/main/finops/affiliated-managers-group-finops.yml
-sources: []
+sources:
+- https://www.amg.com/
 specification: FinOps Framework
 tags:
-- Asset Management
-- Investment Management
-- Financial Services
-- Wealth Management
-- Institutional Investing
 - FinOps
-- Cost Management
 - FOCUS
+- Asset Management
+- Financial Services
 ---

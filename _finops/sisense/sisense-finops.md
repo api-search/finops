@@ -19,73 +19,72 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Sisense API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription
+description: 'FOCUS-aligned FinOps for Sisense: tiered subscription with bundled storage, Sisense credits, and seat counts; per-seat and per-credit add-ons; Scale tier negotiated.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Sisense
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Sisense Inc.
   ProviderName: Sisense
-  PublisherName: Sisense
-  ServiceCategory: Developer Tools / API
+  PublisherName: Sisense Inc.
+  ServiceCategory: Analytics / Business Intelligence
   ServiceName: Sisense
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Monthly subscription fee for the selected plan tier (Launch, Grow, Scale).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - plan
+  name: subscription_month
+  unit: month
+- aggregation: max
+  description: Storage consumed against plan allowance (20 GB / 80 GB / custom).
+  dimensions:
+  - plan
+  - environment
+  name: storage
+  unit: GB-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Compute / query credits consumed; pool replenishes monthly per plan.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  - plan
+  - workload
+  name: sisense_credits
+  unit: varies
+- aggregation: max
+  description: Active designer seats counted against plan minimums; additional seats are billable.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - plan
+  name: designer_seats
+  unit: seat
+- aggregation: max
+  description: Active viewer seats counted against plan minimums; additional seats are billable.
+  dimensions:
+  - plan
+  name: viewer_seats
+  unit: seat
 name: Sisense Finops
 provider_name: Sisense
 provider_slug: sisense
-publisher_name: Sisense
-service_category: API
+publisher_name: Sisense Inc.
+service_category: Analytics / Business Intelligence
 slug: sisense-finops
 source_filename: sisense-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sisense\nproviderId: sisense\npublisherName: Sisense\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Business Intelligence\n  - Dashboards\n  - Data Models\n  - Embedded Analytics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sisense API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
-  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sisense\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sisense\n  PublisherName: Sisense\n  InvoiceIssuerName: Sisense\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Sisense REST API v1\n    baseURL: https://your-sisense-host/api/v1\n    tags:\n      - Dashboards\n      - Users\n      - Groups\n      - Elasticubes\n      - Data Models\n      - Analytics\n    serviceName: Sisense REST API v1\n    serviceCategory: API\n  - name: Sisense REST API v2\n    baseURL: https://your-sisense-host/api/v2\n    tags:\n      - Data Models\n      - Builds\n      - Analytics\n    serviceName: Sisense REST API v2\n    serviceCategory: API\n  - name: Sisense User and Role Management API\n    baseURL: https://your-sisense-host/api/v1\n    tags:\n      - Users\n      - Roles\n      - RBAC\n      - Identity\n    serviceName: Sisense User and Role Management API\n    serviceCategory:\
-  \ API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.sisense.com/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sisense\nproviderId: sisense\npublisherName: Sisense Inc.\nserviceCategory: Analytics / Business Intelligence\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Analytics\n  - Business Intelligence\n  - Embedded Analytics\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Sisense: tiered subscription with bundled storage, Sisense\n  credits, and seat counts; per-seat and per-credit add-ons; Scale tier negotiated.'\nsources:\n  - https://www.sisense.com/pricing/\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n\
+  \    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Sisense\n  ServiceCategory: Analytics / Business Intelligence\n  ProviderName: Sisense\n  PublisherName: Sisense Inc.\n  InvoiceIssuerName: Sisense Inc.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: subscription_month\n    description: Monthly subscription fee for the selected plan tier (Launch, Grow, Scale).\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n  - name: storage\n    description: Storage consumed against plan allowance (20 GB / 80 GB / custom).\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - plan\n      - environment\n  - name: sisense_credits\n    description: Compute / query credits consumed; pool replenishes monthly per plan.\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - plan\n      - workload\n  - name: designer_seats\n    description: Active designer seats counted against plan minimums; additional seats are billable.\n    unit:\
+  \ seat\n    aggregation: max\n    dimensions:\n      - plan\n  - name: viewer_seats\n    description: Active viewer seats counted against plan minimums; additional seats are billable.\n    unit: seat\n    aggregation: max\n    dimensions:\n      - plan\nprinciples:\n  - name: Visibility\n    description: Track Sisense credit burn, storage utilization, and seat counts in the Sisense\n      admin console; alert before any pool reaches 80% to time tier upgrades.\n  - name: Allocation\n    description: Allocate cost per embedding tenant or workload by tagging dashboards and using\n      multi-environment support (Grow and above) to separate dev/staging/production credit usage.\n  - name: Optimization\n    description: Optimize credit consumption by caching dashboards, reducing query frequency, and\n      consolidating viewer seats; consider BYO LLM (Grow+) to control AI inference cost externally.\n  - name: Accountability\n    description: Embedded-analytics product owner reviews monthly credit\
+  \ / seat / storage telemetry\n      and approves seat or credit purchases vs. plan upgrades.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sisense/refs/heads/main/finops/sisense-finops.yml
-sources: []
+sources:
+- https://www.sisense.com/pricing/
 specification: FinOps Framework
 tags:
 - Analytics
 - Business Intelligence
-- Dashboards
-- Data Models
 - Embedded Analytics
 - FinOps
-- Cost Management
 - FOCUS
 ---

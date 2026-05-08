@@ -13,79 +13,57 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/dnv/refs/heads/main/openapi/dnv-class-status-openapi.yml
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: USD/EUR/NOK
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the DNV API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Enterprise Contract
+description: FOCUS-aligned FinOps shape for DNV Maritime APIs. DNV does not publish a per-call meter; cost is governed by the negotiated API contract (often bundled with classification or advisory services).
 focus_columns:
-  BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: DNV
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  BillingCurrency: USD/EUR/NOK
+  ChargeCategory: Purchase
+  InvoiceIssuerName: DNV AS
   ProviderName: DNV
-  PublisherName: DNV
-  ServiceCategory: Developer Tools / API
-  ServiceName: DNV
+  PublisherName: DNV AS
+  ServiceCategory: Maritime Classification / Data Platform
+  ServiceName: DNV Maritime APIs
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Internal observability of calls against DNV APIs
   dimensions:
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - vessel_imo
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+- aggregation: count
+  description: Active named technical contacts under the API contract
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - contract
+  name: contract_seats
+  unit: seat
 name: Dnv Finops
 provider_name: DNV
 provider_slug: dnv
-publisher_name: DNV
-service_category: API
+publisher_name: DNV AS
+service_category: Maritime Classification / Data Platform
 slug: dnv-finops
 source_filename: dnv-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: DNV\nproviderId: dnv\npublisherName: DNV\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Maritime\n  - Energy\n  - Classification\n  - Vessel\n  - Data Platform\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the DNV API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: DNV\n  ServiceCategory: Developer Tools / API\n  ProviderName: DNV\n  PublisherName: DNV\n  InvoiceIssuerName: DNV\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n \
-  \     - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: DNV Class Status API\n    baseURL: https://maritime.dnv.com/api/cs-iacs-customer\n    tags:\n      - Azure AD\n      - Classification\n      - Maritime\n      - OAuth2\n      - Safety\n      - Vessel\n    serviceName: DNV Class Status API\n    serviceCategory: API\n  - name: DNV Veracity Platform API\n    baseURL: https://api.veracity.com\n    tags:\n      - Analytics\n      - Data Platform\n      - Energy\n      - IoT\n      - Maritime\n    serviceName: DNV Veracity Platform API\n    serviceCategory: API\n  - name: DNV Vessel Register\n    baseURL: https://vesselregister.dnv.com\n    tags:\n      - Classification\n      - Fleet Management\n      - Maritime\n      - Vessel Registry\n    serviceName: DNV Vessel Register\n    serviceCategory: API\n\
-  unitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://maritime.dnv.com/api/cs-iacs-customer
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: DNV\nproviderId: dnv\npublisherName: DNV AS\nserviceCategory: Maritime Classification / Data Platform\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Maritime\n  - Classification\n  - Vessel\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for DNV Maritime APIs. DNV does not publish a per-call meter;\n  cost is governed by the negotiated API contract (often bundled with classification or advisory services).\nnotes: No public pricing or per-meter billing is published; reconciled=false. Meters below describe the\n  consumption surface that a customer would observe internally.\nsources:\n  - https://maritime.dnv.com/api/cs-iacs-customer\n\
+  \  - https://www.dnv.com/maritime/\nbillingModel:\n  pricingCategory: Enterprise Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD/EUR/NOK\n  chargeCategories:\n    - Purchase\n    - Tax\nfocusColumns:\n  ServiceName: DNV Maritime APIs\n  ServiceCategory: Maritime Classification / Data Platform\n  ProviderName: DNV\n  PublisherName: DNV AS\n  InvoiceIssuerName: DNV AS\n  BillingCurrency: USD/EUR/NOK\n  ChargeCategory: Purchase\nmeters:\n  - name: api_requests\n    description: Internal observability of calls against DNV APIs\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - vessel_imo\n  - name: contract_seats\n    description: Active named technical contacts under the API contract\n    unit: seat\n    aggregation: count\n    dimensions:\n      - contract\nprinciples:\n  - name: Visibility\n    description: DNV invoices are issued under the API/classification contract; reconcile against contracted\n      services rather than per-call usage.\n\
+  \  - name: Allocation\n    description: Allocate DNV cost to the fleet/vessel program that consumes class-status and IACS-75 data.\n  - name: Optimization\n    description: Cache class-status responses; reuse OAuth tokens (~20 min validity) across requests; coalesce\n      vessel-IMO lookups.\n  - name: Accountability\n    description: The named technical contact on the API contract is accountable for credential security\n      and adherence to the contracted scope.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/dnv/refs/heads/main/finops/dnv-finops.yml
-sources: []
+sources:
+- https://maritime.dnv.com/api/cs-iacs-customer
+- https://www.dnv.com/maritime/
 specification: FinOps Framework
 tags:
 - Maritime
-- Energy
 - Classification
 - Vessel
-- Data Platform
 - FinOps
-- Cost Management
 - FOCUS
 ---

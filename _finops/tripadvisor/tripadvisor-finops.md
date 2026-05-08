@@ -29,76 +29,62 @@ billing_model:
   billingFrequency: Monthly
   chargeCategories:
   - Usage
-  - Purchase
-  - Tax
   - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Tripadvisor API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Pay-As-You-Go
+description: 'FOCUS-aligned FinOps for Tripadvisor Content API: pay-as-you-go per-call billing with a free monthly allotment, customer-set daily budget cap, and sliding-scale volume tiers.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Tripadvisor
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Tripadvisor LLC
   ProviderName: Tripadvisor
-  PublisherName: Tripadvisor
-  ServiceCategory: Developer Tools / API
-  ServiceName: Tripadvisor
+  PublisherName: Tripadvisor LLC
+  ServiceCategory: Travel Content / Reviews API
+  ServiceName: Tripadvisor Content API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
   - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - api_key
+  name: api_calls_total
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - api_key
+  name: api_calls_search
+  unit: request
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - api_key
+  name: api_calls_free_tier
+  unit: request
+- aggregation: sum
+  dimensions:
+  - api_key
+  name: daily_budget_consumed
+  unit: USD
 name: Tripadvisor Finops
 provider_name: Tripadvisor
 provider_slug: tripadvisor
-publisher_name: Tripadvisor
-service_category: API
+publisher_name: Tripadvisor LLC
+service_category: Travel Content / Reviews API
 slug: tripadvisor-finops
 source_filename: tripadvisor-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Tripadvisor\nproviderId: tripadvisor\npublisherName: Tripadvisor\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Attractions\n  - Hotels\n  - Hospitality\n  - Restaurants\n  - Reviews\n  - Travel\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Tripadvisor API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Tripadvisor\n  ServiceCategory: Developer Tools / API\n  ProviderName: Tripadvisor\n  PublisherName: Tripadvisor\n  InvoiceIssuerName: Tripadvisor\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
-  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Tripadvisor Content API\n    baseURL: https://api.content.tripadvisor.com/api/v1\n    tags:\n      - Attractions\n      - Hotels\n      - Locations\n      - Restaurants\n      - Reviews\n      - Travel\n    serviceName: Tripadvisor Content API\n    serviceCategory: API\n  - name: Tripadvisor Hotel Availability Check API\n    baseURL: https://partner-endpoint.example.com\n    tags:\n      - Availability\n      - Booking\n      - Connectivity\n      - Hospitality\n      - Hotels\n      - Travel\n    serviceName: Tripadvisor Hotel Availability Check API\n    serviceCategory: API\n  - name: Tripadvisor Hotel Inventory API\n    baseURL: https://partner-endpoint.example.com\n   \
-  \ tags:\n      - Connectivity\n      - Hospitality\n      - Hotels\n      - Inventory\n      - Travel\n    serviceName: Tripadvisor Hotel Inventory API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://tripadvisor-content-api.readme.io/reference/overview
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Tripadvisor\nproviderId: tripadvisor\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Travel\n  - Reviews\n  - Hospitality\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Tripadvisor Content API: pay-as-you-go per-call billing with a\n  free monthly allotment, customer-set daily budget cap, and sliding-scale volume tiers.'\nsources:\n  - https://tripadvisor-content-api.readme.io/reference/overview\n  - https://tripadvisor-content-api.readme.io/reference/faq\n  - https://www.tripadvisor.com/developers\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Tripadvisor LLC\nserviceCategory: Travel Content / Reviews API\nbillingModel:\n  pricingCategory:\
+  \ Pay-As-You-Go\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Credit\nfocusColumns:\n  ServiceName: Tripadvisor Content API\n  ServiceCategory: Travel Content / Reviews API\n  ProviderName: Tripadvisor\n  PublisherName: Tripadvisor LLC\n  InvoiceIssuerName: Tripadvisor LLC\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_calls_total\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - api_key\n  - name: api_calls_search\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_key\n  - name: api_calls_free_tier\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_key\n  - name: daily_budget_consumed\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - api_key\nprinciples:\n  - name: Visibility\n    description: Track consumption against the free 5,000-call monthly allotment and the customer-set\n      daily budget cap on the My Usage page (data\
+  \ appears within 24 hours).\n  - name: Allocation\n    description: Allocate cost per API key; rotate or partition keys per consuming product / property\n      so the My Usage view doubles as a chargeback ledger.\n  - name: Optimization\n    description: Stay inside the 5,000-call/month free tier when possible; lower the customer-set\n      daily budget to enforce hard ceilings; cache popular Location and Review responses to absorb\n      bursts under the 50 calls/sec ceiling; if consistently over 500K calls/month, contact sales\n      for volume tier pricing.\n  - name: Accountability\n    description: API key owner is the spend owner; the customer-set daily budget cap is the primary\n      hard guardrail and 429 responses are the user-facing accountability signal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tripadvisor/refs/heads/main/finops/tripadvisor-finops.yml
-sources: []
+sources:
+- https://tripadvisor-content-api.readme.io/reference/overview
+- https://tripadvisor-content-api.readme.io/reference/faq
+- https://www.tripadvisor.com/developers
 specification: FinOps Framework
 tags:
-- Attractions
-- Hotels
-- Hospitality
-- Restaurants
-- Reviews
 - Travel
+- Reviews
+- Hospitality
 - FinOps
-- Cost Management
 - FOCUS
 ---

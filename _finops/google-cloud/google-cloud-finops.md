@@ -57,78 +57,66 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Google Cloud Platform API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Pay-As-You-Go + Committed Use
+description: FOCUS-aligned FinOps for Google Cloud.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Google Cloud Platform
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Google Cloud Platform
-  PublisherName: Google Cloud Platform
-  ServiceCategory: Developer Tools / API
-  ServiceName: Google Cloud Platform
+  ProviderName: Google Cloud
+  PublisherName: Google Cloud
+  ServiceCategory: Cloud Infrastructure
+  ServiceName: Google Cloud
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - service
   - region
-  - consumer
+  - instance_type
+  - tenant
+  name: compute_hours
+  unit: instance-hour
+- aggregation: max
+  dimensions:
+  - service
+  - tier
+  name: storage
+  unit: GB-month
+- aggregation: sum
+  dimensions:
+  - egress_type
+  - region_pair
+  name: data_transfer
+  unit: GB
+- aggregation: sum
+  dimensions:
+  - service
+  - operation
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - service
+  name: managed_services
+  unit: varies
 name: Google Cloud Finops
 provider_name: Google Cloud Platform
 provider_slug: google-cloud
-publisher_name: Google Cloud Platform
-service_category: API
+publisher_name: Google Cloud
+service_category: Cloud Infrastructure
 slug: google-cloud-finops
 source_filename: google-cloud-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Cloud Platform\nproviderId: google-cloud\npublisherName: Google Cloud Platform\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud Computing\n  - Data Analytics\n  - Infrastructure\n  - Machine Learning\n  - Platform as a Service\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Google Cloud Platform API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name:\
-  \ Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  -\
-  \ name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Google Cloud Platform\n  ServiceCategory: Developer Tools / API\n  ProviderName: Google Cloud Platform\n  PublisherName: Google Cloud Platform\n  InvoiceIssuerName: Google Cloud Platform\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name:\
-  \ data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Google Compute Engine API\n    baseURL: https://compute.googleapis.com\n    tags:\n      - Compute\n      - IaaS\n      - Infrastructure\n      - Virtual Machines\n    serviceName: Google Compute Engine API\n    serviceCategory: API\n  - name: Google Cloud Storage API\n    baseURL: https://storage.googleapis.com\n    tags:\n      - Buckets\n      - Files\n      - Object Storage\n      - Storage\n    serviceName: Google Cloud Storage API\n    serviceCategory: API\n  - name: Google Kubernetes Engine API\n    baseURL: https://container.googleapis.com\n    tags:\n      - Containers\n     \
-  \ - Docker\n      - Kubernetes\n      - Orchestration\n    serviceName: Google Kubernetes Engine API\n    serviceCategory: API\n  - name: Google Cloud Functions API\n    baseURL: https://cloudfunctions.googleapis.com\n    tags:\n      - Event-Driven\n      - FaaS\n      - Functions\n      - Serverless\n    serviceName: Google Cloud Functions API\n    serviceCategory: API\n  - name: Google BigQuery API\n    baseURL: https://bigquery.googleapis.com\n    tags:\n      - Analytics\n      - Big Data\n      - Data Warehouse\n      - SQL\n    serviceName: Google BigQuery API\n    serviceCategory: API\n  - name: Google Cloud Pub/Sub API\n    baseURL: https://pubsub.googleapis.com\n    tags:\n      - Event Streaming\n      - Messaging\n      - Pub/Sub\n      - Queue\n    serviceName: Google Cloud Pub/Sub API\n    serviceCategory: API\n  - name: Google Cloud Vision API\n    baseURL: https://vision.googleapis.com\n    tags:\n      - AI\n      - Computer Vision\n      - Image Analysis\n      - Machine\
-  \ Learning\n    serviceName: Google Cloud Vision API\n    serviceCategory: API\n  - name: Google Cloud SQL Admin API\n    baseURL: https://sqladmin.googleapis.com\n    tags:\n      - Database\n      - MySQL\n      - PostgreSQL\n      - SQL\n    serviceName: Google Cloud SQL Admin API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: https://cloud.google.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Google Cloud\nproviderId: google-cloud\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Cloud Infrastructure\ndescription: FOCUS-aligned FinOps for Google Cloud.\nsources:\n  - https://cloud.google.com/pricing\n  - https://focus.finops.org/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Google Cloud\nserviceCategory: Cloud Infrastructure\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Committed Use\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Google Cloud\n  ServiceCategory: Cloud Infrastructure\n  ProviderName: Google Cloud\n  PublisherName: Google Cloud\n  BillingCurrency: USD\nmeters:\n\
+  \  - name: compute_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - service\n      - region\n      - instance_type\n      - tenant\n  - name: storage\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - service\n      - tier\n  - name: data_transfer\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - egress_type\n      - region_pair\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - service\n      - operation\n  - name: managed_services\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - service\nprinciples:\n  - name: Visibility\n    description: Track Google Cloud consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers for chargeback.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n  - name: Committed Use Discounts\n    description:\
+  \ 1-yr or 3-yr CUDs offer up to 70% off list for Compute, BigQuery, Cloud SQL, Spanner.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/google-cloud/refs/heads/main/finops/google-cloud-finops.yml
-sources: []
+sources:
+- https://cloud.google.com/pricing
+- https://focus.finops.org/
 specification: FinOps Framework
 tags:
-- Cloud Computing
-- Data Analytics
-- Infrastructure
-- Machine Learning
-- Platform as a Service
 - FinOps
-- Cost Management
 - FOCUS
+- Cloud Infrastructure
 ---

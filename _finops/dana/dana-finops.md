@@ -16,67 +16,62 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
+  - Refund
   chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Dana API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Cost of Goods + Distributor Agreement
+description: 'FOCUS-aligned FinOps for Dana aftermarket distributor APIs: API access is included with the distributor agreement; spend tracks ordered parts (cost-of-goods) rather than API calls.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Dana
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Dana Incorporated
+  PricingCategory: Cost of Goods
   ProviderName: Dana
-  PublisherName: Dana
-  ServiceCategory: Developer Tools / API
-  ServiceName: Dana
+  PublisherName: Dana Incorporated
+  ServiceCategory: Automotive Aftermarket
+  ServiceName: Dana Aftermarket
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Aftermarket part orders placed via API
+  dimensions:
+  - distributor
+  - product_line
+  - branch
+  name: parts_orders
+  unit: order
+- aggregation: sum
+  description: Individual part units ordered
+  dimensions:
+  - product_line
+  - sku
+  name: parts_units
+  unit: part
+- aggregation: sum
+  description: API calls against the Dana Aftermarket API (not separately billed; observed for capacity)
   dimensions:
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - distributor
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Dana Finops
 provider_name: Dana
 provider_slug: dana
-publisher_name: Dana
-service_category: API
+publisher_name: Dana Incorporated
+service_category: Automotive Aftermarket
 slug: dana-finops
 source_filename: dana-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Dana\nproviderId: dana\npublisherName: Dana\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Aftermarket\n  - Auto Parts\n  - Drivetrain\n  - eCommerce\n  - Supply Chain\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Dana API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
-  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
-  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Dana\n  ServiceCategory: Developer Tools / API\n  ProviderName: Dana\n  PublisherName: Dana\n  InvoiceIssuerName: Dana\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      -\
-  \ region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Dana Aftermarket API\n    baseURL: https://api.danaaftermarket.com\n    tags:\n      - Aftermarket\n      - Auto Parts\n      - Drivetrain\n      - eCommerce\n      - Supply Chain\n    serviceName: Dana Aftermarket API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
+source_url: https://www.dana.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Dana\nproviderId: dana\npublisherName: Dana Incorporated\nserviceCategory: Automotive Aftermarket\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Aftermarket\n  - Auto Parts\n  - Drivetrain\n  - eCommerce\n  - Supply Chain\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Dana aftermarket distributor APIs: API access is included with\n  the distributor agreement; spend tracks ordered parts (cost-of-goods) rather than API calls.'\nsources:\n  - https://www.dana.com/\nnotes: No separate API pricing; cost tracks parts ordered via the distributor agreement.\nprinciples:\n  - name: Visibility\n    description:\
+  \ Track parts orders, returns, and core charges via the distributor portal and Dana Aftermarket\n      API order endpoints.\n  - name: Allocation\n    description: Tag orders by branch / shop / business unit to attribute aftermarket parts spend.\n  - name: Optimization\n    description: Consolidate orders to hit volume tiers; use API inventory checks before ordering to\n      avoid backorder fees; manage core returns promptly.\n  - name: Accountability\n    description: Distributor / branch ops owns parts purchasing; finance reviews monthly distributor\n      statements for chargebacks and rebate accruals.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Allocation\n      - Reporting and Analytics\n  - name: Quantify Business Value\n    capabilities:\n      - Forecasting\n      - Budgeting\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Rate Optimization\n  - name: Manage the FinOps Practice\n    capabilities:\n      - Invoicing and Chargeback\n\
+  billingModel:\n  pricingCategory: Cost of Goods + Distributor Agreement\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Dana Aftermarket\n  ServiceCategory: Automotive Aftermarket\n  ProviderName: Dana\n  PublisherName: Dana Incorporated\n  InvoiceIssuerName: Dana Incorporated\n  PricingCategory: Cost of Goods\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: parts_orders\n    description: Aftermarket part orders placed via API\n    unit: order\n    aggregation: sum\n    dimensions:\n      - distributor\n      - product_line\n      - branch\n  - name: parts_units\n    description: Individual part units ordered\n    unit: part\n    aggregation: sum\n    dimensions:\n      - product_line\n      - sku\n  - name: api_requests\n    description: API calls against the Dana Aftermarket API (not separately billed; observed for capacity)\n\
+  \    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - distributor\napis:\n  - name: Dana Aftermarket API\n    baseURL: https://api.danaaftermarket.com\n    tags:\n      - Aftermarket\n      - Auto Parts\n      - Drivetrain\n      - eCommerce\n      - Supply Chain\n    serviceName: Dana Aftermarket API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Part\n    metric: billed_cost / parts_units\n    target: TBD\n  - name: Cost per Order\n    metric: billed_cost / parts_orders\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/dana/refs/heads/main/finops/dana-finops.yml
-sources: []
+sources:
+- https://www.dana.com/
 specification: FinOps Framework
 tags:
 - Aftermarket
@@ -85,6 +80,5 @@ tags:
 - eCommerce
 - Supply Chain
 - FinOps
-- Cost Management
 - FOCUS
 ---

@@ -14,77 +14,57 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/adobe-illustrator/refs/heads/main/openapi/adobe-illustrator-scripting-openapi-original.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Monthly / Annual
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Adobe Illustrator API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  pricingCategory: Subscription + Generative Credits
+description: 'FOCUS-aligned FinOps shape for Adobe Illustrator: per-seat Creative Cloud subscription (Single App or All Apps) plus generative-credit metering for Firefly Vector / Pattern / Recolor APIs.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Adobe Illustrator
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Adobe Illustrator
-  PublisherName: Adobe Illustrator
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Adobe Inc.
+  ProviderName: Adobe
+  PublisherName: Adobe Inc.
+  ServiceCategory: Creative SaaS
   ServiceName: Adobe Illustrator
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Per-seat Illustrator subscription (Single App or All Apps)
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - sku
+  - geography
+  name: illustrator_seat
+  unit: seat-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Firefly Vector / Pattern / Recolor API generative-credit consumption
   dimensions:
   - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - account
+  name: vector_generative_credits
+  unit: credit
 name: Adobe Illustrator Finops
 provider_name: Adobe Illustrator
 provider_slug: adobe-illustrator
-publisher_name: Adobe Illustrator
-service_category: API
+publisher_name: Adobe Inc.
+service_category: Creative SaaS
 slug: adobe-illustrator-finops
 source_filename: adobe-illustrator-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Adobe Illustrator\nproviderId: adobe-illustrator\npublisherName: Adobe Illustrator\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Creative Cloud\n  - Design\n  - Illustrator\n  - Vector Graphics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Adobe Illustrator API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Adobe Illustrator\n  ServiceCategory: Developer Tools / API\n  ProviderName: Adobe Illustrator\n  PublisherName: Adobe Illustrator\n  InvoiceIssuerName: Adobe Illustrator\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in\
-  \ API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Adobe Illustrator Scripting API\n    baseURL: https://api.example.com\n    tags:\n      - AppleScript\n      - Automation\n      - JavaScript\n      - Scripting\n      - VBScript\n    serviceName: Adobe Illustrator Scripting API\n    serviceCategory: API\n  - name: Adobe Illustrator Plugin SDK\n    baseURL: https://api.example.com\n    tags:\n      - C++\n      - Extensions\n      - Plugins\n      - SDK\n    serviceName: Adobe Illustrator Plugin SDK\n    serviceCategory: API\n  - name: Adobe Illustrator CEP Extensions API\n    baseURL: https://api.example.com\n    tags:\n      - CEP\n      - CSS\n      - Extensions\n      - HTML\n      - JavaScript\n\
-  \      - Panels\n    serviceName: Adobe Illustrator CEP Extensions API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.adobe.com/products/illustrator/plans.html
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Adobe Illustrator\nproviderId: adobe-illustrator\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Illustration\n  - Generative AI\nnotes: >-\n  Illustrator is per-seat SaaS (Single App or All Apps) plus optional\n  generative-credit usage for Firefly vector APIs. Public list prices\n  were not retrievable via WebFetch.\ndescription: >-\n  FOCUS-aligned FinOps shape for Adobe Illustrator: per-seat Creative\n  Cloud subscription (Single App or All Apps) plus generative-credit\n  metering for Firefly Vector / Pattern / Recolor APIs.\nsources:\n  - https://www.adobe.com/products/illustrator/plans.html\n  - https://developer.adobe.com/firefly-services/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl:\
+  \ https://focus.finops.org/focus-specification/v1-3/\npublisherName: Adobe Inc.\nserviceCategory: Creative SaaS\nbillingModel:\n  pricingCategory: Subscription + Generative Credits\n  billingFrequency: Monthly / Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Refund\nfocusColumns:\n  ServiceName: Adobe Illustrator\n  ServiceCategory: Creative SaaS\n  ProviderName: Adobe\n  PublisherName: Adobe Inc.\n  InvoiceIssuerName: Adobe Inc.\n  BillingCurrency: USD\nmeters:\n  - name: illustrator_seat\n    description: Per-seat Illustrator subscription (Single App or All Apps)\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - sku\n      - geography\n  - name: vector_generative_credits\n    description: Firefly Vector / Pattern / Recolor API generative-credit consumption\n    unit: credit\n    aggregation: sum\n    dimensions:\n      - api\n      - account\nprinciples:\n  - name: Visibility\n    description: >-\n      Use the Adobe\
+  \ Admin Console for seat usage; Firefly Services dashboard\n      for generative-credit burn against Vector API.\n  - name: Allocation\n    description: >-\n      Tag seats with department metadata in the Admin Console; attribute\n      Vector API calls to consuming team via API key per integration.\n  - name: Optimization\n    description: >-\n      Move occasional users from Single App to a shared All Apps seat where\n      they need other tools; cache vector outputs server-side; route bulk\n      pattern generation through Firefly Services bundles instead of\n      ad-hoc API calls.\n  - name: Accountability\n    description: >-\n      Design-team owner accountable for active seat count; engineering\n      owner accountable for Vector API generative-credit burn rate.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/adobe-illustrator/refs/heads/main/finops/adobe-illustrator-finops.yml
-sources: []
+sources:
+- https://www.adobe.com/products/illustrator/plans.html
+- https://developer.adobe.com/firefly-services/
 specification: FinOps Framework
 tags:
-- Creative Cloud
-- Design
-- Illustrator
-- Vector Graphics
 - FinOps
-- Cost Management
 - FOCUS
+- Illustration
+- Generative AI
 ---

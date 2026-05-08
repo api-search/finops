@@ -385,88 +385,88 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/bunq/refs/heads/main/openapi/bunq-user-userid-whitelist-sdd-openapi-original.yml
 billing_model:
-  billingCurrency: USD
+  billingCurrency: EUR
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Bunq API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  pricingCategory: Tiered Subscription
+description: 'FOCUS-aligned FinOps for bunq: API access is bundled with bunq personal/business account subscriptions (Free, Core, Pro, Elite) rather than billed per request. Cost shape is therefore a tiered monthly subscription per account/seat with bank-product fee schedules layered on top.'
 focus_columns:
-  BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Bunq
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Bunq
-  PublisherName: Bunq
-  ServiceCategory: Developer Tools / API
-  ServiceName: Bunq
+  BillingCurrency: EUR
+  ChargeCategory: Purchase
+  InvoiceIssuerName: bunq B.V.
+  ProviderName: bunq
+  PublisherName: bunq B.V.
+  ServiceCategory: Banking / Fintech
+  ServiceName: bunq API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Monthly subscription fee for the bunq account tier (Free, Core, Pro, Elite) that grants API access.
   dimensions:
-  - api
-  - endpoint
   - tier
-  - region
-  - consumer
+  - account_type
+  - country
+  name: account_subscription
+  unit: month
+- aggregation: sum
+  description: Count of API requests made against the bunq production API. Not directly billed but tracked for fair-use, throttling and capacity reporting.
+  dimensions:
+  - endpoint
+  - http_method
+  - tier
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Card payments processed against the underlying bunq account; some operations carry per-transaction fees per the bunq pricing PDF.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - card_brand
+  - currency
+  - country
+  name: card_transactions
+  unit: transaction
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Foreign-exchange conversions on payments and transfers. Carries a per-conversion fee per the bunq pricing PDF.
   dimensions:
-  - api
-  - endpoint
+  - source_currency
+  - target_currency
+  name: fx_conversions
+  unit: transaction
+- aggregation: sum
+  description: ATM cash withdrawals; free up to a monthly cap per tier, then per-withdrawal fee applies.
+  dimensions:
   - tier
-  name: compute_seconds
-  unit: second
+  - country
+  name: atm_withdrawals
+  unit: transaction
 name: Bunq Finops
 provider_name: Bunq
 provider_slug: bunq
-publisher_name: Bunq
-service_category: API
+publisher_name: bunq B.V.
+service_category: Banking / Fintech
 slug: bunq-finops
 source_filename: bunq-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Bunq\nproviderId: bunq\npublisherName: Bunq\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Banking\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Bunq API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n\
-  \  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n\
-  \      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Bunq\n  ServiceCategory: Developer Tools / API\n  ProviderName: Bunq\n  PublisherName: Bunq\n  InvoiceIssuerName: Bunq\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side\
-  \ compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Bunq Activity Map Place API\n    baseURL: https://public-api.sandbox.bunq.com/\n    tags: []\n    serviceName: Bunq Activity Map Place API\n    serviceCategory: API\n  - name: Bunq Attachment Content API\n    baseURL: ''\n    tags:\n      - Attachments\n      - Content\n      - Public\n    serviceName: Bunq Attachment Content API\n    serviceCategory: API\n  - name: Bunq Attachments API\n    baseURL: https://public-api.sandbox.bunq.com/\n    tags:\n      - Attachments\n      - Content\n      - Items\n      - Users\n    serviceName: Bunq Attachments API\n    serviceCategory: API\n  - name: Bunq Avatar API\n    baseURL: ''\n    tags:\n      - Avatars\n      - Items\n    serviceName: Bunq Avatar API\n    serviceCategory: API\n  - name: Bunq Billing Contract Subscription API\n    baseURL: ''\n    tags:\n      - Billing\n\
-  \      - Contracts\n      - Subscriptions\n      - Users\n    serviceName: Bunq Billing Contract Subscription API\n    serviceCategory: API\n  - name: Bunq Card API\n    baseURL: ''\n    tags:\n      - Batches\n      - Cards\n      - Content\n      - Credit\n      - CSV\n      - Debit\n      - Exports\n      - Generated\n      - Items\n      - Names\n      - PDF\n      - Replace\n      - Statements\n      - Users\n    serviceName: Bunq Card API\n    serviceCategory: API\n  - name: Bunq Certificate Pinning API\n    baseURL: ''\n    tags:\n      - Certificates\n      - Items\n      - Pinned\n      - Users\n    serviceName: Bunq Certificate Pinning API\n    serviceCategory: API\n  - name: Bunq Challenge Request API\n    baseURL: ''\n    tags:\n      - Challenges\n      - Items\n      - Users\n    serviceName: Bunq Challenge Request API\n    serviceCategory: API\n  - name: Bunq Chat Conversation API\n    baseURL: ''\n    tags:\n      - Attachments\n      - Chat\n      - Content\n      - Conversations\n\
-  \      - Users\n    serviceName: Bunq Chat Conversation API\n    serviceCategory: API\n  - name: Bunq Company API\n    baseURL: ''\n    tags:\n      - Companies\n      - Items\n      - Users\n    serviceName: Bunq Company API\n    serviceCategory: API\n  - name: Bunq Confirmation of Funds API\n    baseURL: ''\n    tags:\n      - Confirmation\n      - Funds\n      - Users\n    serviceName: Bunq Confirmation of Funds API\n    serviceCategory: API\n  - name: Bunq Device API\n    baseURL: ''\n    tags:\n      - Device\n      - Items\n    serviceName: Bunq Device API\n    serviceCategory: API\n  - name: Bunq Device Server API\n    baseURL: ''\n    tags:\n      - Device\n      - Items\n      - Servers\n    serviceName: Bunq Device Server API\n    serviceCategory: API\n  - name: Bunq Export Annual Overview API\n    baseURL: ''\n    tags:\n      - Annual\n      - Content\n      - Exports\n      - Items\n      - Overview\n      - Users\n    serviceName: Bunq Export Annual Overview API\n    serviceCategory:\
-  \ API\n  - name: Bunq Fundraiser Profile API\n    baseURL: ''\n    tags:\n      - Fundraiser\n      - Items\n      - Profiles\n      - Users\n    serviceName: Bunq Fundraiser Profile API\n    serviceCategory: API\n  - name: Bunq Installation API\n    baseURL: ''\n    tags:\n      - Installations\n      - Items\n      - Keys\n      - Public\n      - Servers\n    serviceName: Bunq Installation API\n    serviceCategory: API\n  - name: Bunq Installation Installation Server Public Key API\n    baseURL: ''\n    tags:\n      - Installations\n      - Keys\n      - Public\n      - Servers\n    serviceName: Bunq Installation Installation Server Public Key API\n    serviceCategory: API\n  - name: Bunq Monetary Account API\n    baseURL: https://public-api.sandbox.bunq.com/\n    tags:\n      - Accounts\n      - Actions\n      - Adyen\n      - Allocate\n      - Attachments\n      - Auto\n      - Bank\n      - Batches\n      - Cards\n      - Cloud\n      - Content\n      - Conversions\n      - Currencies\n\
-  \      - Customers\n      - Definitions\n      - Draft\n      - Eal\n      - Events\n      - Exports\n      - External\n      - Filter\n      - Fundraiser\n      - Ideal\n      - Inquiries\n      - Instances\n      - Invite\n      - Invoices\n      - Items\n      - Joint\n      - Mastercard\n      - Merchants\n      - Monetary\n      - Notes\n      - Notifications\n      - Payments\n      - Quotes\n      - Responses\n      - Results\n      - Savings\n      - Schedules\n      - Share\n      - Statements\n      - Switch\n      - Tabs\n      - Text\n      - Transactions\n      - URL\n      - Users\n      - Whitelist\n    serviceName: Bunq Monetary Account API\n    serviceCategory: API\n  - name: Bunq Oauth Client API\n    baseURL: ''\n    tags:\n      - Callback\n      - Clients\n      - Items\n      - OAuth\n      - URL\n      - Users\n    serviceName: Bunq Oauth Client API\n    serviceCategory: API\n  - name: Bunq Payment Service Provider Credential API\n    baseURL: ''\n    tags:\n   \
-  \   - Credentials\n      - Er\n      - Items\n      - Payments\n      - Prov\n      - Providers\n    serviceName: Bunq Payment Service Provider Credential API\n    serviceCategory: API\n  - name: Bunq Registry Import Splitwise Csv API\n    baseURL: ''\n    tags: []\n    serviceName: Bunq Registry Import Splitwise Csv API\n    serviceCategory: API\n  - name: Bunq Sandbox User Company API\n    baseURL: ''\n    tags: []\n    serviceName: Bunq Sandbox User Company API\n    serviceCategory: API\n  - name: Bunq Sandbox User Person API\n    baseURL: ''\n    tags: []\n    serviceName: Bunq Sandbox User Person API\n    serviceCategory: API\n  - name: Bunq Server Error API\n    baseURL: ''\n    tags: []\n    serviceName: Bunq Server Error API\n    serviceCategory: API\n  - name: Bunq Session Item API\n    baseURL: ''\n    tags: []\n    serviceName: Bunq Session Item API\n    serviceCategory: API\n  - name: Bunq Session Server API\n    baseURL: ''\n    tags: []\n    serviceName: Bunq Session Server\
-  \ API\n    serviceCategory: API\n  - name: Bunq Transaction Categories API\n    baseURL: https://public-api.sandbox.bunq.com/\n    tags:\n      - Additional\n      - Categories\n      - Defined\n      - Information\n      - Transactions\n      - Users\n    serviceName: Bunq Transaction Categories API\n    serviceCategory: API\n  - name: Bunq User Company Item API\n    baseURL: ''\n    tags: []\n    serviceName: Bunq User Company Item API\n    serviceCategory: API\n  - name: Bunq User Company User Company Name API\n    baseURL: ''\n    tags:\n      - Companies\n      - Names\n      - Users\n    serviceName: Bunq User Company User Company Name API\n    serviceCategory: API\n  - name: Bunq User Credential Password Ip API\n    baseURL: ''\n    tags:\n      - Credentials\n      - IP\n      - Items\n      - Password\n      - Users\n    serviceName: Bunq User Credential Password Ip API\n    serviceCategory: API\n  - name: Bunq User Currency Cloud Beneficiary API\n    baseURL: ''\n    tags: []\n\
-  \    serviceName: Bunq User Currency Cloud Beneficiary API\n    serviceCategory: API\n  - name: Bunq User Event API\n    baseURL: ''\n    tags:\n      - Events\n      - Items\n      - Users\n    serviceName: Bunq User Event API\n    serviceCategory: API\n  - name: Bunq User Feature Announcement API\n    baseURL: ''\n    tags:\n      - Announcement\n      - Feature\n      - Items\n      - Users\n    serviceName: Bunq User Feature Announcement API\n    serviceCategory: API\n  - name: Bunq User Insight Preference Date API\n    baseURL: ''\n    tags:\n      - Dates\n      - Insights\n      - Preferences\n      - Users\n    serviceName: Bunq User Insight Preference Date API\n    serviceCategory: API\n  - name: Bunq User Insights API\n    baseURL: ''\n    tags:\n      - Insights\n      - Search\n      - Users\n    serviceName: Bunq User Insights API\n    serviceCategory: API\n  - name: Bunq User Invoice API\n    baseURL: ''\n    tags:\n      - Content\n      - Invoices\n      - Items\n     \
-  \ - PDF\n      - Users\n    serviceName: Bunq User Invoice API\n    serviceCategory: API\n  - name: Bunq User Item API\n    baseURL: ''\n    tags: []\n    serviceName: Bunq User Item API\n    serviceCategory: API\n  - name: Bunq User Legal Name API\n    baseURL: ''\n    tags:\n      - Legal\n      - Names\n      - Users\n    serviceName: Bunq User Legal Name API\n    serviceCategory: API\n  - name: Bunq User Limit API\n    baseURL: ''\n    tags:\n      - Limits\n      - Users\n    serviceName: Bunq User Limit API\n    serviceCategory: API\n  - name: Bunq User Monetary Account Bank API\n    baseURL: ''\n    tags:\n      - Accounts\n      - Bank\n      - Items\n      - Monetary\n      - Users\n    serviceName: Bunq User Monetary Account Bank API\n    serviceCategory: API\n  - name: Bunq User Monetary Account Card API\n    baseURL: ''\n    tags:\n      - Accounts\n      - Cards\n      - Items\n      - Monetary\n      - Users\n    serviceName: Bunq User Monetary Account Card API\n    serviceCategory:\
-  \ API\n  - name: Bunq User Monetary Account External API\n    baseURL: ''\n    tags:\n      - Accounts\n      - External\n      - Items\n      - Monetary\n      - Savings\n      - Users\n    serviceName: Bunq User Monetary Account External API\n    serviceCategory: API\n  - name: Bunq User Monetary Account Joint API\n    baseURL: ''\n    tags:\n      - Accounts\n      - Items\n      - Joint\n      - Monetary\n      - Users\n    serviceName: Bunq User Monetary Account Joint API\n    serviceCategory: API\n  - name: Bunq User Monetary Account Savings API\n    baseURL: ''\n    tags:\n      - Accounts\n      - Items\n      - Monetary\n      - Savings\n      - Users\n    serviceName: Bunq User Monetary Account Savings API\n    serviceCategory: API\n  - name: Bunq User Notification Filter Email API\n    baseURL: ''\n    tags:\n      - Emails\n      - Filter\n      - Notifications\n      - Users\n    serviceName: Bunq User Notification Filter Email API\n    serviceCategory: API\n  - name: Bunq\
-  \ User Notification Filter Failure API\n    baseURL: ''\n    tags:\n      - Failure\n      - Filter\n      - Notifications\n      - Users\n    serviceName: Bunq User Notification Filter Failure API\n    serviceCategory: API\n  - name: Bunq User Notification Filter Push API\n    baseURL: ''\n    tags:\n      - Filter\n      - Notifications\n      - Users\n    serviceName: Bunq User Notification Filter Push API\n    serviceCategory: API\n  - name: Bunq User Notification Filter Url API\n    baseURL: ''\n    tags:\n      - Filter\n      - Notifications\n      - URL\n      - Users\n    serviceName: Bunq User Notification Filter Url API\n    serviceCategory: API\n  - name: Bunq User Payment Auto Allocate API\n    baseURL: ''\n    tags:\n      - Allocate\n      - Auto\n      - Payments\n      - Users\n    serviceName: Bunq User Payment Auto Allocate API\n    serviceCategory: API\n  - name: Bunq User Payment Service Provider Draft Payment API\n    baseURL: ''\n    tags:\n      - Draft\n      -\
-  \ Er\n      - Items\n      - Payments\n      - Prov\n      - Providers\n      - Users\n    serviceName: Bunq User Payment Service Provider Draft Payment API\n    serviceCategory: API\n  - name: Bunq User Payment Service Provider Issuer Transaction API\n    baseURL: ''\n    tags:\n      - Er\n      - Issuer\n      - Items\n      - Payments\n      - Prov\n      - Providers\n      - Transactions\n      - Users\n    serviceName: Bunq User Payment Service Provider Issuer Transaction API\n    serviceCategory: API\n  - name: Bunq User Payment Service Provider Item API\n    baseURL: ''\n    tags: []\n    serviceName: Bunq User Payment Service Provider Item API\n    serviceCategory: API\n  - name: Bunq User Person Item API\n    baseURL: ''\n    tags: []\n    serviceName: Bunq User Person Item API\n    serviceCategory: API\n  - name: Bunq User Registry API\n    baseURL: ''\n    tags:\n      - Items\n      - Registries\n      - Settlements\n      - Users\n    serviceName: Bunq User Registry API\n\
-  \    serviceCategory: API\n  - name: Bunq User Schedule API\n    baseURL: ''\n    tags:\n      - Schedules\n      - Users\n    serviceName: Bunq User Schedule API\n    serviceCategory: API\n  - name: Bunq User Share Invite Monetary Account Response API\n    baseURL: ''\n    tags:\n      - Accounts\n      - Invite\n      - Items\n      - Monetary\n      - Share\n      - Users\n    serviceName: Bunq User Share Invite Monetary Account Response API\n    serviceCategory: API\n  - name: Bunq User Token Qr Request Eal API\n    baseURL: ''\n    tags:\n      - Ideal\n      - Tokens\n      - Users\n    serviceName: Bunq User Token Qr Request Eal API\n    serviceCategory: API\n  - name: Bunq User Token Qr Request Sofort API\n    baseURL: ''\n    tags:\n      - Tokens\n      - Users\n    serviceName: Bunq User Token Qr Request Sofort API\n    serviceCategory: API\n  - name: Bunq User Transferwise Currency API\n    baseURL: ''\n    tags:\n      - Currencies\n      - Transferwise\n      - Users\n  \
-  \  serviceName: Bunq User Transferwise Currency API\n    serviceCategory: API\n  - name: Bunq User Transferwise Quote API\n    baseURL: ''\n    tags:\n      - Items\n      - Quotes\n      - Recipient\n      - Requirements\n      - Temporary\n      - Transfers\n      - Transferwise\n      - Users\n    serviceName: Bunq User Transferwise Quote API\n    serviceCategory: API\n  - name: Bunq User Transferwise User API\n    baseURL: ''\n    tags:\n      - Transferwise\n      - Users\n    serviceName: Bunq User Transferwise User API\n    serviceCategory: API\n  - name: Bunq User Tree Progress API\n    baseURL: ''\n    tags:\n      - Progress\n      - Trees\n      - Users\n    serviceName: Bunq User Tree Progress API\n    serviceCategory: API\n  - name: Bunq User Whitelist Sdd API\n    baseURL: ''\n    tags:\n      - Items\n      - Recurring\n      - Users\n      - Whitelist\n    serviceName: Bunq User Whitelist Sdd API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n\
-  \    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    url: http://apievangelist.com\n    email: info@apievangelist.com\n"
+source_url: https://www.bunq.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Bunq\nproviderId: bunq\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Banking\n  - Fintech\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for bunq: API access is bundled with bunq personal/business account\n  subscriptions (Free, Core, Pro, Elite) rather than billed per request. Cost shape is therefore a tiered\n  monthly subscription per account/seat with bank-product fee schedules layered on top.'\nsources:\n  - https://www.bunq.com/pricing\n  - https://www.bunq.com/business-pricing\n  - https://doc.bunq.com/\n  - https://doc.bunq.com/basics/rate-limits.md\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
+  publisherName: bunq B.V.\nserviceCategory: Banking / Fintech\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: EUR\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: bunq API\n  ServiceCategory: Banking / Fintech\n  ProviderName: bunq\n  PublisherName: bunq B.V.\n  InvoiceIssuerName: bunq B.V.\n  BillingCurrency: EUR\n  ChargeCategory: Purchase\nmeters:\n  - name: account_subscription\n    description: Monthly subscription fee for the bunq account tier (Free, Core, Pro, Elite) that grants\n      API access.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\n      - account_type\n      - country\n  - name: api_requests\n    description: Count of API requests made against the bunq production API. Not directly billed but tracked\n      for fair-use, throttling and capacity reporting.\n    unit: request\n    aggregation: sum\n    dimensions:\n \
+  \     - endpoint\n      - http_method\n      - tier\n  - name: card_transactions\n    description: Card payments processed against the underlying bunq account; some operations carry per-transaction\n      fees per the bunq pricing PDF.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - card_brand\n      - currency\n      - country\n  - name: fx_conversions\n    description: Foreign-exchange conversions on payments and transfers. Carries a per-conversion fee per\n      the bunq pricing PDF.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - source_currency\n      - target_currency\n  - name: atm_withdrawals\n    description: ATM cash withdrawals; free up to a monthly cap per tier, then per-withdrawal fee applies.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - tier\n      - country\nprinciples:\n  - name: Visibility\n    description: Use the bunq mobile/web app statements and the User Invoice API to see monthly subscription\n\
+  \      charges and per-transaction fees. The Monetary Account API exposes per-account ledgers usable for\n      back-office reconciliation.\n  - name: Allocation\n    description: Allocate spend by sub-account (each bunq account supports multiple Monetary Accounts)\n      and by API key / OAuth client to attribute API-driven flows back to the consuming team or product.\n  - name: Optimization\n    description: Right-size the bunq tier (Free / Core / Pro / Elite) to expected ATM withdrawal volume\n      and feature use; reuse session tokens to avoid the strict /session-server throttle; batch payments\n      when possible to reduce per-transaction FX fees.\n  - name: Accountability\n    description: Designate a finance owner per bunq business account; reconcile monthly invoices against\n      the User Invoice API and tag outflows with the consuming product so chargeback / showback is possible.\nmaintainers:\n  - FN: API Evangelist\n    url: http://apievangelist.com\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/bunq/refs/heads/main/finops/bunq-finops.yml
-sources: []
+sources:
+- https://www.bunq.com/pricing
+- https://www.bunq.com/business-pricing
+- https://doc.bunq.com/
+- https://doc.bunq.com/basics/rate-limits.md
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Banking
+- Fintech
 - FinOps
-- Cost Management
 - FOCUS
 ---

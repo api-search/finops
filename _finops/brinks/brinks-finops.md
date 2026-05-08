@@ -9,67 +9,65 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Brinks API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Service Contract
+description: 'FOCUS-aligned FinOps for Brink''s: bundled commercial contract covering 24SEVEN ACCESS portal, Armored Account, RetailBox, and Brink''s Money paycard services with armored logistics and hardware. Software and API access are not separately metered; spend is dominated by per-pickup and per-location service fees set in the master services agreement.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Brinks
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Brinks
-  PublisherName: Brinks
-  ServiceCategory: Developer Tools / API
-  ServiceName: Brinks
+  InvoiceIssuerName: The Brink's Company
+  PricingCategory: Other
+  PricingUnit: service-contract
+  ProviderName: Brink's
+  PublisherName: The Brink's Company
+  ServiceCategory: Cash Management & Logistics
+  ServiceName: Brink's
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Monthly contracted service fee covering portal access, software, and base logistics.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - location
+  - product_line
+  name: service_contract_month
+  unit: month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Armored pickup events per location.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - location
+  - frequency_band
+  name: pickups
+  unit: event
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Cash deposits processed through 24SEVEN ACCESS / Armored Account.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - location
+  name: deposits_processed
+  unit: deposit
+- aggregation: sum
+  description: Brink's Money paycard loads.
+  dimensions:
+  - employer
+  name: paycard_loads
+  unit: load
 name: Brinks Finops
 provider_name: Brinks
 provider_slug: brinks
-publisher_name: Brinks
-service_category: API
+publisher_name: The Brink's Company
+service_category: Cash Management & Logistics
 slug: brinks-finops
 source_filename: brinks-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Brinks\nproviderId: brinks\npublisherName: Brinks\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cash Management\n  - Security\n  - ATM Services\n  - Financial Services\n  - Armored Transport\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Brinks API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
-  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
-  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Brinks\n  ServiceCategory: Developer Tools / API\n  ProviderName: Brinks\n  PublisherName: Brinks\n  InvoiceIssuerName: Brinks\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
-  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Brink's 24SEVEN ACCESS Portal\n    baseURL: ''\n    tags:\n      - Cash Management\n      - Customer Portal\n      - Operations\n    serviceName: Brink's 24SEVEN ACCESS Portal\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
+source_url: https://www.brinks.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Brinks\nproviderId: brinks\npublisherName: The Brink's Company\nserviceCategory: Cash Management & Logistics\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Cash Management\n  - Security\n  - ATM Services\n  - Financial Services\n  - Armored Transport\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Brink''s: bundled commercial contract covering 24SEVEN ACCESS\n  portal, Armored Account, RetailBox, and Brink''s Money paycard services with armored logistics and\n  hardware. Software and API access are not separately metered; spend is dominated by per-pickup and\n  per-location service fees set in the master\
+  \ services agreement.'\nsources:\n  - https://www.brinks.com/\nnotes: API access is included with contracted cash management services; no public per-API price.\nbillingModel:\n  pricingCategory: Service Contract\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Brink's\n  ServiceCategory: Cash Management & Logistics\n  ProviderName: Brink's\n  PublisherName: The Brink's Company\n  InvoiceIssuerName: The Brink's Company\n  BillingCurrency: USD\n  PricingCategory: Other\n  PricingUnit: service-contract\nmeters:\n  - name: service_contract_month\n    description: Monthly contracted service fee covering portal access, software, and base logistics.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - location\n      - product_line\n  - name: pickups\n    description: Armored pickup events per location.\n    unit: event\n    aggregation: sum\n    dimensions:\n      - location\n\
+  \      - frequency_band\n  - name: deposits_processed\n    description: Cash deposits processed through 24SEVEN ACCESS / Armored Account.\n    unit: deposit\n    aggregation: sum\n    dimensions:\n      - location\n  - name: paycard_loads\n    description: Brink's Money paycard loads.\n    unit: load\n    aggregation: sum\n    dimensions:\n      - employer\nprinciples:\n  - name: Visibility\n    description: Use 24SEVEN ACCESS to track deposits, pickups, and change orders by location; reconcile\n      against monthly invoices and the master services agreement.\n  - name: Allocation\n    description: Allocate cash management spend by store / location to product lines, regions, or business\n      units that own the cash flow.\n  - name: Optimization\n    description: Tune pickup frequency to actual deposit volume per location, consolidate stops where\n      geography allows, and renegotiate volume-based discounts at renewal.\n  - name: Accountability\n    description: Designate a treasury\
+  \ / store-operations owner for the Brink's relationship; review pickup\n      frequency, dispute discrepancies, and forecast contract renewals against retail growth plans.\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/brinks/refs/heads/main/finops/brinks-finops.yml
-sources: []
+sources:
+- https://www.brinks.com/
 specification: FinOps Framework
 tags:
 - Cash Management
@@ -78,6 +76,5 @@ tags:
 - Financial Services
 - Armored Transport
 - FinOps
-- Cost Management
 - FOCUS
 ---

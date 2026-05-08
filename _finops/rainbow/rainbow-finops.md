@@ -25,83 +25,62 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/rainbow/refs/heads/main/openapi/rainbow-contacts-openapi.yml
 billing_model:
-  billingCurrency: USD
+  billingCurrency: USD/EUR
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Rainbow API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Usage
+  pricingCategory: Enterprise CPaaS Contract
+description: FOCUS-aligned FinOps for Rainbow CPaaS is contract-based; chat, voice, video, and telephony consumption is billed under the ALE customer agreement rather than a public per-API tariff.
 focus_columns:
-  BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Rainbow
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Rainbow
-  PublisherName: Rainbow
-  ServiceCategory: Developer Tools / API
+  BillingCurrency: USD/EUR
+  InvoiceIssuerName: Alcatel-Lucent Enterprise
+  ProviderName: Alcatel-Lucent Enterprise
+  PublisherName: Alcatel-Lucent Enterprise
+  ServiceCategory: Communications
   ServiceName: Rainbow
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Active Rainbow user accounts on the customer's CPaaS deployment.
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - tenant
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: licensed_users
+  unit: seat
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Voice and PBX minutes routed through the Rainbow telephony surface.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - tenant
+  - destination_country
+  name: telephony_minutes
+  unit: minute
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: API and SDK usage covered under the ALE production contract; not exposed as a public per-call meter.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - tenant
+  name: api_engagement
+  unit: varies
 name: Rainbow Finops
 provider_name: Rainbow
 provider_slug: rainbow
-publisher_name: Rainbow
-service_category: API
+publisher_name: Alcatel-Lucent Enterprise
+service_category: Communications
 slug: rainbow-finops
 source_filename: rainbow-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Rainbow\nproviderId: rainbow\npublisherName: Rainbow\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Communications\n  - CPaaS\n  - Chat\n  - Voice\n  - Video\n  - Telephony\n  - Messaging\n  - Collaboration\n  - Unified Communications\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Rainbow API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Rainbow\n  ServiceCategory: Developer Tools / API\n  ProviderName: Rainbow\n  PublisherName: Rainbow\n  InvoiceIssuerName: Rainbow\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in\
-  \ API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Rainbow Application Portal API\n    baseURL: https://openrainbow.com/api/rainbow\n    tags:\n      - Applications\n      - Administration\n      - OAuth\n      - Provisioning\n    serviceName: Rainbow Application Portal API\n    serviceCategory: API\n  - name: Rainbow Messaging API\n    baseURL: https://openrainbow.com/api/rainbow\n    tags:\n      - Messaging\n      - Chat\n      - Conversations\n      - Bubbles\n    serviceName: Rainbow Messaging API\n    serviceCategory: API\n  - name: Rainbow Contacts API\n    baseURL: https://openrainbow.com/api/rainbow\n    tags:\n      - Contacts\n      - Directory\n      - Search\n    serviceName: Rainbow Contacts\
-  \ API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.al-enterprise.com/en/products/communications/rainbow
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Rainbow\nproviderId: rainbow\npublisherName: Alcatel-Lucent Enterprise\nserviceCategory: Communications\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Communications\n  - CPaaS\n  - FinOps\n  - FOCUS\nnotes: Rainbow does not publish a per-API meter or invoice surface; FinOps mapping is anchored to the\n  ALE production contract.\ndescription: FOCUS-aligned FinOps for Rainbow CPaaS is contract-based; chat, voice, video, and telephony\n  consumption is billed under the ALE customer agreement rather than a public per-API tariff.\nsources:\n  - https://www.al-enterprise.com/en/products/communications/rainbow\n  - https://developers.openrainbow.com/\n\
+  billingModel:\n  pricingCategory: Enterprise CPaaS Contract\n  billingFrequency: Monthly\n  billingCurrency: USD/EUR\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: Rainbow\n  ServiceCategory: Communications\n  ProviderName: Alcatel-Lucent Enterprise\n  PublisherName: Alcatel-Lucent Enterprise\n  InvoiceIssuerName: Alcatel-Lucent Enterprise\n  BillingCurrency: USD/EUR\nmeters:\n  - name: licensed_users\n    description: Active Rainbow user accounts on the customer's CPaaS deployment.\n    unit: seat\n    aggregation: max\n    dimensions:\n      - tenant\n      - region\n  - name: telephony_minutes\n    description: Voice and PBX minutes routed through the Rainbow telephony surface.\n    unit: minute\n    aggregation: sum\n    dimensions:\n      - tenant\n      - destination_country\n  - name: api_engagement\n    description: API and SDK usage covered under the ALE production contract; not exposed as a public\n      per-call meter.\n    unit: varies\n  \
+  \  aggregation: sum\n    dimensions:\n      - tenant\nprinciples:\n  - name: Visibility\n    description: Pull licensed-user and telephony-minute reports from the ALE Rainbow administration\n      console; production deployments expose tenant-level usage to administrators.\n  - name: Allocation\n    description: Allocate Rainbow seat and telephony spend to the consuming business unit or location;\n      tenant scoping makes per-department attribution straightforward.\n  - name: Optimization\n    description: Right-size licensed-user counts at renewal and tune telephony routing to minimize cross-region\n      egress; consolidate developer hub experimentation under a shared sandbox tenant.\n  - name: Accountability\n    description: Communications IT owns the Rainbow contract; finance reviews seat and minute consumption\n      against the ALE agreement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/rainbow/refs/heads/main/finops/rainbow-finops.yml
-sources: []
+sources:
+- https://www.al-enterprise.com/en/products/communications/rainbow
+- https://developers.openrainbow.com/
 specification: FinOps Framework
 tags:
 - Communications
 - CPaaS
-- Chat
-- Voice
-- Video
-- Telephony
-- Messaging
-- Collaboration
-- Unified Communications
 - FinOps
-- Cost Management
 - FOCUS
 ---

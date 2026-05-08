@@ -136,82 +136,87 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Sentry API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Usage
+  pricingCategory: Tiered Subscription + Pay-As-You-Go
+description: FOCUS-aligned FinOps shape for Sentry — tiered SaaS subscription with multiple consumption meters (errors, logs/metrics, spans, replays, uptime monitors, cron monitors). Team and Business plans publish per-unit overage prices ($0.50/GB logs, $1.00/uptime alert, $0.78/cron monitor); Developer hard-caps on free quota; Enterprise is custom.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Sentry
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Functional Software, Inc.
   ProviderName: Sentry
-  PublisherName: Sentry
-  ServiceCategory: Developer Tools / API
+  PublisherName: Functional Software, Inc.
+  ServiceCategory: Observability / APM
   ServiceName: Sentry
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Captured error events
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - organization
+  - project
+  - environment
+  name: errors
+  unit: error
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Logs and metrics ingested in GB (overage billed at $0.50/GB on Team/Business)
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  - organization
+  - project
+  name: logs_metrics
   unit: GB
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Tracing spans ingested
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - organization
+  - project
+  name: spans
+  unit: span
+- aggregation: sum
+  description: Session Replay recordings ingested
+  dimensions:
+  - organization
+  - project
+  name: session_replays
+  unit: replay
+- aggregation: sum
+  description: Active uptime monitors / alerts (overage at $1.00/alert on Team/Business)
+  dimensions:
+  - organization
+  name: uptime_monitors
+  unit: alert
+- aggregation: sum
+  description: Active cron monitors (overage at $0.78/monitor on Team/Business)
+  dimensions:
+  - organization
+  name: cron_monitors
+  unit: monitor
+- aggregation: sum
+  description: Recurring monthly plan fee (Team $26/mo, Business $80/mo, Enterprise custom)
+  dimensions:
+  - plan
+  name: subscription_fee
+  unit: month
 name: Sentry System Finops
 provider_name: Sentry
 provider_slug: sentry-system
-publisher_name: Sentry
-service_category: API
+publisher_name: Functional Software, Inc. (Sentry)
+service_category: Observability / APM
 slug: sentry-system-finops
 source_filename: sentry-system-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sentry\nproviderId: sentry-system\npublisherName: Sentry\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - APM\n  - Application Monitoring\n  - Bug Tracking\n  - Developer Tools\n  - Error Tracking\n  - Observability\n  - Performance Monitoring\n  - Real-Time Monitoring\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sentry API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
-  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
-  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sentry\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sentry\n  PublisherName: Sentry\n  InvoiceIssuerName: Sentry\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned\
-  \ over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Sentry API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Error Tracking\n      - Monitoring\n      - Observability\n      - Performance\n    serviceName: Sentry API\n    serviceCategory: API\n  - name: Sentry Events and Issues API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Debugging\n      - Error Tracking\n      - Events\n      - Issues\n    serviceName: Sentry Events and Issues API\n    serviceCategory: API\n  - name: Sentry Organizations API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Administration\n      - Members\n      - Organizations\n    serviceName: Sentry Organizations API\n   \
-  \ serviceCategory: API\n  - name: Sentry Projects API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Configuration\n      - Management\n      - Projects\n    serviceName: Sentry Projects API\n    serviceCategory: API\n  - name: Sentry Teams API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Collaboration\n      - Members\n      - Teams\n    serviceName: Sentry Teams API\n    serviceCategory: API\n  - name: Sentry Releases API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Deployments\n      - Releases\n      - Version Management\n    serviceName: Sentry Releases API\n    serviceCategory: API\n  - name: Sentry Alerts API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Alerts\n      - Monitoring\n      - Notifications\n    serviceName: Sentry Alerts API\n    serviceCategory: API\n  - name: Sentry Crons API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Crons\n      - Monitoring\n      - Scheduled Tasks\n    serviceName: Sentry Crons API\n\
-  \    serviceCategory: API\n  - name: Sentry Dashboards API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Analytics\n      - Dashboards\n      - Visualization\n    serviceName: Sentry Dashboards API\n    serviceCategory: API\n  - name: Sentry Discover API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Analytics\n      - Discover\n      - Performance\n      - Queries\n    serviceName: Sentry Discover API\n    serviceCategory: API\n  - name: Sentry Environments API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Configuration\n      - Environments\n      - Management\n    serviceName: Sentry Environments API\n    serviceCategory: API\n  - name: Sentry Explore API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Analytics\n      - Events\n      - Explore\n    serviceName: Sentry Explore API\n    serviceCategory: API\n  - name: Sentry Integration Platform API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Integrations\n      - Platform\n\
-  \      - Webhooks\n    serviceName: Sentry Integration Platform API\n    serviceCategory: API\n  - name: Sentry Integrations API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Configuration\n      - Data Forwarding\n      - Integrations\n    serviceName: Sentry Integrations API\n    serviceCategory: API\n  - name: Sentry Mobile Builds API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Artifacts\n      - Builds\n      - Mobile\n    serviceName: Sentry Mobile Builds API\n    serviceCategory: API\n  - name: Sentry Monitors API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Alerts\n      - Monitors\n      - Uptime\n    serviceName: Sentry Monitors API\n    serviceCategory: API\n  - name: Sentry Prevent API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Quality Assurance\n      - Repositories\n      - Testing\n    serviceName: Sentry Prevent API\n    serviceCategory: API\n  - name: Sentry Replays API\n    baseURL: https://sentry.io/api/0\n    tags:\n\
-  \      - Replays\n      - Session Recording\n      - User Experience\n    serviceName: Sentry Replays API\n    serviceCategory: API\n  - name: Sentry SCIM API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Enterprise\n      - Identity Management\n      - Provisioning\n      - SCIM\n    serviceName: Sentry SCIM API\n    serviceCategory: API\n  - name: Sentry Seer API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - AI\n      - Automation\n      - Issue Analysis\n    serviceName: Sentry Seer API\n    serviceCategory: API\n  - name: Sentry Users API\n    baseURL: https://sentry.io/api/0\n    tags:\n      - Accounts\n      - Authentication\n      - Users\n    serviceName: Sentry Users API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://sentry.io/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Sentry\nproviderId: sentry-system\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Error Tracking\n  - Observability\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for Sentry — tiered SaaS subscription with multiple consumption\n  meters (errors, logs/metrics, spans, replays, uptime monitors, cron monitors). Team and Business plans\n  publish per-unit overage prices ($0.50/GB logs, $1.00/uptime alert, $0.78/cron monitor); Developer hard-caps\n  on free quota; Enterprise is custom.\nsources:\n  - https://sentry.io/pricing/\n  - https://docs.sentry.io/api/ratelimits/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Functional Software,\
+  \ Inc. (Sentry)\nserviceCategory: Observability / APM\nbillingModel:\n  pricingCategory: Tiered Subscription + Pay-As-You-Go\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: Sentry\n  ServiceCategory: Observability / APM\n  ProviderName: Sentry\n  PublisherName: Functional Software, Inc.\n  InvoiceIssuerName: Functional Software, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: errors\n    description: Captured error events\n    unit: error\n    aggregation: sum\n    dimensions:\n      - organization\n      - project\n      - environment\n  - name: logs_metrics\n    description: Logs and metrics ingested in GB (overage billed at $0.50/GB on Team/Business)\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - organization\n      - project\n  - name: spans\n    description: Tracing spans ingested\n    unit: span\n    aggregation: sum\n    dimensions:\n      - organization\n      - project\n  - name:\
+  \ session_replays\n    description: Session Replay recordings ingested\n    unit: replay\n    aggregation: sum\n    dimensions:\n      - organization\n      - project\n  - name: uptime_monitors\n    description: Active uptime monitors / alerts (overage at $1.00/alert on Team/Business)\n    unit: alert\n    aggregation: sum\n    dimensions:\n      - organization\n  - name: cron_monitors\n    description: Active cron monitors (overage at $0.78/monitor on Team/Business)\n    unit: monitor\n    aggregation: sum\n    dimensions:\n      - organization\n  - name: subscription_fee\n    description: Recurring monthly plan fee (Team $26/mo, Business $80/mo, Enterprise custom)\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\nprinciples:\n  - name: Visibility\n    description: Use the Stats / Usage page in the Sentry UI plus the /api/0/organizations/{org}/stats_v2/\n      endpoint to break consumption down by project, category (error/transaction/replay/log), and time\n      bucket.\
+  \ Spending alerts can be configured from the same screen.\n  - name: Allocation\n    description: Sentry organizations and projects are the natural allocation units. Tag events with\n      release, environment, and team metadata to attribute consumption to product squads.\n  - name: Optimization\n    description: Use server-side and client-side sampling to control transaction/span volume; configure\n      inbound filters to drop noisy / non-actionable errors; tune session replay sample rate per project.\n      Advanced Quota Management on Business lets you cap per-project spend to prevent runaway billing.\n  - name: Accountability\n    description: Engineering owners of each project are accountable for their event volume. Platform\n      / SRE owns the org-level subscription and overage budget; finance reviews monthly Sentry invoice\n      against the plan.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sentry-system/refs/heads/main/finops/sentry-system-finops.yml
-sources: []
+sources:
+- https://sentry.io/pricing/
+- https://docs.sentry.io/api/ratelimits/
 specification: FinOps Framework
 tags:
-- APM
-- Application Monitoring
-- Bug Tracking
-- Developer Tools
 - Error Tracking
 - Observability
-- Performance Monitoring
-- Real-Time Monitoring
 - FinOps
-- Cost Management
 - FOCUS
 ---

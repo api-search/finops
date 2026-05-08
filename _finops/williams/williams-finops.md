@@ -11,76 +11,61 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Williams Companies API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tariff-Based
+description: FinOps shape for Williams is tariff-driven - pipeline transportation rates filed with FERC and invoiced under the shipper's transportation service agreement. The 1Line / EBB system itself is not separately metered as an API; it is the access channel for the underlying tariff service.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Williams Companies
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: The Williams Companies, Inc.
   ProviderName: Williams Companies
-  PublisherName: Williams Companies
-  ServiceCategory: Developer Tools / API
-  ServiceName: Williams Companies
+  PublisherName: The Williams Companies, Inc.
+  ServiceCategory: Energy Infrastructure
+  ServiceName: Williams 1Line Pipeline Service
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - pipeline
+  - rate_schedule
+  - receipt_point
+  - delivery_point
+  name: reserved_capacity
+  unit: Dth_per_day
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - pipeline
+  - rate_schedule
+  - cycle
+  name: transported_volume
+  unit: Dth
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - pipeline
+  - rate_schedule
+  name: capacity_release
+  unit: Dth_per_day
 name: Williams Finops
 provider_name: Williams Companies
 provider_slug: williams
-publisher_name: Williams Companies
-service_category: API
+publisher_name: The Williams Companies, Inc.
+service_category: Energy Infrastructure
 slug: williams-finops
 source_filename: williams-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Williams Companies\nproviderId: williams\npublisherName: Williams Companies\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Energy\n  - Natural Gas\n  - Pipeline\n  - Infrastructure\n  - Fortune 500\n  - Midstream\n  - Utilities\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Williams Companies API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Williams Companies\n  ServiceCategory: Developer Tools / API\n  ProviderName: Williams Companies\n  PublisherName: Williams Companies\n  InvoiceIssuerName: Williams Companies\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
-  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Transco Nominations API\n    baseURL: https://www.1line.williams.com/Transco\n    tags:\n      - Energy\n      - Natural Gas\n      - Pipeline\n      - Nominations\n      - Transco\n    serviceName: Transco Nominations API\n    serviceCategory: API\n  - name: Northwest Pipeline EBB\n    baseURL: https://www.1line.williams.com/NWP\n    tags:\n      - Energy\n      - Natural Gas\n      - Pipeline\n      - Northwest\n    serviceName: Northwest Pipeline EBB\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active\
-  \ Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.williams.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Williams Companies\nproviderId: williams\npublisherName: The Williams Companies, Inc.\nserviceCategory: Energy Infrastructure\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Energy\n  - Natural Gas\n  - Pipeline\n  - FinOps\n  - FOCUS\n  - Contact Sales\ndescription: FinOps shape for Williams is tariff-driven - pipeline transportation rates filed with FERC and invoiced under the shipper's transportation service agreement. The 1Line / EBB system itself is not separately metered as an API; it is the access channel for the underlying tariff service.\nsources:\n  - https://www.williams.com\n  - https://www.1line.williams.com\n\
+  notes: There is no API price list; cost is the pipeline tariff. Meters describe the actual tariff line items (reserved capacity, transported volume) rather than synthetic API meters.\nbillingModel:\n  pricingCategory: Tariff-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Williams 1Line Pipeline Service\n  ServiceCategory: Energy Infrastructure\n  ProviderName: Williams Companies\n  PublisherName: The Williams Companies, Inc.\n  InvoiceIssuerName: The Williams Companies, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: reserved_capacity\n    unit: Dth_per_day\n    aggregation: max\n    dimensions:\n      - pipeline\n      - rate_schedule\n      - receipt_point\n      - delivery_point\n  - name: transported_volume\n    unit: Dth\n    aggregation: sum\n    dimensions:\n      - pipeline\n      - rate_schedule\n      - cycle\n  - name: capacity_release\n    unit: Dth_per_day\n    aggregation:\
+  \ sum\n    dimensions:\n      - pipeline\n      - rate_schedule\nprinciples:\n  - name: Visibility\n    description: Reconcile against 1Line nomination, scheduling, and confirmation reports plus the shipper's monthly transportation invoice; FERC-filed tariffs publish the rate schedules.\n  - name: Allocation\n    description: Allocate by pipeline (Transco / Northwest), rate schedule, and receipt / delivery point pair, matching the tariff's billing keys.\n  - name: Optimization\n    description: Optimization is contractual - capacity-release auctions, alternate path selection, and cycle timing - not API-call reduction.\n  - name: Accountability\n    description: Owned by gas-supply / scheduling and treasury; the technical 1Line integration team owns reliability of nominations, not the underlying tariff cost.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/williams/refs/heads/main/finops/williams-finops.yml
-sources: []
+sources:
+- https://www.williams.com
+- https://www.1line.williams.com
 specification: FinOps Framework
 tags:
 - Energy
 - Natural Gas
 - Pipeline
-- Infrastructure
-- Fortune 500
-- Midstream
-- Utilities
 - FinOps
-- Cost Management
 - FOCUS
+- Contact Sales
 ---

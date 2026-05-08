@@ -20,70 +20,71 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/goodyear-tire-and-rubber/refs/heads/main/openapi/gaas-portal.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Contract
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Goodyear Tire & Rubber API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Enterprise Contract
+description: 'FOCUS-aligned FinOps for Goodyear''s SightLine + GaaS API portfolio: enterprise/partner-contracted access where commercial terms are not publicly disclosed. Meters reflect the consumption shape consumers should expect to track (vehicle/tire telematics ingest, catalog and work-order traffic).'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Goodyear Tire & Rubber
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: The Goodyear Tire & Rubber Company
   ProviderName: Goodyear Tire & Rubber
-  PublisherName: Goodyear Tire & Rubber
-  ServiceCategory: Developer Tools / API
-  ServiceName: Goodyear Tire & Rubber
+  PublisherName: The Goodyear Tire & Rubber Company
+  ServiceCategory: Connected Vehicles / Tire Telematics
+  ServiceName: Goodyear SightLine / GaaS APIs
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Count of billable API requests across the SightLine + GaaS surface
   dimensions:
   - api
   - endpoint
-  - tier
-  - region
   - consumer
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Telematics events ingested per vehicle/tire from SightLine
   dimensions:
-  - api
+  - vehicle
+  - fleet
   - region
-  - consumer
-  name: data_egress
-  unit: GB
+  name: tire_data_events
+  unit: event
+- aggregation: max
+  description: Active connected vehicles or tires under contract
+  dimensions:
+  - fleet
+  - region
+  name: connected_vehicles
+  unit: vehicle
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Work orders / service tickets transacted via the truck tire APIs
   dimensions:
   - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - fleet
+  name: work_orders
+  unit: ticket
 name: Goodyear Tire And Rubber Finops
 provider_name: Goodyear Tire & Rubber
 provider_slug: goodyear-tire-and-rubber
-publisher_name: Goodyear Tire & Rubber
-service_category: API
+publisher_name: The Goodyear Tire & Rubber Company
+service_category: Connected Vehicles / Tire Telematics
 slug: goodyear-tire-and-rubber-finops
 source_filename: goodyear-tire-and-rubber-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Goodyear Tire & Rubber\nproviderId: goodyear-tire-and-rubber\npublisherName: Goodyear Tire & Rubber\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Connected Vehicles\n  - Fleet Management\n  - IoT\n  - Telematics\n  - Tires\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Goodyear Tire & Rubber API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Goodyear Tire & Rubber\n  ServiceCategory: Developer Tools / API\n  ProviderName: Goodyear Tire & Rubber\n  PublisherName: Goodyear Tire & Rubber\n  InvoiceIssuerName: Goodyear Tire & Rubber\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
-  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Goodyear SightLine API\n    baseURL: https://developer.goodyearsightline.com\n    tags:\n      - Connected Vehicles\n      - IoT\n      - Telematics\n      - Tire Data\n      - Tires\n    serviceName: Goodyear SightLine API\n    serviceCategory: API\n  - name: Goodyear API Management Portal\n    baseURL: https://gaas-portal.goodyear.com\n    tags:\n      - API Management\n      - Fleet Management\n      - Tires\n    serviceName: Goodyear API Management Portal\n    serviceCategory: API\n  - name: Goodyear Truck Tire Catalog API\n    baseURL: https://api.catalog.goodyeartrucktires.com\n    tags:\n   \
-  \   - Catalog\n      - Tires\n      - Truck Tires\n    serviceName: Goodyear Truck Tire Catalog API\n    serviceCategory: API\n  - name: Goodyear Work Order API\n    baseURL: https://api.workorder.goodyeartrucktires.com\n    tags:\n      - Fleet Management\n      - Tires\n      - Work Orders\n    serviceName: Goodyear Work Order API\n    serviceCategory: API\n  - name: Goodyear Service Ticket API\n    baseURL: https://api.serviceticket.goodyeartrucktires.com\n    tags:\n      - Fleet Management\n      - Service Tickets\n      - Tires\n    serviceName: Goodyear Service Ticket API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://developer.goodyearsightline.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Goodyear Tire & Rubber\nproviderId: goodyear-tire-and-rubber\npublisherName: The Goodyear Tire & Rubber Company\nserviceCategory: Connected Vehicles / Tire Telematics\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Connected Vehicles\n  - Fleet Management\n  - IoT\n  - Telematics\n  - Tires\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Goodyear''s SightLine + GaaS API portfolio: enterprise/partner-contracted\n  access where commercial terms are not publicly disclosed. Meters reflect the consumption shape consumers\n  should expect to track (vehicle/tire telematics ingest, catalog and work-order traffic).'\n\
+  notes: No public pricing or invoice surface was found at reconciliation time. Billing model assumes a contracted\n  recurring fee plus optional usage-based components negotiated through the GaaS portal; replace once the\n  partner agreement terms are known.\nsources:\n  - https://developer.goodyearsightline.com/\n  - https://gaas-portal.goodyear.com/\nbillingModel:\n  pricingCategory: Enterprise Contract\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Goodyear SightLine / GaaS APIs\n  ServiceCategory: Connected Vehicles / Tire Telematics\n  ProviderName: Goodyear Tire & Rubber\n  PublisherName: The Goodyear Tire & Rubber Company\n  InvoiceIssuerName: The Goodyear Tire & Rubber Company\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests across the SightLine + GaaS surface\n    unit: request\n    aggregation:\
+  \ sum\n    dimensions:\n      - api\n      - endpoint\n      - consumer\n  - name: tire_data_events\n    description: Telematics events ingested per vehicle/tire from SightLine\n    unit: event\n    aggregation: sum\n    dimensions:\n      - vehicle\n      - fleet\n      - region\n  - name: connected_vehicles\n    description: Active connected vehicles or tires under contract\n    unit: vehicle\n    aggregation: max\n    dimensions:\n      - fleet\n      - region\n  - name: work_orders\n    description: Work orders / service tickets transacted via the truck tire APIs\n    unit: ticket\n    aggregation: sum\n    dimensions:\n      - api\n      - fleet\napis:\n  - name: Goodyear SightLine API\n    baseURL: https://developer.goodyearsightline.com\n    serviceName: Goodyear SightLine API\n    serviceCategory: Tire Telematics\n  - name: Goodyear API Management Portal\n    baseURL: https://gaas-portal.goodyear.com\n    serviceName: Goodyear API Management Portal\n    serviceCategory: API Management\n\
+  \  - name: Goodyear Truck Tire Catalog API\n    baseURL: https://api.catalog.goodyeartrucktires.com\n    serviceName: Goodyear Truck Tire Catalog API\n    serviceCategory: Catalog\n  - name: Goodyear Work Order API\n    baseURL: https://api.workorder.goodyeartrucktires.com\n    serviceName: Goodyear Work Order API\n    serviceCategory: Fleet Management\n  - name: Goodyear Service Ticket API\n    baseURL: https://api.serviceticket.goodyeartrucktires.com\n    serviceName: Goodyear Service Ticket API\n    serviceCategory: Fleet Management\nprinciples:\n  - name: Visibility\n    description: Track SightLine telematics ingest volume and GaaS API request counts per fleet via the\n      partner portal usage views; export to your data warehouse for cross-charging.\n  - name: Allocation\n    description: Tag API consumers by fleet ID and vehicle ID so tire-telematics and work-order spend can\n      be attributed to the operating unit owning each fleet.\n  - name: Optimization\n    description:\
+  \ Reduce SightLine event ingest cost by tuning sampling intervals on low-risk axles, batching\n      catalog lookups, and consolidating service-ticket polling.\n  - name: Accountability\n    description: Assign each fleet contract a budget owner; reconcile Goodyear invoices against the consumed\n      vehicles and ticket volume captured in your fleet system of record.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/goodyear-tire-and-rubber/refs/heads/main/finops/goodyear-tire-and-rubber-finops.yml
-sources: []
+sources:
+- https://developer.goodyearsightline.com/
+- https://gaas-portal.goodyear.com/
 specification: FinOps Framework
 tags:
 - Connected Vehicles
@@ -92,6 +93,5 @@ tags:
 - Telematics
 - Tires
 - FinOps
-- Cost Management
 - FOCUS
 ---

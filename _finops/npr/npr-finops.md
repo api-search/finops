@@ -26,70 +26,56 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/npr/main/openapi/npr-authorization-openapi-original.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: None
   chargeCategories:
   - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the NPR API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  chargeFrequency: None
+  pricingCategory: Free / Partner Program
+description: 'FOCUS-aligned FinOps for NPR: API access is free under a partner/credentialed program rather than a paid SaaS contract. Cost dimensions are operational (engineering integration time, content licensing obligations) rather than per-call invoicing.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: NPR
-  PricingCategory: Usage-Based
+  InvoiceIssuerName: N/A (free partner program)
+  PricingCategory: Free
   PricingUnit: request
   ProviderName: NPR
-  PublisherName: NPR
-  ServiceCategory: Developer Tools / API
+  PublisherName: National Public Radio, Inc.
+  ServiceCategory: Media / Public Broadcasting
   ServiceName: NPR
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Count of API requests across all NPR developer surfaces (operationally tracked, not invoiced)
   dimensions:
   - api
+  - oauth_client
   - endpoint
-  - tier
-  - region
-  - consumer
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  description: Listening API audio recommendations delivered (relevant to content licensing reporting)
+  name: audio_recommendations_served
+  unit: recommendation
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  description: Station Finder lookups by zip/geo
+  name: station_lookups
+  unit: lookup
 name: Npr Finops
 provider_name: NPR
 provider_slug: npr
-publisher_name: NPR
-service_category: API
+publisher_name: National Public Radio, Inc.
+service_category: Media / Public Broadcasting
 slug: npr-finops
 source_filename: npr-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: NPR\nproviderId: npr\npublisherName: NPR\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Media\n  - News\n  - Radio\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the NPR API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost\
-  \ can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n     \
-  \ - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: NPR\n  ServiceCategory: Developer Tools / API\n  ProviderName: NPR\n  PublisherName: NPR\n  InvoiceIssuerName: NPR\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n\
-  \    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: NPR Listening\n    baseURL: https://listening.api.npr.org/\n    tags:\n      - Audio\n      - Listening\n    serviceName: NPR Listening\n    serviceCategory: API\n  - name: NPR Station Finder\n    baseURL: https://station.api.npr.org/\n    tags:\n      - Stations\n    serviceName: NPR Station Finder\n    serviceCategory: API\n  - name: NPR Identity\n    baseURL: https://identity.api.npr.org/\n    tags:\n      - Identity\n      - Users\n    serviceName: NPR Identity\n    serviceCategory: API\n  - name: NPR Authorization\n    baseURL: https://authorization.api.npr.org/\n    tags:\n      - Authorization\n    serviceName: NPR Authorization\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost\
-  \ per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://dev.npr.org/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: NPR\nproviderId: npr\npublisherName: National Public Radio, Inc.\nserviceCategory: Media / Public Broadcasting\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Media\n  - News\n  - Radio\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for NPR: API access is free under a partner/credentialed program rather\n  than a paid SaaS contract. Cost dimensions are operational (engineering integration time, content licensing\n  obligations) rather than per-call invoicing.'\nnotes: NPR does not invoice API consumers under the public developer program; the FinOps surface is implementation\n  cost and\
+  \ content-licensing compliance, not vendor spend.\nsources:\n  - https://dev.npr.org/\nprinciples:\n  - name: Visibility\n    description: There is no NPR invoice for API usage. Track per-OAuth-client request volumes and content\n      airing/streaming counts internally for licensing and quota-of-fair-use reporting.\n  - name: Allocation\n    description: Allocate API usage to the consuming app or station group via the OAuth client_id.\n  - name: Optimization\n    description: Cache NPR Listening recommendations and Station Finder responses; respect upstream content\n      TTLs to minimize redundant calls and stay within fair use.\n  - name: Accountability\n    description: Each NPR developer account has an owner of record. Assign per-app responsibility for\n      compliance with the NPR API Terms of Use and content rights, and for renewing OAuth credentials.\nbillingModel:\n  pricingCategory: Free / Partner Program\n  billingFrequency: None\n  billingCurrency: USD\n  chargeCategories:\n\
+  \    - Usage\n  chargeFrequency: None\nfocusColumns:\n  ServiceName: NPR\n  ServiceCategory: Media / Public Broadcasting\n  ProviderName: NPR\n  PublisherName: National Public Radio, Inc.\n  InvoiceIssuerName: N/A (free partner program)\n  PricingCategory: Free\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of API requests across all NPR developer surfaces (operationally tracked, not invoiced)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - oauth_client\n      - endpoint\n  - name: audio_recommendations_served\n    description: Listening API audio recommendations delivered (relevant to content licensing reporting)\n    unit: recommendation\n    aggregation: sum\n  - name: station_lookups\n    description: Station Finder lookups by zip/geo\n    unit: lookup\n    aggregation: sum\napis:\n  - name: NPR Listening\n    baseURL: https://listening.api.npr.org/\n    tags:\n      -\
+  \ Audio\n      - Listening\n    serviceName: NPR Listening\n    serviceCategory: Media\n  - name: NPR Station Finder\n    baseURL: https://station.api.npr.org/\n    tags:\n      - Stations\n    serviceName: NPR Station Finder\n    serviceCategory: Media\n  - name: NPR Identity\n    baseURL: https://identity.api.npr.org/\n    tags:\n      - Identity\n      - Users\n    serviceName: NPR Identity\n    serviceCategory: Media\n  - name: NPR Authorization\n    baseURL: https://authorization.api.npr.org/\n    tags:\n      - Authorization\n    serviceName: NPR Authorization\n    serviceCategory: Media\nunitEconomics:\n  - name: Engineering cost per integrated app\n    metric: integration_engineer_hours * loaded_rate / integrated_apps\n    target: minimize via shared client libraries\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/npr/refs/heads/main/finops/npr-finops.yml
-sources: []
+sources:
+- https://dev.npr.org/
 specification: FinOps Framework
 tags:
 - Media

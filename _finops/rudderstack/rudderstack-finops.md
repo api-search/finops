@@ -15,81 +15,92 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
+  billingTerm: Monthly or Annual
   chargeCategories:
+  - Subscription
   - Usage
-  - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the RudderStack API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Tax
+  commitmentDiscount: Annual prepay discount on Starter; committed-volume discount on Growth and Enterprise contracts.
+  pricingCategory: Tier-Based Subscription with Event Quota
+description: RudderStack's billing surface is a tier-based monthly subscription metered primarily on monthly tracked events. Free (250K events) is gratis; Starter is a flat $220/month including 1M events; Growth and Enterprise are custom-quoted committed-volume contracts. Reverse ETL connections, Profiles, and Python Transformations gate higher tiers. Hidden adjacent costs include the customer-owned data warehouse compute used by Profiles and Reverse ETL, and the egress traffic to downstream SaaS destinations.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
+  ChargeCategory: Subscription
   InvoiceIssuerName: RudderStack
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  PricingCategory: Standard Pricing
   ProviderName: RudderStack
   PublisherName: RudderStack
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Customer Data Platform
   ServiceName: RudderStack
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Events ingested via Event Stream (identify, track, page, screen, group, alias) and counted toward the plan's monthly quota.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - workspace
+  - source
+  - event_type
+  name: tracked_events
+  unit: event
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Rows synced through Reverse ETL pipelines.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - workspace
+  - source
+  - destination
+  - model
+  name: reverse_etl_rows
+  unit: row
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Profiles model executions (identity stitching, feature compute, audience materialization).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - workspace
+  - project
+  - model
+  name: profiles_runs
+  unit: run
+- aggregation: sum
+  description: Transformation function invocations (JS or Python) on the streaming pipeline.
+  dimensions:
+  - workspace
+  - destination
+  - language
+  name: transformation_invocations
+  unit: invocation
+- aggregation: max
+  description: Active source-to-destination connections (caps vary by tier).
+  dimensions:
+  - workspace
+  - source
+  - destination
+  name: connections_active
+  unit: connection-month
 name: Rudderstack Finops
 provider_name: RudderStack
 provider_slug: rudderstack
 publisher_name: RudderStack
-service_category: API
+service_category: Customer Data Platform
 slug: rudderstack-finops
 source_filename: rudderstack-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: RudderStack\nproviderId: rudderstack\npublisherName: RudderStack\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Customer Data Platform\n  - CDP\n  - Data Pipeline\n  - Open Source\n  - Event Streaming\n  - Reverse ETL\n  - Analytics\n  - Identity Resolution\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the RudderStack API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
-  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
-  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: RudderStack\n  ServiceCategory: Developer Tools / API\n  ProviderName: RudderStack\n  PublisherName: RudderStack\n  InvoiceIssuerName: RudderStack\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
-  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: RudderStack HTTP Tracking API\n    baseURL: ''\n    tags:\n      - Tracking\n      - Events\n      - HTTP Source\n      - Identify\n      - Track\n      - Page\n      - Screen\n      - Group\n      - Alias\n      - Batch\n    serviceName: RudderStack HTTP Tracking API\n    serviceCategory: API\n  - name: RudderStack Config Backend API\n    baseURL: ''\n    tags:\n      - Sources\n      - Destinations\n      - Connections\n      - Workspaces\n      - Management\n    serviceName: RudderStack Config Backend API\n    serviceCategory: API\n  - name: RudderStack Transformations API\n    baseURL: ''\n    tags:\n      - Transformations\n\
-  \      - JavaScript\n      - Python\n      - Data Quality\n    serviceName: RudderStack Transformations API\n    serviceCategory: API\n  - name: RudderStack Tracking Plan API\n    baseURL: ''\n    tags:\n      - Tracking Plan\n      - Schema Governance\n      - Data Quality\n      - Validation\n    serviceName: RudderStack Tracking Plan API\n    serviceCategory: API\n  - name: RudderStack Data Catalog API\n    baseURL: ''\n    tags:\n      - Catalog\n      - Data Governance\n      - Schema\n    serviceName: RudderStack Data Catalog API\n    serviceCategory: API\n  - name: RudderStack Profiles API\n    baseURL: ''\n    tags:\n      - Profiles\n      - Identity Resolution\n      - Customer 360\n      - Features\n    serviceName: RudderStack Profiles API\n    serviceCategory: API\n  - name: RudderStack Audiences API\n    baseURL: ''\n    tags:\n      - Audiences\n      - Segmentation\n      - Activation\n    serviceName: RudderStack Audiences API\n    serviceCategory: API\n  - name: RudderStack\
-  \ Reverse ETL API\n    baseURL: ''\n    tags:\n      - Reverse ETL\n      - Warehouse\n      - Sync\n      - Models\n    serviceName: RudderStack Reverse ETL API\n    serviceCategory: API\n  - name: RudderStack Event Stream API\n    baseURL: ''\n    tags:\n      - Event Stream\n      - Pipelines\n      - Streaming\n    serviceName: RudderStack Event Stream API\n    serviceCategory: API\n  - name: RudderStack Webhook Source API\n    baseURL: ''\n    tags:\n      - Webhooks\n      - Sources\n      - Cloud Apps\n    serviceName: RudderStack Webhook Source API\n    serviceCategory: API\n  - name: RudderStack Warehouse Destination API\n    baseURL: ''\n    tags:\n      - Warehouse\n      - Snowflake\n      - BigQuery\n      - Redshift\n      - Databricks\n      - Destinations\n    serviceName: RudderStack Warehouse Destination API\n    serviceCategory: API\n  - name: RudderStack Orchestration API\n    baseURL: ''\n    tags:\n      - Orchestration\n      - Airflow\n      - Dagster\n      - Workflows\n\
-  \    serviceName: RudderStack Orchestration API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.rudderstack.com/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: RudderStack\nproviderId: rudderstack\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n  - Customer Data Platform\n  - CDP\n  - Data Pipeline\n  - Event Streaming\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: >-\n  RudderStack's billing surface is a tier-based monthly subscription metered primarily on monthly tracked events. Free (250K events) is gratis; Starter is a flat $220/month including 1M events; Growth and Enterprise are custom-quoted committed-volume contracts. Reverse ETL connections, Profiles, and Python Transformations gate higher tiers. Hidden adjacent costs include the customer-owned data warehouse compute used by Profiles and Reverse ETL, and the egress traffic to downstream SaaS destinations.\nnotes: >-\n  Reconciled against published RudderStack pricing on 2026-05-08. RudderStack does not currently expose a public\
+  \ FOCUS-formatted billing feed; usage and invoice data is available through the Dashboard, monthly invoices, and (for Enterprise) custom usage exports. Self-hosted (open-source) deployments do not generate RudderStack invoices but do incur infrastructure cost in the operator's cloud.\nsources:\n  - https://www.rudderstack.com/pricing/\n  - https://www.rudderstack.com/docs/data-pipelines/event-stream/\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: RudderStack\nserviceCategory: Customer Data Platform\nbillingModel:\n  pricingCategory: Tier-Based Subscription with Event Quota\n  billingFrequency: Monthly\n  billingTerm: Monthly or Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Subscription\n    - Usage\n    - Adjustment\n    - Tax\n  commitmentDiscount:\
+  \ Annual prepay discount on Starter; committed-volume discount on Growth and Enterprise contracts.\nfocusColumns:\n  ServiceName: RudderStack\n  ServiceCategory: Customer Data Platform\n  ProviderName: RudderStack\n  PublisherName: RudderStack\n  InvoiceIssuerName: RudderStack\n  BillingCurrency: USD\n  ChargeCategory: Subscription\n  PricingCategory: Standard Pricing\nmeters:\n  - name: tracked_events\n    description: Events ingested via Event Stream (identify, track, page, screen, group, alias) and counted toward the plan's monthly quota.\n    unit: event\n    aggregation: sum\n    dimensions:\n      - workspace\n      - source\n      - event_type\n  - name: reverse_etl_rows\n    description: Rows synced through Reverse ETL pipelines.\n    unit: row\n    aggregation: sum\n    dimensions:\n      - workspace\n      - source\n      - destination\n      - model\n  - name: profiles_runs\n    description: Profiles model executions (identity stitching, feature compute, audience materialization).\n\
+  \    unit: run\n    aggregation: sum\n    dimensions:\n      - workspace\n      - project\n      - model\n  - name: transformation_invocations\n    description: Transformation function invocations (JS or Python) on the streaming pipeline.\n    unit: invocation\n    aggregation: sum\n    dimensions:\n      - workspace\n      - destination\n      - language\n  - name: connections_active\n    description: Active source-to-destination connections (caps vary by tier).\n    unit: connection-month\n    aggregation: max\n    dimensions:\n      - workspace\n      - source\n      - destination\nprinciples:\n  - name: Visibility\n    description: >-\n      Pull the monthly invoice and Dashboard usage report. Track event-volume burn-down vs plan quota; on Enterprise, request a scheduled usage export feeding your cost-allocation pipeline. Account for warehouse compute consumed by Profiles and Reverse ETL inside your warehouse provider's bill, not the RudderStack invoice.\n  - name: Allocation\n   \
+  \ description: >-\n      Use one workspace per business unit (or use source-level tagging) to attribute event volume back to product surfaces. Allocate Reverse ETL rows by destination owner.\n  - name: Optimization\n    description: >-\n      Suppress noisy events at the SDK and via Tracking Plan validation; right-size Reverse ETL sync frequency; archive rarely used connections; consolidate shadow workspaces; renegotiate at renewal once stable volume is known.\n  - name: Accountability\n    description: >-\n      Assign a workspace owner; alert on month-to-date events at 70/85/95% of plan; review forecast monthly with the contract owner ahead of renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/rudderstack/refs/heads/main/finops/rudderstack-finops.yml
-sources: []
+sources:
+- https://www.rudderstack.com/pricing/
+- https://www.rudderstack.com/docs/data-pipelines/event-stream/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Customer Data Platform
 - CDP
 - Data Pipeline
-- Open Source
 - Event Streaming
-- Reverse ETL
-- Analytics
-- Identity Resolution
 - FinOps
 - Cost Management
 - FOCUS

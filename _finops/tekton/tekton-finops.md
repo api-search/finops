@@ -13,84 +13,47 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/tekton/refs/heads/main/openapi/tekton-pipeline-openapi.json
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Tekton API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  billingCurrency: Not Applicable
+  billingFrequency: Not Applicable
+  chargeCategories: []
+  pricingCategory: Open Source — No Commercial Billing Surface
+description: Tekton is open-source software (Apache License 2.0). There is no commercial billing surface published by the Tekton project itself — there are no invoices, no metered usage charges, and no subscription fees attributable to Tekton. Operating costs flow entirely through the operator's own Kubernetes infrastructure providers (worker-node compute consumed by TaskRun/PipelineRun pods, persistent volumes for workspaces, image-registry storage, ingress, observability, and any cloud-side OCI registries used by Chains). Commercial managed offerings exist (Red Hat OpenShift Pipelines, IBM Cloud Continuous Delivery, Tekton via various cloud platforms) and have their own billing surfaces that should be profiled against the third-party vendor — not Tekton.
 focus_columns:
-  BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Tekton
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Tekton
-  PublisherName: Tekton
-  ServiceCategory: Developer Tools / API
+  BillingCurrency: Not Applicable
+  ChargeCategory: Not Applicable
+  InvoiceIssuerName: Not Applicable
+  ProviderName: Tekton (CNCF)
+  PublisherName: Tekton (CNCF)
+  ServiceCategory: DevOps
   ServiceName: Tekton
 layout: finops
-meters:
-- aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+meters: []
 name: Tekton Finops
 provider_name: Tekton
 provider_slug: tekton
-publisher_name: Tekton
-service_category: API
+publisher_name: Tekton (CNCF)
+service_category: DevOps / CI/CD
 slug: tekton-finops
 source_filename: tekton-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Tekton\nproviderId: tekton\npublisherName: Tekton\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - DevOps\n  - CI/CD\n  - Kubernetes\n  - CNCF\n  - Pipelines\n  - Open Source\n  - CRD\n  - Operator\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Tekton API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
-  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Tekton\n  ServiceCategory: Developer Tools / API\n  ProviderName: Tekton\n  PublisherName: Tekton\n  InvoiceIssuerName: Tekton\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Tekton Task CRD\n    baseURL: ''\n    tags:\n      - CRD\n      - Tasks\n      - Steps\n      - Build\n    serviceName: Tekton Task CRD\n    serviceCategory: API\n  - name: Tekton TaskRun CRD\n    baseURL: ''\n    tags:\n      - CRD\n      - TaskRuns\n      - Execution\n    serviceName: Tekton TaskRun CRD\n    serviceCategory: API\n  - name: Tekton Pipeline CRD\n    baseURL: ''\n    tags:\n      - CRD\n      - Pipelines\n      - Workflows\n    serviceName: Tekton Pipeline CRD\n    serviceCategory: API\n  - name: Tekton PipelineRun CRD\n    baseURL: ''\n    tags:\n      - CRD\n      - PipelineRuns\n      - Execution\n    serviceName: Tekton PipelineRun CRD\n    serviceCategory: API\n  - name: Tekton\
-  \ ClusterTask CRD\n    baseURL: ''\n    tags:\n      - CRD\n      - ClusterTasks\n      - Cluster-Scoped\n    serviceName: Tekton ClusterTask CRD\n    serviceCategory: API\n  - name: Tekton StepAction CRD\n    baseURL: ''\n    tags:\n      - CRD\n      - StepActions\n      - Reusable\n    serviceName: Tekton StepAction CRD\n    serviceCategory: API\n  - name: Tekton CustomRun CRD\n    baseURL: ''\n    tags:\n      - CRD\n      - CustomRun\n      - Extension\n    serviceName: Tekton CustomRun CRD\n    serviceCategory: API\n  - name: Tekton Resolver Framework\n    baseURL: ''\n    tags:\n      - Resolution\n      - Resolvers\n      - Remote\n    serviceName: Tekton Resolver Framework\n    serviceCategory: API\n  - name: Tekton EventListener CRD\n    baseURL: ''\n    tags:\n      - CRD\n      - EventListener\n      - Triggers\n      - Webhooks\n    serviceName: Tekton EventListener CRD\n    serviceCategory: API\n  - name: Tekton Trigger CRD\n    baseURL: ''\n    tags:\n      - CRD\n     \
-  \ - Trigger\n      - TriggerBinding\n      - TriggerTemplate\n    serviceName: Tekton Trigger CRD\n    serviceCategory: API\n  - name: Tekton TriggerBinding CRD\n    baseURL: ''\n    tags:\n      - CRD\n      - TriggerBinding\n    serviceName: Tekton TriggerBinding CRD\n    serviceCategory: API\n  - name: Tekton TriggerTemplate CRD\n    baseURL: ''\n    tags:\n      - CRD\n      - TriggerTemplate\n    serviceName: Tekton TriggerTemplate CRD\n    serviceCategory: API\n  - name: Tekton ClusterInterceptor CRD\n    baseURL: ''\n    tags:\n      - CRD\n      - Interceptor\n      - Filtering\n    serviceName: Tekton ClusterInterceptor CRD\n    serviceCategory: API\n  - name: Tekton Results API\n    baseURL: ''\n    tags:\n      - Results\n      - History\n      - Storage\n      - GRPC\n    serviceName: Tekton Results API\n    serviceCategory: API\n  - name: Tekton Chains\n    baseURL: ''\n    tags:\n      - Supply Chain\n      - Provenance\n      - SLSA\n      - Signing\n    serviceName: Tekton\
-  \ Chains\n    serviceCategory: API\n  - name: Tekton Pipelines as Code\n    baseURL: ''\n    tags:\n      - Pipelines as Code\n      - GitOps\n      - GitHub\n      - GitLab\n    serviceName: Tekton Pipelines as Code\n    serviceCategory: API\n  - name: Tekton Dashboard API\n    baseURL: ''\n    tags:\n      - Dashboard\n      - UI\n      - Backend\n    serviceName: Tekton Dashboard API\n    serviceCategory: API\n  - name: Tekton CLI (tkn)\n    baseURL: ''\n    tags:\n      - CLI\n      - tkn\n      - Operations\n    serviceName: Tekton CLI (tkn)\n    serviceCategory: API\n  - name: Tekton Operator CRDs\n    baseURL: ''\n    tags:\n      - CRD\n      - Operator\n      - Lifecycle\n      - TektonConfig\n    serviceName: Tekton Operator CRDs\n    serviceCategory: API\n  - name: Tekton Hub API\n    baseURL: ''\n    tags:\n      - Hub\n      - Catalog\n      - Discovery\n    serviceName: Tekton Hub API\n    serviceCategory: API\n  - name: Tekton Catalog\n    baseURL: ''\n    tags:\n      -\
-  \ Catalog\n      - Library\n      - Reusable\n    serviceName: Tekton Catalog\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://tekton.dev/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Tekton\nproviderId: tekton\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: false\ntags:\n  - DevOps\n  - CI/CD\n  - Kubernetes\n  - CNCF\n  - Open Source\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: >-\n  Tekton is open-source software (Apache License 2.0). There is no commercial billing surface published by the Tekton project itself — there are no invoices, no metered usage charges, and no subscription fees attributable to Tekton. Operating costs flow entirely through the operator's own Kubernetes infrastructure providers (worker-node compute consumed by TaskRun/PipelineRun pods, persistent volumes for workspaces, image-registry storage, ingress, observability, and any cloud-side OCI registries used by Chains). Commercial managed offerings exist (Red Hat OpenShift Pipelines, IBM Cloud Continuous Delivery, Tekton via various cloud platforms)\
+  \ and have their own billing surfaces that should be profiled against the third-party vendor — not Tekton.\nnotes: >-\n  Open source — no commercial billing surface; commercial offerings handled by 3rd parties (Red Hat OpenShift Pipelines, IBM Cloud Continuous Delivery, Tekton via cloud platforms). reconciled=false explicitly indicates that no Tekton-issued bill exists rather than incomplete data. The principles below describe how to FinOps-manage the underlying infrastructure cost of operating self-hosted Tekton.\nsources:\n  - https://tekton.dev/\n  - https://github.com/tektoncd/pipeline/blob/main/LICENSE\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Tekton (CNCF)\nserviceCategory: DevOps / CI/CD\nbillingModel:\n  pricingCategory: Open Source\
+  \ — No Commercial Billing Surface\n  billingFrequency: Not Applicable\n  billingCurrency: Not Applicable\n  chargeCategories: []\nfocusColumns:\n  ServiceName: Tekton\n  ServiceCategory: DevOps\n  ProviderName: Tekton (CNCF)\n  PublisherName: Tekton (CNCF)\n  InvoiceIssuerName: Not Applicable\n  BillingCurrency: Not Applicable\n  ChargeCategory: Not Applicable\nmeters: []\nprinciples:\n  - name: Visibility\n    description: >-\n      No Tekton invoice exists. Treat self-hosted Tekton as a Kubernetes workload — the cost is the underlying compute consumed by TaskRun/PipelineRun pods (often bursty), persistent storage for workspaces, image pulls, OCI artifact pushes, ingress for EventListeners, and the database backing Tekton Results. All of these appear on the cloud provider's FOCUS-formatted bill.\n  - name: Allocation\n    description: >-\n      Tag PipelineRun and TaskRun pods by team / repository / commit-author via Tekton's labels and annotations and propagate them to your cloud-provider\
+  \ tagging strategy. Tekton Results storage costs can be allocated by namespace.\n  - name: Optimization\n    description: >-\n      Use spot/preemptible nodes for short-lived TaskRun pods; right-size step container resource requests; cache image layers via local registry mirrors; use the Hub/Bundles resolver to avoid re-bundling Tasks; expire old Results data; consolidate small Tekton installations onto a shared cluster with namespace-level RBAC and ResourceQuotas.\n  - name: Accountability\n    description: >-\n      Assign a platform-engineering owner; review monthly Kubernetes-cluster cost attributable to tekton-pipelines and PipelineRun namespaces; benchmark managed Tekton (e.g., OpenShift Pipelines) versus self-hosting before signing a vendor contract.\ncommercialOfferings:\n  - name: Red Hat OpenShift Pipelines\n    type: distribution\n    url: https://www.redhat.com/en/technologies/cloud-computing/openshift/pipelines\n    note: Bundled and supported as part of OpenShift subscription.\n\
+  \  - name: IBM Cloud Continuous Delivery\n    type: managed-service\n    url: https://www.ibm.com/cloud/continuous-delivery\n    note: Cloud-hosted CI/CD using Tekton; pricing per IBM Cloud catalog.\n  - name: Pipelines-as-Code on Cloud Platforms\n    type: managed-service\n    url: https://pipelinesascode.com/\n    note: Several cloud platforms expose hosted Tekton Pipelines-as-Code; pricing per platform.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tekton/refs/heads/main/finops/tekton-finops.yml
-sources: []
+sources:
+- https://tekton.dev/
+- https://github.com/tektoncd/pipeline/blob/main/LICENSE
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - DevOps
 - CI/CD
 - Kubernetes
 - CNCF
-- Pipelines
 - Open Source
-- CRD
-- Operator
 - FinOps
 - Cost Management
 - FOCUS

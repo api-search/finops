@@ -102,76 +102,130 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
   pricingCategory: Usage-Based
-description: FinOps framework definition for the Together AI API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+description: FinOps view of Together AI spend. Together bills usage-based per-token rates for serverless inference (chat, embeddings, rerank, vision, audio), per-asset rates for image and video, per-1M-character rates for audio, per-token rates for fine-tuning training, and hourly rates for dedicated endpoints and GPU clusters (with reserved discounts).
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
   InvoiceIssuerName: Together AI
   PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Together AI
   PublisherName: Together AI
-  ServiceCategory: Developer Tools / API
-  ServiceName: Together AI
+  ServiceCategory: AI and Machine Learning
+  ServiceName: Together AI Cloud
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Tokens sent in chat / completion requests, billed per 1M tokens per model.
   dimensions:
+  - account
+  - model
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: input_tokens
+  unit: tokens
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Tokens generated, billed per 1M tokens per model.
   dimensions:
+  - account
+  - model
   - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  name: output_tokens
+  unit: tokens
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Tokens processed for embeddings, billed per 1M tokens per model.
   dimensions:
-  - api
+  - account
+  - model
+  name: embedding_tokens
+  unit: tokens
+- aggregation: sum
+  description: Documents reranked, billed per 1K or per 1M units depending on model.
+  dimensions:
+  - account
+  - model
+  name: rerank_documents
+  unit: documents
+- aggregation: sum
+  description: Image generation requests, billed per image per model/quality tier.
+  dimensions:
+  - account
+  - model
+  name: image_generations
+  unit: images
+- aggregation: sum
+  description: Video generation requests, billed per video per model/quality tier.
+  dimensions:
+  - account
+  - model
+  name: video_generations
+  unit: videos
+- aggregation: sum
+  description: TTS / STT character counts, billed per 1M characters per model.
+  dimensions:
+  - account
+  - model
+  name: audio_characters
+  unit: characters
+- aggregation: sum
+  description: Training tokens for fine-tuning jobs, billed per 1M tokens per base-model size class.
+  dimensions:
+  - account
+  - base_model
+  - method
+  name: fine_tuning_tokens
+  unit: tokens
+- aggregation: sum
+  description: Wall-clock hours of dedicated inference endpoint runtime per GPU class.
+  dimensions:
+  - account
   - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - gpu_class
+  name: dedicated_endpoint_hours
+  unit: hours
+- aggregation: sum
+  description: Wall-clock hours of bare-metal GPU cluster runtime per GPU class and reservation tier.
+  dimensions:
+  - account
+  - cluster
+  - gpu_class
+  - reservation_tier
+  name: gpu_cluster_hours
+  unit: hours
+- aggregation: sum
+  description: Tokens consumed via the Batch API at up to 50% discount versus serverless.
+  dimensions:
+  - account
+  - model
+  name: batch_tokens
+  unit: tokens
 name: Together Ai Finops
 provider_name: Together AI
 provider_slug: together-ai
 publisher_name: Together AI
-service_category: API
+service_category: AI and Machine Learning
 slug: together-ai-finops
 source_filename: together-ai-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Together AI\nproviderId: together-ai\npublisherName: Together AI\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - LLM\n  - Inference\n  - Foundation Models\n  - GPU\n  - Open Source AI\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Together AI API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
-  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Together AI\n  ServiceCategory: Developer Tools / API\n  ProviderName: Together AI\n  PublisherName: Together AI\n  InvoiceIssuerName: Together AI\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
-  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Together Chat Completions API\n    baseURL: https://api.together.ai/v1\n    tags:\n      - Chat\n      - Completions\n      - LLM\n    serviceName: Together Chat Completions API\n    serviceCategory: API\n  - name: Together Completions API\n    baseURL: https://api.together.ai/v1\n    tags:\n      - Completions\n      - LLM\n    serviceName: Together Completions API\n    serviceCategory: API\n  - name: Together Embeddings API\n    baseURL: https://api.together.ai/v1\n    tags:\n      - Embeddings\n      - Vector\n      - Retrieval\n    serviceName: Together Embeddings API\n    serviceCategory: API\n  - name: Together Rerank API\n    baseURL: https://api.together.ai/v1\n   \
-  \ tags:\n      - Rerank\n      - Retrieval\n      - RAG\n    serviceName: Together Rerank API\n    serviceCategory: API\n  - name: Together Images API\n    baseURL: https://api.together.ai/v1\n    tags:\n      - Images\n      - Generation\n      - Diffusion\n    serviceName: Together Images API\n    serviceCategory: API\n  - name: Together Video API\n    baseURL: https://api.together.ai/v1\n    tags:\n      - Video\n      - Generation\n      - Multimodal\n    serviceName: Together Video API\n    serviceCategory: API\n  - name: Together Audio API\n    baseURL: https://api.together.ai/v1\n    tags:\n      - Audio\n      - Speech\n      - TTS\n      - STT\n    serviceName: Together Audio API\n    serviceCategory: API\n  - name: Together Vision API\n    baseURL: https://api.together.ai/v1\n    tags:\n      - Vision\n      - Multimodal\n      - Documents\n    serviceName: Together Vision API\n    serviceCategory: API\n  - name: Together Fine-Tuning API\n    baseURL: https://api.together.ai/v1\n\
-  \    tags:\n      - Fine-Tuning\n      - LoRA\n      - Training\n    serviceName: Together Fine-Tuning API\n    serviceCategory: API\n  - name: Together Files API\n    baseURL: https://api.together.ai/v1\n    tags:\n      - Files\n      - Storage\n    serviceName: Together Files API\n    serviceCategory: API\n  - name: Together Models API\n    baseURL: https://api.together.ai/v1\n    tags:\n      - Models\n      - Catalog\n    serviceName: Together Models API\n    serviceCategory: API\n  - name: Together Batch API\n    baseURL: https://api.together.ai/v1\n    tags:\n      - Batch\n      - Async\n    serviceName: Together Batch API\n    serviceCategory: API\n  - name: Together Code Interpreter API\n    baseURL: https://api.together.ai/v1\n    tags:\n      - Code\n      - Execution\n      - Sandbox\n    serviceName: Together Code Interpreter API\n    serviceCategory: API\n  - name: Together Evaluations API\n    baseURL: https://api.together.ai/v1\n    tags:\n      - Evaluations\n      -\
-  \ Quality\n    serviceName: Together Evaluations API\n    serviceCategory: API\n  - name: Together Dedicated Endpoints API\n    baseURL: https://api.together.ai/v1\n    tags:\n      - Dedicated\n      - Endpoints\n      - Deployment\n    serviceName: Together Dedicated Endpoints API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.together.ai/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Together AI\nproviderId: together-ai\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- AI\n- LLM\n- Inference\n- Open Source\n- Fine-tuning\n- GPU\n- FinOps\n- Cost Management\n- FOCUS\ndescription: >-\n  FinOps view of Together AI spend. Together bills usage-based per-token rates\n  for serverless inference (chat, embeddings, rerank, vision, audio), per-asset\n  rates for image and video, per-1M-character rates for audio, per-token rates\n  for fine-tuning training, and hourly rates for dedicated endpoints and GPU\n  clusters (with reserved discounts).\nnotes: >-\n  Per-model rates change frequently; verify against the Together pricing page at\n  reconciliation. Batch API consistently offers up to 50% off serverless rates.\nsources:\n- https://www.together.ai/pricing\n- https://docs.together.ai/\n- https://focus.finops.org/focus-specification/v1-3/\n\
+  alignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Together AI\nserviceCategory: AI and Machine Learning\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n  - Usage\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: Together AI Cloud\n  ServiceCategory: AI and Machine Learning\n  ProviderName: Together AI\n  PublisherName: Together AI\n  InvoiceIssuerName: Together AI\n  BillingCurrency: USD\n  ChargeCategory: Usage\n  PricingCategory: Usage-Based\nmeters:\n- name: input_tokens\n  description: Tokens sent in chat / completion requests, billed per 1M tokens per model.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - account\n  - model\n  - api\n- name: output_tokens\n  description: Tokens generated, billed per 1M tokens\
+  \ per model.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - account\n  - model\n  - api\n- name: embedding_tokens\n  description: Tokens processed for embeddings, billed per 1M tokens per model.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - account\n  - model\n- name: rerank_documents\n  description: Documents reranked, billed per 1K or per 1M units depending on model.\n  unit: documents\n  aggregation: sum\n  dimensions:\n  - account\n  - model\n- name: image_generations\n  description: Image generation requests, billed per image per model/quality tier.\n  unit: images\n  aggregation: sum\n  dimensions:\n  - account\n  - model\n- name: video_generations\n  description: Video generation requests, billed per video per model/quality tier.\n  unit: videos\n  aggregation: sum\n  dimensions:\n  - account\n  - model\n- name: audio_characters\n  description: TTS / STT character counts, billed per 1M characters per model.\n  unit: characters\n  aggregation: sum\n  dimensions:\n\
+  \  - account\n  - model\n- name: fine_tuning_tokens\n  description: Training tokens for fine-tuning jobs, billed per 1M tokens per base-model size class.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - account\n  - base_model\n  - method\n- name: dedicated_endpoint_hours\n  description: Wall-clock hours of dedicated inference endpoint runtime per GPU class.\n  unit: hours\n  aggregation: sum\n  dimensions:\n  - account\n  - endpoint\n  - gpu_class\n- name: gpu_cluster_hours\n  description: Wall-clock hours of bare-metal GPU cluster runtime per GPU class and reservation tier.\n  unit: hours\n  aggregation: sum\n  dimensions:\n  - account\n  - cluster\n  - gpu_class\n  - reservation_tier\n- name: batch_tokens\n  description: Tokens consumed via the Batch API at up to 50% discount versus serverless.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - account\n  - model\nprinciples:\n- name: Visibility\n  description: Pull token / asset / hour usage from the Together console; export\
+  \ invoices monthly.\n- name: Allocation\n  description: Tag API keys per workload/team and join usage to internal cost centers.\n- name: Optimization\n  description: Move non-realtime workloads to Batch (-50%); pick smaller open-source models when quality permits; reserve GPU clusters for steady-state workloads.\n- name: Accountability\n  description: Assign owners per endpoint, fine-tuning job, and GPU cluster reservation.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/together-ai/refs/heads/main/finops/together-ai-finops.yml
-sources: []
+sources:
+- https://www.together.ai/pricing
+- https://docs.together.ai/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - AI
 - LLM
 - Inference
-- Foundation Models
+- Open Source
+- Fine-tuning
 - GPU
-- Open Source AI
 - FinOps
 - Cost Management
 - FOCUS

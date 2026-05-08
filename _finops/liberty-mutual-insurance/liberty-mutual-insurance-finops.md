@@ -20,80 +20,62 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/liberty-mutual-insurance/refs/heads/main/openapi/liberty-mutual-insurance-solaria-labs-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Liberty Mutual Insurance API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Custom Contract
+description: 'FOCUS-aligned FinOps scaffold for Liberty Mutual Insurance: partner-only API access with no public per-call pricing. Consumer-side telemetry tracks against the partner agreement (commission, premium, claims-handling), not metered API invoices.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Liberty Mutual Insurance
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Liberty Mutual Insurance Company
   ProviderName: Liberty Mutual Insurance
-  PublisherName: Liberty Mutual Insurance
-  ServiceCategory: Developer Tools / API
-  ServiceName: Liberty Mutual Insurance
+  PublisherName: Liberty Mutual Insurance Company
+  ServiceCategory: Insurance / API
+  ServiceName: Liberty Mutual Insurance API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - environment
+  - partner
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - product
+  - state
+  name: quotes_issued
+  unit: quote
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - product
+  - state
+  name: policies_bound
+  unit: policy
 name: Liberty Mutual Insurance Finops
 provider_name: Liberty Mutual Insurance
 provider_slug: liberty-mutual-insurance
-publisher_name: Liberty Mutual Insurance
-service_category: API
+publisher_name: Liberty Mutual Insurance Company
+service_category: Insurance / API
 slug: liberty-mutual-insurance-finops
 source_filename: liberty-mutual-insurance-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Liberty Mutual Insurance\nproviderId: liberty-mutual-insurance\npublisherName: Liberty Mutual Insurance\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Casualty\n  - Commercial Lines\n  - Insurance\n  - Personal Lines\n  - Property\n  - Renters\n  - Safety Data\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Liberty Mutual Insurance API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n\
-  \      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n   \
-  \   - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Liberty Mutual Insurance\n  ServiceCategory: Developer Tools / API\n  ProviderName: Liberty Mutual Insurance\n  PublisherName: Liberty Mutual Insurance\n  InvoiceIssuerName: Liberty Mutual Insurance\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n\
-  \      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Liberty Mutual Renters Insurance API\n    baseURL: https://api.libertymutual.com\n    tags:\n      - Bind\n      - Insurance\n      - Quote\n      - Renters\n    serviceName: Liberty Mutual Renters Insurance API\n    serviceCategory: API\n  - name: Liberty Mutual Solaria Labs API\n    baseURL: https://developers.solarialabs.com\n    tags:\n      - Data Analytics\n      - Innovation\n      - Insurance\n      - Safety\n    serviceName: Liberty Mutual Solaria Labs API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n   \
-  \ metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://business.libertymutual.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Liberty Mutual Insurance\nproviderId: liberty-mutual-insurance\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Insurance\n  - Casualty\n  - Commercial Lines\n  - Personal Lines\ndescription: 'FOCUS-aligned FinOps scaffold for Liberty Mutual Insurance: partner-only API access with\n  no public per-call pricing. Consumer-side telemetry tracks against the partner agreement (commission,\n  premium, claims-handling), not metered API invoices.'\nnotes: Pricing is partner-contract driven. Meters describe the consumer-side observation surface.\nsources:\n  - https://business.libertymutual.com\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
+  \ Liberty Mutual Insurance Company\nserviceCategory: Insurance / API\nbillingModel:\n  pricingCategory: Custom Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Liberty Mutual Insurance API\n  ServiceCategory: Insurance / API\n  ProviderName: Liberty Mutual Insurance\n  PublisherName: Liberty Mutual Insurance Company\n  InvoiceIssuerName: Liberty Mutual Insurance Company\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - environment\n      - partner\n  - name: quotes_issued\n    unit: quote\n    aggregation: sum\n    dimensions:\n      - product\n      - state\n  - name: policies_bound\n    unit: policy\n    aggregation: sum\n    dimensions:\n      - product\n      - state\nprinciples:\n  - name: Visibility\n    description: Track quote, bind, and claim event volumes through your gateway\
+  \ / observability stack;\n      Liberty Mutual does not expose a public usage API.\n  - name: Allocation\n    description: Tag calls by product line (renters, auto, commercial) and channel partner so commission\n      and partner-contract spend can be charged back.\n  - name: Optimization\n    description: Cache rating reference data and quote artifacts within partner TOS; batch claim status\n      polling to reduce call volume.\n  - name: Accountability\n    description: Assign a Liberty Mutual partner contract owner who reviews quote-to-bind ratios, claim\n      volumes, and partner-contract performance monthly.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/liberty-mutual-insurance/refs/heads/main/finops/liberty-mutual-insurance-finops.yml
-sources: []
+sources:
+- https://business.libertymutual.com
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
+- Insurance
 - Casualty
 - Commercial Lines
-- Insurance
 - Personal Lines
-- Property
-- Renters
-- Safety Data
-- FinOps
-- Cost Management
-- FOCUS
 ---

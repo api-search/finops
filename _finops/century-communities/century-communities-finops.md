@@ -7,74 +7,44 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Century Communities API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Custom / Contract
+description: FinOps placeholder for Century Communities. No public API surface, billing model, or pricing documentation has been identified; FOCUS columns and meters are illustrative defaults.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Century Communities
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Century Communities, Inc.
   ProviderName: Century Communities
-  PublisherName: Century Communities
-  ServiceCategory: Developer Tools / API
+  PublisherName: Century Communities, Inc.
+  ServiceCategory: Real Estate
   ServiceName: Century Communities
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: partner_integrations
+  unit: varies
 name: Century Communities Finops
 provider_name: Century Communities
 provider_slug: century-communities
-publisher_name: Century Communities
-service_category: API
+publisher_name: Century Communities, Inc.
+service_category: Real Estate
 slug: century-communities-finops
 source_filename: century-communities-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Century Communities\nproviderId: century-communities\npublisherName: Century Communities\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Real Estate\n  - Homebuilding\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Century Communities API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Century Communities\n  ServiceCategory: Developer Tools / API\n  ProviderName: Century Communities\n  PublisherName: Century Communities\n  InvoiceIssuerName: Century Communities\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
-  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Century Communities API\n    baseURL: https://api.centurycommunities.com\n    tags:\n      - Real Estate\n      - Homebuilding\n    serviceName: Century Communities API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.centurycommunities.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Century Communities\nproviderId: century-communities\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Real Estate\n  - Homebuilding\n  - FinOps\n  - FOCUS\ndescription: FinOps placeholder for Century Communities. No public API surface, billing model, or pricing\n  documentation has been identified; FOCUS columns and meters are illustrative defaults.\nnotes: No public API or billing documentation located. Retained as placeholder pending partner integration\n  discovery.\nsources:\n  - https://www.centurycommunities.com\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Century Communities, Inc.\nserviceCategory: Real Estate\nbillingModel:\n  pricingCategory:\
+  \ Custom / Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Century Communities\n  ServiceCategory: Real Estate\n  ProviderName: Century Communities\n  PublisherName: Century Communities, Inc.\n  InvoiceIssuerName: Century Communities, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: partner_integrations\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: No public consumption telemetry is documented; rely on partner contract reporting if\n      a relationship is established.\n  - name: Allocation\n    description: Allocate any partner integration costs against the team owning the Century Communities\n      relationship.\n  - name: Optimization\n    description: Negotiate volume terms in any partner contract; consolidate data feeds where possible.\n  - name: Accountability\n    description: Partner relationship owner is accountable\
+  \ for any contractual costs and renewal review.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/century-communities/refs/heads/main/finops/century-communities-finops.yml
-sources: []
+sources:
+- https://www.centurycommunities.com
 specification: FinOps Framework
 tags:
 - Real Estate
 - Homebuilding
 - FinOps
-- Cost Management
 - FOCUS
 ---

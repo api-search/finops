@@ -60,66 +60,90 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
   pricingCategory: Usage-Based
-description: FinOps framework definition for the xAI API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+description: FinOps view of xAI API spend. Billing is usage-based, charged per token (input/output, with cached-input discounts) per model, plus per-call fees for built-in tools and a Batch API tier offering 20-50% discounts. Spend is reported on the team-level invoice in USD.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
   InvoiceIssuerName: xAI
   PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: xAI
   PublisherName: xAI
-  ServiceCategory: Developer Tools / API
-  ServiceName: xAI
+  ServiceCategory: AI and Machine Learning
+  ServiceName: xAI API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Tokens sent in the request (prompt) per model.
   dimensions:
+  - team
+  - model
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: input_tokens
+  unit: tokens
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Cached-input tokens billed at a reduced rate when prompt caching applies.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - team
+  - model
+  name: cached_input_tokens
+  unit: tokens
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Tokens generated in the model response per model.
   dimensions:
+  - team
+  - model
   - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: output_tokens
+  unit: tokens
+- aggregation: sum
+  description: Calls to built-in tools (e.g., Live Search) priced per 1,000 invocations.
+  dimensions:
+  - team
+  - tool
+  name: tool_invocations
+  unit: invocations
+- aggregation: sum
+  description: Tokens consumed via the Batch API at 20-50% discount.
+  dimensions:
+  - team
+  - model
+  name: batch_tokens
+  unit: tokens
+- aggregation: sum
+  description: Image generation requests (per image / per resolution tier).
+  dimensions:
+  - team
+  - model
+  name: image_generations
+  unit: images
+- aggregation: sum
+  description: Video generation requests (per video / per duration tier).
+  dimensions:
+  - team
+  - model
+  name: video_generations
+  unit: videos
 name: Xai Finops
 provider_name: xAI
 provider_slug: xai
 publisher_name: xAI
-service_category: API
+service_category: AI and Machine Learning
 slug: xai-finops
 source_filename: xai-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: xAI\nproviderId: xai\npublisherName: xAI\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - LLM\n  - Foundation Models\n  - Grok\n  - Generative AI\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the xAI API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
-  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
-  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: xAI\n  ServiceCategory: Developer Tools / API\n  ProviderName: xAI\n  PublisherName: xAI\n  InvoiceIssuerName: xAI\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n\
-  \  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: xAI Chat Completions API\n    baseURL: https://api.x.ai/v1\n    tags:\n      - Chat\n      - Completions\n      - LLM\n      - Grok\n    serviceName: xAI Chat Completions API\n    serviceCategory: API\n  - name: xAI Responses API\n    baseURL: https://api.x.ai/v1\n    tags:\n      - Responses\n      - LLM\n      - Grok\n      - Reasoning\n    serviceName: xAI Responses API\n    serviceCategory: API\n  - name: xAI Images API\n    baseURL: https://api.x.ai/v1\n    tags:\n      - Images\n      - Generation\n      - Multimodal\n    serviceName: xAI Images API\n    serviceCategory: API\n  - name: xAI Video Generation API\n    baseURL: https://api.x.ai/v1\n    tags:\n      - Video\n      - Generation\n      - Multimodal\n    serviceName: xAI Video Generation API\n    serviceCategory:\
-  \ API\n  - name: xAI Voice API\n    baseURL: https://api.x.ai/v1\n    tags:\n      - Voice\n      - Speech\n      - Audio\n      - Realtime\n    serviceName: xAI Voice API\n    serviceCategory: API\n  - name: xAI Embeddings API\n    baseURL: https://api.x.ai/v1\n    tags:\n      - Embeddings\n      - Vector\n    serviceName: xAI Embeddings API\n    serviceCategory: API\n  - name: xAI Models API\n    baseURL: https://api.x.ai/v1\n    tags:\n      - Models\n      - Catalog\n    serviceName: xAI Models API\n    serviceCategory: API\n  - name: xAI Batch API\n    baseURL: https://api.x.ai/v1\n    tags:\n      - Batch\n      - Async\n    serviceName: xAI Batch API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://x.ai/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: xAI\nproviderId: xai\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- AI\n- LLM\n- Foundation Models\n- Grok\n- Generative AI\n- FinOps\n- Cost Management\n- FOCUS\ndescription: >-\n  FinOps view of xAI API spend. Billing is usage-based, charged per token\n  (input/output, with cached-input discounts) per model, plus per-call fees for\n  built-in tools and a Batch API tier offering 20-50% discounts. Spend is\n  reported on the team-level invoice in USD.\nnotes: >-\n  Per-model token rates are subject to change; verify current rates against the\n  xAI Console Models page when reconciling.\nsources:\n- https://x.ai/\n- https://docs.x.ai/docs/models\n- https://console.x.ai/team/default/models\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n\
+  \  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: xAI\nserviceCategory: AI and Machine Learning\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n  - Usage\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: xAI API\n  ServiceCategory: AI and Machine Learning\n  ProviderName: xAI\n  PublisherName: xAI\n  InvoiceIssuerName: xAI\n  BillingCurrency: USD\n  ChargeCategory: Usage\n  PricingCategory: Usage-Based\nmeters:\n- name: input_tokens\n  description: Tokens sent in the request (prompt) per model.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - team\n  - model\n  - api\n- name: cached_input_tokens\n  description: Cached-input tokens billed at a reduced rate when prompt caching applies.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - team\n  - model\n- name: output_tokens\n  description: Tokens generated in the model\
+  \ response per model.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - team\n  - model\n  - api\n- name: tool_invocations\n  description: Calls to built-in tools (e.g., Live Search) priced per 1,000 invocations.\n  unit: invocations\n  aggregation: sum\n  dimensions:\n  - team\n  - tool\n- name: batch_tokens\n  description: Tokens consumed via the Batch API at 20-50% discount.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - team\n  - model\n- name: image_generations\n  description: Image generation requests (per image / per resolution tier).\n  unit: images\n  aggregation: sum\n  dimensions:\n  - team\n  - model\n- name: video_generations\n  description: Video generation requests (per video / per duration tier).\n  unit: videos\n  aggregation: sum\n  dimensions:\n  - team\n  - model\nprinciples:\n- name: Visibility\n  description: Pull team-level usage from the xAI Console and join with invoice exports.\n- name: Allocation\n  description: Tag API keys per workload/team and\
+  \ map back to internal cost centers.\n- name: Optimization\n  description: Route non-realtime workloads through the Batch API for 20-50% savings; use cached-input tokens where prompts are reused.\n- name: Accountability\n  description: Assign owners per team and per API key; review monthly token burn vs. budget.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/xai/refs/heads/main/finops/xai-finops.yml
-sources: []
+sources:
+- https://x.ai/
+- https://docs.x.ai/docs/models
+- https://console.x.ai/team/default/models
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - AI

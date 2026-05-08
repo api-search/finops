@@ -19,78 +19,68 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/envoy/refs/heads/main/openapi/envoy-ai-gateway-openapi.yml
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: USD (operator's cloud bill, if any)
+  billingFrequency: N/A (project is free)
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Envoy API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Open Source (Infra Pass-Through)
+description: FOCUS-aligned FinOps view for Envoy. The Envoy software is free (Apache 2.0), so there is no SaaS-style invoice from the project. Cost shows up on the operator's cloud bill — compute, networking, egress, and observability — and on any third-party vendor invoices (Tetrate, Solo.io, cloud-provider managed mesh) chosen for support or managed deployment.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Envoy
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Envoy
-  PublisherName: Envoy
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Operator's cloud / vendor (project itself does not invoice)
+  ProviderName: Envoy (CNCF)
+  PublisherName: Cloud Native Computing Foundation
+  ServiceCategory: Open-Source Networking / Service Mesh
   ServiceName: Envoy
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Compute consumed by Envoy proxies and the Envoy Gateway/AI Gateway control plane on the operator's cloud.
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - cluster
+  - workload
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: compute_hours
+  unit: instance-hour
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Egress traffic mediated by Envoy that the underlying cloud bills the operator.
   dimensions:
-  - api
+  - cluster
   - region
-  - consumer
-  name: data_egress
+  name: network_egress
   unit: GB
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Optional third-party support / managed-service subscription fees.
   dimensions:
-  - api
-  - endpoint
+  - vendor
   - tier
-  name: compute_seconds
-  unit: second
+  name: vendor_support_subscription
+  unit: month
 name: Envoy Finops
 provider_name: Envoy
 provider_slug: envoy
-publisher_name: Envoy
-service_category: API
+publisher_name: Cloud Native Computing Foundation (Envoy is a CNCF graduated project)
+service_category: Open-Source Networking / Service Mesh
 slug: envoy-finops
 source_filename: envoy-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Envoy\nproviderId: envoy\npublisherName: Envoy\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud Native\n  - Load Balancing\n  - Proxy\n  - Service Mesh\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Envoy API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Envoy\n  ServiceCategory: Developer Tools / API\n  ProviderName: Envoy\n  PublisherName: Envoy\n  InvoiceIssuerName: Envoy\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
-  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Envoy Admin API\n    baseURL: ''\n    tags:\n      - Admin\n      - Management\n      - Observability\n    serviceName: Envoy Admin API\n    serviceCategory: API\n  - name: Envoy xDS APIs\n    baseURL: ''\n    tags:\n      - Discovery Service\n      - Dynamic Configuration\n      - gRPC\n      - xDS\n    serviceName: Envoy xDS APIs\n    serviceCategory: API\n  - name: Envoy API V3\n    baseURL: ''\n    tags:\n      - Configuration\n      - Extensions\n      - Filters\n      - Protobuf\n    serviceName: Envoy API V3\n    serviceCategory: API\n  - name: Envoy Gateway API\n    baseURL: ''\n    tags:\n      - Cloud Native\n      - Gateway\n      - Kubernetes\n      - Traffic Management\n    serviceName: Envoy Gateway API\n    serviceCategory: API\n\
-  \  - name: Envoy AI Gateway API\n    baseURL: ''\n    tags:\n      - AI\n      - Cloud Native\n      - Gateway\n      - LLM\n    serviceName: Envoy AI Gateway API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.envoyproxy.io/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Envoy\nproviderId: envoy\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Cloud Native\n  - Proxy\n  - Service Mesh\n  - Open Source\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps view for Envoy. The Envoy software is free (Apache 2.0), so there is\n  no SaaS-style invoice from the project. Cost shows up on the operator's cloud bill — compute, networking,\n  egress, and observability — and on any third-party vendor invoices (Tetrate, Solo.io, cloud-provider\n  managed mesh) chosen for support or managed deployment.\nsources:\n  - https://www.envoyproxy.io/\n  - https://github.com/envoyproxy/envoy\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
+  \ Cloud Native Computing Foundation (Envoy is a CNCF graduated project)\nserviceCategory: Open-Source Networking / Service Mesh\nbillingModel:\n  pricingCategory: Open Source (Infra Pass-Through)\n  billingFrequency: N/A (project is free)\n  billingCurrency: USD (operator's cloud bill, if any)\n  chargeCategories:\n    - Usage\n    - Purchase\nfocusColumns:\n  ServiceName: Envoy\n  ServiceCategory: Open-Source Networking / Service Mesh\n  ProviderName: Envoy (CNCF)\n  PublisherName: Cloud Native Computing Foundation\n  InvoiceIssuerName: Operator's cloud / vendor (project itself does not invoice)\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: compute_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - workload\n      - region\n    description: Compute consumed by Envoy proxies and the Envoy Gateway/AI Gateway control plane on the\n      operator's cloud.\n  - name: network_egress\n    unit: GB\n    aggregation: sum\n   \
+  \ dimensions:\n      - cluster\n      - region\n    description: Egress traffic mediated by Envoy that the underlying cloud bills the operator.\n  - name: vendor_support_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - vendor\n      - tier\n    description: Optional third-party support / managed-service subscription fees.\nprinciples:\n  - name: Visibility\n    description: Pull cloud cost (compute, egress, observability) tagged to the Envoy/Gateway workload\n      from your CSP's billing data; pull vendor invoices for any commercial support you've engaged.\n  - name: Allocation\n    description: Tag each Envoy/Gateway deployment with cluster, namespace, and owning team so cloud-side\n      cost can be attributed back.\n  - name: Optimization\n    description: Right-size Envoy deployments, tune connection pools and concurrency, use sidecarless /\n      ambient patterns where appropriate, and revisit per-region replica counts. There is no project-side\n    \
+  \  license cost to optimize.\n  - name: Accountability\n    description: The platform team running Envoy / Envoy Gateway owns the underlying cloud spend and any\n      vendor support subscription; reviews follow the operator's normal cloud FinOps cadence.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/envoy/refs/heads/main/finops/envoy-finops.yml
-sources: []
+sources:
+- https://www.envoyproxy.io/
+- https://github.com/envoyproxy/envoy
 specification: FinOps Framework
 tags:
 - Cloud Native
-- Load Balancing
 - Proxy
 - Service Mesh
+- Open Source
 - FinOps
-- Cost Management
 - FOCUS
 ---

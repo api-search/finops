@@ -52,82 +52,79 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Oracle Fusion Cloud Applications API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Credit
+  pricingCategory: Tiered Subscription (Per Pillar)
+description: 'FOCUS-aligned FinOps view for Oracle Fusion Cloud Applications: per-pillar SaaS subscriptions billed monthly per Hosted Named User / Hosted Employee / Hosted Single-Sign-On Employee. REST API access is bundled with the pillar subscription. FinOps observation centres on per-pillar seat utilization rather than per-call consumption.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Oracle Fusion Cloud Applications
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Oracle Fusion Cloud Applications
-  PublisherName: Oracle Fusion Cloud Applications
-  ServiceCategory: Developer Tools / API
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Oracle America, Inc.
+  PricingCategory: Subscription
+  ProviderName: Oracle
+  PublisherName: Oracle America, Inc.
+  ServiceCategory: SaaS Applications
   ServiceName: Oracle Fusion Cloud Applications
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Active Hosted Named User seats per pillar per month
   dimensions:
+  - pillar
+  - module
+  - business_unit
+  name: hosted_named_user_subscription
+  unit: seat-month
+- aggregation: max
+  description: Hosted Employee seats per pillar per month
+  dimensions:
+  - pillar
+  - module
+  - business_unit
+  name: hosted_employee_subscription
+  unit: employee-month
+- aggregation: max
+  description: Hosted Single-Sign-On Employee seats per month
+  dimensions:
+  - pillar
+  - module
+  name: hosted_sso_employee_subscription
+  unit: employee-month
+- aggregation: sum
+  description: REST API calls (informational; bundled in the subscription)
+  dimensions:
+  - pillar
   - api
   - endpoint
-  - tier
-  - region
   - consumer
-  name: api_requests
+  name: rest_api_calls
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Oracle Fusion Finops
 provider_name: Oracle Fusion Cloud Applications
 provider_slug: oracle-fusion
-publisher_name: Oracle Fusion Cloud Applications
-service_category: API
+publisher_name: Oracle America, Inc.
+service_category: SaaS Applications
 slug: oracle-fusion-finops
 source_filename: oracle-fusion-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Oracle Fusion Cloud Applications\nproviderId: oracle-fusion\npublisherName: Oracle Fusion Cloud Applications\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud\n  - CX\n  - Enterprise\n  - EPM\n  - ERP\n  - HCM\n  - Project Management\n  - REST API\n  - SaaS\n  - SCM\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Oracle Fusion Cloud Applications API surface. Provides\n  a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across\n  the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and\
-  \ finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud\
-  \ Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Oracle Fusion Cloud Applications\n  ServiceCategory: Developer Tools / API\n  ProviderName: Oracle Fusion Cloud Applications\n  PublisherName: Oracle Fusion Cloud Applications\n  InvoiceIssuerName: Oracle Fusion Cloud Applications\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Oracle Fusion ERP REST API\n    baseURL: https://{instance}.oraclecloud.com/fscmRestApi/\n    tags:\n      - ERP\n      - Financials\n      - Procurement\n      - Projects\n      - Risk Management\n    serviceName: Oracle Fusion ERP REST API\n    serviceCategory: API\n  - name: Oracle Fusion HCM REST API\n    baseURL: https://{instance}.oraclecloud.com/hcmRestApi/\n    tags:\n      - HCM\n      - Human Resources\n      - Payroll\n      - Talent Management\n      - Workforce\n    serviceName: Oracle\
-  \ Fusion HCM REST API\n    serviceCategory: API\n  - name: Oracle Fusion SCM REST API\n    baseURL: https://{instance}.oraclecloud.com/fscmRestApi/\n    tags:\n      - Inventory\n      - Logistics\n      - Manufacturing\n      - Order Management\n      - SCM\n      - Supply Chain\n    serviceName: Oracle Fusion SCM REST API\n    serviceCategory: API\n  - name: Oracle Fusion CX Sales and Fusion Service REST API\n    baseURL: https://{instance}.oraclecloud.com/crmRestApi/\n    tags:\n      - Commerce\n      - Customer Experience\n      - CX\n      - Marketing\n      - Sales\n    serviceName: Oracle Fusion CX Sales and Fusion Service REST API\n    serviceCategory: API\n  - name: Oracle Fusion Common Features REST API\n    baseURL: https://{instance}.oraclecloud.com/fscmRestApi/\n    tags:\n      - Attachments\n      - Common\n      - Flexfields\n      - Roles\n      - Security\n      - Users\n    serviceName: Oracle Fusion Common Features REST API\n    serviceCategory: API\n  - name: Oracle\
-  \ Fusion Project Management REST API\n    baseURL: https://{instance}.oraclecloud.com/fscmRestApi/\n    tags:\n      - Grants\n      - Project Billing\n      - Project Costing\n      - Project Management\n    serviceName: Oracle Fusion Project Management REST API\n    serviceCategory: API\n  - name: Oracle Fusion EPM REST API\n    baseURL: https://{instance}.oraclecloud.com/HyperionPlanning/rest/\n    tags:\n      - Budgeting\n      - Consolidation\n      - EPM\n      - Financial Close\n      - Planning\n    serviceName: Oracle Fusion EPM REST API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.oracle.com/applications/cloud/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Oracle Fusion Cloud Applications\nproviderId: oracle-fusion\npublisherName: Oracle America, Inc.\nserviceCategory: SaaS Applications\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - ERP\n  - HCM\n  - SaaS\n  - Oracle Cloud\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps view for Oracle Fusion Cloud Applications: per-pillar\n  SaaS subscriptions billed monthly per Hosted Named User / Hosted Employee /\n  Hosted Single-Sign-On Employee. REST API access is bundled with the\n  pillar subscription. FinOps observation centres on per-pillar seat\n  utilization rather than per-call consumption.\nsources:\n  -\
+  \ https://www.oracle.com/applications/cloud/\n  - https://docs.oracle.com/en/cloud/saas/\nnotes: >-\n  No per-API meter exists. Track license seat utilization per pillar (ERP,\n  HCM, SCM, CX, EPM) through the Fusion Applications usage reports and\n  reconcile against the contractual seat counts on each pillar order document.\nbillingModel:\n  pricingCategory: Tiered Subscription (Per Pillar)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Oracle Fusion Cloud Applications\n  ServiceCategory: SaaS Applications\n  ProviderName: Oracle\n  PublisherName: Oracle America, Inc.\n  InvoiceIssuerName: Oracle America, Inc.\n  BillingCurrency: USD\n  PricingCategory: Subscription\n  ChargeCategory: Purchase\nmeters:\n  - name: hosted_named_user_subscription\n    description: Active Hosted Named User seats per pillar per month\n    unit: seat-month\n    aggregation: max\n    dimensions:\n\
+  \      - pillar\n      - module\n      - business_unit\n  - name: hosted_employee_subscription\n    description: Hosted Employee seats per pillar per month\n    unit: employee-month\n    aggregation: max\n    dimensions:\n      - pillar\n      - module\n      - business_unit\n  - name: hosted_sso_employee_subscription\n    description: Hosted Single-Sign-On Employee seats per month\n    unit: employee-month\n    aggregation: max\n    dimensions:\n      - pillar\n      - module\n  - name: rest_api_calls\n    description: REST API calls (informational; bundled in the subscription)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - pillar\n      - api\n      - endpoint\n      - consumer\nprinciples:\n  - name: Visibility\n    description: >-\n      Review per-pillar seat utilization through the Fusion Applications\n      Security Console and Manage Users area; reconcile monthly against the\n      contractual seat counts captured on each pillar's order document.\n  - name:\
+  \ Allocation\n    description: >-\n      Tag user records with pillar, business unit, and cost center so seat\n      cost can be allocated back to consuming finance teams.\n  - name: Optimization\n    description: >-\n      Reclaim inactive seats, consolidate duplicate user records across\n      pillars, and use the lower-priced Hosted Employee or Hosted SSO\n      Employee metrics for light-touch users where the module supports them.\n  - name: Accountability\n    description: >-\n      Pair each pillar's applications administrator with a finance partner;\n      review seat growth and renewal scoping at quarterly business reviews.\napis:\n  - name: Oracle Fusion ERP REST API\n    serviceName: Oracle Fusion ERP REST API\n    serviceCategory: SaaS Applications\n  - name: Oracle Fusion HCM REST API\n    serviceName: Oracle Fusion HCM REST API\n    serviceCategory: SaaS Applications\n  - name: Oracle Fusion SCM REST API\n    serviceName: Oracle Fusion SCM REST API\n    serviceCategory: SaaS\
+  \ Applications\n  - name: Oracle Fusion CX Sales and Fusion Service REST API\n    serviceName: Oracle Fusion CX Sales and Fusion Service REST API\n    serviceCategory: SaaS Applications\n  - name: Oracle Fusion Common Features REST API\n    serviceName: Oracle Fusion Common Features REST API\n    serviceCategory: SaaS Applications\n  - name: Oracle Fusion Project Management REST API\n    serviceName: Oracle Fusion Project Management REST API\n    serviceCategory: SaaS Applications\n  - name: Oracle Fusion EPM REST API\n    serviceName: Oracle Fusion EPM REST API\n    serviceCategory: SaaS Applications\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/oracle-fusion/refs/heads/main/finops/oracle-fusion-finops.yml
-sources: []
+sources:
+- https://www.oracle.com/applications/cloud/
+- https://docs.oracle.com/en/cloud/saas/
 specification: FinOps Framework
 tags:
-- Cloud
-- CX
-- Enterprise
-- EPM
 - ERP
 - HCM
-- Project Management
-- REST API
 - SaaS
-- SCM
+- Oracle Cloud
 - FinOps
-- Cost Management
 - FOCUS
 ---

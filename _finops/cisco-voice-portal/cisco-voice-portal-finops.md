@@ -38,79 +38,65 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/cisco-voice-portal/refs/heads/main/asyncapi/cisco-voice-portal-call-events-asyncapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Cisco Voice Portal API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Perpetual License
+description: FOCUS-aligned FinOps shape for Cisco Unified Customer Voice Portal. Cost is driven by Smart Licensing entitlements for IVR / call-control ports under the Cisco Contact Center Enterprise bill of materials, not by per-API metering.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Cisco Voice Portal
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Cisco Voice Portal
-  PublisherName: Cisco Voice Portal
-  ServiceCategory: Developer Tools / API
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Cisco Systems, Inc.
+  ProviderName: Cisco
+  PublisherName: Cisco Systems, Inc.
+  ServiceCategory: Contact Center
   ServiceName: Cisco Voice Portal
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Licensed IVR ports for VXML self-service.
   dimensions:
-  - api
-  - endpoint
-  - tier
   - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  - environment
+  name: ivr_ports
+  unit: port
+- aggregation: max
+  description: Licensed call-control / queueing ports.
   dimensions:
-  - api
   - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - environment
+  name: call_control_ports
+  unit: port
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: VM compute for CVP Call Server, VXML Server, OAMP, and Reporting Server.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - role
+  - region
+  name: cvp_server_compute
+  unit: instance-hour
 name: Cisco Voice Portal Finops
 provider_name: Cisco Voice Portal
 provider_slug: cisco-voice-portal
-publisher_name: Cisco Voice Portal
-service_category: API
+publisher_name: Cisco Systems, Inc.
+service_category: Contact Center
 slug: cisco-voice-portal-finops
 source_filename: cisco-voice-portal-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Cisco Voice Portal\nproviderId: cisco-voice-portal\npublisherName: Cisco Voice Portal\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Contact Center\n  - IVR\n  - Telephony\n  - Voice\n  - VXML\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Cisco Voice Portal API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Cisco Voice Portal\n  ServiceCategory: Developer Tools / API\n  ProviderName: Cisco Voice Portal\n  PublisherName: Cisco Voice Portal\n  InvoiceIssuerName: Cisco Voice Portal\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network\
-  \ in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Cisco Voice Portal Call Control API\n    baseURL: https://cvp-callserver.example.com:8000/cvp/rest\n    tags:\n      - Call Control\n      - Routing\n      - Session Management\n      - SIP\n    serviceName: Cisco Voice Portal Call Control API\n    serviceCategory: API\n  - name: Cisco Voice Portal Reporting API\n    baseURL: https://cvp-reporting.example.com:8111/cvp-reporting/rest\n    tags:\n      - Analytics\n      - CDR\n      - Reporting\n      - Statistics\n    serviceName: Cisco Voice Portal Reporting API\n    serviceCategory: API\n  - name: Cisco Voice Portal Administration API\n    baseURL: https://cvp-oamp.example.com:9443/oamp/rest\n\
-  \    tags:\n      - Administration\n      - Configuration\n      - Management\n      - OAMP\n      - Provisioning\n    serviceName: Cisco Voice Portal Administration API\n    serviceCategory: API\n  - name: Cisco Voice Portal VXML Services API\n    baseURL: https://cvp-vxmlserver.example.com:7443/CVP/rest\n    tags:\n      - Call Studio\n      - IVR\n      - Micro-Applications\n      - Voice Applications\n      - VXML\n    serviceName: Cisco Voice Portal VXML Services API\n    serviceCategory: API\n  - name: Cisco Voice Portal Call Events API\n    baseURL: tcp://cvp-callserver.example.com:61616\n    tags:\n      - Call Lifecycle\n      - Events\n      - JMS\n      - Monitoring\n      - Notifications\n    serviceName: Cisco Voice Portal Call Events API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\n\
-  maintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: https://www.cisco.com/c/en/us/products/customer-collaboration/unified-customer-voice-portal/index.html
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Cisco Voice Portal\nproviderId: cisco-voice-portal\npublisherName: Cisco Systems, Inc.\nserviceCategory: Contact Center\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Contact Center\n  - IVR\n  - Voice\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for Cisco Unified Customer Voice Portal. Cost is driven by\n  Smart Licensing entitlements for IVR / call-control ports under the Cisco Contact Center Enterprise\n  bill of materials, not by per-API metering.\nnotes: Per-API meters below are placeholders modeled on operational dimensions; real billing flows\n  through Cisco Contact Center licensing line items\
+  \ and underlying server / TDM gateway costs.\nsources:\n  - https://www.cisco.com/c/en/us/products/customer-collaboration/unified-customer-voice-portal/index.html\nbillingModel:\n  pricingCategory: Subscription + Perpetual License\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Cisco Voice Portal\n  ServiceCategory: Contact Center\n  ProviderName: Cisco\n  PublisherName: Cisco Systems, Inc.\n  InvoiceIssuerName: Cisco Systems, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: ivr_ports\n    description: Licensed IVR ports for VXML self-service.\n    unit: port\n    aggregation: max\n    dimensions:\n      - region\n      - environment\n  - name: call_control_ports\n    description: Licensed call-control / queueing ports.\n    unit: port\n    aggregation: max\n    dimensions:\n      - region\n      - environment\n  - name: cvp_server_compute\n    description:\
+  \ VM compute for CVP Call Server, VXML Server, OAMP, and Reporting Server.\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - role\n      - region\nprinciples:\n  - name: Visibility\n    description: Use the CVP Reporting Server, Cisco Smart Software Manager, and Contact Center\n      management portal to observe port utilization and license consumption.\n  - name: Allocation\n    description: Allocate IVR / port costs to the contact center business unit; chargeback by line\n      of business using call-type / dialed-number reporting.\n  - name: Optimization\n    description: Right-size IVR port counts to peak concurrent call volume, retire low-traffic IVR\n      applications, and consolidate VXML applications onto shared CVP servers.\n  - name: Accountability\n    description: Contact Center operations owner is accountable for CVP port forecasting, license\n      renewals, and IVR application lifecycle.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cisco-voice-portal/refs/heads/main/finops/cisco-voice-portal-finops.yml
-sources: []
+sources:
+- https://www.cisco.com/c/en/us/products/customer-collaboration/unified-customer-voice-portal/index.html
 specification: FinOps Framework
 tags:
 - Contact Center
 - IVR
-- Telephony
 - Voice
-- VXML
 - FinOps
-- Cost Management
 - FOCUS
 ---

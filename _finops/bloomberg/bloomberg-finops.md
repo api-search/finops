@@ -14,85 +14,80 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/bloomberg/refs/heads/main/openapi/blpapi-core.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Bloomberg API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription (Seat) + Enterprise Data License
+description: 'FOCUS-aligned FinOps for Bloomberg: per-user Terminal seat subscriptions plus contract-negotiated enterprise data feeds (B-PIPE, Data License). Spend is dominated by named-user Terminal seats and per-feed enterprise data licenses.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Bloomberg
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Bloomberg L.P.
   ProviderName: Bloomberg
-  PublisherName: Bloomberg
-  ServiceCategory: Developer Tools / API
+  PublisherName: Bloomberg L.P.
+  ServiceCategory: Market Data
   ServiceName: Bloomberg
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - named_user
+  - office
+  - cost_center
+  name: terminal_seats
+  unit: seat-year
+- aggregation: sum
+  dimensions:
+  - service
+  - terminal_user
+  - application
+  name: blpapi_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - exchange
+  - feed
+  - application
+  name: bpipe_updates
+  unit: update
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - product
+  - field
+  - exchange
+  name: data_license_records
+  unit: record
+- aggregation: sum
+  dimensions:
+  - product
+  - department
+  name: enterprise_module_subscriptions
+  unit: month
 name: Bloomberg Finops
 provider_name: Bloomberg
 provider_slug: bloomberg
-publisher_name: Bloomberg
-service_category: API
+publisher_name: Bloomberg L.P.
+service_category: Market Data / Financial Services
 slug: bloomberg-finops
 source_filename: bloomberg-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Bloomberg\nproviderId: bloomberg\npublisherName: Bloomberg\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Business Intelligence\n  - Data License\n  - Enterprise\n  - Execution Management\n  - Financial Services\n  - Market Data\n  - News\n  - Quantitative Analysis\n  - Trading\n  - Transaction Cost Analysis\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Bloomberg API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible\
-  \ to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload\
-  \ Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Bloomberg\n  ServiceCategory: Developer Tools / API\n  ProviderName: Bloomberg\n  PublisherName: Bloomberg\n  InvoiceIssuerName: Bloomberg\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n\
-  \      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Bloomberg Market Data API\n    baseURL: ''\n    tags:\n      - Financial Data\n      - Indices\n      - Market Data\n      - Real-Time\n      - Stocks\n    serviceName: Bloomberg Market Data API\n    serviceCategory: API\n  - name: Bloomberg Server API (SAPI)\n    baseURL: ''\n    tags:\n      - Enterprise\n      - Historical Data\n      - Market Data\n      - Real-Time\n      - Reference Data\n      - Server API\n    serviceName: Bloomberg Server API (SAPI)\n    serviceCategory: API\n  - name: Bloomberg Data License API\n    baseURL: ''\n    tags:\n      - Data\
-  \ License\n      - Enterprise\n      - ESG\n      - Pricing Data\n      - Reference Data\n      - Regulatory Data\n    serviceName: Bloomberg Data License API\n    serviceCategory: API\n  - name: Bloomberg EMSX API\n    baseURL: ''\n    tags:\n      - Equities\n      - Execution Management\n      - Futures\n      - Options\n      - Orders\n      - Trading\n    serviceName: Bloomberg EMSX API\n    serviceCategory: API\n  - name: Bloomberg BLPAPI Core\n    baseURL: ''\n    tags:\n      - B-PIPE\n      - BLPAPI\n      - Desktop API\n      - Historical Data\n      - Intraday Bars\n      - Intraday Ticks\n      - Market Data\n      - Open API\n      - Reference Data\n      - Request Response\n      - Server API\n      - Subscription\n    serviceName: Bloomberg BLPAPI Core\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n\
-  \    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.bloomberg.com/professional/products/bloomberg-terminal/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Bloomberg\nproviderId: bloomberg\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Market Data\n  - Enterprise\n  - Financial Services\ndescription: 'FOCUS-aligned FinOps for Bloomberg: per-user Terminal seat subscriptions plus\n  contract-negotiated enterprise data feeds (B-PIPE, Data License). Spend is dominated by named-user\n  Terminal seats and per-feed enterprise data licenses.'\nsources:\n  - https://www.bloomberg.com/professional/products/bloomberg-terminal/\n  - https://en.wikipedia.org/wiki/Bloomberg_Terminal\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Bloomberg L.P.\nserviceCategory: Market Data / Financial Services\n\
+  billingModel:\n  pricingCategory: Subscription (Seat) + Enterprise Data License\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Bloomberg\n  ServiceCategory: Market Data\n  ProviderName: Bloomberg\n  PublisherName: Bloomberg L.P.\n  InvoiceIssuerName: Bloomberg L.P.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: terminal_seats\n    unit: seat-year\n    aggregation: sum\n    dimensions:\n      - named_user\n      - office\n      - cost_center\n  - name: blpapi_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - service\n      - terminal_user\n      - application\n  - name: bpipe_updates\n    unit: update\n    aggregation: sum\n    dimensions:\n      - exchange\n      - feed\n      - application\n  - name: data_license_records\n    unit: record\n    aggregation: sum\n    dimensions:\n      - product\n      - field\n      - exchange\n\
+  \  - name: enterprise_module_subscriptions\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\n      - department\nprinciples:\n  - name: Visibility\n    description: Use BPS<GO> (Bloomberg Profile Statistics) and the Customer Service portal for\n      seat-level usage; pull WAPI<GO> usage tables to track BDH/BDP daily quota burn against\n      contractual ceilings.\n  - name: Allocation\n    description: Map each Terminal login (BUID) to a cost center / desk; reconcile annual\n      seat-license invoices against the named-user roster.\n  - name: Optimization\n    description: Reclaim inactive seats during the annual renewal window; consolidate B-PIPE\n      symbol subscriptions; favor Bloomberg Anywhere for hoteling instead of dedicated seats; route\n      bulk historical pulls through Data License (EDF) instead of BLPAPI to avoid per-Terminal caps.\n  - name: Accountability\n    description: Designate a Terminal Administrator per legal entity; review the SR<GO>\
+  \ Service\n      Reports monthly; run quarterly seat-utilization reviews with the Bloomberg account team.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/bloomberg/refs/heads/main/finops/bloomberg-finops.yml
-sources: []
+sources:
+- https://www.bloomberg.com/professional/products/bloomberg-terminal/
+- https://en.wikipedia.org/wiki/Bloomberg_Terminal
 specification: FinOps Framework
 tags:
-- Analytics
-- Business Intelligence
-- Data License
-- Enterprise
-- Execution Management
-- Financial Services
-- Market Data
-- News
-- Quantitative Analysis
-- Trading
-- Transaction Cost Analysis
 - FinOps
-- Cost Management
 - FOCUS
+- Market Data
+- Enterprise
+- Financial Services
 ---

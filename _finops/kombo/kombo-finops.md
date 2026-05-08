@@ -37,80 +37,75 @@ api_specs:
   spec_type: OpenAPI
   url: https://api.kombo.dev/openapi.json
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: EUR/USD
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Kombo API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription + Per-Customer
+description: 'FOCUS-aligned FinOps for Kombo: tiered annual platform fee plus per-connected-customer charges, with unlimited API calls and data volume. Inactive integrations are not billed.'
 focus_columns:
-  BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Kombo
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  BillingCurrency: EUR
+  InvoiceIssuerName: Kombo Technologies GmbH
   ProviderName: Kombo
-  PublisherName: Kombo
-  ServiceCategory: Developer Tools / API
+  PublisherName: Kombo Technologies GmbH
+  ServiceCategory: Developer Tools
   ServiceName: Kombo
+  ServiceSubcategory: Unified API
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
+  - integration
+  - category
+  name: connected_customers
+  unit: customer
+- aggregation: max
+  dimensions:
+  - source_system
+  - category
+  name: active_integrations
+  unit: integration
+- aggregation: sum
+  dimensions:
+  - plan
+  name: platform_fee
+  unit: year
+- aggregation: sum
+  dimensions:
+  - integration
   - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  name: api_calls
+  notes: Tracked for visibility; not billed (unlimited per pricing page).
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - integration
+  - object_type
+  name: synced_records
+  unit: record
 name: Kombo Finops
 provider_name: Kombo
 provider_slug: kombo
-publisher_name: Kombo
-service_category: API
+publisher_name: Kombo Technologies GmbH
+service_category: HR Tech / Unified API
 slug: kombo-finops
 source_filename: kombo-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Kombo\nproviderId: kombo\npublisherName: Kombo\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - ATS\n  - Embedded iPaaS\n  - HRIS\n  - LMS\n  - Payroll\n  - Unified API\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Kombo API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
-  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
-  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Kombo\n  ServiceCategory: Developer Tools / API\n  ProviderName: Kombo\n  PublisherName: Kombo\n  InvoiceIssuerName: Kombo\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n  \
-  \    - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Kombo Unified API\n    baseURL: https://api.kombo.dev\n    tags:\n      - ATS\n      - HRIS\n      - Payroll\n      - Unified API\n    serviceName: Kombo Unified API\n    serviceCategory: API\n  - name: Kombo Unified HRIS API\n    baseURL: ''\n    tags:\n      - HRIS\n      - Employees\n      - Time Off\n    serviceName: Kombo Unified HRIS API\n    serviceCategory: API\n  - name: Kombo Unified ATS API\n    baseURL: ''\n    tags:\n      - ATS\n      - Recruiting\n    serviceName: Kombo Unified ATS API\n    serviceCategory: API\n  - name: Kombo Unified ATS-Assessment API\n    baseURL: ''\n    tags:\n      - ATS\n      - Assessments\n    serviceName: Kombo Unified ATS-Assessment API\n    serviceCategory: API\n  - name: Kombo Unified LMS\
-  \ API\n    baseURL: ''\n    tags:\n      - LMS\n      - Learning\n    serviceName: Kombo Unified LMS API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://kombo.dev/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Kombo\nproviderId: kombo\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - HRIS\n  - Unified API\n  - HR Tech\ndescription: 'FOCUS-aligned FinOps for Kombo: tiered annual platform fee plus per-connected-customer\n  charges, with unlimited API calls and data volume. Inactive integrations are not billed.'\nsources:\n  - https://kombo.dev/pricing\n  - https://docs.kombo.dev/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Kombo Technologies GmbH\nserviceCategory: HR Tech / Unified API\nbillingModel:\n  pricingCategory: Tiered Subscription + Per-Customer\n  billingFrequency: Annual\n  billingCurrency: EUR/USD\n  chargeCategories:\n\
+  \    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: Kombo\n  ServiceCategory: Developer Tools\n  ServiceSubcategory: Unified API\n  ProviderName: Kombo\n  PublisherName: Kombo Technologies GmbH\n  InvoiceIssuerName: Kombo Technologies GmbH\n  BillingCurrency: EUR\nmeters:\n  - name: connected_customers\n    unit: customer\n    aggregation: max\n    dimensions:\n      - integration\n      - category\n  - name: active_integrations\n    unit: integration\n    aggregation: max\n    dimensions:\n      - source_system\n      - category\n  - name: platform_fee\n    unit: year\n    aggregation: sum\n    dimensions:\n      - plan\n  - name: api_calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - integration\n      - endpoint\n    notes: Tracked for visibility; not billed (unlimited per pricing page).\n  - name: synced_records\n    unit: record\n    aggregation: sum\n    dimensions:\n      - integration\n      - object_type\nprinciples:\n  - name: Visibility\n\
+  \    description: Use the Kombo developer dashboard to monitor connected customers, active integrations,\n      and sync errors per plan tier; pull the same data from the API for finance dashboards.\n  - name: Allocation\n    description: Tag connected customers with internal account IDs so per-customer Kombo cost can be allocated\n      to the revenue line that customer represents.\n  - name: Optimization\n    description: Disconnect / pause integrations for churned or inactive end-customers (Kombo does not\n      charge for inactive integrations); review tier upgrades against need for sandbox / SFTP / SLAs.\n  - name: Accountability\n    description: Account managers reconcile Kombo's connected-customer count quarterly against active\n      revenue customers; renegotiate per-customer rate at the next annual cycle as volume grows.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/kombo/refs/heads/main/finops/kombo-finops.yml
-sources: []
+sources:
+- https://kombo.dev/pricing
+- https://docs.kombo.dev/
 specification: FinOps Framework
 tags:
-- ATS
-- Embedded iPaaS
-- HRIS
-- LMS
-- Payroll
-- Unified API
 - FinOps
-- Cost Management
 - FOCUS
+- HRIS
+- Unified API
+- HR Tech
 ---

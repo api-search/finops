@@ -7,75 +7,66 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Tariff / Per-Volume
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Plains All American Pipeline API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Regulated Tariff
+description: FOCUS-aligned FinOps placeholder for Plains All American Pipeline. The provider's monetization is pipeline transportation and storage tariffs, not metered API consumption. There is no public per-call price book to model.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Plains All American Pipeline
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Plains All American Pipeline, L.P.
   ProviderName: Plains All American Pipeline
-  PublisherName: Plains All American Pipeline
-  ServiceCategory: Developer Tools / API
-  ServiceName: Plains All American Pipeline
+  PublisherName: Plains All American Pipeline, L.P.
+  ServiceCategory: Midstream Energy
+  ServiceName: Plains Pipeline Transportation
+  ServiceSubcategory: Crude Oil and NGL Pipeline / Storage
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Volume transported through Plains pipelines under a shipper contract; billed via FERC tariff.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - pipeline
+  - origin
+  - destination
+  - product
+  name: barrels_transported
+  unit: barrel
+- aggregation: max
+  description: Contracted storage capacity at Plains terminals.
+  dimensions:
+  - terminal
+  name: storage_capacity
+  unit: barrel-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: FERC-tariff per-barrel transportation charge.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - tariff_id
+  - route
+  name: tariff_charge
+  unit: USD
 name: Plains All American Pipeline Finops
 provider_name: Plains All American Pipeline
 provider_slug: plains-all-american-pipeline
-publisher_name: Plains All American Pipeline
-service_category: API
+publisher_name: Plains All American Pipeline, L.P.
+service_category: Midstream Energy
 slug: plains-all-american-pipeline-finops
 source_filename: plains-all-american-pipeline-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Plains All American Pipeline\nproviderId: plains-all-american-pipeline\npublisherName: Plains All American Pipeline\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Energy\n  - Pipeline\n  - Midstream\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Plains All American Pipeline API surface. Provides a\n  FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the\n  provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
-  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Plains All American Pipeline\n  ServiceCategory: Developer Tools / API\n  ProviderName: Plains All American Pipeline\n  PublisherName: Plains All American Pipeline\n  InvoiceIssuerName: Plains All American Pipeline\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
-  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Plains All American Pipeline API\n    baseURL: https://api.paalp.com\n    tags:\n      - Energy\n      - Pipeline\n      - Midstream\n    serviceName: Plains All American Pipeline API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.plains.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Plains All American Pipeline\nproviderId: plains-all-american-pipeline\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Energy\n  - Pipeline\n  - Midstream\nnotes: Plains All American Pipeline is a midstream energy operator, not a software / API vendor.\n  There is no public metered API to model. This artifact captures the FinOps shape only at the\n  shipper-contract level under FERC tariffs.\ndescription: FOCUS-aligned FinOps placeholder for Plains All American Pipeline. The provider's\n  monetization is pipeline transportation and storage tariffs, not metered API consumption. There\n  is no public per-call price book to model.\nsources:\n  - https://www.plains.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
+  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Plains All American Pipeline, L.P.\nserviceCategory: Midstream Energy\nbillingModel:\n  pricingCategory: Regulated Tariff\n  billingFrequency: Per-Tariff / Per-Volume\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\nfocusColumns:\n  ServiceName: Plains Pipeline Transportation\n  ServiceCategory: Midstream Energy\n  ServiceSubcategory: Crude Oil and NGL Pipeline / Storage\n  ProviderName: Plains All American Pipeline\n  PublisherName: Plains All American Pipeline, L.P.\n  InvoiceIssuerName: Plains All American Pipeline, L.P.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: barrels_transported\n    description: Volume transported through Plains pipelines under a shipper contract; billed via\n      FERC tariff.\n    unit: barrel\n    aggregation: sum\n    dimensions:\n      - pipeline\n      - origin\n      - destination\n      - product\n  - name: storage_capacity\n\
+  \    description: Contracted storage capacity at Plains terminals.\n    unit: barrel-month\n    aggregation: max\n    dimensions:\n      - terminal\n  - name: tariff_charge\n    description: FERC-tariff per-barrel transportation charge.\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - tariff_id\n      - route\nprinciples:\n  - name: Visibility\n    description: Track shipper nominations and actual movements via the Plains shipper portal /\n      EDI; reconcile against monthly tariff invoices.\n  - name: Allocation\n    description: Allocate barrels and tariff cost to the producing field, trading desk, or refining\n      cost center on the shipper side.\n  - name: Optimization\n    description: Optimize routing and committed volume against tariff structure; review committed\n      capacity vs. actual nominations quarterly.\n  - name: Accountability\n    description: Shipper-side scheduling and commercial team own the contract; finance reviews\n      tariff invoices monthly.\n\
+  maintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/plains-all-american-pipeline/refs/heads/main/finops/plains-all-american-pipeline-finops.yml
-sources: []
+sources:
+- https://www.plains.com/
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
 - Energy
 - Pipeline
 - Midstream
-- FinOps
-- Cost Management
-- FOCUS
 ---

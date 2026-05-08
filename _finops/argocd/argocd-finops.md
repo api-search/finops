@@ -13,82 +13,47 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/argocd/refs/heads/main/openapi/argocd-server-openapi.json
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Argo CD API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  billingCurrency: Not Applicable
+  billingFrequency: Not Applicable
+  chargeCategories: []
+  pricingCategory: Open Source — No Commercial Billing Surface
+description: Argo CD is open-source software (Apache License 2.0). There is no commercial billing surface published by the Argo CD project itself — there are no invoices, no metered usage charges, and no subscription fees attributable to Argo CD. Operating costs flow entirely through the operator's own infrastructure providers (Kubernetes cluster compute, storage, networking, monitoring, and ingress). Commercial managed offerings exist (e.g., Akuity Platform, Codefresh/Octopus Deploy, Kubernetes distribution vendors) and have their own billing surfaces that should be profiled against the third-party vendor — not Argo CD.
 focus_columns:
-  BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Argo CD
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Argo CD
-  PublisherName: Argo CD
-  ServiceCategory: Developer Tools / API
+  BillingCurrency: Not Applicable
+  ChargeCategory: Not Applicable
+  InvoiceIssuerName: Not Applicable
+  ProviderName: Argo CD (CNCF)
+  PublisherName: Argo CD (CNCF)
+  ServiceCategory: DevOps
   ServiceName: Argo CD
 layout: finops
-meters:
-- aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+meters: []
 name: Argocd Finops
 provider_name: Argo CD
 provider_slug: argocd
-publisher_name: Argo CD
-service_category: API
+publisher_name: Argo CD (CNCF)
+service_category: DevOps / GitOps
 slug: argocd-finops
 source_filename: argocd-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Argo CD\nproviderId: argocd\npublisherName: Argo CD\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - DevOps\n  - GitOps\n  - Kubernetes\n  - Continuous Delivery\n  - CNCF\n  - Open Source\n  - Operator\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Argo CD API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Argo CD\n  ServiceCategory: Developer Tools / API\n  ProviderName: Argo CD\n  PublisherName: Argo CD\n  InvoiceIssuerName: Argo CD\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Argo CD Applications API\n    baseURL: ''\n    tags:\n      - Applications\n      - Sync\n      - GitOps\n      - Lifecycle\n    serviceName: Argo CD Applications API\n    serviceCategory: API\n  - name: Argo CD ApplicationSets API\n    baseURL: ''\n    tags:\n      - ApplicationSets\n      - Generators\n      - GitOps\n    serviceName: Argo CD ApplicationSets API\n    serviceCategory: API\n  - name: Argo CD Projects API\n    baseURL: ''\n    tags:\n      - Projects\n      - AppProjects\n      - RBAC\n    serviceName: Argo CD Projects API\n    serviceCategory: API\n  - name: Argo CD Clusters API\n    baseURL: ''\n    tags:\n      - Clusters\n      - Targets\n      - Kubernetes\n    serviceName:\
-  \ Argo CD Clusters API\n    serviceCategory: API\n  - name: Argo CD Repositories API\n    baseURL: ''\n    tags:\n      - Repositories\n      - Git\n      - Helm\n      - OCI\n    serviceName: Argo CD Repositories API\n    serviceCategory: API\n  - name: Argo CD Accounts API\n    baseURL: ''\n    tags:\n      - Accounts\n      - Authentication\n      - Tokens\n    serviceName: Argo CD Accounts API\n    serviceCategory: API\n  - name: Argo CD Sessions API\n    baseURL: ''\n    tags:\n      - Sessions\n      - Authentication\n      - JWT\n    serviceName: Argo CD Sessions API\n    serviceCategory: API\n  - name: Argo CD Settings API\n    baseURL: ''\n    tags:\n      - Settings\n      - Configuration\n      - Plugins\n    serviceName: Argo CD Settings API\n    serviceCategory: API\n  - name: Argo CD Certificates API\n    baseURL: ''\n    tags:\n      - Certificates\n      - TLS\n      - SSH\n    serviceName: Argo CD Certificates API\n    serviceCategory: API\n  - name: Argo CD GPG Keys API\n\
-  \    baseURL: ''\n    tags:\n      - GPG\n      - Signed Commits\n      - Security\n    serviceName: Argo CD GPG Keys API\n    serviceCategory: API\n  - name: Argo CD Notifications API\n    baseURL: ''\n    tags:\n      - Notifications\n      - Webhooks\n      - Slack\n      - Email\n    serviceName: Argo CD Notifications API\n    serviceCategory: API\n  - name: Argo CD Version API\n    baseURL: ''\n    tags:\n      - Version\n      - Build Info\n    serviceName: Argo CD Version API\n    serviceCategory: API\n  - name: Argo CD Application CRD\n    baseURL: ''\n    tags:\n      - CRD\n      - Kubernetes\n      - Application\n      - GitOps\n    serviceName: Argo CD Application CRD\n    serviceCategory: API\n  - name: Argo CD ApplicationSet CRD\n    baseURL: ''\n    tags:\n      - CRD\n      - Kubernetes\n      - ApplicationSet\n      - Generators\n    serviceName: Argo CD ApplicationSet CRD\n    serviceCategory: API\n  - name: Argo CD AppProject CRD\n    baseURL: ''\n    tags:\n      -\
-  \ CRD\n      - Kubernetes\n      - AppProject\n      - RBAC\n    serviceName: Argo CD AppProject CRD\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://argo-cd.readthedocs.io/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Argo CD\nproviderId: argocd\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: false\ntags:\n  - DevOps\n  - GitOps\n  - Kubernetes\n  - CNCF\n  - Open Source\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: >-\n  Argo CD is open-source software (Apache License 2.0). There is no commercial billing surface published by the Argo CD project itself — there are no invoices, no metered usage charges, and no subscription fees attributable to Argo CD. Operating costs flow entirely through the operator's own infrastructure providers (Kubernetes cluster compute, storage, networking, monitoring, and ingress). Commercial managed offerings exist (e.g., Akuity Platform, Codefresh/Octopus Deploy, Kubernetes distribution vendors) and have their own billing surfaces that should be profiled against the third-party vendor — not Argo CD.\nnotes: >-\n  Open source\
+  \ — no commercial billing surface; commercial offerings handled by 3rd parties (Akuity for Argo CD). reconciled=false explicitly indicates that no Argo CD-issued bill exists rather than incomplete data. The principles below describe how to FinOps-manage the underlying infrastructure cost of operating self-hosted Argo CD.\nsources:\n  - https://argo-cd.readthedocs.io/\n  - https://github.com/argoproj/argo-cd/blob/master/LICENSE\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Argo CD (CNCF)\nserviceCategory: DevOps / GitOps\nbillingModel:\n  pricingCategory: Open Source — No Commercial Billing Surface\n  billingFrequency: Not Applicable\n  billingCurrency: Not Applicable\n  chargeCategories: []\nfocusColumns:\n  ServiceName: Argo CD\n  ServiceCategory:\
+  \ DevOps\n  ProviderName: Argo CD (CNCF)\n  PublisherName: Argo CD (CNCF)\n  InvoiceIssuerName: Not Applicable\n  BillingCurrency: Not Applicable\n  ChargeCategory: Not Applicable\nmeters: []\nprinciples:\n  - name: Visibility\n    description: >-\n      No Argo CD invoice exists. Treat self-hosted Argo CD as a Kubernetes workload — its cost is the underlying compute (argocd-server, application-controller, repo-server, redis, ApplicationSet controller, notifications controller pods), persistent storage, ingress/load-balancer hours, and observability resources, all of which appear on the cloud provider's FOCUS-formatted bill.\n  - name: Allocation\n    description: >-\n      Tag Argo CD namespace resources by environment / cost-center via Kubernetes labels and propagate them to your cloud-provider tagging strategy. If running multiple Argo CD instances per tenant, allocate by namespace.\n  - name: Optimization\n    description: >-\n      Right-size argocd-server, repo-server, and application-controller\
+  \ replicas; shard the application-controller for very large fleets; tune cache expiration; consider running Argo CD on Spot/Preemptible nodes; consolidate small instances into a single multi-tenant control-plane deployment.\n  - name: Accountability\n    description: >-\n      Assign a platform-engineering owner; review monthly Kubernetes-cluster cost attributable to argocd namespaces; if commercial managed Argo CD is being considered (e.g., Akuity), benchmark its monthly fee against the operational + opportunity cost of self-hosting.\ncommercialOfferings:\n  - name: Akuity Platform\n    type: managed-argocd\n    url: https://akuity.io/\n    note: SaaS offering of managed Argo CD founded by the project's creators; pricing on request.\n  - name: Codefresh (Octopus Deploy)\n    type: managed-argocd\n    url: https://codefresh.io/\n    note: GitOps platform built on Argo CD and Argo Workflows.\n  - name: Kubernetes Distribution Bundles\n    type: bundled-support\n    url: https://www.cncf.io/projects/argo/\n\
+  \    note: Argo CD is bundled and supported by major Kubernetes distributions; pricing varies by vendor.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/argocd/refs/heads/main/finops/argocd-finops.yml
-sources: []
+sources:
+- https://argo-cd.readthedocs.io/
+- https://github.com/argoproj/argo-cd/blob/master/LICENSE
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - DevOps
 - GitOps
 - Kubernetes
-- Continuous Delivery
 - CNCF
 - Open Source
-- Operator
 - FinOps
 - Cost Management
 - FOCUS

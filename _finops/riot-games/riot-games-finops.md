@@ -14,80 +14,55 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/riot-games/refs/heads/main/openapi/riot-games-league-of-legends-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: None
   chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Riot Games API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Free
+description: The Riot Games Developer API is free; there is no Riot-issued invoice for API consumption. FinOps treatment for consumers therefore focuses on the indirect cost of consuming and storing Riot data (compute, storage, egress on the consumer's own cloud) and the policy cost of staying compliant with Riot's developer terms.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Riot Games
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Riot Games
-  PublisherName: Riot Games
-  ServiceCategory: Developer Tools / API
-  ServiceName: Riot Games
+  PublisherName: Riot Games, Inc.
+  ServiceCategory: Gaming Developer Platform
+  ServiceName: Riot Games Developer API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Requests consumed against Riot's developer API; not billed by Riot but useful for forecasting consumer-side infrastructure cost.
   dimensions:
-  - api
-  - endpoint
-  - tier
   - region
-  - consumer
+  - api
+  - key_tier
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+- aggregation: count
+  description: Count of 429 responses; an operational signal that limits or method-call patterns need tuning, not a billable line.
   dimensions:
-  - api
   - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - rate_limit_type
+  name: rate_limit_breaches
+  unit: response
 name: Riot Games Finops
 provider_name: Riot Games
 provider_slug: riot-games
-publisher_name: Riot Games
-service_category: API
+publisher_name: Riot Games, Inc.
+service_category: Gaming Developer Platform
 slug: riot-games-finops
 source_filename: riot-games-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Riot Games\nproviderId: riot-games\npublisherName: Riot Games\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Esports\n  - Gaming\n  - League of Legends\n  - Legends of Runeterra\n  - Teamfight Tactics\n  - VALORANT\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Riot Games API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
-  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Riot Games\n  ServiceCategory: Developer Tools / API\n  ProviderName: Riot Games\n  PublisherName: Riot Games\n  InvoiceIssuerName: Riot Games\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
-  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: League of Legends API\n    baseURL: https://na1.api.riotgames.com\n    tags:\n      - Champion Mastery\n      - Clash\n      - League of Legends\n      - Match History\n      - Ranked\n      - Summoner\n      - Tournaments\n    serviceName: League of Legends API\n    serviceCategory: API\n  - name: VALORANT API\n    baseURL: https://na.api.riotgames.com\n    tags:\n      - Console\n      - Match History\n      - Ranked\n      - VALORANT\n    serviceName: VALORANT API\n    serviceCategory: API\n  - name: Teamfight Tactics API\n    baseURL: https://na1.api.riotgames.com\n    tags:\n      - Match History\n      - Ranked\n      - Summoner\n      - Teamfight Tactics\n \
-  \   serviceName: Teamfight Tactics API\n    serviceCategory: API\n  - name: Legends of Runeterra API\n    baseURL: https://americas.api.riotgames.com\n    tags:\n      - Decks\n      - Legends of Runeterra\n      - Match History\n      - Ranked\n    serviceName: Legends of Runeterra API\n    serviceCategory: API\n  - name: Riot Account API\n    baseURL: https://americas.api.riotgames.com\n    tags:\n      - Account\n      - Authentication\n      - Identity\n      - PUUID\n    serviceName: Riot Account API\n    serviceCategory: API\n  - name: Riot Data Dragon\n    baseURL: https://ddragon.leagueoflegends.com/cdn\n    tags:\n      - Champions\n      - Data Dragon\n      - Items\n      - Static Data\n    serviceName: Riot Data Dragon\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN:\
-  \ Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://developer.riotgames.com/docs/portal
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Riot Games\nproviderId: riot-games\npublisherName: Riot Games, Inc.\nserviceCategory: Gaming Developer Platform\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Riot Games\n  - Gaming\n  - Developer API\n  - FinOps\n  - FOCUS\ndescription: >-\n  The Riot Games Developer API is free; there is no Riot-issued invoice for API consumption.\n  FinOps treatment for consumers therefore focuses on the indirect cost of consuming and\n  storing Riot data (compute, storage, egress on the consumer's own cloud) and the policy\n  cost of staying compliant with Riot's developer terms.\nsources:\n  - https://developer.riotgames.com/docs/portal\n\
+  \  - https://developer.riotgames.com/policies.html\nbillingModel:\n  pricingCategory: Free\n  billingFrequency: None\n  billingCurrency: USD\n  chargeCategories:\n    - Adjustment\nfocusColumns:\n  ServiceName: Riot Games Developer API\n  ServiceCategory: Gaming Developer Platform\n  ProviderName: Riot Games\n  PublisherName: Riot Games, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    description: >-\n      Requests consumed against Riot's developer API; not billed by Riot but useful for\n      forecasting consumer-side infrastructure cost.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - region\n      - api\n      - key_tier\n  - name: rate_limit_breaches\n    description: >-\n      Count of 429 responses; an operational signal that limits or method-call patterns need\n      tuning, not a billable line.\n    unit: response\n    aggregation: count\n    dimensions:\n      - region\n      - rate_limit_type\nprinciples:\n  - name: Visibility\n    description:\
+  \ >-\n      Track Riot API consumption from the client side (request log, 429 rate, retry queue\n      depth); Riot does not publish a usage or billing API.\n  - name: Allocation\n    description: >-\n      Allocate the consumer-side infrastructure cost of running Riot integrations\n      (compute/storage/egress) to the product team that owns the integration, not to\n      undifferentiated platform cost.\n  - name: Optimization\n    description: >-\n      Cache match and account data to stay under per-region method limits; coalesce repeated\n      summoner/match lookups; request a production-key raise before scaling the request rate\n      itself.\n  - name: Accountability\n    description: >-\n      The product owner of the consumer application owns adherence to Riot's developer\n      terms; budget concerns are limited to consumer-side infra and staff cost.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/riot-games/refs/heads/main/finops/riot-games-finops.yml
-sources: []
+sources:
+- https://developer.riotgames.com/docs/portal
+- https://developer.riotgames.com/policies.html
 specification: FinOps Framework
 tags:
-- Esports
+- Riot Games
 - Gaming
-- League of Legends
-- Legends of Runeterra
-- Teamfight Tactics
-- VALORANT
+- Developer API
 - FinOps
-- Cost Management
 - FOCUS
 ---

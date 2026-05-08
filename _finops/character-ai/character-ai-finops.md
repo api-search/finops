@@ -9,74 +9,49 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Character.AI API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription-Based
+description: FinOps view of Character.AI spend. Character.AI is a consumer subscription product - the only chargeable surface is the c.ai+ monthly subscription per user. There is no public developer API and no token / call metering. In a corporate FinOps view, c.ai+ should be treated as an end-user SaaS subscription tracked in the SaaS-management category.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Character.AI
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Character.AI / Apple App Store / Google Play
+  PricingCategory: Subscription-Based
   ProviderName: Character.AI
   PublisherName: Character.AI
-  ServiceCategory: Developer Tools / API
-  ServiceName: Character.AI
+  ServiceCategory: AI and Machine Learning
+  ServiceName: Character.AI Consumer App
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: c.ai+ monthly subscription per user (consumer SaaS).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - user
+  name: c_ai_plus_subscription
+  unit: subscription_months
 name: Character Ai Finops
 provider_name: Character.AI
 provider_slug: character-ai
 publisher_name: Character.AI
-service_category: API
+service_category: AI and Machine Learning
 slug: character-ai-finops
 source_filename: character-ai-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Character.AI\nproviderId: character-ai\npublisherName: Character.AI\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - LLM\n  - Chatbots\n  - Personas\n  - Generative AI\n  - Consumer\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Character.AI API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
-  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Character.AI\n  ServiceCategory: Developer Tools / API\n  ProviderName: Character.AI\n  PublisherName: Character.AI\n  InvoiceIssuerName: Character.AI\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
-  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Character.AI Web Application\n    baseURL: https://character.ai/\n    tags:\n      - Web\n      - Consumer\n      - Chat\n    serviceName: Character.AI Web Application\n    serviceCategory: API\n  - name: Character.AI Mobile Apps\n    baseURL: https://character.ai/\n    tags:\n      - Mobile\n      - iOS\n      - Android\n      - Consumer\n    serviceName: Character.AI Mobile Apps\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://character.ai/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Character.AI\nproviderId: character-ai\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- AI\n- LLM\n- Chatbots\n- Personas\n- Consumer\n- FinOps\n- Cost Management\n- FOCUS\ndescription: >-\n  FinOps view of Character.AI spend. Character.AI is a consumer subscription\n  product - the only chargeable surface is the c.ai+ monthly subscription\n  per user. There is no public developer API and no token / call metering.\n  In a corporate FinOps view, c.ai+ should be treated as an end-user SaaS\n  subscription tracked in the SaaS-management category.\nnotes: >-\n  No public developer API; charges appear as recurring per-seat consumer\n  subscription line items charged to the user's payment method (or app\n  store).\nsources:\n- https://character.ai/\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation\
+  \ Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Character.AI\nserviceCategory: AI and Machine Learning\nbillingModel:\n  pricingCategory: Subscription-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: Character.AI Consumer App\n  ServiceCategory: AI and Machine Learning\n  ProviderName: Character.AI\n  PublisherName: Character.AI\n  InvoiceIssuerName: Character.AI / Apple App Store / Google Play\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingCategory: Subscription-Based\nmeters:\n- name: c_ai_plus_subscription\n  description: c.ai+ monthly subscription per user (consumer SaaS).\n  unit: subscription_months\n  aggregation: sum\n  dimensions:\n  - user\nprinciples:\n- name: Visibility\n  description: Track c.ai+ subscriptions through expense /\
+  \ SaaS-management tooling.\n- name: Allocation\n  description: Allocate to individual employee or department if expensed.\n- name: Optimization\n  description: Cancel inactive c.ai+ subscriptions; consumer product not intended for production workloads.\n- name: Accountability\n  description: Owners are individual subscribers; no enterprise contract surface today.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/character-ai/refs/heads/main/finops/character-ai-finops.yml
-sources: []
+sources:
+- https://character.ai/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - AI
 - LLM
 - Chatbots
 - Personas
-- Generative AI
 - Consumer
 - FinOps
 - Cost Management

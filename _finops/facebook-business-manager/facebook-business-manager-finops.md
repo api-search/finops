@@ -19,73 +19,82 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/facebook-business-manager/refs/heads/main/openapi/facebook-pages-openapi.yml
 billing_model:
-  billingCurrency: USD
+  billingCurrency: USD (settlement varies by country)
   billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
+  - Credit
   chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Facebook Business Manager API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Free API + Downstream Ad Spend + Per-Conversation Messaging
+description: 'FOCUS-aligned FinOps for Meta Business Manager (now Meta Business Suite): the API surface is free; spend lands as Meta Ads campaign cost (CPM/CPC/CPA) and per-conversation WhatsApp Business pricing. API-level FinOps focuses on App Review tier and BUC quota burn.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Facebook Business Manager
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Facebook Business Manager
-  PublisherName: Facebook Business Manager
-  ServiceCategory: Developer Tools / API
-  ServiceName: Facebook Business Manager
+  InvoiceIssuerName: Meta Platforms, Inc.
+  PricingCategory: Free API + Usage (downstream)
+  PricingUnit: varies (impression, conversation, ad-spend USD)
+  ProviderName: Meta
+  PublisherName: Meta Platforms, Inc.
+  ServiceCategory: Advertising / Business Management
+  ServiceName: Meta Business Manager / Business Suite
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Count of Marketing/Pages/Conversions/Catalog Graph API calls; not directly billed but governs rate-limit burn.
   dimensions:
-  - api
+  - app
+  - business_id
+  - ad_account
   - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: graph_api_calls
+  unit: call
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Meta Ads campaign spend.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - ad_account
+  - campaign
+  - placement
+  - country
+  name: ad_spend
+  unit: USD
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: 24-hour WhatsApp Business conversations.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - waba_id
+  - category
+  - country
+  name: whatsapp_conversations
+  unit: conversation
+- aggregation: sum
+  description: Conversions API events ingested.
+  dimensions:
+  - pixel_id
+  - event_name
+  name: conversion_events
+  unit: event
 name: Facebook Business Manager Finops
 provider_name: Facebook Business Manager
 provider_slug: facebook-business-manager
-publisher_name: Facebook Business Manager
-service_category: API
+publisher_name: Meta Platforms, Inc.
+service_category: Advertising / Business Management
 slug: facebook-business-manager-finops
 source_filename: facebook-business-manager-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Facebook Business Manager\nproviderId: facebook-business-manager\npublisherName: Facebook Business Manager\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Advertising\n  - Analytics\n  - Business Management\n  - Marketing\n  - Social Media\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Facebook Business Manager API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
-  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
-  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Facebook Business Manager\n  ServiceCategory: Developer Tools / API\n  ProviderName: Facebook Business Manager\n  PublisherName: Facebook Business Manager\n  InvoiceIssuerName: Facebook Business Manager\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n\
-  \      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Facebook Marketing API\n    baseURL: https://graph.facebook.com/v18.0\n    tags:\n      - Ads\n      - Advertising\n      - Campaigns\n      - Marketing\n    serviceName: Facebook Marketing API\n    serviceCategory: API\n  - name: Facebook Pages API\n    baseURL: https://graph.facebook.com/v18.0\n    tags:\n      - Content\n      - Pages\n      - Publishing\n      - Social Media\n    serviceName: Facebook Pages API\n    serviceCategory: API\n  - name: Facebook Conversions API\n    baseURL: https://graph.facebook.com/v18.0\n    tags:\n      - Attribution\n   \
-  \   - Conversions\n      - Events\n      - Tracking\n    serviceName: Facebook Conversions API\n    serviceCategory: API\n  - name: Facebook Business Asset API\n    baseURL: https://graph.facebook.com/v18.0\n    tags:\n      - Assets\n      - Audiences\n      - Catalogs\n      - Pixels\n    serviceName: Facebook Business Asset API\n    serviceCategory: API\n  - name: Facebook Instagram API\n    baseURL: https://graph.facebook.com/v18.0\n    tags:\n      - Content\n      - Instagram\n      - Media\n      - Social Media\n    serviceName: Facebook Instagram API\n    serviceCategory: API\n  - name: Facebook Insights API\n    baseURL: https://graph.facebook.com/v25.0\n    tags:\n      - Analytics\n      - Insights\n      - Metrics\n      - Reporting\n    serviceName: Facebook Insights API\n    serviceCategory: API\n  - name: Facebook Messenger Platform API\n    baseURL: https://graph.facebook.com/v25.0\n    tags:\n      - Bots\n      - Chat\n      - Customer Service\n      - Messaging\n   \
-  \ serviceName: Facebook Messenger Platform API\n    serviceCategory: API\n  - name: Facebook Catalog API\n    baseURL: https://graph.facebook.com/v25.0\n    tags:\n      - Catalogs\n      - Commerce\n      - Products\n      - Shopping\n    serviceName: Facebook Catalog API\n    serviceCategory: API\n  - name: Facebook Live Video API\n    baseURL: https://graph.facebook.com/v25.0\n    tags:\n      - Broadcasting\n      - Live Streaming\n      - Media\n      - Video\n    serviceName: Facebook Live Video API\n    serviceCategory: API\n  - name: Facebook Threads API\n    baseURL: https://graph.threads.net/v25.0\n    tags:\n      - Content\n      - Publishing\n      - Social Media\n      - Threads\n    serviceName: Facebook Threads API\n    serviceCategory: API\n  - name: Facebook WhatsApp Business Platform API\n    baseURL: https://graph.facebook.com/v25.0\n    tags:\n      - Customer Service\n      - Messaging\n      - Notifications\n      - WhatsApp\n    serviceName: Facebook WhatsApp Business\
-  \ Platform API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://developers.facebook.com/docs/graph-api/overview/rate-limiting
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Facebook Business Manager\nproviderId: facebook-business-manager\npublisherName: Meta Platforms, Inc.\nserviceCategory: Advertising / Business Management\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Advertising\n  - Analytics\n  - Business Management\n  - Marketing\n  - Social Media\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Meta Business Manager (now Meta Business Suite): the API surface\n  is free; spend lands as Meta Ads campaign cost (CPM/CPC/CPA) and per-conversation WhatsApp Business\n  pricing. API-level FinOps focuses on App Review tier and BUC quota burn.'\nsources:\n  - https://developers.facebook.com/docs/graph-api/overview/rate-limiting\n\
+  \  - https://www.facebook.com/business/ads/pricing\n  - https://developers.facebook.com/docs/whatsapp/pricing\nprinciples:\n  - name: Visibility\n    description: Read X-App-Usage, X-Business-Use-Case-Usage, X-Ad-Account-Usage, X-Page-Usage on every\n      response; pull Ads Manager spend reports daily; export WhatsApp conversation logs.\n  - name: Allocation\n    description: Allocate ad spend by ad account → campaign → ad set → ad; allocate WhatsApp spend by\n      WABA ID, category, and country. Tag each Conversions API event with the originating product/team.\n  - name: Optimization\n    description: Batch Marketing/Insights calls (use ?fields= and the batch endpoint); reduce User Errors\n      that erode the Standard Access Ads Insights ceiling; route WhatsApp conversation traffic into the\n      24h customer-service window where free service conversations apply.\n  - name: Accountability\n    description: Per-app owners own the App Review tier; per-ad-account owners own ad spend;\
+  \ per-WABA\n      owners own conversation cost. Reconcile Meta Ads invoices and WhatsApp reports monthly against\n      finance ledgers.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Rate Optimization\n      - Workload Optimization\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - Invoicing and Chargeback\nbillingModel:\n  pricingCategory: Free API + Downstream Ad Spend + Per-Conversation Messaging\n  billingFrequency: Monthly\n  billingCurrency: USD (settlement varies by country)\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n\
+  \    - Credit\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Meta Business Manager / Business Suite\n  ServiceCategory: Advertising / Business Management\n  ProviderName: Meta\n  PublisherName: Meta Platforms, Inc.\n  InvoiceIssuerName: Meta Platforms, Inc.\n  PricingCategory: Free API + Usage (downstream)\n  PricingUnit: varies (impression, conversation, ad-spend USD)\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: graph_api_calls\n    description: Count of Marketing/Pages/Conversions/Catalog Graph API calls; not directly billed but\n      governs rate-limit burn.\n    unit: call\n    aggregation: sum\n    dimensions:\n      - app\n      - business_id\n      - ad_account\n      - endpoint\n  - name: ad_spend\n    description: Meta Ads campaign spend.\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - ad_account\n      - campaign\n      - placement\n      - country\n  - name: whatsapp_conversations\n    description: 24-hour WhatsApp Business\
+  \ conversations.\n    unit: conversation\n    aggregation: sum\n    dimensions:\n      - waba_id\n      - category\n      - country\n  - name: conversion_events\n    description: Conversions API events ingested.\n    unit: event\n    aggregation: sum\n    dimensions:\n      - pixel_id\n      - event_name\napis:\n  - name: Facebook Marketing API\n    baseURL: https://graph.facebook.com/v18.0\n    serviceName: Facebook Marketing API\n    serviceCategory: API\n  - name: Facebook Pages API\n    baseURL: https://graph.facebook.com/v18.0\n    serviceName: Facebook Pages API\n    serviceCategory: API\n  - name: Facebook Conversions API\n    baseURL: https://graph.facebook.com/v18.0\n    serviceName: Facebook Conversions API\n    serviceCategory: API\n  - name: Facebook Business Asset API\n    baseURL: https://graph.facebook.com/v18.0\n    serviceName: Facebook Business Asset API\n    serviceCategory: API\n  - name: Facebook Insights API\n    baseURL: https://graph.facebook.com/v25.0\n    serviceName:\
+  \ Facebook Insights API\n    serviceCategory: API\n  - name: Facebook Catalog API\n    baseURL: https://graph.facebook.com/v25.0\n    serviceName: Facebook Catalog API\n    serviceCategory: API\n  - name: Facebook WhatsApp Business Platform API\n    baseURL: https://graph.facebook.com/v25.0\n    serviceName: Facebook WhatsApp Business Platform API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Impressions (CPM)\n    metric: ad_spend / (impressions / 1000)\n    target: campaign-dependent\n  - name: Cost per WhatsApp Conversation\n    metric: whatsapp_spend / whatsapp_conversations\n    target: see WhatsApp Business pricing by country\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/facebook-business-manager/refs/heads/main/finops/facebook-business-manager-finops.yml
-sources: []
+sources:
+- https://developers.facebook.com/docs/graph-api/overview/rate-limiting
+- https://www.facebook.com/business/ads/pricing
+- https://developers.facebook.com/docs/whatsapp/pricing
 specification: FinOps Framework
 tags:
 - Advertising

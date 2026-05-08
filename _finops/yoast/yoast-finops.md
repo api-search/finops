@@ -14,78 +14,62 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/yoast/refs/heads/main/openapi/yoast-rest-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Yoast API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription
+description: 'FOCUS-aligned FinOps view for Yoast: a flat annual plugin licence (per WordPress site /
+
+  Shopify store) rather than a metered API. Cost surface is dominated by Premium licence
+
+  renewals plus optional add-on plugins.
+
+  '
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Yoast
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Yoast B.V.
   ProviderName: Yoast
-  PublisherName: Yoast
-  ServiceCategory: Developer Tools / API
-  ServiceName: Yoast
+  PublisherName: Yoast B.V.
+  ServiceCategory: SEO / Content
+  ServiceName: Yoast SEO
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: count
+  description: Count of active Yoast SEO Premium site licences renewed annually.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  - product
+  - site
+  name: premium_site_licences
+  unit: licence-year
+- aggregation: count
+  description: Add-on plugin licences (Local SEO, Video SEO, News SEO, WooCommerce SEO, Yoast SEO for Shopify) purchased separately or as part of bundles.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - product
+  - site
+  name: addon_licences
+  unit: licence-year
 name: Yoast Finops
 provider_name: Yoast
 provider_slug: yoast
-publisher_name: Yoast
-service_category: API
+publisher_name: Yoast B.V.
+service_category: SEO / Content
 slug: yoast-finops
 source_filename: yoast-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Yoast\nproviderId: yoast\npublisherName: Yoast\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - SEO\n  - WordPress\n  - Content Optimization\n  - Schema\n  - Metadata\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Yoast API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
-  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
-  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Yoast\n  ServiceCategory: Developer Tools / API\n  ProviderName: Yoast\n  PublisherName: Yoast\n  InvoiceIssuerName: Yoast\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n  \
-  \    - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Yoast REST API\n    baseURL: https://{your-site}/wp-json\n    tags:\n      - SEO\n      - REST API\n      - Metadata\n      - WordPress\n      - Headless\n    serviceName: Yoast REST API\n    serviceCategory: API\n  - name: Yoast Surfaces API\n    baseURL: https://{your-site}\n    tags:\n      - SEO\n      - PHP API\n      - Metadata\n      - WordPress\n    serviceName: Yoast Surfaces API\n    serviceCategory: API\n  - name: Yoast Metadata API\n    baseURL: https://{your-site}\n    tags:\n      - SEO\n      - PHP API\n      - Metadata\n      - WordPress\n    serviceName: Yoast Metadata API\n    serviceCategory: API\n  - name: Yoast Schema API\n    baseURL: https://{your-site}\n    tags:\n      - SEO\n      - Schema.org\n      - Structured\
-  \ Data\n      - PHP API\n      - WordPress\n    serviceName: Yoast Schema API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://yoast.com/wordpress/plugins/seo/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Yoast\nproviderId: yoast\npublisherName: Yoast B.V.\nserviceCategory: SEO / Content\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - SEO\n  - WordPress\n  - Plugin\n  - FinOps\n  - FOCUS\ndescription: |\n  FOCUS-aligned FinOps view for Yoast: a flat annual plugin licence (per WordPress site /\n  Shopify store) rather than a metered API. Cost surface is dominated by Premium licence\n  renewals plus optional add-on plugins.\nsources:\n  - https://yoast.com/wordpress/plugins/seo/pricing/\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n\
+  \    - Tax\nfocusColumns:\n  ServiceName: Yoast SEO\n  ServiceCategory: SEO / Content\n  ProviderName: Yoast\n  PublisherName: Yoast B.V.\n  InvoiceIssuerName: Yoast B.V.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: premium_site_licences\n    description: Count of active Yoast SEO Premium site licences renewed annually.\n    unit: licence-year\n    aggregation: count\n    dimensions:\n      - product\n      - site\n  - name: addon_licences\n    description: Add-on plugin licences (Local SEO, Video SEO, News SEO, WooCommerce SEO,\n      Yoast SEO for Shopify) purchased separately or as part of bundles.\n    unit: licence-year\n    aggregation: count\n    dimensions:\n      - product\n      - site\nprinciples:\n  - name: Visibility\n    description: Visibility is invoice-driven via the my.yoast.com account; there is no\n      usage telemetry for the plugin itself.\n  - name: Allocation\n    description: Allocate Yoast spend per WordPress site / brand by tagging\
+  \ each licence\n      to the owning site URL within my.yoast.com.\n  - name: Optimization\n    description: Cost levers are bundle selection (Premium vs Premium + add-ons), multi-site\n      packs, and choosing the free Yoast SEO where Premium features are not needed.\n  - name: Accountability\n    description: Marketing / web ops typically owns Yoast renewal; finance reconciles the\n      annual purchase line on the my.yoast.com invoice.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/yoast/refs/heads/main/finops/yoast-finops.yml
-sources: []
+sources:
+- https://yoast.com/wordpress/plugins/seo/pricing/
 specification: FinOps Framework
 tags:
 - SEO
 - WordPress
-- Content Optimization
-- Schema
-- Metadata
+- Plugin
 - FinOps
-- Cost Management
 - FOCUS
 ---

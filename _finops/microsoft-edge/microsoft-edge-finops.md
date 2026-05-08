@@ -25,77 +25,55 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Microsoft Edge API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Bundled with Microsoft 365
+description: 'FOCUS-aligned FinOps for Microsoft Edge: the browser and developer APIs are free, with enterprise management surfaced as a no-incremental-charge feature of Microsoft 365 and Entra ID subscriptions. Costs flow through the bundled Microsoft 365 SKU rather than per-call metering.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Edge
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Microsoft Edge
-  PublisherName: Microsoft Edge
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Microsoft Corporation
+  ProviderName: Microsoft
+  PublisherName: Microsoft Corporation
+  ServiceCategory: Developer Tools
   ServiceName: Microsoft Edge
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Active Edge for Business users counted via the parent Microsoft 365 / Entra ID seat licenses
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - tenant
+  - sku
+  name: edge_for_business_seats
+  unit: seat
+- aggregation: sum
+  description: Calls to the Edge Add-ons publishing API (no charge; tracked for fair-use)
+  dimensions:
+  - partner_center_account
+  name: addons_api_calls
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Microsoft Edge Finops
 provider_name: Microsoft Edge
 provider_slug: microsoft-edge
-publisher_name: Microsoft Edge
-service_category: API
+publisher_name: Microsoft Corporation
+service_category: Developer Tools
 slug: microsoft-edge-finops
 source_filename: microsoft-edge-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Edge\nproviderId: microsoft-edge\npublisherName: Microsoft Edge\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Browser\n  - Chromium\n  - Developer Tools\n  - Edge\n  - Extensions\n  - Microsoft\n  - Progressive Web Apps\n  - Web Development\n  - WebView\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Edge API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n  \
-  \    real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n     \
-  \ - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Edge\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Edge\n  PublisherName: Microsoft Edge\n  InvoiceIssuerName: Microsoft Edge\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name:\
-  \ data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Microsoft Edge Add-ons API\n    baseURL: https://api.addons.microsoftedge.microsoft.com\n    tags:\n      - Add-Ons\n      - Browser Extensions\n      - Extension Publishing\n      - Package Management\n      - Partner Center\n    serviceName: Microsoft Edge Add-ons API\n    serviceCategory: API\n  - name: Microsoft Edge DevTools Protocol HTTP API\n    baseURL: http://localhost:9222\n    tags:\n      - Automation\n      - Browser Debugging\n      - DevTools\n      - Remote Debugging\n      - Testing\n    serviceName: Microsoft Edge DevTools Protocol HTTP API\n    serviceCategory: API\n\
-  \  - name: Microsoft Edge Extensions API\n    baseURL: https://microsoftedge.microsoft.com/addons\n    tags:\n      - Add-Ons\n      - Browser Extensions\n      - Chromium Extensions\n      - Web Extensions\n    serviceName: Microsoft Edge Extensions API\n    serviceCategory: API\n  - name: Microsoft Edge Web Platform APIs\n    baseURL: https://www.microsoft.com/edge\n    tags:\n      - Progressive Web Apps\n      - PWA\n      - Web Platform\n      - Web Standards\n    serviceName: Microsoft Edge Web Platform APIs\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.microsoft.com/en-us/edge/business
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Edge\nproviderId: microsoft-edge\npublisherName: Microsoft Corporation\nserviceCategory: Developer Tools\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Browser\n  - Chromium\n  - Developer Tools\n  - Edge\n  - Microsoft\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Microsoft Edge: the browser and developer APIs are free, with enterprise\n  management surfaced as a no-incremental-charge feature of Microsoft 365 and Entra ID subscriptions.\n  Costs flow through the bundled Microsoft 365 SKU rather than per-call metering.'\nsources:\n  - https://www.microsoft.com/en-us/edge/business\n  - https://learn.microsoft.com/en-us/microsoft-edge/\n\
+  billingModel:\n  pricingCategory: Bundled with Microsoft 365\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Microsoft Edge\n  ServiceCategory: Developer Tools\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: edge_for_business_seats\n    description: Active Edge for Business users counted via the parent Microsoft 365 / Entra ID seat licenses\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - tenant\n      - sku\n  - name: addons_api_calls\n    description: Calls to the Edge Add-ons publishing API (no charge; tracked for fair-use)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - partner_center_account\nprinciples:\n  - name: Visibility\n    description: Edge consumption is observable via Microsoft 365 admin center\
+  \ usage reports and Entra\n      sign-in logs; there is no separate Edge billing meter.\n  - name: Allocation\n    description: Allocate Edge for Business usage to teams via the M365 / Entra group memberships that\n      control license assignment.\n  - name: Optimization\n    description: There is no per-seat charge for Edge itself; optimization focuses on the bundled M365\n      SKU and on reducing DevTools / extension complexity inside the enterprise.\n  - name: Accountability\n    description: IT owns Edge configuration via Intune / Group Policy; finance owns the underlying M365\n      SKU.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft-edge/refs/heads/main/finops/microsoft-edge-finops.yml
-sources: []
+sources:
+- https://www.microsoft.com/en-us/edge/business
+- https://learn.microsoft.com/en-us/microsoft-edge/
 specification: FinOps Framework
 tags:
 - Browser
 - Chromium
 - Developer Tools
 - Edge
-- Extensions
 - Microsoft
-- Progressive Web Apps
-- Web Development
-- WebView
 - FinOps
-- Cost Management
 - FOCUS
 ---

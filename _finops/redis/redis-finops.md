@@ -8,79 +8,49 @@ aligned_with:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Redis API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Per-Shard-Hour with Minimums
+description: FOCUS-aligned FinOps for Redis Cloud.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Redis
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Redis
-  PublisherName: Redis
-  ServiceCategory: Developer Tools / API
-  ServiceName: Redis
+  ProviderName: Redis Cloud
+  PublisherName: Redis Cloud
+  ServiceCategory: Database / Cache
+  ServiceName: Redis Cloud
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - plan
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  - cloud
+  name: shard_hours
+  unit: shard-hour
+- aggregation: max
+  name: memory
+  unit: GB-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  name: data_transfer
   unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+- aggregation: max
+  name: backup_storage
+  unit: GB-month
 name: Redis Finops
 provider_name: Redis
 provider_slug: redis
-publisher_name: Redis
-service_category: API
+publisher_name: Redis Cloud
+service_category: Database / Cache
 slug: redis-finops
 source_filename: redis-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Redis\nproviderId: redis\npublisherName: Redis\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cache\n  - Database\n  - In-Memory\n  - Key-Value Store\n  - NoSQL\n  - Open Source\n  - Streaming\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Redis API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
-  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
-  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Redis\n  ServiceCategory: Developer Tools / API\n  ProviderName: Redis\n  PublisherName: Redis\n  InvoiceIssuerName: Redis\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
-  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Redis Core\n    baseURL: ''\n    tags:\n      - Cache\n      - Commands\n      - Core\n      - Database\n      - Key-Value\n    serviceName: Redis Core\n    serviceCategory: API\n  - name: Redis Cloud API\n    baseURL: ''\n    tags:\n      - Cloud\n      - Management\n      - REST\n      - Subscriptions\n    serviceName: Redis Cloud API\n    serviceCategory: API\n  - name: Redis Enterprise API\n    baseURL: ''\n    tags:\n      - Cluster\n      - Enterprise\n      - Management\n      - REST\n    serviceName: Redis Enterprise API\n    serviceCategory: API\n  - name: Redis Insight\n    baseURL: ''\n    tags:\n      - Developer Tools\n      - Management\n      - Visualization\n    serviceName: Redis Insight\n\
-  \    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://redis.io/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Redis Cloud\nproviderId: redis\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Database / Cache\ndescription: FOCUS-aligned FinOps for Redis Cloud.\nsources:\n  - https://redis.io/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Redis Cloud\nserviceCategory: Database / Cache\nbillingModel:\n  pricingCategory: Per-Shard-Hour with Minimums\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Redis Cloud\n  ServiceCategory: Database / Cache\n  ProviderName: Redis Cloud\n  PublisherName: Redis Cloud\n  BillingCurrency: USD\nmeters:\n  - name: shard_hours\n    unit: shard-hour\n    aggregation:\
+  \ sum\n    dimensions:\n      - plan\n      - region\n      - cloud\n  - name: memory\n    unit: GB-month\n    aggregation: max\n  - name: data_transfer\n    unit: GB\n    aggregation: sum\n  - name: backup_storage\n    unit: GB-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track Redis Cloud consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/redis/refs/heads/main/finops/redis-finops.yml
-sources: []
+sources:
+- https://redis.io/pricing/
 specification: FinOps Framework
 tags:
-- Cache
-- Database
-- In-Memory
-- Key-Value Store
-- NoSQL
-- Open Source
-- Streaming
 - FinOps
-- Cost Management
 - FOCUS
+- Database / Cache
 ---

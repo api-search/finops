@@ -48,70 +48,94 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
   - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Hugging Face API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Tax
+  pricingCategory: Subscription + Pay-As-You-Go
+description: 'FOCUS-aligned FinOps for Hugging Face: per-seat subscriptions plus pay-as-you-go inference credits, per-instance-hour for Inference Endpoints and Spaces, and per-TB-month storage with volume discounts.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Hugging Face
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Hugging Face, Inc.
   ProviderName: Hugging Face
-  PublisherName: Hugging Face
-  ServiceCategory: Developer Tools / API
+  PublisherName: Hugging Face, Inc.
+  ServiceCategory: AI Infrastructure
   ServiceName: Hugging Face
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: PRO ($9/mo), Team ($20/seat/mo), Enterprise ($50+/seat/mo) seat fees.
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - plan
+  - organization
+  name: subscription_seats
+  unit: seat
+- aggregation: sum
+  description: Pay-as-you-go credits consumed against partner inference providers; pass-through provider rate, no HF markup.
+  dimensions:
+  - provider
+  - model
+  - task
+  - organization
+  name: inference_provider_credits
+  unit: USD
+- aggregation: sum
+  description: Replica-hours for dedicated Inference Endpoints, billed by hardware tier.
+  dimensions:
+  - hardware
+  - cloud
   - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
   - endpoint
+  name: inference_endpoint_hours
+  unit: instance-hour
+- aggregation: sum
+  description: Hourly cost of Spaces hardware (CPU upgrade, T4, L4, A10G, A100, etc).
+  dimensions:
+  - hardware
+  - space
+  - owner
+  name: spaces_hardware_hours
+  unit: instance-hour
+- aggregation: avg
+  description: Tiered TB-month storage for public and private repos with volume discounts at 50/200/500 TB.
+  dimensions:
+  - repo_type
   - tier
-  name: compute_seconds
+  - owner
+  name: hub_storage
+  unit: GB-month
+- aggregation: sum
+  description: H200 GPU-seconds consumed under the ZeroGPU shared pool (free tier with quotas by plan).
+  dimensions:
+  - plan
+  - space
+  name: zerogpu_seconds
   unit: second
 name: Hugging Face Finops
 provider_name: Hugging Face
 provider_slug: hugging-face
-publisher_name: Hugging Face
-service_category: API
+publisher_name: Hugging Face, Inc.
+service_category: AI Infrastructure
 slug: hugging-face-finops
 source_filename: hugging-face-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Hugging Face\nproviderId: hugging-face\npublisherName: Hugging Face\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Hugging Face API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so\
-  \ cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n\
-  \      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Hugging Face\n  ServiceCategory: Developer Tools / API\n  ProviderName: Hugging Face\n  PublisherName: Hugging Face\n  InvoiceIssuerName: Hugging Face\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
-  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Hugging Face Inference API\n    baseURL: https://api-inference.huggingface.co\n    tags:\n      - AI\n      - Inference\n      - Machine Learning\n      - Models\n    serviceName: Hugging Face Inference API\n    serviceCategory: API\n  - name: Hugging Face Hub API\n    baseURL: https://huggingface.co/api\n    tags:\n      - Datasets\n      - Hub\n      - Models\n      - Repository Management\n    serviceName: Hugging Face Hub API\n    serviceCategory: API\n  - name: Hugging Face Inference Endpoints API\n    baseURL: https://api.endpoints.huggingface.cloud\n    tags:\n      - Deployment\n      - Enterprise\n      - Inference\n      - Managed Service\n    serviceName: Hugging Face Inference Endpoints API\n    serviceCategory: API\n  - name: Hugging\
-  \ Face Inference Providers API\n    baseURL: https://router.huggingface.co/v1\n    tags:\n      - AI\n      - Inference\n      - OpenAI Compatible\n      - Providers\n    serviceName: Hugging Face Inference Providers API\n    serviceCategory: API\n  - name: Hugging Face Dataset Viewer API\n    baseURL: https://datasets-server.huggingface.co\n    tags:\n      - Data\n      - Datasets\n      - Viewer\n    serviceName: Hugging Face Dataset Viewer API\n    serviceCategory: API\n  - name: Hugging Face Text Generation Inference API\n    baseURL: https://api-inference.huggingface.co\n    tags:\n      - AI\n      - Inference\n      - LLM\n      - Text Generation\n    serviceName: Hugging Face Text Generation Inference API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n   \
-  \ email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: https://huggingface.co/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Hugging Face\nproviderId: hugging-face\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - AI\n  - Machine Learning\n  - Inference\ndescription: 'FOCUS-aligned FinOps for Hugging Face: per-seat subscriptions plus pay-as-you-go inference\n  credits, per-instance-hour for Inference Endpoints and Spaces, and per-TB-month storage with volume\n  discounts.'\nsources:\n  - https://huggingface.co/pricing\n  - https://huggingface.co/docs/inference-providers/pricing\n  - https://huggingface.co/docs/inference-endpoints/pricing\n  - https://huggingface.co/settings/billing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Hugging Face, Inc.\nserviceCategory:\
+  \ AI Infrastructure\nbillingModel:\n  pricingCategory: Subscription + Pay-As-You-Go\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Credit\n    - Adjustment\n    - Tax\nfocusColumns:\n  ServiceName: Hugging Face\n  ServiceCategory: AI Infrastructure\n  ProviderName: Hugging Face\n  PublisherName: Hugging Face, Inc.\n  InvoiceIssuerName: Hugging Face, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: subscription_seats\n    description: PRO ($9/mo), Team ($20/seat/mo), Enterprise ($50+/seat/mo) seat fees.\n    unit: seat\n    aggregation: max\n    dimensions:\n      - plan\n      - organization\n  - name: inference_provider_credits\n    description: Pay-as-you-go credits consumed against partner inference providers; pass-through\n      provider rate, no HF markup.\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - provider\n      - model\n      - task\n      - organization\n  - name: inference_endpoint_hours\n\
+  \    description: Replica-hours for dedicated Inference Endpoints, billed by hardware tier.\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - hardware\n      - cloud\n      - region\n      - endpoint\n  - name: spaces_hardware_hours\n    description: Hourly cost of Spaces hardware (CPU upgrade, T4, L4, A10G, A100, etc).\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - hardware\n      - space\n      - owner\n  - name: hub_storage\n    description: Tiered TB-month storage for public and private repos with volume discounts at 50/200/500\n      TB.\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - repo_type\n      - tier\n      - owner\n  - name: zerogpu_seconds\n    description: H200 GPU-seconds consumed under the ZeroGPU shared pool (free tier with quotas by\n      plan).\n    unit: second\n    aggregation: sum\n    dimensions:\n      - plan\n      - space\nprinciples:\n  - name: Visibility\n    description: Track spending\
+  \ in the billing settings (https://huggingface.co/settings/billing)\n      and the Inference Providers usage breakdown by model and provider. Organizations see pooled\n      usage on the org billing page.\n  - name: Allocation\n    description: Use the X-HF-Bill-To header to attribute Inference Providers requests to a specific\n      organization. Tag Spaces and Inference Endpoints with metadata for team/product chargeback.\n  - name: Optimization\n    description: Use \":cheapest\" provider routing policy for cost-sensitive workloads; bring your\n      own provider key when you have negotiated rates with a specific partner; scale Inference Endpoints\n      to zero when idle; use ZeroGPU for low-traffic Spaces; consolidate storage to take advantage\n      of 50/200/500 TB volume discounts.\n  - name: Accountability\n    description: Team and Enterprise admins set spending limits and disable specific Inference Providers\n      from organization settings. Reconcile monthly invoices against\
+  \ the per-model usage breakdown\n      to attribute spend back to product owners.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/hugging-face/refs/heads/main/finops/hugging-face-finops.yml
-sources: []
+sources:
+- https://huggingface.co/pricing
+- https://huggingface.co/docs/inference-providers/pricing
+- https://huggingface.co/docs/inference-endpoints/pricing
+- https://huggingface.co/settings/billing
 specification: FinOps Framework
 tags:
 - FinOps
-- Cost Management
 - FOCUS
+- AI
+- Machine Learning
+- Inference
 ---

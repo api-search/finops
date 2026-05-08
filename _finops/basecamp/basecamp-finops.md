@@ -31,73 +31,87 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
+  - Refund
+  - Credit
   chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Basecamp API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription
+description: 'FOCUS-aligned FinOps for Basecamp: tiered SaaS subscription with two billing shapes — per-user (Plus) and flat unlimited-seat (Pro Unlimited) — plus storage overage and add-on subscriptions. No per-API-call billing.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Basecamp
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: 37signals, LLC
+  PricingCategory: Subscription
+  PricingUnit: seat-month
   ProviderName: Basecamp
-  PublisherName: Basecamp
-  ServiceCategory: Developer Tools / API
+  PublisherName: 37signals, LLC
+  ServiceCategory: Collaboration / Project Management SaaS
   ServiceName: Basecamp
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Per-user monthly subscription on the Plus plan (employees only; guests free)
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - account
+  - plan
+  - billing_period
+  name: seat_subscription
+  unit: seat-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Flat monthly subscription on the Pro Unlimited plan
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - account
+  - billing_cycle
+  name: flat_subscription
+  unit: month
+- aggregation: max
+  description: Storage included in the plan ceiling (Plus 500 GB, Pro Unlimited 5 TB)
+  dimensions:
+  - account
+  - plan
+  name: storage_included
+  unit: GB-month
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Additional storage purchased above the plan ceiling
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - account
+  name: storage_overage
+  unit: TB-month
+- aggregation: sum
+  description: Timesheet add-on flat monthly fee (Plus only; included with Pro Unlimited)
+  dimensions:
+  - account
+  name: addon_timesheet
+  unit: month
+- aggregation: sum
+  description: Admin Pro Pack add-on flat monthly fee (Plus only; included with Pro Unlimited)
+  dimensions:
+  - account
+  name: addon_admin_pro_pack
+  unit: month
 name: Basecamp Finops
 provider_name: Basecamp
 provider_slug: basecamp
-publisher_name: Basecamp
-service_category: API
+publisher_name: 37signals, LLC
+service_category: Collaboration / Project Management SaaS
 slug: basecamp-finops
 source_filename: basecamp-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Basecamp\nproviderId: basecamp\npublisherName: Basecamp\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Collaboration\n  - Project Management\n  - REST\n  - SaaS\n  - Team Communication\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Basecamp API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
-  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
-  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Basecamp\n  ServiceCategory: Developer Tools / API\n  ProviderName: Basecamp\n  PublisherName: Basecamp\n  InvoiceIssuerName: Basecamp\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
-  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Basecamp API\n    baseURL: https://3.basecampapi.com\n    tags:\n      - Collaboration\n      - Project Management\n      - REST\n      - Team Communication\n    serviceName: Basecamp API\n    serviceCategory: API\n  - name: Basecamp Webhooks\n    baseURL: https://3.basecampapi.com\n    tags:\n      - Events\n      - Notifications\n      - Project Management\n      - Webhooks\n    serviceName: Basecamp Webhooks\n    serviceCategory: API\n  - name: Basecamp OAuth\n    baseURL: https://launchpad.37signals.com\n    tags:\n      - Authentication\n      - Authorization\n      - OAuth\n      - Security\n    serviceName: Basecamp OAuth\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n\
-  \    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://basecamp.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Basecamp\nproviderId: basecamp\npublisherName: 37signals, LLC\nserviceCategory: Collaboration / Project Management SaaS\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Collaboration\n  - Project Management\n  - SaaS\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Basecamp: tiered SaaS subscription with two billing shapes —\n  per-user (Plus) and flat unlimited-seat (Pro Unlimited) — plus storage overage and add-on subscriptions.\n  No per-API-call billing.'\nsources:\n  - https://basecamp.com/pricing\n  - https://github.com/basecamp/bc3-api\nprinciples:\n  - name: Visibility\n    description: 37signals invoices and receipts surface seat counts,\
+  \ storage usage, and add-on charges\n      in the Basecamp account billing portal. There is no usage API; reconciliation relies on the monthly\n      invoice line items.\n  - name: Allocation\n    description: Allocate spend by Basecamp account; cost can be split across teams via project-level\n      attribution outside Basecamp (the API exposes project membership for chargeback modeling).\n  - name: Optimization\n    description: Compare Plus per-user math vs Pro Unlimited flat fee — Pro Unlimited becomes cheaper\n      around 20+ active employee seats. Use annual billing on Pro Unlimited ($299/mo vs $349/mo monthly)\n      and prune storage to avoid $50/TB overage.\n  - name: Accountability\n    description: Account owner is the billing contact; assign an internal Basecamp budget owner to review\n      seat counts quarterly and remove inactive employees before each billing cycle.\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n\
+  \  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\n    - Credit\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Basecamp\n  ServiceCategory: Collaboration / Project Management SaaS\n  ProviderName: Basecamp\n  PublisherName: 37signals, LLC\n  InvoiceIssuerName: 37signals, LLC\n  PricingCategory: Subscription\n  PricingUnit: seat-month\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: seat_subscription\n    description: Per-user monthly subscription on the Plus plan (employees only; guests free)\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - account\n      - plan\n      - billing_period\n  - name: flat_subscription\n    description: Flat monthly subscription on the Pro Unlimited plan\n    unit: month\n    aggregation: sum\n    dimensions:\n      - account\n      - billing_cycle\n  - name: storage_included\n    description: Storage included in the plan ceiling (Plus 500 GB, Pro Unlimited\
+  \ 5 TB)\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - account\n      - plan\n  - name: storage_overage\n    description: Additional storage purchased above the plan ceiling\n    unit: TB-month\n    aggregation: sum\n    dimensions:\n      - account\n  - name: addon_timesheet\n    description: Timesheet add-on flat monthly fee (Plus only; included with Pro Unlimited)\n    unit: month\n    aggregation: sum\n    dimensions:\n      - account\n  - name: addon_admin_pro_pack\n    description: Admin Pro Pack add-on flat monthly fee (Plus only; included with Pro Unlimited)\n    unit: month\n    aggregation: sum\n    dimensions:\n      - account\napis:\n  - name: Basecamp API\n    baseURL: https://3.basecampapi.com\n    tags:\n      - Collaboration\n      - Project Management\n      - REST\n      - Team Communication\n    serviceName: Basecamp API\n    serviceCategory: API\n  - name: Basecamp Webhooks\n    baseURL: https://3.basecampapi.com\n    tags:\n      - Events\n   \
+  \   - Notifications\n      - Project Management\n      - Webhooks\n    serviceName: Basecamp Webhooks\n    serviceCategory: API\n  - name: Basecamp OAuth\n    baseURL: https://launchpad.37signals.com\n    tags:\n      - Authentication\n      - Authorization\n      - OAuth\n      - Security\n    serviceName: Basecamp OAuth\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Active Seat\n    metric: billed_cost / active_seats\n    target: '<= $15/seat/month on Plus; switch to Pro Unlimited above ~20 seats'\n  - name: Storage Cost Ratio\n    metric: storage_overage_cost / total_billed\n    target: minimize via retention policies\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/basecamp/refs/heads/main/finops/basecamp-finops.yml
-sources: []
+sources:
+- https://basecamp.com/pricing
+- https://github.com/basecamp/bc3-api
 specification: FinOps Framework
 tags:
 - Collaboration
 - Project Management
-- REST
 - SaaS
-- Team Communication
 - FinOps
-- Cost Management
 - FOCUS
 ---

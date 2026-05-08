@@ -38,80 +38,47 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/tibco/refs/heads/main/openapi/tibco-spotfire-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the TIBCO API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Enterprise License / Subscription
+description: 'FOCUS-aligned FinOps placeholder for TIBCO: enterprise-licensed integration, analytics, and API management products sold under quote-based contracts by Cloud Software Group.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: TIBCO
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Cloud Software Group, Inc.
   ProviderName: TIBCO
-  PublisherName: TIBCO
-  ServiceCategory: Developer Tools / API
+  PublisherName: Cloud Software Group, Inc.
+  ServiceCategory: Integration & Analytics
   ServiceName: TIBCO
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - product
+  - environment
+  name: licensed_entitlement
+  unit: varies
 name: Tibco Finops
 provider_name: TIBCO
 provider_slug: tibco
-publisher_name: TIBCO
-service_category: API
+publisher_name: Cloud Software Group, Inc.
+service_category: Integration & Analytics
 slug: tibco-finops
 source_filename: tibco-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: TIBCO\nproviderId: tibco\npublisherName: TIBCO\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - API Management\n  - Cloud\n  - Enterprise Software\n  - Integration\n  - Messaging\n  - Real-Time Data\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the TIBCO API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
-  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
-  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: TIBCO\n  ServiceCategory: Developer Tools / API\n  ProviderName: TIBCO\n  PublisherName: TIBCO\n  InvoiceIssuerName: TIBCO\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n  \
-  \  aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: TIBCO Cloud Integration API\n    baseURL: https://integration.cloud.tibco.com/api/v1\n    tags:\n      - Cloud\n      - Integration\n      - iPaaS\n    serviceName: TIBCO Cloud Integration API\n    serviceCategory: API\n  - name: TIBCO Mashery API Management\n    baseURL: https://api.mashery.com\n    tags:\n      - Analytics\n      - API Management\n      - Security\n    serviceName: TIBCO Mashery API Management\n    serviceCategory: API\n  - name: TIBCO BusinessEvents API\n    baseURL: https://api.tibco.com/businessevents/v1\n    tags:\n      - Decision Management\n      - Event Processing\n      - Real-Time\n    serviceName: TIBCO BusinessEvents API\n    serviceCategory: API\n \
-  \ - name: TIBCO Messaging API\n    baseURL: https://messaging.cloud.tibco.com/api/v1\n    tags:\n      - JMS\n      - Messaging\n      - Publish-Subscribe\n    serviceName: TIBCO Messaging API\n    serviceCategory: API\n  - name: TIBCO Spotfire Analytics API\n    baseURL: https://spotfire.cloud.tibco.com/api/rest/v1\n    tags:\n      - Analytics\n      - Business Intelligence\n      - Visualization\n    serviceName: TIBCO Spotfire Analytics API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.tibco.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: TIBCO\nproviderId: tibco\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Integration\n  - Analytics\n  - API Management\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps placeholder for TIBCO: enterprise-licensed integration, analytics,\n  and API management products sold under quote-based contracts by Cloud Software Group.'\nsources:\n  - https://www.tibco.com/\n  - https://focus.finops.org/focus-specification/v1-3/\nnotes: TIBCO does not expose a public usage-based rate card or billing API. FinOps observability comes\n  from contract-line allocation, not per-call telemetry.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Cloud Software Group,\
+  \ Inc.\nserviceCategory: Integration & Analytics\nbillingModel:\n  pricingCategory: Enterprise License / Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: TIBCO\n  ServiceCategory: Integration & Analytics\n  ProviderName: TIBCO\n  PublisherName: Cloud Software Group, Inc.\n  InvoiceIssuerName: Cloud Software Group, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: licensed_entitlement\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - product\n      - environment\nprinciples:\n  - name: Visibility\n    description: Map TIBCO contract entitlements (cores, instances, named users, API tier) to deployments;\n      pull usage from product-native dashboards (Spotfire, BusinessWorks, Mashery analytics).\n  - name: Allocation\n    description: Allocate the TIBCO contract cost to the integration, analytics, or API platform team\n      that owns each product line.\n  - name: Optimization\n    description:\
+  \ At renewal, right-size cores/instances and consolidate duplicate environments; retire\n      unused Spotfire seats and BusinessWorks engines.\n  - name: Accountability\n    description: A platform owner is accountable for the TIBCO master agreement, true-up cycle, and renewal\n      negotiation with Cloud Software Group.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tibco/refs/heads/main/finops/tibco-finops.yml
-sources: []
+sources:
+- https://www.tibco.com/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
+- Integration
 - Analytics
 - API Management
-- Cloud
-- Enterprise Software
-- Integration
-- Messaging
-- Real-Time Data
 - FinOps
-- Cost Management
 - FOCUS
 ---

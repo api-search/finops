@@ -11,66 +11,48 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Infura API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Credits
+description: Infura bills as monthly subscription with daily credit allotments. Overage handling depends on plan; Custom is contracted.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Infura
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: ConsenSys
   ProviderName: Infura
-  PublisherName: Infura
-  ServiceCategory: Developer Tools / API
+  PublisherName: ConsenSys
+  ServiceCategory: Web3
   ServiceName: Infura
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Daily request credits weighted per method.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  - api_key
+  - network
+  - method
+  name: credits
+  unit: credit
+- aggregation: max
+  description: IPFS pinned bytes.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - account
+  name: ipfs_storage
+  unit: byte
 name: Infura Finops
 provider_name: Infura
 provider_slug: infura
-publisher_name: Infura
-service_category: API
+publisher_name: ConsenSys (MetaMask)
+service_category: Web3
 slug: infura-finops
 source_filename: infura-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Infura\nproviderId: infura\npublisherName: Infura\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Web3\n  - Blockchain\n  - RPC\n  - Infrastructure\n  - MetaMask\n  - ConsenSys\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Infura API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Infura\n  ServiceCategory: Developer Tools / API\n  ProviderName: Infura\n  PublisherName: Infura\n  InvoiceIssuerName: Infura\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Infura JSON-RPC API\n    baseURL: https://{network}.infura.io/v3/{apiKey}\n    tags:\n      - JSON-RPC\n      - WebSocket\n      - Multi-chain\n    serviceName: Infura JSON-RPC API\n    serviceCategory: API\n  - name: Infura Solana JSON-RPC\n    baseURL: https://solana-mainnet.infura.io/v3/{apiKey}\n    tags:\n      - JSON-RPC\n      - Solana\n    serviceName: Infura Solana JSON-RPC\n    serviceCategory: API\n  - name: Infura Gas API\n    baseURL: https://gas.api.infura.io/v3/{apiKey}\n    tags:\n      - REST\n      - Gas\n    serviceName: Infura Gas API\n    serviceCategory: API\n  - name: Infura IPFS API\n    baseURL: https://ipfs.infura.io:5001/api/v0\n    tags:\n      - REST\n      - IPFS\n    serviceName: Infura\
-  \ IPFS API\n    serviceCategory: API\n  - name: Infura NFT API\n    baseURL: https://nft.api.infura.io/networks/{chainId}\n    tags:\n      - REST\n      - NFT\n    serviceName: Infura NFT API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://docs.metamask.io/services/get-started/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Infura\nproviderId: infura\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- Web3\n- Blockchain\n- RPC\n- Infrastructure\n- MetaMask\n- ConsenSys\n- FinOps\n- FOCUS\ndescription: Infura bills as monthly subscription with daily credit allotments. Overage\n  handling depends on plan; Custom is contracted.\nnotes: Usage data viewable in MetaMask Developer dashboard. Invoiced via ConsenSys.\nsources:\n- https://docs.metamask.io/services/get-started/pricing/\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: ConsenSys (MetaMask)\nserviceCategory: Web3\nbillingModel:\n  pricingCategory: Subscription + Credits\n\
+  \  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n  - Usage\n  - Purchase\nfocusColumns:\n  ServiceName: Infura\n  ServiceCategory: Web3\n  ProviderName: Infura\n  PublisherName: ConsenSys\n  InvoiceIssuerName: ConsenSys\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n- name: credits\n  description: Daily request credits weighted per method.\n  unit: credit\n  aggregation: sum\n  dimensions:\n  - api_key\n  - network\n  - method\n- name: ipfs_storage\n  description: IPFS pinned bytes.\n  unit: byte\n  aggregation: max\n  dimensions:\n  - account\nprinciples:\n- name: Visibility\n  description: Monitor credit burn in the MetaMask Developer dashboard.\n- name: Allocation\n  description: Use one project key per environment/team to attribute credits.\n- name: Optimization\n  description: Cache responses; avoid archive unless required; use eth_getLogs windows\n    judiciously.\n- name: Accountability\n  description: Designate project owners; review against\
+  \ daily allotment.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/infura/refs/heads/main/finops/infura-finops.yml
-sources: []
+sources:
+- https://docs.metamask.io/services/get-started/pricing/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Web3
@@ -80,6 +62,5 @@ tags:
 - MetaMask
 - ConsenSys
 - FinOps
-- Cost Management
 - FOCUS
 ---

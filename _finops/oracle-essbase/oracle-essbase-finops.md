@@ -19,75 +19,72 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Oracle Essbase API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Credit
+  pricingCategory: BYOL + Pay-As-You-Go (OCI Compute)
+description: 'FOCUS-aligned FinOps view for Oracle Essbase: cost is composed of underlying OCI compute, block storage, and networking consumed by the Essbase host, plus a separately negotiated Oracle Technology license (BYOL or per-processor / named-user-plus on-premises).'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Oracle Essbase
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Oracle Essbase
-  PublisherName: Oracle Essbase
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Oracle America, Inc.
+  PricingCategory: BYOL + Usage
+  ProviderName: Oracle
+  PublisherName: Oracle America, Inc.
+  ServiceCategory: Analytics
   ServiceName: Oracle Essbase
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: OCPU-hours consumed by the OCI compute instance hosting Essbase
   dimensions:
-  - api
-  - endpoint
-  - tier
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  - shape
+  - tag
+  name: oci_compute_ocpu_hours
+  unit: ocpu-hour
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Block storage attached to the Essbase host
   dimensions:
-  - api
   - region
-  - consumer
-  name: data_egress
+  - tag
+  name: oci_block_storage_gb_month
+  unit: GB-month
+- aggregation: sum
+  description: Outbound data transfer from the Essbase host
+  dimensions:
+  - region
+  name: oci_egress_gb
   unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+- aggregation: max
+  description: Contractual Oracle Technology license for Essbase (per-processor or NUP)
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - license_type
+  name: essbase_license
+  unit: license
 name: Oracle Essbase Finops
 provider_name: Oracle Essbase
 provider_slug: oracle-essbase
-publisher_name: Oracle Essbase
-service_category: API
+publisher_name: Oracle America, Inc.
+service_category: Analytics
 slug: oracle-essbase-finops
 source_filename: oracle-essbase-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Oracle Essbase\nproviderId: oracle-essbase\npublisherName: Oracle Essbase\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Budgeting\n  - Business Intelligence\n  - Financial Consolidation\n  - Multi-Dimensional Database\n  - OLAP\n  - Planning\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Oracle Essbase API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
-  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
-  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Oracle Essbase\n  ServiceCategory: Developer Tools / API\n  ProviderName: Oracle Essbase\n  PublisherName: Oracle Essbase\n  InvoiceIssuerName: Oracle Essbase\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
-  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Oracle Essbase REST API\n    baseURL: https://{host}:{port}/essbase/rest/v1\n    tags:\n      - Analytics\n      - Calculations\n      - Data Management\n      - OLAP\n      - REST API\n    serviceName: Oracle Essbase REST API\n    serviceCategory: API\n  - name: Essbase Java API\n    baseURL: ''\n    tags:\n      - Client Tools\n      - Data Loading\n      - Java\n      - Programming Interface\n      - SDK\n    serviceName: Essbase Java API\n    serviceCategory: API\n  - name: Essbase C API\n    baseURL: ''\n    tags:\n      - C API\n      - Grid API\n      - Native Interface\n      - Outline API\n\
-  \      - SDK\n    serviceName: Essbase C API\n    serviceCategory: API\n  - name: Essbase MaxL Scripting Interface\n    baseURL: ''\n    tags:\n      - Administration\n      - Automation\n      - Database Management\n      - Query Language\n      - Scripting\n    serviceName: Essbase MaxL Scripting Interface\n    serviceCategory: API\n  - name: Essbase CLI (Command Line Interface)\n    baseURL: ''\n    tags:\n      - Administration\n      - Automation\n      - CLI\n      - Command Line\n      - Server Management\n    serviceName: Essbase CLI (Command Line Interface)\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.oracle.com/business-analytics/essbase/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Oracle Essbase\nproviderId: oracle-essbase\npublisherName: Oracle America, Inc.\nserviceCategory: Analytics\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Analytics\n  - OLAP\n  - Oracle Cloud\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps view for Oracle Essbase: cost is composed of underlying\n  OCI compute, block storage, and networking consumed by the Essbase host, plus\n  a separately negotiated Oracle Technology license (BYOL or per-processor /\n  named-user-plus on-premises).\nsources:\n  - https://www.oracle.com/business-analytics/essbase/\n  - https://cloudmarketplace.oracle.com/marketplace/en_US/listing/79529283\n\
+  \  - https://www.oracle.com/cloud/price-list/\nnotes: >-\n  No public per-API meter exists. FinOps observation is performed against OCI\n  Cost Analysis (Cost-Tracking Tags) for the Essbase host plus the contractual\n  Oracle Technology license line.\nbillingModel:\n  pricingCategory: BYOL + Pay-As-You-Go (OCI Compute)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Oracle Essbase\n  ServiceCategory: Analytics\n  ProviderName: Oracle\n  PublisherName: Oracle America, Inc.\n  InvoiceIssuerName: Oracle America, Inc.\n  BillingCurrency: USD\n  PricingCategory: BYOL + Usage\n  ChargeCategory: Usage\nmeters:\n  - name: oci_compute_ocpu_hours\n    description: OCPU-hours consumed by the OCI compute instance hosting Essbase\n    unit: ocpu-hour\n    aggregation: sum\n    dimensions:\n      - region\n      - shape\n      - tag\n  - name: oci_block_storage_gb_month\n\
+  \    description: Block storage attached to the Essbase host\n    unit: GB-month\n    aggregation: sum\n    dimensions:\n      - region\n      - tag\n  - name: oci_egress_gb\n    description: Outbound data transfer from the Essbase host\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - region\n  - name: essbase_license\n    description: Contractual Oracle Technology license for Essbase (per-processor or NUP)\n    unit: license\n    aggregation: max\n    dimensions:\n      - license_type\nprinciples:\n  - name: Visibility\n    description: >-\n      Use OCI Cost Analysis with cost-tracking tags applied to the Essbase\n      compute, block volumes, and VCN to view consumption; reconcile against\n      the Oracle Technology license entitlement separately.\n  - name: Allocation\n    description: >-\n      Apply OCI cost-tracking tags (e.g. team, application, environment) to\n      every Essbase host and storage volume so spend can be attributed to\n      consuming products.\n \
+  \ - name: Optimization\n    description: >-\n      Right-size the OCI compute shape to match actual calc and query\n      concurrency, schedule non-production instances to stop outside business\n      hours, and consolidate small Essbase applications onto shared hosts\n      where license terms permit.\n  - name: Accountability\n    description: >-\n      Assign an owner to each Essbase application; review OCI consumption and\n      Oracle support renewals quarterly.\napis:\n  - name: Oracle Essbase REST API\n    serviceName: Oracle Essbase REST API\n    serviceCategory: Analytics\n  - name: Essbase Java API\n    serviceName: Essbase Java API\n    serviceCategory: Analytics\n  - name: Essbase C API\n    serviceName: Essbase C API\n    serviceCategory: Analytics\n  - name: Essbase MaxL Scripting Interface\n    serviceName: Essbase MaxL Scripting Interface\n    serviceCategory: Analytics\n  - name: Essbase CLI (Command Line Interface)\n    serviceName: Essbase CLI (Command Line Interface)\n\
+  \    serviceCategory: Analytics\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/oracle-essbase/refs/heads/main/finops/oracle-essbase-finops.yml
-sources: []
+sources:
+- https://www.oracle.com/business-analytics/essbase/
+- https://cloudmarketplace.oracle.com/marketplace/en_US/listing/79529283
+- https://www.oracle.com/cloud/price-list/
 specification: FinOps Framework
 tags:
 - Analytics
-- Budgeting
-- Business Intelligence
-- Financial Consolidation
-- Multi-Dimensional Database
 - OLAP
-- Planning
+- Oracle Cloud
 - FinOps
-- Cost Management
 - FOCUS
 ---

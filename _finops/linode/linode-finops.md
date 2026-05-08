@@ -15,72 +15,51 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the linode API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Per-Instance Subscription + Hourly Metered
+description: FOCUS-aligned FinOps for Linode (Akamai Cloud).
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: linode
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: linode
-  PublisherName: linode
-  ServiceCategory: Developer Tools / API
-  ServiceName: linode
+  ProviderName: Linode (Akamai Cloud)
+  PublisherName: Linode (Akamai Cloud)
+  ServiceCategory: Cloud Compute
+  ServiceName: Linode (Akamai Cloud)
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - plan
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: instance_hours
+  unit: instance-hour
+- aggregation: max
+  name: object_storage
+  unit: GB-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  name: data_transfer_egress
   unit: GB
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: managed_db_hours
+  unit: instance-hour
+- aggregation: sum
+  name: lke_node_hours
+  unit: node-hour
 name: Linode Finops
 provider_name: linode
 provider_slug: linode
-publisher_name: linode
-service_category: API
+publisher_name: Linode (Akamai Cloud)
+service_category: Cloud Compute
 slug: linode-finops
 source_filename: linode-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: linode\nproviderId: linode\npublisherName: linode\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the linode API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n\
-  \  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n\
-  \      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: linode\n  ServiceCategory: Developer Tools / API\n  ProviderName: linode\n  PublisherName: linode\n  InvoiceIssuerName: linode\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description:\
-  \ Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Linode API V4\n    baseURL: https://api.linode.com/v4\n    tags:\n      - Cloud Computing\n      - Infrastructure\n      - REST API\n      - Virtual Machines\n    serviceName: Linode API V4\n    serviceCategory: API\n  - name: Linode CLI\n    baseURL: https://api.example.com\n    tags:\n      - Automation\n      - CLI\n      - Command Line\n      - DevOps\n    serviceName: Linode CLI\n    serviceCategory: API\n  - name: Linode Python SDK\n    baseURL: https://api.example.com\n    tags:\n      - Client Library\n      - Python\n      - SDK\n    serviceName: Linode Python SDK\n    serviceCategory: API\n  - name: Linode Go SDK\n    baseURL: https://api.example.com\n    tags:\n      - Client Library\n      - Go\n      - SDK\n    serviceName: Linode Go SDK\n    serviceCategory: API\n  - name: Linode Terraform Provider\n\
-  \    baseURL: https://api.example.com\n    tags:\n      - Automation\n      - DevOps\n      - Infrastructure as Code\n      - Terraform\n    serviceName: Linode Terraform Provider\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://www.linode.com/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Linode (Akamai Cloud)\nproviderId: linode\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Cloud Compute\ndescription: FOCUS-aligned FinOps for Linode (Akamai Cloud).\nsources:\n  - https://www.linode.com/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Linode (Akamai Cloud)\nserviceCategory: Cloud Compute\nbillingModel:\n  pricingCategory: Per-Instance Subscription + Hourly Metered\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Linode (Akamai Cloud)\n  ServiceCategory: Cloud Compute\n  ProviderName: Linode (Akamai Cloud)\n  PublisherName: Linode (Akamai Cloud)\n  BillingCurrency: USD\n\
+  meters:\n  - name: instance_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - plan\n      - region\n  - name: object_storage\n    unit: GB-month\n    aggregation: max\n  - name: data_transfer_egress\n    unit: GB\n    aggregation: sum\n  - name: managed_db_hours\n    unit: instance-hour\n    aggregation: sum\n  - name: lke_node_hours\n    unit: node-hour\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Track Linode (Akamai Cloud) consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/linode/refs/heads/main/finops/linode-finops.yml
-sources: []
+sources:
+- https://www.linode.com/pricing/
 specification: FinOps Framework
 tags:
 - FinOps
-- Cost Management
 - FOCUS
+- Cloud Compute
 ---

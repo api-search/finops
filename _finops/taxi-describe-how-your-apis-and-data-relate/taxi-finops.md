@@ -14,79 +14,86 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/taxi-describe-how-your-apis-and-data-relate/refs/heads/main/openapi/taxi-language-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Taxi - Describe How Your APIs and Data Relate API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Usage
+  pricingCategory: Tiered Subscription
+description: FOCUS-aligned FinOps shape for the commercial Orbital platform that executes TaxiQL queries against the Taxi schema registry. Billing is a tiered subscription with monthly call quotas, per-additional-user fees, an AI Copilot add-on, and metered overage; the Taxi language itself is Apache 2.0 open source and not directly billed.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Taxi - Describe How Your APIs and Data Relate
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Taxi - Describe How Your APIs and Data Relate
-  PublisherName: Taxi - Describe How Your APIs and Data Relate
-  ServiceCategory: Developer Tools / API
-  ServiceName: Taxi - Describe How Your APIs and Data Relate
+  InvoiceIssuerName: Orbital HQ
+  PricingUnit: subscription-month
+  ProviderName: Orbital
+  PublisherName: Orbital HQ
+  ServiceCategory: Data Integration
+  ServiceName: Orbital
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
   - tier
-  - region
-  - consumer
-  name: api_requests
+  name: subscription_tier
+  unit: month
+- aggregation: sum
+  dimensions:
+  - workspace
+  - tier
+  name: api_calls
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+- aggregation: max
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
   - tier
-  name: compute_seconds
-  unit: second
+  name: workspaces
+  unit: workspace
+- aggregation: max
+  dimensions:
+  - workspace
+  name: endpoints
+  unit: endpoint
+- aggregation: max
+  dimensions:
+  - tier
+  name: admin_users
+  unit: seat
+- aggregation: max
+  dimensions:
+  - tier
+  name: additional_users
+  unit: seat
+- aggregation: max
+  name: ai_copilot_seats
+  unit: seat
+- aggregation: sum
+  dimensions:
+  - tier
+  name: overage_calls
+  unit: request
+- aggregation: max
+  name: managed_onprem
+  unit: month
 name: Taxi Finops
 provider_name: Taxi - Describe How Your APIs and Data Relate
 provider_slug: taxi-describe-how-your-apis-and-data-relate
-publisher_name: Taxi - Describe How Your APIs and Data Relate
-service_category: API
+publisher_name: Orbital HQ
+service_category: Data Integration
 slug: taxi-finops
 source_filename: taxi-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Taxi - Describe How Your APIs and Data Relate\nproviderId: taxi-describe-how-your-apis-and-data-relate\npublisherName: Taxi - Describe How Your APIs and Data Relate\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Description\n  - Data Integration\n  - Open Source\n  - Query Language\n  - Schema\n  - Semantic\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Taxi - Describe How Your APIs and Data Relate API surface.\n  Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting\n  across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API\
-  \ consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate\
-  \ Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Taxi - Describe How Your APIs and Data Relate\n  ServiceCategory: Developer Tools / API\n  ProviderName: Taxi - Describe How Your APIs and Data Relate\n  PublisherName: Taxi - Describe How Your APIs and Data Relate\n  InvoiceIssuerName: Taxi - Describe How Your APIs and Data Relate\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n\
-  \    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Taxi Language\n    baseURL: ''\n    tags:\n      - API Description\n      - Data Modeling\n      - Open Source\n      - Schema\n      - Semantic Types\n    serviceName: Taxi Language\n    serviceCategory: API\n  - name: TaxiQL Query API\n    baseURL: ''\n    tags:\n      - Data Query\n      - Federated Query\n      - Open Source\n      - Query Language\n    serviceName: TaxiQL Query API\n    serviceCategory:\
-  \ API\n  - name: Orbital Platform\n    baseURL: ''\n    tags:\n      - Data Platform\n      - Federated Query\n      - Integration\n      - Schema Registry\n    serviceName: Orbital Platform\n    serviceCategory: API\n  - name: Taxi Playground\n    baseURL: ''\n    tags:\n      - Developer Tools\n      - Playground\n      - Schema Editor\n    serviceName: Taxi Playground\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://taxilang.org/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Taxi - Describe How Your APIs and Data Relate\nproviderId: taxi-describe-how-your-apis-and-data-relate\npublisherName: Orbital HQ\nserviceCategory: Data Integration\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Data Integration\n  - Federated Query\n  - Open Source\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for the commercial Orbital platform that executes TaxiQL\n  queries against the Taxi schema registry. Billing is a tiered subscription with monthly call\n  quotas, per-additional-user fees, an AI Copilot add-on, and metered overage; the Taxi language\n  itself is Apache 2.0 open source and not\
+  \ directly billed.\nsources:\n  - https://taxilang.org/\n  - https://orbitalhq.com/pricing\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: Orbital\n  ServiceCategory: Data Integration\n  ProviderName: Orbital\n  PublisherName: Orbital HQ\n  InvoiceIssuerName: Orbital HQ\n  BillingCurrency: USD\n  PricingUnit: subscription-month\nmeters:\n  - name: subscription_tier\n    unit: month\n    aggregation: max\n    dimensions:\n      - tier\n  - name: api_calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - workspace\n      - tier\n  - name: workspaces\n    unit: workspace\n    aggregation: max\n    dimensions:\n      - tier\n  - name: endpoints\n    unit: endpoint\n    aggregation: max\n    dimensions:\n      - workspace\n  - name: admin_users\n    unit: seat\n    aggregation: max\n    dimensions:\n      - tier\n  - name: additional_users\n\
+  \    unit: seat\n    aggregation: max\n    dimensions:\n      - tier\n  - name: ai_copilot_seats\n    unit: seat\n    aggregation: max\n  - name: overage_calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - tier\n  - name: managed_onprem\n    unit: month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track Orbital monthly call consumption against the tier ceiling (100K / 1M /\n      10M / 100M / 1B) so overage at $200-$400 per 10M calls is forecast, not surprise. Workspace\n      and endpoint counts are visible in the Orbital console.\n  - name: Allocation\n    description: Allocate by Orbital workspace and tier so each consuming team's call volume,\n      additional-user seats, and AI Copilot seats can be charged back distinctly.\n  - name: Optimization\n    description: Right-size the tier against monthly call volume, push pure-OSS use of Taxi /\n      TaxiQL down into self-hosted environments where managed Orbital execution isn't required,\n\
+  \      and consolidate endpoints inside fewer workspaces to stay within the per-tier endpoint cap.\n  - name: Accountability\n    description: The data integration / platform team that owns the Orbital workspace owns the\n      subscription tier choice, additional-user count, and AI Copilot seat allocation.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/taxi-describe-how-your-apis-and-data-relate/refs/heads/main/finops/taxi-finops.yml
-sources: []
+sources:
+- https://taxilang.org/
+- https://orbitalhq.com/pricing
 specification: FinOps Framework
 tags:
-- API Description
 - Data Integration
+- Federated Query
 - Open Source
-- Query Language
-- Schema
-- Semantic
 - FinOps
-- Cost Management
 - FOCUS
 ---

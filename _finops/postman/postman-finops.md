@@ -86,96 +86,97 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/postman/refs/heads/main/openapi/postman-secret-scanner-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Postman API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription + Usage
+description: 'FOCUS-aligned FinOps for Postman: per-seat tiered subscription (Solo $9, Team $19, Enterprise $49 per user/month, billed annually) layered with metered consumption surfaces (AI credits, automation flow credits, monitoring requests, Postman API calls). Add-ons (custom domains, private NPM, data-driven testing) appear as separate Purchase line items.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Postman
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Postman, Inc.
+  PricingUnit: seat-month
   ProviderName: Postman
-  PublisherName: Postman
-  ServiceCategory: Developer Tools / API
+  PublisherName: Postman, Inc.
+  ServiceCategory: Developer Tools
   ServiceName: Postman
+  ServiceSubcategory: API Platform
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Per-user subscription seats on Solo, Team, and Enterprise.
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - plan
+  - team
+  name: seats
+  unit: seat-month
+- aggregation: sum
+  description: AI credits consumed by Postbot and AI features.
+  dimensions:
+  - user
+  - workspace
+  - feature
+  name: ai_credits
+  unit: credit
+- aggregation: sum
+  description: Automation Flow runs charged in credits, pooled per team on Team and Enterprise.
+  dimensions:
+  - workspace
+  - flow
+  name: automation_flow_credits
+  unit: credit
+- aggregation: sum
+  description: Outbound API monitor invocations.
+  dimensions:
+  - monitor
+  - workspace
   - region
-  - consumer
-  name: api_requests
+  name: monitoring_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Calls against the Postman REST API authenticated with a Postman API key.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
+  - api_key
   - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: postman_api_calls
+  unit: request
+- aggregation: max
+  description: Configured third-party integrations against the per-plan ceiling.
+  dimensions:
+  - workspace
+  name: integrations
+  unit: integration
+- aggregation: count
+  description: Optional purchases (custom domains, private NPM packages, data-driven testing).
+  dimensions:
+  - addon_type
+  - workspace
+  name: addons
+  unit: addon
 name: Postman Finops
 provider_name: Postman
 provider_slug: postman
-publisher_name: Postman
-service_category: API
+publisher_name: Postman, Inc.
+service_category: Developer Tools
 slug: postman-finops
 source_filename: postman-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Postman\nproviderId: postman\npublisherName: Postman\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI Agent Builder\n  - API Development\n  - API Documentation\n  - API Governance\n  - API Monitoring\n  - API Testing\n  - Automation\n  - Client\n  - Clients\n  - Collaboration\n  - Collections\n  - Discovery\n  - Environments\n  - MCP\n  - Mock Servers\n  - Mocking\n  - Network\n  - Platform\n  - Testing\n  - Workflows\n  - Workspaces\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Postman API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across\
-  \ the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize\
-  \ Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Postman\n  ServiceCategory: Developer Tools / API\n  ProviderName: Postman\n  PublisherName: Postman\n  InvoiceIssuerName: Postman\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n\
-  \    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Postman\n    baseURL: ''\n    tags:\n      - Automation\n      - Client\n      - Collections\n      - Discovery\n      - Mocking\n      - Network\n      - Platform\n      - Testing\n      - Workflows\n    serviceName: Postman\n    serviceCategory: API\n  - name: Postman Collections API\n    baseURL: https://api.getpostman.com\n    tags:\n      - API Management\n      - Automation\n      - Collections\n    serviceName: Postman Collections API\n    serviceCategory:\
-  \ API\n  - name: Postman Workspaces API\n    baseURL: https://api.getpostman.com\n    tags:\n      - API Management\n      - Collaboration\n      - Workspaces\n    serviceName: Postman Workspaces API\n    serviceCategory: API\n  - name: Postman Environments API\n    baseURL: https://api.getpostman.com\n    tags:\n      - Configuration\n      - Environments\n      - Variables\n    serviceName: Postman Environments API\n    serviceCategory: API\n  - name: Postman Mock Servers API\n    baseURL: https://api.getpostman.com\n    tags:\n      - API Development\n      - Mocking\n      - Simulation\n    serviceName: Postman Mock Servers API\n    serviceCategory: API\n  - name: Postman Monitors API\n    baseURL: https://api.getpostman.com\n    tags:\n      - Automation\n      - Monitoring\n      - Scheduling\n      - Testing\n    serviceName: Postman Monitors API\n    serviceCategory: API\n  - name: Postman APIs API\n    baseURL: https://api.getpostman.com\n    tags:\n      - API Builder\n     \
-  \ - API Design\n      - Specifications\n    serviceName: Postman APIs API\n    serviceCategory: API\n  - name: Postman Private API Network API\n    baseURL: https://api.getpostman.com\n    tags:\n      - API Network\n      - Discovery\n      - Governance\n    serviceName: Postman Private API Network API\n    serviceCategory: API\n  - name: Postman Webhooks API\n    baseURL: https://api.getpostman.com\n    tags:\n      - Automation\n      - Events\n      - Integrations\n      - Webhooks\n    serviceName: Postman Webhooks API\n    serviceCategory: API\n  - name: Postman Collection Runs API\n    baseURL: https://api.getpostman.com\n    tags:\n      - Automation\n      - CI/CD\n      - Collection Runner\n      - Testing\n    serviceName: Postman Collection Runs API\n    serviceCategory: API\n  - name: Postman Tags API\n    baseURL: https://api.getpostman.com\n    tags:\n      - Governance\n      - Metadata\n      - Organization\n    serviceName: Postman Tags API\n    serviceCategory: API\n\
-  \  - name: Postman Audit Logs API\n    baseURL: https://api.getpostman.com\n    tags:\n      - Audit Logs\n      - Compliance\n      - Governance\n      - Security\n    serviceName: Postman Audit Logs API\n    serviceCategory: API\n  - name: Postman Secret Scanner API\n    baseURL: https://api.getpostman.com\n    tags:\n      - Compliance\n      - Governance\n      - Secret Scanning\n      - Security\n    serviceName: Postman Secret Scanner API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n  - name: Postman\n    email: help@postman.com\n    url: https://www.postman.com\n"
+source_url: https://www.postman.com/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Postman\nproviderId: postman\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - API Development\n  - Collaboration\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps for Postman: per-seat tiered subscription (Solo $9,\n  Team $19, Enterprise $49 per user/month, billed annually) layered with\n  metered consumption surfaces (AI credits, automation flow credits,\n  monitoring requests, Postman API calls). Add-ons (custom domains, private\n  NPM, data-driven testing) appear as separate Purchase line items.\nsources:\n  - https://www.postman.com/pricing/\n  - https://learning.postman.com/docs/developer/postman-api/postman-api-rate-limits/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
+  publisherName: Postman, Inc.\nserviceCategory: Developer Tools\nbillingModel:\n  pricingCategory: Tiered Subscription + Usage\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Postman\n  ServiceCategory: Developer Tools\n  ServiceSubcategory: API Platform\n  ProviderName: Postman\n  PublisherName: Postman, Inc.\n  InvoiceIssuerName: Postman, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingUnit: seat-month\nmeters:\n  - name: seats\n    description: Per-user subscription seats on Solo, Team, and Enterprise.\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - plan\n      - team\n  - name: ai_credits\n    description: AI credits consumed by Postbot and AI features.\n    unit: credit\n    aggregation: sum\n    dimensions:\n      - user\n      - workspace\n      - feature\n  - name: automation_flow_credits\n    description: Automation Flow runs\
+  \ charged in credits, pooled per team on Team and Enterprise.\n    unit: credit\n    aggregation: sum\n    dimensions:\n      - workspace\n      - flow\n  - name: monitoring_requests\n    description: Outbound API monitor invocations.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - monitor\n      - workspace\n      - region\n  - name: postman_api_calls\n    description: Calls against the Postman REST API authenticated with a Postman API key.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_key\n      - endpoint\n  - name: integrations\n    description: Configured third-party integrations against the per-plan ceiling.\n    unit: integration\n    aggregation: max\n    dimensions:\n      - workspace\n  - name: addons\n    description: Optional purchases (custom domains, private NPM packages, data-driven testing).\n    unit: addon\n    aggregation: count\n    dimensions:\n      - addon_type\n      - workspace\nprinciples:\n  - name: Visibility\n   \
+  \ description: Use the Postman resource-usage dashboard and the Postman API (which exposes RateLimit and monthly X-RateLimit headers on every response) to observe seat and consumption-meter consumption.\n  - name: Allocation\n    description: Allocate by workspace and team; pooled meters (Enterprise AI credits, Team automation credits) should be tagged at the workspace level for chargeback.\n  - name: Optimization\n    description: Right-size plan selection on per-user pricing breakpoints ($9 Solo, $19 Team, $49 Enterprise); cap AI-credit consumption per user; consolidate monitors to share the 10k/month monitoring quota.\n  - name: Accountability\n    description: Workspace owners are accountable for their AI credits, monitoring requests, and integration counts; admins should set alerts before the per-plan ceilings are reached and renegotiate seat counts at renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/postman/refs/heads/main/finops/postman-finops.yml
-sources: []
+sources:
+- https://www.postman.com/pricing/
+- https://learning.postman.com/docs/developer/postman-api/postman-api-rate-limits/
 specification: FinOps Framework
 tags:
-- AI Agent Builder
 - API Development
-- API Documentation
-- API Governance
-- API Monitoring
-- API Testing
-- Automation
-- Client
-- Clients
 - Collaboration
-- Collections
-- Discovery
-- Environments
-- MCP
-- Mock Servers
-- Mocking
-- Network
-- Platform
-- Testing
-- Workflows
-- Workspaces
 - FinOps
-- Cost Management
 - FOCUS
 ---

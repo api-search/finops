@@ -7,75 +7,38 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: N/A
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Huron Consulting Group API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Not Applicable (no public API)
+description: 'No FinOps surface for Huron Consulting Group APIs: there is no public developer API and no consumption-based billing model. Huron is fee-for-engagement consulting.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Huron Consulting Group
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Huron Consulting Group Inc.
   ProviderName: Huron Consulting Group
-  PublisherName: Huron Consulting Group
-  ServiceCategory: Developer Tools / API
+  PublisherName: Huron Consulting Group Inc.
+  ServiceCategory: Management Consulting
   ServiceName: Huron Consulting Group
 layout: finops
-meters:
-- aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+meters: []
 name: Huron Consulting Group Finops
 provider_name: Huron Consulting Group
 provider_slug: huron-consulting-group
-publisher_name: Huron Consulting Group
-service_category: API
+publisher_name: Huron Consulting Group Inc.
+service_category: Management Consulting
 slug: huron-consulting-group-finops
 source_filename: huron-consulting-group-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Huron Consulting Group\nproviderId: huron-consulting-group\npublisherName: Huron Consulting Group\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Consulting\n  - Healthcare\n  - Education\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Huron Consulting Group API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Huron Consulting Group\n  ServiceCategory: Developer Tools / API\n  ProviderName: Huron Consulting Group\n  PublisherName: Huron Consulting Group\n  InvoiceIssuerName: Huron Consulting Group\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned\
-  \ over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Huron Consulting Group API\n    baseURL: https://api.huronconsultinggroup.com\n    tags:\n      - Consulting\n      - Healthcare\n      - Education\n    serviceName: Huron Consulting Group API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.huronconsultinggroup.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Huron Consulting Group\nproviderId: huron-consulting-group\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Consulting\ndescription: 'No FinOps surface for Huron Consulting Group APIs: there is no public developer API\n  and no consumption-based billing model. Huron is fee-for-engagement consulting.'\nnotes: No public developer API; preserved as a trimmed scaffold.\nsources:\n  - https://www.huronconsultinggroup.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Huron Consulting Group Inc.\nserviceCategory: Management Consulting\nbillingModel:\n  pricingCategory: Not Applicable (no public API)\n  billingFrequency: N/A\n  billingCurrency:\
+  \ USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Huron Consulting Group\n  ServiceCategory: Management Consulting\n  ProviderName: Huron Consulting Group\n  PublisherName: Huron Consulting Group Inc.\n  InvoiceIssuerName: Huron Consulting Group Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters: []\nprinciples:\n  - name: Visibility\n    description: Not applicable - no public API consumption to track.\n  - name: Allocation\n    description: Not applicable - no API spend exists.\n  - name: Optimization\n    description: Not applicable until a public developer API is published.\n  - name: Accountability\n    description: Not applicable until a public developer API is published.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/huron-consulting-group/refs/heads/main/finops/huron-consulting-group-finops.yml
-sources: []
+sources:
+- https://www.huronconsultinggroup.com/
 specification: FinOps Framework
 tags:
-- Consulting
-- Healthcare
-- Education
 - FinOps
-- Cost Management
 - FOCUS
+- Consulting
 ---

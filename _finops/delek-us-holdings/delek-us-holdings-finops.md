@@ -7,82 +7,56 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Delek US Holdings API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Bilateral Contracts
+description: 'FOCUS-aligned FinOps for Delek US Holdings: a downstream energy company with no public developer API. No API invoice line exists. Commercial relationships flow through product-supply, terminaling, midstream-logistics, and retail-fuel agreements rather than per-call billing.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Delek US Holdings
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Delek US Holdings, Inc.
+  PricingCategory: Contract
   ProviderName: Delek US Holdings
-  PublisherName: Delek US Holdings
-  ServiceCategory: Developer Tools / API
+  PublisherName: Delek US Holdings, Inc.
+  RegionId: US
+  ServiceCategory: Energy
   ServiceName: Delek US Holdings
+  ServiceSubcategory: Downstream Petroleum
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Active partner integrations (EDI feeds, terminal-automation links, ticketing bridges) across refining, logistics, and retail business lines.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - partner
+  - business_line
+  - integration_type
+  name: bilateral_integrations
+  unit: integration
 name: Delek Us Holdings Finops
 provider_name: Delek US Holdings
 provider_slug: delek-us-holdings
-publisher_name: Delek US Holdings
-service_category: API
+publisher_name: Delek US Holdings, Inc.
+service_category: Energy
 slug: delek-us-holdings-finops
 source_filename: delek-us-holdings-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Delek US Holdings\nproviderId: delek-us-holdings\npublisherName: Delek US Holdings\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Asphalt\n  - Convenience Stores\n  - Downstream\n  - Energy\n  - Logistics\n  - Petroleum\n  - Refining\n  - Renewable Fuels\n  - Retail\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Delek US Holdings API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n\
-  \      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n   \
-  \   - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Delek US Holdings\n  ServiceCategory: Developer Tools / API\n  ProviderName: Delek US Holdings\n  PublisherName: Delek US Holdings\n  InvoiceIssuerName: Delek US Holdings\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n\
-  \  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Delek US Holdings Website\n    baseURL: ''\n    tags:\n      - Corporate\n      - Website\n    serviceName: Delek US Holdings Website\n    serviceCategory: API\n  - name: Delek US Holdings Investor Relations\n    baseURL: ''\n    tags:\n      - Earnings\n      - Investor Relations\n      - SEC Filings\n    serviceName: Delek US Holdings Investor Relations\n    serviceCategory: API\n  - name: Delek Logistics Partners\n    baseURL: ''\n    tags:\n      - Logistics\n      - Midstream\n      - Pipelines\n      - Terminals\n    serviceName: Delek Logistics Partners\n    serviceCategory:\
-  \ API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.delekus.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Delek US Holdings\nproviderId: delek-us-holdings\npublisherName: Delek US Holdings, Inc.\nserviceCategory: Energy\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Energy\n  - Logistics\n  - Petroleum\n  - Refining\n  - Retail\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Delek US Holdings: a downstream energy company with no\n  public developer API. No API invoice line exists. Commercial relationships flow through\n  product-supply, terminaling, midstream-logistics, and retail-fuel agreements rather than per-call\n  billing.'\nsources:\n  - https://www.delekus.com\n  - https://www.deleklogistics.com\n\
+  notes: No API consumption to meter. FinOps artifact retained for parity across providers; meters\n  are illustrative of the bilateral-integration shape rather than a billable surface.\nbillingModel:\n  pricingCategory: Bilateral Contracts\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Delek US Holdings\n  ServiceCategory: Energy\n  ServiceSubcategory: Downstream Petroleum\n  ProviderName: Delek US Holdings\n  PublisherName: Delek US Holdings, Inc.\n  InvoiceIssuerName: Delek US Holdings, Inc.\n  PricingCategory: Contract\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  RegionId: US\nmeters:\n  - name: bilateral_integrations\n    description: Active partner integrations (EDI feeds, terminal-automation links, ticketing\n      bridges) across refining, logistics, and retail business lines.\n    unit: integration\n    aggregation: max\n    dimensions:\n      - partner\n      - business_line\n\
+  \      - integration_type\nprinciples:\n  - name: Visibility\n    description: There is no API invoice. Track partner-integration spend through procurement,\n      logistics, and IT-services contracts rather than developer-portal usage.\n  - name: Allocation\n    description: Allocate any integration-related cost to the refining, logistics, or retail\n      business unit that owns the partner relationship.\n  - name: Optimization\n    description: Consolidate redundant EDI feeds across affiliates (Delek Logistics, retail\n      stores), prefer modern terminal-automation protocols, and retire legacy bridges to reduce\n      operational toil.\n  - name: Accountability\n    description: Designate a single integration owner per partner per business line so EDI map\n      maintenance and ticketing-bridge SLAs have a clear escalation path.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/delek-us-holdings/refs/heads/main/finops/delek-us-holdings-finops.yml
-sources: []
+sources:
+- https://www.delekus.com
+- https://www.deleklogistics.com
 specification: FinOps Framework
 tags:
-- Asphalt
-- Convenience Stores
-- Downstream
 - Energy
 - Logistics
 - Petroleum
 - Refining
-- Renewable Fuels
 - Retail
 - FinOps
-- Cost Management
 - FOCUS
 ---

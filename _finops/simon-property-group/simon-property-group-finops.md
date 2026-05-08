@@ -7,80 +7,44 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Contract
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Simon Property Group API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Lease / Partnership Contract
+description: FOCUS-aligned FinOps placeholder for Simon Property Group. Simon does not bill API consumption as a discrete line; cost flows through leasing, marketing, and partnership contracts. No public usage telemetry or per-call billing surface exists.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Simon Property Group
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Simon Property Group, L.P.
   ProviderName: Simon Property Group
-  PublisherName: Simon Property Group
-  ServiceCategory: Developer Tools / API
+  PublisherName: Simon Property Group, L.P.
+  ServiceCategory: Commercial Real Estate
   ServiceName: Simon Property Group
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  description: Partner cost is governed by the underlying lease or marketing agreement, not by per-API-call meters.
+  name: contractual_partnership
+  unit: varies
 name: Simon Property Group Finops
 provider_name: Simon Property Group
 provider_slug: simon-property-group
-publisher_name: Simon Property Group
-service_category: API
+publisher_name: Simon Property Group, L.P.
+service_category: Commercial Real Estate
 slug: simon-property-group-finops
 source_filename: simon-property-group-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Simon Property Group\nproviderId: simon-property-group\npublisherName: Simon Property Group\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Commercial Real Estate\n  - E-Commerce\n  - Fortune 500\n  - Malls\n  - Outlet Centers\n  - Real Estate\n  - REIT\n  - Retail\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Simon Property Group API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n\
-  \      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n   \
-  \   - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Simon Property Group\n  ServiceCategory: Developer Tools / API\n  ProviderName: Simon Property Group\n  PublisherName: Simon Property Group\n  InvoiceIssuerName: Simon Property Group\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n\
-  \      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: ShopSimon Retailer API\n    baseURL: ''\n    tags:\n      - E-Commerce\n      - Inventory\n      - Marketplace\n      - Orders\n      - Products\n      - Retail\n    serviceName: ShopSimon Retailer API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.simon.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Simon Property Group\nproviderId: simon-property-group\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Commercial Real Estate\n  - REIT\n  - Fortune 500\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps placeholder for Simon Property Group. Simon does not bill API\n  consumption as a discrete line; cost flows through leasing, marketing, and partnership contracts.\n  No public usage telemetry or per-call billing surface exists.\nsources:\n  - https://www.simon.com/\nnotes: No public API billing model. FinOps treatment is contract-driven; reconciliation pending\n  direct partner-channel confirmation.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
+  \ Simon Property Group, L.P.\nserviceCategory: Commercial Real Estate\nbillingModel:\n  pricingCategory: Lease / Partnership Contract\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Simon Property Group\n  ServiceCategory: Commercial Real Estate\n  ProviderName: Simon Property Group\n  PublisherName: Simon Property Group, L.P.\n  InvoiceIssuerName: Simon Property Group, L.P.\n  BillingCurrency: USD\nmeters:\n  - name: contractual_partnership\n    description: Partner cost is governed by the underlying lease or marketing agreement, not by\n      per-API-call meters.\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Spend visibility comes from the AP/finance system that processes lease and marketing\n      invoices, not from a usage API.\n  - name: Allocation\n    description: Allocate via the originating lease, store, or campaign captured in the partner's\n      financial\
+  \ system; tag integration traffic with the contract reference.\n  - name: Optimization\n    description: Optimization is contractual — renegotiate marketing or co-tenancy terms and consolidate\n      duplicate integrations rather than tuning request volume.\n  - name: Accountability\n    description: Real-estate, retail-marketing, and brand teams own the Simon partnership; integration\n      teams own technical SLA conformance.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/simon-property-group/refs/heads/main/finops/simon-property-group-finops.yml
-sources: []
+sources:
+- https://www.simon.com/
 specification: FinOps Framework
 tags:
 - Commercial Real Estate
-- E-Commerce
-- Fortune 500
-- Malls
-- Outlet Centers
-- Real Estate
 - REIT
-- Retail
+- Fortune 500
 - FinOps
-- Cost Management
 - FOCUS
 ---

@@ -31,74 +31,51 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/sap-concur-expense/refs/heads/main/openapi/sap-concur-expense-report-openapi.yml
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: USD/EUR/varies
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the SAP Concur Expense API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Enterprise Contract
+description: FOCUS-aligned FinOps placeholder for SAP Concur Expense. Per-employee subscription plus per-report transaction fees.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: SAP Concur Expense
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: SAP Concur (Concur Technologies, Inc.)
   ProviderName: SAP Concur Expense
-  PublisherName: SAP Concur Expense
-  ServiceCategory: Developer Tools / API
+  PublisherName: SAP Concur (Concur Technologies, Inc.)
+  ServiceCategory: Expense Management
   ServiceName: SAP Concur Expense
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Consumption against the customer's negotiated SAP / Concur contract; reconcile to actual provider-published meters once available.
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - service
   - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: contracted_consumption
+  unit: varies
 name: Sap Concur Expense Finops
 provider_name: SAP Concur Expense
 provider_slug: sap-concur-expense
-publisher_name: SAP Concur Expense
-service_category: API
+publisher_name: SAP Concur (Concur Technologies, Inc.)
+service_category: Expense Management
 slug: sap-concur-expense-finops
 source_filename: sap-concur-expense-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: SAP Concur Expense\nproviderId: sap-concur-expense\npublisherName: SAP Concur Expense\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Expense Management\n  - Financial Management\n  - Receipts\n  - Reimbursement\n  - Reporting\n  - SAP\n  - Travel\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the SAP Concur Expense API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
-  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
-  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: SAP Concur Expense\n  ServiceCategory: Developer Tools / API\n  ProviderName: SAP Concur Expense\n  PublisherName: SAP Concur Expense\n  InvoiceIssuerName: SAP Concur Expense\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name:\
-  \ data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Expense Report v3 API\n    baseURL: https://us.api.concursolutions.com/api/v3.0\n    tags:\n      - Approval\n      - Expenses\n      - Financial\n      - Reports\n      - Workflow\n    serviceName: Expense Report v3 API\n    serviceCategory: API\n  - name: Expense Entry v3 API\n    baseURL: https://us.api.concursolutions.com/api/v3.0\n    tags:\n      - Expense Entries\n      - Itemization\n      - Line Items\n    serviceName: Expense Entry v3 API\n    serviceCategory: API\n  - name: Quick Expense v3 API\n    baseURL: https://us.api.concursolutions.com/api/v3.0\n    tags:\n      - Expenses\n\
-  \      - Mobile\n      - Quick Expense\n    serviceName: Quick Expense v3 API\n    serviceCategory: API\n  - name: Receipt Image v3 API\n    baseURL: https://us.api.concursolutions.com/api/v3.0\n    tags:\n      - Documents\n      - Images\n      - Receipts\n    serviceName: Receipt Image v3 API\n    serviceCategory: API\n  - name: Digital Tax Invoice API\n    baseURL: https://us.api.concursolutions.com/api/v3.0\n    tags:\n      - Compliance\n      - Invoice\n      - Tax\n    serviceName: Digital Tax Invoice API\n    serviceCategory: API\n  - name: Expense Group Configuration API\n    baseURL: https://us.api.concursolutions.com/api/v3.0\n    tags:\n      - Configuration\n      - Policies\n      - Settings\n    serviceName: Expense Group Configuration API\n    serviceCategory: API\n  - name: Expense Allocations API\n    baseURL: https://us.api.concursolutions.com/api/v3.0\n    tags:\n      - Accounting\n      - Allocations\n      - Cost Centers\n    serviceName: Expense Allocations API\n\
-  \    serviceCategory: API\n  - name: Payment Batch v1 API\n    baseURL: https://us.api.concursolutions.com/api/v1.1\n    tags:\n      - Batch Processing\n      - Payments\n      - Reimbursement\n    serviceName: Payment Batch v1 API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: https://developer.concur.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: SAP Concur Expense\nproviderId: sap-concur-expense\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Expense Management\n  - Financial Management\n  - Receipts\n  - Reimbursement\n  - Reporting\n  - SAP\n  - Travel\ndescription: FOCUS-aligned FinOps placeholder for SAP Concur Expense. Per-employee subscription plus per-report transaction fees.\nsources:\n  - https://developer.concur.com/\n  - https://developer.concur.com/api-reference/expense/\nnotes: Provider does not publish a public, machine-readable rate card; meters and FOCUS columns below are placeholders to be reconciled once contract or partner-portal terms are available.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
+  publisherName: SAP Concur (Concur Technologies, Inc.)\nserviceCategory: Expense Management\nbillingModel:\n  pricingCategory: Enterprise Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD/EUR/varies\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: SAP Concur Expense\n  ServiceCategory: Expense Management\n  ProviderName: SAP Concur Expense\n  PublisherName: SAP Concur (Concur Technologies, Inc.)\n  InvoiceIssuerName: SAP Concur (Concur Technologies, Inc.)\n  BillingCurrency: USD\nmeters:\n  - name: contracted_consumption\n    description: Consumption against the customer's negotiated SAP / Concur contract; reconcile to actual\n      provider-published meters once available.\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - service\n      - region\nprinciples:\n  - name: Visibility\n    description: Use SAP for Me, the BTP Cockpit, or the SAP Concur admin console (as applicable) to\n      view consumption\
+  \ against entitlements; line items appear on the SAP / Concur invoice.\n  - name: Allocation\n    description: Allocate by SAP global account / subaccount or by Concur entity; map to internal cost\n      centers via the relevant cockpit before chargeback.\n  - name: Optimization\n    description: Track CPEA/BTPEA balance burn or per-employee subscription utilization; right-size service\n      plans and prune unused entitlements at renewal.\n  - name: Accountability\n    description: Designate a single billing owner and reconcile invoices monthly with usage reports from\n      the relevant SAP / Concur cockpit.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sap-concur-expense/refs/heads/main/finops/sap-concur-expense-finops.yml
-sources: []
+sources:
+- https://developer.concur.com/
+- https://developer.concur.com/api-reference/expense/
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
 - Expense Management
 - Financial Management
 - Receipts
@@ -106,7 +83,4 @@ tags:
 - Reporting
 - SAP
 - Travel
-- FinOps
-- Cost Management
-- FOCUS
 ---

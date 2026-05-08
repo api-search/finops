@@ -38,71 +38,69 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/bitwarden/refs/heads/main/openapi/bitwarden-public-swagger.json
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Monthly or Annual
   chargeCategories:
-  - Usage
   - Purchase
+  - Adjustment
   - Tax
   - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Bitwarden API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription (Per User) + Optional Add-Ons
+description: FOCUS-aligned FinOps for Bitwarden. The Public API and SCIM endpoints are not metered separately - they are bundled in the underlying password-manager subscription (Teams $4/user/month or Enterprise $6/user/month, billed annually). Personal plans (Premium $9.99/year, Families $40/year for 6 users) do not include API access. Secrets Manager is sold as a separate per-user-per-month add-on with a tier-dependent machine-account allowance. Self-host is included; cloud regions split US and EU with no price difference.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Bitwarden
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Bitwarden, Inc.
   ProviderName: Bitwarden
-  PublisherName: Bitwarden
-  ServiceCategory: Developer Tools / API
+  PublisherName: Bitwarden, Inc.
+  ServiceCategory: Identity and Access Management
   ServiceName: Bitwarden
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Recurring per-user subscription for the active password-manager tier (Teams, Enterprise) or per-account fee for personal plans (Premium, Families).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - plan_tier
+  - billing_cycle
+  name: subscription_fee_per_user
+  unit: user_month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Per-user-per-month subscription for the Secrets Manager add-on; price varies by Teams or Enterprise underlying tier.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  - plan_tier
+  - billing_cycle
+  name: secrets_manager_fee
+  unit: user_month
+- aggregation: max
+  description: Machine accounts consumed against the Secrets Manager allowance bundled with the add-on; overage requires moving to a higher tier.
+  dimensions:
+  - organization_id
+  name: machine_accounts
+  unit: machine_account
+- aggregation: max
+  description: Encrypted storage consumed by file attachments and Send across the organization and personal accounts; bundled GB included by tier.
+  dimensions:
+  - organization_id
+  name: storage
   unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Bitwarden Finops
 provider_name: Bitwarden
 provider_slug: bitwarden
-publisher_name: Bitwarden
-service_category: API
+publisher_name: Bitwarden, Inc.
+service_category: Identity and Access Management
 slug: bitwarden-finops
 source_filename: bitwarden-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Bitwarden\nproviderId: bitwarden\npublisherName: Bitwarden\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Security\n  - Password Manager\n  - Open Source\n  - Vault\n  - Identity\n  - SCIM\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Bitwarden API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
-  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
-  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Bitwarden\n  ServiceCategory: Developer Tools / API\n  ProviderName: Bitwarden\n  PublisherName: Bitwarden\n  InvoiceIssuerName: Bitwarden\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Bitwarden Public API - Members\n    baseURL: https://api.bitwarden.com/public\n    tags:\n      - Members\n      - Users\n      - Public API\n    serviceName: Bitwarden Public API - Members\n    serviceCategory: API\n  - name: Bitwarden Public API - Groups\n    baseURL: https://api.bitwarden.com/public\n    tags:\n      - Groups\n      - Permissions\n      - Public API\n    serviceName: Bitwarden Public API - Groups\n    serviceCategory: API\n  - name: Bitwarden Public API - Collections\n    baseURL: https://api.bitwarden.com/public\n    tags:\n      - Collections\n      - Sharing\n      - Public API\n    serviceName: Bitwarden Public API - Collections\n    serviceCategory: API\n  - name: Bitwarden\
-  \ Public API - Policies\n    baseURL: https://api.bitwarden.com/public\n    tags:\n      - Policies\n      - Enterprise\n      - Public API\n    serviceName: Bitwarden Public API - Policies\n    serviceCategory: API\n  - name: Bitwarden Public API - Event Logs\n    baseURL: https://api.bitwarden.com/public\n    tags:\n      - Events\n      - Audit Logs\n      - Compliance\n      - Public API\n    serviceName: Bitwarden Public API - Event Logs\n    serviceCategory: API\n  - name: Bitwarden Identity API\n    baseURL: https://identity.bitwarden.com/connect/token\n    tags:\n      - Identity\n      - OAuth\n      - Authentication\n    serviceName: Bitwarden Identity API\n    serviceCategory: API\n  - name: Bitwarden SCIM API\n    baseURL: https://scim.bitwarden.com/v2\n    tags:\n      - SCIM\n      - Provisioning\n      - Identity\n    serviceName: Bitwarden SCIM API\n    serviceCategory: API\n  - name: Bitwarden Vault Management API\n    baseURL: http://localhost:8087\n    tags:\n      -\
-  \ Vault Items\n      - CLI\n      - Local\n    serviceName: Bitwarden Vault Management API\n    serviceCategory: API\n  - name: Bitwarden Secrets Manager API\n    baseURL: https://api.bitwarden.com\n    tags:\n      - Secrets Manager\n      - Secrets\n      - DevOps\n    serviceName: Bitwarden Secrets Manager API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://bitwarden.com/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Bitwarden\nproviderId: bitwarden\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n  - Security\n  - Password Manager\n  - Open Source\n  - Vault\n  - Identity\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps for Bitwarden. The Public API and SCIM endpoints are not metered\n  separately - they are bundled in the underlying password-manager subscription\n  (Teams $4/user/month or Enterprise $6/user/month, billed annually). Personal plans\n  (Premium $9.99/year, Families $40/year for 6 users) do not include API access.\n  Secrets Manager is sold as a separate per-user-per-month add-on with a tier-dependent\n  machine-account allowance. Self-host is included; cloud regions split US and EU\n  with no price difference.\nsources:\n  - https://bitwarden.com/pricing/\n  - https://www.bitwarden.com/products/business/\n  - https://bitwarden.com/help/public-api/\n\
+  alignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Bitwarden, Inc.\nserviceCategory: Identity and Access Management\nbillingModel:\n  pricingCategory: Subscription (Per User) + Optional Add-Ons\n  billingFrequency: Monthly or Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\n    - Tax\n    - Credit\nfocusColumns:\n  ServiceName: Bitwarden\n  ServiceCategory: Identity and Access Management\n  ProviderName: Bitwarden\n  PublisherName: Bitwarden, Inc.\n  InvoiceIssuerName: Bitwarden, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: subscription_fee_per_user\n    description: >-\n      Recurring per-user subscription for the active password-manager tier (Teams,\n      Enterprise) or per-account fee for personal plans (Premium, Families).\n    unit:\
+  \ user_month\n    aggregation: sum\n    dimensions:\n      - plan_tier\n      - billing_cycle\n  - name: secrets_manager_fee\n    description: >-\n      Per-user-per-month subscription for the Secrets Manager add-on; price varies by\n      Teams or Enterprise underlying tier.\n    unit: user_month\n    aggregation: sum\n    dimensions:\n      - plan_tier\n      - billing_cycle\n  - name: machine_accounts\n    description: >-\n      Machine accounts consumed against the Secrets Manager allowance bundled with the\n      add-on; overage requires moving to a higher tier.\n    unit: machine_account\n    aggregation: max\n    dimensions:\n      - organization_id\n  - name: storage\n    description: >-\n      Encrypted storage consumed by file attachments and Send across the organization\n      and personal accounts; bundled GB included by tier.\n    unit: GB\n    aggregation: max\n    dimensions:\n      - organization_id\nprinciples:\n  - name: Visibility\n    description: >-\n      Use the\
+  \ Public API event-logs endpoint to track member activity and feed invoice\n      reconciliation. Member counts in the Admin Console map directly to the per-user\n      billing line.\n  - name: Allocation\n    description: >-\n      Map Bitwarden organizations and groups to business units. Use directory connector\n      or SCIM to keep member counts aligned with HR truth so the per-user line cannot\n      drift.\n  - name: Optimization\n    description: >-\n      Choose Teams over Enterprise unless SSO, account recovery, or enterprise policies\n      are needed. Offboard inactive members promptly via SCIM. Self-host where data\n      residency or contractual requirements would otherwise drive add-on costs.\n  - name: Accountability\n    description: >-\n      Assign a security or IT owner per Bitwarden organization. Review SCIM\n      reconciliation logs each cycle and renegotiate Secrets Manager seats and\n      machine-account allowances at renewal.\nmaintainers:\n  - FN: Kin Lane\n\
+  \    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/bitwarden/refs/heads/main/finops/bitwarden-finops.yml
-sources: []
+sources:
+- https://bitwarden.com/pricing/
+- https://www.bitwarden.com/products/business/
+- https://bitwarden.com/help/public-api/
 specification: FinOps Framework
 tags:
 - Security
@@ -110,8 +108,6 @@ tags:
 - Open Source
 - Vault
 - Identity
-- SCIM
 - FinOps
-- Cost Management
 - FOCUS
 ---

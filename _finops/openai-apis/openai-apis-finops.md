@@ -54,73 +54,101 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
   - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the OpenAI APIs API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Token-Based Usage + Committed Throughput
+description: 'FOCUS-aligned FinOps for the OpenAI API platform: token-based pay-as-you-go billing across text, image, audio, and video models, with batch and prompt-caching discounts plus optional Provisioned Throughput commitments for enterprise.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: OpenAI APIs
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: OpenAI APIs
-  PublisherName: OpenAI APIs
-  ServiceCategory: Developer Tools / API
-  ServiceName: OpenAI APIs
+  InvoiceIssuerName: OpenAI, L.L.C.
+  PricingUnit: token
+  ProviderName: OpenAI
+  PublisherName: OpenAI, L.L.C.
+  ServiceCategory: AI Infrastructure
+  ServiceName: OpenAI API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - model
+  - organization
+  - project
+  - api_key
+  - cached
+  name: tokens_input
+  unit: token
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - model
+  - organization
+  - project
+  - api_key
+  - reasoning
+  name: tokens_output
+  unit: token
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
+  - model
+  - organization
+  name: cached_tokens
+  unit: token
+- aggregation: sum
+  dimensions:
+  - model
+  - resolution
+  - quality
+  name: image_generations
+  unit: image
+- aggregation: sum
+  dimensions:
+  - model
+  - resolution
+  name: video_seconds
   unit: second
+- aggregation: sum
+  dimensions:
+  - model
+  - direction
+  name: audio_seconds
+  unit: second
+- aggregation: sum
+  dimensions:
+  - tool
+  name: tool_calls
+  unit: call
+- aggregation: sum
+  dimensions:
+  - vector_store
+  name: file_storage
+  unit: GB-day
+- aggregation: sum
+  dimensions:
+  - model
+  name: provisioned_throughput_hours
+  unit: PTU-hour
 name: Openai Apis Finops
 provider_name: OpenAI APIs
 provider_slug: openai-apis
-publisher_name: OpenAI APIs
-service_category: API
+publisher_name: OpenAI, L.L.C.
+service_category: AI Infrastructure
 slug: openai-apis-finops
 source_filename: openai-apis-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: OpenAI APIs\nproviderId: openai-apis\npublisherName: OpenAI APIs\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Artificial Intelligence\n  - Embeddings\n  - Image Generation\n  - Language Models\n  - Speech\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the OpenAI APIs API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
-  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
-  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: OpenAI APIs\n  ServiceCategory: Developer Tools / API\n  ProviderName: OpenAI APIs\n  PublisherName: OpenAI APIs\n  InvoiceIssuerName: OpenAI APIs\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
-  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: OpenAI Chat Completions API\n    baseURL: https://api.openai.com/v1\n    tags:\n      - Chat\n      - GPT\n    serviceName: OpenAI Chat Completions API\n    serviceCategory: API\n  - name: OpenAI Completions API\n    baseURL: https://api.openai.com/v1\n    tags:\n      - Completions\n      - GPT\n    serviceName: OpenAI Completions API\n    serviceCategory: API\n  - name: OpenAI Images API\n    baseURL: https://api.openai.com/v1\n    tags:\n      - DALL-E\n      - Image Generation\n    serviceName: OpenAI Images API\n    serviceCategory: API\n  - name: OpenAI Embeddings API\n    baseURL: https://api.openai.com/v1\n    tags:\n      - Embeddings\n      - Vectors\n  \
-  \  serviceName: OpenAI Embeddings API\n    serviceCategory: API\n  - name: OpenAI Audio API\n    baseURL: https://api.openai.com/v1\n    tags:\n      - Audio\n      - Speech\n    serviceName: OpenAI Audio API\n    serviceCategory: API\n  - name: OpenAI Moderations API\n    baseURL: https://api.openai.com/v1\n    tags:\n      - Moderation\n      - Safety\n    serviceName: OpenAI Moderations API\n    serviceCategory: API\n  - name: OpenAI Assistants API\n    baseURL: https://api.openai.com/v1\n    tags:\n      - Agents\n      - Assistants\n    serviceName: OpenAI Assistants API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://openai.com/api/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: OpenAI APIs\nproviderId: openai-apis\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Artificial Intelligence\n  - Language Models\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for the OpenAI API platform: token-based pay-as-you-go billing across\n  text, image, audio, and video models, with batch and prompt-caching discounts plus optional Provisioned\n  Throughput commitments for enterprise.'\nsources:\n  - https://openai.com/api/pricing/\n  - https://platform.openai.com/docs/guides/rate-limits\n  - https://platform.openai.com/usage\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: OpenAI, L.L.C.\nserviceCategory: AI\
+  \ Infrastructure\nbillingModel:\n  pricingCategory: Token-Based Usage + Committed Throughput\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Credit\n    - Adjustment\nfocusColumns:\n  ServiceName: OpenAI API\n  ServiceCategory: AI Infrastructure\n  ProviderName: OpenAI\n  PublisherName: OpenAI, L.L.C.\n  InvoiceIssuerName: OpenAI, L.L.C.\n  BillingCurrency: USD\n  ChargeCategory: Usage\n  PricingUnit: token\nmeters:\n  - name: tokens_input\n    unit: token\n    aggregation: sum\n    dimensions:\n      - model\n      - organization\n      - project\n      - api_key\n      - cached\n  - name: tokens_output\n    unit: token\n    aggregation: sum\n    dimensions:\n      - model\n      - organization\n      - project\n      - api_key\n      - reasoning\n  - name: cached_tokens\n    unit: token\n    aggregation: sum\n    dimensions:\n      - model\n      - organization\n  - name: image_generations\n    unit: image\n    aggregation:\
+  \ sum\n    dimensions:\n      - model\n      - resolution\n      - quality\n  - name: video_seconds\n    unit: second\n    aggregation: sum\n    dimensions:\n      - model\n      - resolution\n  - name: audio_seconds\n    unit: second\n    aggregation: sum\n    dimensions:\n      - model\n      - direction\n  - name: tool_calls\n    unit: call\n    aggregation: sum\n    dimensions:\n      - tool\n  - name: file_storage\n    unit: GB-day\n    aggregation: sum\n    dimensions:\n      - vector_store\n  - name: provisioned_throughput_hours\n    unit: PTU-hour\n    aggregation: sum\n    dimensions:\n      - model\nprinciples:\n  - name: Visibility\n    description: Use the Usage dashboard, the /v1/usage endpoint, and project-scoped API keys to attribute\n      tokens and cost per team/feature in near-real-time.\n  - name: Allocation\n    description: Create separate Projects and API keys per workload; tag requests with metadata such as\n      user/feature in your application logs to back-allocate\
+  \ spend.\n  - name: Optimization\n    description: Route to the cheapest sufficient model (nano/mini before flagship), enable prompt caching,\n      use the Batch API for non-urgent jobs (50% off), trim system prompts, and prefer structured outputs\n      over chain-of-thought when latency permits.\n  - name: Accountability\n    description: Set hard usage limits and per-project budget alerts in the OpenAI console; assign a model-cost\n      owner who reviews the monthly invoice against forecast and investigates token-cost regressions.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/openai-apis/refs/heads/main/finops/openai-apis-finops.yml
-sources: []
+sources:
+- https://openai.com/api/pricing/
+- https://platform.openai.com/docs/guides/rate-limits
+- https://platform.openai.com/usage
 specification: FinOps Framework
 tags:
 - Artificial Intelligence
-- Embeddings
-- Image Generation
 - Language Models
-- Speech
 - FinOps
 - Cost Management
 - FOCUS

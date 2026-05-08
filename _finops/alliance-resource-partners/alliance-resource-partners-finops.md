@@ -7,75 +7,50 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Alliance Resource Partners API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription
+description: 'FOCUS-aligned FinOps shell for Alliance Resource Partners: no public API commercial surface. Data-feed and integration costs are governed by bilateral commercial agreements; reconcile against the contracted feed agreement.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Alliance Resource Partners
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Alliance Resource Partners, L.P.
   ProviderName: Alliance Resource Partners
-  PublisherName: Alliance Resource Partners
-  ServiceCategory: Developer Tools / API
-  ServiceName: Alliance Resource Partners
+  PublisherName: Alliance Resource Partners, L.P.
+  ServiceCategory: Energy / Mining Data
+  ServiceName: Alliance Resource Partners Data Feeds
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Annual data-feed subscription value
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - feed
+  - partner
+  name: data_feed_subscription
+  unit: contract-year
 name: Alliance Resource Partners Finops
 provider_name: Alliance Resource Partners
 provider_slug: alliance-resource-partners
-publisher_name: Alliance Resource Partners
-service_category: API
+publisher_name: Alliance Resource Partners, L.P.
+service_category: Energy / Mining Data
 slug: alliance-resource-partners-finops
 source_filename: alliance-resource-partners-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Alliance Resource Partners\nproviderId: alliance-resource-partners\npublisherName: Alliance Resource Partners\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Coal\n  - Mining\n  - Energy\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Alliance Resource Partners API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Alliance Resource Partners\n  ServiceCategory: Developer Tools / API\n  ProviderName: Alliance Resource Partners\n  PublisherName: Alliance Resource Partners\n  InvoiceIssuerName: Alliance Resource Partners\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
-  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Alliance Resource Partners API\n    baseURL: https://api.arlp.com\n    tags:\n      - Coal\n      - Mining\n      - Energy\n    serviceName: Alliance Resource Partners API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.arlp.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Alliance Resource Partners\nproviderId: alliance-resource-partners\npublisherName: Alliance Resource Partners, L.P.\nserviceCategory: Energy / Mining Data\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Coal\n  - Mining\n  - Energy\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps shell for Alliance Resource Partners: no public API commercial surface.\n  Data-feed and integration costs are governed by bilateral commercial agreements; reconcile against the\n  contracted feed agreement.'\nsources:\n  - https://www.arlp.com\n  - https://focus.finops.org/focus-specification/v1-3/\nbillingModel:\n  pricingCategory:\
+  \ Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Alliance Resource Partners Data Feeds\n  ServiceCategory: Energy / Mining Data\n  ProviderName: Alliance Resource Partners\n  PublisherName: Alliance Resource Partners, L.P.\n  InvoiceIssuerName: Alliance Resource Partners, L.P.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: data_feed_subscription\n    description: Annual data-feed subscription value\n    unit: contract-year\n    aggregation: sum\n    dimensions:\n      - feed\n      - partner\nprinciples:\n  - name: Visibility\n    description: Track data-feed costs through the bilateral integration agreement; ARLP does not provide\n      a public usage console.\n  - name: Allocation\n    description: Allocate feed cost to operations (logistics, royalty, customer EDI) consuming the data.\n  - name: Optimization\n    description: Right-size feeds during renewal;\
+  \ consolidate redundant integrations.\n  - name: Accountability\n    description: Owned by the partner-side operations or commercial owner of the integration.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/alliance-resource-partners/refs/heads/main/finops/alliance-resource-partners-finops.yml
-sources: []
+sources:
+- https://www.arlp.com
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Coal
 - Mining
 - Energy
 - FinOps
-- Cost Management
 - FOCUS
 ---

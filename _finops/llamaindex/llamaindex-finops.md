@@ -39,67 +39,61 @@ billing_model:
   - Tax
   - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the llamaindex API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Usage
+description: 'FOCUS-aligned FinOps for LlamaIndex / LlamaCloud: tiered subscription with included monthly credits plus pay-as-you-go credits at $1.25 per 1,000 credits. Credits are consumed per parsed page with cost varying by parsing tier (basic vs. agentic).'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: llamaindex
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: llamaindex
-  PublisherName: llamaindex
-  ServiceCategory: Developer Tools / API
-  ServiceName: llamaindex
+  InvoiceIssuerName: LlamaIndex, Inc.
+  ProviderName: LlamaIndex
+  PublisherName: LlamaIndex, Inc.
+  ServiceCategory: AI Infrastructure
+  ServiceName: LlamaIndex
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
   - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: subscription_fee
+  unit: month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
   - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
   - tier
-  name: compute_seconds
-  unit: second
+  - parsing_mode
+  name: credits_consumed
+  unit: credit
+- aggregation: sum
+  dimensions:
+  - api
+  - parsing_mode
+  name: pages_parsed
+  unit: page
+- aggregation: max
+  dimensions:
+  - tier
+  name: seats
+  unit: seat
 name: Llamaindex Finops
 provider_name: llamaindex
 provider_slug: llamaindex
-publisher_name: llamaindex
-service_category: API
+publisher_name: LlamaIndex, Inc.
+service_category: AI Infrastructure
 slug: llamaindex-finops
 source_filename: llamaindex-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: llamaindex\nproviderId: llamaindex\npublisherName: llamaindex\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the llamaindex API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can\
-  \ be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing\
-  \ and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: llamaindex\n  ServiceCategory: Developer Tools / API\n  ProviderName: llamaindex\n  PublisherName: llamaindex\n  InvoiceIssuerName: llamaindex\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name:\
-  \ compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: LlamaIndex LlamaCloud API\n    baseURL: https://api.cloud.llamaindex.ai\n    tags:\n      - Agents\n      - Artificial Intelligence\n      - Cloud\n      - Documents\n      - LLM\n      - RAG\n    serviceName: LlamaIndex LlamaCloud API\n    serviceCategory: API\n  - name: LlamaIndex LlamaParse API\n    baseURL: https://api.cloud.llamaindex.ai\n    tags:\n      - Artificial Intelligence\n      - Document Parsing\n      - LLM\n      - OCR\n      - PDF\n    serviceName: LlamaIndex LlamaParse API\n    serviceCategory: API\n  - name: LlamaIndex LlamaExtract API\n    baseURL: https://api.cloud.llamaindex.ai\n    tags:\n      - Artificial Intelligence\n      - Data Extraction\n      - Documents\n      - JSON\n      - Structured Data\n    serviceName: LlamaIndex LlamaExtract API\n\
-  \    serviceCategory: API\n  - name: LlamaIndex LlamaCloud Index API\n    baseURL: https://api.cloud.llamaindex.ai\n    tags:\n      - Document Ingestion\n      - Indexing\n      - RAG\n      - Retrieval\n      - Vector Store\n    serviceName: LlamaIndex LlamaCloud Index API\n    serviceCategory: API\n  - name: LlamaIndex Python Framework\n    baseURL: https://api.example.com\n    tags:\n      - Agents\n      - Framework\n      - LLM\n      - Open Source\n      - Python\n      - RAG\n      - SDK\n    serviceName: LlamaIndex Python Framework\n    serviceCategory: API\n  - name: LlamaIndex TypeScript Framework\n    baseURL: https://api.example.com\n    tags:\n      - Agents\n      - Framework\n      - JavaScript\n      - LLM\n      - Open Source\n      - RAG\n      - SDK\n      - TypeScript\n    serviceName: LlamaIndex TypeScript Framework\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name:\
-  \ Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://www.llamaindex.ai/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: LlamaIndex\nproviderId: llamaindex\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - AI Infrastructure\n  - LLM\n  - RAG\ndescription: 'FOCUS-aligned FinOps for LlamaIndex / LlamaCloud: tiered subscription with included monthly\n  credits plus pay-as-you-go credits at $1.25 per 1,000 credits. Credits are consumed per parsed page\n  with cost varying by parsing tier (basic vs. agentic).'\nsources:\n  - https://www.llamaindex.ai/pricing\n  - https://developers.llamaindex.ai/python/cloud/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: LlamaIndex, Inc.\nserviceCategory: AI Infrastructure\nbillingModel:\n  pricingCategory: Subscription\
+  \ + Usage\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\nfocusColumns:\n  ServiceName: LlamaIndex\n  ServiceCategory: AI Infrastructure\n  ProviderName: LlamaIndex\n  PublisherName: LlamaIndex, Inc.\n  InvoiceIssuerName: LlamaIndex, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: subscription_fee\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\n  - name: credits_consumed\n    unit: credit\n    aggregation: sum\n    dimensions:\n      - api\n      - tier\n      - parsing_mode\n  - name: pages_parsed\n    unit: page\n    aggregation: sum\n    dimensions:\n      - api\n      - parsing_mode\n  - name: seats\n    unit: seat\n    aggregation: max\n    dimensions:\n      - tier\nprinciples:\n  - name: Visibility\n    description: Track credit consumption in the LlamaCloud dashboard; reconcile parsing-mode usage against\n      the 1,000 credits = $1.25 conversion.\n  - name:\
+  \ Allocation\n    description: Tag jobs by team/app via API metadata; map LlamaCloud projects to chargeback codes.\n  - name: Optimization\n    description: Use Auto Mode to route pages between basic and agentic parsing (saves up to 80%); right-size\n      tier vs. PAYG ceiling; cache parsed outputs to avoid re-parsing.\n  - name: Accountability\n    description: Set monthly PAYG ceilings by tier ($500 Starter, $5,000 Pro); Enterprise contract owners\n      review monthly credit burn and renegotiate at scale.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/llamaindex/refs/heads/main/finops/llamaindex-finops.yml
-sources: []
+sources:
+- https://www.llamaindex.ai/pricing
+- https://developers.llamaindex.ai/python/cloud/
 specification: FinOps Framework
 tags:
 - FinOps
-- Cost Management
 - FOCUS
+- AI Infrastructure
+- LLM
+- RAG
 ---

@@ -93,82 +93,45 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Amplitude API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: MTU/Event-Based
+description: FOCUS-aligned FinOps for Amplitude.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Amplitude
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Amplitude
   PublisherName: Amplitude
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Product Analytics
   ServiceName: Amplitude
 layout: finops
 meters:
+- aggregation: max
+  name: monthly_tracked_users
+  unit: MTU
 - aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: tracked_events
+  unit: event
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  name: session_replays
+  unit: replay
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: feature_flags_evaluations
+  unit: evaluation
 name: Amplitude Finops
 provider_name: Amplitude
 provider_slug: amplitude
 publisher_name: Amplitude
-service_category: API
+service_category: Product Analytics
 slug: amplitude-finops
 source_filename: amplitude-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Amplitude\nproviderId: amplitude\npublisherName: Amplitude\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - A/B Testing\n  - Analytics\n  - Experimentation\n  - Feature Flags\n  - Product Analytics\n  - User Behavior\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Amplitude API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
-  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Amplitude\n  ServiceCategory: Developer Tools / API\n  ProviderName: Amplitude\n  PublisherName: Amplitude\n  InvoiceIssuerName: Amplitude\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
-  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Amplitude HTTP V2 API\n    baseURL: https://api2.amplitude.com\n    tags:\n      - Analytics\n      - Events\n      - Ingestion\n      - Tracking\n    serviceName: Amplitude HTTP V2 API\n    serviceCategory: API\n  - name: Amplitude Batch Event Upload API\n    baseURL: https://api2.amplitude.com\n    tags:\n      - Analytics\n      - Batch\n      - Events\n      - Ingestion\n    serviceName: Amplitude Batch Event Upload API\n    serviceCategory: API\n  - name: Amplitude Identify API\n    baseURL: https://api2.amplitude.com\n    tags:\n      - Analytics\n      - Identity\n      - Properties\n      - Users\n    serviceName: Amplitude Identify API\n    serviceCategory:\
-  \ API\n  - name: Amplitude Group Identify API\n    baseURL: https://api2.amplitude.com\n    tags:\n      - Analytics\n      - Groups\n      - Identity\n      - Properties\n    serviceName: Amplitude Group Identify API\n    serviceCategory: API\n  - name: Amplitude Dashboard REST API\n    baseURL: https://amplitude.com\n    tags:\n      - Analytics\n      - Dashboards\n      - Metrics\n      - Reporting\n    serviceName: Amplitude Dashboard REST API\n    serviceCategory: API\n  - name: Amplitude Export API\n    baseURL: https://amplitude.com\n    tags:\n      - Analytics\n      - Data\n      - Events\n      - Export\n    serviceName: Amplitude Export API\n    serviceCategory: API\n  - name: Amplitude Behavioral Cohorts API\n    baseURL: https://amplitude.com\n    tags:\n      - Analytics\n      - Cohorts\n      - Segmentation\n      - Users\n    serviceName: Amplitude Behavioral Cohorts API\n    serviceCategory: API\n  - name: Amplitude Taxonomy API\n    baseURL: https://amplitude.com\n\
-  \    tags:\n      - Analytics\n      - Data Governance\n      - Events\n      - Taxonomy\n    serviceName: Amplitude Taxonomy API\n    serviceCategory: API\n  - name: Amplitude Attribution API\n    baseURL: https://api2.amplitude.com\n    tags:\n      - Analytics\n      - Attribution\n      - Campaigns\n      - Marketing\n    serviceName: Amplitude Attribution API\n    serviceCategory: API\n  - name: Amplitude Chart Annotations API\n    baseURL: https://amplitude.com\n    tags:\n      - Analytics\n      - Annotations\n      - Charts\n      - Reporting\n    serviceName: Amplitude Chart Annotations API\n    serviceCategory: API\n  - name: Amplitude Releases API\n    baseURL: https://amplitude.com\n    tags:\n      - Analytics\n      - Deployments\n      - Releases\n      - Tracking\n    serviceName: Amplitude Releases API\n    serviceCategory: API\n  - name: Amplitude Session Replay API\n    baseURL: https://amplitude.com\n    tags:\n      - Analytics\n      - Replay\n      - Sessions\n\
-  \      - User Experience\n    serviceName: Amplitude Session Replay API\n    serviceCategory: API\n  - name: Amplitude User Profile API\n    baseURL: https://profile-api.amplitude.com\n    tags:\n      - Analytics\n      - Profiles\n      - Recommendations\n      - Users\n    serviceName: Amplitude User Profile API\n    serviceCategory: API\n  - name: Amplitude User Mapping API\n    baseURL: https://api2.amplitude.com\n    tags:\n      - Aliasing\n      - Analytics\n      - Identity\n      - Users\n    serviceName: Amplitude User Mapping API\n    serviceCategory: API\n  - name: Amplitude User Privacy API\n    baseURL: https://amplitude.com\n    tags:\n      - Compliance\n      - GDPR\n      - Privacy\n      - Users\n    serviceName: Amplitude User Privacy API\n    serviceCategory: API\n  - name: Amplitude SCIM API\n    baseURL: https://analytics.amplitude.com\n    tags:\n      - Access Management\n      - Identity\n      - Provisioning\n      - Users\n    serviceName: Amplitude SCIM API\n\
-  \    serviceCategory: API\n  - name: Amplitude Data Subject Access Request API\n    baseURL: https://amplitude.com\n    tags:\n      - CCPA\n      - Compliance\n      - GDPR\n      - Privacy\n    serviceName: Amplitude Data Subject Access Request API\n    serviceCategory: API\n  - name: Amplitude Experiment Evaluation API\n    baseURL: https://api.lab.amplitude.com\n    tags:\n      - A/B Testing\n      - Experimentation\n      - Feature Flags\n      - Variants\n    serviceName: Amplitude Experiment Evaluation API\n    serviceCategory: API\n  - name: Amplitude Experiment Management API\n    baseURL: https://experiment.amplitude.com\n    tags:\n      - A/B Testing\n      - Experimentation\n      - Feature Flags\n      - Management\n    serviceName: Amplitude Experiment Management API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n\
-  \    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://amplitude.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Amplitude\nproviderId: amplitude\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Product Analytics\ndescription: FOCUS-aligned FinOps for Amplitude.\nsources:\n  - https://amplitude.com/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Amplitude\nserviceCategory: Product Analytics\nbillingModel:\n  pricingCategory: MTU/Event-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Amplitude\n  ServiceCategory: Product Analytics\n  ProviderName: Amplitude\n  PublisherName: Amplitude\n  BillingCurrency: USD\nmeters:\n  - name: monthly_tracked_users\n    unit: MTU\n    aggregation: max\n  -\
+  \ name: tracked_events\n    unit: event\n    aggregation: sum\n  - name: session_replays\n    unit: replay\n    aggregation: sum\n  - name: feature_flags_evaluations\n    unit: evaluation\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Track Amplitude consumption monthly via admin/billing exports.\n  - name: Allocation\n    description: Tag seats/usage to teams or cost centers for chargeback.\n  - name: Optimization\n    description: Right-size tier and seat count quarterly; reclaim inactive seats.\n  - name: Accountability\n    description: Set spend alerts and renew at observed active utilization.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/amplitude/refs/heads/main/finops/amplitude-finops.yml
-sources: []
+sources:
+- https://amplitude.com/pricing
 specification: FinOps Framework
 tags:
-- A/B Testing
-- Analytics
-- Experimentation
-- Feature Flags
-- Product Analytics
-- User Behavior
 - FinOps
-- Cost Management
 - FOCUS
+- Product Analytics
 ---

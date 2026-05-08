@@ -40,68 +40,76 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Boltic API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Credit
+  pricingCategory: Tiered Subscription + Credits
+description: 'FOCUS-aligned FinOps for Boltic: tiered subscription with execution / seat / storage quotas per plan, plus pay-as-you-go credits at $1.25 per credit for premium AI integrations.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
   InvoiceIssuerName: Boltic
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  PricingCategory: Standard
+  PricingUnit: subscription-month
   ProviderName: Boltic
   PublisherName: Boltic
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Workflow Automation
   ServiceName: Boltic
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Plan subscription fee billed monthly per account.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - plan
+  - billing_cycle
+  name: subscription_month
+  unit: month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Count of workflow runs charged against the plan's monthly execution allowance.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - workflow
+  - plan
+  - environment
+  name: workflow_executions
+  unit: execution
+- aggregation: max
+  description: Number of provisioned team members on the account.
+  dimensions:
+  - plan
+  - role
+  name: seats
+  unit: seat
+- aggregation: max
+  description: Provisioned storage attached to the account.
+  dimensions:
+  - plan
+  name: storage
+  unit: GB-month
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Pay-as-you-go credits consumed for premium AI integrations and advanced models.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - integration
+  - model
+  name: ai_credits
+  unit: credit
 name: Boltic Finops
 provider_name: Boltic
 provider_slug: boltic
 publisher_name: Boltic
-service_category: API
+service_category: Workflow Automation
 slug: boltic-finops
 source_filename: boltic-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Boltic\nproviderId: boltic\npublisherName: Boltic\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Automation\n  - DataSync\n  - Gateways\n  - NoCode\n  - Streaming\n  - Workflows\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Boltic API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Boltic\n  ServiceCategory: Developer Tools / API\n  ProviderName: Boltic\n  PublisherName: Boltic\n  InvoiceIssuerName: Boltic\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Boltic Gateway API\n    baseURL: ''\n    tags:\n      - Gateways\n      - Plugins\n      - Routing\n      - Security\n    serviceName: Boltic Gateway API\n    serviceCategory: API\n  - name: Boltic Workflow API\n    baseURL: ''\n    tags:\n      - Automation\n      - Integrations\n      - Triggers\n      - Workflows\n    serviceName: Boltic Workflow API\n    serviceCategory: API\n  - name: Boltic Tables API\n    baseURL: ''\n    tags:\n      - CRUD\n      - Databases\n      - NoCode\n      - Tables\n    serviceName: Boltic Tables API\n    serviceCategory: API\n  - name: Boltic Pipes API\n    baseURL: ''\n    tags:\n      - DataSync\n      - ETL\n      - Integration\n      - Pipelines\n    serviceName: Boltic Pipes API\n\
-  \    serviceCategory: API\n  - name: Boltic Streams API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Events\n      - RealTime\n      - Streaming\n    serviceName: Boltic Streams API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
+source_url: https://www.boltic.io/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Boltic\nproviderId: boltic\npublisherName: Boltic\nserviceCategory: Workflow Automation\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Automation\n  - DataSync\n  - Gateways\n  - NoCode\n  - Streaming\n  - Workflows\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Boltic: tiered subscription with execution / seat / storage quotas\n  per plan, plus pay-as-you-go credits at $1.25 per credit for premium AI integrations.'\nsources:\n  - https://www.boltic.io/pricing\n  - https://docs.boltic.io/\nbillingModel:\n  pricingCategory: Tiered Subscription + Credits\n  billingFrequency: Monthly\n  billingCurrency:\
+  \ USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Boltic\n  ServiceCategory: Workflow Automation\n  ProviderName: Boltic\n  PublisherName: Boltic\n  InvoiceIssuerName: Boltic\n  BillingCurrency: USD\n  PricingCategory: Standard\n  PricingUnit: subscription-month\nmeters:\n  - name: subscription_month\n    description: Plan subscription fee billed monthly per account.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n      - billing_cycle\n  - name: workflow_executions\n    description: Count of workflow runs charged against the plan's monthly execution allowance.\n    unit: execution\n    aggregation: sum\n    dimensions:\n      - workflow\n      - plan\n      - environment\n  - name: seats\n    description: Number of provisioned team members on the account.\n    unit: seat\n    aggregation: max\n    dimensions:\n      - plan\n      - role\n  - name: storage\n    description: Provisioned\
+  \ storage attached to the account.\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - plan\n  - name: ai_credits\n    description: Pay-as-you-go credits consumed for premium AI integrations and advanced models.\n    unit: credit\n    aggregation: sum\n    dimensions:\n      - integration\n      - model\nprinciples:\n  - name: Visibility\n    description: Track workflow execution counts, seat usage, and credit consumption from the Boltic console;\n      monitor monthly execution headroom to avoid plan overage.\n  - name: Allocation\n    description: Tag workflows with the consuming team / business function and split credit consumption\n      by integration and AI model so spend can be attributed.\n  - name: Optimization\n    description: Right-size the subscription tier to the actual monthly execution profile, consolidate\n      duplicate workflows, prefer batch and webhook-triggered patterns over polling, and reserve credits\n      for high-value AI calls.\n  - name: Accountability\n\
+  \    description: Designate a workflow owner per business function; review monthly execution and credit\n      burn against budget and renegotiate Enterprise capacity at renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/boltic/refs/heads/main/finops/boltic-finops.yml
-sources: []
+sources:
+- https://www.boltic.io/pricing
+- https://docs.boltic.io/
 specification: FinOps Framework
 tags:
 - Automation
@@ -111,6 +119,5 @@ tags:
 - Streaming
 - Workflows
 - FinOps
-- Cost Management
 - FOCUS
 ---

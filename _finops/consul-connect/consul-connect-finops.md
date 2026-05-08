@@ -20,76 +20,70 @@ billing_model:
   - Purchase
   - Tax
   - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Consul Connect API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Pay-As-You-Go
+description: 'FOCUS-aligned FinOps for Consul Connect: open-source service mesh APIs are free; commercial cost lives in Consul Enterprise (self-managed license) and HCP Consul (managed, usage-based on the IBM HashiCorp Cloud Platform). Track infrastructure cost (compute, network) for self-hosted clusters alongside the HashiCorp / IBM line items.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Consul Connect
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Consul Connect
-  PublisherName: Consul Connect
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: HashiCorp, Inc. (an IBM company)
+  ProviderName: HashiCorp
+  PublisherName: HashiCorp, Inc. (an IBM company)
+  ServiceCategory: Service Mesh / Networking
   ServiceName: Consul Connect
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Managed HCP Consul cluster runtime hours
   dimensions:
-  - api
-  - endpoint
+  - cluster_size
+  - region
+  - environment
+  name: hcp_consul_runtime
+  unit: instance-hour
+- aggregation: max
+  description: Self-managed Consul Enterprise license (annual / multi-year)
+  dimensions:
+  - cluster
   - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: consul_enterprise_license
+  unit: month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Compute / storage / network cost of operating self-hosted Consul agents and gateways
   dimensions:
-  - api
+  - cloud_provider
   - region
-  - consumer
-  name: data_egress
+  - cluster
+  name: self_hosted_infrastructure
+  unit: instance-hour
+- aggregation: sum
+  description: WAN / mesh-gateway egress between datacenters
+  dimensions:
+  - source_dc
+  - dest_dc
+  name: cross_dc_traffic
   unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Consul Connect Finops
 provider_name: Consul Connect
 provider_slug: consul-connect
-publisher_name: Consul Connect
-service_category: API
+publisher_name: HashiCorp, Inc. (an IBM company)
+service_category: Service Mesh / Networking
 slug: consul-connect-finops
 source_filename: consul-connect-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Consul Connect\nproviderId: consul-connect\npublisherName: Consul Connect\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Consul\n  - Envoy\n  - HashiCorp\n  - Intentions\n  - Kubernetes\n  - mTLS\n  - Service Mesh\n  - Sidecar\n  - Zero Trust\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Consul Connect API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name:\
-  \ Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  -\
-  \ name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Consul Connect\n  ServiceCategory: Developer Tools / API\n  ProviderName: Consul Connect\n  PublisherName: Consul Connect\n  InvoiceIssuerName: Consul Connect\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
-  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Consul Connect HTTP API\n    baseURL: http://localhost:8500/v1\n    tags:\n      - HTTP API\n      - Intentions\n      - mTLS\n      - Service Mesh\n    serviceName: Consul Connect HTTP API\n    serviceCategory: API\n  - name: Consul Connect Configuration Entries\n    baseURL: https://developer.hashicorp.com\n    tags:\n      - Configuration Entries\n      - CRD\n      - Kubernetes\n      - L7 Routing\n    serviceName: Consul Connect Configuration Entries\n    serviceCategory: API\n  - name: Consul Connect Gateways\n    baseURL: https://developer.hashicorp.com\n    tags:\n      - API Gateway\n      - Gateways\n   \
-  \   - Ingress\n      - Mesh Gateway\n      - Terminating Gateway\n    serviceName: Consul Connect Gateways\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.hashicorp.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Consul Connect\nproviderId: consul-connect\npublisherName: HashiCorp, Inc. (an IBM company)\nserviceCategory: Service Mesh / Networking\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Consul\n  - HashiCorp\n  - Service Mesh\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Consul Connect: open-source service mesh APIs are free; commercial\n  cost lives in Consul Enterprise (self-managed license) and HCP Consul (managed, usage-based on the\n  IBM HashiCorp Cloud Platform). Track infrastructure cost (compute, network) for self-hosted clusters\n  alongside the HashiCorp / IBM line items.'\nnotes: HashiCorp\
+  \ does not publish a single canonical per-resource price for HCP Consul publicly; reconcile\n  against the active HCP / Consul Enterprise contract or the HCP pricing calculator at runtime.\nsources:\n  - https://www.hashicorp.com/pricing\n  - https://developer.hashicorp.com/consul\nbillingModel:\n  pricingCategory: Subscription + Pay-As-You-Go\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\nfocusColumns:\n  ServiceName: Consul Connect\n  ServiceCategory: Service Mesh / Networking\n  ProviderName: HashiCorp\n  PublisherName: HashiCorp, Inc. (an IBM company)\n  InvoiceIssuerName: HashiCorp, Inc. (an IBM company)\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: hcp_consul_runtime\n    description: Managed HCP Consul cluster runtime hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - cluster_size\n      - region\n      - environment\n  - name: consul_enterprise_license\n\
+  \    description: Self-managed Consul Enterprise license (annual / multi-year)\n    unit: month\n    aggregation: max\n    dimensions:\n      - cluster\n      - tier\n  - name: self_hosted_infrastructure\n    description: Compute / storage / network cost of operating self-hosted Consul agents and gateways\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - cloud_provider\n      - region\n      - cluster\n  - name: cross_dc_traffic\n    description: WAN / mesh-gateway egress between datacenters\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - source_dc\n      - dest_dc\nprinciples:\n  - name: Visibility\n    description: Use the HCP console (or Consul UI for self-hosted) plus Prometheus / OTel metrics from\n      `consul.*` for per-cluster cost-and-utilization views; stream HCP usage to FOCUS-aligned exports\n      through IBM HashiCorp Cloud Platform billing.\n  - name: Allocation\n    description: Tag clusters and admin partitions / namespaces (Enterprise)\
+  \ per business unit; correlate\n      cloud-provider tags on the underlying VMs / Kubernetes nodes.\n  - name: Optimization\n    description: Right-size cluster sizes against Raft load; consolidate via admin partitions; prefer\n      mesh gateways over public LBs for cross-DC traffic; consider Flex Plans for predictable HCP discounts;\n      use the OSS edition where Enterprise features are not needed.\n  - name: Accountability\n    description: Platform / SRE teams typically own Consul cluster spend; product teams own per-service\n      mesh footprint and cross-DC traffic generated by their workloads.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/consul-connect/refs/heads/main/finops/consul-connect-finops.yml
-sources: []
+sources:
+- https://www.hashicorp.com/pricing
+- https://developer.hashicorp.com/consul
 specification: FinOps Framework
 tags:
 - Consul
-- Envoy
 - HashiCorp
-- Intentions
-- Kubernetes
-- mTLS
 - Service Mesh
-- Sidecar
-- Zero Trust
 - FinOps
-- Cost Management
 - FOCUS
 ---

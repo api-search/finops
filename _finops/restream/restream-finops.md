@@ -16,77 +16,58 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Restream API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription
+description: FOCUS-aligned FinOps for Restream. Restream is sold as a tiered SaaS subscription with optional Clips add-on packs and per-seat charges on the Business tier. There is no per-API-request meter; spend scales with the subscription tier and add-on packs.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Restream
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Restream, Inc.
   ProviderName: Restream
-  PublisherName: Restream
-  ServiceCategory: Developer Tools / API
+  PublisherName: Restream, Inc.
+  ServiceCategory: Live Streaming
   ServiceName: Restream
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
   - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: subscription_tier
+  unit: month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  name: team_seats
+  unit: seat
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
   - tier
-  name: compute_seconds
-  unit: second
+  name: clips_addon
+  unit: clip
+- aggregation: max
+  dimensions:
+  - tier
+  name: simultaneous_channels
+  unit: channel
 name: Restream Finops
 provider_name: Restream
 provider_slug: restream
-publisher_name: Restream
-service_category: API
+publisher_name: Restream, Inc.
+service_category: Live Streaming
 slug: restream-finops
 source_filename: restream-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Restream\nproviderId: restream\npublisherName: Restream\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Broadcast\n  - Chat\n  - Content Delivery\n  - Live Streaming\n  - Multistreaming\n  - Video Streaming\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Restream API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Restream\n  ServiceCategory: Developer Tools / API\n  ProviderName: Restream\n  PublisherName: Restream\n  InvoiceIssuerName: Restream\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Restream API\n    baseURL: https://api.restream.io/v2\n    tags:\n      - Channels\n      - Events\n      - Live Video\n      - OAuth2\n      - Streaming\n      - Users\n    serviceName: Restream API\n    serviceCategory: API\n  - name: Restream Streaming Updates API\n    baseURL: wss://streaming.api.restream.io\n    tags:\n      - Real-Time\n      - Streaming\n      - WebSocket\n    serviceName: Restream Streaming Updates API\n    serviceCategory: API\n  - name: Restream Chat API\n    baseURL: wss://chat.api.restream.io\n    tags:\n      - Chat\n      - Real-Time\n      - Streaming\n      - WebSocket\n    serviceName: Restream Chat API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost\
-  \ per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://restream.io/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Restream\nproviderId: restream\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Live Streaming\n  - Multistreaming\ndescription: FOCUS-aligned FinOps for Restream. Restream is sold as a tiered SaaS subscription with optional\n  Clips add-on packs and per-seat charges on the Business tier. There is no per-API-request meter; spend\n  scales with the subscription tier and add-on packs.\nsources:\n  - https://restream.io/pricing\n  - https://developers.restream.io/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Restream, Inc.\nserviceCategory: Live Streaming\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency:\
+  \ Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\nfocusColumns:\n  ServiceName: Restream\n  ServiceCategory: Live Streaming\n  ProviderName: Restream\n  PublisherName: Restream, Inc.\n  InvoiceIssuerName: Restream, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: subscription_tier\n    unit: month\n    aggregation: max\n    dimensions:\n      - tier\n  - name: team_seats\n    unit: seat\n    aggregation: sum\n  - name: clips_addon\n    unit: clip\n    aggregation: sum\n    dimensions:\n      - tier\n  - name: simultaneous_channels\n    unit: channel\n    aggregation: max\n    dimensions:\n      - tier\nprinciples:\n  - name: Visibility\n    description: Visibility comes from the Restream account billing page (subscription, team seats, Clips\n      add-on). There is no usage-API export; surface the billing page to finance and the team owner.\n  - name: Allocation\n    description: Allocate the subscription and Clips add-on to\
+  \ the production team or show that uses\n      the workspace. On Business, allocate per team-workspace seat.\n  - name: Optimization\n    description: Optimize by tier-fit — match the simultaneous-channel cap to actual destinations used,\n      drop unused team seats on Business, and size Clips packs to actual clip volume rather than buying\n      headroom.\n  - name: Accountability\n    description: Owner is the production / broadcast lead who controls the Restream workspace and selects\n      the subscription tier.\nnotes: Tiered SaaS subscription with seat and Clips add-ons; no per-request meter exists. Generic\n  per-call FOCUS columns and meters removed.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/restream/refs/heads/main/finops/restream-finops.yml
-sources: []
+sources:
+- https://restream.io/pricing
+- https://developers.restream.io/
 specification: FinOps Framework
 tags:
-- Broadcast
-- Chat
-- Content Delivery
+- FinOps
+- FOCUS
 - Live Streaming
 - Multistreaming
-- Video Streaming
-- FinOps
-- Cost Management
-- FOCUS
 ---

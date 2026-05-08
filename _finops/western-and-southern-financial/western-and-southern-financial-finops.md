@@ -7,73 +7,47 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the western-and-southern-financial API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Contract-Negotiated
+description: FinOps shape for Western & Southern Financial Group is contract-driven; the holding company does not publish a public API pricing surface, so meters and FOCUS columns are minimum placeholders.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: western-and-southern-financial
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: western-and-southern-financial
-  PublisherName: western-and-southern-financial
-  ServiceCategory: Developer Tools / API
-  ServiceName: western-and-southern-financial
+  InvoiceIssuerName: The Western and Southern Life Insurance Company
+  ProviderName: Western & Southern Financial Group
+  PublisherName: The Western and Southern Life Insurance Company
+  ServiceCategory: Insurance
+  ServiceName: Western & Southern Financial Group
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - service
+  - subsidiary
+  name: contracted_service
+  unit: varies
 name: Western And Southern Financial Finops
 provider_name: western-and-southern-financial
 provider_slug: western-and-southern-financial
-publisher_name: western-and-southern-financial
-service_category: API
+publisher_name: The Western and Southern Life Insurance Company
+service_category: Insurance
 slug: western-and-southern-financial-finops
 source_filename: western-and-southern-financial-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: western-and-southern-financial\nproviderId: western-and-southern-financial\npublisherName: western-and-southern-financial\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the western-and-southern-financial API surface. Provides\n  a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across\n  the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
-  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
-  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: western-and-southern-financial\n  ServiceCategory: Developer Tools / API\n  ProviderName: western-and-southern-financial\n  PublisherName: western-and-southern-financial\n  InvoiceIssuerName: western-and-southern-financial\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n   \
-  \ description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Western & Southern Life\n    baseURL: https://www.westernsouthern.com\n    tags:\n      - Life Insurance\n      - Annuities\n      - Retirement\n      - Financial Services\n    serviceName: Western & Southern Life\n    serviceCategory: API\n  - name: Gerber Life Insurance\n    baseURL: https://www.gerberlife.com\n    tags:\n      - Life Insurance\n      - Family Insurance\n      - Children\n      - Financial Services\n    serviceName: Gerber Life Insurance\n    serviceCategory: API\n  - name: Touchstone Investments\n    baseURL: https://www.touchstoneinvestments.com\n    tags:\n      - Mutual Funds\n \
-  \     - Asset Management\n      - Investments\n      - Financial Services\n    serviceName: Touchstone Investments\n    serviceCategory: API\n  - name: Fort Washington Investment Advisors\n    baseURL: https://www.fortwashington.com\n    tags:\n      - Asset Management\n      - Institutional Investing\n      - Portfolio Management\n      - Financial Services\n    serviceName: Fort Washington Investment Advisors\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://www.westernsouthern.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Western & Southern Financial Group\nproviderId: western-and-southern-financial\npublisherName: The Western and Southern Life Insurance Company\nserviceCategory: Insurance\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Insurance\n  - Financial Services\n  - FinOps\n  - FOCUS\n  - Contact Sales\ndescription: FinOps shape for Western & Southern Financial Group is contract-driven; the holding company does not publish a public API pricing surface, so meters and FOCUS columns are minimum placeholders.\nsources:\n  - https://www.westernsouthern.com\nnotes: No public pricing/billing pages exist. Populate meters and chargeCategories\
+  \ from an actual producer / institutional contract once one exists.\nbillingModel:\n  pricingCategory: Contract-Negotiated\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\nfocusColumns:\n  ServiceName: Western & Southern Financial Group\n  ServiceCategory: Insurance\n  ProviderName: Western & Southern Financial Group\n  PublisherName: The Western and Southern Life Insurance Company\n  InvoiceIssuerName: The Western and Southern Life Insurance Company\n  BillingCurrency: USD\nmeters:\n  - name: contracted_service\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - service\n      - subsidiary\nprinciples:\n  - name: Visibility\n    description: Consumption signal comes from contracted producer / distribution reporting; no public usage API.\n  - name: Allocation\n    description: Spend is allocated by subsidiary brand (Western & Southern Life, Gerber Life, Touchstone, Fort Washington) and contract.\n  - name: Optimization\n\
+  \    description: Optimization is commercial - distribution mix, product selection, contract renegotiation.\n  - name: Accountability\n    description: Owned by the integrating partner's finance / treasury function; technical teams own only the integration surface.\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/western-and-southern-financial/refs/heads/main/finops/western-and-southern-financial-finops.yml
-sources: []
+sources:
+- https://www.westernsouthern.com
 specification: FinOps Framework
 tags:
+- Insurance
+- Financial Services
 - FinOps
-- Cost Management
 - FOCUS
+- Contact Sales
 ---

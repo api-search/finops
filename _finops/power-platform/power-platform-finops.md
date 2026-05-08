@@ -32,72 +32,107 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/power-platform/refs/heads/main/openapi/power-platform-api-openapi.json
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual (per-user/per-bot) and Monthly (PAYG and Copilot Credits)
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Microsoft Power Platform APIs API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Credit
+  pricingCategory: Subscription + Per-Bot + Pay-As-You-Go + Tenant Add-Ons
+description: 'FOCUS-aligned FinOps for Microsoft Power Platform: layered model combining per-user subscriptions (Power Apps Premium $20, Power Automate Premium $15), per-bot subscriptions (Process $150, Hosted Process $215), tenant-level add-ons (Process Mining $5,000, Dataverse storage $40/GB/month), pre-paid Copilot Credits ($200 per 25,000), and pay-as-you-go overage for Power Apps. The unifying meter is Power Platform Requests (PPR), entitled per license on a 24-hour sliding window. Add-on capacity packs raise target identities by 50k PPR/day each and are stackable.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Power Platform APIs
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Microsoft Power Platform APIs
-  PublisherName: Microsoft Power Platform APIs
-  ServiceCategory: Developer Tools / API
-  ServiceName: Microsoft Power Platform APIs
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Microsoft Corporation
+  PricingUnit: seat-month / bot-month / GB-month / 25k-credits
+  ProviderName: Microsoft
+  PublisherName: Microsoft Corporation
+  ServiceCategory: Business Applications
+  ServiceName: Microsoft Power Platform
+  ServiceSubcategory: Low-Code Platform
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Per-user Power Apps Premium subscriptions.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - tenant
+  - department
+  name: power_apps_premium_seats
+  unit: seat-month
+- aggregation: max
+  description: Per-user Power Automate Premium subscriptions.
+  dimensions:
+  - tenant
+  - department
+  name: power_automate_premium_seats
+  unit: seat-month
+- aggregation: max
+  description: Per-bot Process and Hosted Process subscriptions for unattended desktop flows.
+  dimensions:
+  - flow_id
+  - environment
+  - hosted
+  name: process_bots
+  unit: bot-month
+- aggregation: sum
+  description: Daily request entitlement consumed per user (Premium) or per flow (Process), evaluated on a 24-hour sliding window.
+  dimensions:
+  - environment
+  - caller_id
+  - caller_type
+  - resource_type
+  - license
+  name: power_platform_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Microsoft Copilot Studio Credits consumed by custom copilots.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - copilot
+  - tenant
+  - environment
+  name: copilot_credits
+  unit: credit
+- aggregation: max
+  description: Dataverse database, file, and log storage at the tenant level.
+  dimensions:
+  - environment
+  - storage_type
+  name: dataverse_storage
+  unit: GB-month
+- aggregation: max
+  description: Process Mining add-on storage capacity.
+  dimensions:
+  - tenant
+  name: process_mining_storage
+  unit: GB-month
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Pay-as-you-go cloud-flow actions billed when daily PPR limits are exceeded.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - environment
+  - flow_id
+  name: payg_actions
+  unit: action
 name: Power Platform Finops
 provider_name: Microsoft Power Platform APIs
 provider_slug: power-platform
-publisher_name: Microsoft Power Platform APIs
-service_category: API
+publisher_name: Microsoft Corporation
+service_category: Business Applications
 slug: power-platform-finops
 source_filename: power-platform-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Power Platform APIs\nproviderId: power-platform\npublisherName: Microsoft Power Platform APIs\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Business Applications\n  - Copilot Studio\n  - Dataverse\n  - Low-Code\n  - Microsoft\n  - No-Code\n  - Power Pages\n  - Power Platform\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Power Platform APIs API surface. Provides a\n  FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the\n  provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering,\
-  \ product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n\
-  \      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Power Platform APIs\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Power Platform APIs\n  PublisherName: Microsoft Power Platform APIs\n  InvoiceIssuerName: Microsoft Power Platform APIs\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Power Apps API\n    baseURL: https://api.powerapps.com\n    tags:\n      - Applications\n      - Canvas Apps\n      - Model-Driven Apps\n      - Power Apps\n    serviceName: Power Apps API\n    serviceCategory: API\n  - name: Dataverse API (Common Data Service)\n    baseURL: https://[org].api.crm.dynamics.com/api/data/v9.2\n    tags:\n      - CDS\n      - Data Platform\n      - Database\n      - Dataverse\n      - OData\n    serviceName: Dataverse API (Common Data Service)\n    serviceCategory: API\n\
-  \  - name: Power Automate API\n    baseURL: https://api.flow.microsoft.com\n    tags:\n      - Automation\n      - Desktop Flows\n      - Flow\n      - Power Automate\n      - RPA\n      - Workflow\n    serviceName: Power Automate API\n    serviceCategory: API\n  - name: Power BI REST API\n    baseURL: https://api.powerbi.com\n    tags:\n      - Analytics\n      - Business Intelligence\n      - Dashboards\n      - Embedded Analytics\n      - Power BI\n      - Reporting\n    serviceName: Power BI REST API\n    serviceCategory: API\n  - name: Microsoft Copilot Studio API (formerly Power Virtual Agents)\n    baseURL: https://api.powerva.microsoft.com\n    tags:\n      - AI Agents\n      - Chatbots\n      - Conversational AI\n      - Copilot Studio\n      - Power Virtual Agents\n      - Virtual Agents\n    serviceName: Microsoft Copilot Studio API (formerly Power Virtual Agents)\n    serviceCategory: API\n  - name: Power Platform Admin API\n    baseURL: https://api.bap.microsoft.com\n    tags:\n\
-  \      - Administration\n      - Environments\n      - Governance\n      - Licensing\n      - Management\n    serviceName: Power Platform Admin API\n    serviceCategory: API\n  - name: Power Platform Connectors API\n    baseURL: https://api.connectors.microsoft.com\n    tags:\n      - Connectors\n      - Custom Connectors\n      - Integration\n      - OpenAPI\n    serviceName: Power Platform Connectors API\n    serviceCategory: API\n  - name: Power Platform Unified API\n    baseURL: https://api.powerplatform.com\n    tags:\n      - Administration\n      - App Management\n      - Governance\n      - Licensing\n      - Power Platform API\n      - Unified API\n    serviceName: Power Platform Unified API\n    serviceCategory: API\n  - name: Power Pages Web API\n    baseURL: https://[site].powerappsportals.com/_api\n    tags:\n      - Dataverse\n      - Portals\n      - Power Pages\n      - Web API\n      - Websites\n    serviceName: Power Pages Web API\n    serviceCategory: API\nunitEconomics:\n\
-  \  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: https://www.microsoft.com/en-us/power-platform/products/power-apps/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Microsoft Power Platform APIs\nproviderId: power-platform\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Business Applications\n  - Copilot Studio\n  - Dataverse\n  - Low-Code\n  - Microsoft\n  - Power Apps\n  - Power Automate\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps for Microsoft Power Platform: layered model combining\n  per-user subscriptions (Power Apps Premium $20, Power Automate Premium $15),\n  per-bot subscriptions (Process $150, Hosted Process $215), tenant-level\n  add-ons (Process Mining $5,000, Dataverse storage $40/GB/month), pre-paid\n  Copilot Credits ($200 per 25,000), and pay-as-you-go overage for Power Apps.\n  The unifying meter is Power Platform Requests (PPR), entitled per license\n  on a 24-hour sliding window. Add-on capacity packs raise target identities\n  by 50k PPR/day each and are\
+  \ stackable.\nsources:\n  - https://www.microsoft.com/en-us/power-platform/products/power-apps/pricing\n  - https://www.microsoft.com/en-us/power-platform/products/power-automate/pricing\n  - https://learn.microsoft.com/en-us/power-platform/admin/api-request-limits-allocations\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Microsoft Corporation\nserviceCategory: Business Applications\nbillingModel:\n  pricingCategory: Subscription + Per-Bot + Pay-As-You-Go + Tenant Add-Ons\n  billingFrequency: Annual (per-user/per-bot) and Monthly (PAYG and Copilot Credits)\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Microsoft Power Platform\n  ServiceCategory: Business Applications\n  ServiceSubcategory: Low-Code Platform\n\
+  \  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingUnit: seat-month / bot-month / GB-month / 25k-credits\nmeters:\n  - name: power_apps_premium_seats\n    description: Per-user Power Apps Premium subscriptions.\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - tenant\n      - department\n  - name: power_automate_premium_seats\n    description: Per-user Power Automate Premium subscriptions.\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - tenant\n      - department\n  - name: process_bots\n    description: Per-bot Process and Hosted Process subscriptions for unattended desktop flows.\n    unit: bot-month\n    aggregation: max\n    dimensions:\n      - flow_id\n      - environment\n      - hosted\n  - name: power_platform_requests\n    description: Daily request entitlement consumed per user (Premium) or per flow (Process), evaluated\
+  \ on a 24-hour sliding window.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - environment\n      - caller_id\n      - caller_type\n      - resource_type\n      - license\n  - name: copilot_credits\n    description: Microsoft Copilot Studio Credits consumed by custom copilots.\n    unit: credit\n    aggregation: sum\n    dimensions:\n      - copilot\n      - tenant\n      - environment\n  - name: dataverse_storage\n    description: Dataverse database, file, and log storage at the tenant level.\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - environment\n      - storage_type\n  - name: process_mining_storage\n    description: Process Mining add-on storage capacity.\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - tenant\n  - name: payg_actions\n    description: Pay-as-you-go cloud-flow actions billed when daily PPR limits are exceeded.\n    unit: action\n    aggregation: sum\n    dimensions:\n      - environment\n      - flow_id\n\
+  principles:\n  - name: Visibility\n    description: Use the Power Platform admin center capacity reports (Licensed user, Non-licensed user, Per-flow) to track Power Platform Requests against entitlement; Microsoft 365 admin center surfaces seat consumption.\n  - name: Allocation\n    description: Tag environments by business unit and assign capacity reports per-environment; the per-flow report attributes Process-license consumption to a specific flow_id for chargeback to the flow's owning team.\n  - name: Optimization\n    description: Right-size license mix between Premium (per-user) and Process (per-flow); stack Process licenses on a single high-volume flow rather than over-licensing users; switch to Power Apps pay-as-you-go for spiky workloads to avoid throttling; cache and de-duplicate connector calls inside flows.\n  - name: Accountability\n    description: Environment admins are accountable for PPR consumption in their environments; Power Automate flow owners are accountable for\
+  \ the 24-hour and 5-minute (100k) ceilings; tenant admins purchase capacity add-ons and review per-flow reports before transition-period enforcement begins.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/power-platform/refs/heads/main/finops/power-platform-finops.yml
-sources: []
+sources:
+- https://www.microsoft.com/en-us/power-platform/products/power-apps/pricing
+- https://www.microsoft.com/en-us/power-platform/products/power-automate/pricing
+- https://learn.microsoft.com/en-us/power-platform/admin/api-request-limits-allocations
 specification: FinOps Framework
 tags:
 - Business Applications
@@ -105,10 +140,8 @@ tags:
 - Dataverse
 - Low-Code
 - Microsoft
-- No-Code
-- Power Pages
-- Power Platform
+- Power Apps
+- Power Automate
 - FinOps
-- Cost Management
 - FOCUS
 ---

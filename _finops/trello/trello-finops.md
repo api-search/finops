@@ -21,72 +21,44 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the trello API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Per-User Subscription
+description: FOCUS-aligned FinOps for Trello.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: trello
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: trello
-  PublisherName: trello
-  ServiceCategory: Developer Tools / API
-  ServiceName: trello
+  ProviderName: Trello
+  PublisherName: Trello
+  ServiceCategory: Kanban / Project Management
+  ServiceName: Trello
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - plan
+  name: user_seats
+  unit: seat-month
+- aggregation: max
+  name: boards
+  unit: board-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: automation_runs
+  unit: run
 name: Trello Finops
 provider_name: trello
 provider_slug: trello
-publisher_name: trello
-service_category: API
+publisher_name: Trello
+service_category: Kanban / Project Management
 slug: trello-finops
 source_filename: trello-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: trello\nproviderId: trello\npublisherName: trello\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the trello API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n\
-  \  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n\
-  \      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: trello\n  ServiceCategory: Developer Tools / API\n  ProviderName: trello\n  PublisherName: trello\n  InvoiceIssuerName: trello\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description:\
-  \ Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Trello REST API\n    baseURL: https://api.trello.com\n    tags:\n      - Atlassian\n      - Boards\n      - Cards\n      - Collaboration\n      - Kanban\n      - Project Management\n      - Task Management\n    serviceName: Trello REST API\n    serviceCategory: API\n  - name: Trello Webhooks API\n    baseURL: https://api.trello.com\n    tags:\n      - Events\n      - Notifications\n      - Real-Time\n      - Webhooks\n    serviceName: Trello Webhooks API\n    serviceCategory: API\n  - name: Trello Power-Ups\n    baseURL: https://api.example.com\n    tags:\n      - Customization\n      - Extensions\n      - Integrations\n      - Plugins\n    serviceName: Trello Power-Ups\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n\
-  \  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://trello.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Trello\nproviderId: trello\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Kanban / Project Management\ndescription: FOCUS-aligned FinOps for Trello.\nsources:\n  - https://trello.com/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Trello\nserviceCategory: Kanban / Project Management\nbillingModel:\n  pricingCategory: Per-User Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Trello\n  ServiceCategory: Kanban / Project Management\n  ProviderName: Trello\n  PublisherName: Trello\n  BillingCurrency: USD\nmeters:\n  - name: user_seats\n    unit: seat-month\n    aggregation: max\n\
+  \    dimensions:\n      - plan\n  - name: boards\n    unit: board-month\n    aggregation: max\n  - name: automation_runs\n    unit: run\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Track Trello consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/trello/refs/heads/main/finops/trello-finops.yml
-sources: []
+sources:
+- https://trello.com/pricing
 specification: FinOps Framework
 tags:
 - FinOps
-- Cost Management
 - FOCUS
+- Kanban / Project Management
 ---

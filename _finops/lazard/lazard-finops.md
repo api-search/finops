@@ -7,75 +7,51 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Engagement
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Lazard API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Engagement / Advisory Fee
+description: Lazard publishes no public API pricing or billing documentation. This artifact is a placeholder FOCUS-aligned scaffold for any future private institutional integration; meters describe the kind of signal a consumer would track against an engagement agreement.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Lazard
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Lazard, Inc.
   ProviderName: Lazard
-  PublisherName: Lazard
-  ServiceCategory: Developer Tools / API
+  PublisherName: Lazard, Inc.
+  ServiceCategory: Financial Services / Advisory
   ServiceName: Lazard
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - integration
+  - environment
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - engagement
+  name: documents_exchanged
+  unit: document
 name: Lazard Finops
 provider_name: Lazard
 provider_slug: lazard
-publisher_name: Lazard
-service_category: API
+publisher_name: Lazard, Inc.
+service_category: Financial Services / Advisory
 slug: lazard-finops
 source_filename: lazard-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Lazard\nproviderId: lazard\npublisherName: Lazard\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Investment Banking\n  - Asset Management\n  - Financial Advisory\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Lazard API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Lazard\n  ServiceCategory: Developer Tools / API\n  ProviderName: Lazard\n  PublisherName: Lazard\n  InvoiceIssuerName: Lazard\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n     \
-  \ - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Lazard API\n    baseURL: https://api.lazard.com\n    tags:\n      - Investment Banking\n      - Asset Management\n      - Financial Advisory\n    serviceName: Lazard API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.lazard.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Lazard\nproviderId: lazard\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Investment Banking\n  - Asset Management\ndescription: Lazard publishes no public API pricing or billing documentation. This artifact is a placeholder\n  FOCUS-aligned scaffold for any future private institutional integration; meters describe the kind of\n  signal a consumer would track against an engagement agreement.\nsources:\n  - https://www.lazard.com/\nnotes: No public pricing or billing model. FinOps shape can only be filled in once a private engagement\n  exists.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Lazard, Inc.\nserviceCategory: Financial\
+  \ Services / Advisory\nbillingModel:\n  pricingCategory: Engagement / Advisory Fee\n  billingFrequency: Per-Engagement\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Lazard\n  ServiceCategory: Financial Services / Advisory\n  ProviderName: Lazard\n  PublisherName: Lazard, Inc.\n  InvoiceIssuerName: Lazard, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - integration\n      - environment\n  - name: documents_exchanged\n    unit: document\n    aggregation: sum\n    dimensions:\n      - engagement\nprinciples:\n  - name: Visibility\n    description: No public consumption telemetry; integrators measure traffic and document volume client-side\n      against engagement scope.\n  - name: Allocation\n    description: Tag any private API calls with the consuming fund / mandate / deal so cost can be allocated\n      against the engagement fee.\n  - name:\
+  \ Optimization\n    description: Cache low-volatility reference data; coordinate batch workflows over real-time polling;\n      reduce duplicate document exchanges.\n  - name: Accountability\n    description: Engagement owner and operations counterpart review integration metrics against the\n      advisory or fund agreement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/lazard/refs/heads/main/finops/lazard-finops.yml
-sources: []
+sources:
+- https://www.lazard.com/
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
 - Investment Banking
 - Asset Management
-- Financial Advisory
-- FinOps
-- Cost Management
-- FOCUS
 ---

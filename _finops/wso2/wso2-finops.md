@@ -60,77 +60,84 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the WSO2 API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Pay-As-You-Go + Subscription
+description: 'FOCUS-aligned FinOps for WSO2: open-source product (no software cost) plus two SaaS cost surfaces - Choreo, billed per-component-month with infrastructure resource credits, and Asgardeo, billed per monthly-active-user across B2C / B2B / B2E. Enterprise on-prem support contracts are quote-based.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: WSO2
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: WSO2 LLC
   ProviderName: WSO2
-  PublisherName: WSO2
-  ServiceCategory: Developer Tools / API
+  PublisherName: WSO2 LLC
+  ServiceCategory: API Management / Identity SaaS
   ServiceName: WSO2
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
   - tier
-  - region
-  - consumer
-  name: api_requests
+  - component
+  - organization
+  name: choreo_component_month
+  unit: month
+- aggregation: sum
+  dimensions:
+  - organization
+  - resource_type
+  name: choreo_resource_credits
+  unit: USD
+- aggregation: sum
+  dimensions:
+  - tier
+  - organization
+  name: choreo_builds
+  unit: build
+- aggregation: sum
+  dimensions:
+  - tier
+  - organization
+  name: choreo_deployments
+  unit: deployment
+- aggregation: sum
+  dimensions:
+  - tier
+  - component
+  name: choreo_api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+- aggregation: max
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
+  - flavor
   - tier
-  name: compute_seconds
-  unit: second
+  - organization
+  name: asgardeo_mau
+  unit: mau
+- aggregation: sum
+  dimensions:
+  - product
+  - environment
+  name: enterprise_subscription
+  unit: month
 name: Wso2 Finops
 provider_name: WSO2
 provider_slug: wso2
-publisher_name: WSO2
-service_category: API
+publisher_name: WSO2 LLC
+service_category: API Management / Identity SaaS + Open Source
 slug: wso2-finops
 source_filename: wso2-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: WSO2\nproviderId: wso2\npublisherName: WSO2\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Management\n  - Gateways\n  - Open Source\n  - API Lifecycle\n  - GraphQL\n  - SOAP\n  - REST\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the WSO2 API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
-  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
-  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: WSO2\n  ServiceCategory: Developer Tools / API\n  ProviderName: WSO2\n  PublisherName: WSO2\n  InvoiceIssuerName: WSO2\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: WSO2 Publisher API\n    baseURL: ''\n    tags:\n      - API Management\n      - Lifecycle\n      - Publisher\n    serviceName: WSO2 Publisher API\n    serviceCategory: API\n  - name: WSO2 Developer Portal API\n    baseURL: ''\n    tags:\n      - Developer Portal\n      - Discovery\n      - Subscriptions\n    serviceName: WSO2 Developer Portal API\n    serviceCategory: API\n  - name: WSO2 Admin Portal API\n    baseURL: ''\n    tags:\n      - Administration\n      - Configuration\n      - Policies\n    serviceName: WSO2 Admin Portal API\n    serviceCategory: API\n  - name: WSO2 Gateway API\n    baseURL: ''\n    tags:\n      - Deployment\n      - Gateway\n      - Traffic Management\n    serviceName: WSO2 Gateway API\n \
-  \   serviceCategory: API\n  - name: WSO2 Service Catalog API\n    baseURL: ''\n    tags:\n      - Discovery\n      - Integration\n      - Service Catalog\n    serviceName: WSO2 Service Catalog API\n    serviceCategory: API\n  - name: WSO2 DevOps API\n    baseURL: ''\n    tags:\n      - Deployment\n      - DevOps\n      - Operations\n    serviceName: WSO2 DevOps API\n    serviceCategory: API\n  - name: WSO2 DCR API\n    baseURL: https://apis.wso2.com\n    tags:\n      - Client Registration\n      - Identity\n      - OAuth2\n      - Security\n    serviceName: WSO2 DCR API\n    serviceCategory: API\n  - name: WSO2 Governance API\n    baseURL: https://apis.wso2.com\n    tags:\n      - API Management\n      - Compliance\n      - Governance\n      - Policies\n    serviceName: WSO2 Governance API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost\
-  \ / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://wso2.com/choreo/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: WSO2\nproviderId: wso2\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - API Management\n  - Identity\n  - Open Source\ndescription: 'FOCUS-aligned FinOps for WSO2: open-source product (no software cost) plus two SaaS\n  cost surfaces - Choreo, billed per-component-month with infrastructure resource credits, and\n  Asgardeo, billed per monthly-active-user across B2C / B2B / B2E. Enterprise on-prem support\n  contracts are quote-based.'\nsources:\n  - https://wso2.com/choreo/pricing/\n  - https://wso2.com/asgardeo/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: WSO2 LLC\nserviceCategory: API Management / Identity SaaS +\
+  \ Open Source\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: WSO2\n  ServiceCategory: API Management / Identity SaaS\n  ProviderName: WSO2\n  PublisherName: WSO2 LLC\n  InvoiceIssuerName: WSO2 LLC\n  BillingCurrency: USD\nmeters:\n  - name: choreo_component_month\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\n      - component\n      - organization\n  - name: choreo_resource_credits\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - organization\n      - resource_type\n  - name: choreo_builds\n    unit: build\n    aggregation: sum\n    dimensions:\n      - tier\n      - organization\n  - name: choreo_deployments\n    unit: deployment\n    aggregation: sum\n    dimensions:\n      - tier\n      - organization\n  - name: choreo_api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n\
+  \      - tier\n      - component\n  - name: asgardeo_mau\n    unit: mau\n    aggregation: max\n    dimensions:\n      - flavor\n      - tier\n      - organization\n  - name: enterprise_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\n      - environment\nprinciples:\n  - name: Visibility\n    description: Choreo exposes per-organization resource-credit and component-usage dashboards;\n      Asgardeo exposes MAU dashboards per flavor (B2C / B2B / B2E). On-prem WSO2 has no vendor\n      bill - operators meter their own infrastructure costs.\n  - name: Allocation\n    description: Allocate Choreo by component and organization; allocate Asgardeo by tenant /\n      sub-organization and MAU flavor. On-prem allocates by deployment environment and\n      subscription contract.\n  - name: Optimization\n    description: For Choreo, levers are right-sizing component count, scaling-to-zero unused\n      services, and managing build/deployment frequency. For Asgardeo,\
+  \ MAU pruning and selecting\n      the appropriate flavor (B2C vs B2B vs B2E) are the main levers. For on-prem, throttling-\n      tier policy tuning is the operator's lever.\n  - name: Accountability\n    description: Choreo cost owned by the engineering team running components; Asgardeo cost\n      owned by the IAM team or product team owning the customer-facing app; on-prem subscription\n      cost owned by the platform team renewing the WSO2 contract.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/wso2/refs/heads/main/finops/wso2-finops.yml
-sources: []
+sources:
+- https://wso2.com/choreo/pricing/
+- https://wso2.com/asgardeo/pricing/
 specification: FinOps Framework
 tags:
-- API Management
-- Gateways
-- Open Source
-- API Lifecycle
-- GraphQL
-- SOAP
-- REST
 - FinOps
-- Cost Management
 - FOCUS
+- API Management
+- Identity
+- Open Source
 ---

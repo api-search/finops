@@ -14,70 +14,62 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/obsidian/refs/heads/main/openapi/obsidian-local-rest-api-openapi.yaml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual or Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Obsidian API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription (Add-Ons) + One-Time Licenses
+description: FOCUS-aligned FinOps profile for Obsidian. The core Obsidian app is free for personal use; commercial use is covered by an optional per-user annual license. Two managed add-ons (Sync, Publish) and a one-time Catalyst license are sold separately. There is no per-API or metered usage cost.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Obsidian
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Dynalist Inc.
   ProviderName: Obsidian
-  PublisherName: Obsidian
-  ServiceCategory: Developer Tools / API
+  PublisherName: Dynalist Inc.
+  ServiceCategory: Productivity
   ServiceName: Obsidian
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Per-user commercial-use license at $50/user/year.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - organization
+  name: commercial_license_seats
+  unit: seat
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Obsidian Sync per-user subscription ($4/user/mo annual, $5/user/mo monthly).
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - account
+  name: sync_seats
+  unit: seat
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Obsidian Publish per-site subscription ($8/site/mo annual, $10/site/mo monthly).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - account
+  name: publish_sites
+  unit: site
+- aggregation: sum
+  description: One-time Catalyst supporter license at $25.
+  dimensions:
+  - account
+  name: catalyst_licenses
+  unit: license
 name: Obsidian Finops
 provider_name: Obsidian
 provider_slug: obsidian
-publisher_name: Obsidian
-service_category: API
+publisher_name: Dynalist Inc. (Obsidian)
+service_category: Productivity
 slug: obsidian-finops
 source_filename: obsidian-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Obsidian\nproviderId: obsidian\npublisherName: Obsidian\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Productivity\n  - Knowledge Management\n  - Markdown\n  - Notes\n  - Local-First\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Obsidian API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
-  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
-  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Obsidian\n  ServiceCategory: Developer Tools / API\n  ProviderName: Obsidian\n  PublisherName: Obsidian\n  InvoiceIssuerName: Obsidian\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
-  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Obsidian Plugin API\n    baseURL: local\n    tags:\n      - Plugins\n      - Extensions\n      - SDK\n    serviceName: Obsidian Plugin API\n    serviceCategory: API\n  - name: Obsidian Local REST API\n    baseURL: https://127.0.0.1:27124\n    tags:\n      - Local API\n      - REST\n      - Vault\n      - Community Plugin\n    serviceName: Obsidian Local REST API\n    serviceCategory: API\n  - name: Obsidian Sync\n    baseURL: managed\n    tags:\n      - Sync\n      - Cross-Device\n      - End-to-End Encryption\n    serviceName: Obsidian Sync\n    serviceCategory: API\n  - name: Obsidian Publish\n    baseURL: managed\n    tags:\n      - Publishing\n      - Web\n      - Hosting\n    serviceName: Obsidian\
-  \ Publish\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://obsidian.md/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Obsidian\nproviderId: obsidian\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- Productivity\n- Knowledge Management\n- Markdown\n- Notes\n- Local-First\n- FinOps\n- Cost Management\n- FOCUS\ndescription: FOCUS-aligned FinOps profile for Obsidian. The core Obsidian app is free for\n  personal use; commercial use is covered by an optional per-user annual license. Two\n  managed add-ons (Sync, Publish) and a one-time Catalyst license are sold separately.\n  There is no per-API or metered usage cost.\nsources:\n- https://obsidian.md/pricing\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Dynalist Inc.\
+  \ (Obsidian)\nserviceCategory: Productivity\nbillingModel:\n  pricingCategory: Subscription (Add-Ons) + One-Time Licenses\n  billingFrequency: Annual or Monthly\n  billingCurrency: USD\n  chargeCategories:\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: Obsidian\n  ServiceCategory: Productivity\n  ProviderName: Obsidian\n  PublisherName: Dynalist Inc.\n  InvoiceIssuerName: Dynalist Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n- name: commercial_license_seats\n  description: Per-user commercial-use license at $50/user/year.\n  unit: seat\n  aggregation: sum\n  dimensions:\n  - organization\n- name: sync_seats\n  description: Obsidian Sync per-user subscription ($4/user/mo annual, $5/user/mo monthly).\n  unit: seat\n  aggregation: sum\n  dimensions:\n  - account\n- name: publish_sites\n  description: Obsidian Publish per-site subscription ($8/site/mo annual, $10/site/mo monthly).\n  unit: site\n  aggregation: sum\n  dimensions:\n  - account\n- name: catalyst_licenses\n\
+  \  description: One-time Catalyst supporter license at $25.\n  unit: license\n  aggregation: sum\n  dimensions:\n  - account\nprinciples:\n- name: Visibility\n  description: Track Sync seats, Publish sites, and Commercial licenses centrally; consolidate\n    Obsidian-related receipts in your AP/expense system.\n- name: Allocation\n  description: Allocate Commercial license cost to the employees and teams holding it; Sync\n    and Publish to specific users/sites.\n- name: Optimization\n  description: Use annual billing for Sync/Publish where committed; reclaim Sync seats from\n    inactive users; consolidate multiple personal Sync subscriptions if shifting to a single\n    org-managed plan.\n- name: Accountability\n  description: Assign an owner for organization-wide Obsidian licensing and review annually.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/obsidian/refs/heads/main/finops/obsidian-finops.yml
-sources: []
+sources:
+- https://obsidian.md/pricing
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Productivity

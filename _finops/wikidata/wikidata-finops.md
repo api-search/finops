@@ -14,79 +14,72 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/wikidata/refs/heads/main/openapi/wikidata-mediawiki-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: On-Demand
   chargeCategories:
   - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Wikidata API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Free / CC0 (Wikimedia Enterprise priced separately)
+description: 'FOCUS-aligned FinOps for Wikidata: the public APIs are zero-cost / CC0; consumer-side cost is the engineering effort and infrastructure spent fetching, caching, and re-hosting Wikidata content responsibly. Commercial-grade access is available separately through Wikimedia Enterprise and is the only path with a real invoice line.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Wikidata
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Wikidata
-  PublisherName: Wikidata
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Wikimedia Foundation, Inc.
+  ProviderName: Wikimedia Foundation
+  PublisherName: Wikimedia Foundation, Inc.
+  ServiceCategory: Open Knowledge Graph
   ServiceName: Wikidata
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
   - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - client_ip
+  name: sparql_queries
+  unit: query
+- aggregation: sum
+  dimensions:
+  - module
+  - client_ip
+  name: action_api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  - resource
+  - client_ip
+  name: rest_api_requests
+  unit: request
+- aggregation: sum
+  dimensions:
+  - dump_type
+  name: dump_downloads
   unit: GB
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - stream
+  name: event_stream_subscriptions
+  unit: connection-hour
 name: Wikidata Finops
 provider_name: Wikidata
 provider_slug: wikidata
-publisher_name: Wikidata
-service_category: API
+publisher_name: Wikimedia Foundation, Inc.
+service_category: Open Knowledge Graph
 slug: wikidata-finops
 source_filename: wikidata-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Wikidata\nproviderId: wikidata\npublisherName: Wikidata\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Knowledge Graph\n  - Linked Data\n  - Open Data\n  - Semantic Web\n  - SPARQL\n  - Wikipedia\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Wikidata API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Wikidata\n  ServiceCategory: Developer Tools / API\n  ProviderName: Wikidata\n  PublisherName: Wikidata\n  InvoiceIssuerName: Wikidata\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Wikibase REST API\n    baseURL: https://www.wikidata.org/w/rest.php/wikibase/v0\n    tags:\n      - Knowledge Graph\n      - Entities\n      - Items\n      - Properties\n      - Statements\n      - Linked Data\n    serviceName: Wikibase REST API\n    serviceCategory: API\n  - name: MediaWiki Action API\n    baseURL: https://www.wikidata.org/w/api.php\n    tags:\n      - MediaWiki\n      - Batch Operations\n      - Entity Retrieval\n      - Search\n    serviceName: MediaWiki Action API\n    serviceCategory: API\n  - name: SPARQL Query Service\n    baseURL: https://query.wikidata.org/sparql\n    tags:\n      - SPARQL\n      - Graph Query\n      - Linked Data\n      - Open Data\n    serviceName: SPARQL\
-  \ Query Service\n    serviceCategory: API\n  - name: Linked Data Interface\n    baseURL: https://www.wikidata.org/entity\n    tags:\n      - Linked Data\n      - RDF\n      - JSON-LD\n      - Content Negotiation\n    serviceName: Linked Data Interface\n    serviceCategory: API\n  - name: Recent Changes Event Stream\n    baseURL: https://stream.wikimedia.org/v2/stream\n    tags:\n      - Event Streaming\n      - Real-time\n      - Server-Sent Events\n      - Change Detection\n    serviceName: Recent Changes Event Stream\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.wikidata.org/wiki/Wikidata:Data_access
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Wikidata\nproviderId: wikidata\npublisherName: Wikimedia Foundation, Inc.\nserviceCategory: Open Knowledge Graph\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Knowledge Graph\n  - Linked Data\n  - Open Data\n  - SPARQL\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Wikidata: the public APIs are zero-cost / CC0; consumer-side cost is the engineering effort and infrastructure spent fetching, caching, and re-hosting Wikidata content responsibly. Commercial-grade access is available separately through Wikimedia Enterprise and is the only path with a real invoice line.'\nsources:\n  - https://www.wikidata.org/wiki/Wikidata:Data_access\n\
+  \  - https://dumps.wikimedia.org\n  - https://enterprise.wikimedia.com\nbillingModel:\n  pricingCategory: Free / CC0 (Wikimedia Enterprise priced separately)\n  billingFrequency: On-Demand\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Wikidata\n  ServiceCategory: Open Knowledge Graph\n  ProviderName: Wikimedia Foundation\n  PublisherName: Wikimedia Foundation, Inc.\n  InvoiceIssuerName: Wikimedia Foundation, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: sparql_queries\n    unit: query\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - client_ip\n  - name: action_api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - module\n      - client_ip\n  - name: rest_api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - resource\n      - client_ip\n  - name: dump_downloads\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - dump_type\n  - name: event_stream_subscriptions\n  \
+  \  unit: connection-hour\n    aggregation: sum\n    dimensions:\n      - stream\nprinciples:\n  - name: Visibility\n    description: There is no Wikimedia billing API for the free APIs; visibility is consumer-side - log SPARQL query runtimes, MediaWiki maxlag responses, and 429s to understand pressure on the shared infrastructure.\n  - name: Allocation\n    description: Allocate by surface (SPARQL vs Action vs REST vs dumps) since each surface has a different cost model for the consumer (live latency vs bulk-mirror vs streaming).\n  - name: Optimization\n    description: 'Optimization is etiquette: cache aggressively, prefer dumps for bulk reads, send maxlag and a descriptive User-Agent, and avoid running long SPARQL queries near the 60s timeout.'\n  - name: Accountability\n    description: Engineering owns User-Agent compliance and dump-mirroring strategy; if a use case requires SLAs, accountability for that spend shifts to procurement via Wikimedia Enterprise.\nmaintainers:\n  - FN:\
+  \ Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/wikidata/refs/heads/main/finops/wikidata-finops.yml
-sources: []
+sources:
+- https://www.wikidata.org/wiki/Wikidata:Data_access
+- https://dumps.wikimedia.org
+- https://enterprise.wikimedia.com
 specification: FinOps Framework
 tags:
 - Knowledge Graph
 - Linked Data
 - Open Data
-- Semantic Web
 - SPARQL
-- Wikipedia
 - FinOps
-- Cost Management
 - FOCUS
 ---

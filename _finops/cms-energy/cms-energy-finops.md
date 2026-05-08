@@ -9,76 +9,53 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the CMS Energy API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Regulated Tariff / Enterprise Contract
+description: 'FinOps placeholder for CMS Energy: Green Button Connect is free; partner / EDI / demand-response integrations are governed by MPSC tariffs or bilateral agreements rather than a public API price list.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: CMS Energy
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  PricingCategory: Regulated Tariff
   ProviderName: CMS Energy
-  PublisherName: CMS Energy
-  ServiceCategory: Developer Tools / API
+  PublisherName: CMS Energy Corporation
+  ServiceCategory: Energy / Utility
   ServiceName: CMS Energy
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Customer-authorized energy data shared via Green Button Connect (no charge).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - third_party_application
+  name: green_button_data_access
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Recurring partner integration / EDI subscription fee per the contract.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - contract
+  name: partner_contract_subscription
+  unit: month
 name: Cms Energy Finops
 provider_name: CMS Energy
 provider_slug: cms-energy
-publisher_name: CMS Energy
-service_category: API
+publisher_name: CMS Energy Corporation
+service_category: Energy / Utility
 slug: cms-energy-finops
 source_filename: cms-energy-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CMS Energy\nproviderId: cms-energy\npublisherName: CMS Energy\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Electric\n  - Energy\n  - Green Button\n  - Michigan\n  - Natural Gas\n  - Utility\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the CMS Energy API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
-  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: CMS Energy\n  ServiceCategory: Developer Tools / API\n  ProviderName: CMS Energy\n  PublisherName: CMS Energy\n  InvoiceIssuerName: CMS Energy\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n\
-  \    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Consumers Energy Green Button Connect My Data API\n    baseURL: ''\n    tags:\n      - Energy Usage\n      - Green Button\n      - OAuth2\n      - Smart Meter\n      - Utility\n    serviceName: Consumers Energy Green Button Connect My Data API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.consumersenergy.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CMS Energy\nproviderId: cms-energy\npublisherName: CMS Energy Corporation\nserviceCategory: Energy / Utility\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Energy\n  - Utility\n  - Green Button\nnotes: CMS Energy is a regulated utility, not a software vendor. Green Button Connect is provided at no\n  cost to customers and authorized third parties. The shape below captures the structural FinOps surface\n  of partner / EDI integrations rather than a verified invoice.\ndescription: 'FinOps placeholder for CMS Energy: Green Button Connect is free; partner / EDI / demand-response\n  integrations are\
+  \ governed by MPSC tariffs or bilateral agreements rather than a public API price list.'\nsources:\n  - https://www.consumersenergy.com\n  - https://www.greenbuttondata.org/\nbillingModel:\n  pricingCategory: Regulated Tariff / Enterprise Contract\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\nfocusColumns:\n  ServiceName: CMS Energy\n  ServiceCategory: Energy / Utility\n  ProviderName: CMS Energy\n  PublisherName: CMS Energy Corporation\n  PricingCategory: Regulated Tariff\n  BillingCurrency: USD\nmeters:\n  - name: green_button_data_access\n    description: Customer-authorized energy data shared via Green Button Connect (no charge).\n    unit: request\n    aggregation: sum\n    dimensions:\n      - third_party_application\n  - name: partner_contract_subscription\n    description: Recurring partner integration / EDI subscription fee per the contract.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - contract\n\
+  principles:\n  - name: Visibility\n    description: Reconcile usage against partner contracts via the partner's reporting deliverables; Green\n      Button Connect access is observable through the customer's authorization log.\n  - name: Allocation\n    description: Allocate partner-integration costs to the consuming demand-response or settlement program;\n      Green Button Connect carries no allocable cost.\n  - name: Optimization\n    description: Right-size partner contract scope at each renewal; ensure Green Button Connect implementation\n      is up to date with NAESB ESPI revisions to avoid out-of-band custom integrations.\n  - name: Accountability\n    description: Assign a partner-integration owner accountable for renewal and utilization review; assign\n      a Green Button Connect program owner accountable for NAESB ESPI compliance.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cms-energy/refs/heads/main/finops/cms-energy-finops.yml
-sources: []
+sources:
+- https://www.consumersenergy.com
+- https://www.greenbuttondata.org/
 specification: FinOps Framework
 tags:
-- Electric
-- Energy
-- Green Button
-- Michigan
-- Natural Gas
-- Utility
 - FinOps
-- Cost Management
 - FOCUS
+- Energy
+- Utility
+- Green Button
 ---

@@ -20,79 +20,56 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/vlex/refs/heads/main/openapi/vlex-iceberg-legal-research-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the vLex API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Custom Terms
+description: FOCUS-aligned FinOps shape for vLex. Pricing is custom-quoted per organization and product; meters cover the canonical billable units on a vLex contract (seats and metered AI queries / document operations) without inventing public unit prices.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: vLex
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: vLex
-  PublisherName: vLex
-  ServiceCategory: Developer Tools / API
+  PublisherName: vLex Justis
+  ServiceCategory: Legal Research / Legal AI
   ServiceName: vLex
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - product
+  name: seats
+  unit: seat
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - product
+  name: ai_queries
+  unit: query
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - product
+  name: document_views
+  unit: document
 name: Vlex Finops
 provider_name: vLex
 provider_slug: vlex
-publisher_name: vLex
-service_category: API
+publisher_name: vLex Justis
+service_category: Legal Research / Legal AI
 slug: vlex-finops
 source_filename: vlex-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: vLex\nproviderId: vlex\npublisherName: vLex\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - Classification\n  - Legal Research\n  - Legal Tech\n  - Natural Language Processing\n  - Privacy\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the vLex API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
-  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: vLex\n  ServiceCategory: Developer Tools / API\n  ProviderName: vLex\n  PublisherName: vLex\n  InvoiceIssuerName: vLex\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
-  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: vLex Iceberg Anonymization API\n    baseURL: ''\n    tags:\n      - Anonymization\n      - NLP\n      - Privacy\n      - Legal Tech\n    serviceName: vLex Iceberg Anonymization API\n    serviceCategory: API\n  - name: vLex Iceberg Legal Research API\n    baseURL: ''\n    tags:\n      - AI\n      - Case Law\n      - Citation Detection\n      - Classification\n      - Legal Research\n      - Legal Tech\n      - Search\n    serviceName: vLex Iceberg Legal Research API\n    serviceCategory: API\n  - name: vLex Remote Authentication API\n    baseURL: ''\n    tags:\n      - Authentication\n      - Single Sign-On\n      - SSO\n    serviceName: vLex Remote Authentication API\n    serviceCategory: API\nunitEconomics:\n\
-  \  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://vlex.com/products
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: vLex\nproviderId: vlex\npublisherName: vLex Justis\nserviceCategory: Legal Research / Legal AI\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Legal\n  - Legal Research\n  - Legal AI\ndescription: FOCUS-aligned FinOps shape for vLex. Pricing is custom-quoted per organization and\n  product; meters cover the canonical billable units on a vLex contract (seats and metered AI\n  queries / document operations) without inventing public unit prices.\nsources:\n  - https://vlex.com/products\nnotes: No public unit prices were available; commercial terms are negotiated through vLex sales.\nbillingModel:\n  pricingCategory: Subscription + Custom Terms\n\
+  \  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\nfocusColumns:\n  ServiceName: vLex\n  ServiceCategory: Legal Research / Legal AI\n  ProviderName: vLex\n  PublisherName: vLex Justis\n  BillingCurrency: USD\nmeters:\n  - name: seats\n    unit: seat\n    aggregation: max\n    dimensions:\n      - product\n  - name: ai_queries\n    unit: query\n    aggregation: sum\n    dimensions:\n      - product\n  - name: document_views\n    unit: document\n    aggregation: sum\n    dimensions:\n      - product\nprinciples:\n  - name: Visibility\n    description: Visibility is delivered through the vLex admin console (per-seat usage, query\n      counts) and the contracted reporting cadence; there is no FOCUS export.\n  - name: Allocation\n    description: Allocate seat and query consumption to practice groups / matter codes via the\n      organization mapping in the vLex admin console.\n  - name: Optimization\n    description: Levers are\
+  \ seat right-sizing across practice groups, retiring inactive accounts,\n      and selecting the product mix (Vincent vs Library vs Docket Alarm) that matches actual use.\n  - name: Accountability\n    description: Knowledge management / library services typically owns the vLex contract;\n      finance reconciles annually against the contracted seat count and any metered overages.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/vlex/refs/heads/main/finops/vlex-finops.yml
-sources: []
+sources:
+- https://vlex.com/products
 specification: FinOps Framework
 tags:
-- AI
-- Classification
-- Legal Research
-- Legal Tech
-- Natural Language Processing
-- Privacy
 - FinOps
-- Cost Management
 - FOCUS
+- Legal
+- Legal Research
+- Legal AI
 ---

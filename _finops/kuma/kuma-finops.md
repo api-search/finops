@@ -14,78 +14,69 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/kuma/refs/heads/main/openapi/kuma-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Kuma API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Open Source + Enterprise Subscription
+description: 'FOCUS-aligned FinOps for Kuma: open-source service mesh with no license fee for the OSS build; Kong Mesh (the commercial distribution by Kong, Inc.) is a contact-sales subscription. FinOps signal at the OSS level comes entirely from the underlying compute and network spend (control-plane pods, sidecar proxies, mesh-internal traffic).'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Kuma
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Kuma
-  PublisherName: Kuma
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Kong, Inc.
+  ProviderName: Kuma (CNCF) / Kong Mesh (Kong, Inc.)
+  PublisherName: Kong, Inc.
+  ServiceCategory: Service Mesh
   ServiceName: Kuma
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - zone
+  - cluster
+  name: control_plane_compute
+  unit: vCPU-hour
+- aggregation: max
+  dimensions:
+  - mesh
+  - zone
+  - service
+  name: dataplane_proxies
+  unit: proxy
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  - source_service
+  - destination_service
+  - zone
+  name: mesh_traffic
   unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+- aggregation: max
+  name: kong_mesh_subscription_seats
+  unit: seat
+- aggregation: max
+  name: managed_meshes
+  unit: mesh
 name: Kuma Finops
 provider_name: Kuma
 provider_slug: kuma
-publisher_name: Kuma
-service_category: API
+publisher_name: Kong, Inc.
+service_category: Service Mesh / Networking
 slug: kuma-finops
 source_filename: kuma-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Kuma\nproviderId: kuma\npublisherName: Kuma\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Envoy\n  - Kubernetes\n  - Microservices\n  - Security\n  - Service Mesh\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Kuma API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Kuma\n  ServiceCategory: Developer Tools / API\n  ProviderName: Kuma\n  PublisherName: Kuma\n  InvoiceIssuerName: Kuma\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
-  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Kuma API\n    baseURL: https://localhost:5681\n    tags:\n      - Control Plane\n      - Management\n      - REST API\n      - Service Mesh\n    serviceName: Kuma API\n    serviceCategory: API\n  - name: Kuma Kubernetes Policy API\n    baseURL: ''\n    tags:\n      - CRD\n      - Kubernetes\n      - Policy\n      - Traffic Management\n    serviceName: Kuma Kubernetes Policy API\n    serviceCategory: API\n  - name: Kuma Multizone API\n    baseURL: ''\n    tags:\n      - Control Plane\n      - Federation\n      - Multi-Cluster\n      - Multizone\n    serviceName: Kuma Multizone API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n\
-  \    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://kuma.io/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Kuma\nproviderId: kuma\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Service Mesh\n  - Open Source\ndescription: 'FOCUS-aligned FinOps for Kuma: open-source service mesh with no license fee for the OSS\n  build; Kong Mesh (the commercial distribution by Kong, Inc.) is a contact-sales subscription. FinOps\n  signal at the OSS level comes entirely from the underlying compute and network spend (control-plane\n  pods, sidecar proxies, mesh-internal traffic).'\nsources:\n  - https://kuma.io/\n  - https://konghq.com/products/kong-mesh\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Kong, Inc.\nserviceCategory: Service Mesh / Networking\n\
+  billingModel:\n  pricingCategory: Open Source + Enterprise Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Kuma\n  ServiceCategory: Service Mesh\n  ProviderName: Kuma (CNCF) / Kong Mesh (Kong, Inc.)\n  PublisherName: Kong, Inc.\n  InvoiceIssuerName: Kong, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: control_plane_compute\n    unit: vCPU-hour\n    aggregation: sum\n    dimensions:\n      - zone\n      - cluster\n  - name: dataplane_proxies\n    unit: proxy\n    aggregation: max\n    dimensions:\n      - mesh\n      - zone\n      - service\n  - name: mesh_traffic\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - source_service\n      - destination_service\n      - zone\n  - name: kong_mesh_subscription_seats\n    unit: seat\n    aggregation: max\n  - name: managed_meshes\n    unit: mesh\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description:\
+  \ Use Kuma's built-in Prometheus metrics and traffic permissions API plus the data-plane\n      Envoy stats to attribute traffic and proxy compute to source/destination services.\n  - name: Allocation\n    description: Map each Kuma 'service' tag and 'mesh' to a team/product label; carry those labels onto\n      the underlying pod and node bill via Kubernetes labels.\n  - name: Optimization\n    description: Right-size sidecar resource requests; co-locate heavy mesh-internal traffic in the same\n      zone to avoid cross-AZ egress; consolidate meshes only where isolation is required (each mesh has\n      its own control-plane footprint); turn off optional features (tracing exporters, access logs to\n      object storage) when not in active use.\n  - name: Accountability\n    description: Platform team owns the Kuma control plane and Kong Mesh subscription (if any); product\n      teams own the sidecar overhead of the services they ship. Review proxy count and mesh traffic monthly;\n  \
+  \    escalate Kong Mesh seat / cluster overages before renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/kuma/refs/heads/main/finops/kuma-finops.yml
-sources: []
+sources:
+- https://kuma.io/
+- https://konghq.com/products/kong-mesh
 specification: FinOps Framework
 tags:
-- Envoy
-- Kubernetes
-- Microservices
-- Security
-- Service Mesh
 - FinOps
-- Cost Management
 - FOCUS
+- Service Mesh
+- Open Source
 ---

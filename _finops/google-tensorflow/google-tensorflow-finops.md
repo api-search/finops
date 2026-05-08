@@ -14,79 +14,80 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/google-tensorflow/refs/heads/main/openapi/tensorflow-serving-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: On-Demand
   chargeCategories:
   - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Google TensorFlow API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Open Source
+description: 'FOCUS-aligned FinOps for Google TensorFlow: open-source, no-cost framework. Cost surfaces are entirely the underlying compute, storage, and engineer-time consumed by self-hosted TensorFlow Serving and training pipelines, not TensorFlow license fees.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Google TensorFlow
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Google TensorFlow
-  PublisherName: Google TensorFlow
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: N/A (open source)
+  ProviderName: TensorFlow / Google
+  PublisherName: Google LLC
+  ServiceCategory: AI Infrastructure
   ServiceName: Google TensorFlow
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Inference requests handled by self-hosted TensorFlow Serving (operational metric, not a billing line)
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - model
+  - version
+  - environment
+  name: serving_inference_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Underlying compute hours consumed by TensorFlow Serving processes
   dimensions:
-  - api
+  - instance_type
+  - accelerator
   - region
-  - consumer
-  name: data_egress
-  unit: GB
+  name: serving_compute_hours
+  unit: instance-hour
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Compute consumed during model training / fine-tuning
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - instance_type
+  - accelerator
+  - region
+  name: training_compute_hours
+  unit: instance-hour
+- aggregation: avg
+  description: Storage occupied by trained model artifacts and checkpoints
+  dimensions:
+  - storage_class
+  - region
+  name: model_artifact_storage
+  unit: GB-month
+- aggregation: sum
+  description: Pre-trained model downloads from TensorFlow Hub / Kaggle Models
+  dimensions:
+  - model
+  name: hub_model_downloads
+  unit: download
 name: Google Tensorflow Finops
 provider_name: Google TensorFlow
 provider_slug: google-tensorflow
-publisher_name: Google TensorFlow
-service_category: API
+publisher_name: TensorFlow Authors / Google LLC
+service_category: AI Infrastructure
 slug: google-tensorflow-finops
 source_filename: google-tensorflow-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google TensorFlow\nproviderId: google-tensorflow\npublisherName: Google TensorFlow\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - Deep Learning\n  - Google\n  - Machine Learning\n  - Model Serving\n  - Open Source\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Google TensorFlow API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n  \
-  \  description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the\
-  \ FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Google TensorFlow\n  ServiceCategory: Developer Tools / API\n  ProviderName: Google TensorFlow\n  PublisherName: Google TensorFlow\n  InvoiceIssuerName: Google TensorFlow\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
-  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: TensorFlow Serving REST API\n    baseURL: http://localhost:8501\n    tags:\n      - Inference\n      - Model Serving\n      - Predictions\n    serviceName: TensorFlow Serving REST API\n    serviceCategory: API\n  - name: TensorFlow Hub API\n    baseURL: https://tfhub.dev\n    tags:\n      - Models\n      - Pre-Trained Models\n      - Transfer Learning\n    serviceName: TensorFlow Hub API\n    serviceCategory: API\n  - name: TensorFlow Model Analysis API\n    baseURL: https://localhost\n    tags:\n      - Analysis\n      - Metrics\n      - Model Evaluation\n    serviceName: TensorFlow Model Analysis API\n    serviceCategory:\
-  \ API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.tensorflow.org/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google TensorFlow\nproviderId: google-tensorflow\npublisherName: TensorFlow Authors / Google LLC\nserviceCategory: AI Infrastructure\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - AI\n  - Machine Learning\n  - Open Source\ndescription: 'FOCUS-aligned FinOps for Google TensorFlow: open-source, no-cost framework. Cost surfaces\n  are entirely the underlying compute, storage, and engineer-time consumed by self-hosted TensorFlow\n  Serving and training pipelines, not TensorFlow license fees.'\nsources:\n  - https://www.tensorflow.org/\n  - https://github.com/tensorflow/serving\nbillingModel:\n  pricingCategory:\
+  \ Open Source\n  billingFrequency: On-Demand\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Google TensorFlow\n  ServiceCategory: AI Infrastructure\n  ProviderName: TensorFlow / Google\n  PublisherName: Google LLC\n  InvoiceIssuerName: 'N/A (open source)'\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: serving_inference_requests\n    description: Inference requests handled by self-hosted TensorFlow Serving (operational metric, not\n      a billing line)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - model\n      - version\n      - environment\n  - name: serving_compute_hours\n    description: Underlying compute hours consumed by TensorFlow Serving processes\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - instance_type\n      - accelerator\n      - region\n  - name: training_compute_hours\n    description: Compute consumed during model training / fine-tuning\n    unit: instance-hour\n\
+  \    aggregation: sum\n    dimensions:\n      - instance_type\n      - accelerator\n      - region\n  - name: model_artifact_storage\n    description: Storage occupied by trained model artifacts and checkpoints\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - storage_class\n      - region\n  - name: hub_model_downloads\n    description: Pre-trained model downloads from TensorFlow Hub / Kaggle Models\n    unit: download\n    aggregation: sum\n    dimensions:\n      - model\nprinciples:\n  - name: Visibility\n    description: Track inference and training compute / storage cost in the underlying cloud bill (GCP,\n      AWS, Azure) — TensorFlow itself produces no invoice. Use Prometheus / OpenTelemetry exporters to\n      attribute requests-per-model.\n  - name: Allocation\n    description: Tag the cloud resources running TensorFlow Serving / training jobs with team, model,\n      and environment labels so attached compute spend rolls up to the consuming product.\n  - name:\
+  \ Optimization\n    description: Use TFLite / quantization / pruning to shrink models; right-size accelerators; enable\n      batching in TF Serving; share inference clusters across low-traffic models.\n  - name: Accountability\n    description: Each ML team owns the cloud cost of training and serving its models; review monthly\n      training-run cost vs. model-quality lift in MLOps reviews.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/google-tensorflow/refs/heads/main/finops/google-tensorflow-finops.yml
-sources: []
+sources:
+- https://www.tensorflow.org/
+- https://github.com/tensorflow/serving
 specification: FinOps Framework
 tags:
-- AI
-- Deep Learning
-- Google
-- Machine Learning
-- Model Serving
-- Open Source
 - FinOps
-- Cost Management
 - FOCUS
+- AI
+- Machine Learning
+- Open Source
 ---

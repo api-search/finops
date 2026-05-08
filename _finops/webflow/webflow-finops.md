@@ -106,70 +106,71 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Webflow API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Usage
+  pricingCategory: Tiered Subscription
+description: FOCUS-aligned FinOps for Webflow. Webflow bills as tiered subscriptions across three product surfaces — Site Plans (per-site), Workspace Plans (per-seat), and Ecommerce Plans (per-store + transaction-fee on Standard) — invoiced monthly or annually in USD. The Data API itself is bundled with the Site Plan and rate-limited rather than metered, so cost optimization centers on right-sizing Site / Workspace / Ecommerce tiers.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Webflow
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Webflow, Inc.
   ProviderName: Webflow
-  PublisherName: Webflow
-  ServiceCategory: Developer Tools / API
+  PublisherName: Webflow, Inc.
+  ServiceCategory: Web Publishing / CMS
   ServiceName: Webflow
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Recurring Site Plan subscription (Starter / Basic / CMS / Business / Enterprise) per hosted site.
   dimensions:
-  - api
-  - endpoint
+  - site
   - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: site_subscription
+  unit: month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Workspace seat subscription (Starter / Core / Growth / Freelancer / Agency / Enterprise).
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  - workspace
+  - tier
+  name: workspace_seat
+  unit: seat
+- aggregation: sum
+  description: Ecommerce Plan subscription (Standard / Plus / Advanced) per store.
+  dimensions:
+  - site
+  - tier
+  name: ecommerce_subscription
+  unit: month
+- aggregation: sum
+  description: 2% Webflow transaction fee on the Ecommerce Standard plan; 0% on Plus and Advanced.
+  dimensions:
+  - site
+  - tier
+  name: ecommerce_transaction_fee
+  unit: transaction
+- aggregation: sum
+  description: Bandwidth consumed against the Site Plan's monthly bandwidth quota; overage handling is per the Site Plan tier.
+  dimensions:
+  - site
+  - tier
+  name: bandwidth_overage
   unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Webflow Finops
 provider_name: Webflow
 provider_slug: webflow
-publisher_name: Webflow
-service_category: API
+publisher_name: Webflow, Inc.
+service_category: Web Publishing / CMS
 slug: webflow-finops
 source_filename: webflow-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Webflow\nproviderId: webflow\npublisherName: Webflow\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - CMS\n  - Ecommerce\n  - No-Code\n  - Web Development\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Webflow API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Webflow\n  ServiceCategory: Developer Tools / API\n  ProviderName: Webflow\n  PublisherName: Webflow\n  InvoiceIssuerName: Webflow\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n \
-  \     - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Webflow Data API\n    baseURL: ''\n    tags:\n      - CMS\n      - Content Management\n      - Ecommerce\n      - Sites\n    serviceName: Webflow Data API\n    serviceCategory: API\n  - name: Webflow Designer Extension API\n    baseURL: ''\n    tags:\n      - Designer\n      - Extensions\n      - Plugins\n    serviceName: Webflow Designer Extension API\n    serviceCategory: API\n  - name: Webflow Meta API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - Authentication\n      - Meta\n      - Tokens\n    serviceName: Webflow Meta API\n    serviceCategory: API\n  - name: Webflow Sites API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - Domains\n      - Publishing\n      - Sites\n    serviceName: Webflow Sites\
-  \ API\n    serviceCategory: API\n  - name: Webflow Pages API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - Content\n      - DOM\n      - Pages\n    serviceName: Webflow Pages API\n    serviceCategory: API\n  - name: Webflow Collections API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - CMS\n      - Collections\n      - Fields\n    serviceName: Webflow Collections API\n    serviceCategory: API\n  - name: Webflow CMS Items API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - CMS\n      - Content Management\n      - Items\n    serviceName: Webflow CMS Items API\n    serviceCategory: API\n  - name: Webflow Components API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - Components\n      - Design\n      - Reusable\n    serviceName: Webflow Components API\n    serviceCategory: API\n  - name: Webflow Assets API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - Assets\n      - Files\n      - Media\n    serviceName: Webflow Assets\
-  \ API\n    serviceCategory: API\n  - name: Webflow Forms API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - Forms\n      - Submissions\n    serviceName: Webflow Forms API\n    serviceCategory: API\n  - name: Webflow Products and SKUs API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - Ecommerce\n      - Products\n      - SKUs\n    serviceName: Webflow Products and SKUs API\n    serviceCategory: API\n  - name: Webflow Orders API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - Ecommerce\n      - Fulfillment\n      - Orders\n    serviceName: Webflow Orders API\n    serviceCategory: API\n  - name: Webflow Inventory API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - Ecommerce\n      - Inventory\n      - Stock\n    serviceName: Webflow Inventory API\n    serviceCategory: API\n  - name: Webflow Ecommerce Settings API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - Configuration\n      - Ecommerce\n      - Settings\n    serviceName:\
-  \ Webflow Ecommerce Settings API\n    serviceCategory: API\n  - name: Webflow Webhooks API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - Events\n      - Notifications\n      - Webhooks\n    serviceName: Webflow Webhooks API\n    serviceCategory: API\n  - name: Webflow Custom Code API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - Custom Code\n      - JavaScript\n      - Scripts\n    serviceName: Webflow Custom Code API\n    serviceCategory: API\n  - name: Webflow Comments API\n    baseURL: https://api.webflow.com/v2\n    tags:\n      - Collaboration\n      - Comments\n    serviceName: Webflow Comments API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://webflow.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Webflow\nproviderId: webflow\npublisherName: Webflow, Inc.\nserviceCategory: Web Publishing / CMS\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - CMS\n  - Ecommerce\n  - No-Code\n  - Web Development\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for Webflow. Webflow bills as tiered subscriptions across three\n  product surfaces — Site Plans (per-site), Workspace Plans (per-seat), and Ecommerce Plans (per-store\n  + transaction-fee on Standard) — invoiced monthly or annually in USD. The Data API itself is bundled\n  with the Site Plan and rate-limited rather than metered, so cost optimization centers on right-sizing\n\
+  \  Site / Workspace / Ecommerce tiers.\nsources:\n  - https://webflow.com/pricing\n  - https://developers.webflow.com/data/reference/rate-limits\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: Webflow\n  ServiceCategory: Web Publishing / CMS\n  ProviderName: Webflow\n  PublisherName: Webflow, Inc.\n  InvoiceIssuerName: Webflow, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: site_subscription\n    description: Recurring Site Plan subscription (Starter / Basic / CMS / Business / Enterprise) per\n      hosted site.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - site\n      - tier\n  - name: workspace_seat\n    description: Workspace seat subscription (Starter / Core / Growth / Freelancer / Agency / Enterprise).\n    unit: seat\n    aggregation: sum\n    dimensions:\n      - workspace\n      - tier\n  - name: ecommerce_subscription\n\
+  \    description: Ecommerce Plan subscription (Standard / Plus / Advanced) per store.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - site\n      - tier\n  - name: ecommerce_transaction_fee\n    description: 2% Webflow transaction fee on the Ecommerce Standard plan; 0% on Plus and Advanced.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - site\n      - tier\n  - name: bandwidth_overage\n    description: Bandwidth consumed against the Site Plan's monthly bandwidth quota; overage handling\n      is per the Site Plan tier.\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - site\n      - tier\nprinciples:\n  - name: Visibility\n    description: Cost visibility is via the Workspace billing dashboard at webflow.com — review the\n      site / seat / ecommerce subscriptions per workspace and the bandwidth meter on each site dashboard.\n  - name: Allocation\n    description: Allocate Webflow spend by workspace (one workspace per business unit /\
+  \ agency client),\n      site (one per brand or property), and seat (named designer / developer). Workspace billing\n      consolidates all sites under a workspace into one invoice.\n  - name: Optimization\n    description: Cost levers are (1) move stores from Standard (2% fee) to Plus (0%) once monthly GMV\n      makes the $74 vs $29 delta worthwhile; (2) consolidate underused workspaces; (3) drop unused\n      Site Plans on staging projects; (4) keep API calls under the per-key per-minute limit to avoid\n      forcing an Enterprise upgrade for rate alone — use webhooks instead of polling.\n  - name: Accountability\n    description: Workspace owner / billing admin holds accountability; design / engineering owners\n      review site bandwidth, CMS-item counts, and API rate-limit alerts before adding new sites or\n      higher-traffic launches.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/webflow/refs/heads/main/finops/webflow-finops.yml
-sources: []
+sources:
+- https://webflow.com/pricing
+- https://developers.webflow.com/data/reference/rate-limits
 specification: FinOps Framework
 tags:
 - CMS
@@ -177,6 +178,5 @@ tags:
 - No-Code
 - Web Development
 - FinOps
-- Cost Management
 - FOCUS
 ---

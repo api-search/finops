@@ -20,80 +20,85 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/dell-servers/refs/heads/main/openapi/dell-servers-openmanage-enterprise-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Dell Servers API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: License + Hardware
+description: 'FOCUS-aligned FinOps for Dell server-management APIs: there is no per-call API invoice. Spend is the sum of (a) the underlying PowerEdge hardware, (b) iDRAC license tier upgrades (Enterprise / Datacenter) per server, (c) OpenManage Enterprise plug-in licenses per managed node (Power Manager, SupportAssist, Update Manager, OMIVV, OMEM), and (d) Dell ProSupport / hardware-warranty SKUs. The APIs themselves are bundled with the firmware.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Dell Servers
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Dell Servers
-  PublisherName: Dell Servers
-  ServiceCategory: Developer Tools / API
-  ServiceName: Dell Servers
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Dell Inc.
+  PricingCategory: License + Hardware
+  ProviderName: Dell
+  PublisherName: Dell Inc.
+  ServiceCategory: Hardware Infrastructure
+  ServiceName: Dell PowerEdge Management
+  ServiceSubcategory: Server Management
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Count of PowerEdge servers under management. Drives iDRAC license counts and OpenManage Enterprise plug-in entitlements.
+  dimensions:
+  - model
+  - generation
+  - datacenter
+  name: managed_servers
+  unit: server
+- aggregation: max
+  description: iDRAC license tier per server (Express, Enterprise, Datacenter).
+  dimensions:
+  - tier
+  - server
+  name: idrac_license_tier
+  unit: license
+- aggregation: max
+  description: Active OpenManage Enterprise plug-in licenses (Power Manager, SupportAssist, Update Manager, OMIVV, OMEM) per managed node.
+  dimensions:
+  - plugin
+  - node
+  name: ome_plugin_licenses
+  unit: license
+- aggregation: count
+  description: Count of API calls against iDRAC / OME / OMIVV. Useful for capacity planning; not directly billable.
   dimensions:
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - device
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Telemetry metrics streamed via the iDRAC Telemetry Streaming API. Useful for sizing downstream observability storage cost.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - device
+  - metric_class
+  name: telemetry_metrics
+  unit: metric
 name: Dell Servers Finops
 provider_name: Dell Servers
 provider_slug: dell-servers
-publisher_name: Dell Servers
-service_category: API
+publisher_name: Dell Inc.
+service_category: Hardware Infrastructure
 slug: dell-servers-finops
 source_filename: dell-servers-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Dell Servers\nproviderId: dell-servers\npublisherName: Dell Servers\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Hardware\n  - Infrastructure\n  - Management\n  - Monitoring\n  - Servers\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Dell Servers API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
-  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Dell Servers\n  ServiceCategory: Developer Tools / API\n  ProviderName: Dell Servers\n  PublisherName: Dell Servers\n  InvoiceIssuerName: Dell Servers\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
-  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Dell iDRAC Redfish REST API\n    baseURL: https://{idrac-ip}/redfish/v1\n    tags:\n      - BMC\n      - Hardware Monitoring\n      - Redfish\n      - Server Management\n    serviceName: Dell iDRAC Redfish REST API\n    serviceCategory: API\n  - name: Dell OpenManage Enterprise API\n    baseURL: https://{ome-server}/api\n    tags:\n      - Automation\n      - Enterprise Management\n      - Monitoring\n      - Orchestration\n    serviceName: Dell OpenManage Enterprise API\n    serviceCategory: API\n  - name: Dell OpenManage Enterprise Modular API\n    baseURL: https://{omem-server}/api\n    tags:\n      - Chassis Management\n      - Modular Infrastructure\n      - Multi-Chassis\n\
-  \      - PowerEdge MX\n    serviceName: Dell OpenManage Enterprise Modular API\n    serviceCategory: API\n  - name: Dell OpenManage Enterprise Power Manager API\n    baseURL: https://{ome-server}/api\n    tags:\n      - Data Center\n      - Energy Efficiency\n      - Power Management\n      - Thermal Monitoring\n    serviceName: Dell OpenManage Enterprise Power Manager API\n    serviceCategory: API\n  - name: Dell OpenManage Enterprise SupportAssist API\n    baseURL: https://{ome-server}/api\n    tags:\n      - Alerting\n      - Predictive Analytics\n      - Proactive Monitoring\n      - Support\n    serviceName: Dell OpenManage Enterprise SupportAssist API\n    serviceCategory: API\n  - name: Dell OpenManage Integration for VMware vCenter API\n    baseURL: https://{omivv-server}/api\n    tags:\n      - Server Management\n      - vCenter Integration\n      - Virtualization\n      - VMware\n    serviceName: Dell OpenManage Integration for VMware vCenter API\n    serviceCategory: API\n \
-  \ - name: Dell iDRAC Telemetry Streaming API\n    baseURL: https://{idrac-ip}/redfish/v1/SSE\n    tags:\n      - Monitoring\n      - Server-Sent Events\n      - Streaming\n      - Telemetry\n    serviceName: Dell iDRAC Telemetry Streaming API\n    serviceCategory: API\n  - name: Dell Lifecycle Controller Remote Services API\n    baseURL: https://{idrac-ip}/wsman\n    tags:\n      - Deployment\n      - Lifecycle Management\n      - Provisioning\n      - Remote Services\n    serviceName: Dell Lifecycle Controller Remote Services API\n    serviceCategory: API\n  - name: Dell RACADM CLI\n    baseURL: ''\n    tags:\n      - Automation\n      - CLI\n      - Remote Management\n      - Scripting\n    serviceName: Dell RACADM CLI\n    serviceCategory: API\n  - name: Dell WSMan API\n    baseURL: https://{idrac-ip}/wsman\n    tags:\n      - Hardware Management\n      - Legacy\n      - Web Services\n      - WSMan\n    serviceName: Dell WSMan API\n    serviceCategory: API\nunitEconomics:\n  - name:\
-  \ Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://developer.dell.com/apis/2978
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Dell Servers\nproviderId: dell-servers\npublisherName: Dell Inc.\nserviceCategory: Hardware Infrastructure\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Hardware\n  - Infrastructure\n  - Server Management\n  - Redfish\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Dell server-management APIs: there is no per-call API\n  invoice. Spend is the sum of (a) the underlying PowerEdge hardware, (b) iDRAC license tier\n  upgrades (Enterprise / Datacenter) per server, (c) OpenManage Enterprise plug-in licenses per\n  managed node (Power Manager, SupportAssist, Update Manager, OMIVV, OMEM), and (d) Dell\n  ProSupport\
+  \ / hardware-warranty SKUs. The APIs themselves are bundled with the firmware.'\nsources:\n  - https://developer.dell.com/apis/2978\n  - https://www.dell.com/support/kbdoc/en-us/000178027/idrac-licenses\n  - https://www.dell.com/en-us/dt/solutions/openmanage/index.htm\nnotes: No metered API billing. FinOps shape attributes spend to per-server hardware + license\n  tiers + managed-node plug-in licenses. Per-license SKU pricing is channel-quoted and not public.\nbillingModel:\n  pricingCategory: License + Hardware\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Dell PowerEdge Management\n  ServiceCategory: Hardware Infrastructure\n  ServiceSubcategory: Server Management\n  ProviderName: Dell\n  PublisherName: Dell Inc.\n  InvoiceIssuerName: Dell Inc.\n  PricingCategory: License + Hardware\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: managed_servers\n    description: Count\
+  \ of PowerEdge servers under management. Drives iDRAC license counts and\n      OpenManage Enterprise plug-in entitlements.\n    unit: server\n    aggregation: max\n    dimensions:\n      - model\n      - generation\n      - datacenter\n  - name: idrac_license_tier\n    description: iDRAC license tier per server (Express, Enterprise, Datacenter).\n    unit: license\n    aggregation: max\n    dimensions:\n      - tier\n      - server\n  - name: ome_plugin_licenses\n    description: Active OpenManage Enterprise plug-in licenses (Power Manager, SupportAssist,\n      Update Manager, OMIVV, OMEM) per managed node.\n    unit: license\n    aggregation: max\n    dimensions:\n      - plugin\n      - node\n  - name: api_requests\n    description: Count of API calls against iDRAC / OME / OMIVV. Useful for capacity planning;\n      not directly billable.\n    unit: request\n    aggregation: count\n    dimensions:\n      - api\n      - device\n  - name: telemetry_metrics\n    description: Telemetry\
+  \ metrics streamed via the iDRAC Telemetry Streaming API. Useful for\n      sizing downstream observability storage cost.\n    unit: metric\n    aggregation: sum\n    dimensions:\n      - device\n      - metric_class\nprinciples:\n  - name: Visibility\n    description: Use OpenManage Enterprise inventory plus Dell Premier order history to enumerate\n      servers, license tiers, and plug-in entitlements. The OME API exposes managed-node and\n      license information for programmatic reconciliation against the Dell invoice.\n  - name: Allocation\n    description: Tag servers by datacenter, rack, business unit, and workload in OME so iDRAC and\n      plug-in license cost can be attributed to the consuming team or product.\n  - name: Optimization\n    description: Right-size iDRAC license tiers — only servers needing virtual console / telemetry\n      streaming / group manager benefit from Enterprise/Datacenter. Consolidate OME plug-in\n      licenses to the nodes that actually use the feature,\
+  \ and use SupportAssist proactively to\n      reduce ProSupport ticket volume.\n  - name: Accountability\n    description: Designate an infrastructure / platform team owner for the Dell estate who reviews\n      iDRAC license sprawl, OME plug-in coverage, and ProSupport renewal annually. Track\n      cost-per-managed-server and cost-per-rack to spot optimization opportunities.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/dell-servers/refs/heads/main/finops/dell-servers-finops.yml
-sources: []
+sources:
+- https://developer.dell.com/apis/2978
+- https://www.dell.com/support/kbdoc/en-us/000178027/idrac-licenses
+- https://www.dell.com/en-us/dt/solutions/openmanage/index.htm
 specification: FinOps Framework
 tags:
 - Hardware
 - Infrastructure
-- Management
-- Monitoring
-- Servers
+- Server Management
+- Redfish
 - FinOps
-- Cost Management
 - FOCUS
 ---

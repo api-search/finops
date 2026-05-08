@@ -86,71 +86,55 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/cal-com/refs/heads/main/openapi/cal-com-openapi.json
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Monthly or Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Cal.com API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription (Per Seat) + Platform Volume
+description: FOCUS-aligned FinOps profile for Cal.com. The managed cloud bills per-user monthly across Free, Teams ($12), Organizations ($28), and Enterprise (custom). The Cal.com Platform (Atoms / managed users) is sold separately, typically priced on managed-user volume. Self-hosted has no platform fees.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Cal.com
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Cal.com, Inc.
   ProviderName: Cal.com
-  PublisherName: Cal.com
-  ServiceCategory: Developer Tools / API
+  PublisherName: Cal.com, Inc.
+  ServiceCategory: Productivity
   ServiceName: Cal.com
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Per-user monthly subscription. Teams $12, Organizations $28, Enterprise contract.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - account
+  - team
+  - plan
+  name: user_seats
+  unit: seat
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Cal.com Platform managed-user volume meter for embedded SaaS deployments.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - oauth_client
+  - account
+  name: platform_managed_users
+  unit: managed_user
 name: Cal Com Finops
 provider_name: Cal.com
 provider_slug: cal-com
-publisher_name: Cal.com
-service_category: API
+publisher_name: Cal.com, Inc.
+service_category: Productivity
 slug: cal-com-finops
 source_filename: cal-com-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Cal.com\nproviderId: cal-com\npublisherName: Cal.com\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Productivity\n  - Scheduling\n  - Calendar\n  - Open Source\n  - Booking\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Cal.com API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Cal.com\n  ServiceCategory: Developer Tools / API\n  ProviderName: Cal.com\n  PublisherName: Cal.com\n  InvoiceIssuerName: Cal.com\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Cal.com Bookings API\n    baseURL: https://api.cal.com/v2\n    tags:\n      - Bookings\n      - CRUD\n    serviceName: Cal.com Bookings API\n    serviceCategory: API\n  - name: Cal.com Event Types API\n    baseURL: https://api.cal.com/v2\n    tags:\n      - Event Types\n      - Configuration\n    serviceName: Cal.com Event Types API\n    serviceCategory: API\n  - name: Cal.com Schedules API\n    baseURL: https://api.cal.com/v2\n    tags:\n      - Schedules\n      - Working Hours\n    serviceName: Cal.com Schedules API\n    serviceCategory: API\n  - name: Cal.com Availability API\n    baseURL: https://api.cal.com/v2\n    tags:\n      - Availability\n      - Calendar\n    serviceName: Cal.com Availability API\n    serviceCategory:\
-  \ API\n  - name: Cal.com Slots API\n    baseURL: https://api.cal.com/v2\n    tags:\n      - Slots\n      - Time\n    serviceName: Cal.com Slots API\n    serviceCategory: API\n  - name: Cal.com Webhooks API\n    baseURL: https://api.cal.com/v2\n    tags:\n      - Webhooks\n      - Events\n    serviceName: Cal.com Webhooks API\n    serviceCategory: API\n  - name: Cal.com OAuth & Auth API\n    baseURL: https://api.cal.com/v2\n    tags:\n      - OAuth\n      - Authentication\n    serviceName: Cal.com OAuth & Auth API\n    serviceCategory: API\n  - name: Cal.com Teams API\n    baseURL: https://api.cal.com/v2\n    tags:\n      - Teams\n      - Membership\n    serviceName: Cal.com Teams API\n    serviceCategory: API\n  - name: Cal.com Organizations API\n    baseURL: https://api.cal.com/v2\n    tags:\n      - Organizations\n      - Enterprise\n    serviceName: Cal.com Organizations API\n    serviceCategory: API\n  - name: Cal.com Out-of-Office API\n    baseURL: https://api.cal.com/v2\n    tags:\n\
-  \      - OOO\n      - Availability\n    serviceName: Cal.com Out-of-Office API\n    serviceCategory: API\n  - name: Cal.com Conferencing API\n    baseURL: https://api.cal.com/v2\n    tags:\n      - Conferencing\n      - Video\n    serviceName: Cal.com Conferencing API\n    serviceCategory: API\n  - name: Cal.com Destination Calendars API\n    baseURL: https://api.cal.com/v2\n    tags:\n      - Calendars\n      - Integration\n    serviceName: Cal.com Destination Calendars API\n    serviceCategory: API\n  - name: Cal.com Atoms (Platform)\n    baseURL: https://api.cal.com/v2\n    tags:\n      - Atoms\n      - SDK\n      - Embed\n    serviceName: Cal.com Atoms (Platform)\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://cal.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Cal.com\nproviderId: cal-com\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- Productivity\n- Scheduling\n- Calendar\n- Open Source\n- Booking\n- FinOps\n- Cost Management\n- FOCUS\ndescription: FOCUS-aligned FinOps profile for Cal.com. The managed cloud bills per-user\n  monthly across Free, Teams ($12), Organizations ($28), and Enterprise (custom). The\n  Cal.com Platform (Atoms / managed users) is sold separately, typically priced on\n  managed-user volume. Self-hosted has no platform fees.\nsources:\n- https://cal.com/pricing\n- https://cal.com/docs/platform\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
+  \ Cal.com, Inc.\nserviceCategory: Productivity\nbillingModel:\n  pricingCategory: Subscription (Per Seat) + Platform Volume\n  billingFrequency: Monthly or Annual\n  billingCurrency: USD\n  chargeCategories:\n  - Purchase\n  - Usage\n  - Adjustment\nfocusColumns:\n  ServiceName: Cal.com\n  ServiceCategory: Productivity\n  ProviderName: Cal.com\n  PublisherName: Cal.com, Inc.\n  InvoiceIssuerName: Cal.com, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n- name: user_seats\n  description: Per-user monthly subscription. Teams $12, Organizations $28, Enterprise\n    contract.\n  unit: seat\n  aggregation: sum\n  dimensions:\n  - account\n  - team\n  - plan\n- name: platform_managed_users\n  description: Cal.com Platform managed-user volume meter for embedded SaaS deployments.\n  unit: managed_user\n  aggregation: sum\n  dimensions:\n  - oauth_client\n  - account\nprinciples:\n- name: Visibility\n  description: Inventory active users in the Cal.com admin panel; track Platform\
+  \ managed-user\n    counts separately.\n- name: Allocation\n  description: Allocate user seats by team membership; allocate Platform spend to the SaaS\n    product embedding scheduling.\n- name: Optimization\n  description: Reclaim seats from inactive users; choose annual billing for the 25% discount;\n    consider self-hosting for very large deployments where engineering capacity is available.\n- name: Accountability\n  description: Assign an owner per Cal.com organization; review Platform managed-user count\n    against forecast.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cal-com/refs/heads/main/finops/cal-com-finops.yml
-sources: []
+sources:
+- https://cal.com/pricing
+- https://cal.com/docs/platform
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Productivity

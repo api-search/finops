@@ -16,79 +16,70 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the CloudZero API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription
+description: 'FOCUS-aligned FinOps for the CloudZero platform itself: a contact-sales subscription that scales with ingested cloud spend, with unlimited user seats. CloudZero is a FOCUS member organization and exports cost data in FOCUS format to its customers.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: CloudZero
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: CloudZero, Inc.
+  PricingCategory: Subscription
+  PricingUnit: subscription-month
   ProviderName: CloudZero
-  PublisherName: CloudZero
-  ServiceCategory: Developer Tools / API
+  PublisherName: CloudZero, Inc.
+  ServiceCategory: FinOps Platform
   ServiceName: CloudZero
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Recurring CloudZero platform subscription fee.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - plan
+  name: subscription_fee
+  unit: month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Cloud spend (USD) ingested into the CloudZero platform across connected accounts.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  - cloud_provider
+  - account
+  name: cloud_spend_ingested
+  unit: usd
+- aggregation: max
+  description: Active user seats (CloudZero markets unlimited seats; may still appear on invoice).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - role
+  name: user_seats
+  unit: seat-month
+- aggregation: max
+  description: Connected data sources (AWS, Azure, GCP, Snowflake, Kubernetes, SaaS).
+  dimensions:
+  - source_type
+  name: data_sources
+  unit: source
 name: Cloudzero Finops
 provider_name: CloudZero
 provider_slug: cloudzero
-publisher_name: CloudZero
-service_category: API
+publisher_name: CloudZero, Inc.
+service_category: FinOps Platform
 slug: cloudzero-finops
 source_filename: cloudzero-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CloudZero\nproviderId: cloudzero\npublisherName: CloudZero\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Budgets\n  - Cloud Cost Management\n  - Cost Allocation\n  - Cost Optimization\n  - FinOps\n  - Telemetry\n  - Unit Economics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the CloudZero API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: CloudZero\n  ServiceCategory: Developer Tools / API\n  ProviderName: CloudZero\n  PublisherName: CloudZero\n  InvoiceIssuerName: CloudZero\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network\
-  \ in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: CloudZero API\n    baseURL: https://api.cloudzero.com\n    tags:\n      - Billing\n      - Budgets\n      - Cloud Costs\n      - Cost Allocation\n      - FinOps\n      - Insights\n      - Telemetry\n      - Unit Economics\n    serviceName: CloudZero API\n    serviceCategory: API\n  - name: CloudZero Billing API\n    baseURL: https://api.cloudzero.com/v2/billing\n    tags:\n      - Billing\n      - Cost Reporting\n      - Dimensions\n    serviceName: CloudZero Billing API\n    serviceCategory: API\n  - name: CloudZero Insights API\n    baseURL: https://api.cloudzero.com/v2/insights\n    tags:\n      - Cost Optimization\n      - Insights\n      - Recommendations\n\
-  \    serviceName: CloudZero Insights API\n    serviceCategory: API\n  - name: CloudZero Budgets API\n    baseURL: https://api.cloudzero.com/v2/budgets\n    tags:\n      - Alerts\n      - Budgets\n      - FinOps\n    serviceName: CloudZero Budgets API\n    serviceCategory: API\n  - name: CloudZero Allocation Telemetry API\n    baseURL: https://api.cloudzero.com/v1/telemetry/allocation\n    tags:\n      - Allocation\n      - Cost Splitting\n      - Telemetry\n    serviceName: CloudZero Allocation Telemetry API\n    serviceCategory: API\n  - name: CloudZero Unit Metric Telemetry API\n    baseURL: https://api.cloudzero.com/v1/telemetry\n    tags:\n      - Telemetry\n      - Unit Economics\n      - Unit Metrics\n    serviceName: CloudZero Unit Metric Telemetry API\n    serviceCategory: API\n  - name: CloudZero AnyCost API\n    baseURL: https://api.cloudzero.com/v2/connections/billing/anycost\n    tags:\n      - AnyCost\n      - Billing Drop\n      - CBF\n      - Common Bill Format\n      -\
-  \ Ingestion\n    serviceName: CloudZero AnyCost API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.cloudzero.com/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CloudZero\nproviderId: cloudzero\npublisherName: CloudZero, Inc.\nserviceCategory: FinOps Platform\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Cloud Cost Management\n  - Cost Allocation\n  - Unit Economics\nnotes: CloudZero is itself a FinOps platform, so this artifact describes the cost surface of consuming\n  the CloudZero product. Public pricing numbers are not disclosed (contact-sales), so the focus columns\n  and meters reflect the structural shape of a CloudZero subscription invoice rather than verified line-items.\ndescription: 'FOCUS-aligned FinOps for the CloudZero platform itself:\
+  \ a contact-sales subscription that\n  scales with ingested cloud spend, with unlimited user seats. CloudZero is a FOCUS member organization\n  and exports cost data in FOCUS format to its customers.'\nsources:\n  - https://www.cloudzero.com/pricing/\n  - https://www.cloudzero.com/focus/\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: CloudZero\n  ServiceCategory: FinOps Platform\n  ProviderName: CloudZero\n  PublisherName: CloudZero, Inc.\n  InvoiceIssuerName: CloudZero, Inc.\n  PricingCategory: Subscription\n  PricingUnit: subscription-month\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: subscription_fee\n    description: Recurring CloudZero platform subscription fee.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n  - name: cloud_spend_ingested\n    description: Cloud spend (USD) ingested\
+  \ into the CloudZero platform across connected accounts.\n    unit: usd\n    aggregation: sum\n    dimensions:\n      - cloud_provider\n      - account\n  - name: user_seats\n    description: Active user seats (CloudZero markets unlimited seats; may still appear on invoice).\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - role\n  - name: data_sources\n    description: Connected data sources (AWS, Azure, GCP, Snowflake, Kubernetes, SaaS).\n    unit: source\n    aggregation: max\n    dimensions:\n      - source_type\nprinciples:\n  - name: Visibility\n    description: Use CloudZero's own dashboards and the FOCUS export to see what you spend on CloudZero\n      itself, not just the cloud spend it ingests.\n  - name: Allocation\n    description: Tag the CloudZero subscription line in your AP system to the FinOps practice or the team\n      that owns FinOps tooling; flow the FOCUS-format export back into your data warehouse alongside CUR.\n  - name: Optimization\n    description:\
+  \ Right-size the contract against the cloud spend you actually ingest into CloudZero; consolidate\n      data sources rather than activating them speculatively, since pricing scales with ingested spend.\n  - name: Accountability\n    description: Assign FinOps platform ownership to a single accountable owner who reviews monthly utilization\n      against the contract during the CloudZero-led FinOps Account Manager check-in.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cloudzero/refs/heads/main/finops/cloudzero-finops.yml
-sources: []
+sources:
+- https://www.cloudzero.com/pricing/
+- https://www.cloudzero.com/focus/
 specification: FinOps Framework
 tags:
-- Budgets
+- FinOps
+- FOCUS
 - Cloud Cost Management
 - Cost Allocation
-- Cost Optimization
-- FinOps
-- Telemetry
 - Unit Economics
-- FinOps
-- Cost Management
-- FOCUS
 ---

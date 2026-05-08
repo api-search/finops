@@ -14,79 +14,48 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/sigma-aldrich/refs/heads/main/openapi/sigma-aldrich-product-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Order
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Sigma-Aldrich API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: B2B Procurement / Catalog
+description: FOCUS-aligned FinOps placeholder for Sigma-Aldrich (MilliporeSigma). API integrations are not billed as a discrete line; cost flows through product purchases (reagents, consumables, equipment) and contracted procurement terms. No public usage telemetry or per-call billing surface exists.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Sigma-Aldrich
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: MilliporeSigma
   ProviderName: Sigma-Aldrich
-  PublisherName: Sigma-Aldrich
-  ServiceCategory: Developer Tools / API
+  PublisherName: MilliporeSigma
+  ServiceCategory: Life Science Procurement
   ServiceName: Sigma-Aldrich
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Orders placed via the procurement integration; cost flows through product price and negotiated contract pricing rather than per-API-call charges.
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - account
+  - product_category
   - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: catalog_orders
+  unit: order
 name: Sigma Aldrich Finops
 provider_name: Sigma-Aldrich
 provider_slug: sigma-aldrich
-publisher_name: Sigma-Aldrich
-service_category: API
+publisher_name: MilliporeSigma (Merck KGaA, Darmstadt, Germany)
+service_category: Life Science Procurement
 slug: sigma-aldrich-finops
 source_filename: sigma-aldrich-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sigma-Aldrich\nproviderId: sigma-aldrich\npublisherName: Sigma-Aldrich\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Life Science\n  - Chemistry\n  - Biochemistry\n  - Laboratory\n  - Research\n  - Chemical Catalog\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sigma-Aldrich API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
-  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sigma-Aldrich\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sigma-Aldrich\n  PublisherName: Sigma-Aldrich\n  InvoiceIssuerName: Sigma-Aldrich\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network\
-  \ in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Sigma-Aldrich Product Search API\n    baseURL: ''\n    tags:\n      - Life Science\n      - Chemistry\n      - Products\n      - Search\n    serviceName: Sigma-Aldrich Product Search API\n    serviceCategory: API\n  - name: Sigma-Aldrich Chemical Structure Search API\n    baseURL: ''\n    tags:\n      - Chemistry\n      - Cheminformatics\n      - Structure Search\n      - SMILES\n    serviceName: Sigma-Aldrich Chemical Structure Search API\n    serviceCategory: API\n  - name: Sigma-Aldrich Safety Data Sheet API\n    baseURL: ''\n    tags:\n      - Safety\n      - SDS\n      - GHS\n      - Compliance\n    serviceName: Sigma-Aldrich Safety Data Sheet\
-  \ API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.sigmaaldrich.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Sigma-Aldrich\nproviderId: sigma-aldrich\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Life Science\n  - Chemistry\n  - Laboratory\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps placeholder for Sigma-Aldrich (MilliporeSigma). API integrations\n  are not billed as a discrete line; cost flows through product purchases (reagents, consumables,\n  equipment) and contracted procurement terms. No public usage telemetry or per-call billing surface\n  exists.\nsources:\n  - https://www.sigmaaldrich.com/\nnotes: No public API billing model. FinOps treatment is procurement-driven; reconciliation pending\n  direct vendor confirmation.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
+  publisherName: MilliporeSigma (Merck KGaA, Darmstadt, Germany)\nserviceCategory: Life Science Procurement\nbillingModel:\n  pricingCategory: B2B Procurement / Catalog\n  billingFrequency: Per-Order\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Sigma-Aldrich\n  ServiceCategory: Life Science Procurement\n  ProviderName: Sigma-Aldrich\n  PublisherName: MilliporeSigma\n  InvoiceIssuerName: MilliporeSigma\n  BillingCurrency: USD\nmeters:\n  - name: catalog_orders\n    description: Orders placed via the procurement integration; cost flows through product price and\n      negotiated contract pricing rather than per-API-call charges.\n    unit: order\n    aggregation: sum\n    dimensions:\n      - account\n      - product_category\n      - region\nprinciples:\n  - name: Visibility\n    description: Spend visibility comes from the lab/procurement system that issues purchase orders\n      and the supplier invoice; API call volume does not appear on an\
+  \ invoice.\n  - name: Allocation\n    description: Allocate by purchase order, requesting lab/cost center, project/grant, and product\n      category captured in the procurement system.\n  - name: Optimization\n    description: Optimization is procurement-led — negotiate volume discounts, consolidate orders to\n      reduce shipping, and use punchout to enforce contract pricing rather than tuning API patterns.\n  - name: Accountability\n    description: Lab procurement and finance own Sigma-Aldrich spend; integration owners ensure punchout\n      and order traffic stays within contract terms.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sigma-aldrich/refs/heads/main/finops/sigma-aldrich-finops.yml
-sources: []
+sources:
+- https://www.sigmaaldrich.com/
 specification: FinOps Framework
 tags:
 - Life Science
 - Chemistry
-- Biochemistry
 - Laboratory
-- Research
-- Chemical Catalog
 - FinOps
-- Cost Management
 - FOCUS
 ---

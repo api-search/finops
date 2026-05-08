@@ -14,80 +14,50 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/ssl-tls/refs/heads/main/openapi/ssl-tls-certificate-management-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the SSL/TLS API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Mixed (Free + Per-Certificate)
+description: SSL/TLS is a multi-vendor category index. Cost surfaces vary by certificate authority - Let's Encrypt is free; DigiCert and Sectigo bill per certificate per validation level under partner contracts. There is no single FOCUS-aligned billing model for the category; per-vendor finops artifacts should live in vendor-specific repos.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: SSL/TLS
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Per Vendor
   ProviderName: SSL/TLS
-  PublisherName: SSL/TLS
-  ServiceCategory: Developer Tools / API
+  PublisherName: Multiple
+  ServiceCategory: Identity
   ServiceName: SSL/TLS
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: count
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - certificate_authority
+  - validation_level
+  - term_length
+  name: certificate_issuance
+  unit: certificate
 name: Ssl Tls Finops
 provider_name: SSL/TLS
 provider_slug: ssl-tls
-publisher_name: SSL/TLS
-service_category: API
+publisher_name: Multiple Certificate Authorities
+service_category: Identity
 slug: ssl-tls-finops
 source_filename: ssl-tls-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: SSL/TLS\nproviderId: ssl-tls\npublisherName: SSL/TLS\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - SSL/TLS\n  - TLS\n  - Certificates\n  - PKI\n  - Cryptography\n  - Certificate Authority\n  - HTTPS\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the SSL/TLS API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: SSL/TLS\n  ServiceCategory: Developer Tools / API\n  ProviderName: SSL/TLS\n  PublisherName: SSL/TLS\n  InvoiceIssuerName: SSL/TLS\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Let's Encrypt ACME API\n    baseURL: https://acme-v02.api.letsencrypt.org/directory\n    tags:\n      - SSL/TLS\n      - Certificate Authority\n      - ACME\n      - Let's Encrypt\n      - HTTPS\n    serviceName: Let's Encrypt ACME API\n    serviceCategory: API\n  - name: DigiCert Certificate Management API\n    baseURL: https://www.digicert.com/services/v2\n    tags:\n      - SSL/TLS\n      - Certificate Authority\n      - Enterprise PKI\n      - DigiCert\n    serviceName: DigiCert Certificate Management API\n    serviceCategory: API\n  - name: Sectigo Certificate Manager API\n    baseURL: https://cert-manager.com/api\n    tags:\n      - SSL/TLS\n      - Certificate Authority\n      - Enterprise\
-  \ PKI\n    serviceName: Sectigo Certificate Manager API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://letsencrypt.org/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: SSL/TLS\nproviderId: ssl-tls\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - SSL/TLS\n  - TLS\n  - Certificates\n  - PKI\n  - FinOps\n  - FOCUS\ndescription: SSL/TLS is a multi-vendor category index. Cost surfaces vary by certificate authority - Let's Encrypt is free; DigiCert and Sectigo bill per certificate per validation level under partner contracts. There is no single FOCUS-aligned billing model for the category; per-vendor finops artifacts should live in vendor-specific repos.\nsources:\n  - https://letsencrypt.org/\n  - https://www.digicert.com/\n  - https://www.sectigo.com/\nnotes: No unified billing surface. FOCUS columns are placeholders; replace with per-vendor entries (Let's Encrypt = $0, DigiCert / Sectigo = per-certificate per-contract).\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n\
+  \  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Multiple Certificate Authorities\nserviceCategory: Identity\nbillingModel:\n  pricingCategory: Mixed (Free + Per-Certificate)\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: SSL/TLS\n  ServiceCategory: Identity\n  ProviderName: SSL/TLS\n  PublisherName: Multiple\n  InvoiceIssuerName: Per Vendor\n  BillingCurrency: USD\nmeters:\n  - name: certificate_issuance\n    unit: certificate\n    aggregation: count\n    dimensions:\n      - certificate_authority\n      - validation_level\n      - term_length\nprinciples:\n  - name: Visibility\n    description: Inventory issued certificates via each CA's portal or API (DigiCert Services API, Sectigo Cert Manager, Let's Encrypt ACME account orders endpoint). Aggregate into a single CMDB / certificate-lifecycle tool to see total spend across CAs.\n\
+  \  - name: Allocation\n    description: Allocate per-certificate cost to the team that owns the hostname. Tag certificates with team/product at issuance; for ACME automation, derive ownership from the requesting service principal.\n  - name: Optimization\n    description: Default to Let's Encrypt for DV use cases (free, fully automated); reserve OV/EV from paid CAs for explicit business-identity requirements. Consolidate wildcard certificates where possible to reduce per-cert charges.\n  - name: Accountability\n    description: PKI / platform-security team owns the CA contracts and renewal cadence; product teams own remediation when their certificates approach expiry or fail validation.\nmaintainers:\n  - name: API Evangelist\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/ssl-tls/refs/heads/main/finops/ssl-tls-finops.yml
-sources: []
+sources:
+- https://letsencrypt.org/
+- https://www.digicert.com/
+- https://www.sectigo.com/
 specification: FinOps Framework
 tags:
 - SSL/TLS
 - TLS
 - Certificates
 - PKI
-- Cryptography
-- Certificate Authority
-- HTTPS
 - FinOps
-- Cost Management
 - FOCUS
 ---

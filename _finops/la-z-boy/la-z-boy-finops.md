@@ -7,75 +7,46 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Contract
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the La-Z-Boy API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Contract / Partner
+description: La-Z-Boy publishes no public API pricing or billing documentation. This artifact is a placeholder FOCUS-aligned scaffold for any future private partner integration; meters are illustrative.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: La-Z-Boy
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: La-Z-Boy Incorporated
   ProviderName: La-Z-Boy
-  PublisherName: La-Z-Boy
-  ServiceCategory: Developer Tools / API
+  PublisherName: La-Z-Boy Incorporated
+  ServiceCategory: Retail / Furniture
   ServiceName: La-Z-Boy
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - integration
+  - environment
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: La Z Boy Finops
 provider_name: La-Z-Boy
 provider_slug: la-z-boy
-publisher_name: La-Z-Boy
-service_category: API
+publisher_name: La-Z-Boy Incorporated
+service_category: Retail / Furniture
 slug: la-z-boy-finops
 source_filename: la-z-boy-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: La-Z-Boy\nproviderId: la-z-boy\npublisherName: La-Z-Boy\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Furniture\n  - Home Products\n  - Retail\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the La-Z-Boy API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
-  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
-  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: La-Z-Boy\n  ServiceCategory: Developer Tools / API\n  ProviderName: La-Z-Boy\n  PublisherName: La-Z-Boy\n  InvoiceIssuerName: La-Z-Boy\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
-  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: La-Z-Boy API\n    baseURL: https://api.la-z-boy.com\n    tags:\n      - Furniture\n      - Home Products\n      - Retail\n    serviceName: La-Z-Boy API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.la-z-boy.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: La-Z-Boy\nproviderId: la-z-boy\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Furniture\n  - Retail\ndescription: La-Z-Boy publishes no public API pricing or billing documentation. This artifact is a placeholder\n  FOCUS-aligned scaffold for any future private partner integration; meters are illustrative.\nsources:\n  - https://www.la-z-boy.com/\nnotes: No public pricing or billing model. FinOps shape can only be filled in once a partner agreement\n  exists.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: La-Z-Boy Incorporated\nserviceCategory: Retail / Furniture\nbillingModel:\n  pricingCategory: Contract / Partner\n  billingFrequency:\
+  \ Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\nfocusColumns:\n  ServiceName: La-Z-Boy\n  ServiceCategory: Retail / Furniture\n  ProviderName: La-Z-Boy\n  PublisherName: La-Z-Boy Incorporated\n  InvoiceIssuerName: La-Z-Boy Incorporated\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - integration\n      - environment\nprinciples:\n  - name: Visibility\n    description: No public consumption telemetry; integrators must capture client-side request volumes\n      themselves.\n  - name: Allocation\n    description: Tag any private API calls with the consuming program/business unit to enable internal\n      chargeback against the partner agreement.\n  - name: Optimization\n    description: Cache catalog/dealer data; coordinate batch workflows to reduce request volume on shared\n      partner endpoints.\n  - name: Accountability\n    description: Partnership owner reviews integration\
+  \ metrics against the partner agreement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/la-z-boy/refs/heads/main/finops/la-z-boy-finops.yml
-sources: []
+sources:
+- https://www.la-z-boy.com/
 specification: FinOps Framework
 tags:
-- Furniture
-- Home Products
-- Retail
 - FinOps
-- Cost Management
 - FOCUS
+- Furniture
+- Retail
 ---

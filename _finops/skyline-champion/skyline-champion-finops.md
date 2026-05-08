@@ -7,74 +7,42 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Skyline Champion API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Not Applicable
+description: 'FOCUS-aligned FinOps placeholder for Skyline Champion: no public API or programmatic pricing surface; this provider is a building-products manufacturer rather than a software vendor.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Skyline Champion
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Skyline Champion Corporation
   ProviderName: Skyline Champion
-  PublisherName: Skyline Champion
-  ServiceCategory: Developer Tools / API
+  PublisherName: Skyline Champion Corporation
+  ServiceCategory: Manufactured Housing
   ServiceName: Skyline Champion
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  description: Skyline Champion does not bill API consumption; physical product invoicing is outside the scope of this FinOps catalog.
+  dimensions: []
+  name: not_applicable
+  unit: varies
 name: Skyline Champion Finops
 provider_name: Skyline Champion
 provider_slug: skyline-champion
-publisher_name: Skyline Champion
-service_category: API
+publisher_name: Skyline Champion Corporation
+service_category: Manufactured Housing
 slug: skyline-champion-finops
 source_filename: skyline-champion-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Skyline Champion\nproviderId: skyline-champion\npublisherName: Skyline Champion\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Manufactured Homes\n  - Housing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Skyline Champion API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
-  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
-  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Skyline Champion\n  ServiceCategory: Developer Tools / API\n  ProviderName: Skyline Champion\n  PublisherName: Skyline Champion\n  InvoiceIssuerName: Skyline Champion\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Skyline Champion API\n    baseURL: https://api.skylinechampion.com\n    tags:\n      - Manufactured Homes\n      - Housing\n    serviceName: Skyline Champion API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://ir.skylinechampion.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Skyline Champion\nproviderId: skyline-champion\npublisherName: Skyline Champion Corporation\nserviceCategory: Manufactured Housing\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Manufactured Housing\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps placeholder for Skyline Champion: no public API or programmatic\n  pricing surface; this provider is a building-products manufacturer rather than a software vendor.'\nsources:\n  - https://ir.skylinechampion.com/\nnotes: |\n  Not a software / API vendor. No invoice-line catalog applicable; retained as a placeholder for\n  catalog completeness only.\nbillingModel:\n\
+  \  pricingCategory: Not Applicable\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Skyline Champion\n  ServiceCategory: Manufactured Housing\n  ProviderName: Skyline Champion\n  PublisherName: Skyline Champion Corporation\n  InvoiceIssuerName: Skyline Champion Corporation\n  BillingCurrency: USD\nmeters:\n  - name: not_applicable\n    description: Skyline Champion does not bill API consumption; physical product invoicing is\n      outside the scope of this FinOps catalog.\n    unit: varies\n    aggregation: sum\n    dimensions: []\nprinciples:\n  - name: Visibility\n    description: Not applicable - no API consumption telemetry exists for a manufactured-housing\n      producer.\n  - name: Allocation\n    description: Not applicable.\n  - name: Optimization\n    description: Not applicable.\n  - name: Accountability\n    description: Not applicable.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/skyline-champion/refs/heads/main/finops/skyline-champion-finops.yml
-sources: []
+sources:
+- https://ir.skylinechampion.com/
 specification: FinOps Framework
 tags:
-- Manufactured Homes
-- Housing
+- Manufactured Housing
 - FinOps
-- Cost Management
 - FOCUS
 ---

@@ -22,79 +22,83 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Oracle Retail API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Credit
+  pricingCategory: Tiered Subscription (Per Application)
+description: 'FOCUS-aligned FinOps view for Oracle Retail: per-application SaaS subscriptions billed against retail-specific metrics (Annual Subscriber Revenue, Hosted Named User, POS Lane / Store) on the Oracle Retail price list. REST API access is bundled with the subscription. FinOps observation centres on the per-application metric (revenue tier, seat count, lane / store count) rather than per-call consumption.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Oracle Retail
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Oracle Retail
-  PublisherName: Oracle Retail
-  ServiceCategory: Developer Tools / API
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Oracle America, Inc.
+  PricingCategory: Subscription
+  ProviderName: Oracle
+  PublisherName: Oracle America, Inc.
+  ServiceCategory: Retail Applications
   ServiceName: Oracle Retail
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Annual Subscriber Revenue tier on metered Retail Cloud Services
   dimensions:
+  - service
+  - business_unit
+  name: annual_subscriber_revenue_tier
+  unit: usd-annual-revenue
+- aggregation: max
+  description: Hosted Named User seats per month
+  dimensions:
+  - service
+  - role
+  name: hosted_named_user_subscription
+  unit: seat-month
+- aggregation: max
+  description: Active POS lanes per month for Xstore Point of Service
+  dimensions:
+  - banner
+  - region
+  name: pos_lane_subscription
+  unit: lane-month
+- aggregation: max
+  description: Active stores per month for Xstore Point of Service
+  dimensions:
+  - banner
+  - region
+  name: store_subscription
+  unit: store-month
+- aggregation: sum
+  description: REST API calls (informational; bundled in the subscription)
+  dimensions:
+  - service
   - api
   - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  name: rest_api_calls
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Oracle Retail Finops
 provider_name: Oracle Retail
 provider_slug: oracle-retail
-publisher_name: Oracle Retail
-service_category: API
+publisher_name: Oracle America, Inc.
+service_category: Retail Applications
 slug: oracle-retail-finops
 source_filename: oracle-retail-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Oracle Retail\nproviderId: oracle-retail\npublisherName: Oracle Retail\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Retail\n  - Merchandising\n  - Order Management\n  - Pricing\n  - Inventory\n  - Point of Sale\n  - Omnichannel\n  - Oracle\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Oracle Retail API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name:\
-  \ Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  -\
-  \ name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Oracle Retail\n  ServiceCategory: Developer Tools / API\n  ProviderName: Oracle Retail\n  PublisherName: Oracle Retail\n  InvoiceIssuerName: Oracle Retail\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
-  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Oracle Retail Merchandising Foundation Cloud Service API\n    baseURL: https://{host}/MerchServices/MerchRes/v1\n    tags:\n      - Inventory\n      - Merchandising\n      - REST\n      - Retail\n    serviceName: Oracle Retail Merchandising Foundation Cloud Service API\n    serviceCategory: API\n  - name: Oracle Retail Pricing Cloud Service API\n    baseURL: ''\n    tags:\n      - Pricing\n      - Promotions\n      - REST\n      - Retail\n    serviceName: Oracle Retail Pricing Cloud Service API\n    serviceCategory: API\n  - name: Oracle Retail Integration Cloud Service API\n    baseURL: ''\n    tags:\n      - Integration\n\
-  \      - Middleware\n      - REST\n      - Retail\n    serviceName: Oracle Retail Integration Cloud Service API\n    serviceCategory: API\n  - name: Oracle Retail Order Management Suite Cloud Service API\n    baseURL: ''\n    tags:\n      - Omnichannel\n      - Order Management\n      - REST\n      - Retail\n    serviceName: Oracle Retail Order Management Suite Cloud Service API\n    serviceCategory: API\n  - name: Oracle Retail Xstore Point of Service API\n    baseURL: ''\n    tags:\n      - Point of Sale\n      - REST\n      - Retail\n      - Store Operations\n    serviceName: Oracle Retail Xstore Point of Service API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.oracle.com/industries/retail/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Oracle Retail\nproviderId: oracle-retail\npublisherName: Oracle America, Inc.\nserviceCategory: Retail Applications\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Retail\n  - Merchandising\n  - Omnichannel\n  - Oracle Cloud\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps view for Oracle Retail: per-application SaaS\n  subscriptions billed against retail-specific metrics (Annual Subscriber\n  Revenue, Hosted Named User, POS Lane / Store) on the Oracle Retail price\n  list. REST API access is bundled with the subscription. FinOps observation\n  centres on the per-application metric (revenue tier, seat\
+  \ count, lane /\n  store count) rather than per-call consumption.\nsources:\n  - https://www.oracle.com/industries/retail/\n  - https://docs.oracle.com/en/industries/retail/\nnotes: >-\n  No per-API meter exists. Track the contractual metric per Retail Cloud\n  Service (revenue tier, seat count, lane count) at each renewal cycle.\nbillingModel:\n  pricingCategory: Tiered Subscription (Per Application)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Oracle Retail\n  ServiceCategory: Retail Applications\n  ProviderName: Oracle\n  PublisherName: Oracle America, Inc.\n  InvoiceIssuerName: Oracle America, Inc.\n  BillingCurrency: USD\n  PricingCategory: Subscription\n  ChargeCategory: Purchase\nmeters:\n  - name: annual_subscriber_revenue_tier\n    description: Annual Subscriber Revenue tier on metered Retail Cloud Services\n    unit: usd-annual-revenue\n    aggregation: max\n\
+  \    dimensions:\n      - service\n      - business_unit\n  - name: hosted_named_user_subscription\n    description: Hosted Named User seats per month\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - service\n      - role\n  - name: pos_lane_subscription\n    description: Active POS lanes per month for Xstore Point of Service\n    unit: lane-month\n    aggregation: max\n    dimensions:\n      - banner\n      - region\n  - name: store_subscription\n    description: Active stores per month for Xstore Point of Service\n    unit: store-month\n    aggregation: max\n    dimensions:\n      - banner\n      - region\n  - name: rest_api_calls\n    description: REST API calls (informational; bundled in the subscription)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - service\n      - api\n      - endpoint\nprinciples:\n  - name: Visibility\n    description: >-\n      Maintain a tenancy-level inventory of Oracle Retail Cloud Service\n      subscriptions, contractual\
+  \ metrics, and active lane / store counts;\n      reconcile annually against the Oracle order document.\n  - name: Allocation\n    description: >-\n      Tag each Retail subscription with the consuming banner, region, and\n      business unit so spend can be attributed back to the operating\n      business.\n  - name: Optimization\n    description: >-\n      Reclaim inactive seats, decommission lanes for closed stores at the\n      monthly snapshot, and prefer RICS bulk patterns over transactional\n      REST integrations to reduce capacity pressure on the Retail Cloud pod.\n  - name: Accountability\n    description: >-\n      Pair the Retail applications administrator with retail-finance and\n      store-operations owners; review metric utilization at quarterly\n      business reviews.\napis:\n  - name: Oracle Retail Merchandising Foundation Cloud Service API\n    serviceName: Oracle Retail Merchandising Foundation Cloud Service API\n    serviceCategory: Retail Applications\n  - name:\
+  \ Oracle Retail Pricing Cloud Service API\n    serviceName: Oracle Retail Pricing Cloud Service API\n    serviceCategory: Retail Applications\n  - name: Oracle Retail Integration Cloud Service API\n    serviceName: Oracle Retail Integration Cloud Service API\n    serviceCategory: Retail Applications\n  - name: Oracle Retail Order Management Suite Cloud Service API\n    serviceName: Oracle Retail Order Management Suite Cloud Service API\n    serviceCategory: Retail Applications\n  - name: Oracle Retail Xstore Point of Service API\n    serviceName: Oracle Retail Xstore Point of Service API\n    serviceCategory: Retail Applications\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/oracle-retail/refs/heads/main/finops/oracle-retail-finops.yml
-sources: []
+sources:
+- https://www.oracle.com/industries/retail/
+- https://docs.oracle.com/en/industries/retail/
 specification: FinOps Framework
 tags:
 - Retail
 - Merchandising
-- Order Management
-- Pricing
-- Inventory
-- Point of Sale
 - Omnichannel
-- Oracle
+- Oracle Cloud
 - FinOps
-- Cost Management
 - FOCUS
 ---

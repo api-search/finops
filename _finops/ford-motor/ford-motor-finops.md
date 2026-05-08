@@ -19,67 +19,69 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the ford-motor API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Credit
+  pricingCategory: Subscription + Usage
+description: FOCUS-aligned FinOps mapping for Ford Motor Company's developer/partner APIs — partner-licensed connected-vehicle access, billed per-VIN subscription plus per-call/event usage.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: ford-motor
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: ford-motor
-  PublisherName: ford-motor
-  ServiceCategory: Developer Tools / API
-  ServiceName: ford-motor
+  InvoiceIssuerName: Ford Motor Company
+  ProviderName: Ford Motor Company
+  PublisherName: Ford Motor Company
+  ServiceCategory: Connected Vehicle / Mobility
+  ServiceName: Ford Motor Company Connected Vehicle APIs
 layout: finops
 meters:
+- aggregation: max
+  description: Active VIN subscriptions enrolled with the partner application
+  dimensions:
+  - region
+  - vehicle_model
+  - data_package
+  name: vehicle_subscriptions
+  unit: vehicle-month
 - aggregation: sum
-  description: Count of billable API requests
+  description: API requests against connected-vehicle, dealer, and fleet endpoints
   dimensions:
   - api
   - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - data_class
+  name: api_calls
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Webhook/streaming events delivered (telemetry, status, alerts)
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - event_type
+  name: streaming_events
+  unit: event
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Premium-data add-ons (high-resolution telemetry, historical replay)
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - data_class
+  name: premium_data
+  unit: request
 name: Ford Motor Finops
 provider_name: ford-motor
 provider_slug: ford-motor
-publisher_name: ford-motor
-service_category: API
+publisher_name: Ford Motor Company
+service_category: Connected Vehicle / Mobility
 slug: ford-motor-finops
 source_filename: ford-motor-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: ford-motor\nproviderId: ford-motor\npublisherName: ford-motor\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the ford-motor API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can\
-  \ be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing\
-  \ and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: ford-motor\n  ServiceCategory: Developer Tools / API\n  ProviderName: ford-motor\n  PublisherName: ford-motor\n  InvoiceIssuerName: ford-motor\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name:\
-  \ compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Ford Developer API\n    baseURL: https://api.ford.com\n    tags:\n      - Automotive\n      - Connected Vehicles\n      - IoT\n      - Telematics\n    serviceName: Ford Developer API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://developer.ford.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Ford Motor Company\nproviderId: ford-motor\npublisherName: Ford Motor Company\nserviceCategory: Connected Vehicle / Mobility\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Automobiles\n  - Connected Vehicle\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps mapping for Ford Motor Company's developer/partner APIs — partner-licensed connected-vehicle access, billed per-VIN subscription plus per-call/event usage.\nnotes: No public pricing. Mirrors the ford finops; meters reflect typical OEM connected-vehicle billing patterns.\nsources:\n  - https://developer.ford.com/\n  - https://developer.ford.com/apis\nbillingModel:\n\
+  \  pricingCategory: Subscription + Usage\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Ford Motor Company Connected Vehicle APIs\n  ServiceCategory: Connected Vehicle / Mobility\n  ProviderName: Ford Motor Company\n  PublisherName: Ford Motor Company\n  InvoiceIssuerName: Ford Motor Company\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: vehicle_subscriptions\n    description: Active VIN subscriptions enrolled with the partner application\n    unit: vehicle-month\n    aggregation: max\n    dimensions:\n      - region\n      - vehicle_model\n      - data_package\n  - name: api_calls\n    description: API requests against connected-vehicle, dealer, and fleet endpoints\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - data_class\n  - name: streaming_events\n    description: Webhook/streaming\
+  \ events delivered (telemetry, status, alerts)\n    unit: event\n    aggregation: sum\n    dimensions:\n      - event_type\n  - name: premium_data\n    description: Premium-data add-ons (high-resolution telemetry, historical replay)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - data_class\nprinciples:\n  - name: Visibility\n    description: Pull partner-portal usage daily and reconcile against your own logs; track per-VIN consent status to avoid billing for orphaned subscriptions.\n  - name: Allocation\n    description: Tag every request with end-customer, VIN, and use-case for chargeback to downstream product features.\n  - name: Optimization\n    description: Use webhooks/streaming over polling; respect minimum poll intervals; cache static reference data; archive historical data into your own warehouse rather than re-fetching.\n  - name: Accountability\n    description: Connected-vehicle product owner owns the partnership agreement; finance audits VIN subscription\
+  \ counts against active consent monthly.\nmaintainers: []\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/ford-motor/refs/heads/main/finops/ford-motor-finops.yml
-sources: []
+sources:
+- https://developer.ford.com/
+- https://developer.ford.com/apis
 specification: FinOps Framework
 tags:
+- Automobiles
+- Connected Vehicle
 - FinOps
-- Cost Management
 - FOCUS
 ---

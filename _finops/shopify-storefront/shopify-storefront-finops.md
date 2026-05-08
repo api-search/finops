@@ -16,79 +16,74 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Shopify Storefront API API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Take Rate
+description: FOCUS-aligned FinOps for the Shopify Storefront API. The Storefront API has no per-call fees and no published rate limits; cost flows through the merchant's commerce subscription and the payment processing fees on orders that flow through the Storefront-built checkout.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Shopify Storefront API
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Shopify Storefront API
-  PublisherName: Shopify Storefront API
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Shopify Inc.
+  ProviderName: Shopify
+  PublisherName: Shopify Inc.
+  ServiceCategory: Commerce
   ServiceName: Shopify Storefront API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Monthly commerce plan fee that includes Storefront API entitlement.
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - plan
+  - billing_term
+  name: commerce_subscription
+  unit: month
+- aggregation: sum
+  description: Payment processing fees on orders placed through the Storefront-driven checkout.
+  dimensions:
+  - plan
+  - channel
+  - card_brand
   - region
-  - consumer
-  name: api_requests
+  name: card_transactions
+  unit: transaction
+- aggregation: sum
+  description: Per-transaction surcharge applied when using a non-Shopify payment provider.
+  dimensions:
+  - plan
+  - provider
+  name: third_party_payment_fee
+  unit: transaction
+- aggregation: sum
+  description: Storefront API requests; not billed per call but useful as a capacity and abuse-detection meter for headless deployments.
+  dimensions:
+  - shop
+  - operation
+  name: storefront_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Shopify Storefront Finops
 provider_name: Shopify Storefront API
 provider_slug: shopify-storefront
-publisher_name: Shopify Storefront API
-service_category: API
+publisher_name: Shopify Inc.
+service_category: Commerce
 slug: shopify-storefront-finops
 source_filename: shopify-storefront-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Shopify Storefront API\nproviderId: shopify-storefront\npublisherName: Shopify Storefront API\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Commerce\n  - Ecommerce\n  - Headless\n  - GraphQL\n  - Storefront\n  - Products\n  - Cart\n  - Checkout\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Shopify Storefront API API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
-  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
-  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Shopify Storefront API\n  ServiceCategory: Developer Tools / API\n  ProviderName: Shopify Storefront API\n  PublisherName: Shopify Storefront API\n  InvoiceIssuerName: Shopify Storefront API\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n\
-  \  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Shopify Storefront API\n    baseURL: https://{store_name}.myshopify.com/api/2024-10/graphql.json\n    tags:\n      - Commerce\n      - Ecommerce\n      - Headless\n      - GraphQL\n      - Products\n      - Cart\n      - Checkout\n    serviceName: Shopify Storefront API\n    serviceCategory: API\n  - name: Shopify Hydrogen\n    baseURL: ''\n    tags:\n      - Commerce\n      - Headless\n      - React\n      - Framework\n      - SSR\n    serviceName: Shopify Hydrogen\n    serviceCategory: API\n  - name: Shopify Buy SDK\n    baseURL: ''\n    tags:\n      - Commerce\n      - JavaScript\n\
-  \      - SDK\n      - Cart\n    serviceName: Shopify Buy SDK\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.shopify.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Shopify Storefront API\nproviderId: shopify-storefront\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Commerce\n  - Ecommerce\n  - Headless\n  - GraphQL\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for the Shopify Storefront API. The Storefront API has no per-call\n  fees and no published rate limits; cost flows through the merchant's commerce subscription and the\n  payment processing fees on orders that flow through the Storefront-built checkout.\nsources:\n  - https://www.shopify.com/pricing\n  - https://shopify.dev/docs/api/usage/rate-limits\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Shopify Inc.\nserviceCategory: Commerce\nbillingModel:\n\
+  \  pricingCategory: Subscription + Take Rate\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Shopify Storefront API\n  ServiceCategory: Commerce\n  ProviderName: Shopify\n  PublisherName: Shopify Inc.\n  InvoiceIssuerName: Shopify Inc.\n  BillingCurrency: USD\nmeters:\n  - name: commerce_subscription\n    description: Monthly commerce plan fee that includes Storefront API entitlement.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n      - billing_term\n  - name: card_transactions\n    description: Payment processing fees on orders placed through the Storefront-driven checkout.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - plan\n      - channel\n      - card_brand\n      - region\n  - name: third_party_payment_fee\n    description: Per-transaction surcharge applied when using a non-Shopify payment provider.\n    unit: transaction\n\
+  \    aggregation: sum\n    dimensions:\n      - plan\n      - provider\n  - name: storefront_requests\n    description: Storefront API requests; not billed per call but useful as a capacity and abuse-detection\n      meter for headless deployments.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - shop\n      - operation\nprinciples:\n  - name: Visibility\n    description: Subscription, processing fees, and refunds appear on the Shopify monthly invoice and\n      Shopify Payments balance reports. Storefront request counts are observable through the consumer's\n      own client/CDN telemetry, not a Shopify-billed line.\n  - name: Allocation\n    description: Allocate by myshopify domain and channel (Hydrogen storefront, custom headless, Buy\n      SDK embed); attribute card-fee spend to the originating storefront.\n  - name: Optimization\n    description: Cache GraphQL responses at the edge (Hydrogen / Oxygen / CDN) to reduce origin load,\n      and choose the commerce\
+  \ plan that matches transaction volume rather than over-paying for Plus\n      when API throughput is unconstrained.\n  - name: Accountability\n    description: Commerce/finance owns subscription and processing-fee spend; engineering owns Storefront\n      request behavior, security signals (430), and checkout throttle handling.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/shopify-storefront/refs/heads/main/finops/shopify-storefront-finops.yml
-sources: []
+sources:
+- https://www.shopify.com/pricing
+- https://shopify.dev/docs/api/usage/rate-limits
 specification: FinOps Framework
 tags:
 - Commerce
 - Ecommerce
 - Headless
 - GraphQL
-- Storefront
-- Products
-- Cart
-- Checkout
 - FinOps
-- Cost Management
 - FOCUS
 ---

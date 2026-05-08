@@ -7,70 +7,59 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Monthly or Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Framer API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription (Per Site) + Per-Editor Add-On + Usage
+description: FOCUS-aligned FinOps profile for Framer. Framer prices per site (Free/Basic $10 / Pro $30 / Scale $100 + usage / Enterprise custom). Additional editors are an add-on at $20-$40/editor/month depending on tier. Site bandwidth and pages are plan-level allowances; Scale and Enterprise add usage-based bandwidth components.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Framer
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Framer B.V.
   ProviderName: Framer
-  PublisherName: Framer
-  ServiceCategory: Developer Tools / API
+  PublisherName: Framer B.V.
+  ServiceCategory: Productivity
   ServiceName: Framer
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Per-site monthly subscription (Basic $10, Pro $30, Scale $100, Enterprise contract).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - account
+  - plan
+  name: site_subscription
+  unit: site
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Add-on per-editor monthly fee ($20-$40 depending on tier).
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - account
+  - site
+  name: editor_seats
+  unit: seat
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Site bandwidth usage in GB; included allowance per plan, overage on Scale and Enterprise.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - site
+  name: bandwidth
+  unit: gigabyte
 name: Framer Finops
 provider_name: Framer
 provider_slug: framer
-publisher_name: Framer
-service_category: API
+publisher_name: Framer B.V.
+service_category: Productivity
 slug: framer-finops
 source_filename: framer-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Framer\nproviderId: framer\npublisherName: Framer\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Productivity\n  - Design\n  - No-Code\n  - Web Design\n  - SaaS\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Framer API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Framer\n  ServiceCategory: Developer Tools / API\n  ProviderName: Framer\n  PublisherName: Framer\n  InvoiceIssuerName: Framer\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n     \
-  \ - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Framer Plugin API\n    baseURL: https://framerusercontent.com\n    tags:\n      - Plugins\n      - Editor\n      - SDK\n    serviceName: Framer Plugin API\n    serviceCategory: API\n  - name: Framer Code Components API\n    baseURL: local\n    tags:\n      - Components\n      - React\n      - SDK\n    serviceName: Framer Code Components API\n    serviceCategory: API\n  - name: Framer Code Overrides API\n    baseURL: local\n    tags:\n      - Overrides\n      - HOC\n      - React\n    serviceName: Framer Code Overrides API\n    serviceCategory: API\n  - name: Framer Fetch\n    baseURL: local\n    tags:\n      - Fetch\n      - Data\n      - No-Code\n    serviceName: Framer Fetch\n    serviceCategory: API\n  - name: Framer Form Webhooks\n\
-  \    baseURL: https://framer.com\n    tags:\n      - Webhooks\n      - Forms\n    serviceName: Framer Form Webhooks\n    serviceCategory: API\n  - name: Framer CMS\n    baseURL: local\n    tags:\n      - CMS\n      - Content\n    serviceName: Framer CMS\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.framer.com/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Framer\nproviderId: framer\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- Productivity\n- Design\n- No-Code\n- Web Design\n- SaaS\n- FinOps\n- Cost Management\n- FOCUS\ndescription: FOCUS-aligned FinOps profile for Framer. Framer prices per site (Free/Basic\n  $10 / Pro $30 / Scale $100 + usage / Enterprise custom). Additional editors are an\n  add-on at $20-$40/editor/month depending on tier. Site bandwidth and pages are\n  plan-level allowances; Scale and Enterprise add usage-based bandwidth components.\nsources:\n- https://www.framer.com/pricing/\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
+  \ Framer B.V.\nserviceCategory: Productivity\nbillingModel:\n  pricingCategory: Subscription (Per Site) + Per-Editor Add-On + Usage\n  billingFrequency: Monthly or Annual\n  billingCurrency: USD\n  chargeCategories:\n  - Purchase\n  - Usage\n  - Adjustment\nfocusColumns:\n  ServiceName: Framer\n  ServiceCategory: Productivity\n  ProviderName: Framer\n  PublisherName: Framer B.V.\n  InvoiceIssuerName: Framer B.V.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n- name: site_subscription\n  description: Per-site monthly subscription (Basic $10, Pro $30, Scale $100,\n    Enterprise contract).\n  unit: site\n  aggregation: sum\n  dimensions:\n  - account\n  - plan\n- name: editor_seats\n  description: Add-on per-editor monthly fee ($20-$40 depending on tier).\n  unit: seat\n  aggregation: sum\n  dimensions:\n  - account\n  - site\n- name: bandwidth\n  description: Site bandwidth usage in GB; included allowance per plan, overage on Scale\n    and Enterprise.\n  unit: gigabyte\n\
+  \  aggregation: sum\n  dimensions:\n  - site\nprinciples:\n- name: Visibility\n  description: Inventory all Framer sites under each account; tag sites to projects or\n    business owners.\n- name: Allocation\n  description: Allocate site subscriptions and editor add-ons to the team owning each site.\n- name: Optimization\n  description: Consolidate low-traffic sites onto Basic/Pro; downgrade Scale to Pro when\n    traffic permits; reclaim editor seats from inactive collaborators.\n- name: Accountability\n  description: Assign one Framer account owner per organization; review quarterly site\n    inventory and bandwidth usage.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/framer/refs/heads/main/finops/framer-finops.yml
-sources: []
+sources:
+- https://www.framer.com/pricing/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Productivity

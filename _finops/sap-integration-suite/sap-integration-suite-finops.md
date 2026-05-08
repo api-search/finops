@@ -19,82 +19,47 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/sap-integration-suite/refs/heads/main/openapi/sap-integration-suite-api-management-openapi.yml
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: USD (varies by contract)
+  billingFrequency: Per-Contract
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the SAP Integration Suite API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Contract / Negotiated
+description: 'FOCUS-aligned FinOps shape for SAP Integration Suite: BTP-hosted iPaaS billed under the customer''s SAP BTP commercial agreement (CPEA / Pay-As-You-Go-for-SAP-BTP). No public unit pricing.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: SAP Integration Suite
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: SAP SE
   ProviderName: SAP Integration Suite
-  PublisherName: SAP Integration Suite
-  ServiceCategory: Developer Tools / API
+  PublisherName: SAP SE
+  ServiceCategory: Integration Platform
   ServiceName: SAP Integration Suite
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: contracted_consumption
+  unit: varies
 name: Sap Integration Suite Finops
 provider_name: SAP Integration Suite
 provider_slug: sap-integration-suite
-publisher_name: SAP Integration Suite
-service_category: API
+publisher_name: SAP SE
+service_category: Integration Platform
 slug: sap-integration-suite-finops
 source_filename: sap-integration-suite-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: SAP Integration Suite\nproviderId: sap-integration-suite\npublisherName: SAP Integration Suite\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Management\n  - Cloud Integration\n  - Enterprise Integration\n  - Event Mesh\n  - iPaaS\n  - SAP\n  - SAP BTP\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the SAP Integration Suite API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n   \
-  \   real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      -\
-  \ Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: SAP Integration Suite\n  ServiceCategory: Developer Tools / API\n  ProviderName: SAP Integration Suite\n  PublisherName: SAP Integration Suite\n  InvoiceIssuerName: SAP Integration Suite\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n\
-  \      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: SAP Cloud Integration API\n    baseURL: https://{host}/api/v1\n    tags:\n      - Cloud Integration\n      - Integration Flows\n      - OData\n      - Runtime Monitoring\n    serviceName: SAP Cloud Integration API\n    serviceCategory: API\n  - name: SAP API Management API\n    baseURL: https://{api-portal-host}/apiportal/api/1.0\n    tags:\n      - API Gateway\n      - API Management\n      - API Proxy\n      - Developer Portal\n      - OData\n    serviceName: SAP API Management API\n    serviceCategory: API\n  - name: SAP Integration Advisor API\n    baseURL:\
-  \ https://{host}/api\n    tags:\n      - B2B Integration\n      - EDI\n      - Integration Advisor\n      - Mapping Guidelines\n      - Message Implementation Guidelines\n    serviceName: SAP Integration Advisor API\n    serviceCategory: API\n  - name: SAP Open Connectors API\n    baseURL: https://api.openconnectors.ext.hana.ondemand.com\n    tags:\n      - Cloud Connectors\n      - Normalization\n      - Open Connectors\n      - Third-Party Integration\n      - Unified API\n    serviceName: SAP Open Connectors API\n    serviceCategory: API\n  - name: SAP Trading Partner Management API\n    baseURL: https://{host}/api\n    tags:\n      - AS2\n      - B2B\n      - EDI\n      - Trading Partner Management\n    serviceName: SAP Trading Partner Management API\n    serviceCategory: API\n  - name: SAP Event Mesh API\n    baseURL: https://enterprise-messaging.cfapps.sap.hana.ondemand.com\n    tags:\n      - Asynchronous\n      - CloudEvents\n      - Event Mesh\n      - Messaging\n      - Pub/Sub\n\
-  \    serviceName: SAP Event Mesh API\n    serviceCategory: API\n  - name: SAP Integration Suite Advanced Event Mesh API\n    baseURL: https://api.solacecloud.com/api/v2\n    tags:\n      - Advanced Event Mesh\n      - Broker Management\n      - Event Streaming\n      - Messaging\n      - REST\n    serviceName: SAP Integration Suite Advanced Event Mesh API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.sap.com/products/technology-platform/integration-suite.html
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: SAP Integration Suite\nproviderId: sap-integration-suite\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n- FinOps\n- FOCUS\n- iPaaS\n- API Management\n- SAP\ndescription: 'FOCUS-aligned FinOps shape for SAP Integration Suite: BTP-hosted iPaaS billed under the\n  customer''s SAP BTP commercial agreement (CPEA / Pay-As-You-Go-for-SAP-BTP). No public unit pricing.'\nnotes: SAP Integration Suite is sold as part of SAP Business Technology Platform (BTP) and priced via\n  SAP commercial agreements. The public pricing page returns HTTP 403 to anonymous fetches; Discovery\n  Center requires authenticated SAP session. List pricing is not publicly disclosed.\nsources:\n- https://www.sap.com/products/technology-platform/integration-suite.html\n- https://discovery-center.cloud.sap/serviceCatalog/integration-suite\nalignedWith:\n  framework: FinOps\
+  \ Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: SAP SE\nserviceCategory: Integration Platform\nbillingModel:\n  pricingCategory: Contract / Negotiated\n  billingFrequency: Per-Contract\n  billingCurrency: USD (varies by contract)\n  chargeCategories:\n  - Purchase\n  - Usage\n  - Adjustment\nfocusColumns:\n  ServiceName: SAP Integration Suite\n  ServiceCategory: Integration Platform\n  ProviderName: SAP Integration Suite\n  PublisherName: SAP SE\n  InvoiceIssuerName: SAP SE\n  BillingCurrency: USD\nmeters:\n- name: contracted_consumption\n  unit: varies\n  aggregation: sum\nprinciples:\n- name: Visibility\n  description: Consumption visibility comes from the SAP Integration Suite account / partner reporting\n    surface (invoices, account dashboards) rather than a public usage API.\n- name: Allocation\n  description: Allocate cost through\
+  \ the SAP Integration Suite contract structure (entitlement, project,\n    business unit) and reconcile against internal cost centers.\n- name: Optimization\n  description: 'Optimization levers are commercial: renegotiation cadence, commitment sizing, and consolidation\n    of SAP Integration Suite entitlements.'\n- name: Accountability\n  description: Assign a contract owner who reconciles SAP Integration Suite invoices against contracted\n    entitlements each billing cycle.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n  url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sap-integration-suite/refs/heads/main/finops/sap-integration-suite-finops.yml
-sources: []
+sources:
+- https://www.sap.com/products/technology-platform/integration-suite.html
+- https://discovery-center.cloud.sap/serviceCatalog/integration-suite
 specification: FinOps Framework
 tags:
-- API Management
-- Cloud Integration
-- Enterprise Integration
-- Event Mesh
-- iPaaS
-- SAP
-- SAP BTP
 - FinOps
-- Cost Management
 - FOCUS
+- iPaaS
+- API Management
+- SAP
 ---

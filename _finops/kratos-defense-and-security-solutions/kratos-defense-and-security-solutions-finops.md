@@ -7,75 +7,73 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice / Milestone
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Kratos Defense & Security Solutions API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Government Contract (FFP / CPFF / T&M / OTA)
+description: 'FinOps shape for Kratos: defense-contractor billing under government / commercial-defense contract vehicles. No public API tariff; cost lines are program-specific and follow contract type (FFP, CPFF, T&M, OTA, GSA schedule).'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Kratos Defense & Security Solutions
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Kratos Defense & Security Solutions, Inc.
   ProviderName: Kratos Defense & Security Solutions
-  PublisherName: Kratos Defense & Security Solutions
-  ServiceCategory: Developer Tools / API
+  PublisherName: Kratos Defense & Security Solutions, Inc.
+  ServiceCategory: Defense
   ServiceName: Kratos Defense & Security Solutions
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: count
   dimensions:
-  - api
+  - program
+  - clin
+  name: program_milestones
+  unit: milestone
+- aggregation: sum
+  dimensions:
+  - labor_category
+  - program
+  name: labor_hours
+  unit: hour
+- aggregation: sum
+  dimensions:
   - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - program
+  name: api_calls
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+- aggregation: max
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  - product
+  - program
+  name: license_seats
+  unit: seat
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - product
+  name: managed_assets
+  unit: asset
 name: Kratos Defense And Security Solutions Finops
 provider_name: Kratos Defense & Security Solutions
 provider_slug: kratos-defense-and-security-solutions
-publisher_name: Kratos Defense & Security Solutions
-service_category: API
+publisher_name: Kratos Defense & Security Solutions, Inc.
+service_category: Defense Technology
 slug: kratos-defense-and-security-solutions-finops
 source_filename: kratos-defense-and-security-solutions-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Kratos Defense & Security Solutions\nproviderId: kratos-defense-and-security-solutions\npublisherName: Kratos Defense & Security Solutions\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Defense\n  - Security\n  - Unmanned Systems\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Kratos Defense & Security Solutions API surface. Provides\n  a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across\n  the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
-  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
-  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Kratos Defense & Security Solutions\n  ServiceCategory: Developer Tools / API\n  ProviderName: Kratos Defense & Security Solutions\n  PublisherName: Kratos Defense & Security Solutions\n  InvoiceIssuerName: Kratos Defense & Security Solutions\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n    \
-  \  - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Kratos Defense & Security Solutions API\n    baseURL: https://api.kratosdefense.com\n    tags:\n      - Defense\n      - Security\n      - Unmanned Systems\n    serviceName: Kratos Defense & Security Solutions API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.kratosdefense.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Kratos Defense & Security Solutions\nproviderId: kratos-defense-and-security-solutions\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Defense\n  - Government\n  - National Security\ndescription: 'FinOps shape for Kratos: defense-contractor billing under government / commercial-defense\n  contract vehicles. No public API tariff; cost lines are program-specific and follow contract type (FFP,\n  CPFF, T&M, OTA, GSA schedule).'\nsources:\n  - https://www.kratosdefense.com\n  - https://developer.kratosdefense.com\nnotes: Pricing is contract-specific and frequently sensitive / classified. Reconcile from program contract\n  documentation and DCAA-compliant cost reporting when authorized access is obtained.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n \
+  \ dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Kratos Defense & Security Solutions, Inc.\nserviceCategory: Defense Technology\nbillingModel:\n  pricingCategory: Government Contract (FFP / CPFF / T&M / OTA)\n  billingFrequency: Per-Invoice / Milestone\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: Kratos Defense & Security Solutions\n  ServiceCategory: Defense\n  ProviderName: Kratos Defense & Security Solutions\n  PublisherName: Kratos Defense & Security Solutions, Inc.\n  InvoiceIssuerName: Kratos Defense & Security Solutions, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: program_milestones\n    unit: milestone\n    aggregation: count\n    dimensions:\n      - program\n      - clin\n  - name: labor_hours\n    unit: hour\n    aggregation: sum\n    dimensions:\n      - labor_category\n      - program\n  - name: api_calls\n    unit:\
+  \ request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - program\n  - name: license_seats\n    unit: seat\n    aggregation: max\n    dimensions:\n      - product\n      - program\n  - name: managed_assets\n    unit: asset\n    aggregation: max\n    dimensions:\n      - product\nprinciples:\n  - name: Visibility\n    description: Use program-specific cost reporting (DCAA-compliant CDRLs, DD250, monthly progress reports)\n      to surface labor, ODC, and material costs against each Contract Line Item Number (CLIN).\n  - name: Allocation\n    description: Charge labor and ODCs to the correct program/CLIN; tag API/platform usage by program\n      so cost rolls up to the responsible PM.\n  - name: Optimization\n    description: Use commercial-of-the-shelf (COTS) Kratos products where available to convert program-funded\n      development to a lower-cost license model; bundle multi-program enclaves where ATO permits.\n  - name: Accountability\n    description: Program managers\
+  \ own the contract budget, EVM reporting, and milestone billing; finance\n      reconciles cost performance reports against funded ceiling.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/kratos-defense-and-security-solutions/refs/heads/main/finops/kratos-defense-and-security-solutions-finops.yml
-sources: []
+sources:
+- https://www.kratosdefense.com
+- https://developer.kratosdefense.com
 specification: FinOps Framework
 tags:
-- Defense
-- Security
-- Unmanned Systems
 - FinOps
-- Cost Management
 - FOCUS
+- Defense
+- Government
+- National Security
 ---

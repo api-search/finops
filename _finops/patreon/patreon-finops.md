@@ -10,73 +10,67 @@ billing_model:
   billingFrequency: Monthly
   chargeCategories:
   - Usage
-  - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Patreon API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Revenue Share
+description: FOCUS-aligned FinOps profile for Patreon's revenue-share creator pricing.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
   InvoiceIssuerName: Patreon
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Patreon
   PublisherName: Patreon
-  ServiceCategory: Developer Tools / API
-  ServiceName: Patreon
+  ServiceCategory: Creator Economy
+  ServiceName: Patreon Creator Platform
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: 10% of creator earnings.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - campaign
+  - currency
+  name: platform_fee
+  unit: percent_of_earnings
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Stripe/PayPal-style processing fees on member charges.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - payment_method
+  - currency
+  name: payment_processing_fee
+  unit: percent_plus_fixed
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Foreign-exchange fee on cross-currency payouts.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - source_currency
+  - target_currency
+  name: currency_conversion_fee
+  unit: percent
+- aggregation: sum
+  description: Per-payout transfer fee.
+  dimensions:
+  - payout_method
+  name: payout_fee
+  unit: fixed
 name: Patreon Finops
 provider_name: Patreon
 provider_slug: patreon
 publisher_name: Patreon
-service_category: API
+service_category: Creator Economy
 slug: patreon-finops
 source_filename: patreon-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Patreon\nproviderId: patreon\npublisherName: Patreon\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Creator Economy\n  - Membership\n  - Subscription\n  - Content\n  - Community\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Patreon API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Patreon\n  ServiceCategory: Developer Tools / API\n  ProviderName: Patreon\n  PublisherName: Patreon\n  InvoiceIssuerName: Patreon\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Patreon API v2\n    baseURL: https://www.patreon.com/api/oauth2/v2\n    tags:\n      - Creator Economy\n      - Membership\n      - Campaigns\n      - Members\n      - Posts\n      - Webhooks\n    serviceName: Patreon API v2\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.patreon.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Patreon\nproviderId: patreon\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- Creator Economy\n- Membership\n- FinOps\n- Cost Management\n- FOCUS\ndescription: FOCUS-aligned FinOps profile for Patreon's revenue-share creator pricing.\nnotes: >-\n  Patreon's billing model is revenue-based — creators pay a 10% platform fee on income\n  earned plus payment processing, currency conversion, payout, and applicable tax fees.\n  There is no per-call API charge.\nsources:\n- https://www.patreon.com/pricing\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Patreon\nserviceCategory: Creator Economy\nbillingModel:\n\
+  \  pricingCategory: Revenue Share\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n  - Usage\n  - Tax\n  - Adjustment\nfocusColumns:\n  ServiceName: Patreon Creator Platform\n  ServiceCategory: Creator Economy\n  ProviderName: Patreon\n  PublisherName: Patreon\n  InvoiceIssuerName: Patreon\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n- name: platform_fee\n  description: 10% of creator earnings.\n  unit: percent_of_earnings\n  aggregation: sum\n  dimensions:\n  - campaign\n  - currency\n- name: payment_processing_fee\n  description: Stripe/PayPal-style processing fees on member charges.\n  unit: percent_plus_fixed\n  aggregation: sum\n  dimensions:\n  - payment_method\n  - currency\n- name: currency_conversion_fee\n  description: Foreign-exchange fee on cross-currency payouts.\n  unit: percent\n  aggregation: sum\n  dimensions:\n  - source_currency\n  - target_currency\n- name: payout_fee\n  description: Per-payout transfer fee.\n  unit: fixed\n \
+  \ aggregation: sum\n  dimensions:\n  - payout_method\nprinciples:\n- name: Visibility\n  description: Pull monthly creator earnings and fee statements; correlate with platform fee, processing, FX, and payout meters.\n- name: Allocation\n  description: Allocate fees to specific campaigns, tiers, and currencies for clear unit economics.\n- name: Optimization\n  description: Optimize payout cadence and member-side payment methods to minimize processing and FX fees.\n- name: Accountability\n  description: Assign a creator-finance owner to reconcile Patreon statements against ledger revenue.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/patreon/refs/heads/main/finops/patreon-finops.yml
-sources: []
+sources:
+- https://www.patreon.com/pricing
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Creator Economy
 - Membership
-- Subscription
-- Content
-- Community
 - FinOps
 - Cost Management
 - FOCUS

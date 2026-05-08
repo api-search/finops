@@ -26,81 +26,73 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/synapse/refs/heads/main/openapi/synapse-admin-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Continuous (Operator Infra)
   chargeCategories:
   - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Synapse API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Open-Source (Operator-Hosted)
+description: FOCUS-aligned FinOps for Synapse - the software is free (AGPL-3.0) so all cost is operator-borne infrastructure. The billing surface is the operator's underlying compute, database, media storage, and federation egress invoice rather than a Synapse-issued invoice. Element Server Suite is a separately-priced commercial distribution.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Synapse
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Synapse
-  PublisherName: Synapse
-  ServiceCategory: Developer Tools / API
-  ServiceName: Synapse
+  ProviderName: Element / matrix-org
+  PublisherName: Element (New Vector Ltd.)
+  ServiceCategory: Open-Source Messaging Infrastructure
+  ServiceName: Synapse Matrix Homeserver
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: MAUs on the homeserver - the most useful unit for sizing compute and database load.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - server
+  name: monthly_active_users
+  unit: user
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Bytes exchanged over federation; drives egress and database growth on busy public rooms.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  - server
+  - peer
+  name: federation_traffic
   unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+- aggregation: max
+  description: Media repository storage (uploads, thumbnails) - persistent storage cost.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - server
+  name: media_storage
+  unit: GB-month
+- aggregation: max
+  description: Postgres-backing database growth - the dominant operator cost on large deployments.
+  dimensions:
+  - server
+  name: postgres_storage
+  unit: GB-month
+- aggregation: sum
+  description: Persisted room events; drives database write IO and disk consumption.
+  dimensions:
+  - server
+  - room
+  name: room_event_volume
+  unit: event
 name: Synapse Finops
 provider_name: Synapse
 provider_slug: synapse
-publisher_name: Synapse
-service_category: API
+publisher_name: Element (New Vector Ltd.) / matrix-org community
+service_category: Open-Source Messaging Infrastructure
 slug: synapse-finops
 source_filename: synapse-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Synapse\nproviderId: synapse\npublisherName: Synapse\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Chat\n  - Collaboration\n  - Decentralized\n  - Federation\n  - Matrix\n  - Messaging\n  - Open-Source\n  - Real-Time\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Synapse API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
-  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Synapse\n  ServiceCategory: Developer Tools / API\n  ProviderName: Synapse\n  PublisherName: Synapse\n  InvoiceIssuerName: Synapse\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
-  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Synapse Client-Server API\n    baseURL: https://matrix.example.com/_matrix/client\n    tags:\n      - Chat\n      - Client\n      - Collaboration\n      - Matrix\n      - Messaging\n      - Real-Time\n      - Rooms\n    serviceName: Synapse Client-Server API\n    serviceCategory: API\n  - name: Synapse Server-Server API\n    baseURL: https://matrix.example.com/_matrix/federation\n    tags:\n      - Decentralized\n      - Federation\n      - Matrix\n      - Server-To-Server\n    serviceName: Synapse Server-Server API\n    serviceCategory: API\n  - name: Synapse Admin API\n    baseURL: https://matrix.example.com/_synapse/admin\n    tags:\n      - Administration\n      - Management\n\
-  \      - Matrix\n      - Monitoring\n      - Users\n    serviceName: Synapse Admin API\n    serviceCategory: API\n  - name: Synapse Application Service API\n    baseURL: https://matrix.example.com/_matrix/app\n    tags:\n      - Application-Services\n      - Bots\n      - Bridges\n      - Integration\n      - Matrix\n    serviceName: Synapse Application Service API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
+source_url: https://element-hq.github.io/synapse/latest/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Synapse\nproviderId: synapse\npublisherName: Element (New Vector Ltd.) / matrix-org community\nserviceCategory: Open-Source Messaging Infrastructure\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Matrix\n  - Open Source\n  - Messaging\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for Synapse - the software is free (AGPL-3.0) so all cost is operator-borne infrastructure. The billing surface is the operator's underlying compute, database, media storage, and federation egress invoice rather than a Synapse-issued invoice. Element Server Suite is a separately-priced commercial distribution.\nsources:\n  - https://element-hq.github.io/synapse/latest/\n\
+  \  - https://github.com/element-hq/synapse\nbillingModel:\n  pricingCategory: Open-Source (Operator-Hosted)\n  billingFrequency: Continuous (Operator Infra)\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Synapse Matrix Homeserver\n  ServiceCategory: Open-Source Messaging Infrastructure\n  ProviderName: Element / matrix-org\n  PublisherName: Element (New Vector Ltd.)\n  BillingCurrency: USD\nmeters:\n  - name: monthly_active_users\n    description: MAUs on the homeserver - the most useful unit for sizing compute and database load.\n    unit: user\n    aggregation: max\n    dimensions:\n      - server\n  - name: federation_traffic\n    description: Bytes exchanged over federation; drives egress and database growth on busy public rooms.\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - server\n      - peer\n  - name: media_storage\n    description: Media repository storage (uploads, thumbnails) - persistent storage cost.\n    unit: GB-month\n\
+  \    aggregation: max\n    dimensions:\n      - server\n  - name: postgres_storage\n    description: Postgres-backing database growth - the dominant operator cost on large deployments.\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - server\n  - name: room_event_volume\n    description: Persisted room events; drives database write IO and disk consumption.\n    unit: event\n    aggregation: sum\n    dimensions:\n      - server\n      - room\nprinciples:\n  - name: Visibility\n    description: Synapse exposes Prometheus metrics and an Admin API that surface MAUs, federation traffic, room-event rates, and media storage; pair these with the cloud bill to attribute Synapse-driven cost.\n  - name: Allocation\n    description: Operators allocate against the homeserver they run; multi-tenant operators can use room-level / appservice-level metrics to apportion infra cost to internal customers.\n  - name: Optimization\n    description: Tune `ratelimiting` defaults, enable workers\
+  \ to scale federation independently, prune old media, archive old room state, and scope federation reachability to control egress.\n  - name: Accountability\n    description: The platform team running the Matrix homeserver owns Synapse cost; Element is the commercial counterparty only if ESS is purchased.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/synapse/refs/heads/main/finops/synapse-finops.yml
-sources: []
+sources:
+- https://element-hq.github.io/synapse/latest/
+- https://github.com/element-hq/synapse
 specification: FinOps Framework
 tags:
-- Chat
-- Collaboration
-- Decentralized
-- Federation
 - Matrix
+- Open Source
 - Messaging
-- Open-Source
-- Real-Time
 - FinOps
-- Cost Management
 - FOCUS
 ---

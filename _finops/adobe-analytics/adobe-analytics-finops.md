@@ -32,80 +32,64 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/adobe-analytics/refs/heads/main/openapi/adobe-analytics-data-repair-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Adobe Analytics API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Enterprise Contract
+description: 'FOCUS-aligned FinOps shape for Adobe Analytics: enterprise contract licensing keyed to annual server-call commit, Workspace seats, and feature bundle (Select / Prime / Ultimate). API access is included.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Adobe Analytics
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Adobe Analytics
-  PublisherName: Adobe Analytics
-  ServiceCategory: Developer Tools / API
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Adobe Inc.
+  ProviderName: Adobe
+  PublisherName: Adobe Inc.
+  ServiceCategory: Analytics
   ServiceName: Adobe Analytics
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Tracked Adobe Analytics server calls against the annual commit
+  dimensions:
+  - report_suite
+  - environment
+  name: server_calls
+  unit: server_call
+- aggregation: sum
+  description: Named Workspace user licenses
+  dimensions:
+  - role
+  name: workspace_seats
+  unit: seat-month
+- aggregation: sum
+  description: Reporting API 2.0 / Bulk Data Insertion / Livestream calls (no incremental charge; tracked for capacity)
   dimensions:
   - api
   - endpoint
-  - tier
-  - region
-  - consumer
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Adobe Analytics Finops
 provider_name: Adobe Analytics
 provider_slug: adobe-analytics
-publisher_name: Adobe Analytics
-service_category: API
+publisher_name: Adobe Inc.
+service_category: Analytics
 slug: adobe-analytics-finops
 source_filename: adobe-analytics-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Adobe Analytics\nproviderId: adobe-analytics\npublisherName: Adobe Analytics\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Adobe\n  - Analytics\n  - Business Intelligence\n  - Customer Intelligence\n  - Digital Marketing\n  - Marketing\n  - Web Analytics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Adobe Analytics API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
-  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
-  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Adobe Analytics\n  ServiceCategory: Developer Tools / API\n  ProviderName: Adobe Analytics\n  PublisherName: Adobe Analytics\n  InvoiceIssuerName: Adobe Analytics\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
-  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Adobe Analytics API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Data\n      - Marketing\n      - Metrics\n      - Reporting\n    serviceName: Adobe Analytics API\n    serviceCategory: API\n  - name: Adobe Analytics Bulk Data Insertion API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Batch Processing\n      - Data Collection\n      - Server-Side\n    serviceName: Adobe Analytics Bulk Data Insertion API\n    serviceCategory: API\n  - name: Adobe Analytics Livestream API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Data\n      - Real-Time\n      - Streaming\n    serviceName:\
-  \ Adobe Analytics Livestream API\n    serviceCategory: API\n  - name: Adobe Analytics Data Repair API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Compliance\n      - Data Management\n      - Privacy\n    serviceName: Adobe Analytics Data Repair API\n    serviceCategory: API\n  - name: Adobe Analytics Data Insertion API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Data Collection\n      - Real-Time\n      - Server-Side\n    serviceName: Adobe Analytics Data Insertion API\n    serviceCategory: API\n  - name: Adobe Analytics 1.4 API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Deprecated\n      - Legacy\n      - Reporting\n    serviceName: Adobe Analytics 1.4 API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://business.adobe.com/products/analytics/adobe-analytics.html
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Adobe Analytics\nproviderId: adobe-analytics\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Analytics\n  - Web Analytics\nnotes: >-\n  Adobe Analytics is contact-sales enterprise SaaS; line-item amounts are\n  contract-specific. FinOps levers focus on server-call commit management,\n  Workspace seat allocation, and unused-SKU consolidation rather than\n  on-demand metering.\ndescription: >-\n  FOCUS-aligned FinOps shape for Adobe Analytics: enterprise contract\n  licensing keyed to annual server-call commit, Workspace seats, and feature\n  bundle (Select / Prime / Ultimate). API access is included.\nsources:\n  - https://business.adobe.com/products/analytics/adobe-analytics.html\n  - https://developer.adobe.com/analytics-apis/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n\
+  \  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Adobe Inc.\nserviceCategory: Analytics\nbillingModel:\n  pricingCategory: Enterprise Contract\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Adobe Analytics\n  ServiceCategory: Analytics\n  ProviderName: Adobe\n  PublisherName: Adobe Inc.\n  InvoiceIssuerName: Adobe Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: server_calls\n    description: Tracked Adobe Analytics server calls against the annual commit\n    unit: server_call\n    aggregation: sum\n    dimensions:\n      - report_suite\n      - environment\n  - name: workspace_seats\n    description: Named Workspace user licenses\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - role\n  - name: api_requests\n    description: Reporting API 2.0 / Bulk Data Insertion\
+  \ / Livestream calls (no incremental charge; tracked for capacity)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\nprinciples:\n  - name: Visibility\n    description: >-\n      Use the Adobe Analytics Admin Console Server Call Usage report and\n      Workspace audit logs to track consumption against the annual commit.\n  - name: Allocation\n    description: >-\n      Allocate server-call cost to product or business unit using report-suite\n      naming conventions and the Workspace audit log.\n  - name: Optimization\n    description: >-\n      Audit unused Workspace seats quarterly; archive low-traffic report\n      suites; deduplicate client / server-side beacon implementations to\n      reduce wasted server calls; right-size the SKU at renewal.\n  - name: Accountability\n    description: >-\n      Adobe TAM and CSM run quarterly business reviews against the contracted\n      server-call commit; finance owns true-up reconciliation at year end.\n\
+  maintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/adobe-analytics/refs/heads/main/finops/adobe-analytics-finops.yml
-sources: []
+sources:
+- https://business.adobe.com/products/analytics/adobe-analytics.html
+- https://developer.adobe.com/analytics-apis/
 specification: FinOps Framework
 tags:
-- Adobe
-- Analytics
-- Business Intelligence
-- Customer Intelligence
-- Digital Marketing
-- Marketing
-- Web Analytics
 - FinOps
-- Cost Management
 - FOCUS
+- Analytics
+- Web Analytics
 ---

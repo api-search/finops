@@ -90,68 +90,103 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
   pricingCategory: Usage-Based
-description: FinOps framework definition for the Groq API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+description: FinOps view of GroqCloud spend. Groq bills usage-based per-token rates for chat / vision / reasoning per model, per-million-character rates for TTS, per-hour transcription rates for STT, per-call or per-hour rates for tools, and a 50% Batch discount. Prompt Caching gives 50% off cached input tokens.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
   InvoiceIssuerName: Groq
   PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Groq
   PublisherName: Groq
-  ServiceCategory: Developer Tools / API
-  ServiceName: Groq
+  ServiceCategory: AI and Machine Learning
+  ServiceName: GroqCloud
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Tokens sent in chat / vision / reasoning requests, billed per 1M tokens per model.
   dimensions:
+  - account
+  - model
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: input_tokens
+  unit: tokens
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Cached-input tokens billed at 50% of the standard input rate.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - account
+  - model
+  name: cached_input_tokens
+  unit: tokens
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Tokens generated, billed per 1M tokens per model.
   dimensions:
+  - account
+  - model
   - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: output_tokens
+  unit: tokens
+- aggregation: sum
+  description: TTS characters synthesized, billed per 1M characters per voice/model.
+  dimensions:
+  - account
+  - model
+  name: tts_characters
+  unit: characters
+- aggregation: sum
+  description: Audio hours transcribed, billed per hour per Whisper variant.
+  dimensions:
+  - account
+  - model
+  name: stt_audio_hours
+  unit: hours
+- aggregation: sum
+  description: Tool calls (web search, Wolfram) priced per 1,000 invocations.
+  dimensions:
+  - account
+  - tool
+  name: tool_invocations
+  unit: invocations
+- aggregation: sum
+  description: Tool compute hours (e.g., Code Execution at $0.18/hr).
+  dimensions:
+  - account
+  - tool
+  name: tool_compute_hours
+  unit: hours
+- aggregation: sum
+  description: Tokens consumed via the Batch API at 50% discount.
+  dimensions:
+  - account
+  - model
+  name: batch_tokens
+  unit: tokens
+- aggregation: sum
+  description: Tokens consumed via Flex Processing tier at relaxed-latency discount.
+  dimensions:
+  - account
+  - model
+  name: flex_tokens
+  unit: tokens
 name: Groq Finops
 provider_name: Groq
 provider_slug: groq
 publisher_name: Groq
-service_category: API
+service_category: AI and Machine Learning
 slug: groq-finops
 source_filename: groq-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Groq\nproviderId: groq\npublisherName: Groq\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - LLM\n  - Inference\n  - LPU\n  - Low Latency\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Groq API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
-  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
-  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Groq\n  ServiceCategory: Developer Tools / API\n  ProviderName: Groq\n  PublisherName: Groq\n  InvoiceIssuerName: Groq\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n\
-  \  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Groq Chat Completions API\n    baseURL: https://api.groq.com/openai/v1\n    tags:\n      - Chat\n      - Completions\n      - LLM\n    serviceName: Groq Chat Completions API\n    serviceCategory: API\n  - name: Groq Reasoning API\n    baseURL: https://api.groq.com/openai/v1\n    tags:\n      - Reasoning\n      - Chain of Thought\n    serviceName: Groq Reasoning API\n    serviceCategory: API\n  - name: Groq Vision API\n    baseURL: https://api.groq.com/openai/v1\n    tags:\n      - Vision\n      - OCR\n      - Multimodal\n    serviceName: Groq Vision API\n    serviceCategory: API\n  - name: Groq Speech-to-Text API\n    baseURL: https://api.groq.com/openai/v1\n    tags:\n      - Speech to Text\n      - Transcription\n      - Whisper\n    serviceName: Groq Speech-to-Text\
-  \ API\n    serviceCategory: API\n  - name: Groq Text-to-Speech API\n    baseURL: https://api.groq.com/openai/v1\n    tags:\n      - Text to Speech\n      - Audio\n      - Orpheus\n    serviceName: Groq Text-to-Speech API\n    serviceCategory: API\n  - name: Groq Content Moderation API\n    baseURL: https://api.groq.com/openai/v1\n    tags:\n      - Moderation\n      - Safety\n      - Llama Guard\n    serviceName: Groq Content Moderation API\n    serviceCategory: API\n  - name: Groq Batch API\n    baseURL: https://api.groq.com/openai/v1\n    tags:\n      - Batch\n      - Async\n    serviceName: Groq Batch API\n    serviceCategory: API\n  - name: Groq Flex Processing API\n    baseURL: https://api.groq.com/openai/v1\n    tags:\n      - Flex\n      - Service Tier\n    serviceName: Groq Flex Processing API\n    serviceCategory: API\n  - name: Groq Files API\n    baseURL: https://api.groq.com/openai/v1\n    tags:\n      - Files\n      - Storage\n    serviceName: Groq Files API\n    serviceCategory:\
-  \ API\n  - name: Groq Models API\n    baseURL: https://api.groq.com/openai/v1\n    tags:\n      - Models\n      - Catalog\n    serviceName: Groq Models API\n    serviceCategory: API\n  - name: Groq Tools API\n    baseURL: https://api.groq.com/openai/v1\n    tags:\n      - Tools\n      - Web Search\n      - Code Execution\n    serviceName: Groq Tools API\n    serviceCategory: API\n  - name: Groq LoRA Inference API\n    baseURL: https://api.groq.com/openai/v1\n    tags:\n      - LoRA\n      - Custom Models\n      - Fine-Tuning\n    serviceName: Groq LoRA Inference API\n    serviceCategory: API\n  - name: Groq Prompt Caching\n    baseURL: https://api.groq.com/openai/v1\n    tags:\n      - Prompt Caching\n      - Optimization\n    serviceName: Groq Prompt Caching\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target:\
-  \ TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://groq.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Groq\nproviderId: groq\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- AI\n- LLM\n- Inference\n- LPU\n- Low Latency\n- FinOps\n- Cost Management\n- FOCUS\ndescription: >-\n  FinOps view of GroqCloud spend. Groq bills usage-based per-token rates for\n  chat / vision / reasoning per model, per-million-character rates for TTS,\n  per-hour transcription rates for STT, per-call or per-hour rates for tools,\n  and a 50% Batch discount. Prompt Caching gives 50% off cached input tokens.\nnotes: >-\n  Per-model rates are subject to change; verify against the Groq pricing page\n  during reconciliation.\nsources:\n- https://groq.com/pricing\n- https://console.groq.com/docs\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n\
+  \  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Groq\nserviceCategory: AI and Machine Learning\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n  - Usage\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: GroqCloud\n  ServiceCategory: AI and Machine Learning\n  ProviderName: Groq\n  PublisherName: Groq\n  InvoiceIssuerName: Groq\n  BillingCurrency: USD\n  ChargeCategory: Usage\n  PricingCategory: Usage-Based\nmeters:\n- name: input_tokens\n  description: Tokens sent in chat / vision / reasoning requests, billed per 1M tokens per model.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - account\n  - model\n  - api\n- name: cached_input_tokens\n  description: Cached-input tokens billed at 50% of the standard input rate.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - account\n  - model\n- name: output_tokens\n  description: Tokens generated,\
+  \ billed per 1M tokens per model.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - account\n  - model\n  - api\n- name: tts_characters\n  description: TTS characters synthesized, billed per 1M characters per voice/model.\n  unit: characters\n  aggregation: sum\n  dimensions:\n  - account\n  - model\n- name: stt_audio_hours\n  description: Audio hours transcribed, billed per hour per Whisper variant.\n  unit: hours\n  aggregation: sum\n  dimensions:\n  - account\n  - model\n- name: tool_invocations\n  description: Tool calls (web search, Wolfram) priced per 1,000 invocations.\n  unit: invocations\n  aggregation: sum\n  dimensions:\n  - account\n  - tool\n- name: tool_compute_hours\n  description: Tool compute hours (e.g., Code Execution at $0.18/hr).\n  unit: hours\n  aggregation: sum\n  dimensions:\n  - account\n  - tool\n- name: batch_tokens\n  description: Tokens consumed via the Batch API at 50% discount.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - account\n  - model\n\
+  - name: flex_tokens\n  description: Tokens consumed via Flex Processing tier at relaxed-latency discount.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - account\n  - model\nprinciples:\n- name: Visibility\n  description: Pull GroqCloud usage and billing exports; inspect per-model token burn.\n- name: Allocation\n  description: Tag API keys per workload/team; map to internal cost centers.\n- name: Optimization\n  description: Use Batch (-50%) for non-realtime jobs; enable Prompt Caching; route lower-quality work to Flex; pick smaller open-source models when sufficient.\n- name: Accountability\n  description: Assign owners per project/key; review token spend monthly against budget.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/groq/refs/heads/main/finops/groq-finops.yml
-sources: []
+sources:
+- https://groq.com/pricing
+- https://console.groq.com/docs
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - AI

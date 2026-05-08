@@ -7,75 +7,44 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Not Applicable
   chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the TPG Inc API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Not Applicable
+  pricingCategory: Not Applicable
+description: TPG Inc. is an asset manager rather than an API/SaaS vendor. The FinOps framework does not meaningfully apply because there is no consumption-billed API surface; LP economics (management fees, carried interest) are governed by fund agreements and are out of scope.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: TPG Inc
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: TPG Inc.
   ProviderName: TPG Inc
-  PublisherName: TPG Inc
-  ServiceCategory: Developer Tools / API
-  ServiceName: TPG Inc
+  PublisherName: TPG Inc.
+  ServiceCategory: Alternative Asset Management
+  ServiceName: TPG
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  description: TPG does not bill on a consumption meter. LP-level fund economics are governed by partnership agreements, not by FOCUS columns.
+  name: not_applicable
+  unit: varies
 name: Tpg Finops
 provider_name: TPG Inc
 provider_slug: tpg
-publisher_name: TPG Inc
-service_category: API
+publisher_name: TPG Inc.
+service_category: Alternative Asset Management
 slug: tpg-finops
 source_filename: tpg-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: TPG Inc\nproviderId: tpg\npublisherName: TPG Inc\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Private Equity\n  - Alternative Assets\n  - Investment\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the TPG Inc API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: TPG Inc\n  ServiceCategory: Developer Tools / API\n  ProviderName: TPG Inc\n  PublisherName: TPG Inc\n  InvoiceIssuerName: TPG Inc\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n \
-  \     - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: TPG Inc API\n    baseURL: https://api.tpg.com\n    tags:\n      - Private Equity\n      - Alternative Assets\n      - Investment\n    serviceName: TPG Inc API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.tpg.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: TPG Inc\nproviderId: tpg\npublisherName: TPG Inc.\nserviceCategory: Alternative Asset Management\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Private Equity\n  - Alternative Assets\n  - Investment Management\n  - FinOps\n  - FOCUS\ndescription: TPG Inc. is an asset manager rather than an API/SaaS vendor. The FinOps framework does not\n  meaningfully apply because there is no consumption-billed API surface; LP economics (management fees,\n  carried interest) are governed by fund agreements and are out of scope.\nsources:\n  - https://www.tpg.com/\nnotes: Not an API provider; no FOCUS-aligned consumption meters apply.\n\
+  billingModel:\n  pricingCategory: Not Applicable\n  billingFrequency: Not Applicable\n  billingCurrency: USD\n  chargeCategories:\n    - Not Applicable\nfocusColumns:\n  ServiceName: TPG\n  ServiceCategory: Alternative Asset Management\n  ProviderName: TPG Inc\n  PublisherName: TPG Inc.\n  InvoiceIssuerName: TPG Inc.\n  BillingCurrency: USD\nmeters:\n  - name: not_applicable\n    description: TPG does not bill on a consumption meter. LP-level fund economics are governed by partnership\n      agreements, not by FOCUS columns.\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Not applicable — fund-level reporting is provided through investor-relations channels,\n      not through a self-service usage API.\n  - name: Allocation\n    description: Not applicable at the API level; LP capital accounts are allocated per the partnership\n      agreement.\n  - name: Optimization\n    description: Not applicable — there are no consumption levers to optimize.\n\
+  \  - name: Accountability\n    description: LP relationship managers handle commercial accountability; not a FinOps surface.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tpg/refs/heads/main/finops/tpg-finops.yml
-sources: []
+sources:
+- https://www.tpg.com/
 specification: FinOps Framework
 tags:
 - Private Equity
 - Alternative Assets
-- Investment
+- Investment Management
 - FinOps
-- Cost Management
 - FOCUS
 ---

@@ -13,80 +13,53 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/sage/refs/heads/main/openapi/sage-accounting-openapi.yml
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: USD/GBP/EUR
+  billingFrequency: Monthly or Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Sage API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription / Contact Sales
+description: 'FOCUS-aligned FinOps placeholder for Sage: API access is bundled with paid Sage product subscriptions whose pricing varies by product, region, and seat. With public pages bot-gated, this artifact reflects a contracted-spend posture rather than usage-based billing.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Sage
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Sage Software, Inc. (US) / The Sage Group plc (regional entities)
   ProviderName: Sage
-  PublisherName: Sage
-  ServiceCategory: Developer Tools / API
+  PublisherName: The Sage Group plc
+  ServiceCategory: ERP / Accounting Software
   ServiceName: Sage
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - product
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: subscription_seats
+  unit: seat
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - product
+  name: product_modules
+  unit: varies
 name: Sage Finops
 provider_name: Sage
 provider_slug: sage
-publisher_name: Sage
-service_category: API
+publisher_name: The Sage Group plc
+service_category: Business Software / ERP / Accounting
 slug: sage-finops
 source_filename: sage-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sage\nproviderId: sage\npublisherName: Sage\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Accounting\n  - Business Management\n  - Cloud Software\n  - ERP\n  - Payroll\n  - HR\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sage API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sage\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sage\n  PublisherName: Sage\n  InvoiceIssuerName: Sage\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      -\
-  \ api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Sage Accounting API\n    baseURL: ''\n    tags:\n      - Accounting\n      - ERP\n      - REST\n      - OAuth 2.0\n    serviceName: Sage Accounting API\n    serviceCategory: API\n  - name: Sage Intacct API\n    baseURL: ''\n    tags:\n      - Accounting\n      - ERP\n      - REST\n      - XML\n      - OAuth 2.0\n    serviceName: Sage Intacct API\n    serviceCategory: API\n  - name: Sage X3 API\n    baseURL: ''\n    tags:\n      - ERP\n      - GraphQL\n      - Manufacturing\n      - Distribution\n    serviceName: Sage X3 API\n    serviceCategory: API\n  - name: Sage 200 API\n    baseURL: ''\n    tags:\n      - Accounting\n      - ERP\n      - REST\n    serviceName: Sage 200 API\n    serviceCategory: API\n  - name: Sage 50 Accounts\
-  \ API\n    baseURL: ''\n    tags:\n      - Accounting\n      - Desktop\n      - REST\n    serviceName: Sage 50 Accounts API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://developer.sage.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Sage\nproviderId: sage\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Accounting\n  - ERP\n  - B2B\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps placeholder for Sage: API access is bundled with paid Sage product\n  subscriptions whose pricing varies by product, region, and seat. With public pages bot-gated, this artifact\n  reflects a contracted-spend posture rather than usage-based billing.'\nsources:\n  - https://developer.sage.com/\n  - https://www.sage.com/\nnotes: Sage marketing and developer pages returned 403; per-product invoice line items, per-call prices,\n  and FOCUS-friendly meter mappings could not be verified. This file is a Contact-Sales placeholder.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n \
+  \ dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: The Sage Group plc\nserviceCategory: Business Software / ERP / Accounting\nbillingModel:\n  pricingCategory: Subscription / Contact Sales\n  billingFrequency: Monthly or Annual\n  billingCurrency: USD/GBP/EUR\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Sage\n  ServiceCategory: ERP / Accounting Software\n  ProviderName: Sage\n  PublisherName: The Sage Group plc\n  InvoiceIssuerName: Sage Software, Inc. (US) / The Sage Group plc (regional entities)\n  BillingCurrency: USD\nmeters:\n  - name: subscription_seats\n    unit: seat\n    aggregation: max\n    dimensions:\n      - product\n      - region\n  - name: product_modules\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - product\nprinciples:\n  - name: Visibility\n    description: Pull seat / module usage from each Sage product portal (Accounting, Intacct, People).\n      There is no unified Sage-wide usage API; consolidate\
+  \ at the procurement layer.\n  - name: Allocation\n    description: Allocate by Sage product, region, and entity since Sage commonly invoices through regional\n      entities; tag internal cost centers by Sage tenant.\n  - name: Optimization\n    description: Right-size seats at renewal, retire unused modules, and consolidate tenants where Sage\n      product / region permits.\n  - name: Accountability\n    description: Finance owns the Sage subscription portfolio; engineering owns API integration health.\n      Reconcile invoice line items against tenant seat counts each renewal cycle.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sage/refs/heads/main/finops/sage-finops.yml
-sources: []
+sources:
+- https://developer.sage.com/
+- https://www.sage.com/
 specification: FinOps Framework
 tags:
 - Accounting
-- Business Management
-- Cloud Software
 - ERP
-- Payroll
-- HR
+- B2B
 - FinOps
-- Cost Management
 - FOCUS
 ---

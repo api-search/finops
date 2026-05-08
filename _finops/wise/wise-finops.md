@@ -67,72 +67,81 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/wise/refs/heads/main/openapi/wise-platform-openapi.yml
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: Multi-Currency
+  billingFrequency: Per Transaction (statement monthly)
   chargeCategories:
   - Usage
   - Purchase
+  - Adjustment
   - Tax
   - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Wise API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Pay-As-You-Go (Transaction Fees + FX Markup)
+description: FOCUS-aligned FinOps for Wise. The Wise Platform API itself is free; cost is incurred per transaction in two components - a route-specific transfer fee (a fixed amount plus a percentage of the converted amount) and a small markup applied on top of the mid-market FX rate when a conversion occurs. Wise Business adds a one-time account-opening fee in most regions and per-card issuance fees. Wise Platform (embedded partner) tenants negotiate consolidated pricing with monthly settlement.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Wise
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Wise Payments Limited
   ProviderName: Wise
-  PublisherName: Wise
-  ServiceCategory: Developer Tools / API
-  ServiceName: Wise
+  PublisherName: Wise Payments Limited
+  ServiceCategory: Payments
+  ServiceName: Wise Platform
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Per-transfer fee composed of a route-specific fixed component plus a percentage of the converted amount. Visible on the quote response before the transfer is created.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - source_currency
+  - target_currency
+  - pay_in_method
+  - profile_type
+  name: transfer_fee
+  unit: transfer
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Margin applied to the mid-market exchange rate on currency conversions. Captured implicitly in the rate returned by the Quotes API.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - source_currency
+  - target_currency
+  name: fx_markup
+  unit: fx_conversion
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: One-time fee charged on Wise Business account creation in most regions (e.g. ~$31 US / GBP 45 UK).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - region
+  name: account_opening_fee
+  unit: account
+- aggregation: sum
+  description: Wise debit card issuance and replacement fees (issuance ~$9 in the US, GBP 7 UK).
+  dimensions:
+  - region
+  - card_type
+  name: card_fee
+  unit: card
+- aggregation: sum
+  description: Embedded Wise Platform partner per-transaction or settlement fee, negotiated contractually for banks and fintechs that resell Wise capabilities.
+  dimensions:
+  - partner_id
+  - transaction_type
+  name: platform_partner_fee
+  unit: transaction
 name: Wise Finops
 provider_name: Wise
 provider_slug: wise
-publisher_name: Wise
-service_category: API
+publisher_name: Wise Payments Limited
+service_category: Payments
 slug: wise-finops
 source_filename: wise-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Wise\nproviderId: wise\npublisherName: Wise\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Payments\n  - FX\n  - Cross-Border\n  - Banking\n  - Multi-Currency\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Wise API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Wise\n  ServiceCategory: Developer Tools / API\n  ProviderName: Wise\n  PublisherName: Wise\n  InvoiceIssuerName: Wise\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
-  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Wise Profiles API\n    baseURL: https://api.wise.com/v2\n    tags:\n      - Profiles\n      - Identity\n      - KYC\n    serviceName: Wise Profiles API\n    serviceCategory: API\n  - name: Wise Recipients API\n    baseURL: https://api.wise.com/v1\n    tags:\n      - Recipients\n      - Beneficiaries\n      - Bank Accounts\n    serviceName: Wise Recipients API\n    serviceCategory: API\n  - name: Wise Quotes API\n    baseURL: https://api.wise.com/v3\n    tags:\n      - Quotes\n      - FX\n      - Pricing\n    serviceName: Wise Quotes API\n    serviceCategory: API\n  - name: Wise Transfers API\n    baseURL: https://api.wise.com/v1\n    tags:\n      - Transfers\n      - Payments\n      - Cross-Border\n    serviceName: Wise Transfers API\n    serviceCategory:\
-  \ API\n  - name: Wise Balances API\n    baseURL: https://api.wise.com/v4\n    tags:\n      - Balances\n      - Multi-Currency\n      - Wallets\n    serviceName: Wise Balances API\n    serviceCategory: API\n  - name: Wise Multi-Currency Account API\n    baseURL: https://api.wise.com/v1\n    tags:\n      - Multi-Currency Account\n      - Receive Money\n      - Local Bank Details\n    serviceName: Wise Multi-Currency Account API\n    serviceCategory: API\n  - name: Wise Statements API\n    baseURL: https://api.wise.com/v1\n    tags:\n      - Statements\n      - Reporting\n      - Accounting\n    serviceName: Wise Statements API\n    serviceCategory: API\n  - name: Wise Cards API\n    baseURL: https://api.wise.com/v3\n    tags:\n      - Cards\n      - Issuing\n      - Spending Controls\n    serviceName: Wise Cards API\n    serviceCategory: API\n  - name: Wise Webhooks API\n    baseURL: https://api.wise.com/v3\n    tags:\n      - Webhooks\n      - Events\n      - Notifications\n    serviceName:\
-  \ Wise Webhooks API\n    serviceCategory: API\n  - name: Wise Simulation API\n    baseURL: https://api.sandbox.transferwise.tech\n    tags:\n      - Simulation\n      - Sandbox\n      - Testing\n    serviceName: Wise Simulation API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://wise.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Wise\nproviderId: wise\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n  - Payments\n  - FX\n  - Cross-Border\n  - Banking\n  - Multi-Currency\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps for Wise. The Wise Platform API itself is free; cost is incurred\n  per transaction in two components - a route-specific transfer fee (a fixed amount plus\n  a percentage of the converted amount) and a small markup applied on top of the\n  mid-market FX rate when a conversion occurs. Wise Business adds a one-time\n  account-opening fee in most regions and per-card issuance fees. Wise Platform\n  (embedded partner) tenants negotiate consolidated pricing with monthly settlement.\nsources:\n  - https://wise.com/pricing\n  - https://wise.com/help/articles/2932150\n  - https://docs.wise.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n\
+  \  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Wise Payments Limited\nserviceCategory: Payments\nbillingModel:\n  pricingCategory: Pay-As-You-Go (Transaction Fees + FX Markup)\n  billingFrequency: Per Transaction (statement monthly)\n  billingCurrency: Multi-Currency\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\n    - Tax\n    - Credit\nfocusColumns:\n  ServiceName: Wise Platform\n  ServiceCategory: Payments\n  ProviderName: Wise\n  PublisherName: Wise Payments Limited\n  InvoiceIssuerName: Wise Payments Limited\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: transfer_fee\n    description: >-\n      Per-transfer fee composed of a route-specific fixed component plus a percentage of\n      the converted amount. Visible on the quote response before the transfer is created.\n    unit: transfer\n    aggregation: sum\n\
+  \    dimensions:\n      - source_currency\n      - target_currency\n      - pay_in_method\n      - profile_type\n  - name: fx_markup\n    description: >-\n      Margin applied to the mid-market exchange rate on currency conversions. Captured\n      implicitly in the rate returned by the Quotes API.\n    unit: fx_conversion\n    aggregation: sum\n    dimensions:\n      - source_currency\n      - target_currency\n  - name: account_opening_fee\n    description: >-\n      One-time fee charged on Wise Business account creation in most regions\n      (e.g. ~$31 US / GBP 45 UK).\n    unit: account\n    aggregation: sum\n    dimensions:\n      - region\n  - name: card_fee\n    description: >-\n      Wise debit card issuance and replacement fees (issuance ~$9 in the US, GBP 7 UK).\n    unit: card\n    aggregation: sum\n    dimensions:\n      - region\n      - card_type\n  - name: platform_partner_fee\n    description: >-\n      Embedded Wise Platform partner per-transaction or settlement fee, negotiated\n\
+  \      contractually for banks and fintechs that resell Wise capabilities.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - partner_id\n      - transaction_type\nprinciples:\n  - name: Visibility\n    description: >-\n      Every transfer carries an explicit fee breakdown on the quote and the resulting\n      transfer object. Use the Statements API (JSON/CSV/MT940) to reconcile fees and FX\n      markup against the converted amount line by line.\n  - name: Allocation\n    description: >-\n      Tag transfers with customerTransactionId on creation to attribute spend to a\n      cost center or end-customer. Wise Business multi-user RBAC and Wise Platform\n      partner accounts allow per-team or per-tenant attribution.\n  - name: Optimization\n    description: >-\n      Pre-fund transfers from a same-currency Wise balance to skip the FX markup. Batch\n      payouts (up to 1,000 per file) reduce per-transfer overhead. Choose lower-fee\n      pay-in methods (bank debit\
+  \ / ACH) over card funding where speed permits.\n  - name: Accountability\n    description: >-\n      Assign a treasury owner per Wise profile. Wire pay-in/pay-out paths and FX corridors\n      to internal cost categories so the FX markup is treated as a controllable spend\n      lever, not a hidden cost.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/wise/refs/heads/main/finops/wise-finops.yml
-sources: []
+sources:
+- https://wise.com/pricing
+- https://wise.com/help/articles/2932150
+- https://docs.wise.com/
 specification: FinOps Framework
 tags:
 - Payments
@@ -141,6 +150,5 @@ tags:
 - Banking
 - Multi-Currency
 - FinOps
-- Cost Management
 - FOCUS
 ---

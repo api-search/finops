@@ -111,75 +111,66 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Microsoft API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Pay-As-You-Go + Committed Use
+description: FOCUS-aligned FinOps for Microsoft (Azure + 365 + Foundry + Graph).
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Microsoft
-  PublisherName: Microsoft
-  ServiceCategory: Developer Tools / API
-  ServiceName: Microsoft
+  ProviderName: Microsoft (Azure + 365 + Foundry + Graph)
+  PublisherName: Microsoft (Azure + 365 + Foundry + Graph)
+  ServiceCategory: Cloud + Productivity + AI
+  ServiceName: Microsoft (Azure + 365 + Foundry + Graph)
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - service
   - region
-  - consumer
+  - instance_type
+  - tenant
+  name: compute_hours
+  unit: instance-hour
+- aggregation: max
+  dimensions:
+  - service
+  - tier
+  name: storage
+  unit: GB-month
+- aggregation: sum
+  dimensions:
+  - egress_type
+  - region_pair
+  name: data_transfer
+  unit: GB
+- aggregation: sum
+  dimensions:
+  - service
+  - operation
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - service
+  name: managed_services
+  unit: varies
 name: Microsoft Finops
 provider_name: Microsoft
 provider_slug: microsoft
-publisher_name: Microsoft
-service_category: API
+publisher_name: Microsoft (Azure + 365 + Foundry + Graph)
+service_category: Cloud + Productivity + AI
 slug: microsoft-finops
 source_filename: microsoft-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft\nproviderId: microsoft\npublisherName: Microsoft\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be\
-  \ allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing\
-  \ and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft\n  PublisherName: Microsoft\n  InvoiceIssuerName: Microsoft\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n\
-  \    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Microsoft Graph API\n    baseURL: https://graph.microsoft.com\n    tags:\n      - Azure AD\n      - Office 365\n      - OneDrive\n      - Outlook\n      - Teams\n    serviceName: Microsoft Graph API\n    serviceCategory: API\n  - name: Azure REST API\n    baseURL: https://management.azure.com\n    tags:\n      - Azure\n      - Cloud\n      - Infrastructure\n      - Resources\n    serviceName: Azure REST API\n    serviceCategory: API\n  - name: Azure OpenAI Service API\n    baseURL: https://{resource-name}.openai.azure.com\n    tags:\n      - AI\n      - GPT\n      - Machine Learning\n      - OpenAI\n    serviceName: Azure OpenAI Service API\n    serviceCategory: API\n  - name: Azure Cognitive Services API\n    baseURL: https://{region}.api.cognitive.microsoft.com\n    tags:\n      - AI\n \
-  \     - Computer Vision\n      - Language\n      - Machine Learning\n      - Speech\n    serviceName: Azure Cognitive Services API\n    serviceCategory: API\n  - name: Microsoft Teams API\n    baseURL: https://graph.microsoft.com/v1.0/teams\n    tags:\n      - Chat\n      - Collaboration\n      - Messaging\n      - Teams\n    serviceName: Microsoft Teams API\n    serviceCategory: API\n  - name: OneDrive API\n    baseURL: https://graph.microsoft.com/v1.0/me/drive\n    tags:\n      - Files\n      - OneDrive\n      - SharePoint\n      - Storage\n    serviceName: OneDrive API\n    serviceCategory: API\n  - name: Power Platform API\n    baseURL: https://api.powerplatform.com\n    tags:\n      - Automation\n      - Business Intelligence\n      - Low Code\n      - Power Apps\n    serviceName: Power Platform API\n    serviceCategory: API\n  - name: Bing Search APIs\n    baseURL: https://api.bing.microsoft.com/v7.0\n    tags:\n      - Bing\n      - Image Search\n      - Search\n      - Web Search\n\
-  \    serviceName: Bing Search APIs\n    serviceCategory: API\n  - name: SharePoint REST API\n    baseURL: https://{tenant}.sharepoint.com/_api\n    tags:\n      - Collaboration\n      - Content Management\n      - Documents\n      - SharePoint\n    serviceName: SharePoint REST API\n    serviceCategory: API\n  - name: Power BI REST API\n    baseURL: https://api.powerbi.com/v1.0/myorg\n    tags:\n      - Analytics\n      - Business Intelligence\n      - Dashboards\n      - Reports\n    serviceName: Power BI REST API\n    serviceCategory: API\n  - name: Azure DevOps REST API\n    baseURL: https://dev.azure.com/{organization}/_apis\n    tags:\n      - CI/CD\n      - DevOps\n      - Git\n      - Pipelines\n      - Work Items\n    serviceName: Azure DevOps REST API\n    serviceCategory: API\n  - name: Dynamics 365 REST API\n    baseURL: https://{org}.api.crm.dynamics.com/api/data/v9.2\n    tags:\n      - Business Applications\n      - CRM\n      - Dynamics\n      - ERP\n    serviceName: Dynamics\
-  \ 365 REST API\n    serviceCategory: API\n  - name: LinkedIn API\n    baseURL: https://api.linkedin.com/v2\n    tags:\n      - Marketing\n      - Professional Network\n      - Recruiting\n      - Social\n    serviceName: LinkedIn API\n    serviceCategory: API\n  - name: Azure Communication Services API\n    baseURL: https://{resource}.communication.azure.com\n    tags:\n      - Chat\n      - Communication\n      - Email\n      - SMS\n      - Video\n      - Voice\n    serviceName: Azure Communication Services API\n    serviceCategory: API\n  - name: Microsoft Entra ID API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Authentication\n      - Authorization\n      - Directory\n      - Identity\n      - Security\n    serviceName: Microsoft Entra ID API\n    serviceCategory: API\n  - name: Microsoft Outlook API\n    baseURL: https://graph.microsoft.com/v1.0/me\n    tags:\n      - Calendar\n      - Contacts\n      - Email\n      - Outlook\n    serviceName: Microsoft Outlook\
-  \ API\n    serviceCategory: API\n  - name: Microsoft Intune API\n    baseURL: https://graph.microsoft.com/v1.0\n    tags:\n      - Compliance\n      - Device Management\n      - Endpoint Management\n      - Mobile\n    serviceName: Microsoft Intune API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: https://www.microsoft.com/en-us/microsoft-365/business/compare-all-plans
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Microsoft (Azure + 365 + Foundry + Graph)\nproviderId: microsoft\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Cloud + Productivity + AI\ndescription: FOCUS-aligned FinOps for Microsoft (Azure + 365 + Foundry + Graph).\nsources:\n  - https://www.microsoft.com/en-us/microsoft-365/business/compare-all-plans\n  - https://focus.finops.org/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Microsoft (Azure + 365 + Foundry + Graph)\nserviceCategory: Cloud + Productivity + AI\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Committed Use\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Microsoft (Azure\
+  \ + 365 + Foundry + Graph)\n  ServiceCategory: Cloud + Productivity + AI\n  ProviderName: Microsoft (Azure + 365 + Foundry + Graph)\n  PublisherName: Microsoft (Azure + 365 + Foundry + Graph)\n  BillingCurrency: USD\nmeters:\n  - name: compute_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - service\n      - region\n      - instance_type\n      - tenant\n  - name: storage\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - service\n      - tier\n  - name: data_transfer\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - egress_type\n      - region_pair\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - service\n      - operation\n  - name: managed_services\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - service\nprinciples:\n  - name: Visibility\n    description: Track Microsoft (Azure + 365 + Foundry + Graph) consumption monthly.\n  - name: Allocation\n    description: Tag\
+  \ usage to teams/cost centers for chargeback.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/finops/microsoft-finops.yml
-sources: []
+sources:
+- https://www.microsoft.com/en-us/microsoft-365/business/compare-all-plans
+- https://focus.finops.org/
 specification: FinOps Framework
 tags:
 - FinOps
-- Cost Management
 - FOCUS
+- Cloud + Productivity + AI
 ---

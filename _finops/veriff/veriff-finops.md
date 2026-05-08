@@ -18,67 +18,73 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
+  - Adjustment
   - Tax
   - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Veriff API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Per-Verification (Tiered) + Monthly Minimum + Add-Ons
+description: FOCUS-aligned FinOps for Veriff. Cost is dominated by per-verification consumption against the active tier (Essential $0.80, Plus $1.39, Premium $1.89, Enterprise custom) up to the monthly minimum, plus stacked add-on per-verification surcharges for extended retention (+$0.30), PEP/sanctions screening (+$0.64), and ongoing monitoring (+$0.09). The web and mobile SDKs are free; cost begins when a session reaches a billable terminal state. Optimisation levers are reducing duplicate or abandoned sessions, choosing the lowest tier that meets the regulatory profile, and selectively enabling add-ons.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Veriff
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Veriff OU
   ProviderName: Veriff
-  PublisherName: Veriff
-  ServiceCategory: Developer Tools / API
+  PublisherName: Veriff OU
+  ServiceCategory: Identity Verification
   ServiceName: Veriff
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Per-completed verification (terminal session decision); the dominant usage meter, billed at the active tier's per-verification rate.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - account_id
+  - plan_tier
+  - country
+  - document_type
+  name: verification
+  unit: verification
+- aggregation: max
+  description: Monthly minimum charge for the active tier ($49 Essential / $99 Plus / $209 Premium / custom Enterprise); whichever is greater (minimum or actual usage) is billed.
+  dimensions:
+  - account_id
+  - plan_tier
+  name: monthly_minimum
+  unit: month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Per-verification PEP / sanctions / adverse-media screening surcharge (+$0.64).
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - account_id
+  name: pep_screening
+  unit: verification
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Per-verification ongoing-monitoring surcharge (+$0.09).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - account_id
+  name: ongoing_monitoring
+  unit: verification
+- aggregation: sum
+  description: Per-verification extended-retention surcharge for retaining records 2 years instead of the tier default (+$0.30).
+  dimensions:
+  - account_id
+  name: extended_retention
+  unit: verification
 name: Veriff Finops
 provider_name: Veriff
 provider_slug: veriff
-publisher_name: Veriff
-service_category: API
+publisher_name: Veriff OU
+service_category: Identity Verification
 slug: veriff-finops
 source_filename: veriff-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Veriff\nproviderId: veriff\npublisherName: Veriff\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - KYC\n  - Identity Verification\n  - Biometrics\n  - Fraud Prevention\n  - AML\n  - SaaS\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Veriff API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
-  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
-  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Veriff\n  ServiceCategory: Developer Tools / API\n  ProviderName: Veriff\n  PublisherName: Veriff\n  InvoiceIssuerName: Veriff\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Veriff Sessions API\n    baseURL: https://stationapi.veriff.com/v1\n    tags:\n      - Sessions\n      - Verification\n      - Onboarding\n    serviceName: Veriff Sessions API\n    serviceCategory: API\n  - name: Veriff Media API\n    baseURL: https://stationapi.veriff.com/v1\n    tags:\n      - Media\n      - Uploads\n      - Documents\n    serviceName: Veriff Media API\n    serviceCategory: API\n  - name: Veriff Decisions API\n    baseURL: https://stationapi.veriff.com/v1\n    tags:\n      - Decisions\n      - Verification Results\n    serviceName: Veriff Decisions API\n    serviceCategory: API\n  - name: Veriff Attempts API\n    baseURL: https://stationapi.veriff.com/v1\n    tags:\n      - Attempts\n      - Resubmission\n\
-  \    serviceName: Veriff Attempts API\n    serviceCategory: API\n  - name: Veriff Persons API\n    baseURL: https://stationapi.veriff.com/v1\n    tags:\n      - Persons\n      - Identity Data\n    serviceName: Veriff Persons API\n    serviceCategory: API\n  - name: Veriff Watchlist Screening API\n    baseURL: https://stationapi.veriff.com/v1\n    tags:\n      - AML\n      - Sanctions\n      - PEP\n      - Watchlist\n    serviceName: Veriff Watchlist Screening API\n    serviceCategory: API\n  - name: Veriff Webhook Delivery\n    baseURL: customer-configured\n    tags:\n      - Webhooks\n      - Events\n      - HMAC\n    serviceName: Veriff Webhook Delivery\n    serviceCategory: API\n  - name: Veriff Web (InContext / Hosted) SDK\n    baseURL: https://github.com/Veriff\n    tags:\n      - Web SDK\n      - JavaScript\n      - Capture\n    serviceName: Veriff Web (InContext / Hosted) SDK\n    serviceCategory: API\n  - name: Veriff iOS SDK\n    baseURL: https://github.com/Veriff/veriff-ios\n\
-  \    tags:\n      - iOS SDK\n      - Mobile\n      - Capture\n    serviceName: Veriff iOS SDK\n    serviceCategory: API\n  - name: Veriff Android SDK\n    baseURL: https://github.com/Veriff/veriff-android\n    tags:\n      - Android SDK\n      - Mobile\n      - Capture\n    serviceName: Veriff Android SDK\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.veriff.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Veriff\nproviderId: veriff\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n  - KYC\n  - Identity Verification\n  - Biometrics\n  - Fraud Prevention\n  - AML\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps for Veriff. Cost is dominated by per-verification consumption\n  against the active tier (Essential $0.80, Plus $1.39, Premium $1.89, Enterprise\n  custom) up to the monthly minimum, plus stacked add-on per-verification surcharges\n  for extended retention (+$0.30), PEP/sanctions screening (+$0.64), and ongoing\n  monitoring (+$0.09). The web and mobile SDKs are free; cost begins when a session\n  reaches a billable terminal state. Optimisation levers are reducing duplicate or\n  abandoned sessions, choosing the lowest tier that meets the regulatory profile, and\n  selectively enabling add-ons.\nsources:\n  - https://www.veriff.com/pricing\n\
+  \  - https://devdocs.veriff.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Veriff OU\nserviceCategory: Identity Verification\nbillingModel:\n  pricingCategory: Per-Verification (Tiered) + Monthly Minimum + Add-Ons\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\n    - Tax\n    - Credit\nfocusColumns:\n  ServiceName: Veriff\n  ServiceCategory: Identity Verification\n  ProviderName: Veriff\n  PublisherName: Veriff OU\n  InvoiceIssuerName: Veriff OU\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: verification\n    description: >-\n      Per-completed verification (terminal session decision); the dominant usage\n      meter, billed at the active tier's per-verification rate.\n    unit: verification\n    aggregation:\
+  \ sum\n    dimensions:\n      - account_id\n      - plan_tier\n      - country\n      - document_type\n  - name: monthly_minimum\n    description: >-\n      Monthly minimum charge for the active tier ($49 Essential / $99 Plus /\n      $209 Premium / custom Enterprise); whichever is greater (minimum or actual\n      usage) is billed.\n    unit: month\n    aggregation: max\n    dimensions:\n      - account_id\n      - plan_tier\n  - name: pep_screening\n    description: >-\n      Per-verification PEP / sanctions / adverse-media screening surcharge (+$0.64).\n    unit: verification\n    aggregation: sum\n    dimensions:\n      - account_id\n  - name: ongoing_monitoring\n    description: >-\n      Per-verification ongoing-monitoring surcharge (+$0.09).\n    unit: verification\n    aggregation: sum\n    dimensions:\n      - account_id\n  - name: extended_retention\n    description: >-\n      Per-verification extended-retention surcharge for retaining records 2 years\n      instead of the tier\
+  \ default (+$0.30).\n    unit: verification\n    aggregation: sum\n    dimensions:\n      - account_id\nprinciples:\n  - name: Visibility\n    description: >-\n      Use the Veriff Customer Portal usage report to track per-tier verifications and\n      add-on attach rate. Use webhook events and the Decisions API to confirm session\n      lifecycle counts and reconcile against the invoice.\n  - name: Allocation\n    description: >-\n      Pass a vendorData reference per session keyed to a business unit or product\n      flow, so attribution is preserved on the invoice. Separate sandbox and\n      production accounts to keep pre-prod testing off the production meter.\n  - name: Optimization\n    description: >-\n      Avoid double-billing by collapsing duplicate sessions for the same end user.\n      Choose the lowest tier consistent with the regulatory profile. Enable add-ons\n      (PEP/sanctions, monitoring, extended retention) only on flows where they are\n      legally or contractually\
+  \ required. Use the 50-session free trial to size\n      production volume before committing to a tier.\n  - name: Accountability\n    description: >-\n      Assign a compliance / fraud owner per Veriff account. Track actual usage against\n      the monthly minimum and renegotiate the tier and add-ons at renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/veriff/refs/heads/main/finops/veriff-finops.yml
-sources: []
+sources:
+- https://www.veriff.com/pricing
+- https://devdocs.veriff.com/
 specification: FinOps Framework
 tags:
 - KYC
@@ -86,8 +92,6 @@ tags:
 - Biometrics
 - Fraud Prevention
 - AML
-- SaaS
 - FinOps
-- Cost Management
 - FOCUS
 ---

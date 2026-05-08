@@ -14,71 +14,66 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/google-chrome/refs/heads/main/openapi/google-chrome-management-api-openapi.json
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Monthly (Premium) / One-Time (Webstore)
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Google Chrome API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + One-Time
+description: 'FOCUS-aligned FinOps for Chrome: the developer-platform surface is free, with two narrow paid lines - the one-time $5 Chrome Web Store developer registration and the $6/user/month Chrome Enterprise Premium subscription. Premium invoicing flows through Google Workspace billing; CrUX/PageSpeed Insights API costs are zero.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Google Chrome
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Google Chrome
-  PublisherName: Google Chrome
-  ServiceCategory: Developer Tools / API
-  ServiceName: Google Chrome
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Google LLC
+  ProviderName: Google
+  PublisherName: Google LLC
+  ServiceCategory: Browser / Endpoint Management
+  ServiceName: Chrome / Chrome Enterprise
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Active Chrome Enterprise Premium licensed users
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - org_unit
   - region
-  - consumer
-  name: api_requests
+  name: chrome_enterprise_premium_seats
+  unit: seat-month
+- aggregation: count
+  description: Chrome Web Store developer account one-time fee
+  dimensions:
+  - publisher
+  name: webstore_developer_registration
+  unit: account
+- aggregation: sum
+  description: Cloud-billed CrUX API requests (free at default quota)
+  dimensions:
+  - api_key
+  - origin
+  name: crux_api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Cloud-billed PageSpeed Insights API requests
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - api_key
+  name: pagespeed_api_requests
+  unit: request
 name: Google Chrome Finops
 provider_name: Google Chrome
 provider_slug: google-chrome
-publisher_name: Google Chrome
-service_category: API
+publisher_name: Google LLC
+service_category: Browser / Developer Tools
 slug: google-chrome-finops
 source_filename: google-chrome-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Chrome\nproviderId: google-chrome\npublisherName: Google Chrome\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Browser\n  - Chrome Extensions\n  - Developer Tools\n  - Web Platform\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Google Chrome API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
-  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Google Chrome\n  ServiceCategory: Developer Tools / API\n  ProviderName: Google Chrome\n  PublisherName: Google Chrome\n  InvoiceIssuerName: Google Chrome\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
-  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Chrome Extensions API\n    baseURL: ''\n    tags:\n      - Add-Ons\n      - Browser\n      - Extensions\n    serviceName: Chrome Extensions API\n    serviceCategory: API\n  - name: Chrome DevTools Protocol\n    baseURL: ''\n    tags:\n      - Automation\n      - Debugging\n      - DevTools\n      - Testing\n    serviceName: Chrome DevTools Protocol\n    serviceCategory: API\n  - name: Chrome Web Store API\n    baseURL: ''\n    tags:\n      - Distribution\n      - Publishing\n      - Web Store\n    serviceName: Chrome Web Store API\n    serviceCategory: API\n  - name: Chrome Management API\n    baseURL: ''\n    tags:\n      - Administration\n      - Device Management\n\
-  \      - Enterprise\n    serviceName: Chrome Management API\n    serviceCategory: API\n  - name: Chrome User Experience Report API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Metrics\n      - Performance\n      - User Experience\n    serviceName: Chrome User Experience Report API\n    serviceCategory: API\n  - name: Chrome Policy API\n    baseURL: ''\n    tags:\n      - Administration\n      - Chrome OS\n      - Enterprise\n      - Policies\n    serviceName: Chrome Policy API\n    serviceCategory: API\n  - name: Chrome Verified Access API\n    baseURL: ''\n    tags:\n      - Chrome OS\n      - Enterprise\n      - Security\n      - Verification\n    serviceName: Chrome Verified Access API\n    serviceCategory: API\n  - name: Google Safe Browsing API\n    baseURL: ''\n    tags:\n      - Malware\n      - Phishing\n      - Security\n      - URL Checking\n    serviceName: Google Safe Browsing API\n    serviceCategory: API\n  - name: PageSpeed Insights API\n    baseURL: ''\n    tags:\n\
-  \      - Analytics\n      - Lighthouse\n      - Optimization\n      - Performance\n    serviceName: PageSpeed Insights API\n    serviceCategory: API\n  - name: Chrome Built-in AI APIs\n    baseURL: ''\n    tags:\n      - AI\n      - Gemini Nano\n      - Machine Learning\n      - On-Device AI\n    serviceName: Chrome Built-in AI APIs\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com/\n"
+source_url: https://chromeenterprise.google/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Chrome\nproviderId: google-chrome\npublisherName: Google LLC\nserviceCategory: Browser / Developer Tools\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Browser\n  - Chrome Extensions\n  - Developer Tools\n  - Web Platform\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Chrome: the developer-platform surface is free, with two narrow\n  paid lines - the one-time $5 Chrome Web Store developer registration and the $6/user/month Chrome Enterprise\n  Premium subscription. Premium invoicing flows through Google Workspace billing; CrUX/PageSpeed Insights\n  API costs are zero.'\nsources:\n  - https://chromeenterprise.google/pricing/\n\
+  \  - https://developer.chrome.com/docs/webstore/register\n  - https://workspace.google.com/pricing\nbillingModel:\n  pricingCategory: Subscription + One-Time\n  billingFrequency: Monthly (Premium) / One-Time (Webstore)\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\nfocusColumns:\n  ServiceName: Chrome / Chrome Enterprise\n  ServiceCategory: Browser / Endpoint Management\n  ProviderName: Google\n  PublisherName: Google LLC\n  InvoiceIssuerName: Google LLC\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: chrome_enterprise_premium_seats\n    description: Active Chrome Enterprise Premium licensed users\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - org_unit\n      - region\n  - name: webstore_developer_registration\n    description: Chrome Web Store developer account one-time fee\n    unit: account\n    aggregation: count\n    dimensions:\n      - publisher\n  - name: crux_api_requests\n    description: Cloud-billed CrUX\
+  \ API requests (free at default quota)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_key\n      - origin\n  - name: pagespeed_api_requests\n    description: Cloud-billed PageSpeed Insights API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_key\napis:\n  - name: Chrome Extensions API\n    baseURL: chrome://extensions/\n    serviceName: Chrome Extensions API\n    serviceCategory: Browser\n  - name: Chrome User Experience (CrUX) API\n    baseURL: https://chromeuxreport.googleapis.com\n    serviceName: CrUX API\n    serviceCategory: Web Performance\n  - name: PageSpeed Insights API\n    baseURL: https://pagespeedonline.googleapis.com\n    serviceName: PageSpeed Insights API\n    serviceCategory: Web Performance\n  - name: Chrome Web Store Publish API\n    baseURL: https://www.googleapis.com/chromewebstore\n    serviceName: Chrome Web Store Publish API\n    serviceCategory: Distribution\nprinciples:\n  - name: Visibility\n    description:\
+  \ For Chrome Enterprise Premium, view per-seat consumption in the Google Workspace Admin\n      console subscriptions page; for the CrUX/PageSpeed Insights APIs, monitor request volume in the\n      Google Cloud Console.\n  - name: Allocation\n    description: Allocate Premium seats by org-unit (department/team) in the Admin console; tag CrUX/PageSpeed\n      API keys per consuming team for per-team usage attribution.\n  - name: Optimization\n    description: Reclaim inactive Premium seats monthly using the Admin console's last-active reports;\n      cache CrUX results since underlying data updates only weekly/monthly; consolidate CrUX/PageSpeed\n      API keys to share quota across teams.\n  - name: Accountability\n    description: Assign a license owner per organizational unit; review Premium seat utilization quarterly\n      and right-size; the Webstore registration is a sunk one-time cost owned by the publisher account\n      holder.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/google-chrome/refs/heads/main/finops/google-chrome-finops.yml
-sources: []
+sources:
+- https://chromeenterprise.google/pricing/
+- https://developer.chrome.com/docs/webstore/register
+- https://workspace.google.com/pricing
 specification: FinOps Framework
 tags:
 - Browser
@@ -86,6 +81,5 @@ tags:
 - Developer Tools
 - Web Platform
 - FinOps
-- Cost Management
 - FOCUS
 ---

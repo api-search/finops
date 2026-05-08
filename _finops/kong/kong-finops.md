@@ -16,75 +16,74 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Kong API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Credit
+  pricingCategory: Subscription + Usage Overage
+description: 'FOCUS-aligned FinOps for Kong Konnect: per-Gateway-per-month subscription with included request quotas and per-million overages, plus per-LLM-model AI Gateway charges and seat-based Insomnia pricing.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Kong
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Kong Inc.
   ProviderName: Kong
-  PublisherName: Kong
-  ServiceCategory: Developer Tools / API
-  ServiceName: Kong
+  PublisherName: Kong Inc.
+  ServiceCategory: Developer Tools
+  ServiceName: Kong Konnect
+  ServiceSubcategory: API Management
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - gateway_type
   - region
+  name: gateway_months
+  unit: gateway-month
+- aggregation: sum
+  dimensions:
+  - gateway
+  - service
   - consumer
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+- aggregation: max
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  - provider
+  - model
+  name: ai_gateway_models
+  unit: llm_model
+- aggregation: max
+  name: developer_portals
+  unit: portal
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - portal
+  name: published_apis
+  unit: api
+- aggregation: max
+  dimensions:
+  - plan
+  name: insomnia_seats
+  unit: seat-month
 name: Kong Finops
 provider_name: Kong
 provider_slug: kong
-publisher_name: Kong
-service_category: API
+publisher_name: Kong Inc.
+service_category: API Management
 slug: kong-finops
 source_filename: kong-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Kong\nproviderId: kong\npublisherName: Kong\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Gateway\n  - Lua\n  - NGINX\n  - Open Source\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Kong API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
-  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
-  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Kong\n  ServiceCategory: Developer Tools / API\n  ProviderName: Kong\n  PublisherName: Kong\n  InvoiceIssuerName: Kong\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n\
-  \  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Kong Gateway\n    baseURL: ''\n    tags:\n      - API Gateway\n      - Open Source\n    serviceName: Kong Gateway\n    serviceCategory: API\n  - name: Kong Gateway Admin API\n    baseURL: https://konghq.com/\n    tags:\n      - Admin API\n      - Configuration\n      - Gateway\n      - REST API\n    serviceName: Kong Gateway Admin API\n    serviceCategory: API\n  - name: Kong Konnect API\n    baseURL: https://konghq.com/\n    tags:\n      - Cloud\n      - Konnect\n      - Management\n      - REST API\n    serviceName: Kong Konnect API\n    serviceCategory: API\n  - name: Kong Mesh\n    baseURL: https://konghq.com/\n    tags:\n      - Envoy\n      - Kubernetes\n      - mTLS\n      - Service Mesh\n    serviceName: Kong Mesh\n    serviceCategory: API\n  - name: Kong\
-  \ Insomnia\n    baseURL: https://konghq.com/\n    tags:\n      - API Client\n      - Developer Tools\n      - Open Source\n      - Testing\n    serviceName: Kong Insomnia\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://konghq.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Kong\nproviderId: kong\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - API Gateway\n  - API Management\n  - AI Gateway\ndescription: 'FOCUS-aligned FinOps for Kong Konnect: per-Gateway-per-month subscription with included\n  request quotas and per-million overages, plus per-LLM-model AI Gateway charges and seat-based Insomnia\n  pricing.'\nsources:\n  - https://konghq.com/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Kong Inc.\nserviceCategory: API Management\nbillingModel:\n  pricingCategory: Subscription + Usage Overage\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    -\
+  \ Usage\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Kong Konnect\n  ServiceCategory: Developer Tools\n  ServiceSubcategory: API Management\n  ProviderName: Kong\n  PublisherName: Kong Inc.\n  InvoiceIssuerName: Kong Inc.\n  BillingCurrency: USD\nmeters:\n  - name: gateway_months\n    unit: gateway-month\n    aggregation: max\n    dimensions:\n      - gateway_type\n      - region\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - gateway\n      - service\n      - consumer\n  - name: ai_gateway_models\n    unit: llm_model\n    aggregation: max\n    dimensions:\n      - provider\n      - model\n  - name: developer_portals\n    unit: portal\n    aggregation: max\n  - name: published_apis\n    unit: api\n    aggregation: max\n    dimensions:\n      - portal\n  - name: insomnia_seats\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - plan\nprinciples:\n  - name: Visibility\n    description: Use Konnect Analytics and\
+  \ the Konnect API to track per-gateway request counts, model\n      usage, and portal activity; export to your data warehouse for FOCUS-aligned roll-up.\n  - name: Allocation\n    description: Tag Konnect services and consumers with team / product metadata so per-million request\n      overages and AI-model fees can be allocated to the consuming team.\n  - name: Optimization\n    description: Consolidate low-traffic services onto fewer Serverless gateways (each one billed); cap\n      AI Gateway to the 5 LLM models the team actually uses; move to Enterprise once you exceed Plus\n      gateway/portal limits or accrue meaningful overage spend.\n  - name: Accountability\n    description: Platform owners review monthly Konnect usage vs included quotas, alert on overage thresholds\n      via Konnect Analytics, and reconcile Insomnia seat counts with the IdP each renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/kong/refs/heads/main/finops/kong-finops.yml
-sources: []
+sources:
+- https://konghq.com/pricing
 specification: FinOps Framework
 tags:
-- API Gateway
-- Lua
-- NGINX
-- Open Source
 - FinOps
-- Cost Management
 - FOCUS
+- API Gateway
+- API Management
+- AI Gateway
 ---

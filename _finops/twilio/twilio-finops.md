@@ -225,88 +225,77 @@ billing_model:
   - Tax
   - Credit
   - Adjustment
-  chargeFrequency: Recurring
   pricingCategory: Usage-Based
-description: FinOps framework definition for the Twilio API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+description: FOCUS-aligned FinOps for Twilio communications spend.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Twilio
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Twilio Inc.
   ProviderName: Twilio
-  PublisherName: Twilio
-  ServiceCategory: Developer Tools / API
+  PublisherName: Twilio Inc.
+  ServiceCategory: Communications
   ServiceName: Twilio
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - direction
+  - country
+  - carrier
+  - number_type
+  name: sms_segments
+  unit: segment
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - direction
+  - country
+  - carrier
+  name: mms_messages
+  unit: message
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - direction
+  - country
+  - destination_type
+  name: voice_minutes
+  unit: minute
+- aggregation: max
+  dimensions:
+  - country
+  - type
+  name: phone_numbers
+  unit: number-month
+- aggregation: sum
+  dimensions:
+  - channel
+  - country
+  name: verify_attempts
+  unit: attempt
+- aggregation: sum
+  dimensions:
+  - category
+  name: email_messages
+  unit: message
 name: Twilio Finops
 provider_name: Twilio
 provider_slug: twilio
-publisher_name: Twilio
-service_category: API
+publisher_name: Twilio Inc.
+service_category: Communications
 slug: twilio-finops
 source_filename: twilio-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Twilio\nproviderId: twilio\npublisherName: Twilio\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Authentication\n  - Communications\n  - Contact Center\n  - Email\n  - IoT\n  - Messaging\n  - Phone\n  - SMS\n  - T1\n  - Verification\n  - Video\n  - Voice\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Twilio API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  -\
-  \ name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n\
-  \  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Twilio\n  ServiceCategory: Developer Tools / API\n  ProviderName: Twilio\n  PublisherName: Twilio\n  InvoiceIssuerName: Twilio\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the\
-  \ network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Twilio Accounts API\n    baseURL: ''\n    tags:\n      - Accounts\n      - Authentication\n      - AWS\n      - Checks\n      - Credentials\n      - From\n      - Keys\n      - Lists\n      - Modify\n      - Numbers\n      - Phone\n      - Promote\n      - Public\n      - Removes\n      - Retrieve\n      - Safe\n      - Secondary\n      - Tokens\n    serviceName: Twilio Accounts API\n    serviceCategory: API\n  - name: Twilio Assistant API\n    baseURL: ''\n    tags:\n      - Actions\n      - Assistants\n      - Build\n      - Builds\n      - Dialogues\n      - Fallback\n      - Fields\n      - Initiation\n      - Models\n      - Queries\n\
-  \      - Samples\n      - Sheet\n      - Sheets\n      - Statistics\n      - Styles\n      - Tasks\n      - Types\n      - Understand\n      - Value\n      - Values\n    serviceName: Twilio Assistant API\n    serviceCategory: API\n  - name: Twilio Autopilot API\n    baseURL: ''\n    tags: []\n    serviceName: Twilio Autopilot API\n    serviceCategory: API\n  - name: Twilio Bulk Exports API\n    baseURL: ''\n    tags:\n      - Configurations\n      - Days\n      - Exports\n      - Fetch\n      - Jobs\n      - Resources\n      - Types\n    serviceName: Twilio Bulk Exports API\n    serviceCategory: API\n  - name: Twilio Content API\n    baseURL: ''\n    tags:\n      - Approvals\n      - Content\n      - Legacy\n      - Status\n    serviceName: Twilio Content API\n    serviceCategory: API\n  - name: Twilio Conversations API\n    baseURL: ''\n    tags:\n      - Addresses\n      - Bindings\n      - Chat\n      - Configurations\n      - Conversations\n      - Credentials\n      - Messages\n \
-  \     - Notifications\n      - Participants\n      - Receipts\n      - Roles\n      - Users\n      - Webhooks\n    serviceName: Twilio Conversations API\n    serviceCategory: API\n  - name: Twilio Events API\n    baseURL: ''\n    tags:\n      - Ate\n      - Events\n      - Schemas\n      - Sinks\n      - Subscribed\n      - Subscriptions\n      - Tests\n      - Types\n      - Val\n      - Validate\n      - Versions\n    serviceName: Twilio Events API\n    serviceCategory: API\n  - name: Twilio Frontline API\n    baseURL: ''\n    tags: []\n    serviceName: Twilio Frontline API\n    serviceCategory: API\n  - name: Twilio Insights API\n    baseURL: ''\n    tags:\n      - Annotations\n      - Call\n      - Conference\n      - Conferences\n      - Eo\n      - Events\n      - Metrics\n      - Participants\n      - Rooms\n      - Settings\n      - Summaries\n      - Videos\n    serviceName: Twilio Insights API\n    serviceCategory: API\n  - name: Twilio Intelligence API\n    baseURL: ''\n   \
-  \ tags:\n      - Media\n      - Operator\n      - Results\n      - Sentences\n      - Transcripts\n    serviceName: Twilio Intelligence API\n    serviceCategory: API\n  - name: Twilio IP Messaging API\n    baseURL: ''\n    tags: []\n    serviceName: Twilio IP Messaging API\n    serviceCategory: API\n  - name: Twilio Marketplace API\n    baseURL: ''\n    tags:\n      - Available\n      - Extensions\n      - Installed\n      - Marketplace\n      - true\n    serviceName: Twilio Marketplace API\n    serviceCategory: API\n  - name: Twilio Media API\n    baseURL: ''\n    tags:\n      - Grants\"\"\n      - Media\n      - Playback\n      - Player\n      - Processors\n      - Recordings\n      - Streamers\n    serviceName: Twilio Media API\n    serviceCategory: API\n  - name: Twilio Messaging API\n    baseURL: ''\n    tags:\n      - A2p\n      - Alpha\n      - Brands\n      - Certificates\n      - Channels\n      - Codes\n      - Compliance\n      - Configurations\n      - Deactivations\n     \
-  \ - Domains\n      - Link\n      - Messaging\n      - Numbers\n      - Phone\n      - Pre Registered\n      - Registrations\n      - Senders\n      - Shortening\n      - SMS\n      - Toll Free\n      - Use Cases\n      - Verifications\n      - Vettings\n    serviceName: Twilio Messaging API\n    serviceCategory: API\n  - name: Twilio Microvisor API\n    baseURL: ''\n    tags:\n      - Applications\n      - Configurations\n      - Device\n      - Devices\n      - Keys\n      - Manifests\n      - Secrets\n    serviceName: Twilio Microvisor API\n    serviceCategory: API\n  - name: Twilio Monitor API\n    baseURL: ''\n    tags:\n      - Alerts\n      - Events\n    serviceName: Twilio Monitor API\n    serviceCategory: API\n  - name: Twilio Notify API\n    baseURL: ''\n    tags:\n      - Bindings\n      - Credentials\n      - Notifications\n    serviceName: Twilio Notify API\n    serviceCategory: API\n  - name: Twilio Numbers API\n    baseURL: ''\n    tags:\n      - Assignments\n      - Authorization\n\
-  \      - Bulk\n      - Bundles\n      - Compliance\n      - Copies\n      - Dependent\n      - Documents\n      - Evaluations\n      - Hosted\n      - Hosting\n      - Items\n      - Numbers\n      - Orders\n      - Regulations\n      - Regulatory\n      - Replace\n      - Signing\n      - Supporting\n      - Types\n      - Users\n    serviceName: Twilio Numbers API\n    serviceCategory: API\n  - name: Twilio Pricing API\n    baseURL: ''\n    tags:\n      - Countries\n      - Destinations\n      - ISO\n      - Numbers\n      - Trunking\n    serviceName: Twilio Pricing API\n    serviceCategory: API\n  - name: Twilio Proxy API\n    baseURL: ''\n    tags:\n      - Codes\n      - Interactions\n      - Messages\n      - Numbers\n      - Participants\n      - Phone\n      - Sessions\n    serviceName: Twilio Proxy API\n    serviceCategory: API\n  - name: Twilio Routes API\n    baseURL: ''\n    tags: []\n    serviceName: Twilio Routes API\n    serviceCategory: API\n  - name: Twilio Serverless\
-  \ API\n    baseURL: ''\n    tags:\n      - Assets\n      - Builds\n      - Content\n      - Deployments\n      - Environments\n      - Functions\n      - Logs\n      - Status\n      - Variables\n      - Versions\n    serviceName: Twilio Serverless API\n    serviceCategory: API\n  - name: Twilio Studio API\n    baseURL: ''\n    tags:\n      - Context\n      - Execution\n      - Executions\n      - Flows\n      - Revisions\n      - Steps\n      - Tests\n      - Users\n      - Validate\n    serviceName: Twilio Studio API\n    serviceCategory: API\n  - name: Twilio Super SIM API\n    baseURL: ''\n    tags:\n      - Access\n      - Addresses\n      - Billing\n      - Commands\n      - Esim\n      - Fleets\n      - IP\n      - Networks\n      - Periods\n      - Profiles\n      - Records\n      - Settings\n      - SIMs\n      - SMS\n      - Usage\n    serviceName: Twilio Super SIM API\n    serviceCategory: API\n  - name: Twilio Sync API\n    baseURL: ''\n    tags:\n      - Documents\n      -\
-  \ Identity\n      - Index\n      - Items\n      - Keys\n      - Maps\n      - Messages\n      - Permissions\n      - Stream\n      - Streams\n    serviceName: Twilio Sync API\n    serviceCategory: API\n  - name: Twilio Task Router API\n    baseURL: ''\n    tags:\n      - Activities\n      - Channels\n      - Cumulative\n      - Events\n      - Queues\n      - Reservations\n      - Statistics\n      - Tasks\n      - Time\n      - Workers\n      - Workflows\n      - Workspaces\n    serviceName: Twilio Task Router API\n    serviceCategory: API\n  - name: Twilio Elastic SIP Trunking API\n    baseURL: ''\n    tags:\n      - Access\n      - Controls\n      - Credentials\n      - IP\n      - Numbers\n      - Origination\n      - Phone\n      - Recording\n      - Trunks\n      - URL\n    serviceName: Twilio Elastic SIP Trunking API\n    serviceCategory: API\n  - name: Twilio Trust Hub API\n    baseURL: ''\n    tags:\n      - Assignments\n      - Channels\n      - Compliance\n      - Customers\n\
-  \      - Documents\n      - Endpoints\n      - Entities\n      - Evaluations\n      - Initialize\n      - Inquiries\n      - Policies\n      - Products\n      - Profiles\n      - Supporting\n      - Toll Free\n      - Trust\n      - Types\n      - Users\n    serviceName: Twilio Trust Hub API\n    serviceCategory: API\n  - name: Twilio Verify API\n    baseURL: ''\n    tags:\n      - Access\n      - Attempts\n      - Buckets\n      - Challenges\n      - Checks\n      - Configurations\n      - Countries\n      - Entities\n      - Factors\n      - Forms\n      - Identity\n      - Limits\n      - Messaging\n      - Notifications\n      - Numbers\n      - Phone\n      - Rates\n      - Safe\n      - Summaries\n      - Templates\n      - Tokens\n      - Types\n      - Verification\n      - Verifications\n      - Webhooks\n    serviceName: Twilio Verify API\n    serviceCategory: API\n  - name: Twilio Video API\n    baseURL: ''\n    tags:\n      - Anonymize\n      - Compositions\n      - Hooks\n\
-  \      - Participants\n      - Published\n      - Recording\n      - Recordings\n      - Rooms\n      - Rules\n      - Settings\n      - Subscribe\n      - Subscribed\n      - Tracks\n    serviceName: Twilio Video API\n    serviceCategory: API\n  - name: Twilio Voice API\n    baseURL: ''\n    tags:\n      - Archives\n      - Bulk\n      - Calls\n      - Code\n      - Connections\n      - Countries\n      - Dates\n      - Dialing\n      - High\n      - IP\n      - ISO\n      - Mapping\n      - Permissions\n      - Policies\n      - Prefixes\n      - Records\n      - Risk\n      - Settings\n      - Sources\n      - Special\n      - Targets\n      - Trunks\n    serviceName: Twilio Voice API\n    serviceCategory: API\n  - name: Twilio Wireless API\n    baseURL: ''\n    tags:\n      - Commands\n      - Data\n      - Plans\n      - Rates\n      - Records\n      - Sessions\n      - SIMs\n      - Usage\n    serviceName: Twilio Wireless API\n    serviceCategory: API\n  - name: Twilio Lookup API\n\
-  \    baseURL: ''\n    tags:\n      - Carrier\n      - Fraud Prevention\n      - Identity\n      - Intelligence\n      - Line Type\n      - Phone Numbers\n      - SIM Swap\n      - Validation\n    serviceName: Twilio Lookup API\n    serviceCategory: API\n  - name: Twilio Flex API\n    baseURL: ''\n    tags:\n      - Agents\n      - Contact Center\n      - Customer Engagement\n      - Interactions\n      - Omnichannel\n      - Plugins\n      - Routing\n      - Workflows\n    serviceName: Twilio Flex API\n    serviceCategory: API\n  - name: Twilio SendGrid Email API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Deliverability\n      - Email\n      - Marketing Email\n      - SMTP\n      - Templates\n      - Transactional Email\n    serviceName: Twilio SendGrid Email API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n\
-  \    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n  - FN: APIs.json\n    email: info@apis.io\n  - FN: Twilio\n    email: support@twilio.com\n    url: https://www.twilio.com\n"
+source_url: https://www.twilio.com/en-us/sms/pricing/us
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Twilio\nproviderId: twilio\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\n  - Communications\ndescription: FOCUS-aligned FinOps for Twilio communications spend.\nsources:\n  - https://www.twilio.com/en-us/sms/pricing/us\n  - https://www.twilio.com/en-us/voice/pricing/us\n  - https://www.twilio.com/docs/usage/api/rate-limits\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Twilio Inc.\nserviceCategory: Communications\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\nfocusColumns:\n\
+  \  ServiceName: Twilio\n  ServiceCategory: Communications\n  ProviderName: Twilio\n  PublisherName: Twilio Inc.\n  InvoiceIssuerName: Twilio Inc.\n  BillingCurrency: USD\nmeters:\n  - name: sms_segments\n    unit: segment\n    aggregation: sum\n    dimensions:\n      - direction\n      - country\n      - carrier\n      - number_type\n  - name: mms_messages\n    unit: message\n    aggregation: sum\n    dimensions:\n      - direction\n      - country\n      - carrier\n  - name: voice_minutes\n    unit: minute\n    aggregation: sum\n    dimensions:\n      - direction\n      - country\n      - destination_type\n  - name: phone_numbers\n    unit: number-month\n    aggregation: max\n    dimensions:\n      - country\n      - type\n  - name: verify_attempts\n    unit: attempt\n    aggregation: sum\n    dimensions:\n      - channel\n      - country\n  - name: email_messages\n    unit: message\n    aggregation: sum\n    dimensions:\n      - category\nprinciples:\n  - name: Visibility\n    description:\
+  \ Use Usage Records API and triggers to alert on per-product spend daily.\n  - name: Allocation\n    description: Tag messages with subaccount and metadata so cost can be allocated to internal teams/products.\n  - name: Optimization\n    description: Concatenate SMS to fewer segments, use carrier-recommended number types, and prefer Toll-Free\n      verified numbers for higher throughput at lower per-message cost.\n  - name: Accountability\n    description: Set monthly trigger thresholds; auto-pause subaccounts beyond budget.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/twilio/refs/heads/main/finops/twilio-finops.yml
-sources: []
+sources:
+- https://www.twilio.com/en-us/sms/pricing/us
+- https://www.twilio.com/en-us/voice/pricing/us
+- https://www.twilio.com/docs/usage/api/rate-limits
 specification: FinOps Framework
 tags:
-- Authentication
-- Communications
-- Contact Center
-- Email
-- IoT
-- Messaging
-- Phone
-- SMS
-- T1
-- Verification
-- Video
-- Voice
 - FinOps
 - Cost Management
 - FOCUS
+- Communications
 ---

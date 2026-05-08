@@ -7,78 +7,44 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the TJX Companies API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  billingFrequency: N/A
+  chargeCategories: []
+  pricingCategory: Not Applicable
+description: 'FOCUS-aligned FinOps placeholder for TJX Companies: an off-price retail holding company with no public developer program or vendor-published rate card.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: TJX Companies
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: TJX Companies
-  PublisherName: TJX Companies
-  ServiceCategory: Developer Tools / API
+  PublisherName: The TJX Companies, Inc.
+  ServiceCategory: Retail
   ServiceName: TJX Companies
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - vendor
+  - banner
+  name: vendor_portal_transactions
+  unit: varies
 name: Tjx Finops
 provider_name: TJX Companies
 provider_slug: tjx
-publisher_name: TJX Companies
-service_category: API
+publisher_name: The TJX Companies, Inc.
+service_category: Retail
 slug: tjx-finops
 source_filename: tjx-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: TJX Companies\nproviderId: tjx\npublisherName: TJX Companies\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Retail\n  - Off-Price\n  - Fortune 100\n  - Supply Chain\n  - EDI\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the TJX Companies API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the\
-  \ consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
-  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: TJX Companies\n  ServiceCategory: Developer Tools / API\n  ProviderName: TJX Companies\n  PublisherName: TJX Companies\n  InvoiceIssuerName: TJX Companies\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n\
-  \    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: TJX Oracle iSupplier Portal\n    baseURL: ''\n    tags:\n      - Supplier Portal\n      - Oracle\n      - Invoicing\n      - Purchase Orders\n    serviceName: TJX Oracle iSupplier Portal\n    serviceCategory: API\n  - name: TJX EDI Integration\n    baseURL: ''\n    tags:\n      - EDI\n      - Supply Chain\n      - Vendors\n    serviceName: TJX EDI Integration\n    serviceCategory: API\n  - name: TJX ASN Vendor Portal\n    baseURL: ''\n    tags:\n      - ASN\n      - Shipping\n      - Vendors\n      - DiCentral\n    serviceName: TJX ASN Vendor Portal\n    serviceCategory: API\n  - name: TJX SupplierOne Diversity Portal\n    baseURL: ''\n    tags:\n      - Supplier Diversity\n   \
-  \   - Vendors\n      - Registration\n    serviceName: TJX SupplierOne Diversity Portal\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.tjx.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: TJX Companies\nproviderId: tjx\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Retail\n  - Off-Price\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps placeholder for TJX Companies: an off-price retail holding company\n  with no public developer program or vendor-published rate card.'\nsources:\n  - https://www.tjx.com/\n  - https://focus.finops.org/focus-specification/v1-3/\nnotes: TJX is the consumer of vendor APIs, not a publisher of them. There is no TJX developer invoice\n  to model; FinOps shape is a placeholder until any internal vendor-portal surface is documented externally.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: The TJX\
+  \ Companies, Inc.\nserviceCategory: Retail\nbillingModel:\n  pricingCategory: Not Applicable\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories: []\nfocusColumns:\n  ServiceName: TJX Companies\n  ServiceCategory: Retail\n  ProviderName: TJX Companies\n  PublisherName: The TJX Companies, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: vendor_portal_transactions\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - vendor\n      - banner\nprinciples:\n  - name: Visibility\n    description: TJX publishes no developer telemetry; visibility is internal vendor-portal reporting,\n      not a vendor-issued usage API.\n  - name: Allocation\n    description: Vendor and EDI integration costs land on the supply-chain or merchandising P&L for the\n      relevant banner (T.J. Maxx, Marshalls, HomeGoods, etc.).\n  - name: Optimization\n    description: Optimization is at the supplier-integration design level (EDI batch sizing, catalog\n      sync cadence) rather than against\
+  \ any public API rate card.\n  - name: Accountability\n    description: TJX IT and merchandising leadership owns vendor integration spend; there is no external\n      developer billing relationship.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tjx/refs/heads/main/finops/tjx-finops.yml
-sources: []
+sources:
+- https://www.tjx.com/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Retail
 - Off-Price
-- Fortune 100
-- Supply Chain
-- EDI
 - FinOps
-- Cost Management
 - FOCUS
 ---

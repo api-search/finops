@@ -14,75 +14,46 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/3m/refs/heads/main/openapi/3m-partner-supplier-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the 3M API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Contract
+description: 3M's Partner and Supplier API is delivered under a commercial trading-partner contract; there is no consumption-based pricing or public billing surface. FinOps mapping is structural only.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: 3M
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: 3M Company
   ProviderName: 3M
-  PublisherName: 3M
-  ServiceCategory: Developer Tools / API
-  ServiceName: 3M
+  PublisherName: 3M Company
+  ServiceCategory: Industrial / Supply Chain
+  ServiceName: 3M Partner and Supplier API
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: count
+  description: Master trading-partner contract — not a metered unit; cost flows through goods/services pricing rather than per-API-call.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - partner
+  name: partner_contract
+  unit: contract
 name: 3M Finops
 provider_name: 3M
 provider_slug: 3m
-publisher_name: 3M
-service_category: API
+publisher_name: 3M Company
+service_category: Industrial / Supply Chain
 slug: 3m-finops
 source_filename: 3m-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: 3M\nproviderId: 3m\npublisherName: 3M\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Industrial\n  - Manufacturing\n  - Supply Chain\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the 3M API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n   \
-  \   feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and\
-  \ Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: 3M\n  ServiceCategory: Developer Tools / API\n  ProviderName: 3M\n  PublisherName: 3M\n  InvoiceIssuerName: 3M\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name:\
-  \ compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: 3M Partner and Supplier API\n    baseURL: https://api.3m.com\n    tags:\n      - Manufacturing\n      - Orders\n      - Product Data\n      - Supply Chain\n    serviceName: 3M Partner and Supplier API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.3m.com/3M/en_US/company-us/partners-suppliers/api/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: 3M\nproviderId: 3m\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Industrial\n  - Manufacturing\n  - Supply Chain\n  - FinOps\n  - FOCUS\ndescription: 3M's Partner and Supplier API is delivered under a commercial trading-partner contract; there\n  is no consumption-based pricing or public billing surface. FinOps mapping is structural only.\nnotes: No public developer pricing — placeholder only. Costs flow through the master partner agreement,\n  not a metered API invoice.\nsources:\n  - https://www.3m.com/3M/en_US/company-us/partners-suppliers/api/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: 3M Company\nserviceCategory: Industrial / Supply Chain\n\
+  billingModel:\n  pricingCategory: Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: 3M Partner and Supplier API\n  ServiceCategory: Industrial / Supply Chain\n  ProviderName: 3M\n  PublisherName: 3M Company\n  InvoiceIssuerName: 3M Company\n  BillingCurrency: USD\nmeters:\n  - name: partner_contract\n    description: Master trading-partner contract — not a metered unit; cost flows through goods/services\n      pricing rather than per-API-call.\n    unit: contract\n    aggregation: count\n    dimensions:\n      - partner\nprinciples:\n  - name: Visibility\n    description: Track API integration cost as part of partner-onboarding and IT integration spend; 3M\n      does not provide a metered usage feed.\n  - name: Allocation\n    description: Allocate the integration cost to the procurement / supply-chain function that owns the\n      3M trading relationship.\n  - name: Optimization\n    description: Optimize\
+  \ by consolidating order/delivery/invoice queries into batch flows rather than\n      polling, in line with the partner contract's throughput expectations.\n  - name: Accountability\n    description: Procurement leadership owns the 3M relationship; IT owns the integration runtime. Review\n      transaction volume against contract terms during partner business reviews.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/3m/refs/heads/main/finops/3m-finops.yml
-sources: []
+sources:
+- https://www.3m.com/3M/en_US/company-us/partners-suppliers/api/
 specification: FinOps Framework
 tags:
 - Industrial
 - Manufacturing
 - Supply Chain
 - FinOps
-- Cost Management
 - FOCUS
 ---

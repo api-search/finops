@@ -44,81 +44,60 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/salesforce-einstein/refs/heads/main/openapi/salesforce-einstein-gpt-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Monthly or Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Salesforce Einstein API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription Add-On / Contact Sales
+description: 'FOCUS-aligned FinOps shape for Salesforce Einstein: AI add-ons priced per Salesforce edition / Cloud / seat with generative features additionally bounded by per-add-on request budgets. The financial unit is the licensed user; the binding constraint for generative use cases is the Einstein generative request quota.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Salesforce Einstein
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Salesforce Einstein
-  PublisherName: Salesforce Einstein
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Salesforce, Inc.
+  ProviderName: Salesforce
+  PublisherName: Salesforce, Inc.
+  ServiceCategory: AI / CRM
   ServiceName: Salesforce Einstein
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - addon
+  - cloud
+  name: einstein_seats
+  unit: seat
+- aggregation: sum
+  dimensions:
+  - feature
+  - org
+  name: generative_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - model
+  - org
+  name: predictions
+  unit: prediction
 name: Salesforce Einstein Finops
 provider_name: Salesforce Einstein
 provider_slug: salesforce-einstein
-publisher_name: Salesforce Einstein
-service_category: API
+publisher_name: Salesforce, Inc.
+service_category: AI / CRM
 slug: salesforce-einstein-finops
 source_filename: salesforce-einstein-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Salesforce Einstein\nproviderId: salesforce-einstein\npublisherName: Salesforce Einstein\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Artificial Intelligence\n  - Computer Vision\n  - CRM\n  - Machine Learning\n  - Natural Language Processing\n  - Predictive Analytics\n  - Salesforce\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Salesforce Einstein API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and\
-  \ finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud\
-  \ Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Salesforce Einstein\n  ServiceCategory: Developer Tools / API\n  ProviderName: Salesforce Einstein\n  PublisherName: Salesforce Einstein\n  InvoiceIssuerName: Salesforce Einstein\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n\
-  \      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Einstein Vision API\n    baseURL: https://api.einstein.ai/v2/vision\n    tags:\n      - Computer Vision\n      - Image Recognition\n      - Machine Learning\n    serviceName: Einstein Vision API\n    serviceCategory: API\n  - name: Einstein Language API\n    baseURL: https://api.einstein.ai/v2/language\n    tags:\n      - Machine Learning\n      - Natural Language Processing\n      - Sentiment Analysis\n      - Text Classification\n    serviceName: Einstein Language API\n    serviceCategory: API\n  - name: Einstein Prediction Builder API\n   \
-  \ baseURL: https://[instance].salesforce.com/services/data/v58.0/einstein/\n    tags:\n      - CRM\n      - Machine Learning\n      - No-Code\n      - Predictive Analytics\n    serviceName: Einstein Prediction Builder API\n    serviceCategory: API\n  - name: Einstein Discovery API\n    baseURL: https://[instance].salesforce.com/services/data/v58.0/analytics/\n    tags:\n      - Automated Insights\n      - Business Intelligence\n      - Machine Learning\n      - Predictive Analytics\n    serviceName: Einstein Discovery API\n    serviceCategory: API\n  - name: Einstein Bots API\n    baseURL: https://[instance].salesforce.com/services/data/v58.0/einstein/\n    tags:\n      - Chatbots\n      - Conversational AI\n      - Customer Service\n      - Natural Language Processing\n    serviceName: Einstein Bots API\n    serviceCategory: API\n  - name: Einstein GPT API\n    baseURL: https://[instance].salesforce.com/services/data/v58.0/einstein/\n    tags:\n      - Content Generation\n      - Generative\
-  \ AI\n      - GPT\n      - Large Language Models\n    serviceName: Einstein GPT API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.salesforce.com/products/einstein-ai-solutions/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Salesforce Einstein\nproviderId: salesforce-einstein\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - CRM\n  - AI\n  - Salesforce\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps shape for Salesforce Einstein: AI add-ons priced per Salesforce edition\n  / Cloud / seat with generative features additionally bounded by per-add-on request budgets. The financial\n  unit is the licensed user; the binding constraint for generative use cases is the Einstein generative\n  request quota.'\nsources:\n  - https://www.salesforce.com/products/einstein-ai-solutions/pricing/\n  - https://developer.salesforce.com/docs/atlas.en-us.salesforce_app_limits_cheatsheet.meta/salesforce_app_limits_cheatsheet/salesforce_app_limits_platform_api.htm\nnotes: Public pricing pages were not retrievable; concrete Einstein add-on prices and generative quotas\n\
+  \  could not be verified for this run.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Salesforce, Inc.\nserviceCategory: AI / CRM\nbillingModel:\n  pricingCategory: Subscription Add-On / Contact Sales\n  billingFrequency: Monthly or Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Salesforce Einstein\n  ServiceCategory: AI / CRM\n  ProviderName: Salesforce\n  PublisherName: Salesforce, Inc.\n  InvoiceIssuerName: Salesforce, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: einstein_seats\n    unit: seat\n    aggregation: max\n    dimensions:\n      - addon\n      - cloud\n  - name: generative_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - feature\n      - org\n  - name: predictions\n    unit: prediction\n    aggregation: sum\n\
+  \    dimensions:\n      - model\n      - org\nprinciples:\n  - name: Visibility\n    description: Track generative request consumption via the Einstein admin console and Trust Layer audit\n      logs; track core API consumption via API Usage Last 7 Days; correlate with seat-level adoption metrics.\n  - name: Allocation\n    description: Allocate Einstein add-on cost by Cloud and business unit; tag Copilot / Prompt Builder\n      generations by feature and use case so high-cost prompts can be attributed back to their owning\n      product.\n  - name: Optimization\n    description: Tune prompt templates for token efficiency; cache deterministic outputs where Trust Layer\n      policy allows; right-size add-on seats at renewal; retire low-adoption Einstein features rather\n      than auto-renewing.\n  - name: Accountability\n    description: Salesforce CoE / AI lead owns Einstein adoption with finance; product owners are accountable\n      for the Copilot / Prompt Builder workflows their\
+  \ teams introduce. Surface generative quota burn\n      relative to budget.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/salesforce-einstein/refs/heads/main/finops/salesforce-einstein-finops.yml
-sources: []
+sources:
+- https://www.salesforce.com/products/einstein-ai-solutions/pricing/
+- https://developer.salesforce.com/docs/atlas.en-us.salesforce_app_limits_cheatsheet.meta/salesforce_app_limits_cheatsheet/salesforce_app_limits_platform_api.htm
 specification: FinOps Framework
 tags:
-- Artificial Intelligence
-- Computer Vision
 - CRM
-- Machine Learning
-- Natural Language Processing
-- Predictive Analytics
+- AI
 - Salesforce
 - FinOps
-- Cost Management
 - FOCUS
 ---

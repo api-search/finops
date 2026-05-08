@@ -7,75 +7,62 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Monthly or Annual
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Ghost API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription (Ghost(Pro)) or Self-Hosted Open Source
+description: FOCUS-aligned FinOps profile for Ghost — open-source software with a hosted Ghost(Pro) tier.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Ghost
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Ghost Foundation
   ProviderName: Ghost
-  PublisherName: Ghost
-  ServiceCategory: Developer Tools / API
-  ServiceName: Ghost
+  PublisherName: Ghost Foundation
+  ServiceCategory: Publishing
+  ServiceName: Ghost(Pro) Hosting
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Monthly/annual plan fee for Ghost(Pro).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - plan_tier
+  name: plan_subscription
+  unit: months
+- aggregation: max
+  description: Member count drives plan-tier breakpoints.
+  dimensions:
+  - account
+  name: members
+  unit: members
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: When self-hosting, infrastructure costs (compute, storage, email) replace plan fees.
   dimensions:
-  - api
+  - cloud_provider
   - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: self_host_infrastructure
+  unit: varies
 name: Ghost Finops
 provider_name: Ghost
 provider_slug: ghost
-publisher_name: Ghost
-service_category: API
+publisher_name: Ghost Foundation
+service_category: Publishing
 slug: ghost-finops
 source_filename: ghost-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Ghost\nproviderId: ghost\npublisherName: Ghost\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Publishing\n  - Newsletters\n  - Memberships\n  - Content\n  - Open Source\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Ghost API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
-  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
-  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Ghost\n  ServiceCategory: Developer Tools / API\n  ProviderName: Ghost\n  PublisherName: Ghost\n  InvoiceIssuerName: Ghost\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n  \
-  \    - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Ghost Admin API\n    baseURL: https://{admin_domain}/ghost/api/admin\n    tags:\n      - Publishing\n      - Content Management\n      - Members\n      - Newsletters\n      - Webhooks\n    serviceName: Ghost Admin API\n    serviceCategory: API\n  - name: Ghost Content API\n    baseURL: https://{admin_domain}/ghost/api/content\n    tags:\n      - Publishing\n      - Content\n      - Read Only\n      - Public\n    serviceName: Ghost Content API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://ghost.org/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Ghost\nproviderId: ghost\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- Publishing\n- Open Source\n- FinOps\n- Cost Management\n- FOCUS\ndescription: FOCUS-aligned FinOps profile for Ghost — open-source software with a hosted Ghost(Pro) tier.\nnotes: >-\n  Ghost software is MIT-licensed and free to self-host (you pay only your infrastructure\n  costs). Ghost(Pro) is a flat-rate subscription with member-count breakpoints. APIs are\n  included with both options.\nsources:\n- https://ghost.org/pricing/\n- https://github.com/TryGhost/Ghost\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Ghost Foundation\n\
+  serviceCategory: Publishing\nbillingModel:\n  pricingCategory: Subscription (Ghost(Pro)) or Self-Hosted Open Source\n  billingFrequency: Monthly or Annual\n  billingCurrency: USD\n  chargeCategories:\n  - Usage\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: Ghost(Pro) Hosting\n  ServiceCategory: Publishing\n  ProviderName: Ghost\n  PublisherName: Ghost Foundation\n  InvoiceIssuerName: Ghost Foundation\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n- name: plan_subscription\n  description: Monthly/annual plan fee for Ghost(Pro).\n  unit: months\n  aggregation: sum\n  dimensions:\n  - plan_tier\n- name: members\n  description: Member count drives plan-tier breakpoints.\n  unit: members\n  aggregation: max\n  dimensions:\n  - account\n- name: self_host_infrastructure\n  description: When self-hosting, infrastructure costs (compute, storage, email) replace plan fees.\n  unit: varies\n  aggregation: sum\n  dimensions:\n  - cloud_provider\n  - region\nprinciples:\n\
+  - name: Visibility\n  description: Track Ghost(Pro) invoices or self-host infra spend; correlate to member growth and email volume.\n- name: Allocation\n  description: Allocate publishing spend to the content/marketing cost center.\n- name: Optimization\n  description: For high-volume publishers, evaluate self-hosted vs. Ghost(Pro) at each tier breakpoint; manage email-send infrastructure costs.\n- name: Accountability\n  description: Assign a publishing-ops owner to review tier vs. members quarterly.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/ghost/refs/heads/main/finops/ghost-finops.yml
-sources: []
+sources:
+- https://ghost.org/pricing/
+- https://github.com/TryGhost/Ghost
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Publishing
-- Newsletters
-- Memberships
-- Content
 - Open Source
 - FinOps
 - Cost Management

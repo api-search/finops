@@ -7,81 +7,115 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Monthly Payouts; One-Time Submission Fees
+  billingTerm: Per Steam Distribution Agreement
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Steam API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Tax
+  commitmentDiscount: Graduated revenue-share tiers based on lifetime gross sales.
+  pricingCategory: One-Time Submission Fee + Revenue Share (Payouts)
+description: 'Steam''s billing surface is unusual relative to typical SaaS. Valve does not invoice Steamworks customers a per-call API fee. Instead, the relationship inverts — Valve disburses revenue to publishers (revenue share, after refunds, chargebacks, and applicable taxes) and charges a one-time non-refundable $100 USD Steam Direct submission fee per product. Charges (in the typical FinOps direction) appear only as the Steam Direct fee plus any Steamworks-specific publisher costs (e.g., physical shipping for keys, Steam Marketplace transaction fees borne by buyers, currency-conversion deltas). For a buyer the relationship is also unusual: end-users prepay a Steam Wallet balance which is then drawn down on store purchases. For a publisher''s accounting, the FinOps surface is fundamentally a payouts surface, not an expense surface.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Steam
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Steam
-  PublisherName: Steam
-  ServiceCategory: Developer Tools / API
-  ServiceName: Steam
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Valve Corporation
+  PricingCategory: Standard Pricing
+  ProviderName: Valve Corporation
+  PublisherName: Valve Corporation
+  ServiceCategory: Gaming Distribution
+  ServiceName: Steam (Steamworks)
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: count
+  description: Per-product submission fees ($100 each, recoupable after $1K adjusted gross revenue).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - publisher
+  - product
+  name: steam_direct_submissions
+  unit: product
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Gross sales attributed to the 30% revenue-share tier (first $10M lifetime).
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - publisher
+  - product
+  - country
+  name: revenue_share_tier_1
+  unit: usd
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Gross sales attributed to the 25% revenue-share tier ($10M-$50M lifetime).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - publisher
+  - product
+  - country
+  name: revenue_share_tier_2
+  unit: usd
+- aggregation: sum
+  description: Gross sales attributed to the 20% revenue-share tier (above $50M lifetime).
+  dimensions:
+  - publisher
+  - product
+  - country
+  name: revenue_share_tier_3
+  unit: usd
+- aggregation: sum
+  description: Customer refunds netted against publisher payouts.
+  dimensions:
+  - publisher
+  - product
+  - reason
+  name: refunds
+  unit: usd
+- aggregation: sum
+  description: Card-network chargebacks netted against publisher payouts.
+  dimensions:
+  - publisher
+  - product
+  name: chargebacks
+  unit: usd
+- aggregation: sum
+  description: Steam Marketplace transaction fees deducted from item-trade proceeds.
+  dimensions:
+  - publisher
+  - product
+  - market
+  name: marketplace_transaction_fees
+  unit: usd
+- aggregation: sum
+  description: Steamworks Web API call volume (no monetary cost; tracked for soft-quota management).
+  dimensions:
+  - api_key
+  - interface
+  - method
+  name: api_calls
+  unit: call
 name: Steam Finops
 provider_name: Steam
 provider_slug: steam
-publisher_name: Steam
-service_category: API
+publisher_name: Valve Corporation
+service_category: Gaming Distribution
 slug: steam-finops
 source_filename: steam-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Steam\nproviderId: steam\npublisherName: Steam\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Gaming\n  - Valve\n  - Distribution\n  - Steamworks\n  - Marketplace\n  - Web API\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Steam API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Steam\n  ServiceCategory: Developer Tools / API\n  ProviderName: Steam\n  PublisherName: Steam\n  InvoiceIssuerName: Steam\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n  \
-  \    - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: ISteamNews\n    baseURL: ''\n    tags:\n      - News\n      - Feeds\n      - Public\n    serviceName: ISteamNews\n    serviceCategory: API\n  - name: ISteamUserStats\n    baseURL: ''\n    tags:\n      - Stats\n      - Achievements\n      - Global Stats\n      - Schema\n    serviceName: ISteamUserStats\n    serviceCategory: API\n  - name: ISteamUser\n    baseURL: ''\n    tags:\n      - Users\n      - Profiles\n      - Friends\n      - Bans\n    serviceName: ISteamUser\n    serviceCategory: API\n  - name: ISteamUserAuth\n    baseURL: ''\n    tags:\n      - Authentication\n      - Sessions\n      - Tickets\n    serviceName: ISteamUserAuth\n    serviceCategory: API\n  - name: ISteamApps\n    baseURL: ''\n    tags:\n      -\
-  \ Apps\n      - Catalog\n      - Servers\n    serviceName: ISteamApps\n    serviceCategory: API\n  - name: ISteamCommunity\n    baseURL: ''\n    tags:\n      - Community\n      - Reports\n    serviceName: ISteamCommunity\n    serviceCategory: API\n  - name: ISteamEconomy\n    baseURL: ''\n    tags:\n      - Economy\n      - Trades\n      - Asset Class\n    serviceName: ISteamEconomy\n    serviceCategory: API\n  - name: IGameInventory\n    baseURL: ''\n    tags:\n      - Inventory\n      - Items\n      - Economy\n    serviceName: IGameInventory\n    serviceCategory: API\n  - name: IInventoryService\n    baseURL: ''\n    tags:\n      - Inventory\n      - Items\n      - Service\n    serviceName: IInventoryService\n    serviceCategory: API\n  - name: ISteamGameServer\n    baseURL: ''\n    tags:\n      - Game Servers\n      - Sessions\n      - Login Tokens\n    serviceName: ISteamGameServer\n    serviceCategory: API\n  - name: ISteamRemoteStorage\n    baseURL: ''\n    tags:\n      - Remote\
-  \ Storage\n      - Cloud Saves\n      - UGC\n    serviceName: ISteamRemoteStorage\n    serviceCategory: API\n  - name: ISteamLeaderboards\n    baseURL: ''\n    tags:\n      - Leaderboards\n      - Scores\n    serviceName: ISteamLeaderboards\n    serviceCategory: API\n  - name: IPlayerService\n    baseURL: ''\n    tags:\n      - Players\n      - Owned Games\n      - Recently Played\n      - Badges\n    serviceName: IPlayerService\n    serviceCategory: API\n  - name: IGameNotificationsService\n    baseURL: ''\n    tags:\n      - Notifications\n      - In-Game\n    serviceName: IGameNotificationsService\n    serviceCategory: API\n  - name: ISteamWebAPIUtil\n    baseURL: ''\n    tags:\n      - Utility\n      - Server Info\n      - Schema\n    serviceName: ISteamWebAPIUtil\n    serviceCategory: API\n  - name: IPublishedFileService\n    baseURL: ''\n    tags:\n      - Workshop\n      - UGC\n      - Published Files\n    serviceName: IPublishedFileService\n    serviceCategory: API\n  - name: IBroadcastService\n\
-  \    baseURL: ''\n    tags:\n      - Broadcast\n      - Streaming\n      - Game Live\n    serviceName: IBroadcastService\n    serviceCategory: API\n  - name: Steam Store API\n    baseURL: ''\n    tags:\n      - Store\n      - Pricing\n      - App Details\n    serviceName: Steam Store API\n    serviceCategory: API\n  - name: ISteamCheckout\n    baseURL: ''\n    tags:\n      - Checkout\n      - In-Game Purchases\n      - Microtransactions\n    serviceName: ISteamCheckout\n    serviceCategory: API\n  - name: ISteamMicroTxn\n    baseURL: ''\n    tags:\n      - Microtransactions\n      - Payments\n      - Refunds\n    serviceName: ISteamMicroTxn\n    serviceCategory: API\n  - name: ISteamDeepLinkService\n    baseURL: ''\n    tags:\n      - Deep Links\n      - Marketing\n    serviceName: ISteamDeepLinkService\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric:\
-  \ billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://partner.steamgames.com/steamdirect
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Steam\nproviderId: steam\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n  - Gaming\n  - Valve\n  - Steamworks\n  - Distribution\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: >-\n  Steam's billing surface is unusual relative to typical SaaS. Valve does not invoice Steamworks customers a per-call API fee. Instead, the relationship inverts — Valve disburses revenue to publishers (revenue share, after refunds, chargebacks, and applicable taxes) and charges a one-time non-refundable $100 USD Steam Direct submission fee per product. Charges (in the typical FinOps direction) appear only as the Steam Direct fee plus any Steamworks-specific publisher costs (e.g., physical shipping for keys, Steam Marketplace transaction fees borne by buyers, currency-conversion deltas). For a buyer the relationship is also unusual: end-users prepay\
+  \ a Steam Wallet balance which is then drawn down on store purchases. For a publisher's accounting, the FinOps surface is fundamentally a payouts surface, not an expense surface.\nnotes: >-\n  Reconciled at the model level on 2026-05-08. This artifact deliberately models Steam from the publisher / partner perspective because that is the side with developer-API obligations. Adjust focusColumns interpretation if profiling Steam from the buyer or end-user perspective.\nsources:\n  - https://partner.steamgames.com/steamdirect\n  - https://partner.steamgames.com/doc/webapi\n  - https://store.steampowered.com/subscriber_agreement/\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Valve Corporation\nserviceCategory: Gaming Distribution\nbillingModel:\n  pricingCategory:\
+  \ One-Time Submission Fee + Revenue Share (Payouts)\n  billingFrequency: Monthly Payouts; One-Time Submission Fees\n  billingTerm: Per Steam Distribution Agreement\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\n    - Tax\n  commitmentDiscount: Graduated revenue-share tiers based on lifetime gross sales.\nfocusColumns:\n  ServiceName: Steam (Steamworks)\n  ServiceCategory: Gaming Distribution\n  ProviderName: Valve Corporation\n  PublisherName: Valve Corporation\n  InvoiceIssuerName: Valve Corporation\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingCategory: Standard Pricing\nmeters:\n  - name: steam_direct_submissions\n    description: Per-product submission fees ($100 each, recoupable after $1K adjusted gross revenue).\n    unit: product\n    aggregation: count\n    dimensions:\n      - publisher\n      - product\n  - name: revenue_share_tier_1\n    description: Gross sales attributed to the 30% revenue-share tier (first $10M lifetime).\n\
+  \    unit: usd\n    aggregation: sum\n    dimensions:\n      - publisher\n      - product\n      - country\n  - name: revenue_share_tier_2\n    description: Gross sales attributed to the 25% revenue-share tier ($10M-$50M lifetime).\n    unit: usd\n    aggregation: sum\n    dimensions:\n      - publisher\n      - product\n      - country\n  - name: revenue_share_tier_3\n    description: Gross sales attributed to the 20% revenue-share tier (above $50M lifetime).\n    unit: usd\n    aggregation: sum\n    dimensions:\n      - publisher\n      - product\n      - country\n  - name: refunds\n    description: Customer refunds netted against publisher payouts.\n    unit: usd\n    aggregation: sum\n    dimensions:\n      - publisher\n      - product\n      - reason\n  - name: chargebacks\n    description: Card-network chargebacks netted against publisher payouts.\n    unit: usd\n    aggregation: sum\n    dimensions:\n      - publisher\n      - product\n  - name: marketplace_transaction_fees\n  \
+  \  description: Steam Marketplace transaction fees deducted from item-trade proceeds.\n    unit: usd\n    aggregation: sum\n    dimensions:\n      - publisher\n      - product\n      - market\n  - name: api_calls\n    description: Steamworks Web API call volume (no monetary cost; tracked for soft-quota management).\n    unit: call\n    aggregation: sum\n    dimensions:\n      - api_key\n      - interface\n      - method\nprinciples:\n  - name: Visibility\n    description: >-\n      Pull the monthly Steamworks revenue report and Steam Direct submission ledger. Reconcile each game's reported gross to your own analytics; track Steam Wallet net deductions (refunds, chargebacks, marketplace fees) line-by-line.\n  - name: Allocation\n    description: >-\n      Allocate Steam payouts and submission fees per product / studio / publisher entity in your finance system; track Web API call volume per API key for ops attribution.\n  - name: Optimization\n    description: >-\n      Use the Steamworks\
+  \ discounting and bundle tooling deliberately; minimize refunds with clear store-page expectations; consider promotional Steam Sale calendar timing; recoup the $100 Steam Direct fee promptly by promoting first-week sales above $1K.\n  - name: Accountability\n    description: >-\n      Assign a Steamworks publisher account owner; monitor Steam Direct submission lifecycle, payout timeliness, and Web API key rotation; review the Steam Distribution Agreement at every renewal/amendment.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/steam/refs/heads/main/finops/steam-finops.yml
-sources: []
+sources:
+- https://partner.steamgames.com/steamdirect
+- https://partner.steamgames.com/doc/webapi
+- https://store.steampowered.com/subscriber_agreement/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Gaming
 - Valve
-- Distribution
 - Steamworks
-- Marketplace
-- Web API
+- Distribution
 - FinOps
 - Cost Management
 - FOCUS

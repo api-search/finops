@@ -63,80 +63,45 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Optimizely API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Modular Annual Subscription (MTU/Sessions/Impressions)
+description: FOCUS-aligned FinOps for Optimizely.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Optimizely
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Optimizely
   PublisherName: Optimizely
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Digital Experience Platform
   ServiceName: Optimizely
 layout: finops
 meters:
+- aggregation: max
+  name: monthly_tracked_users
+  unit: MTU
 - aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: monthly_impressions
+  unit: impression
+- aggregation: max
+  name: experiments
+  unit: experiment-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: feature_flag_evaluations
+  unit: evaluation
 name: Optimizely Finops
 provider_name: Optimizely
 provider_slug: optimizely
 publisher_name: Optimizely
-service_category: API
+service_category: Digital Experience Platform
 slug: optimizely-finops
 source_filename: optimizely-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Optimizely\nproviderId: optimizely\npublisherName: Optimizely\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - A/B Testing\n  - Content Management\n  - Customer Data\n  - E-Commerce\n  - Experimentation\n  - Feature Flags\n  - Marketing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Optimizely API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Optimizely\n  ServiceCategory: Developer Tools / API\n  ProviderName: Optimizely\n  PublisherName: Optimizely\n  InvoiceIssuerName: Optimizely\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the\
-  \ network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Optimizely Web Experimentation REST API\n    baseURL: https://api.optimizely.com/v2\n    tags:\n      - A/B Testing\n      - Analytics\n      - Experimentation\n      - Web Optimization\n    serviceName: Optimizely Web Experimentation REST API\n    serviceCategory: API\n  - name: Optimizely Feature Experimentation REST API\n    baseURL: https://api.optimizely.com/flags/v1\n    tags:\n      - Experimentation\n      - Feature Flags\n      - Feature Management\n      - Rollouts\n    serviceName: Optimizely Feature Experimentation REST API\n    serviceCategory: API\n  - name: Optimizely Campaign REST API\n    baseURL: https://api.campaign.episerver.net\n\
-  \    tags:\n      - Campaigns\n      - Email Marketing\n      - Marketing Automation\n      - Messaging\n    serviceName: Optimizely Campaign REST API\n    serviceCategory: API\n  - name: Optimizely Content Delivery API\n    baseURL: ''\n    tags:\n      - Content Delivery\n      - Content Management\n      - Headless CMS\n      - REST\n    serviceName: Optimizely Content Delivery API\n    serviceCategory: API\n  - name: Optimizely Content Management API\n    baseURL: ''\n    tags:\n      - CMS\n      - Content Management\n      - Content Operations\n      - REST\n    serviceName: Optimizely Content Management API\n    serviceCategory: API\n  - name: Optimizely Graph API\n    baseURL: ''\n    tags:\n      - Content Delivery\n      - Content Query\n      - GraphQL\n      - Search\n    serviceName: Optimizely Graph API\n    serviceCategory: API\n  - name: Optimizely Data Platform REST API\n    baseURL: ''\n    tags:\n      - Analytics\n      - CDP\n      - Customer Data\n      - Data Platform\n\
-  \    serviceName: Optimizely Data Platform REST API\n    serviceCategory: API\n  - name: Optimizely CMP Open REST API\n    baseURL: https://api.cmp.optimizely.com\n    tags:\n      - Content Marketing\n      - Content Planning\n      - Marketing\n      - Workflows\n    serviceName: Optimizely CMP Open REST API\n    serviceCategory: API\n  - name: Optimizely Commerce Service API\n    baseURL: ''\n    tags:\n      - Catalog\n      - Commerce\n      - E-Commerce\n      - Orders\n    serviceName: Optimizely Commerce Service API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.optimizely.com/plans/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Optimizely\nproviderId: optimizely\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Digital Experience Platform\ndescription: FOCUS-aligned FinOps for Optimizely.\nsources:\n  - https://www.optimizely.com/plans/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Optimizely\nserviceCategory: Digital Experience Platform\nbillingModel:\n  pricingCategory: Modular Annual Subscription (MTU/Sessions/Impressions)\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Optimizely\n  ServiceCategory: Digital Experience Platform\n  ProviderName: Optimizely\n  PublisherName: Optimizely\n  BillingCurrency: USD\nmeters:\n\
+  \  - name: monthly_tracked_users\n    unit: MTU\n    aggregation: max\n  - name: monthly_impressions\n    unit: impression\n    aggregation: sum\n  - name: experiments\n    unit: experiment-month\n    aggregation: max\n  - name: feature_flag_evaluations\n    unit: evaluation\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Track Optimizely consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/optimizely/refs/heads/main/finops/optimizely-finops.yml
-sources: []
+sources:
+- https://www.optimizely.com/plans/
 specification: FinOps Framework
 tags:
-- A/B Testing
-- Content Management
-- Customer Data
-- E-Commerce
-- Experimentation
-- Feature Flags
-- Marketing
 - FinOps
-- Cost Management
 - FOCUS
+- Digital Experience Platform
 ---

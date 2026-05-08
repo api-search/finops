@@ -25,74 +25,98 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Google Data Studio API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Usage (tokens)
+description: 'FOCUS-aligned FinOps for Looker Studio / Looker: Looker Studio Pro is a per-user subscription billed via Google Cloud; Looker editions (Standard / Enterprise / Embed) are annual instance-based commitments with included user allocations and API call buckets; Conversational Analytics adds a token meter starting October 2026. Indirect cost flows through the underlying data source (often BigQuery), which dominates total dashboarding spend.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Google Data Studio
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Google Data Studio
-  PublisherName: Google Data Studio
-  ServiceCategory: Developer Tools / API
-  ServiceName: Google Data Studio
+  InvoiceIssuerName: Google LLC
+  ProviderName: Google Cloud
+  PublisherName: Google LLC
+  ServiceCategory: Business Intelligence
+  ServiceName: Looker Studio / Looker
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Active Looker Studio Pro per-user licenses
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - workspace
+  name: looker_studio_pro_seats
+  unit: seat-month
+- aggregation: max
+  description: Looker production instance under annual commitment (Standard / Enterprise / Embed)
+  dimensions:
+  - edition
   - region
-  - consumer
-  name: api_requests
+  name: looker_instance
+  unit: instance-month
+- aggregation: max
+  description: Looker per-user licenses by class (Developer / Standard / Viewer)
+  dimensions:
+  - user_class
+  - edition
+  name: looker_user_licenses
+  unit: seat-month
+- aggregation: sum
+  description: Looker Query API calls
+  dimensions:
+  - edition
+  - instance
+  name: query_api_calls
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Looker Admin API calls
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - edition
+  - instance
+  name: admin_api_calls
+  unit: request
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Conversational Analytics input tokens
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - user_class
+  - instance
+  name: data_tokens_input
+  unit: token
+- aggregation: sum
+  description: Conversational Analytics output tokens
+  dimensions:
+  - user_class
+  - instance
+  name: data_tokens_output
+  unit: token
+- aggregation: sum
+  description: Cost incurred at the connected data source (e.g., BigQuery bytes-scanned) when dashboards run queries
+  dimensions:
+  - data_source
+  - dashboard
+  name: underlying_data_source_cost
+  unit: USD
 name: Google Data Studio Finops
 provider_name: Google Data Studio
 provider_slug: google-data-studio
-publisher_name: Google Data Studio
-service_category: API
+publisher_name: Google LLC
+service_category: Business Intelligence / Analytics
 slug: google-data-studio-finops
 source_filename: google-data-studio-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Data Studio\nproviderId: google-data-studio\npublisherName: Google Data Studio\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Business Intelligence\n  - Dashboards\n  - Data\n  - Reporting\n  - Visualization\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Google Data Studio API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Google Data Studio\n  ServiceCategory: Developer Tools / API\n  ProviderName: Google Data Studio\n  PublisherName: Google Data Studio\n  InvoiceIssuerName: Google Data Studio\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
-  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Google Data Studio API\n    baseURL: https://datastudio.googleapis.com\n    tags:\n      - Assets\n      - Data Sources\n      - Permissions\n      - Reports\n    serviceName: Google Data Studio API\n    serviceCategory: API\n  - name: Looker Studio Linking API\n    baseURL: ''\n    tags:\n      - Embedding\n      - Integration\n      - Linking\n      - Reports\n    serviceName: Looker Studio Linking API\n    serviceCategory: API\n  - name: Looker Studio Community Connectors\n    baseURL: ''\n    tags:\n      - Apps Script\n      - Connectors\n      - Data Sources\n      - Integration\n    serviceName: Looker Studio\
-  \ Community Connectors\n    serviceCategory: API\n  - name: Looker Studio Community Visualizations\n    baseURL: ''\n    tags:\n      - Charts\n      - Custom Components\n      - JavaScript\n      - Visualizations\n    serviceName: Looker Studio Community Visualizations\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: https://cloud.google.com/looker/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Data Studio\nproviderId: google-data-studio\npublisherName: Google LLC\nserviceCategory: Business Intelligence / Analytics\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Business Intelligence\n  - Reporting\n  - Dashboards\n  - Google Cloud\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Looker Studio / Looker: Looker Studio Pro is a per-user subscription\n  billed via Google Cloud; Looker editions (Standard / Enterprise / Embed) are annual instance-based commitments\n  with included user allocations and API call buckets; Conversational Analytics adds a token meter starting\n  October 2026. Indirect\
+  \ cost flows through the underlying data source (often BigQuery), which dominates\n  total dashboarding spend.'\nsources:\n  - https://cloud.google.com/looker/pricing\n  - https://cloud.google.com/billing/docs/how-to/export-data-bigquery\nbillingModel:\n  pricingCategory: Subscription + Usage (tokens)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Looker Studio / Looker\n  ServiceCategory: Business Intelligence\n  ProviderName: Google Cloud\n  PublisherName: Google LLC\n  InvoiceIssuerName: Google LLC\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: looker_studio_pro_seats\n    description: Active Looker Studio Pro per-user licenses\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - workspace\n  - name: looker_instance\n    description: Looker production instance under annual commitment (Standard / Enterprise / Embed)\n    unit: instance-month\n\
+  \    aggregation: max\n    dimensions:\n      - edition\n      - region\n  - name: looker_user_licenses\n    description: Looker per-user licenses by class (Developer / Standard / Viewer)\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - user_class\n      - edition\n  - name: query_api_calls\n    description: Looker Query API calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - edition\n      - instance\n  - name: admin_api_calls\n    description: Looker Admin API calls\n    unit: request\n    aggregation: sum\n    dimensions:\n      - edition\n      - instance\n  - name: data_tokens_input\n    description: Conversational Analytics input tokens\n    unit: token\n    aggregation: sum\n    dimensions:\n      - user_class\n      - instance\n  - name: data_tokens_output\n    description: Conversational Analytics output tokens\n    unit: token\n    aggregation: sum\n    dimensions:\n      - user_class\n      - instance\n  - name: underlying_data_source_cost\n\
+  \    description: Cost incurred at the connected data source (e.g., BigQuery bytes-scanned) when dashboards\n      run queries\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - data_source\n      - dashboard\napis:\n  - name: Looker Studio\n    baseURL: https://lookerstudio.google.com\n    serviceName: Looker Studio\n    serviceCategory: Business Intelligence\n  - name: Looker (Google Cloud Core)\n    baseURL: https://cloud.google.com/looker\n    serviceName: Looker\n    serviceCategory: Business Intelligence\nprinciples:\n  - name: Visibility\n    description: Use Cloud Billing detailed export filtered to the Looker SKU and Looker Studio Pro SKU;\n      pair with INFORMATION_SCHEMA on connected BigQuery datasets to attribute query cost to the originating\n      report.\n  - name: Allocation\n    description: Allocate Looker Studio Pro seats to product/marketing teams; tag connected data sources\n      with team labels so dashboard query cost can be charged back through the\
+  \ BigQuery (or other source)\n      bill.\n  - name: Optimization\n    description: Use Looker extract scheduling and dashboard caching to avoid re-running expensive queries\n      on every viewer load; right-size BigQuery on-demand vs slot reservation per dashboard workload;\n      monitor Conversational Analytics token burn approaching the October 2026 paid cutover.\n  - name: Accountability\n    description: Designate a dashboard owner per top-spending data source query; review monthly Looker\n      API call usage to avoid edition-level API quota overages; review Conversational Analytics token\n      consumption per user class.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/google-data-studio/refs/heads/main/finops/google-data-studio-finops.yml
-sources: []
+sources:
+- https://cloud.google.com/looker/pricing
+- https://cloud.google.com/billing/docs/how-to/export-data-bigquery
 specification: FinOps Framework
 tags:
-- Analytics
 - Business Intelligence
-- Dashboards
-- Data
 - Reporting
-- Visualization
+- Dashboards
+- Google Cloud
 - FinOps
-- Cost Management
 - FOCUS
 ---

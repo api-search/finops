@@ -20,79 +20,76 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/datahub/refs/heads/main/asyncapi/datahub-actions-asyncapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the DataHub API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Open Source
+description: 'FOCUS-aligned FinOps for DataHub: bifurcated billing model. DataHub Core is open source and produces no vendor invoice — cost is the underlying Kafka, Elasticsearch, and SQL infrastructure. DataHub Cloud is a managed subscription from Acryl Data sized by data scale and user count; per-unit prices are not public.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: DataHub
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: DataHub
-  PublisherName: DataHub
-  ServiceCategory: Developer Tools / API
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Acryl Data, Inc.
+  PricingCategory: Subscription
+  ProviderName: DataHub (Acryl Data)
+  PublisherName: Acryl Data, Inc.
+  ServiceCategory: Data Catalog
   ServiceName: DataHub
+  ServiceSubcategory: Metadata Management
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Count of metadata entities (datasets, dashboards, ML models, etc.) cataloged in DataHub. Common scaling dimension for the Cloud SKU.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  - environment
+  - tenant
+  - asset_type
+  name: catalog_assets
+  unit: asset
+- aggregation: max
+  description: Active user count consuming DataHub UI and APIs.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - tenant
+  - role
+  name: active_users
+  unit: seat
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Metadata change events written through the emitter / CLI / Actions framework.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - source
+  - tenant
+  name: ingestion_events
+  unit: event
+- aggregation: avg
+  description: Underlying storage for the metadata graph (Elasticsearch indices, Kafka retention, SQL primary store). Self-hosted operators see this on their cloud bill; Cloud customers see it as part of the subscription.
+  dimensions:
+  - backend
+  - tenant
+  name: storage_gb
+  unit: GB-month
 name: Datahub Finops
 provider_name: DataHub
 provider_slug: datahub
-publisher_name: DataHub
-service_category: API
+publisher_name: Acryl Data, Inc.
+service_category: Data Catalog
 slug: datahub-finops
 source_filename: datahub-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: DataHub\nproviderId: datahub\npublisherName: DataHub\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Data Catalog\n  - Data Discovery\n  - Data Governance\n  - Data Lineage\n  - Metadata\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the DataHub API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
-  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
-  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: DataHub\n  ServiceCategory: Developer Tools / API\n  ProviderName: DataHub\n  PublisherName: DataHub\n  InvoiceIssuerName: DataHub\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n  \
-  \  dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: DataHub GraphQL API\n    baseURL: http://localhost:8080/api/graphql\n    tags:\n      - GraphQL\n      - Metadata\n      - Queries\n      - Search\n    serviceName: DataHub GraphQL API\n    serviceCategory: API\n  - name: DataHub OpenAPI\n    baseURL: http://localhost:8080/openapi/\n    tags:\n      - Entities\n      - Metadata\n      - OpenAPI\n      - REST\n    serviceName: DataHub OpenAPI\n    serviceCategory: API\n  - name: DataHub REST API\n    baseURL: http://localhost:8080/\n    tags:\n      - Entities\n      - Internal\n      - Metadata\n      - REST\n    serviceName: DataHub REST API\n    serviceCategory: API\n  - name: DataHub Python SDK\n    baseURL: https://pypi.org/project/acryl-datahub/\n\
-  \    tags:\n      - Emitter\n      - Ingestion\n      - Python\n      - SDK\n    serviceName: DataHub Python SDK\n    serviceCategory: API\n  - name: DataHub Java SDK\n    baseURL: https://github.com/datahub-project/datahub\n    tags:\n      - Emitter\n      - Java\n      - Metadata\n      - SDK\n    serviceName: DataHub Java SDK\n    serviceCategory: API\n  - name: DataHub CLI\n    baseURL: https://pypi.org/project/acryl-datahub/\n    tags:\n      - CLI\n      - Command Line\n      - Ingestion\n      - Metadata\n    serviceName: DataHub CLI\n    serviceCategory: API\n  - name: DataHub Actions Framework\n    baseURL: https://pypi.org/project/acryl-datahub-actions/\n    tags:\n      - Actions\n      - Automation\n      - Events\n      - Real-Time\n    serviceName: DataHub Actions Framework\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost\
-  \ / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://datahub.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: DataHub\nproviderId: datahub\npublisherName: Acryl Data, Inc.\nserviceCategory: Data Catalog\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Data Catalog\n  - Data Governance\n  - Open Source\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for DataHub: bifurcated billing model. DataHub Core is open\n  source and produces no vendor invoice — cost is the underlying Kafka, Elasticsearch, and SQL\n  infrastructure. DataHub Cloud is a managed subscription from Acryl Data sized by data scale and\n  user count; per-unit prices are not public.'\nsources:\n  - https://datahub.com/\n  - https://datahubproject.io/docs/\n\
+  notes: No public per-unit pricing for DataHub Cloud; Core is OSS. Meters describe likely billable\n  shape (assets cataloged, users, ingestion volume) but cannot be reconciled to a public price.\nbillingModel:\n  pricingCategory: Subscription + Open Source\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: DataHub\n  ServiceCategory: Data Catalog\n  ServiceSubcategory: Metadata Management\n  ProviderName: DataHub (Acryl Data)\n  PublisherName: Acryl Data, Inc.\n  InvoiceIssuerName: Acryl Data, Inc.\n  PricingCategory: Subscription\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: catalog_assets\n    description: Count of metadata entities (datasets, dashboards, ML models, etc.) cataloged in\n      DataHub. Common scaling dimension for the Cloud SKU.\n    unit: asset\n    aggregation: max\n    dimensions:\n      - environment\n      - tenant\n      - asset_type\n  -\
+  \ name: active_users\n    description: Active user count consuming DataHub UI and APIs.\n    unit: seat\n    aggregation: max\n    dimensions:\n      - tenant\n      - role\n  - name: ingestion_events\n    description: Metadata change events written through the emitter / CLI / Actions framework.\n    unit: event\n    aggregation: sum\n    dimensions:\n      - source\n      - tenant\n  - name: storage_gb\n    description: Underlying storage for the metadata graph (Elasticsearch indices, Kafka retention,\n      SQL primary store). Self-hosted operators see this on their cloud bill; Cloud customers see\n      it as part of the subscription.\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - backend\n      - tenant\nprinciples:\n  - name: Visibility\n    description: For DataHub Core, join Kafka / Elasticsearch / SQL cost from the underlying cloud\n      provider. For DataHub Cloud, use the customer admin console for asset, user, and ingestion\n      counts and join with the\
+  \ Acryl invoice.\n  - name: Allocation\n    description: Tag deployments by team and environment; allocate DataHub Core spend through the\n      cloud provider's tag-driven cost report. For Cloud, attribute the contract by the originating\n      data domain or platform team.\n  - name: Optimization\n    description: Prune unused or stale entities to keep asset counts under contractual ceilings,\n      tune Elasticsearch shard sizing, and reduce ingestion frequency for slow-changing sources.\n      Use scheduled rather than streaming ingestion where freshness allows.\n  - name: Accountability\n    description: Platform / data-engineering teams typically own the DataHub bill; downstream\n      consumers should be assigned ownership of their entities so unused assets can be reaped.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/datahub/refs/heads/main/finops/datahub-finops.yml
-sources: []
+sources:
+- https://datahub.com/
+- https://datahubproject.io/docs/
 specification: FinOps Framework
 tags:
 - Data Catalog
-- Data Discovery
 - Data Governance
-- Data Lineage
-- Metadata
+- Open Source
 - FinOps
-- Cost Management
 - FOCUS
 ---

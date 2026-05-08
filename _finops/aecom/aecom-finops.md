@@ -7,77 +7,56 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the AECOM API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Usage
+  pricingCategory: Subscription
+description: 'FOCUS-aligned FinOps for AECOM: project-based consulting with optional digital software components.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
   InvoiceIssuerName: AECOM
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: AECOM
   PublisherName: AECOM
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Engineering and Infrastructure Services
   ServiceName: AECOM
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - project
+  - role
+  name: professional_services_hours
+  unit: hour
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  - product
+  name: software_subscription
+  unit: month
+- aggregation: count
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - project
+  name: project_milestones
+  unit: milestone
 name: Aecom Finops
 provider_name: AECOM
 provider_slug: aecom
 publisher_name: AECOM
-service_category: API
+service_category: Engineering and Infrastructure Services
 slug: aecom-finops
 source_filename: aecom-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: AECOM\nproviderId: aecom\npublisherName: AECOM\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Engineering\n  - Infrastructure\n  - Construction\n  - Environmental Services\n  - Transportation\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the AECOM API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
-  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
-  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: AECOM\n  ServiceCategory: Developer Tools / API\n  ProviderName: AECOM\n  PublisherName: AECOM\n  InvoiceIssuerName: AECOM\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
-  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: AECOM PipeInsights API\n    baseURL: https://digital.aecom.com\n    tags:\n      - Water Infrastructure\n      - Sewer Inspection\n      - AI\n      - SaaS\n      - Digital\n    serviceName: AECOM PipeInsights API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    url: http://apievangelist.com\n    email: info@apievangelist.com\n"
+source_url: https://digital.aecom.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: AECOM\nproviderId: aecom\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nnotes: AECOM bills consulting/professional-services engagements rather than per-call API usage.\ntags:\n  - FinOps\n  - FOCUS\n  - Engineering\n  - Infrastructure\ndescription: 'FOCUS-aligned FinOps for AECOM: project-based consulting with optional digital\n  software components.'\nsources:\n  - https://digital.aecom.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: AECOM\nserviceCategory: Engineering and Infrastructure Services\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n\
+  \  ServiceName: AECOM\n  ServiceCategory: Engineering and Infrastructure Services\n  ProviderName: AECOM\n  PublisherName: AECOM\n  InvoiceIssuerName: AECOM\n  BillingCurrency: USD\nmeters:\n  - name: professional_services_hours\n    unit: hour\n    aggregation: sum\n    dimensions:\n      - project\n      - role\n  - name: software_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\n  - name: project_milestones\n    unit: milestone\n    aggregation: count\n    dimensions:\n      - project\nprinciples:\n  - name: Visibility\n    description: Reconcile AECOM invoices against project SOWs; track consultant-hour burn against\n      milestones.\n  - name: Allocation\n    description: Tag spend per project, business unit, and capital vs operating budget.\n  - name: Optimization\n    description: Right-size consulting team; renegotiate digital-product subscriptions at renewal.\n  - name: Accountability\n    description: Assign project owner; review monthly\
+  \ burn and re-baseline as scope shifts.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/aecom/refs/heads/main/finops/aecom-finops.yml
-sources: []
+sources:
+- https://digital.aecom.com/
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
 - Engineering
 - Infrastructure
-- Construction
-- Environmental Services
-- Transportation
-- FinOps
-- Cost Management
-- FOCUS
 ---

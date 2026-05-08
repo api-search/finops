@@ -133,85 +133,88 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/binance/refs/heads/main/openapi/binance-fiat-openapi.yml
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: USD (settlement varies, BNB available for fee payment)
+  billingFrequency: Continuous Settlement
   chargeCategories:
   - Usage
-  - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Binance API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  - Credit
+  pricingCategory: Take Rate (Tiered) + Optional Token Discount
+description: 'FOCUS-aligned FinOps for Binance: API connectivity is free; cost is incurred as per-transaction maker/taker take rates with VIP volume tiers and an optional BNB-paid fee discount.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Binance
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Binance Holdings Ltd.
   ProviderName: Binance
-  PublisherName: Binance
-  ServiceCategory: Developer Tools / API
+  PublisherName: Binance Holdings Ltd.
+  ServiceCategory: Financial Services
   ServiceName: Binance
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  dimensions:
+  - symbol
+  - side
+  - maker_or_taker
+  - vip_tier
+  name: spot_trades
+  unit: transaction
+- aggregation: sum
+  dimensions:
+  - symbol
+  - vip_tier
+  name: spot_volume
+  unit: USD
+- aggregation: sum
+  dimensions:
+  - product
+  - contract
+  - maker_or_taker
+  - vip_tier
+  name: futures_trades
+  unit: transaction
+- aggregation: sum
+  dimensions:
+  - product
+  - contract
+  name: futures_volume
+  unit: USD
+- aggregation: sum
+  dimensions:
+  - product
+  name: bnb_fee_payments
+  unit: BNB
+- aggregation: sum
   dimensions:
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - endpoint_weight
+  - vip_tier
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Binance Finops
 provider_name: Binance
 provider_slug: binance
-publisher_name: Binance
-service_category: API
+publisher_name: Binance Holdings Ltd.
+service_category: Financial Services / Trading
 slug: binance-finops
 source_filename: binance-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Binance\nproviderId: binance\npublisherName: Binance\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cryptocurrency\n  - Exchange\n  - Trading\n  - Blockchain\n  - Finance\n  - DeFi\n  - Market Data\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Binance API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Binance\n  ServiceCategory: Developer Tools / API\n  ProviderName: Binance\n  PublisherName: Binance\n  InvoiceIssuerName: Binance\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Binance Spot Trading API\n    baseURL: https://api.binance.com\n    tags:\n      - Cryptocurrency\n      - Exchange\n      - Market Data\n      - Spot\n      - Trading\n    serviceName: Binance Spot Trading API\n    serviceCategory: API\n  - name: Binance Spot WebSocket API\n    baseURL: wss://ws-api.binance.com\n    tags:\n      - Cryptocurrency\n      - Market Data\n      - Real-Time\n      - Streaming\n      - WebSocket\n    serviceName: Binance Spot WebSocket API\n    serviceCategory: API\n  - name: Binance Spot WebSocket Streams\n    baseURL: wss://stream.binance.com\n    tags:\n      - Cryptocurrency\n      - Market Data\n      - Real-Time\n      - Streaming\n      - WebSocket\n    serviceName:\
-  \ Binance Spot WebSocket Streams\n    serviceCategory: API\n  - name: Binance USD-S Margined Futures API\n    baseURL: https://fapi.binance.com\n    tags:\n      - Cryptocurrency\n      - Derivatives\n      - Futures\n      - Trading\n      - USDT\n    serviceName: Binance USD-S Margined Futures API\n    serviceCategory: API\n  - name: Binance COIN-M Futures API\n    baseURL: https://dapi.binance.com\n    tags:\n      - Coin Margined\n      - Cryptocurrency\n      - Derivatives\n      - Futures\n      - Trading\n    serviceName: Binance COIN-M Futures API\n    serviceCategory: API\n  - name: Binance European Options API\n    baseURL: https://eapi.binance.com\n    tags:\n      - Cryptocurrency\n      - Derivatives\n      - Options\n      - Trading\n    serviceName: Binance European Options API\n    serviceCategory: API\n  - name: Binance Portfolio Margin API\n    baseURL: https://papi.binance.com\n    tags:\n      - Cryptocurrency\n      - Margin\n      - Portfolio\n      - Risk Management\n\
-  \      - Trading\n    serviceName: Binance Portfolio Margin API\n    serviceCategory: API\n  - name: Binance Margin Trading API\n    baseURL: https://api.binance.com\n    tags:\n      - Borrowing\n      - Cryptocurrency\n      - Leverage\n      - Margin\n      - Trading\n    serviceName: Binance Margin Trading API\n    serviceCategory: API\n  - name: Binance Wallet API\n    baseURL: https://api.binance.com\n    tags:\n      - Account\n      - Cryptocurrency\n      - Deposits\n      - Wallet\n      - Withdrawals\n    serviceName: Binance Wallet API\n    serviceCategory: API\n  - name: Binance Sub-Account API\n    baseURL: https://api.binance.com\n    tags:\n      - Account Management\n      - Cryptocurrency\n      - Enterprise\n      - Sub-Account\n    serviceName: Binance Sub-Account API\n    serviceCategory: API\n  - name: Binance Simple Earn API\n    baseURL: https://api.binance.com\n    tags:\n      - Cryptocurrency\n      - Earn\n      - Savings\n      - Staking\n      - Yield\n  \
-  \  serviceName: Binance Simple Earn API\n    serviceCategory: API\n  - name: Binance Mining API\n    baseURL: https://api.binance.com\n    tags:\n      - Cryptocurrency\n      - Hash Rate\n      - Mining\n      - Pool\n    serviceName: Binance Mining API\n    serviceCategory: API\n  - name: Binance Copy Trading API\n    baseURL: https://api.binance.com\n    tags:\n      - Copy Trading\n      - Cryptocurrency\n      - Social Trading\n      - Trading\n    serviceName: Binance Copy Trading API\n    serviceCategory: API\n  - name: Binance Convert API\n    baseURL: https://api.binance.com\n    tags:\n      - Convert\n      - Cryptocurrency\n      - Exchange\n      - Swap\n    serviceName: Binance Convert API\n    serviceCategory: API\n  - name: Binance Pay API\n    baseURL: https://bpay.binanceapi.com\n    tags:\n      - Commerce\n      - Cryptocurrency\n      - Merchant\n      - Payments\n    serviceName: Binance Pay API\n    serviceCategory: API\n  - name: Binance Algo Trading API\n    baseURL:\
-  \ https://api.binance.com\n    tags:\n      - Algorithmic Trading\n      - Cryptocurrency\n      - TWAP\n      - VWAP\n    serviceName: Binance Algo Trading API\n    serviceCategory: API\n  - name: Binance Auto-Invest API\n    baseURL: https://api.binance.com\n    tags:\n      - Auto-Invest\n      - Cryptocurrency\n      - DCA\n      - Recurring\n      - Savings\n    serviceName: Binance Auto-Invest API\n    serviceCategory: API\n  - name: Binance Crypto Loan API\n    baseURL: https://api.binance.com\n    tags:\n      - Borrowing\n      - Collateral\n      - Cryptocurrency\n      - Lending\n      - Loans\n    serviceName: Binance Crypto Loan API\n    serviceCategory: API\n  - name: Binance Gift Card API\n    baseURL: https://api.binance.com\n    tags:\n      - Cryptocurrency\n      - Gift Card\n      - Rewards\n      - Voucher\n    serviceName: Binance Gift Card API\n    serviceCategory: API\n  - name: Binance NFT API\n    baseURL: https://api.binance.com\n    tags:\n      - Collectibles\n\
-  \      - Cryptocurrency\n      - Digital Assets\n      - NFT\n    serviceName: Binance NFT API\n    serviceCategory: API\n  - name: Binance Fiat API\n    baseURL: https://api.binance.com\n    tags:\n      - Cryptocurrency\n      - Currency\n      - Deposits\n      - Fiat\n      - Withdrawals\n    serviceName: Binance Fiat API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.binance.com/en/fee/schedule
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Binance\nproviderId: binance\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Cryptocurrency\n  - Exchange\n  - Trading\ndescription: 'FOCUS-aligned FinOps for Binance: API connectivity is free; cost is incurred as\n  per-transaction maker/taker take rates with VIP volume tiers and an optional BNB-paid fee discount.'\nsources:\n  - https://www.binance.com/en/fee/schedule\n  - https://www.binance.com/en/binance-api\n  - https://developers.binance.com/docs/binance-spot-api-docs/rest-api/limits\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Binance Holdings Ltd.\nserviceCategory: Financial Services / Trading\nbillingModel:\n  pricingCategory:\
+  \ Take Rate (Tiered) + Optional Token Discount\n  billingFrequency: Continuous Settlement\n  billingCurrency: USD (settlement varies, BNB available for fee payment)\n  chargeCategories:\n    - Usage\n    - Adjustment\n    - Refund\n    - Credit\nfocusColumns:\n  ServiceName: Binance\n  ServiceCategory: Financial Services\n  ProviderName: Binance\n  PublisherName: Binance Holdings Ltd.\n  InvoiceIssuerName: Binance Holdings Ltd.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: spot_trades\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - symbol\n      - side\n      - maker_or_taker\n      - vip_tier\n  - name: spot_volume\n    unit: USD\n    aggregation: sum\n    dimensions:\n      - symbol\n      - vip_tier\n  - name: futures_trades\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - product\n      - contract\n      - maker_or_taker\n      - vip_tier\n  - name: futures_volume\n    unit: USD\n    aggregation: sum\n    dimensions:\n\
+  \      - product\n      - contract\n  - name: bnb_fee_payments\n    unit: BNB\n    aggregation: sum\n    dimensions:\n      - product\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint_weight\n      - vip_tier\nprinciples:\n  - name: Visibility\n    description: Pull trade and fee detail via /api/v3/myTrades, /sapi/v1/asset/tradeFee, and the Tax\n      Report API; reconcile against monthly account statements.\n  - name: Allocation\n    description: Use sub-accounts (Master / Sub-Account API) and Binance Link broker hierarchy to\n      attribute trades and fees to teams, strategies, or end-clients.\n  - name: Optimization\n    description: Pursue VIP volume tier qualification for lower maker/taker fees, opt into the 25% BNB\n      fee discount, prefer maker-side liquidity, and consolidate trading across the account family to\n      lift 30-day volume into the next tier.\n  - name: Accountability\n    description: Assign desk-level\
+  \ owners for each sub-account, alert on per-tier fee thresholds and\n      weight-ban events, and reconcile USD-denominated PnL against on-chain settlements.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/binance/refs/heads/main/finops/binance-finops.yml
-sources: []
+sources:
+- https://www.binance.com/en/fee/schedule
+- https://www.binance.com/en/binance-api
+- https://developers.binance.com/docs/binance-spot-api-docs/rest-api/limits
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
 - Cryptocurrency
 - Exchange
 - Trading
-- Blockchain
-- Finance
-- DeFi
-- Market Data
-- FinOps
-- Cost Management
-- FOCUS
 ---

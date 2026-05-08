@@ -54,67 +54,64 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the LangSmith API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Usage
+description: FOCUS-aligned FinOps profile for LangSmith. LangSmith billing combines a per-seat subscription with usage-based charges for base traces, Fleet agent runs, and production deployment uptime minutes.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: LangSmith
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: LangSmith
-  PublisherName: LangSmith
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: LangChain
+  ProviderName: LangChain
+  PublisherName: LangChain
+  ServiceCategory: AI
   ServiceName: LangSmith
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Per-seat monthly subscription on the Plus plan ($39/seat/month).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - workspace
+  - user
+  name: seats
+  unit: seat
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Billable base traces ingested in a month. Plus includes 10k; overage is $2.50 per 1,000.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - workspace
+  - project
+  name: base_traces
+  unit: trace
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Fleet agent runs executed in a month. Each plan includes a baseline allowance.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - workspace
+  - agent
+  name: fleet_runs
+  unit: run
+- aggregation: sum
+  description: Minutes of production deployment uptime billed at $0.0036/min on the Plus plan.
+  dimensions:
+  - workspace
+  - deployment
+  name: deployment_uptime_minutes
+  unit: minute
 name: Langsmith Finops
 provider_name: LangSmith
 provider_slug: langsmith
-publisher_name: LangSmith
-service_category: API
+publisher_name: LangChain
+service_category: AI
 slug: langsmith-finops
 source_filename: langsmith-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: LangSmith\nproviderId: langsmith\npublisherName: LangSmith\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - LLM\n  - Observability\n  - Evaluations\n  - LangChain\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the LangSmith API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: LangSmith\n  ServiceCategory: Developer Tools / API\n  ProviderName: LangSmith\n  PublisherName: LangSmith\n  InvoiceIssuerName: LangSmith\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n   \
-  \ dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: LangSmith Tracing API\n    baseURL: https://api.smith.langchain.com\n    tags:\n      - Tracing\n      - Observability\n      - LLM\n    serviceName: LangSmith Tracing API\n    serviceCategory: API\n  - name: LangSmith Datasets API\n    baseURL: https://api.smith.langchain.com\n    tags:\n      - Datasets\n      - Examples\n      - Evaluations\n    serviceName: LangSmith Datasets API\n    serviceCategory: API\n  - name: LangSmith Evaluations API\n    baseURL: https://api.smith.langchain.com\n    tags:\n      - Evaluations\n      - Experiments\n      - LLM\n    serviceName: LangSmith Evaluations API\n    serviceCategory: API\n  - name: LangSmith Prompt Hub API\n    baseURL: https://api.smith.langchain.com\n\
-  \    tags:\n      - Prompts\n      - Prompt Management\n      - LLM\n    serviceName: LangSmith Prompt Hub API\n    serviceCategory: API\n  - name: LangSmith Feedback API\n    baseURL: https://api.smith.langchain.com\n    tags:\n      - Feedback\n      - Scoring\n      - Evaluations\n    serviceName: LangSmith Feedback API\n    serviceCategory: API\n  - name: LangSmith Annotation Queues API\n    baseURL: https://api.smith.langchain.com\n    tags:\n      - Annotation\n      - Human Review\n      - Evaluations\n    serviceName: LangSmith Annotation Queues API\n    serviceCategory: API\n  - name: LangSmith Fleet (Agent Deployment) API\n    baseURL: https://api.smith.langchain.com\n    tags:\n      - Agents\n      - Deployment\n      - LangGraph\n    serviceName: LangSmith Fleet (Agent Deployment) API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost\
-  \ / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.langchain.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: LangSmith\nproviderId: langsmith\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- AI\n- LLM\n- Observability\n- Evaluations\n- LangChain\n- FinOps\n- Cost Management\n- FOCUS\ndescription: FOCUS-aligned FinOps profile for LangSmith. LangSmith billing combines a per-seat\n  subscription with usage-based charges for base traces, Fleet agent runs, and production\n  deployment uptime minutes.\nsources:\n- https://www.langchain.com/pricing\n- https://docs.langchain.com/langsmith\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: LangChain\nserviceCategory: AI\nbillingModel:\n  pricingCategory: Subscription\
+  \ + Usage\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n  - Usage\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: LangSmith\n  ServiceCategory: AI\n  ProviderName: LangChain\n  PublisherName: LangChain\n  InvoiceIssuerName: LangChain\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n- name: seats\n  description: Per-seat monthly subscription on the Plus plan ($39/seat/month).\n  unit: seat\n  aggregation: sum\n  dimensions:\n  - workspace\n  - user\n- name: base_traces\n  description: Billable base traces ingested in a month. Plus includes 10k; overage is\n    $2.50 per 1,000.\n  unit: trace\n  aggregation: sum\n  dimensions:\n  - workspace\n  - project\n- name: fleet_runs\n  description: Fleet agent runs executed in a month. Each plan includes a baseline allowance.\n  unit: run\n  aggregation: sum\n  dimensions:\n  - workspace\n  - agent\n- name: deployment_uptime_minutes\n  description: Minutes of production deployment uptime billed\
+  \ at $0.0036/min on the Plus plan.\n  unit: minute\n  aggregation: sum\n  dimensions:\n  - workspace\n  - deployment\nprinciples:\n- name: Visibility\n  description: Pull LangChain billing exports and tag traces by project to map spend to teams\n    and applications.\n- name: Allocation\n  description: Use workspace, project, and trace metadata to allocate trace, Fleet-run, and\n    deployment costs to consuming services.\n- name: Optimization\n  description: Sample or filter low-value traces, right-size Fleet agent concurrency, and\n    pause unused production deployments to reduce uptime minutes.\n- name: Accountability\n  description: Assign each LangSmith workspace to a budget owner and review monthly trace\n    and run consumption.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/langsmith/refs/heads/main/finops/langsmith-finops.yml
-sources: []
+sources:
+- https://www.langchain.com/pricing
+- https://docs.langchain.com/langsmith
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - AI

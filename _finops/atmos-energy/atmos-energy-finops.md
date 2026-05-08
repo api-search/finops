@@ -10,74 +10,55 @@ billing_model:
   billingFrequency: Monthly
   chargeCategories:
   - Usage
-  - Purchase
   - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Atmos Energy API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Regulated Utility Tariff
+description: FinOps shape for Atmos Energy is not applicable — Atmos is a regulated natural-gas utility, not an API provider. Customer charges are state-tariff-based commodity and distribution rates.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Atmos Energy
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Atmos Energy Corporation
+  PricingCategory: Regulated Utility Tariff
   ProviderName: Atmos Energy
-  PublisherName: Atmos Energy
-  ServiceCategory: Developer Tools / API
+  PublisherName: Atmos Energy Corporation
+  ServiceCategory: Utilities
   ServiceName: Atmos Energy
+  ServiceSubcategory: Natural Gas Distribution
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Natural gas delivered to the customer meter (utility billing meter, not an API meter)
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - state
+  - rate_class
+  name: gas_delivered
+  unit: Mcf
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Fixed and tiered distribution charges per state PUC tariff
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - state
+  - rate_class
+  name: distribution_charge
+  unit: month
 name: Atmos Energy Finops
 provider_name: Atmos Energy
 provider_slug: atmos-energy
-publisher_name: Atmos Energy
-service_category: API
+publisher_name: Atmos Energy Corporation
+service_category: Utilities / Natural Gas Distribution
 slug: atmos-energy-finops
 source_filename: atmos-energy-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Atmos Energy\nproviderId: atmos-energy\npublisherName: Atmos Energy\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Energy\n  - Natural Gas\n  - Utilities\n  - Infrastructure\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Atmos Energy API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the\
-  \ consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
-  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Atmos Energy\n  ServiceCategory: Developer Tools / API\n  ProviderName: Atmos Energy\n  PublisherName: Atmos Energy\n  InvoiceIssuerName: Atmos Energy\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Atmos Energy Account Management\n    baseURL: https://www.atmosenergy.com\n    tags:\n      - Account Management\n      - Billing\n      - Natural Gas\n      - Utilities\n    serviceName: Atmos Energy Account Management\n    serviceCategory: API\n  - name: Atmos Energy Builder Portal\n    baseURL: https://www.atmosenergy.com\n    tags:\n      - Builder Services\n      - Construction\n      - Natural Gas\n      - Service Requests\n    serviceName: Atmos Energy Builder Portal\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n  \
-  \  target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.atmosenergy.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Atmos Energy\nproviderId: atmos-energy\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Energy\n  - Natural Gas\n  - Utilities\n  - FinOps\n  - FOCUS\ndescription: FinOps shape for Atmos Energy is not applicable — Atmos is a regulated natural-gas utility,\n  not an API provider. Customer charges are state-tariff-based commodity and distribution rates.\nsources:\n  - https://www.atmosenergy.com/\n  - https://focus.finops.org/focus-specification/v1-3/\nnotes: No API billing surface. Atmos invoices are utility bills (therms / Mcf delivered + distribution\n  + tax), not FOCUS-aligned cloud/API charges.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Atmos\
+  \ Energy Corporation\nserviceCategory: Utilities / Natural Gas Distribution\nbillingModel:\n  pricingCategory: Regulated Utility Tariff\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Tax\nfocusColumns:\n  ServiceName: Atmos Energy\n  ServiceCategory: Utilities\n  ServiceSubcategory: Natural Gas Distribution\n  ProviderName: Atmos Energy\n  PublisherName: Atmos Energy Corporation\n  InvoiceIssuerName: Atmos Energy Corporation\n  BillingCurrency: USD\n  PricingCategory: Regulated Utility Tariff\nmeters:\n  - name: gas_delivered\n    description: Natural gas delivered to the customer meter (utility billing meter, not an API meter)\n    unit: Mcf\n    aggregation: sum\n    dimensions:\n      - state\n      - rate_class\n  - name: distribution_charge\n    description: Fixed and tiered distribution charges per state PUC tariff\n    unit: month\n    aggregation: sum\n    dimensions:\n      - state\n      - rate_class\nprinciples:\n  - name: Visibility\n\
+  \    description: Not applicable to API consumption — utility usage is visible via the customer portal\n      monthly bill.\n  - name: Allocation\n    description: Not applicable — single utility account per premise.\n  - name: Optimization\n    description: Not applicable to API; utility-side levers are conservation and demand-response programs.\n  - name: Accountability\n    description: Not applicable to API.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/atmos-energy/refs/heads/main/finops/atmos-energy-finops.yml
-sources: []
+sources:
+- https://www.atmosenergy.com/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Energy
 - Natural Gas
 - Utilities
-- Infrastructure
 - FinOps
-- Cost Management
 - FOCUS
 ---

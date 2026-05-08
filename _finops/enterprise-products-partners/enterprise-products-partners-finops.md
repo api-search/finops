@@ -18,72 +18,65 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Enterprise Products Partners API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tariff / Contract
+description: FOCUS-aligned FinOps placeholder for Enterprise Products Partners. The economic surface here is pipeline transportation, NGL fractionation, and storage services governed by FERC-filed tariffs and bilateral service agreements rather than per-API-call billing. FinOps practice attaches to the underlying logistics service, not to API metering.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Enterprise Products Partners
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Enterprise Products Partners L.P.
   ProviderName: Enterprise Products Partners
-  PublisherName: Enterprise Products Partners
-  ServiceCategory: Developer Tools / API
-  ServiceName: Enterprise Products Partners
+  PublisherName: Enterprise Products Partners L.P.
+  ServiceCategory: Pipeline & Midstream Services
+  ServiceName: Enterprise Products Partners Pipeline Operations API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
   - endpoint
-  - tier
-  - region
-  - consumer
+  - shipper
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - pipeline
+  - shipper
+  - product
+  name: pipeline_throughput
+  unit: barrel
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - terminal
+  - shipper
+  name: storage_capacity
+  unit: barrel-month
+- aggregation: sum
+  dimensions:
+  - contract
+  name: contract_fee
+  unit: month
 name: Enterprise Products Partners Finops
 provider_name: Enterprise Products Partners
 provider_slug: enterprise-products-partners
-publisher_name: Enterprise Products Partners
-service_category: API
+publisher_name: Enterprise Products Partners L.P.
+service_category: Pipeline & Midstream Services
 slug: enterprise-products-partners-finops
 source_filename: enterprise-products-partners-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Enterprise Products Partners\nproviderId: enterprise-products-partners\npublisherName: Enterprise Products Partners\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Energy\n  - Midstream\n  - Natural Gas\n  - Pipelines\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Enterprise Products Partners API surface. Provides a\n  FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the\n  provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Enterprise Products Partners\n  ServiceCategory: Developer Tools / API\n  ProviderName: Enterprise Products Partners\n  PublisherName: Enterprise Products Partners\n  InvoiceIssuerName: Enterprise Products Partners\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      -\
-  \ consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Enterprise Products Partners Pipeline Operations API\n    baseURL: https://api.enterpriseproducts.com\n    tags:\n      - Energy\n      - Midstream\n      - Natural Gas\n      - Pipelines\n    serviceName: Enterprise Products Partners Pipeline Operations API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.enterpriseproducts.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Enterprise Products Partners\nproviderId: enterprise-products-partners\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Energy\n  - Midstream\n  - Pipelines\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps placeholder for Enterprise Products Partners. The economic surface here\n  is pipeline transportation, NGL fractionation, and storage services governed by FERC-filed tariffs and\n  bilateral service agreements rather than per-API-call billing. FinOps practice attaches to the underlying\n  logistics service, not to API metering.\nnotes: No public usage/billing API was located. The relevant cost lines are pipeline tariff charges, NGL\n  processing fees, and contracted storage; reconcile against the executed Transportation/Service Agreement.\nsources:\n  - https://www.enterpriseproducts.com/\n  - https://www.enterpriseproducts.com/operations\n\
+  alignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Enterprise Products Partners L.P.\nserviceCategory: Pipeline & Midstream Services\nbillingModel:\n  pricingCategory: Tariff / Contract\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Enterprise Products Partners Pipeline Operations API\n  ServiceCategory: Pipeline & Midstream Services\n  ProviderName: Enterprise Products Partners\n  PublisherName: Enterprise Products Partners L.P.\n  InvoiceIssuerName: Enterprise Products Partners L.P.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - shipper\n  - name: pipeline_throughput\n    unit: barrel\n\
+  \    aggregation: sum\n    dimensions:\n      - pipeline\n      - shipper\n      - product\n  - name: storage_capacity\n    unit: barrel-month\n    aggregation: sum\n    dimensions:\n      - terminal\n      - shipper\n  - name: contract_fee\n    unit: month\n    aggregation: sum\n    dimensions:\n      - contract\nprinciples:\n  - name: Visibility\n    description: Visibility into pipeline usage and charges flows through monthly transportation/storage\n      invoices and shipper portals rather than an API-billing dashboard.\n  - name: Allocation\n    description: Allocate charges by shipper contract, pipeline segment, terminal, and product category\n      (crude/NGL/natural gas/refined).\n  - name: Optimization\n    description: Optimization is achieved through nomination accuracy, capacity contract structuring, and\n      multi-product bundling; there are no API-level discount programs.\n  - name: Accountability\n    description: The shipper's commercial/operations team owns spend and\
+  \ reconciles against the executed\n      service agreement and FERC-filed tariff.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/enterprise-products-partners/refs/heads/main/finops/enterprise-products-partners-finops.yml
-sources: []
+sources:
+- https://www.enterpriseproducts.com/
+- https://www.enterpriseproducts.com/operations
 specification: FinOps Framework
 tags:
 - Energy
 - Midstream
-- Natural Gas
 - Pipelines
 - FinOps
-- Cost Management
 - FOCUS
 ---

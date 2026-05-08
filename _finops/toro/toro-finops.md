@@ -22,78 +22,66 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Toro API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  pricingCategory: Tiered Subscription
+description: 'FOCUS-aligned FinOps for Toro: monthly subscription (tiered by crew size) for the Horizon360 contractor SaaS, with other connected-product surfaces (IntelliDash, myTurf) sold via dealer channels without published list pricing. Cost allocation here is per Horizon360 subscription tier and crew capacity.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Toro
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: The Toro Company
+  PricingCategory: Subscription
+  PricingUnit: month
   ProviderName: Toro
-  PublisherName: Toro
-  ServiceCategory: Developer Tools / API
-  ServiceName: Toro
+  PublisherName: The Toro Company
+  ServiceCategory: Field Service SaaS
+  ServiceName: Toro Horizon360
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: One month of a Horizon360 subscription on Essential, Basic, Premium, or Unlimited.
   dimensions:
-  - api
-  - endpoint
   - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  - account
+  name: horizon360_subscription_month
+  unit: month
+- aggregation: max
+  description: Crew-member capacity associated with the active Horizon360 tier (1 / 5 / unlimited).
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
   - tier
-  name: compute_seconds
-  unit: second
+  - account
+  name: horizon360_crew_capacity
+  unit: seat
+- aggregation: max
+  description: Remaining days on a 30- or 60-day Horizon360 free trial.
+  dimensions:
+  - tier
+  - account
+  name: free_trial_days_remaining
+  unit: day
 name: Toro Finops
 provider_name: Toro
 provider_slug: toro
-publisher_name: Toro
-service_category: API
+publisher_name: The Toro Company
+service_category: Connected Products & Field Service SaaS
 slug: toro-finops
 source_filename: toro-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Toro\nproviderId: toro\npublisherName: Toro\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Landscaping\n  - Irrigation\n  - Golf\n  - Equipment\n  - Smart Connected Products\n  - Fleet Management\n  - Turf Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Toro API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
-  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Toro\n  ServiceCategory: Developer Tools / API\n  ProviderName: Toro\n  PublisherName: Toro\n  InvoiceIssuerName: Toro\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n   \
-  \ aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Toro Horizon360\n    baseURL: ''\n    tags:\n      - Landscaping\n      - Business Management\n      - Equipment\n      - Scheduling\n      - Invoicing\n    serviceName: Toro Horizon360\n    serviceCategory: API\n  - name: Toro IntelliDash\n    baseURL: ''\n    tags:\n      - Irrigation\n      - Golf\n      - Fleet Management\n      - Smart Equipment\n      - Monitoring\n    serviceName: Toro IntelliDash\n    serviceCategory: API\n  - name: Toro myTurf\n    baseURL: ''\n    tags:\n      - Equipment\n      - Maintenance\n      - Fleet\n      - Golf\n      - Turf Management\n    serviceName: Toro myTurf\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric:\
-  \ billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://horizon360.toro.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Toro\nproviderId: toro\npublisherName: The Toro Company\nserviceCategory: Connected Products & Field Service SaaS\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Landscaping\n  - Fleet Management\n  - Turf Management\n  - SaaS\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Toro: monthly subscription (tiered by crew size) for the Horizon360\n  contractor SaaS, with other connected-product surfaces (IntelliDash, myTurf) sold via dealer channels\n  without published list pricing. Cost allocation here is per Horizon360 subscription tier and crew capacity.'\nsources:\n  - https://horizon360.toro.com/\nbillingModel:\n\
+  \  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: Toro Horizon360\n  ServiceCategory: Field Service SaaS\n  ProviderName: Toro\n  PublisherName: The Toro Company\n  InvoiceIssuerName: The Toro Company\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingCategory: Subscription\n  PricingUnit: month\nmeters:\n  - name: horizon360_subscription_month\n    description: One month of a Horizon360 subscription on Essential, Basic, Premium, or Unlimited.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\n      - account\n  - name: horizon360_crew_capacity\n    description: Crew-member capacity associated with the active Horizon360 tier (1 / 5 / unlimited).\n    unit: seat\n    aggregation: max\n    dimensions:\n      - tier\n      - account\n  - name: free_trial_days_remaining\n    description: Remaining days on a\
+  \ 30- or 60-day Horizon360 free trial.\n    unit: day\n    aggregation: max\n    dimensions:\n      - tier\n      - account\nprinciples:\n  - name: Visibility\n    description: Use the Horizon360 account console to see the active tier, billing date, and crew utilization;\n      no separate usage API is published.\n  - name: Allocation\n    description: For multi-business contractors, attribute Horizon360 subscriptions per account/legal\n      entity since seats are bound to the account rather than itemized per project.\n  - name: Optimization\n    description: Right-size by tier — Essential is free for solo operators, Premium covers up to 5 crew\n      members, and Unlimited only earns its cost above 5 active crew. Use the 30/60-day free trials before\n      committing.\n  - name: Accountability\n    description: Assign a single Horizon360 account owner per business; review the tier monthly against\n      actual crew count and trial expiry.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/toro/refs/heads/main/finops/toro-finops.yml
-sources: []
+sources:
+- https://horizon360.toro.com/
 specification: FinOps Framework
 tags:
 - Landscaping
-- Irrigation
-- Golf
-- Equipment
-- Smart Connected Products
 - Fleet Management
 - Turf Management
+- SaaS
 - FinOps
-- Cost Management
 - FOCUS
 ---

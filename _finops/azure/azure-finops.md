@@ -25,81 +25,97 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/azure/refs/heads/main/openapi/azure-management-openapi.yaml
 billing_model:
-  billingCurrency: USD
+  billingCurrency: USD/EUR/GBP/local
   billingFrequency: Monthly
   chargeCategories:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Microsoft Azure API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  - Credit
+  pricingCategory: Pay-As-You-Go + Committed Use
+description: 'FOCUS-aligned FinOps for Microsoft Azure: hyperscale cloud platform with pay-as-you-go consumption metering across hundreds of services, augmented by reservations, savings plans, and enterprise agreements. Microsoft is a founding member of the FinOps Foundation and a primary contributor to the FOCUS specification; Azure Cost Management + Billing exports natively conform to FOCUS 1.0/1.1.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Microsoft Azure
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Microsoft Azure
-  PublisherName: Microsoft Azure
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Microsoft Corporation
+  PricingCategory: Pay-As-You-Go
+  ProviderName: Microsoft
+  PublisherName: Microsoft Corporation
+  ServiceCategory: Cloud Infrastructure
   ServiceName: Microsoft Azure
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Virtual machine, container, and serverless compute time
   dimensions:
-  - api
-  - endpoint
-  - tier
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  - sku
+  - vm_family
+  - subscription
+  - resource_group
+  name: compute_hours
+  unit: instance-hour
+- aggregation: avg
+  description: Blob, file, queue, table, and disk storage
+  dimensions:
+  - region
+  - storage_tier
+  - redundancy
+  name: storage_capacity
+  unit: GB-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Egress bandwidth across regions, AZs, internet
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  - source_region
+  - destination
+  name: data_transfer
   unit: GB
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Service-specific transaction count (Storage, Cosmos DB, Functions, etc.)
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - service
+  - region
+  name: api_transactions
+  unit: transaction
+- aggregation: max
+  description: Per-seat / per-month subscriptions for managed offerings
+  dimensions:
+  - product
+  name: licenses_subscriptions
+  unit: seat
+- aggregation: sum
+  description: Committed-use commitments billed monthly across covered SKUs
+  dimensions:
+  - term
+  - scope
+  name: reservations_savings_plans
+  unit: month
 name: Azure Finops
 provider_name: Microsoft Azure
 provider_slug: azure
-publisher_name: Microsoft Azure
-service_category: API
+publisher_name: Microsoft Corporation
+service_category: Cloud Infrastructure
 slug: azure-finops
 source_filename: azure-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Microsoft Azure\nproviderId: azure\npublisherName: Microsoft Azure\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud Computing\n  - Databases\n  - Infrastructure\n  - Machine Learning\n  - Networking\n  - Platform as a Service\n  - Storage\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Microsoft Azure API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name:\
-  \ Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  -\
-  \ name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Microsoft Azure\n  ServiceCategory: Developer Tools / API\n  ProviderName: Microsoft Azure\n  PublisherName: Microsoft Azure\n  InvoiceIssuerName: Microsoft Azure\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
-  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Azure Compute API\n    baseURL: https://management.azure.com\n    tags:\n      - Containers\n      - Functions\n      - Kubernetes\n      - Virtual Machines\n    serviceName: Azure Compute API\n    serviceCategory: API\n  - name: Azure Storage API\n    baseURL: https://management.azure.com\n    tags:\n      - Blob Storage\n      - File Storage\n      - Queue Storage\n    serviceName: Azure Storage API\n    serviceCategory: API\n  - name: Azure Cognitive Services API\n    baseURL: https://{region}.api.cognitive.microsoft.com\n    tags:\n      - Artificial Intelligence\n      - Computer Vision\n      - Natural Language\n\
-  \    serviceName: Azure Cognitive Services API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://azure.microsoft.com/en-us/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Microsoft Azure\nproviderId: azure\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Cloud Computing\n  - Infrastructure\n  - Platform as a Service\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Microsoft Azure: hyperscale cloud platform with pay-as-you-go consumption\n  metering across hundreds of services, augmented by reservations, savings plans, and enterprise agreements.\n  Microsoft is a founding member of the FinOps Foundation and a primary contributor to the FOCUS specification;\n  Azure Cost Management + Billing exports natively conform to FOCUS 1.0/1.1.'\nsources:\n  - https://azure.microsoft.com/en-us/pricing/\n  - https://learn.microsoft.com/en-us/azure/cost-management-billing/\n  - https://learn.microsoft.com/en-us/azure/cost-management-billing/dataset-schema/cost-usage-details-focus\nalignedWith:\n  framework:\
+  \ FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Microsoft Corporation\nserviceCategory: Cloud Infrastructure\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Committed Use\n  billingFrequency: Monthly\n  billingCurrency: USD/EUR/GBP/local\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\n    - Credit\nfocusColumns:\n  ServiceName: Microsoft Azure\n  ServiceCategory: Cloud Infrastructure\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  PricingCategory: Pay-As-You-Go\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: compute_hours\n    description: Virtual machine, container, and serverless compute time\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - region\n      - sku\n      -\
+  \ vm_family\n      - subscription\n      - resource_group\n  - name: storage_capacity\n    description: Blob, file, queue, table, and disk storage\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - region\n      - storage_tier\n      - redundancy\n  - name: data_transfer\n    description: Egress bandwidth across regions, AZs, internet\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - source_region\n      - destination\n  - name: api_transactions\n    description: Service-specific transaction count (Storage, Cosmos DB, Functions, etc.)\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - service\n      - region\n  - name: licenses_subscriptions\n    description: Per-seat / per-month subscriptions for managed offerings\n    unit: seat\n    aggregation: max\n    dimensions:\n      - product\n  - name: reservations_savings_plans\n    description: Committed-use commitments billed monthly across covered SKUs\n    unit: month\n    aggregation: sum\n\
+  \    dimensions:\n      - term\n      - scope\nprinciples:\n  - name: Visibility\n    description: Use Azure Cost Management + Billing, FOCUS-aligned cost exports to ADLS Gen2, and Azure\n      Workbooks / Power BI for near-real-time spend visibility down to resource and tag.\n  - name: Allocation\n    description: Apply tags, management groups, subscriptions, and resource groups to attribute spend\n      to teams, products, and environments; configure tag inheritance and tag policy.\n  - name: Optimization\n    description: Use Azure Advisor recommendations; right-size VMs; adopt Reservations and Azure Savings\n      Plan for stable workloads; use Spot instances for fault-tolerant compute; enable autoscale; clean\n      up unattached disks and idle resources.\n  - name: Accountability\n    description: Set Cost Management budgets with alerts; assign subscription / resource-group owners;\n      run monthly FinOps reviews; chargeback / showback via FOCUS exports.\nmaintainers:\n  - FN:\
+  \ Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/azure/refs/heads/main/finops/azure-finops.yml
-sources: []
+sources:
+- https://azure.microsoft.com/en-us/pricing/
+- https://learn.microsoft.com/en-us/azure/cost-management-billing/
+- https://learn.microsoft.com/en-us/azure/cost-management-billing/dataset-schema/cost-usage-details-focus
 specification: FinOps Framework
 tags:
 - Cloud Computing
-- Databases
 - Infrastructure
-- Machine Learning
-- Networking
 - Platform as a Service
-- Storage
 - FinOps
-- Cost Management
 - FOCUS
 ---

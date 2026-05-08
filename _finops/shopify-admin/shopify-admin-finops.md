@@ -16,77 +16,74 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Shopify Admin API API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Take Rate
+description: FOCUS-aligned FinOps for the Shopify Admin API. The Admin API is bundled with a Shopify commerce subscription; cost surfaces are the monthly plan fee, payment processing take rates, and third-party payment provider fees. API throughput is governed by GraphQL points budgets that scale with the commerce plan rather than priced per call.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Shopify Admin API
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Shopify Admin API
-  PublisherName: Shopify Admin API
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Shopify Inc.
+  ProviderName: Shopify
+  PublisherName: Shopify Inc.
+  ServiceCategory: Commerce
   ServiceName: Shopify Admin API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Monthly commerce plan fee (Basic, Grow, Advanced, Plus, Enterprise).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - plan
+  - billing_term
+  name: commerce_subscription
+  unit: month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Payment processing fees on cards processed via Shopify Payments.
   dimensions:
-  - api
+  - plan
+  - channel
+  - card_brand
   - region
-  - consumer
-  name: data_egress
-  unit: GB
+  name: card_transactions
+  unit: transaction
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Per-transaction surcharge applied when using a non-Shopify payment provider.
   dimensions:
+  - plan
+  - provider
+  name: third_party_payment_fee
+  unit: transaction
+- aggregation: sum
+  description: GraphQL Admin API query points consumed against the per-second leak-bucket budget; not a billed line, but the primary throughput-cost meter for capacity planning.
+  dimensions:
+  - shop
   - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - operation
+  name: graphql_points_consumed
+  unit: point
 name: Shopify Admin Finops
 provider_name: Shopify Admin API
 provider_slug: shopify-admin
-publisher_name: Shopify Admin API
-service_category: API
+publisher_name: Shopify Inc.
+service_category: Commerce
 slug: shopify-admin-finops
 source_filename: shopify-admin-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Shopify Admin API\nproviderId: shopify-admin\npublisherName: Shopify Admin API\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Commerce\n  - Ecommerce\n  - Admin\n  - Products\n  - Orders\n  - Customers\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Shopify Admin API API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
-  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
-  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Shopify Admin API\n  ServiceCategory: Developer Tools / API\n  ProviderName: Shopify Admin API\n  PublisherName: Shopify Admin API\n  InvoiceIssuerName: Shopify Admin API\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over\
-  \ the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Shopify Admin REST API\n    baseURL: https://{store_name}.myshopify.com/admin/api/2024-10\n    tags:\n      - Commerce\n      - Ecommerce\n      - Admin\n      - REST\n      - Products\n      - Orders\n      - Customers\n    serviceName: Shopify Admin REST API\n    serviceCategory: API\n  - name: Shopify Admin GraphQL API\n    baseURL: https://{store_name}.myshopify.com/admin/api/2024-10/graphql.json\n    tags:\n      - Commerce\n      - Ecommerce\n      - Admin\n      - GraphQL\n      - Products\n      - Orders\n      - Customers\n    serviceName: Shopify Admin GraphQL API\n    serviceCategory: API\n  - name: Shopify Webhooks\n    baseURL:\
-  \ ''\n    tags:\n      - Commerce\n      - Ecommerce\n      - Webhooks\n      - Events\n    serviceName: Shopify Webhooks\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.shopify.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Shopify Admin API\nproviderId: shopify-admin\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Commerce\n  - Ecommerce\n  - Admin\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for the Shopify Admin API. The Admin API is bundled with a Shopify\n  commerce subscription; cost surfaces are the monthly plan fee, payment processing take rates, and\n  third-party payment provider fees. API throughput is governed by GraphQL points budgets that scale\n  with the commerce plan rather than priced per call.\nsources:\n  - https://www.shopify.com/pricing\n  - https://shopify.dev/docs/api/usage/rate-limits\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
+  \ Shopify Inc.\nserviceCategory: Commerce\nbillingModel:\n  pricingCategory: Subscription + Take Rate\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Shopify Admin API\n  ServiceCategory: Commerce\n  ProviderName: Shopify\n  PublisherName: Shopify Inc.\n  InvoiceIssuerName: Shopify Inc.\n  BillingCurrency: USD\nmeters:\n  - name: commerce_subscription\n    description: Monthly commerce plan fee (Basic, Grow, Advanced, Plus, Enterprise).\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n      - billing_term\n  - name: card_transactions\n    description: Payment processing fees on cards processed via Shopify Payments.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - plan\n      - channel\n      - card_brand\n      - region\n  - name: third_party_payment_fee\n    description: Per-transaction surcharge applied when using a non-Shopify\
+  \ payment provider.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - plan\n      - provider\n  - name: graphql_points_consumed\n    description: GraphQL Admin API query points consumed against the per-second leak-bucket budget;\n      not a billed line, but the primary throughput-cost meter for capacity planning.\n    unit: point\n    aggregation: sum\n    dimensions:\n      - shop\n      - api\n      - operation\nprinciples:\n  - name: Visibility\n    description: Subscription and processing fees appear on the Shopify monthly invoice and Shopify\n      Payments balance reports. API throughput is observable via GraphQL response extensions.cost\n      (requestedQueryCost, actualQueryCost, throttleStatus).\n  - name: Allocation\n    description: Allocate by shop (myshopify domain), commerce plan, and channel (online vs POS); for\n      multi-store Plus deployments, attribute by store.\n  - name: Optimization\n    description: Reduce GraphQL query cost by selecting only\
+  \ needed fields, batching mutations, and\n      using bulk operations for large reads. Choose the commerce plan that matches transaction volume\n      and required GraphQL points budget rather than over-provisioning Plus.\n  - name: Accountability\n    description: Commerce/finance owns the subscription and processing-fee line; engineering owns API\n      cost via query design and leak-bucket headroom.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/shopify-admin/refs/heads/main/finops/shopify-admin-finops.yml
-sources: []
+sources:
+- https://www.shopify.com/pricing
+- https://shopify.dev/docs/api/usage/rate-limits
 specification: FinOps Framework
 tags:
 - Commerce
 - Ecommerce
 - Admin
-- Products
-- Orders
-- Customers
 - FinOps
-- Cost Management
 - FOCUS
 ---

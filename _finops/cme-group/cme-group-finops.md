@@ -9,81 +9,78 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the CME Group API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription + Usage
+description: 'FOCUS-aligned FinOps for CME Group market data and connectivity: monthly subscriber-based billing for market data (MDP 3.0), per-dataset purchases for CME DataMine, and per-session billing for iLink connectivity. Subscriber reporting and audit obligations apply to market-data licensees.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: CME Group
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Chicago Mercantile Exchange Inc.
+  PricingCategory: Tiered Subscription
   ProviderName: CME Group
-  PublisherName: CME Group
-  ServiceCategory: Developer Tools / API
-  ServiceName: CME Group
+  PublisherName: Chicago Mercantile Exchange Inc.
+  ServiceCategory: Market Data / Exchange Connectivity
+  ServiceName: CME Group Market Data
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Count of professional market-data subscribers for the period.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  - product
+  - distribution_model
+  name: professional_subscribers
+  unit: seat-month
+- aggregation: max
+  description: Count of non-professional market-data subscribers for the period.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  - product
+  - distribution_model
+  name: non_professional_subscribers
+  unit: seat-month
+- aggregation: max
+  description: Non-display / derived data licenses.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - product
+  - business_unit
+  name: non_display_licenses
+  unit: license-month
+- aggregation: max
+  description: iLink order-entry sessions allocated.
+  dimensions:
+  - environment
+  name: ilink_sessions
+  unit: session-month
+- aggregation: sum
+  description: One-time CME DataMine dataset purchases.
+  dimensions:
+  - dataset
+  - product
+  name: datamine_purchases
+  unit: dataset
 name: Cme Group Finops
 provider_name: CME Group
 provider_slug: cme-group
-publisher_name: CME Group
-service_category: API
+publisher_name: Chicago Mercantile Exchange Inc.
+service_category: Market Data / Exchange Connectivity
 slug: cme-group-finops
 source_filename: cme-group-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CME Group\nproviderId: cme-group\npublisherName: CME Group\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Capital Markets\n  - Derivatives\n  - Exchange\n  - Financial Markets\n  - Futures\n  - Market Data\n  - Options\n  - Reference Data\n  - Trading\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the CME Group API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  -\
-  \ name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n\
-  \  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: CME Group\n  ServiceCategory: Developer Tools / API\n  ProviderName: CME Group\n  PublisherName: CME Group\n  InvoiceIssuerName: CME Group\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned\
-  \ over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: CME Reference Data API\n    baseURL: ''\n    tags:\n      - Instruments\n      - OAuth\n      - Products\n      - Reference Data\n      - REST\n    serviceName: CME Reference Data API\n    serviceCategory: API\n  - name: Real-Time Futures and Options Data API\n    baseURL: ''\n    tags:\n      - Futures\n      - Market Data\n      - Options\n      - Real-Time\n      - REST\n    serviceName: Real-Time Futures and Options Data API\n    serviceCategory: API\n  - name: CME Term SOFR API\n    baseURL: ''\n    tags:\n      - Benchmarks\n      - Interest Rates\n      - REST\n      - SOFR\n    serviceName: CME Term SOFR API\n    serviceCategory:\
-  \ API\n  - name: CME FedWatch API\n    baseURL: ''\n    tags:\n      - Fed Funds\n      - Market-Implied Probabilities\n      - Monetary Policy\n      - REST\n    serviceName: CME FedWatch API\n    serviceCategory: API\n  - name: Greeks and Implied Volatility API\n    baseURL: ''\n    tags:\n      - Greeks\n      - Implied Volatility\n      - Options\n      - REST\n    serviceName: Greeks and Implied Volatility API\n    serviceCategory: API\n  - name: EUR/USD Cross Currency Basis Index API\n    baseURL: ''\n    tags:\n      - FX\n      - Index\n      - REST\n    serviceName: EUR/USD Cross Currency Basis Index API\n    serviceCategory: API\n  - name: CME ClearPort API\n    baseURL: ''\n    tags:\n      - Clearing\n      - OTC\n      - Trade Submission\n    serviceName: CME ClearPort API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost /\
-  \ active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.cmegroup.com/market-data/distributors-and-vendors.html
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: CME Group\nproviderId: cme-group\npublisherName: Chicago Mercantile Exchange Inc.\nserviceCategory: Market Data / Exchange Connectivity\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Capital Markets\n  - Market Data\n  - Derivatives\nnotes: CME Group invoices market-data customers under fee schedules tied to subscriber counts (professional\n  / non-professional), distribution model (display / non-display / derived), and session count for iLink.\n  Specific dollar amounts come from PDF fee schedules per program; the meters below capture the typical\n  billing surface but are not reconciled against\
+  \ a particular invoice.\ndescription: 'FOCUS-aligned FinOps for CME Group market data and connectivity: monthly subscriber-based\n  billing for market data (MDP 3.0), per-dataset purchases for CME DataMine, and per-session billing for\n  iLink connectivity. Subscriber reporting and audit obligations apply to market-data licensees.'\nsources:\n  - https://www.cmegroup.com/market-data/distributors-and-vendors.html\nbillingModel:\n  pricingCategory: Tiered Subscription + Usage\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: CME Group Market Data\n  ServiceCategory: Market Data / Exchange Connectivity\n  ProviderName: CME Group\n  PublisherName: Chicago Mercantile Exchange Inc.\n  InvoiceIssuerName: Chicago Mercantile Exchange Inc.\n  PricingCategory: Tiered Subscription\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: professional_subscribers\n    description:\
+  \ Count of professional market-data subscribers for the period.\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - product\n      - distribution_model\n  - name: non_professional_subscribers\n    description: Count of non-professional market-data subscribers for the period.\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - product\n      - distribution_model\n  - name: non_display_licenses\n    description: Non-display / derived data licenses.\n    unit: license-month\n    aggregation: max\n    dimensions:\n      - product\n      - business_unit\n  - name: ilink_sessions\n    description: iLink order-entry sessions allocated.\n    unit: session-month\n    aggregation: max\n    dimensions:\n      - environment\n  - name: datamine_purchases\n    description: One-time CME DataMine dataset purchases.\n    unit: dataset\n    aggregation: sum\n    dimensions:\n      - dataset\n      - product\nprinciples:\n  - name: Visibility\n    description: CME requires\
+  \ monthly subscriber reporting from vendors / distributors; reconcile internal\n      entitlement systems against the report submitted to CME.\n  - name: Allocation\n    description: Allocate market-data fees to the trading desk or research team consuming the feed; allocate\n      iLink session fees to the order-routing application.\n  - name: Optimization\n    description: Audit professional vs non-professional classifications, sunset orphan iLink sessions,\n      and consolidate distribution agreements to take advantage of enterprise-licensing terms.\n  - name: Accountability\n    description: Assign a market-data administrator accountable for monthly reporting accuracy; CME audits\n      can result in retroactive fees if subscriber counts are under-reported.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cme-group/refs/heads/main/finops/cme-group-finops.yml
-sources: []
+sources:
+- https://www.cmegroup.com/market-data/distributors-and-vendors.html
 specification: FinOps Framework
 tags:
-- Capital Markets
-- Derivatives
-- Exchange
-- Financial Markets
-- Futures
-- Market Data
-- Options
-- Reference Data
-- Trading
 - FinOps
-- Cost Management
 - FOCUS
+- Capital Markets
+- Market Data
+- Derivatives
 ---

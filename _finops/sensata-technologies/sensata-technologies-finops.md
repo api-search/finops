@@ -7,75 +7,48 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Sensata Technologies API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Hardware + Subscription
+description: FinOps shape for Sensata Technologies — an industrial sensor manufacturer. Software / API spend is generally bundled into hardware-plus-connectivity contracts, not metered as a standalone API service. No public per-meter pricing or FOCUS column mapping was reconcilable.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Sensata Technologies
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Sensata Technologies, Inc.
   ProviderName: Sensata Technologies
-  PublisherName: Sensata Technologies
-  ServiceCategory: Developer Tools / API
+  PublisherName: Sensata Technologies, Inc.
+  ServiceCategory: Industrial Sensors / IoT
   ServiceName: Sensata Technologies
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  description: Hardware units shipped under the contract (sensors, controllers, telematics devices)
+  name: hardware_units
+  unit: device
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  description: Connectivity / platform subscription for IoT-enabled devices
+  name: connectivity_subscription
+  unit: device-month
 name: Sensata Technologies Finops
 provider_name: Sensata Technologies
 provider_slug: sensata-technologies
-publisher_name: Sensata Technologies
-service_category: API
+publisher_name: Sensata Technologies, Inc.
+service_category: Industrial Sensors / IoT
 slug: sensata-technologies-finops
 source_filename: sensata-technologies-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sensata Technologies\nproviderId: sensata-technologies\npublisherName: Sensata Technologies\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Sensors\n  - Electrical Protection\n  - Industrial\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sensata Technologies API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sensata Technologies\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sensata Technologies\n  PublisherName: Sensata Technologies\n  InvoiceIssuerName: Sensata Technologies\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the\
-  \ network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Sensata Technologies API\n    baseURL: https://api.sensata.com\n    tags:\n      - Sensors\n      - Electrical Protection\n      - Industrial\n    serviceName: Sensata Technologies API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.sensata.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Sensata Technologies\nproviderId: sensata-technologies\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Sensors\n  - Industrial\n  - IoT\n  - FinOps\n  - FOCUS\ndescription: FinOps shape for Sensata Technologies — an industrial sensor manufacturer. Software / API\n  spend is generally bundled into hardware-plus-connectivity contracts, not metered as a standalone API\n  service. No public per-meter pricing or FOCUS column mapping was reconcilable.\nsources:\n  - https://www.sensata.com/\nnotes: Pricing, meters, and FOCUS column mappings are not publicly disclosed; reconciled to negotiated-contract\n  shape only.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
+  \ Sensata Technologies, Inc.\nserviceCategory: Industrial Sensors / IoT\nbillingModel:\n  pricingCategory: Hardware + Subscription\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Sensata Technologies\n  ServiceCategory: Industrial Sensors / IoT\n  ProviderName: Sensata Technologies\n  PublisherName: Sensata Technologies, Inc.\n  InvoiceIssuerName: Sensata Technologies, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: hardware_units\n    description: Hardware units shipped under the contract (sensors, controllers, telematics devices)\n    unit: device\n    aggregation: sum\n  - name: connectivity_subscription\n    description: Connectivity / platform subscription for IoT-enabled devices\n    unit: device-month\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Visibility comes from the Sensata customer portal / Sensata IQ for connected fleets;\n      cost data lives on the negotiated invoice\
+  \ rather than a usage API.\n  - name: Allocation\n    description: Allocate hardware and connectivity costs to the operational asset / fleet that the\n      device is deployed on.\n  - name: Optimization\n    description: Optimization is a procurement exercise — consolidate vendors, negotiate multi-year\n      hardware contracts, and right-size connected-device populations during contract renewals.\n  - name: Accountability\n    description: Operations / fleet management owns the device population; procurement owns commercial\n      terms with Sensata.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sensata-technologies/refs/heads/main/finops/sensata-technologies-finops.yml
-sources: []
+sources:
+- https://www.sensata.com/
 specification: FinOps Framework
 tags:
 - Sensors
-- Electrical Protection
 - Industrial
+- IoT
 - FinOps
-- Cost Management
 - FOCUS
 ---

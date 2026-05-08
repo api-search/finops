@@ -86,80 +86,77 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/dapr/refs/heads/main/openapi/dapr-metadata-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
   - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Dapr API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Open Source / Self-Hosted
+description: 'FOCUS-aligned FinOps for Dapr: there is no vendor invoice for upstream Dapr itself. Cost emerges from the underlying compute (sidecar CPU/memory), state store, message broker, and any commercial managed Dapr distribution the operator chooses (Diagrid Catalyst, Azure Container Apps Dapr extension, etc.). FinOps reporting for Dapr workloads should attach to the cloud provider that hosts the sidecars rather than to Dapr itself.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Dapr
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Dapr
-  PublisherName: Dapr
-  ServiceCategory: Developer Tools / API
+  PricingCategory: Open Source
+  ProviderName: Dapr (CNCF)
+  PublisherName: Cloud Native Computing Foundation
+  ServiceCategory: Developer Tools
   ServiceName: Dapr
+  ServiceSubcategory: Distributed Application Runtime
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: CPU/memory hours consumed by Dapr sidecars (daprd) running alongside application workloads. Charged by the underlying compute provider, not by Dapr.
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - cluster
+  - namespace
+  - app_id
   - region
-  - consumer
-  name: api_requests
+  name: sidecar_compute_hours
+  unit: instance-hour
+- aggregation: sum
+  description: Reads/writes to the configured state store backend (Redis, Cosmos DB, DynamoDB, etc.). Billed by the state-store provider.
+  dimensions:
+  - state_store
+  - app_id
+  name: state_store_operations
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Messages published or delivered through the configured pub/sub broker (Kafka, RabbitMQ, Service Bus, etc.). Billed by the broker provider.
   dimensions:
-  - api
+  - broker
+  - topic
+  - app_id
+  name: pubsub_messages
+  unit: message
+- aggregation: sum
+  description: Network egress between Dapr sidecars and external state/broker/binding endpoints.
+  dimensions:
   - region
-  - consumer
+  - destination
   name: data_egress
   unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Dapr Finops
 provider_name: Dapr
 provider_slug: dapr
-publisher_name: Dapr
-service_category: API
+publisher_name: Cloud Native Computing Foundation
+service_category: Developer Tools
 slug: dapr-finops
 source_filename: dapr-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Dapr\nproviderId: dapr\npublisherName: Dapr\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Distributed Systems\n  - Microservices\n  - Platform\n  - Pub/Sub\n  - State Management\n  - Workflows\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Dapr API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
-  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
-  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Dapr\n  ServiceCategory: Developer Tools / API\n  ProviderName: Dapr\n  PublisherName: Dapr\n  InvoiceIssuerName: Dapr\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Dapr State Management API\n    baseURL: ''\n    tags:\n      - Distributed Systems\n      - Key Value\n      - State Management\n    serviceName: Dapr State Management API\n    serviceCategory: API\n  - name: Dapr Pub/Sub API\n    baseURL: ''\n    tags:\n      - CloudEvents\n      - Events\n      - Messaging\n      - Pub/Sub\n    serviceName: Dapr Pub/Sub API\n    serviceCategory: API\n  - name: Dapr Service Invocation API\n    baseURL: ''\n    tags:\n      - Microservices\n      - Service Discovery\n      - Service Invocation\n    serviceName: Dapr Service Invocation API\n    serviceCategory: API\n  - name: Dapr Bindings API\n    baseURL: ''\n    tags:\n      - Bindings\n      - Event-Driven\n      - Integrations\n\
-  \    serviceName: Dapr Bindings API\n    serviceCategory: API\n  - name: Dapr Secrets API\n    baseURL: ''\n    tags:\n      - Key Management\n      - Secrets\n      - Security\n    serviceName: Dapr Secrets API\n    serviceCategory: API\n  - name: Dapr Actors API\n    baseURL: ''\n    tags:\n      - Actors\n      - Distributed Systems\n      - Virtual Actors\n    serviceName: Dapr Actors API\n    serviceCategory: API\n  - name: Dapr Workflow API\n    baseURL: ''\n    tags:\n      - Distributed Systems\n      - Orchestration\n      - Workflows\n    serviceName: Dapr Workflow API\n    serviceCategory: API\n  - name: Dapr Configuration API\n    baseURL: ''\n    tags:\n      - Configuration\n      - Distributed Systems\n      - Subscriptions\n    serviceName: Dapr Configuration API\n    serviceCategory: API\n  - name: Dapr Distributed Lock API\n    baseURL: ''\n    tags:\n      - Concurrency\n      - Coordination\n      - Distributed Lock\n    serviceName: Dapr Distributed Lock API\n    serviceCategory:\
-  \ API\n  - name: Dapr Cryptography API\n    baseURL: ''\n    tags:\n      - Cryptography\n      - Encryption\n      - Security\n    serviceName: Dapr Cryptography API\n    serviceCategory: API\n  - name: Dapr Jobs API\n    baseURL: ''\n    tags:\n      - Cron\n      - Jobs\n      - Scheduling\n    serviceName: Dapr Jobs API\n    serviceCategory: API\n  - name: Dapr Health API\n    baseURL: ''\n    tags:\n      - Health\n      - Kubernetes\n      - Monitoring\n    serviceName: Dapr Health API\n    serviceCategory: API\n  - name: Dapr Metadata API\n    baseURL: ''\n    tags:\n      - Metadata\n      - Observability\n      - Runtime\n    serviceName: Dapr Metadata API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://dapr.io
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Dapr\nproviderId: dapr\npublisherName: Cloud Native Computing Foundation\nserviceCategory: Developer Tools\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Distributed Systems\n  - Microservices\n  - Open Source\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Dapr: there is no vendor invoice for upstream Dapr itself.\n  Cost emerges from the underlying compute (sidecar CPU/memory), state store, message broker, and\n  any commercial managed Dapr distribution the operator chooses (Diagrid Catalyst, Azure Container\n  Apps Dapr extension, etc.). FinOps reporting for Dapr workloads should attach to the cloud\n\
+  \  provider that hosts the sidecars rather than to Dapr itself.'\nsources:\n  - https://dapr.io\n  - https://docs.dapr.io\n  - https://www.cncf.io/projects/dapr/\nnotes: No direct vendor billing. FinOps meters track underlying infrastructure spend (sidecar\n  hours, state-store IO, broker throughput) attributed to the apps that run alongside Dapr.\nbillingModel:\n  pricingCategory: Open Source / Self-Hosted\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Dapr\n  ServiceCategory: Developer Tools\n  ServiceSubcategory: Distributed Application Runtime\n  ProviderName: Dapr (CNCF)\n  PublisherName: Cloud Native Computing Foundation\n  PricingCategory: Open Source\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: sidecar_compute_hours\n    description: CPU/memory hours consumed by Dapr sidecars (daprd) running alongside application\n      workloads. Charged by the underlying compute provider, not by\
+  \ Dapr.\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - namespace\n      - app_id\n      - region\n  - name: state_store_operations\n    description: Reads/writes to the configured state store backend (Redis, Cosmos DB, DynamoDB,\n      etc.). Billed by the state-store provider.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - state_store\n      - app_id\n  - name: pubsub_messages\n    description: Messages published or delivered through the configured pub/sub broker (Kafka,\n      RabbitMQ, Service Bus, etc.). Billed by the broker provider.\n    unit: message\n    aggregation: sum\n    dimensions:\n      - broker\n      - topic\n      - app_id\n  - name: data_egress\n    description: Network egress between Dapr sidecars and external state/broker/binding endpoints.\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - region\n      - destination\nprinciples:\n  - name: Visibility\n    description: Dapr emits Prometheus\
+  \ metrics, OpenTelemetry traces, and structured logs for every\n      sidecar. Pipe these into the operator's observability stack and join with cloud-provider\n      billing exports keyed on cluster/namespace/app_id.\n  - name: Allocation\n    description: Tag every Dapr sidecar pod with team, environment, and app_id labels; allocation\n      then flows from cloud-provider billing tags rather than from a Dapr invoice.\n  - name: Optimization\n    description: Right-size sidecar resources (CPU/memory requests and limits), enable component\n      pluggability to use cheaper state stores in non-prod, batch pub/sub messages where ordering\n      allows, and use Resiliency policies to avoid runaway retry storms that amplify bill.\n  - name: Accountability\n    description: Cluster owners and platform teams own infrastructure spend; application teams own\n      per-app sidecar density. Review sidecar utilization quarterly and consolidate co-located\n      apps where the sidecar is over-provisioned.\n\
+  maintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/dapr/refs/heads/main/finops/dapr-finops.yml
-sources: []
+sources:
+- https://dapr.io
+- https://docs.dapr.io
+- https://www.cncf.io/projects/dapr/
 specification: FinOps Framework
 tags:
 - Distributed Systems
 - Microservices
-- Platform
-- Pub/Sub
-- State Management
-- Workflows
+- Open Source
 - FinOps
-- Cost Management
 - FOCUS
 ---

@@ -14,69 +14,59 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/jones-lang-lasalle/refs/heads/main/openapi/jones-lang-lasalle-corrigo-rest-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Contract
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Jones Lang LaSalle API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Services
+description: FOCUS-aligned FinOps scaffold for JLL integration surfaces. Treated as a hybrid professional-services + technology-subscription model with no first-party billing API.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Jones Lang LaSalle
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Jones Lang LaSalle IP, Inc.
   ProviderName: Jones Lang LaSalle
-  PublisherName: Jones Lang LaSalle
-  ServiceCategory: Developer Tools / API
-  ServiceName: Jones Lang LaSalle
+  PublisherName: Jones Lang LaSalle IP, Inc.
+  ServiceCategory: Commercial Real Estate / Facility Management
+  ServiceName: JLL Integration APIs
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - product
+  - client
+  - integration
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+- aggregation: count
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  - portfolio
+  - property
+  name: work_orders
+  unit: work_order
+- aggregation: count
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - portfolio
+  - property
+  name: asset_records
+  unit: record
 name: Jones Lang Lasalle Finops
 provider_name: Jones Lang LaSalle
 provider_slug: jones-lang-lasalle
-publisher_name: Jones Lang LaSalle
-service_category: API
+publisher_name: Jones Lang LaSalle IP, Inc.
+service_category: Commercial Real Estate / Facility Management
 slug: jones-lang-lasalle-finops
 source_filename: jones-lang-lasalle-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Jones Lang LaSalle\nproviderId: jones-lang-lasalle\npublisherName: Jones Lang LaSalle\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Commercial Real Estate\n  - Facility Management\n  - Asset Management\n  - Work Orders\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Jones Lang LaSalle API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n   \
-  \ description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the\
-  \ FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Jones Lang LaSalle\n  ServiceCategory: Developer Tools / API\n  ProviderName: Jones Lang LaSalle\n  PublisherName: Jones Lang LaSalle\n  InvoiceIssuerName: Jones Lang LaSalle\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
-  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: JLL Corrigo Enterprise REST API\n    baseURL: https://am-ce98c.corrigo.com/api/v1\n    tags:\n      - Asset Management\n      - Commercial Real Estate\n      - Facility Management\n      - Work Orders\n    serviceName: JLL Corrigo Enterprise REST API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.jll.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Jones Lang LaSalle\nproviderId: jones-lang-lasalle\npublisherName: Jones Lang LaSalle IP, Inc.\nserviceCategory: Commercial Real Estate / Facility Management\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nnotes: JLL does not expose a public usage-billing surface. FinOps shape inferred from a\n  service-firm + technology-product hybrid model (advisory + JLL Technologies subscriptions).\n  Meters reflect plausible product line items (work orders, asset records).\ntags:\n  - Commercial Real Estate\n  - Facility Management\n  - Asset Management\n  - Work Orders\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps scaffold for\
+  \ JLL integration surfaces. Treated as a hybrid\n  professional-services + technology-subscription model with no first-party billing API.\nsources:\n  - https://www.jll.com/\n  - https://www.jllt.com/\n  - https://www.finops.org/framework/\n  - https://focus.finops.org/focus-specification/v1-3/\nbillingModel:\n  pricingCategory: Subscription + Services\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: JLL Integration APIs\n  ServiceCategory: Commercial Real Estate / Facility Management\n  ProviderName: Jones Lang LaSalle\n  PublisherName: Jones Lang LaSalle IP, Inc.\n  InvoiceIssuerName: Jones Lang LaSalle IP, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - product\n      - client\n      - integration\n  - name: work_orders\n    unit: work_order\n    aggregation: count\n    dimensions:\n      - portfolio\n\
+  \      - property\n  - name: asset_records\n    unit: record\n    aggregation: count\n    dimensions:\n      - portfolio\n      - property\nprinciples:\n  - name: Visibility\n    description: Track integration usage at the JLL Technologies product level; instrument\n      consumer-side calls since JLL does not publish a usage-billing API.\n  - name: Allocation\n    description: Allocate spend by portfolio / property / client engagement to mirror how\n      JLL contracts are scoped.\n  - name: Optimization\n    description: Reconcile work-order and asset-record volumes against subscription tiers;\n      use bulk export interfaces where contracts allow.\n  - name: Accountability\n    description: Each engagement has a JLL account team and an internal real-estate / FM\n      product owner who jointly own integration cost.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/jones-lang-lasalle/refs/heads/main/finops/jones-lang-lasalle-finops.yml
-sources: []
+sources:
+- https://www.jll.com/
+- https://www.jllt.com/
+- https://www.finops.org/framework/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Commercial Real Estate
@@ -84,6 +74,5 @@ tags:
 - Asset Management
 - Work Orders
 - FinOps
-- Cost Management
 - FOCUS
 ---

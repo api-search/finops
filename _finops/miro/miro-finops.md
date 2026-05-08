@@ -80,71 +80,54 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/miro/refs/heads/main/openapi/miro-openapi.json
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Monthly or Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Miro API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription (Per Seat)
+description: FOCUS-aligned FinOps profile for Miro. Miro bills as a per-Member monthly subscription across Free, Starter, Business, and Enterprise tiers. AI usage is metered via per-member monthly AI credit allowances; overage requires plan upgrade or enterprise contract terms. Visitors and Guests are free on paid tiers.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
+  ChargeCategory: Purchase
   InvoiceIssuerName: Miro
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Miro
   PublisherName: Miro
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Productivity
   ServiceName: Miro
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Per-Member subscription. Starter $8/$10, Business $20/$25, Enterprise contract.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - workspace
+  - team
+  - plan
+  name: member_seats
+  unit: seat
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Monthly AI credits per member; Free 10/team, Starter 25/member, Business 50/member, Enterprise custom.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - workspace
+  - member
+  name: ai_credits
+  unit: credit
 name: Miro Finops
 provider_name: Miro
 provider_slug: miro
 publisher_name: Miro
-service_category: API
+service_category: Productivity
 slug: miro-finops
 source_filename: miro-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Miro\nproviderId: miro\npublisherName: Miro\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Productivity\n  - Whiteboard\n  - Visual Collaboration\n  - Diagramming\n  - SaaS\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Miro API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Miro\n  ServiceCategory: Developer Tools / API\n  ProviderName: Miro\n  PublisherName: Miro\n  InvoiceIssuerName: Miro\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      -\
-  \ api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Miro Boards API\n    baseURL: https://api.miro.com/v2\n    tags:\n      - Boards\n      - CRUD\n    serviceName: Miro Boards API\n    serviceCategory: API\n  - name: Miro Board Items API\n    baseURL: https://api.miro.com/v2\n    tags:\n      - Items\n      - Sticky Notes\n      - Shapes\n    serviceName: Miro Board Items API\n    serviceCategory: API\n  - name: Miro Connectors API\n    baseURL: https://api.miro.com/v2\n    tags:\n      - Connectors\n      - Diagramming\n    serviceName: Miro Connectors API\n    serviceCategory: API\n  - name: Miro Tags API\n    baseURL: https://api.miro.com/v2\n    tags:\n      - Tags\n      - Metadata\n    serviceName: Miro Tags API\n    serviceCategory: API\n  - name: Miro Mind Map API\n\
-  \    baseURL: https://api.miro.com/v2\n    tags:\n      - Mind Map\n      - Diagramming\n    serviceName: Miro Mind Map API\n    serviceCategory: API\n  - name: Miro Board Members API\n    baseURL: https://api.miro.com/v2\n    tags:\n      - Members\n      - Sharing\n      - Permissions\n    serviceName: Miro Board Members API\n    serviceCategory: API\n  - name: Miro Webhooks API\n    baseURL: https://api.miro.com/v2\n    tags:\n      - Webhooks\n      - Events\n    serviceName: Miro Webhooks API\n    serviceCategory: API\n  - name: Miro Organization API\n    baseURL: https://api.miro.com/v2\n    tags:\n      - Organization\n      - Enterprise\n    serviceName: Miro Organization API\n    serviceCategory: API\n  - name: Miro Teams API\n    baseURL: https://api.miro.com/v2\n    tags:\n      - Teams\n      - Membership\n    serviceName: Miro Teams API\n    serviceCategory: API\n  - name: Miro Audit Logs API\n    baseURL: https://api.miro.com/v2\n    tags:\n      - Audit\n      - Compliance\n\
-  \      - Enterprise\n    serviceName: Miro Audit Logs API\n    serviceCategory: API\n  - name: Miro SCIM API\n    baseURL: https://miro.com/api/v1/scim\n    tags:\n      - SCIM\n      - Identity\n      - Provisioning\n    serviceName: Miro SCIM API\n    serviceCategory: API\n  - name: Miro Web SDK\n    baseURL: https://miro.com\n    tags:\n      - SDK\n      - Browser\n      - Apps\n    serviceName: Miro Web SDK\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://miro.com/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Miro\nproviderId: miro\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- Productivity\n- Whiteboard\n- Visual Collaboration\n- Diagramming\n- SaaS\n- FinOps\n- Cost Management\n- FOCUS\ndescription: FOCUS-aligned FinOps profile for Miro. Miro bills as a per-Member monthly\n  subscription across Free, Starter, Business, and Enterprise tiers. AI usage is metered\n  via per-member monthly AI credit allowances; overage requires plan upgrade or enterprise\n  contract terms. Visitors and Guests are free on paid tiers.\nsources:\n- https://miro.com/pricing/\n- https://developers.miro.com/reference/overview\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
+  publisherName: Miro\nserviceCategory: Productivity\nbillingModel:\n  pricingCategory: Subscription (Per Seat)\n  billingFrequency: Monthly or Annual\n  billingCurrency: USD\n  chargeCategories:\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: Miro\n  ServiceCategory: Productivity\n  ProviderName: Miro\n  PublisherName: Miro\n  InvoiceIssuerName: Miro\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n- name: member_seats\n  description: Per-Member subscription. Starter $8/$10, Business $20/$25, Enterprise\n    contract.\n  unit: seat\n  aggregation: sum\n  dimensions:\n  - workspace\n  - team\n  - plan\n- name: ai_credits\n  description: Monthly AI credits per member; Free 10/team, Starter 25/member,\n    Business 50/member, Enterprise custom.\n  unit: credit\n  aggregation: sum\n  dimensions:\n  - workspace\n  - member\nprinciples:\n- name: Visibility\n  description: Use Miro admin reports to inventory active members per workspace and team;\n    AI credit usage\
+  \ per member.\n- name: Allocation\n  description: Allocate seats by team membership; tag enterprise contracts to procuring\n    business units.\n- name: Optimization\n  description: Reclaim seats from inactive members; choose annual billing for the discount;\n    exploit free Visitors/Guests for read-only collaborators; right-size plan tier to AI\n    credit needs.\n- name: Accountability\n  description: Assign workspace and organization owners; review quarterly seat counts\n    against active-user reports.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/miro/refs/heads/main/finops/miro-finops.yml
-sources: []
+sources:
+- https://miro.com/pricing/
+- https://developers.miro.com/reference/overview
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Productivity

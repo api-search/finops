@@ -31,75 +31,103 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/braintree/refs/heads/main/openapi/braintree-subscriptions-openapi.yml
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: USD (settlement varies)
+  billingFrequency: Continuous Settlement
   chargeCategories:
   - Usage
-  - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the braintree API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  - Tax
+  pricingCategory: Take Rate
+description: 'FOCUS-aligned FinOps for Braintree: pure take-rate per-transaction pricing across cards, digital wallets, Venmo and ACH, with surcharges for non-USD presentment and non-US issued cards plus per-incident chargeback fees and optional Chargeback Protection / Fraud Protection Lite.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: braintree
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: braintree
-  PublisherName: braintree
-  ServiceCategory: Developer Tools / API
-  ServiceName: braintree
+  InvoiceIssuerName: PayPal, Inc.
+  PricingCategory: Standard
+  PricingUnit: transaction
+  ProviderName: Braintree
+  PublisherName: PayPal, Inc.
+  ServiceCategory: Payments
+  ServiceName: Braintree
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Card and digital wallet transactions priced at 2.89% + $0.29.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - card_brand
+  - country
+  - currency
+  - merchant_account
+  name: card_transactions
+  unit: transaction
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Venmo transactions priced at 3.49% + $0.49 (US only).
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - merchant_account
+  name: venmo_transactions
+  unit: transaction
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: ACH Direct Debit transactions priced at 0.75% capped at $5.00.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - merchant_account
+  name: ach_transactions
+  unit: transaction
+- aggregation: sum
+  description: $0.15 per transaction pass-through fee for merchants with a direct American Express account.
+  dimensions:
+  - merchant_account
+  name: amex_passthrough
+  unit: transaction
+- aggregation: sum
+  description: $15.00 per disputed transaction.
+  dimensions:
+  - merchant_account
+  - reason_code
+  name: chargebacks
+  unit: dispute
+- aggregation: sum
+  description: $5.00 per ACH return / unauthorized claim.
+  dimensions:
+  - merchant_account
+  name: ach_returns
+  unit: incident
+- aggregation: sum
+  description: Add-on rate (starting at 0.4%) on transactions covered by Chargeback Protection.
+  dimensions:
+  - merchant_account
+  name: chargeback_protection
+  unit: transaction
+- aggregation: sum
+  description: Fraud Protection Lite inquiries at $0.05 each.
+  dimensions:
+  - merchant_account
+  name: fraud_protection_inquiries
+  unit: inquiry
 name: Braintree Finops
 provider_name: braintree
 provider_slug: braintree
-publisher_name: braintree
-service_category: API
+publisher_name: PayPal, Inc.
+service_category: Payments
 slug: braintree-finops
 source_filename: braintree-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: braintree\nproviderId: braintree\npublisherName: braintree\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the braintree API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be\
-  \ allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing\
-  \ and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: braintree\n  ServiceCategory: Developer Tools / API\n  ProviderName: braintree\n  PublisherName: braintree\n  InvoiceIssuerName: braintree\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n\
-  \    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Braintree Payments API\n    baseURL: https://api.braintreegateway.com\n    tags:\n      - Credit Cards\n      - Payments\n      - PayPal\n      - Transactions\n    serviceName: Braintree Payments API\n    serviceCategory: API\n  - name: Braintree GraphQL API\n    baseURL: https://payments.braintree-api.com/graphql\n    tags:\n      - GraphQL\n      - Payment Methods\n      - Payments\n      - Transactions\n    serviceName: Braintree GraphQL API\n    serviceCategory: API\n  - name: Braintree JavaScript Client SDK\n    baseURL: https://api.example.com\n    tags:\n      - Browser\n      - Client SDK\n      - Drop-In UI\n      - JavaScript\n      - Payments\n    serviceName: Braintree JavaScript Client SDK\n    serviceCategory: API\n  - name: Braintree iOS SDK\n    baseURL: https://api.example.com\n\
-  \    tags:\n      - iOS\n      - Mobile\n      - Objective-C\n      - Payments\n      - Swift\n    serviceName: Braintree iOS SDK\n    serviceCategory: API\n  - name: Braintree Android SDK\n    baseURL: https://api.example.com\n    tags:\n      - Android\n      - Java\n      - Kotlin\n      - Mobile\n      - Payments\n    serviceName: Braintree Android SDK\n    serviceCategory: API\n  - name: Braintree Webhooks\n    baseURL: https://api.example.com\n    tags:\n      - Disputes\n      - Events\n      - Notifications\n      - Subscriptions\n      - Webhooks\n    serviceName: Braintree Webhooks\n    serviceCategory: API\n  - name: Braintree Vault API\n    baseURL: https://api.braintreegateway.com\n    tags:\n      - Customers\n      - Payment Methods\n      - PCI Compliance\n      - Storage\n      - Vault\n    serviceName: Braintree Vault API\n    serviceCategory: API\n  - name: Braintree Subscriptions API\n    baseURL: https://api.braintreegateway.com\n    tags:\n      - Payments\n     \
-  \ - Plans\n      - Recurring Billing\n      - Subscriptions\n    serviceName: Braintree Subscriptions API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://www.paypal.com/us/enterprise/paypal-braintree-fees
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Braintree\nproviderId: braintree\npublisherName: PayPal, Inc.\nserviceCategory: Payments\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Payments\n  - Credit Cards\n  - PayPal\n  - Venmo\n  - ACH\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Braintree: pure take-rate per-transaction pricing across cards,\n  digital wallets, Venmo and ACH, with surcharges for non-USD presentment and non-US issued cards plus\n  per-incident chargeback fees and optional Chargeback Protection / Fraud Protection Lite.'\nsources:\n  - https://www.paypal.com/us/enterprise/paypal-braintree-fees\n  - https://developer.paypal.com/braintree/docs\n\
+  billingModel:\n  pricingCategory: Take Rate\n  billingFrequency: Continuous Settlement\n  billingCurrency: USD (settlement varies)\n  chargeCategories:\n    - Usage\n    - Adjustment\n    - Refund\n    - Tax\nfocusColumns:\n  ServiceName: Braintree\n  ServiceCategory: Payments\n  ProviderName: Braintree\n  PublisherName: PayPal, Inc.\n  InvoiceIssuerName: PayPal, Inc.\n  BillingCurrency: USD\n  PricingCategory: Standard\n  PricingUnit: transaction\nmeters:\n  - name: card_transactions\n    description: Card and digital wallet transactions priced at 2.89% + $0.29.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - card_brand\n      - country\n      - currency\n      - merchant_account\n  - name: venmo_transactions\n    description: Venmo transactions priced at 3.49% + $0.49 (US only).\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - merchant_account\n  - name: ach_transactions\n    description: ACH Direct Debit transactions priced at 0.75% capped\
+  \ at $5.00.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - merchant_account\n  - name: amex_passthrough\n    description: $0.15 per transaction pass-through fee for merchants with a direct American Express\n      account.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - merchant_account\n  - name: chargebacks\n    description: $15.00 per disputed transaction.\n    unit: dispute\n    aggregation: sum\n    dimensions:\n      - merchant_account\n      - reason_code\n  - name: ach_returns\n    description: $5.00 per ACH return / unauthorized claim.\n    unit: incident\n    aggregation: sum\n    dimensions:\n      - merchant_account\n  - name: chargeback_protection\n    description: Add-on rate (starting at 0.4%) on transactions covered by Chargeback Protection.\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - merchant_account\n  - name: fraud_protection_inquiries\n    description: Fraud Protection Lite inquiries at $0.05 each.\n\
+  \    unit: inquiry\n    aggregation: sum\n    dimensions:\n      - merchant_account\nprinciples:\n  - name: Visibility\n    description: Pull transaction-level data via the Transaction Search API and the Braintree Control\n      Panel reports; reconcile gross volume, fees, refunds, and disputes daily.\n  - name: Allocation\n    description: Use sub-merchant accounts and order metadata to attribute revenue and fees to product\n      lines, brands, or marketplaces.\n  - name: Optimization\n    description: Negotiate custom interchange-plus / volume rates as processing history matures, route\n      eligible volume through preferred payment methods, mitigate disputes early with Chargeback Protection,\n      and minimize cross-border surcharges via local presentment currencies.\n  - name: Accountability\n    description: Designate a payments owner; review effective take rate, dispute rate, and refund rate\n      monthly; alert on variance against modeled cost-of-payments.\nmaintainers:\n  -\
+  \ FN: Kin Lane\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/braintree/refs/heads/main/finops/braintree-finops.yml
-sources: []
+sources:
+- https://www.paypal.com/us/enterprise/paypal-braintree-fees
+- https://developer.paypal.com/braintree/docs
 specification: FinOps Framework
 tags:
+- Payments
+- Credit Cards
+- PayPal
+- Venmo
+- ACH
 - FinOps
-- Cost Management
 - FOCUS
 ---

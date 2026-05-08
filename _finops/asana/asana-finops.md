@@ -171,84 +171,44 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Asana API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Per-Seat Subscription
+description: FOCUS-aligned FinOps for Asana.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Asana
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Asana
   PublisherName: Asana
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Project Management
   ServiceName: Asana
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - plan
+  name: user_seats
+  unit: seat-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: ai_credits
+  unit: credit
+- aggregation: max
+  name: ai_teammates
+  unit: teammate-month
 name: Asana Finops
 provider_name: Asana
 provider_slug: asana
 publisher_name: Asana
-service_category: API
+service_category: Project Management
 slug: asana-finops
 source_filename: asana-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Asana\nproviderId: asana\npublisherName: Asana\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Collaboration\n  - Productivity\n  - Project Management\n  - Projects\n  - Task Management\n  - Tasks\n  - Workflow\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Asana API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
-  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
-  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Asana\n  ServiceCategory: Developer Tools / API\n  ProviderName: Asana\n  PublisherName: Asana\n  InvoiceIssuerName: Asana\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n  \
-  \  aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Asana Allocations  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Allocations  API\n    serviceCategory: API\n  - name: Asana Attachments  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Attachments  API\n    serviceCategory: API\n  - name: Asana Batch  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Batch  API\n    serviceCategory: API\n  - name: Asana Custom Fields  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Custom Fields  API\n    serviceCategory: API\n  - name: Asana Enum Options  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Enum Options  API\n    serviceCategory: API\n  - name: Asana Events  API\n    baseURL: ''\n\
-  \    tags: []\n    serviceName: Asana Events  API\n    serviceCategory: API\n  - name: Asana Goal Relationships  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Goal Relationships  API\n    serviceCategory: API\n  - name: Asana Goals  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Goals  API\n    serviceCategory: API\n  - name: Asana Jobs  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Jobs  API\n    serviceCategory: API\n  - name: Asana Memberships  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Memberships  API\n    serviceCategory: API\n  - name: Asana Organization Exports  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Organization Exports  API\n    serviceCategory: API\n  - name: Asana Portfolios  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Portfolios  API\n    serviceCategory: API\n  - name: Asana Project Templates  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Project Templates  API\n    serviceCategory:\
-  \ API\n  - name: Asana Projects  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Projects  API\n    serviceCategory: API\n  - name: Asana Rule Triggers  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Rule Triggers  API\n    serviceCategory: API\n  - name: Asana Sections  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Sections  API\n    serviceCategory: API\n  - name: Asana Status Updates  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Status Updates  API\n    serviceCategory: API\n  - name: Asana Tags  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Tags  API\n    serviceCategory: API\n  - name: Asana Task Templates  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Task Templates  API\n    serviceCategory: API\n  - name: Asana Tasks  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Tasks  API\n    serviceCategory: API\n  - name: Asana Teams  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Teams  API\n\
-  \    serviceCategory: API\n  - name: Asana Time Periods  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Time Periods  API\n    serviceCategory: API\n  - name: Asana Time Tracking Entries  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Time Tracking Entries  API\n    serviceCategory: API\n  - name: Asana User Task Lists  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana User Task Lists  API\n    serviceCategory: API\n  - name: Asana Users  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Users  API\n    serviceCategory: API\n  - name: Asana Webhooks  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Webhooks  API\n    serviceCategory: API\n  - name: Asana Workspaces  API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Workspaces  API\n    serviceCategory: API\n  - name: Asana Access Requests API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Access Requests API\n    serviceCategory: API\n  - name: Asana Audit Log API\n \
-  \   baseURL: ''\n    tags: []\n    serviceName: Asana Audit Log API\n    serviceCategory: API\n  - name: Asana Budgets API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Budgets API\n    serviceCategory: API\n  - name: Asana Custom Field Settings API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Custom Field Settings API\n    serviceCategory: API\n  - name: Asana Custom Types API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Custom Types API\n    serviceCategory: API\n  - name: Asana Exports API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Exports API\n    serviceCategory: API\n  - name: Asana Portfolio Memberships API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Portfolio Memberships API\n    serviceCategory: API\n  - name: Asana Project Briefs API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Project Briefs API\n    serviceCategory: API\n  - name: Asana Project Memberships API\n    baseURL: ''\n    tags: []\n    serviceName: Asana\
-  \ Project Memberships API\n    serviceCategory: API\n  - name: Asana Project Statuses API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Project Statuses API\n    serviceCategory: API\n  - name: Asana Rates API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Rates API\n    serviceCategory: API\n  - name: Asana Reactions API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Reactions API\n    serviceCategory: API\n  - name: Asana Roles API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Roles API\n    serviceCategory: API\n  - name: Asana Rules API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Rules API\n    serviceCategory: API\n  - name: Asana Stories API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Stories API\n    serviceCategory: API\n  - name: Asana Team Memberships API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Team Memberships API\n    serviceCategory: API\n  - name: Asana Typeahead API\n    baseURL: ''\n    tags: []\n  \
-  \  serviceName: Asana Typeahead API\n    serviceCategory: API\n  - name: Asana Workspace Memberships API\n    baseURL: ''\n    tags: []\n    serviceName: Asana Workspace Memberships API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n  - name: Asana\n    email: api-support@asana.com\n    url: https://developers.asana.com\n"
+source_url: https://asana.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Asana\nproviderId: asana\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Project Management\ndescription: FOCUS-aligned FinOps for Asana.\nsources:\n  - https://asana.com/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Asana\nserviceCategory: Project Management\nbillingModel:\n  pricingCategory: Per-Seat Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Asana\n  ServiceCategory: Project Management\n  ProviderName: Asana\n  PublisherName: Asana\n  BillingCurrency: USD\nmeters:\n  - name: user_seats\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - plan\n\
+  \  - name: ai_credits\n    unit: credit\n    aggregation: sum\n  - name: ai_teammates\n    unit: teammate-month\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Track Asana consumption monthly via admin/billing exports.\n  - name: Allocation\n    description: Tag seats/usage to teams or cost centers for chargeback.\n  - name: Optimization\n    description: Right-size tier and seat count quarterly; reclaim inactive seats.\n  - name: Accountability\n    description: Set spend alerts and renew at observed active utilization.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/asana/refs/heads/main/finops/asana-finops.yml
-sources: []
+sources:
+- https://asana.com/pricing
 specification: FinOps Framework
 tags:
-- Collaboration
-- Productivity
-- Project Management
-- Projects
-- Task Management
-- Tasks
-- Workflow
 - FinOps
-- Cost Management
 - FOCUS
+- Project Management
 ---

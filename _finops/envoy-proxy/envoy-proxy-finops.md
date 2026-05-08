@@ -20,76 +20,61 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/envoy-proxy/refs/heads/main/openapi/envoy-proxy-xds-discovery-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: N/A
   chargeCategories:
   - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Envoy Proxy API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Open Source (no direct cost)
+description: 'FinOps view of Envoy Proxy: the upstream project is free open-source software, so direct software cost is zero. The relevant FinOps surface is the operating cost of running Envoy (compute, egress, observability) plus any third-party commercial distribution.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Envoy Proxy
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: N/A (open source)
   ProviderName: Envoy Proxy
-  PublisherName: Envoy Proxy
-  ServiceCategory: Developer Tools / API
+  PublisherName: Cloud Native Computing Foundation
+  ServiceCategory: Networking / API Gateway
   ServiceName: Envoy Proxy
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - cluster
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  - instance_type
+  name: compute_hours
+  unit: instance-hour
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
+  - cluster
   - region
-  - consumer
-  name: data_egress
+  name: egress_bytes
   unit: GB
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - cluster
+  - sink
+  name: telemetry_volume
+  unit: GB
 name: Envoy Proxy Finops
 provider_name: Envoy Proxy
 provider_slug: envoy-proxy
-publisher_name: Envoy Proxy
-service_category: API
+publisher_name: Cloud Native Computing Foundation
+service_category: Networking / API Gateway
 slug: envoy-proxy-finops
 source_filename: envoy-proxy-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Envoy Proxy\nproviderId: envoy-proxy\npublisherName: Envoy Proxy\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Gateways\n  - Proxies\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Envoy Proxy API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
-  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
-  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Envoy Proxy\n  ServiceCategory: Developer Tools / API\n  ProviderName: Envoy Proxy\n  PublisherName: Envoy Proxy\n  InvoiceIssuerName: Envoy Proxy\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n  \
-  \    - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Envoy Proxy Admin API\n    baseURL: ''\n    tags:\n      - Gateways\n      - Proxies\n      - Service Mesh\n    serviceName: Envoy Proxy Admin API\n    serviceCategory: API\n  - name: Envoy Proxy xDS Discovery API\n    baseURL: ''\n    tags:\n      - Discovery\n      - Gateways\n      - Proxies\n      - Service Mesh\n    serviceName: Envoy Proxy xDS Discovery API\n    serviceCategory: API\n  - name: Envoy Proxy Rate Limit Service API\n    baseURL: ''\n    tags:\n      - gRPC\n      - Proxies\n      - Rate Limiting\n      - Service Mesh\n    serviceName: Envoy Proxy Rate Limit Service API\n    serviceCategory: API\n  - name: Envoy Proxy Health Discovery Service API\n    baseURL: ''\n    tags:\n      - Discovery\n      - gRPC\n     \
-  \ - Health\n      - Proxies\n    serviceName: Envoy Proxy Health Discovery Service API\n    serviceCategory: API\n  - name: Envoy Proxy gRPC Access Log Service API\n    baseURL: ''\n    tags:\n      - Access Logs\n      - gRPC\n      - Observability\n      - Proxies\n    serviceName: Envoy Proxy gRPC Access Log Service API\n    serviceCategory: API\n  - name: Envoy Proxy External Processing API\n    baseURL: ''\n    tags:\n      - Extensibility\n      - gRPC\n      - Proxies\n      - Request Processing\n    serviceName: Envoy Proxy External Processing API\n    serviceCategory: API\n  - name: Envoy Proxy External Authorization API\n    baseURL: ''\n    tags:\n      - Authorization\n      - gRPC\n      - Proxies\n      - Security\n    serviceName: Envoy Proxy External Authorization API\n    serviceCategory: API\n  - name: Envoy Proxy Metrics Service API\n    baseURL: ''\n    tags:\n      - gRPC\n      - Metrics\n      - Observability\n      - Proxies\n    serviceName: Envoy Proxy Metrics\
-  \ Service API\n    serviceCategory: API\n  - name: Envoy Proxy Tap Service API\n    baseURL: ''\n    tags:\n      - Debugging\n      - gRPC\n      - Proxies\n      - Traffic Capture\n    serviceName: Envoy Proxy Tap Service API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.envoyproxy.io/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Envoy Proxy\nproviderId: envoy-proxy\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Open Source\n  - Gateways\n  - Proxies\n  - Service Mesh\ndescription: 'FinOps view of Envoy Proxy: the upstream project is free open-source software, so direct\n  software cost is zero. The relevant FinOps surface is the operating cost of running Envoy (compute,\n  egress, observability) plus any third-party commercial distribution.'\nsources:\n  - https://www.envoyproxy.io/\n  - https://www.cncf.io/projects/envoy/\nnotes: No vendor invoice is generated by the Envoy project. This file frames the indirect FinOps surface\n  (infrastructure to run Envoy) for completeness; replace with vendor-specific data if Envoy is consumed\n  via a commercial distribution.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl:\
+  \ https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Cloud Native Computing Foundation\nserviceCategory: Networking / API Gateway\nbillingModel:\n  pricingCategory: Open Source (no direct cost)\n  billingFrequency: N/A\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\nfocusColumns:\n  ServiceName: Envoy Proxy\n  ServiceCategory: Networking / API Gateway\n  ProviderName: Envoy Proxy\n  PublisherName: Cloud Native Computing Foundation\n  InvoiceIssuerName: N/A (open source)\n  BillingCurrency: USD\nmeters:\n  - name: compute_hours\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - region\n      - instance_type\n  - name: egress_bytes\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - cluster\n      - region\n  - name: telemetry_volume\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - cluster\n      - sink\nprinciples:\n\
+  \  - name: Visibility\n    description: Envoy emits Prometheus stats, OpenTelemetry traces, and access logs; route them to your\n      observability stack to attribute infrastructure cost to traffic flows.\n  - name: Allocation\n    description: Tag downstream services and clusters in Envoy's stats/labels so cost of compute and\n      egress can be attributed to the consuming team or product.\n  - name: Optimization\n    description: Tune connection pooling, HTTP/2, compression, and caching at the Envoy layer to reduce\n      upstream egress and CPU; right-size Envoy sidecars and gateways.\n  - name: Accountability\n    description: Platform team owns Envoy fleet cost; charge back compute/egress to consuming teams using\n      cluster and route tags.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/envoy-proxy/refs/heads/main/finops/envoy-proxy-finops.yml
-sources: []
+sources:
+- https://www.envoyproxy.io/
+- https://www.cncf.io/projects/envoy/
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
+- Open Source
 - Gateways
 - Proxies
-- FinOps
-- Cost Management
-- FOCUS
+- Service Mesh
 ---

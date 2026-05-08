@@ -7,75 +7,47 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Contract
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Carter's API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Custom (Partner Contract)
+description: FOCUS-aligned FinOps scaffold for Carter's. No public API pricing or invoice surface is published; meters and FOCUS columns are the recommended starting points for partners that have negotiated private B2B agreements.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Carter's
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Carter's, Inc.
   ProviderName: Carter's
-  PublisherName: Carter's
-  ServiceCategory: Developer Tools / API
-  ServiceName: Carter's
+  PublisherName: Carter's, Inc.
+  ServiceCategory: Retail
+  ServiceName: Carter's API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
   - endpoint
-  - tier
-  - region
-  - consumer
+  - partner
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Carter Finops
 provider_name: Carter's
 provider_slug: carter
-publisher_name: Carter's
-service_category: API
+publisher_name: Carter's, Inc.
+service_category: Retail
 slug: carter-finops
 source_filename: carter-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Carter's\nproviderId: carter\npublisherName: Carter's\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Retail\n  - Children\n  - Apparel\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Carter's API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n\
-  \      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and\
-  \ Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Carter's\n  ServiceCategory: Developer Tools / API\n  ProviderName: Carter's\n  PublisherName: Carter's\n  InvoiceIssuerName: Carter's\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n  \
-  \    - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Carter's API\n    baseURL: https://api.carters.com\n    tags:\n      - Retail\n      - Children\n      - Apparel\n    serviceName: Carter's API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.carters.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Carter's\nproviderId: carter\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Retail\n  - Children\n  - Apparel\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps scaffold for Carter''s. No public API pricing or invoice surface is\n  published; meters and FOCUS columns are the recommended starting points for partners that have negotiated\n  private B2B agreements.'\nnotes: Billing is private (partner contracts). Reconcile once Carter's publishes API or partner pricing.\nsources:\n  - https://www.carters.com\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Carter's, Inc.\nserviceCategory: Retail\nbillingModel:\n  pricingCategory: Custom (Partner\
+  \ Contract)\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Carter's API\n  ServiceCategory: Retail\n  ProviderName: Carter's\n  PublisherName: Carter's, Inc.\n  InvoiceIssuerName: Carter's, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - partner\nprinciples:\n  - name: Visibility\n    description: Track partner integration consumption through the negotiated reporting surface delivered\n      with the partner agreement; no public usage API is published.\n  - name: Allocation\n    description: Tag partner integration costs to the consuming retail / supply-chain function before\n      issuing chargeback.\n  - name: Optimization\n    description: Batch catalog and order updates; align polling cadence with Carter's published refresh\n      windows to avoid wasted requests.\n  - name: Accountability\n\
+  \    description: Assign a procurement and IT owner for the Carter's partner relationship; review invoiced\n      partner fees against contractual SLAs.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/carter/refs/heads/main/finops/carter-finops.yml
-sources: []
+sources:
+- https://www.carters.com
 specification: FinOps Framework
 tags:
 - Retail
 - Children
 - Apparel
 - FinOps
-- Cost Management
 - FOCUS
 ---

@@ -7,80 +7,62 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Contract
   chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Netflix API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Partner Program (No Cost) + Enterprise Contract
+description: 'FOCUS-aligned FinOps for Netflix: Netflix has no publicly billable API. Open Connect partner ISP appliances are provided at no cost in exchange for hosting / power / peering. Device Partner Program is contractual.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Netflix
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Netflix, Inc.
+  PricingCategory: Free + Contract
   ProviderName: Netflix
-  PublisherName: Netflix
-  ServiceCategory: Developer Tools / API
-  ServiceName: Netflix
+  PublisherName: Netflix, Inc.
+  ServiceCategory: Media
+  ServiceName: Netflix Open Connect / Device Partner Program
+  ServiceSubcategory: CDN + Device Certification
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: avg
+  description: Open Connect Appliances deployed to ISP partner POPs.
   dimensions:
-  - api
-  - endpoint
-  - tier
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  - partner
+  name: open_connect_appliance
+  unit: appliance-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Settlement-free peering traffic delivered through Open Connect.
   dimensions:
-  - api
   - region
-  - consumer
-  name: data_egress
+  - partner
+  name: peering_traffic
   unit: GB
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Device Partner Program contractual obligations.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - partner
+  name: device_partner_contract
+  unit: contract-month
 name: Netflix Finops
 provider_name: Netflix
 provider_slug: netflix
-publisher_name: Netflix
-service_category: API
+publisher_name: Netflix, Inc.
+service_category: Media + CDN
 slug: netflix-finops
 source_filename: netflix-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Netflix\nproviderId: netflix\npublisherName: Netflix\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - CDN\n  - Content Delivery\n  - Device Certification\n  - Entertainment\n  - Media\n  - Netflix\n  - Open Connect\n  - Streaming\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Netflix API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
-  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Netflix\n  ServiceCategory: Developer Tools / API\n  ProviderName: Netflix\n  PublisherName: Netflix\n  InvoiceIssuerName: Netflix\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
-  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Netflix Open Connect\n    baseURL: ''\n    tags:\n      - CDN\n      - ISP\n      - Open Connect\n      - Peering\n      - Streaming\n    serviceName: Netflix Open Connect\n    serviceCategory: API\n  - name: Netflix Partner Help Center\n    baseURL: ''\n    tags:\n      - Certification\n      - Device Integration\n      - Partners\n    serviceName: Netflix Partner Help Center\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://openconnect.netflix.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Netflix\nproviderId: netflix\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - CDN\n  - Streaming\n  - Open Connect\nnotes: Netflix does not sell a public developer API; there is no FinOps surface to reconcile. The artifact\n  here documents the partner-program billing shape (zero-cost Open Connect appliances to qualifying ISPs,\n  contractual Device Partner terms) for completeness.\ndescription: 'FOCUS-aligned FinOps for Netflix: Netflix has no publicly billable API. Open Connect partner\n  ISP appliances are provided at no cost in exchange for hosting / power / peering. Device Partner Program\n  is contractual.'\nsources:\n  - https://openconnect.netflix.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n\
+  \  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Netflix, Inc.\nserviceCategory: Media + CDN\nbillingModel:\n  pricingCategory: Partner Program (No Cost) + Enterprise Contract\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Adjustment\nfocusColumns:\n  ServiceName: Netflix Open Connect / Device Partner Program\n  ServiceCategory: Media\n  ServiceSubcategory: CDN + Device Certification\n  ProviderName: Netflix\n  PublisherName: Netflix, Inc.\n  InvoiceIssuerName: Netflix, Inc.\n  BillingCurrency: USD\n  PricingCategory: Free + Contract\nmeters:\n  - name: open_connect_appliance\n    description: Open Connect Appliances deployed to ISP partner POPs.\n    unit: appliance-month\n    aggregation: avg\n    dimensions:\n      - region\n      - partner\n  - name: peering_traffic\n    description: Settlement-free peering traffic delivered through Open Connect.\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - region\n\
+  \      - partner\n  - name: device_partner_contract\n    description: Device Partner Program contractual obligations.\n    unit: contract-month\n    aggregation: sum\n    dimensions:\n      - partner\nprinciples:\n  - name: Visibility\n    description: Open Connect partners receive traffic and cache-fill telemetry through the Open Connect\n      partner portal; Netflix internally tracks egress savings vs. transit.\n  - name: Allocation\n    description: Netflix attributes Open Connect deployments per partner and per POP for capacity planning.\n  - name: Optimization\n    description: Netflix optimizes by deploying appliances closer to viewers (fill at off-peak, serve\n      at peak) — partners save transit costs in exchange for hosting.\n  - name: Accountability\n    description: Open Connect partner team owns appliance fleet TCO; Device Partner team owns certification\n      and contractual SLAs.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/netflix/refs/heads/main/finops/netflix-finops.yml
-sources: []
+sources:
+- https://openconnect.netflix.com/
 specification: FinOps Framework
 tags:
-- CDN
-- Content Delivery
-- Device Certification
-- Entertainment
-- Media
-- Netflix
-- Open Connect
-- Streaming
 - FinOps
-- Cost Management
 - FOCUS
+- CDN
+- Streaming
+- Open Connect
 ---

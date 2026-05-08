@@ -11,68 +11,92 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
+  - Adjustment
   - Tax
   - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Jumio API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Per-Verification (Custom-Quoted) + Add-Ons
+description: FOCUS-aligned FinOps for Jumio. The dominant cost is per-verification consumption against the contracted KYX Platform plan, with optional add-on lines per AML screening lookup, ongoing-monitoring identity-month, risk-signals lookup, and extended-retention or retrieval. The SDKs (web, iOS, Android, React Native, Flutter, Cordova, Java, .NET) are free; cost begins when a backend transaction is created. Most contracts include a minimum monthly commit. Specific per-verification rates and the commit floor are negotiated and not published, so this artifact stays reconciled:false until paired with a real customer contract.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Jumio
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Jumio Corporation
   ProviderName: Jumio
-  PublisherName: Jumio
-  ServiceCategory: Developer Tools / API
-  ServiceName: Jumio
+  PublisherName: Jumio Corporation
+  ServiceCategory: Identity Verification
+  ServiceName: Jumio KYX Platform
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Per-completed ID Verification transaction. Drives the bulk of usage cost.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - account_id
+  - product_workflow
+  - country
+  name: id_verification
+  unit: verification
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Per Document Verification (proof-of-address, supporting documents) transaction.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - account_id
+  - document_type
+  name: document_verification
+  unit: verification
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Per biometric authentication / selfie reverification (selfie.DONE, Authentication product).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - account_id
+  - product_workflow
+  name: authentication
+  unit: authentication
+- aggregation: sum
+  description: Per AML / sanctions / PEP / adverse-media screening lookup.
+  dimensions:
+  - account_id
+  - watchlist_set
+  name: screening
+  unit: screening
+- aggregation: sum
+  description: Per-identity-per-month subscription for ongoing AML monitoring.
+  dimensions:
+  - account_id
+  name: ongoing_monitoring
+  unit: monitored_identity_month
+- aggregation: sum
+  description: Per Risk Signals lookup against the Identity Graph / device / behavioural data.
+  dimensions:
+  - account_id
+  name: risk_signals
+  unit: lookup
+- aggregation: sum
+  description: Subscription line for extended Retrieval / data-retention windows beyond the default term.
+  dimensions:
+  - account_id
+  name: retention_extended
+  unit: month
+- aggregation: max
+  description: Monthly minimum commit; whichever is greater (commit or actual usage) is billed.
+  dimensions:
+  - account_id
+  name: minimum_commit
+  unit: month
 name: Jumio Finops
 provider_name: Jumio
 provider_slug: jumio
-publisher_name: Jumio
-service_category: API
+publisher_name: Jumio Corporation
+service_category: Identity Verification
 slug: jumio-finops
 source_filename: jumio-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Jumio\nproviderId: jumio\npublisherName: Jumio\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - KYC\n  - Identity Verification\n  - Biometrics\n  - AML\n  - Fraud Prevention\n  - KYX\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Jumio API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the\
-  \ consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
-  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Jumio\n  ServiceCategory: Developer Tools / API\n  ProviderName: Jumio\n  PublisherName: Jumio\n  InvoiceIssuerName: Jumio\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Jumio ID Verification API\n    baseURL: https://account.amer-1.jumio.ai\n    tags:\n      - ID Verification\n      - KYC\n      - Onboarding\n    serviceName: Jumio ID Verification API\n    serviceCategory: API\n  - name: Jumio Document Verification API\n    baseURL: https://account.amer-1.jumio.ai\n    tags:\n      - Document Verification\n      - Proof of Address\n    serviceName: Jumio Document Verification API\n    serviceCategory: API\n  - name: Jumio Authentication API\n    baseURL: https://account.amer-1.jumio.ai\n    tags:\n      - Biometrics\n      - Liveness\n      - Authentication\n    serviceName: Jumio Authentication API\n    serviceCategory: API\n  - name: Jumio selfie.DONE API\n    baseURL: https://account.amer-1.jumio.ai\n\
-  \    tags:\n      - Reusable Identity\n      - Biometrics\n      - Selfie\n    serviceName: Jumio selfie.DONE API\n    serviceCategory: API\n  - name: Jumio Screening API (AML / Watchlist)\n    baseURL: https://account.amer-1.jumio.ai\n    tags:\n      - AML\n      - Sanctions\n      - PEP\n      - Watchlist\n    serviceName: Jumio Screening API (AML / Watchlist)\n    serviceCategory: API\n  - name: Jumio Risk Signals API\n    baseURL: https://account.amer-1.jumio.ai\n    tags:\n      - Risk\n      - Fraud Prevention\n      - Signals\n    serviceName: Jumio Risk Signals API\n    serviceCategory: API\n  - name: Jumio Retrieval API\n    baseURL: https://retrieval.amer-1.jumio.ai\n    tags:\n      - Retrieval\n      - Compliance\n      - Records\n    serviceName: Jumio Retrieval API\n    serviceCategory: API\n  - name: Jumio Callback / Webhook\n    baseURL: customer-configured\n    tags:\n      - Webhooks\n      - Callbacks\n      - Events\n    serviceName: Jumio Callback / Webhook\n    serviceCategory:\
-  \ API\n  - name: Jumio Web SDK\n    baseURL: https://github.com/Jumio/web-sdk\n    tags:\n      - Web SDK\n      - JavaScript\n      - Client\n    serviceName: Jumio Web SDK\n    serviceCategory: API\n  - name: Jumio Mobile SDK (iOS)\n    baseURL: https://github.com/Jumio/mobile-sdk-ios\n    tags:\n      - SDK\n      - iOS\n      - Mobile\n    serviceName: Jumio Mobile SDK (iOS)\n    serviceCategory: API\n  - name: Jumio Mobile SDK (Android)\n    baseURL: https://github.com/Jumio/mobile-sdk-android\n    tags:\n      - SDK\n      - Android\n      - Mobile\n    serviceName: Jumio Mobile SDK (Android)\n    serviceCategory: API\n  - name: Jumio React Native Plugin\n    baseURL: https://github.com/Jumio/mobile-react\n    tags:\n      - SDK\n      - React Native\n      - Mobile\n    serviceName: Jumio React Native Plugin\n    serviceCategory: API\n  - name: Jumio Flutter Plugin\n    baseURL: https://github.com/Jumio/mobile-flutter\n    tags:\n      - SDK\n      - Flutter\n      - Mobile\n  \
-  \  serviceName: Jumio Flutter Plugin\n    serviceCategory: API\n  - name: Jumio Cordova Plugin\n    baseURL: https://github.com/Jumio/mobile-cordova\n    tags:\n      - SDK\n      - Cordova\n      - Mobile\n    serviceName: Jumio Cordova Plugin\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.jumio.com/products/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Jumio\nproviderId: jumio\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: false\ntags:\n  - KYC\n  - Identity Verification\n  - Biometrics\n  - AML\n  - Fraud Prevention\n  - KYX\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps for Jumio. The dominant cost is per-verification consumption\n  against the contracted KYX Platform plan, with optional add-on lines per AML\n  screening lookup, ongoing-monitoring identity-month, risk-signals lookup, and\n  extended-retention or retrieval. The SDKs (web, iOS, Android, React Native, Flutter,\n  Cordova, Java, .NET) are free; cost begins when a backend transaction is created.\n  Most contracts include a minimum monthly commit. Specific per-verification rates and\n  the commit floor are negotiated and not published, so this artifact stays\n  reconciled:false until paired with a real customer contract.\n\
+  sources:\n  - https://www.jumio.com/products/\n  - https://documentation.jumio.ai/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Jumio Corporation\nserviceCategory: Identity Verification\nbillingModel:\n  pricingCategory: Per-Verification (Custom-Quoted) + Add-Ons\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\n    - Tax\n    - Credit\nfocusColumns:\n  ServiceName: Jumio KYX Platform\n  ServiceCategory: Identity Verification\n  ProviderName: Jumio\n  PublisherName: Jumio Corporation\n  InvoiceIssuerName: Jumio Corporation\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: id_verification\n    description: >-\n      Per-completed ID Verification transaction. Drives the bulk of usage cost.\n    unit: verification\n\
+  \    aggregation: sum\n    dimensions:\n      - account_id\n      - product_workflow\n      - country\n  - name: document_verification\n    description: >-\n      Per Document Verification (proof-of-address, supporting documents) transaction.\n    unit: verification\n    aggregation: sum\n    dimensions:\n      - account_id\n      - document_type\n  - name: authentication\n    description: >-\n      Per biometric authentication / selfie reverification (selfie.DONE, Authentication\n      product).\n    unit: authentication\n    aggregation: sum\n    dimensions:\n      - account_id\n      - product_workflow\n  - name: screening\n    description: >-\n      Per AML / sanctions / PEP / adverse-media screening lookup.\n    unit: screening\n    aggregation: sum\n    dimensions:\n      - account_id\n      - watchlist_set\n  - name: ongoing_monitoring\n    description: >-\n      Per-identity-per-month subscription for ongoing AML monitoring.\n    unit: monitored_identity_month\n    aggregation:\
+  \ sum\n    dimensions:\n      - account_id\n  - name: risk_signals\n    description: >-\n      Per Risk Signals lookup against the Identity Graph / device / behavioural data.\n    unit: lookup\n    aggregation: sum\n    dimensions:\n      - account_id\n  - name: retention_extended\n    description: >-\n      Subscription line for extended Retrieval / data-retention windows beyond the\n      default term.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - account_id\n  - name: minimum_commit\n    description: >-\n      Monthly minimum commit; whichever is greater (commit or actual usage) is billed.\n    unit: month\n    aggregation: max\n    dimensions:\n      - account_id\nprinciples:\n  - name: Visibility\n    description: >-\n      Pull the Jumio dashboard usage report and reconcile against the per-product\n      meters. Use callback events and the Retrieval API to confirm verification\n      lifecycle counts and avoid double-counting incomplete sessions.\n  - name: Allocation\n\
+  \    description: >-\n      Use a customerInternalReference per product or business unit so line-of-business\n      attribution flows through the Jumio invoice. Separate test and production\n      accounts to avoid mixing development volume with billable verifications.\n  - name: Optimization\n    description: >-\n      Move returning users to selfie.DONE / Authentication to skip a full ID\n      Verification cycle. Use Risk Signals as a pre-screen so low-risk customers skip\n      full verification. Avoid creating verification transactions in test or canary\n      flows that would consume the production meter. Negotiate the monthly minimum\n      commit to match steady-state demand.\n  - name: Accountability\n    description: >-\n      Assign a compliance / risk owner per Jumio account. Monitor against the monthly\n      minimum commit and renegotiate add-on inclusion (Screening, Risk Signals,\n      Retention) at renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/jumio/refs/heads/main/finops/jumio-finops.yml
-sources: []
+sources:
+- https://www.jumio.com/products/
+- https://documentation.jumio.ai/
 specification: FinOps Framework
 tags:
 - KYC
@@ -82,6 +106,5 @@ tags:
 - Fraud Prevention
 - KYX
 - FinOps
-- Cost Management
 - FOCUS
 ---

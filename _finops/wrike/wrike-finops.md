@@ -16,77 +16,58 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Wrike API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription
+description: 'FOCUS-aligned FinOps for Wrike: per-seat tiered SaaS subscription with paid add-ons. No per-API meter; spend is driven by seat count and add-on subscriptions invoiced in USD.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Wrike
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Wrike, Inc.
   ProviderName: Wrike
-  PublisherName: Wrike
-  ServiceCategory: Developer Tools / API
+  PublisherName: Wrike, Inc.
+  ServiceCategory: Work Management SaaS
   ServiceName: Wrike
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - plan
+  - account
+  name: seats
+  unit: seat
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - addon
+  - account
+  name: addon_subscription
+  unit: month
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - account
+  - plan
+  name: ai_elite_actions
+  unit: action
 name: Wrike Finops
 provider_name: Wrike
 provider_slug: wrike
-publisher_name: Wrike
-service_category: API
+publisher_name: Wrike, Inc.
+service_category: Work Management SaaS
 slug: wrike-finops
 source_filename: wrike-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Wrike\nproviderId: wrike\npublisherName: Wrike\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Work Management\n  - Project Management\n  - Collaboration\n  - Productivity\n  - Workflow Automation\n  - Task Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Wrike API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
-  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Wrike\n  ServiceCategory: Developer Tools / API\n  ProviderName: Wrike\n  PublisherName: Wrike\n  InvoiceIssuerName: Wrike\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n\
-  \    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Wrike API\n    baseURL: https://www.wrike.com/api/v4\n    tags:\n      - REST API\n      - Work Management\n      - Project Management\n      - Tasks\n      - Workflows\n      - Webhooks\n    serviceName: Wrike API\n    serviceCategory: API\n  - name: Wrike DataHub Public API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Reporting\n      - DataHub\n    serviceName: Wrike DataHub Public API\n    serviceCategory: API\n  - name: Wrike BI Export API\n    baseURL: ''\n    tags:\n      - Business Intelligence\n      - Export\n      - Analytics\n    serviceName: Wrike BI Export API\n    serviceCategory: API\n  - name: Wrike Cloud Content Connector\n    baseURL: ''\n    tags:\n\
-  \      - Content Management\n      - Cloud Storage\n      - Connector\n    serviceName: Wrike Cloud Content Connector\n    serviceCategory: API\n  - name: Wrike MCP Server\n    baseURL: ''\n    tags:\n      - MCP\n      - AI\n      - Model Context Protocol\n    serviceName: Wrike MCP Server\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.wrike.com/price/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Wrike\nproviderId: wrike\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Work Management\n  - Project Management\n  - SaaS\ndescription: 'FOCUS-aligned FinOps for Wrike: per-seat tiered SaaS subscription with paid add-ons.\n  No per-API meter; spend is driven by seat count and add-on subscriptions invoiced in USD.'\nsources:\n  - https://www.wrike.com/price/\n  - https://developers.wrike.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Wrike, Inc.\nserviceCategory: Work Management SaaS\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n\
+  \    - Adjustment\nfocusColumns:\n  ServiceName: Wrike\n  ServiceCategory: Work Management SaaS\n  ProviderName: Wrike\n  PublisherName: Wrike, Inc.\n  InvoiceIssuerName: Wrike, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: seats\n    unit: seat\n    aggregation: max\n    dimensions:\n      - plan\n      - account\n  - name: addon_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - addon\n      - account\n  - name: ai_elite_actions\n    unit: action\n    aggregation: sum\n    dimensions:\n      - account\n      - plan\nprinciples:\n  - name: Visibility\n    description: Wrike spend is visible at the account level via the Wrike admin billing page and\n      monthly invoices; API consumption is not separately metered, so usage telemetry comes from\n      Wrike Analyze / Datahub rather than a billing export.\n  - name: Allocation\n    description: Allocate by Wrike account and plan tier; multi-team customers split cost by\n      department via Wrike's account-group\
+  \ structure or by exporting seat-assignment reports.\n  - name: Optimization\n    description: Levers are seat right-sizing (Team vs. Business vs. Pinnacle), pruning inactive\n      collaborators, and consolidating add-ons (Whiteboard / Integrate / Datahub) onto Apex when\n      AI Elite usage is heavy.\n  - name: Accountability\n    description: PMO or Operations typically owns the Wrike subscription; integration teams own\n      Wrike Integrate / Sync add-on consumption and AI Elite action budget.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/wrike/refs/heads/main/finops/wrike-finops.yml
-sources: []
+sources:
+- https://www.wrike.com/price/
+- https://developers.wrike.com/
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
 - Work Management
 - Project Management
-- Collaboration
-- Productivity
-- Workflow Automation
-- Task Management
-- FinOps
-- Cost Management
-- FOCUS
+- SaaS
 ---

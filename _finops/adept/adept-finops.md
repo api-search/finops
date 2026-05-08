@@ -7,78 +7,61 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: One-Time
   chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Adept API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Other
+description: FinOps view of Adept "spend." Adept does not invoice customers - it has no commercial API. The only direct cost surface is downloading the open- source Fuyu-8B and Persimmon-8B models from Hugging Face (free) and the customer's own self-hosted GPU inference cost (or third-party inference provider cost). Those costs appear under the inference provider's ServiceName, not Adept's.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Adept
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Adjustment
+  InvoiceIssuerName: Not Applicable
+  PricingCategory: Other
   ProviderName: Adept
   PublisherName: Adept
-  ServiceCategory: Developer Tools / API
-  ServiceName: Adept
+  ServiceCategory: AI and Machine Learning
+  ServiceName: Adept Open-Source Models
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Adept open-source model downloads (free) used for cost-free attribution / inventory tracking only.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - team
+  - model
+  name: model_downloads
+  unit: downloads
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Customer's own GPU inference cost when serving Adept open-source models (recorded under the inference provider, not Adept).
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - team
+  - model
+  - inference_provider
+  name: self_hosted_inference_cost
+  unit: usd
 name: Adept Finops
 provider_name: Adept
 provider_slug: adept
 publisher_name: Adept
-service_category: API
+service_category: AI and Machine Learning
 slug: adept-finops
 source_filename: adept-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Adept\nproviderId: adept\npublisherName: Adept\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - Agents\n  - Foundation Models\n  - Action Models\n  - Workflow Automation\n  - Multimodal\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Adept API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
-  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
-  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Adept\n  ServiceCategory: Developer Tools / API\n  ProviderName: Adept\n  PublisherName: Adept\n  InvoiceIssuerName: Adept\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
-  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Adept Fuyu-8B Model\n    baseURL: https://huggingface.co/adept/fuyu-8b\n    tags:\n      - Open Source\n      - Multimodal\n      - Vision\n    serviceName: Adept Fuyu-8B Model\n    serviceCategory: API\n  - name: Adept Persimmon-8B Base Model\n    baseURL: https://huggingface.co/adept/persimmon-8b-base\n    tags:\n      - Open Source\n      - Text Generation\n    serviceName: Adept Persimmon-8B Base Model\n    serviceCategory: API\n  - name: Adept Persimmon-8B Chat Model\n    baseURL: https://huggingface.co/adept/persimmon-8b-chat\n    tags:\n      - Open Source\n      - Chat\n      - Text Generation\n    serviceName: Adept Persimmon-8B Chat Model\n    serviceCategory: API\n  - name: Adept ACT Research\n\
-  \    baseURL: https://www.adept.ai/\n    tags:\n      - Research\n      - Agents\n      - Action Models\n    serviceName: Adept ACT Research\n    serviceCategory: API\n  - name: Adept Website\n    baseURL: https://www.adept.ai/\n    tags:\n      - Website\n      - Research\n    serviceName: Adept Website\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.adept.ai/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Adept\nproviderId: adept\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- AI\n- Agents\n- Foundation Models\n- Action Models\n- Open Source\n- FinOps\n- Cost Management\n- FOCUS\ndescription: >-\n  FinOps view of Adept \"spend.\" Adept does not invoice customers - it has\n  no commercial API. The only direct cost surface is downloading the open-\n  source Fuyu-8B and Persimmon-8B models from Hugging Face (free) and the\n  customer's own self-hosted GPU inference cost (or third-party inference\n  provider cost). Those costs appear under the inference provider's\n  ServiceName, not Adept's.\nnotes: >-\n  In a corporate FOCUS dataset there is typically no Adept-issued invoice\n  line item. Track the Adept models via tagging on the inference provider's\n  spend (e.g., AWS / Together / Fireworks running Fuyu-8B).\nsources:\n- https://www.adept.ai/\n\
+  - https://huggingface.co/adept\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Adept\nserviceCategory: AI and Machine Learning\nbillingModel:\n  pricingCategory: Other\n  billingFrequency: One-Time\n  billingCurrency: USD\n  chargeCategories:\n  - Adjustment\nfocusColumns:\n  ServiceName: Adept Open-Source Models\n  ServiceCategory: AI and Machine Learning\n  ProviderName: Adept\n  PublisherName: Adept\n  InvoiceIssuerName: Not Applicable\n  BillingCurrency: USD\n  ChargeCategory: Adjustment\n  PricingCategory: Other\nmeters:\n- name: model_downloads\n  description: Adept open-source model downloads (free) used for cost-free attribution / inventory tracking only.\n  unit: downloads\n  aggregation: sum\n  dimensions:\n  - team\n  - model\n- name: self_hosted_inference_cost\n\
+  \  description: Customer's own GPU inference cost when serving Adept open-source models (recorded under the inference provider, not Adept).\n  unit: usd\n  aggregation: sum\n  dimensions:\n  - team\n  - model\n  - inference_provider\nprinciples:\n- name: Visibility\n  description: Inventory which teams downloaded Adept models; correlate with self-hosted GPU spend tagged to those models.\n- name: Allocation\n  description: Tag GPU inference workloads with the model name (Fuyu-8B / Persimmon-8B) for chargeback.\n- name: Optimization\n  description: Quantize or distill Adept open-source models if hosting cost exceeds value; consider replacing with newer open-source action models.\n- name: Accountability\n  description: No Adept invoice to reconcile; owners are the teams running self-hosted inference.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/adept/refs/heads/main/finops/adept-finops.yml
-sources: []
+sources:
+- https://www.adept.ai/
+- https://huggingface.co/adept
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - AI
 - Agents
 - Foundation Models
 - Action Models
-- Workflow Automation
-- Multimodal
+- Open Source
 - FinOps
 - Cost Management
 - FOCUS

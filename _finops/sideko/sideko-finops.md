@@ -14,80 +14,67 @@ api_specs:
   url: https://docs.sideko.dev/reference/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Sideko API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription + Per-Language Upsell
+description: FOCUS-aligned FinOps for Sideko. Sideko bills as a tiered SaaS subscription (Starter free, Pro $400/month annual, Enterprise custom) with per-additional-SDK-language metered upsell at $400/month each. Quota dimensions are SDK languages, included APIs, and documentation projects.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Sideko
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Sideko, Inc.
   ProviderName: Sideko
-  PublisherName: Sideko
-  ServiceCategory: Developer Tools / API
+  PublisherName: Sideko, Inc.
+  ServiceCategory: Developer Tools
   ServiceName: Sideko
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Monthly Sideko plan fee billed annually.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - plan
+  name: subscription
+  unit: month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Per-additional-SDK-language fee on the Pro plan ($400/month each).
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  - plan
+  - language
+  name: sdk_language_upsell
+  unit: sdk-language
+- aggregation: max
+  description: Count of APIs onboarded against the plan ceiling (1 Starter, 10 Pro, unlimited Enterprise).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - plan
+  name: apis_used
+  unit: api
+- aggregation: max
+  description: Count of documentation projects against the plan ceiling.
+  dimensions:
+  - plan
+  name: doc_projects_used
+  unit: project
 name: Sideko Finops
 provider_name: Sideko
 provider_slug: sideko
-publisher_name: Sideko
-service_category: API
+publisher_name: Sideko, Inc.
+service_category: Developer Tools
 slug: sideko-finops
 source_filename: sideko-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sideko\nproviderId: sideko\npublisherName: Sideko\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - CLI\n  - Documentation\n  - Mock Servers\n  - Platform\n  - SDKs\n  - API Tooling\n  - SDK Generation\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sideko API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sideko\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sideko\n  PublisherName: Sideko\n  InvoiceIssuerName: Sideko\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Sideko API\n    baseURL: https://api.sideko.dev\n    tags:\n      - CLI\n      - Documentation\n      - Mock Servers\n      - Platform\n      - SDKs\n    serviceName: Sideko API\n    serviceCategory: API\n  - name: Sideko CLI\n    baseURL: ''\n    tags:\n      - CLI\n      - Developer Tools\n      - SDKs\n    serviceName: Sideko CLI\n    serviceCategory: API\n  - name: Sideko Node.js SDK\n    baseURL: ''\n    tags:\n      - SDK\n      - Node.js\n      - TypeScript\n      - JavaScript\n    serviceName: Sideko Node.js SDK\n    serviceCategory: API\n  - name: Sideko Python SDK\n    baseURL: ''\n    tags:\n      - SDK\n      - Python\n    serviceName: Sideko Python SDK\n    serviceCategory: API\nunitEconomics:\n\
-  \  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://sideko.dev/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Sideko\nproviderId: sideko\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - API Tooling\n  - SDK Generation\n  - Documentation\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps for Sideko. Sideko bills as a tiered SaaS subscription (Starter free,\n  Pro $400/month annual, Enterprise custom) with per-additional-SDK-language metered upsell at $400/month\n  each. Quota dimensions are SDK languages, included APIs, and documentation projects.\nsources:\n  - https://sideko.dev/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Sideko, Inc.\nserviceCategory: Developer Tools\nbillingModel:\n  pricingCategory: Tiered Subscription + Per-Language Upsell\n\
+  \  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\nfocusColumns:\n  ServiceName: Sideko\n  ServiceCategory: Developer Tools\n  ProviderName: Sideko\n  PublisherName: Sideko, Inc.\n  InvoiceIssuerName: Sideko, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: subscription\n    description: Monthly Sideko plan fee billed annually.\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n  - name: sdk_language_upsell\n    description: Per-additional-SDK-language fee on the Pro plan ($400/month each).\n    unit: sdk-language\n    aggregation: sum\n    dimensions:\n      - plan\n      - language\n  - name: apis_used\n    description: Count of APIs onboarded against the plan ceiling (1 Starter, 10 Pro, unlimited Enterprise).\n    unit: api\n    aggregation: max\n    dimensions:\n      - plan\n  - name: doc_projects_used\n    description: Count of documentation projects against the plan ceiling.\n    unit: project\n \
+  \   aggregation: max\n    dimensions:\n      - plan\nprinciples:\n  - name: Visibility\n    description: Sideko spend is a known monthly subscription line; track via the company invoice and\n      compare APIs/SDK languages onboarded against the Pro plan ceilings to predict upsell triggers.\n  - name: Allocation\n    description: Allocate Sideko cost to the platform/devex team that owns SDK and documentation generation;\n      attribute additional-language fees to the consuming product team requesting that SDK.\n  - name: Optimization\n    description: Consolidate APIs and doc projects under the Pro tier ceilings (10 APIs, 5 doc projects)\n      before triggering Enterprise; only add a paid SDK language when there is real consumer demand.\n  - name: Accountability\n    description: Developer experience or platform engineering owns Sideko renewal; product owners approve\n      additional-SDK-language requests since each adds $400/month.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sideko/refs/heads/main/finops/sideko-finops.yml
-sources: []
+sources:
+- https://sideko.dev/pricing
 specification: FinOps Framework
 tags:
-- CLI
-- Documentation
-- Mock Servers
-- Platform
-- SDKs
 - API Tooling
 - SDK Generation
+- Documentation
 - FinOps
-- Cost Management
 - FOCUS
 ---

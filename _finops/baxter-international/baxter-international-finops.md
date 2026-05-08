@@ -7,77 +7,67 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Baxter International API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Hospital Services Agreement
+description: 'FOCUS-aligned FinOps shape for Baxter DeviceBridge: bundled hospital services agreement rather than per-API-call billing. Cost is tied to the connected-device fleet (infusion pumps, monitors) and integration scope rather than to API request volume.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Baxter International
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Baxter Healthcare Corporation
+  PricingCategory: Hospital Services Agreement
+  PricingUnit: device
   ProviderName: Baxter International
-  PublisherName: Baxter International
-  ServiceCategory: Developer Tools / API
-  ServiceName: Baxter International
+  PublisherName: Baxter Healthcare Corporation
+  ServiceCategory: Healthcare / Medical Device Connectivity
+  ServiceName: Baxter DeviceBridge
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Connected Baxter medical devices integrated through DeviceBridge
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  - device_class
+  - hospital_unit
+  name: connected_devices
+  unit: device
+- aggregation: count
+  description: EMR / hospital IT integration endpoints in scope
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - emr_vendor
+  name: emr_integrations
+  unit: integration
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Telemetry events ingested from connected devices (operational meter, not necessarily billed per event)
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - device_class
+  - hospital_unit
+  name: device_telemetry
+  unit: event
 name: Baxter International Finops
 provider_name: Baxter International
 provider_slug: baxter-international
-publisher_name: Baxter International
-service_category: API
+publisher_name: Baxter Healthcare Corporation
+service_category: Healthcare / Medical Device Connectivity
 slug: baxter-international-finops
 source_filename: baxter-international-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Baxter International\nproviderId: baxter-international\npublisherName: Baxter International\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Healthcare\n  - Medical Devices\n  - Infusion Pumps\n  - Patient Monitoring\n  - Connected Health\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Baxter International API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name:\
-  \ Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  -\
-  \ name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Baxter International\n  ServiceCategory: Developer Tools / API\n  ProviderName: Baxter International\n  PublisherName: Baxter International\n  InvoiceIssuerName: Baxter International\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name:\
-  \ data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Baxter DeviceBridge Platform\n    baseURL: ''\n    tags:\n      - Healthcare\n      - Connected Devices\n      - Interoperability\n      - EMR Integration\n    serviceName: Baxter DeviceBridge Platform\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.baxter.com/perspectives/healthcare-insights/turn-insights-action-connected-medical-devices
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Baxter International\nproviderId: baxter-international\npublisherName: Baxter Healthcare Corporation\nserviceCategory: Healthcare / Medical Device Connectivity\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Healthcare\n  - Medical Devices\n  - Connected Health\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps shape for Baxter DeviceBridge: bundled hospital services agreement\n  rather than per-API-call billing. Cost is tied to the connected-device fleet (infusion pumps, monitors)\n  and integration scope rather than to API request volume.'\nnotes: No public rate card. Replace meter values with the customer's negotiated DeviceBridge scope and\n  per-device\
+  \ economics once available.\nsources:\n  - https://www.baxter.com/perspectives/healthcare-insights/turn-insights-action-connected-medical-devices\nprinciples:\n  - name: Visibility\n    description: Track connected-device count, EMR integration scope, and integration uptime via the\n      hospital's biomed and IT operations dashboards.\n  - name: Allocation\n    description: Allocate platform cost across hospital units (ICU, oncology, peri-op) by connected-device\n      count and infusion-volume per unit.\n  - name: Optimization\n    description: Right-size connected-device scope each renewal — only instrument devices where EMR auto-documentation\n      saves nursing time or improves medication-safety metrics.\n  - name: Accountability\n    description: Assign biomed/IT joint ownership of the DeviceBridge engagement; review uptime, integration\n      changes, and renewal scope quarterly.\nbillingModel:\n  pricingCategory: Hospital Services Agreement\n  billingFrequency: Annual\n  billingCurrency:\
+  \ USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Baxter DeviceBridge\n  ServiceCategory: Healthcare / Medical Device Connectivity\n  ProviderName: Baxter International\n  PublisherName: Baxter Healthcare Corporation\n  InvoiceIssuerName: Baxter Healthcare Corporation\n  PricingCategory: Hospital Services Agreement\n  PricingUnit: device\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: connected_devices\n    description: Connected Baxter medical devices integrated through DeviceBridge\n    unit: device\n    aggregation: max\n    dimensions:\n      - device_class\n      - hospital_unit\n  - name: emr_integrations\n    description: EMR / hospital IT integration endpoints in scope\n    unit: integration\n    aggregation: count\n    dimensions:\n      - emr_vendor\n  - name: device_telemetry\n    description: Telemetry events ingested from connected devices (operational meter, not necessarily\n\
+  \      billed per event)\n    unit: event\n    aggregation: sum\n    dimensions:\n      - device_class\n      - hospital_unit\napis:\n  - name: Baxter DeviceBridge Platform\n    baseURL: ''\n    tags:\n      - Healthcare\n      - Connected Devices\n      - Interoperability\n      - EMR Integration\n    serviceName: Baxter DeviceBridge Platform\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Connected Device\n    metric: platform_cost / connected_devices\n    target: align to per-device clinical / documentation savings\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/baxter-international/refs/heads/main/finops/baxter-international-finops.yml
-sources: []
+sources:
+- https://www.baxter.com/perspectives/healthcare-insights/turn-insights-action-connected-medical-devices
 specification: FinOps Framework
 tags:
 - Healthcare
 - Medical Devices
-- Infusion Pumps
-- Patient Monitoring
 - Connected Health
 - FinOps
-- Cost Management
 - FOCUS
 ---

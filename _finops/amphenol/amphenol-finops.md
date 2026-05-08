@@ -7,80 +7,45 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Not Applicable
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Amphenol API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Not Applicable
+description: FOCUS-aligned FinOps placeholder for Amphenol. Amphenol has no public API metered billing surface; spend on Amphenol parts flows as direct material cost through ERP systems and distributor invoices, outside API FinOps scope.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Amphenol
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Amphenol Corporation
   ProviderName: Amphenol
-  PublisherName: Amphenol
-  ServiceCategory: Developer Tools / API
+  PublisherName: Amphenol Corporation
+  ServiceCategory: Electronic Components
   ServiceName: Amphenol
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Placeholder; not billed as a developer line item
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
   - consumer
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Amphenol Finops
 provider_name: Amphenol
 provider_slug: amphenol
-publisher_name: Amphenol
-service_category: API
+publisher_name: Amphenol Corporation
+service_category: Electronic Components
 slug: amphenol-finops
 source_filename: amphenol-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Amphenol\nproviderId: amphenol\npublisherName: Amphenol\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Electronic Connectors\n  - Interconnect Systems\n  - Fiber Optics\n  - Sensors\n  - Aerospace\n  - Automotive\n  - Defense\n  - Manufacturing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Amphenol API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Amphenol\n  ServiceCategory: Developer Tools / API\n  ProviderName: Amphenol\n  PublisherName: Amphenol\n  InvoiceIssuerName: Amphenol\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network\
-  \ in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Amphenol Website\n    baseURL: https://www.amphenol.com\n    tags:\n      - Electronic Connectors\n      - Interconnect Systems\n      - Manufacturing\n    serviceName: Amphenol Website\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
+source_url: https://www.amphenol.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Amphenol\nproviderId: amphenol\npublisherName: Amphenol Corporation\nserviceCategory: Electronic Components\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Electronic Connectors\n  - Interconnect Systems\ndescription: >-\n  FOCUS-aligned FinOps placeholder for Amphenol. Amphenol has no public API\n  metered billing surface; spend on Amphenol parts flows as direct material\n  cost through ERP systems and distributor invoices, outside API FinOps scope.\nnotes: >-\n  No public API billing surface. Costs are component direct material.\nsources:\n  - https://www.amphenol.com\nbillingModel:\n  pricingCategory:\
+  \ Not Applicable\n  billingFrequency: Not Applicable\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Amphenol\n  ServiceCategory: Electronic Components\n  ProviderName: Amphenol\n  PublisherName: Amphenol Corporation\n  InvoiceIssuerName: Amphenol Corporation\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    description: Placeholder; not billed as a developer line item\n    unit: request\n    aggregation: sum\n    dimensions:\n      - consumer\nprinciples:\n  - name: Visibility\n    description: >-\n      Visibility into Amphenol spend is via ERP material ledgers and\n      distributor invoices, not API telemetry.\n  - name: Allocation\n    description: >-\n      Allocate to BOMs / product lines rather than to API consumers.\n  - name: Optimization\n    description: >-\n      Optimization levers are part consolidation, alternates, and volume\n      contracts, not request optimization.\n  - name: Accountability\n    description: >-\n\
+  \      Procurement and operations own this spend, not the developer / FinOps API\n      practice.\nmaintainers:\n  - FN: API Evangelist\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/amphenol/refs/heads/main/finops/amphenol-finops.yml
-sources: []
+sources:
+- https://www.amphenol.com
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
 - Electronic Connectors
 - Interconnect Systems
-- Fiber Optics
-- Sensors
-- Aerospace
-- Automotive
-- Defense
-- Manufacturing
-- FinOps
-- Cost Management
-- FOCUS
 ---

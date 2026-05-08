@@ -51,63 +51,58 @@ billing_model:
   - Tax
   - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Composio API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription + Pay-As-You-Go
+description: 'FOCUS-aligned FinOps for Composio: tiered subscription with monthly tool-call quotas plus per-1K overage billing for AI-agent integration calls.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Composio
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Composio Inc.
+  PricingUnit: tool_call
   ProviderName: Composio
-  PublisherName: Composio
-  ServiceCategory: Developer Tools / API
+  PublisherName: Composio Inc.
+  ServiceCategory: AI Tooling / Integrations
   ServiceName: Composio
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Count of billable tool-call invocations executed through Composio
   dimensions:
-  - api
-  - endpoint
   - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  - toolkit
+  - account
+  - environment
+  name: tool_calls
+  unit: tool_call
+- aggregation: max
+  description: Monthly subscription per account/workspace
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
   - tier
-  name: compute_seconds
-  unit: second
+  - account
+  name: subscription_seat
+  unit: month
+- aggregation: sum
+  description: Tool calls exceeding the included monthly quota, billed per 1,000
+  dimensions:
+  - tier
+  - account
+  name: tool_call_overage
+  unit: tool_calls_per_1000
 name: Composio Finops
 provider_name: Composio
 provider_slug: composio
-publisher_name: Composio
-service_category: API
+publisher_name: Composio Inc.
+service_category: AI Tooling / Integrations
 slug: composio-finops
 source_filename: composio-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Composio\nproviderId: composio\npublisherName: Composio\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI Agents\n  - Authentication\n  - Integrations\n  - OAuth\n  - Tools\n  - Unified_API\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Composio API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
-  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
-  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Composio\n  ServiceCategory: Developer Tools / API\n  ProviderName: Composio\n  PublisherName: Composio\n  InvoiceIssuerName: Composio\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Composio Tool Router API\n    baseURL: https://backend.composio.dev/api/v3\n    tags:\n      - AI Agents\n      - Sessions\n      - Tools\n    serviceName: Composio Tool Router API\n    serviceCategory: API\n  - name: Composio Tools API\n    baseURL: https://backend.composio.dev/api/v3\n    tags:\n      - Actions\n      - Execution\n      - Tools\n    serviceName: Composio Tools API\n    serviceCategory: API\n  - name: Composio Connected Accounts API\n    baseURL: https://backend.composio.dev/api/v3\n    tags:\n      - Accounts\n      - Authentication\n      - Connections\n      - OAuth\n    serviceName: Composio Connected Accounts API\n    serviceCategory: API\n  - name: Composio Auth Configs\
-  \ API\n    baseURL: https://backend.composio.dev/api/v3\n    tags:\n      - Authentication\n      - Configuration\n      - OAuth\n    serviceName: Composio Auth Configs API\n    serviceCategory: API\n  - name: Composio Triggers API\n    baseURL: https://backend.composio.dev/api/v3\n    tags:\n      - Events\n      - Triggers\n      - Webhooks\n    serviceName: Composio Triggers API\n    serviceCategory: API\n  - name: Composio Toolkits API\n    baseURL: https://backend.composio.dev/api/v3\n    tags:\n      - Applications\n      - Integrations\n      - Toolkits\n    serviceName: Composio Toolkits API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://composio.dev/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Composio\nproviderId: composio\npublisherName: Composio Inc.\nserviceCategory: AI Tooling / Integrations\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - AI Agents\n  - Authentication\n  - Integrations\n  - OAuth\n  - Tools\n  - Unified_API\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Composio: tiered subscription with monthly tool-call quotas plus\n  per-1K overage billing for AI-agent integration calls.'\nsources:\n  - https://composio.dev/pricing\n  - https://docs.composio.dev/\nbillingModel:\n  pricingCategory: Tiered Subscription + Pay-As-You-Go\n  billingFrequency: Monthly\n  billingCurrency: USD\n\
+  \  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\nfocusColumns:\n  ServiceName: Composio\n  ServiceCategory: AI Tooling / Integrations\n  ProviderName: Composio\n  PublisherName: Composio Inc.\n  InvoiceIssuerName: Composio Inc.\n  BillingCurrency: USD\n  ChargeCategory: Usage\n  PricingUnit: tool_call\nmeters:\n  - name: tool_calls\n    description: Count of billable tool-call invocations executed through Composio\n    unit: tool_call\n    aggregation: sum\n    dimensions:\n      - tier\n      - toolkit\n      - account\n      - environment\n  - name: subscription_seat\n    description: Monthly subscription per account/workspace\n    unit: month\n    aggregation: max\n    dimensions:\n      - tier\n      - account\n  - name: tool_call_overage\n    description: Tool calls exceeding the included monthly quota, billed per 1,000\n    unit: tool_calls_per_1000\n    aggregation: sum\n    dimensions:\n      - tier\n      - account\nprinciples:\n  -\
+  \ name: Visibility\n    description: Use the Composio dashboard's usage views to track tool-call consumption per workspace\n      and toolkit; export usage to internal data warehouses for unified FinOps reporting.\n  - name: Allocation\n    description: Tag tool calls by Composio entity ID (the per-end-user identifier) and toolkit so consumption\n      can be attributed to consuming team, product, or end-customer.\n  - name: Optimization\n    description: Reduce per-tool-call cost by caching deterministic tool outputs, batching agent steps,\n      using the Tool Router to short-circuit unnecessary calls, and right-sizing the subscription tier\n      against included quota.\n  - name: Accountability\n    description: Set quota alerts before the included tool-call ceiling is reached on Starter and Professional\n      to control overage spend; assign workspace owners as budget holders.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/composio/refs/heads/main/finops/composio-finops.yml
-sources: []
+sources:
+- https://composio.dev/pricing
+- https://docs.composio.dev/
 specification: FinOps Framework
 tags:
 - AI Agents
@@ -117,6 +112,5 @@ tags:
 - Tools
 - Unified_API
 - FinOps
-- Cost Management
 - FOCUS
 ---

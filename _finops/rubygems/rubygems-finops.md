@@ -44,77 +44,62 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/rubygems/refs/heads/main/openapi/rubygems-webhooks-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the RubyGems API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  billingFrequency: Not Applicable
+  chargeCategories: []
+  pricingCategory: Free / Community-Funded
+description: 'FOCUS-aligned FinOps shape for RubyGems.org: a free, community-funded public registry with no direct billing. FinOps relevance is indirect — internal cost of CI bandwidth and storage when consuming the registry — rather than vendor invoice reconciliation.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: RubyGems
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Ruby Central, Inc.
   ProviderName: RubyGems
-  PublisherName: RubyGems
-  ServiceCategory: Developer Tools / API
-  ServiceName: RubyGems
+  PublisherName: Ruby Central, Inc.
+  ServiceCategory: Developer Tools / Package Registry
+  ServiceName: RubyGems.org
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
   - endpoint
-  - tier
-  - region
-  - consumer
+  - source_ip
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - account
+  name: gem_publishes
+  unit: request
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - source_ip
+  name: dependency_index_fetches
+  unit: request
+- aggregation: sum
+  dimensions:
+  - gem
+  name: download_bytes
+  unit: GB
 name: Rubygems Finops
 provider_name: RubyGems
 provider_slug: rubygems
-publisher_name: RubyGems
-service_category: API
+publisher_name: Ruby Central, Inc.
+service_category: Developer Tools / Package Registry
 slug: rubygems-finops
 source_filename: rubygems-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: RubyGems\nproviderId: rubygems\npublisherName: RubyGems\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Ruby\n  - Package Manager\n  - Open Source\n  - Developer Tools\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the RubyGems API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
-  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
-  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: RubyGems\n  ServiceCategory: Developer Tools / API\n  ProviderName: RubyGems\n  PublisherName: RubyGems\n  InvoiceIssuerName: RubyGems\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n   \
-  \   - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: RubyGems Gems API\n    baseURL: https://rubygems.org/api/v1\n    tags:\n      - Ruby\n      - Gems\n      - Package Manager\n    serviceName: RubyGems Gems API\n    serviceCategory: API\n  - name: RubyGems API V2\n    baseURL: https://rubygems.org/api/v2\n    tags:\n      - Ruby\n      - Gems\n      - Versions\n      - Package Manager\n    serviceName: RubyGems API V2\n    serviceCategory: API\n  - name: RubyGems Downloads API\n    baseURL: https://rubygems.org/api/v1\n    tags:\n      - Ruby\n      - Downloads\n      - Statistics\n    serviceName: RubyGems Downloads API\n    serviceCategory: API\n  - name: RubyGems Search API\n    baseURL: https://rubygems.org/api/v1\n    tags:\n      - Ruby\n      - Search\n      - Discovery\n\
-  \    serviceName: RubyGems Search API\n    serviceCategory: API\n  - name: RubyGems Activity API\n    baseURL: https://rubygems.org/api/v1\n    tags:\n      - Ruby\n      - Activity\n      - Monitoring\n    serviceName: RubyGems Activity API\n    serviceCategory: API\n  - name: RubyGems Webhooks API\n    baseURL: https://rubygems.org/api/v1\n    tags:\n      - Ruby\n      - Webhooks\n      - Events\n    serviceName: RubyGems Webhooks API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://guides.rubygems.org/rubygems-org-rate-limits/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: RubyGems\nproviderId: rubygems\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Ruby\n  - Package Manager\n  - Open Source\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps shape for RubyGems.org: a free, community-funded public registry with\n  no direct billing. FinOps relevance is indirect — internal cost of CI bandwidth and storage when consuming\n  the registry — rather than vendor invoice reconciliation.'\nsources:\n  - https://guides.rubygems.org/rubygems-org-rate-limits/\n  - https://rubygems.org/pages/sponsors\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Ruby Central, Inc.\n\
+  serviceCategory: Developer Tools / Package Registry\nbillingModel:\n  pricingCategory: Free / Community-Funded\n  billingFrequency: Not Applicable\n  billingCurrency: USD\n  chargeCategories: []\nfocusColumns:\n  ServiceName: RubyGems.org\n  ServiceCategory: Developer Tools / Package Registry\n  ProviderName: RubyGems\n  PublisherName: Ruby Central, Inc.\n  InvoiceIssuerName: Ruby Central, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - source_ip\n  - name: gem_publishes\n    unit: request\n    aggregation: sum\n    dimensions:\n      - account\n  - name: dependency_index_fetches\n    unit: request\n    aggregation: sum\n    dimensions:\n      - source_ip\n  - name: download_bytes\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - gem\nprinciples:\n  - name: Visibility\n    description: There is no per-consumer billing telemetry from RubyGems.org. Visibility comes from the\n  \
+  \    consumer side (CI logs, mirror access logs, Bundler resolution traces) rather than provider-issued\n      invoices.\n  - name: Allocation\n    description: Allocate the indirect costs (CI minutes, internal mirror storage/egress) by tagging Bundler\n      / gem fetches with the project, environment, and pipeline that triggered them.\n  - name: Optimization\n    description: Use the compact index endpoints, run an internal gem mirror, cache aggressively in CI,\n      and avoid hitting POST /api/v1/gems retry loops to stay well below load-balancer and rack-attack\n      thresholds.\n  - name: Accountability\n    description: Engineering teams own their CI consumption and dependency hygiene. Sustained abusive traffic\n      is escalated through support@rubygems.org.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/rubygems/refs/heads/main/finops/rubygems-finops.yml
-sources: []
+sources:
+- https://guides.rubygems.org/rubygems-org-rate-limits/
+- https://rubygems.org/pages/sponsors
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Ruby
 - Package Manager
 - Open Source
-- Developer Tools
 - FinOps
-- Cost Management
 - FOCUS
 ---

@@ -14,78 +14,47 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/travelers/refs/heads/main/openapi/travelers-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Contract
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Travelers API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Contract / Negotiated
+description: FinOps shape for Travelers cannot be reconciled from public sources; the developer portal and pricing are gated and access is governed by partner agreements.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Travelers
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: The Travelers Indemnity Company
   ProviderName: Travelers
-  PublisherName: Travelers
-  ServiceCategory: Developer Tools / API
-  ServiceName: Travelers
+  PublisherName: The Travelers Indemnity Company
+  ServiceCategory: Insurance
+  ServiceName: Travelers API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - contract
+  name: contract_fees
+  unit: varies
 name: Travelers Finops
 provider_name: Travelers
 provider_slug: travelers
-publisher_name: Travelers
-service_category: API
+publisher_name: The Travelers Indemnity Company
+service_category: Insurance
 slug: travelers-finops
 source_filename: travelers-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Travelers\nproviderId: travelers\npublisherName: Travelers\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Insurance\n  - Property Casualty\n  - Commercial Insurance\n  - Claims\n  - Fintech\n  - Fortune 500\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Travelers API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every\
-  \ chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n   \
-  \ capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Travelers\n  ServiceCategory: Developer Tools / API\n  ProviderName: Travelers\n  PublisherName: Travelers\n  InvoiceIssuerName: Travelers\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
-  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Travelers API\n    baseURL: https://api.travelers.com/v1\n    tags:\n      - Insurance\n      - Property Casualty\n      - Commercial Insurance\n      - Claims\n      - Quoting\n      - Fortune 500\n    serviceName: Travelers API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://developer.travelers.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Travelers\nproviderId: travelers\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Insurance\n  - Property Casualty\n  - Commercial Insurance\n  - Claims\n  - Fortune 500\n  - FinOps\n  - FOCUS\ndescription: FinOps shape for Travelers cannot be reconciled from public sources; the developer portal\n  and pricing are gated and access is governed by partner agreements.\nsources:\n  - https://developer.travelers.com\nnotes: Public pricing, billing, and usage telemetry surfaces are not disclosed. FOCUS mappings and\n  meters can only be confirmed against an executed Travelers partner / integration agreement.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
+  \ The Travelers Indemnity Company\nserviceCategory: Insurance\nbillingModel:\n  pricingCategory: Contract / Negotiated\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Travelers API\n  ServiceCategory: Insurance\n  ProviderName: Travelers\n  PublisherName: The Travelers Indemnity Company\n  InvoiceIssuerName: The Travelers Indemnity Company\n  BillingCurrency: USD\nmeters:\n  - name: contract_fees\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - contract\nprinciples:\n  - name: Visibility\n    description: Consumption data is exchanged via the Travelers partner channel rather than a public\n      usage API; visibility depends on the reporting clauses of the integration agreement.\n  - name: Allocation\n    description: Allocate costs to the line of business consuming Travelers integrations (claims,\n      quoting, policy servicing) using the contract identifier as the primary tag.\n  - name: Optimization\n\
+  \    description: Optimization levers are negotiated (volume tiers, term length, multi-product bundling)\n      rather than surfaced through self-serve tooling.\n  - name: Accountability\n    description: Procurement and the integrating insurance line of business co-own the contract; renewals\n      and usage true-ups are governed by the partner agreement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/travelers/refs/heads/main/finops/travelers-finops.yml
-sources: []
+sources:
+- https://developer.travelers.com
 specification: FinOps Framework
 tags:
 - Insurance
 - Property Casualty
 - Commercial Insurance
 - Claims
-- Fintech
 - Fortune 500
 - FinOps
-- Cost Management
 - FOCUS
 ---

@@ -16,77 +16,53 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Xerox API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Usage
+  pricingCategory: Subscription + Usage (click-charge)
+description: FinOps shape for Xerox is opaque. The Xerox Developer Program APIs are bundled with Xerox device, MPS, and print-service contracts, not sold as a separate metered API. Spend is recorded against MPS contracts (typically click-charges for printed pages) rather than per-API-call meters.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Xerox
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Xerox Holdings Corporation
   ProviderName: Xerox
-  PublisherName: Xerox
-  ServiceCategory: Developer Tools / API
+  PublisherName: Xerox Holdings Corporation
+  ServiceCategory: Managed Print Services
   ServiceName: Xerox
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - device_model
+  - contract
+  name: device_subscription
+  unit: device-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - device
+  - color_mode
+  - contract
+  name: pages_printed
+  unit: page
 name: Xerox Finops
 provider_name: Xerox
 provider_slug: xerox
-publisher_name: Xerox
-service_category: API
+publisher_name: Xerox Holdings Corporation
+service_category: Managed Print Services
 slug: xerox-finops
 source_filename: xerox-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Xerox\nproviderId: xerox\npublisherName: Xerox\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Document Management\n  - Enterprise\n  - Fortune 500\n  - Managed Print Services\n  - Print Services\n  - Printing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Xerox API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Xerox\n  ServiceCategory: Developer Tools / API\n  ProviderName: Xerox\n  PublisherName: Xerox\n  InvoiceIssuerName: Xerox\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
-  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Xerox Public Print API\n    baseURL: https://publicprintapi.services.xerox.com/api/v1\n    tags:\n      - Print Jobs\n      - Print Management\n      - Printing\n      - REST\n    serviceName: Xerox Public Print API\n    serviceCategory: API\n  - name: Xerox Managed Print Services API\n    baseURL: ''\n    tags:\n      - Fleet Management\n      - Managed Print Services\n      - Monitoring\n      - Print Management\n    serviceName: Xerox Managed Print Services API\n    serviceCategory: API\n  - name: Xerox Extensible Interface Platform (EIP)\n    baseURL: ''\n    tags:\n      - App Development\n      - ConnectKey\n      - Multifunction Printer\n      - SDK\n    serviceName: Xerox Extensible Interface\
-  \ Platform (EIP)\n    serviceCategory: API\n  - name: Xerox FreeFlow SDK\n    baseURL: ''\n    tags:\n      - FreeFlow\n      - Production Printing\n      - SDK\n      - VIPP\n    serviceName: Xerox FreeFlow SDK\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.xerox.com/en-us/services/managed-print-services
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Xerox\nproviderId: xerox\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Print Services\n  - Managed Print Services\n  - Document Management\ndescription: FinOps shape for Xerox is opaque. The Xerox Developer Program APIs are bundled with\n  Xerox device, MPS, and print-service contracts, not sold as a separate metered API. Spend is\n  recorded against MPS contracts (typically click-charges for printed pages) rather than\n  per-API-call meters.\nsources:\n  - https://www.xerox.com/en-us/services/managed-print-services\n  - https://publicprintapi.services.xerox.com/\nnotes: Xerox publishes no public API price list and no usage-billing API or FOCUS-aligned cost\n  export. Meters reflect the underlying print-services billing model (per page / per device)\n  rather than per-request API charges.\nalignedWith:\n  framework:\
+  \ FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Xerox Holdings Corporation\nserviceCategory: Managed Print Services\nbillingModel:\n  pricingCategory: Subscription + Usage (click-charge)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: Xerox\n  ServiceCategory: Managed Print Services\n  ProviderName: Xerox\n  PublisherName: Xerox Holdings Corporation\n  InvoiceIssuerName: Xerox Holdings Corporation\n  BillingCurrency: USD\nmeters:\n  - name: device_subscription\n    unit: device-month\n    aggregation: sum\n    dimensions:\n      - device_model\n      - contract\n  - name: pages_printed\n    unit: page\n    aggregation: sum\n    dimensions:\n      - device\n      - color_mode\n      - contract\nprinciples:\n  - name: Visibility\n    description:\
+  \ Xerox MPS reporting (typically delivered through the customer's Xerox account\n      manager and the MPS portal) shows per-device click counts; there is no separate per-API\n      usage feed.\n  - name: Allocation\n    description: Costs allocate by device, location, and contract line; per-application\n      attribution requires capturing the calling appid in client-side telemetry.\n  - name: Optimization\n    description: Levers are device fleet right-sizing, color-vs-mono routing, ConnectKey\n      workflow consolidation, and renegotiating click-rates at renewal rather than API-side\n      tuning.\n  - name: Accountability\n    description: Print services contract is owned by IT / facilities procurement; integration\n      teams own the Developer Program appid and the printer-side workflows that drive volume.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/xerox/refs/heads/main/finops/xerox-finops.yml
-sources: []
+sources:
+- https://www.xerox.com/en-us/services/managed-print-services
+- https://publicprintapi.services.xerox.com/
 specification: FinOps Framework
 tags:
-- Document Management
-- Enterprise
-- Fortune 500
-- Managed Print Services
-- Print Services
-- Printing
 - FinOps
-- Cost Management
 - FOCUS
+- Print Services
+- Managed Print Services
+- Document Management
 ---

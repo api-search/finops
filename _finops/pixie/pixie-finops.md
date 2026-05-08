@@ -13,78 +13,72 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/pixie/refs/heads/main/openapi/pixie-openapi.yml
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Pixie API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  billingCurrency: N/A
+  billingFrequency: None
+  chargeCategories: []
+  pricingCategory: Open Source
+description: FOCUS-aligned FinOps for Pixie - Pixie is open source under Apache 2.0; there are no vendor invoices for the project itself. The cost surface is the user's own Kubernetes cluster resources (CPU, memory, storage) consumed by the Pixie Cloud control plane and Vizier data plane. Commercial managed offerings that bundle Pixie (e.g. New Relic) are billed by those vendors and outside the scope of this artifact.
 focus_columns:
-  BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Pixie
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Pixie
-  PublisherName: Pixie
-  ServiceCategory: Developer Tools / API
+  BillingCurrency: N/A
+  ChargeCategory: N/A
+  PricingCategory: Open Source
+  ProviderName: Pixie (CNCF)
+  PublisherName: Pixie Authors / CNCF
+  ServiceCategory: Observability
   ServiceName: Pixie
+  ServiceSubcategory: Kubernetes Observability
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: CPU consumed by Pixie Vizier agents (PEMs / Cloud Connector / Kelvin) on the monitored cluster. Cost shows up in your cloud provider bill, not from Pixie.
+  dimensions:
+  - cluster
+  - component
+  - node
+  name: cluster_cpu_pixie
+  unit: vCPU-hour
+- aggregation: sum
+  description: Memory consumed by Pixie components on the cluster.
+  dimensions:
+  - cluster
+  - component
+  name: cluster_memory_pixie
+  unit: GB-hour
+- aggregation: sum
+  description: CPU / memory consumed by the self-hosted Pixie Cloud control plane (only if self-hosting; otherwise the community-hosted instance bears this).
+  dimensions:
+  - service
+  name: pixie_cloud_compute
+  unit: vCPU-hour
+- aggregation: sum
+  description: Pixie API / PxL script invocations. Not billed by Pixie; useful for capacity planning of the Cloud control plane.
   dimensions:
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - script
+  name: api_calls
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Pixie Finops
 provider_name: Pixie
 provider_slug: pixie
-publisher_name: Pixie
-service_category: API
+publisher_name: Pixie Authors (CNCF Sandbox project, originally contributed by New Relic, Inc.)
+service_category: Observability
 slug: pixie-finops
 source_filename: pixie-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Pixie\nproviderId: pixie\npublisherName: Pixie\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - eBPF\n  - Kubernetes\n  - Monitoring\n  - Observability\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Pixie API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
-  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
-  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Pixie\n  ServiceCategory: Developer Tools / API\n  ProviderName: Pixie\n  PublisherName: Pixie\n  InvoiceIssuerName: Pixie\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n\
-  \  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Pixie API\n    baseURL: ''\n    tags:\n      - Kubernetes\n      - Observability\n    serviceName: Pixie API\n    serviceCategory: API\n  - name: Pixie PxL Script API\n    baseURL: ''\n    tags:\n      - eBPF\n      - Kubernetes\n      - Metrics\n      - Observability\n      - Scripting\n    serviceName: Pixie PxL Script API\n    serviceCategory: API\n  - name: Pixie Plugin System API\n    baseURL: ''\n    tags:\n      - Grafana\n      - Integrations\n      - Kubernetes\n      - Observability\n      - Plugins\n    serviceName: Pixie Plugin System API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n\
-  \    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://docs.px.dev/about-pixie/faq/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Pixie\nproviderId: pixie\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Observability\n  - Kubernetes\n  - Open Source\ndescription: FOCUS-aligned FinOps for Pixie - Pixie is open source under Apache 2.0; there are no\n  vendor invoices for the project itself. The cost surface is the user's own Kubernetes cluster\n  resources (CPU, memory, storage) consumed by the Pixie Cloud control plane and Vizier data\n  plane. Commercial managed offerings that bundle Pixie (e.g. New Relic) are billed by those\n  vendors and outside the scope of this artifact.\nsources:\n  - https://docs.px.dev/about-pixie/faq/\n  - https://github.com/pixie-io/pixie/blob/main/LICENSE\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl:\
+  \ https://focus.finops.org/focus-specification/v1-3/\npublisherName: Pixie Authors (CNCF Sandbox project, originally contributed by New Relic, Inc.)\nserviceCategory: Observability\nbillingModel:\n  pricingCategory: Open Source\n  billingFrequency: None\n  billingCurrency: N/A\n  chargeCategories: []\nfocusColumns:\n  ServiceName: Pixie\n  ServiceCategory: Observability\n  ServiceSubcategory: Kubernetes Observability\n  ProviderName: Pixie (CNCF)\n  PublisherName: Pixie Authors / CNCF\n  BillingCurrency: N/A\n  ChargeCategory: N/A\n  PricingCategory: Open Source\nmeters:\n  - name: cluster_cpu_pixie\n    description: CPU consumed by Pixie Vizier agents (PEMs / Cloud Connector / Kelvin) on the\n      monitored cluster. Cost shows up in your cloud provider bill, not from Pixie.\n    unit: vCPU-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - component\n      - node\n  - name: cluster_memory_pixie\n    description: Memory consumed by Pixie components on the cluster.\n\
+  \    unit: GB-hour\n    aggregation: sum\n    dimensions:\n      - cluster\n      - component\n  - name: pixie_cloud_compute\n    description: CPU / memory consumed by the self-hosted Pixie Cloud control plane (only if\n      self-hosting; otherwise the community-hosted instance bears this).\n    unit: vCPU-hour\n    aggregation: sum\n    dimensions:\n      - service\n  - name: api_calls\n    description: Pixie API / PxL script invocations. Not billed by Pixie; useful for capacity\n      planning of the Cloud control plane.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - script\nprinciples:\n  - name: Visibility\n    description: Pixie itself is free; cost visibility comes from your Kubernetes cost-allocation\n      tooling (OpenCost, Kubecost, cloud-provider bill) measuring the CPU / memory / storage\n      footprint of the Pixie components.\n  - name: Allocation\n    description: Tag the Pixie namespace and components with cost-allocation labels (team,\n\
+  \      environment) so the cluster cost system attributes Pixie's footprint to the observability\n      function.\n  - name: Optimization\n    description: Tune PEM agent CPU / memory limits to fit your cluster's traffic profile; reduce\n      data-table retention windows to lower memory; self-host Pixie Cloud only when the community-\n      hosted offering becomes a bottleneck.\n  - name: Accountability\n    description: Platform / observability team owns Pixie's footprint as part of the cluster's\n      observability budget; review CPU / memory of the px-operator namespace each quarter.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/pixie/refs/heads/main/finops/pixie-finops.yml
-sources: []
+sources:
+- https://docs.px.dev/about-pixie/faq/
+- https://github.com/pixie-io/pixie/blob/main/LICENSE
 specification: FinOps Framework
 tags:
-- eBPF
-- Kubernetes
-- Monitoring
-- Observability
 - FinOps
-- Cost Management
 - FOCUS
+- Observability
+- Kubernetes
+- Open Source
 ---

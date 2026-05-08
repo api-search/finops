@@ -136,79 +136,63 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Ashby API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Tax
+  pricingCategory: Subscription
+description: Ashby's billing model is monthly or annual subscription with a flat Foundations price ($400/mo, up to 100 employees) and custom-quoted Plus and Enterprise tiers. Add-ons (Advanced Scheduling, AI Notetaker) are priced separately. Annual commits earn a 10% discount.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
+  ChargeCategory: Purchase
   InvoiceIssuerName: Ashby
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Ashby
   PublisherName: Ashby
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: HR
   ServiceName: Ashby
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Foundations / Plus / Enterprise monthly or annual subscription.
   dimensions:
-  - api
-  - endpoint
   - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - cost_center
+  name: ashby_subscription
+  unit: subscription-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Standalone Ashby Analytics for non-Ashby ATS customers.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - cost_center
+  name: ashby_analytics_subscription
+  unit: subscription-month
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Advanced Scheduling and AI Notetaker add-ons.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - addon
+  - cost_center
+  name: ashby_addons
+  unit: addon-month
 name: Ashby Finops
 provider_name: Ashby
 provider_slug: ashby
 publisher_name: Ashby
-service_category: API
+service_category: HR
 slug: ashby-finops
 source_filename: ashby-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Ashby\nproviderId: ashby\npublisherName: Ashby\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - HR\n  - ATS\n  - Recruiting\n  - Analytics\n  - Sourcing\n  - Scheduling\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Ashby API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team,\
-  \ environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n\
-  \      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Ashby\n  ServiceCategory: Developer Tools / API\n  ProviderName: Ashby\n  PublisherName: Ashby\n  InvoiceIssuerName: Ashby\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n  \
-  \    - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Ashby Candidates API\n    baseURL: ''\n    tags:\n      - Candidates\n      - People\n    serviceName: Ashby Candidates API\n    serviceCategory: API\n  - name: Ashby Applications API\n    baseURL: ''\n    tags:\n      - Applications\n      - Pipeline\n    serviceName: Ashby Applications API\n    serviceCategory: API\n  - name: Ashby Jobs API\n    baseURL: ''\n    tags:\n      - Jobs\n      - Postings\n    serviceName: Ashby Jobs API\n    serviceCategory: API\n  - name: Ashby Openings API\n    baseURL: ''\n    tags:\n      - Openings\n      - Headcount\n    serviceName: Ashby Openings API\n    serviceCategory: API\n  - name: Ashby Job Postings API\n    baseURL: ''\n    tags:\n      - Job Postings\n      - Public\n    serviceName: Ashby\
-  \ Job Postings API\n    serviceCategory: API\n  - name: Ashby Offers API\n    baseURL: ''\n    tags:\n      - Offers\n      - Approvals\n    serviceName: Ashby Offers API\n    serviceCategory: API\n  - name: Ashby Interviews API\n    baseURL: ''\n    tags:\n      - Interviews\n      - Stages\n    serviceName: Ashby Interviews API\n    serviceCategory: API\n  - name: Ashby Interview Schedules API\n    baseURL: ''\n    tags:\n      - Interview Schedules\n      - Scheduling\n    serviceName: Ashby Interview Schedules API\n    serviceCategory: API\n  - name: Ashby Feedback API\n    baseURL: ''\n    tags:\n      - Feedback\n      - Scorecards\n    serviceName: Ashby Feedback API\n    serviceCategory: API\n  - name: Ashby Feedback Form Definitions API\n    baseURL: ''\n    tags:\n      - Feedback Templates\n      - Forms\n    serviceName: Ashby Feedback Form Definitions API\n    serviceCategory: API\n  - name: Ashby Hiring Team API\n    baseURL: ''\n    tags:\n      - Hiring Team\n      - Roles\n\
-  \    serviceName: Ashby Hiring Team API\n    serviceCategory: API\n  - name: Ashby Archive Reasons API\n    baseURL: ''\n    tags:\n      - Archive Reasons\n      - Disposition\n    serviceName: Ashby Archive Reasons API\n    serviceCategory: API\n  - name: Ashby Sources API\n    baseURL: ''\n    tags:\n      - Sources\n      - Attribution\n    serviceName: Ashby Sources API\n    serviceCategory: API\n  - name: Ashby Surveys API\n    baseURL: ''\n    tags:\n      - Surveys\n      - EEO\n    serviceName: Ashby Surveys API\n    serviceCategory: API\n  - name: Ashby Locations API\n    baseURL: ''\n    tags:\n      - Locations\n      - Offices\n    serviceName: Ashby Locations API\n    serviceCategory: API\n  - name: Ashby Departments API\n    baseURL: ''\n    tags:\n      - Departments\n      - Org Structure\n    serviceName: Ashby Departments API\n    serviceCategory: API\n  - name: Ashby Custom Fields API\n    baseURL: ''\n    tags:\n      - Custom Fields\n      - Metadata\n    serviceName:\
-  \ Ashby Custom Fields API\n    serviceCategory: API\n  - name: Ashby Users API\n    baseURL: ''\n    tags:\n      - Users\n      - Permissions\n    serviceName: Ashby Users API\n    serviceCategory: API\n  - name: Ashby Webhooks API\n    baseURL: ''\n    tags:\n      - Webhooks\n      - Events\n    serviceName: Ashby Webhooks API\n    serviceCategory: API\n  - name: Ashby Partner Job Feed\n    baseURL: ''\n    tags:\n      - Job Feed\n      - Partners\n    serviceName: Ashby Partner Job Feed\n    serviceCategory: API\n  - name: Ashby Careers Page API\n    baseURL: ''\n    tags:\n      - Careers Page\n      - Public\n    serviceName: Ashby Careers Page API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.ashbyhq.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Ashby\nproviderId: ashby\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n  - HR\n  - ATS\n  - Recruiting\n  - Analytics\n  - FinOps\n  - FOCUS\ndescription: >-\n  Ashby's billing model is monthly or annual subscription with a flat\n  Foundations price ($400/mo, up to 100 employees) and custom-quoted Plus\n  and Enterprise tiers. Add-ons (Advanced Scheduling, AI Notetaker) are\n  priced separately. Annual commits earn a 10% discount.\nsources:\n  - https://www.ashbyhq.com/pricing\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Ashby\nserviceCategory: HR\nbillingModel:\n  pricingCategory: Subscription\n\
+  \  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\n    - Tax\nfocusColumns:\n  ServiceName: Ashby\n  ServiceCategory: HR\n  ProviderName: Ashby\n  PublisherName: Ashby\n  InvoiceIssuerName: Ashby\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: ashby_subscription\n    description: Foundations / Plus / Enterprise monthly or annual subscription.\n    unit: subscription-month\n    aggregation: sum\n    dimensions:\n      - tier\n      - cost_center\n  - name: ashby_analytics_subscription\n    description: Standalone Ashby Analytics for non-Ashby ATS customers.\n    unit: subscription-month\n    aggregation: sum\n    dimensions:\n      - cost_center\n  - name: ashby_addons\n    description: Advanced Scheduling and AI Notetaker add-ons.\n    unit: addon-month\n    aggregation: sum\n    dimensions:\n      - addon\n      - cost_center\nprinciples:\n  - name: Visibility\n    description: >-\n      Track Ashby invoices\
+  \ alongside headcount; Foundations covers up to\n      100 employees, so monitor employee count to detect tier transitions.\n  - name: Allocation\n    description: >-\n      Allocate to recruiting / talent functions; tag add-ons by team.\n  - name: Optimization\n    description: >-\n      Lock annual commitment for 10% discount; audit Plus tier usage at\n      renewal to validate seat count and feature usage.\n  - name: Accountability\n    description: >-\n      Designate Talent Operations as contract owner; review at renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/ashby/refs/heads/main/finops/ashby-finops.yml
-sources: []
+sources:
+- https://www.ashbyhq.com/pricing
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - HR
 - ATS
 - Recruiting
 - Analytics
-- Sourcing
-- Scheduling
 - FinOps
-- Cost Management
 - FOCUS
 ---

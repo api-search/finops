@@ -80,83 +80,82 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/snyk/refs/heads/main/openapi/snyk-rest-openapi.json
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Monthly or Annual
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
+  - Adjustment
   - Tax
   - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Snyk API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription (Per Contributing Developer)
+description: FOCUS-aligned FinOps for Snyk. Snyk's commercial model is per-contributing-developer subscription, where a contributing developer is one who has committed to a Snyk-monitored private repo in the last 90 days. Self-serve Team is $25/dev/month with a 5-developer floor and 10-developer cap. Ignite is $1,260/dev/year for up to 50 developers. Enterprise is custom-quoted with optional add-ons (Snyk Learning, Snyk API & Web). Test counts on the Free tier are hard-capped, providing the lever to size up. The API itself is not separately metered - it is included with the tier.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Snyk
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Snyk Limited
   ProviderName: Snyk
-  PublisherName: Snyk
-  ServiceCategory: Developer Tools / API
+  PublisherName: Snyk Limited
+  ServiceCategory: Application Security
   ServiceName: Snyk
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Recurring monthly or annual platform subscription fee for the active tier (Team, Ignite, or Enterprise).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - plan_tier
+  - billing_cycle
+  name: subscription_fee
+  unit: month
+- aggregation: max
+  description: Count of contributing developers in the billing period - developers who have committed to a Snyk-monitored private repo in the last 90 days. Drives per-developer subscription totals.
+  dimensions:
+  - organization_id
+  - group_id
+  name: contributing_developers
+  unit: developer
+- aggregation: max
+  description: Number of DAST web-application targets registered (10 included on Ignite, custom on Enterprise).
+  dimensions:
+  - organization_id
+  name: dast_targets
+  unit: target
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Free-tier-only meter; tracks consumed monthly tests against the per-product cap (e.g. open-source, code, container, IaC). Drives upgrade trigger.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - organization_id
+  - product
+  name: tests_per_product
+  unit: test
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Subscription line for Enterprise add-ons such as Snyk Learning Management and Snyk API & Web (DAST).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - addon_name
+  name: addon_subscription
+  unit: month
 name: Snyk Finops
 provider_name: Snyk
 provider_slug: snyk
-publisher_name: Snyk
-service_category: API
+publisher_name: Snyk Limited
+service_category: Application Security
 slug: snyk-finops
 source_filename: snyk-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Snyk\nproviderId: snyk\npublisherName: Snyk\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Security\n  - DevSecOps\n  - Vulnerability Management\n  - Application Security\n  - SCA\n  - SAST\n  - Container Security\n  - IaC\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Snyk API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
-  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Snyk\n  ServiceCategory: Developer Tools / API\n  ProviderName: Snyk\n  PublisherName: Snyk\n  InvoiceIssuerName: Snyk\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n   \
-  \ aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Snyk REST API - Groups\n    baseURL: https://api.snyk.io/rest\n    tags:\n      - Groups\n      - Tenancy\n      - REST API\n    serviceName: Snyk REST API - Groups\n    serviceCategory: API\n  - name: Snyk REST API - Organizations\n    baseURL: https://api.snyk.io/rest\n    tags:\n      - Organizations\n      - Memberships\n      - REST API\n    serviceName: Snyk REST API - Organizations\n    serviceCategory: API\n  - name: Snyk REST API - Projects\n    baseURL: https://api.snyk.io/rest\n    tags:\n      - Projects\n      - REST API\n    serviceName: Snyk REST API - Projects\n    serviceCategory: API\n  - name: Snyk REST API - Issues\n    baseURL: https://api.snyk.io/rest\n    tags:\n\
-  \      - Issues\n      - Vulnerabilities\n      - REST API\n    serviceName: Snyk REST API - Issues\n    serviceCategory: API\n  - name: Snyk REST API - Targets\n    baseURL: https://api.snyk.io/rest\n    tags:\n      - Targets\n      - Import Sources\n      - REST API\n    serviceName: Snyk REST API - Targets\n    serviceCategory: API\n  - name: Snyk REST API - Integrations\n    baseURL: https://api.snyk.io/rest\n    tags:\n      - Integrations\n      - SCM\n      - Registries\n      - REST API\n    serviceName: Snyk REST API - Integrations\n    serviceCategory: API\n  - name: Snyk REST API - Audit Logs\n    baseURL: https://api.snyk.io/rest\n    tags:\n      - Audit Logs\n      - Compliance\n      - REST API\n    serviceName: Snyk REST API - Audit Logs\n    serviceCategory: API\n  - name: Snyk REST API - SBOMs\n    baseURL: https://api.snyk.io/rest\n    tags:\n      - SBOM\n      - CycloneDX\n      - SPDX\n      - REST API\n    serviceName: Snyk REST API - SBOMs\n    serviceCategory:\
-  \ API\n  - name: Snyk REST API - Container Images\n    baseURL: https://api.snyk.io/rest\n    tags:\n      - Container Images\n      - Container Security\n      - REST API\n    serviceName: Snyk REST API - Container Images\n    serviceCategory: API\n  - name: Snyk REST API - Custom Base Images\n    baseURL: https://api.snyk.io/rest\n    tags:\n      - Custom Base Images\n      - Container Security\n      - REST API\n    serviceName: Snyk REST API - Custom Base Images\n    serviceCategory: API\n  - name: Snyk REST API - Webhooks\n    baseURL: https://api.snyk.io/rest\n    tags:\n      - Webhooks\n      - Events\n      - REST API\n    serviceName: Snyk REST API - Webhooks\n    serviceCategory: API\n  - name: Snyk REST API - Export\n    baseURL: https://api.snyk.io/rest\n    tags:\n      - Export\n      - Reporting\n      - Bulk\n      - REST API\n    serviceName: Snyk REST API - Export\n    serviceCategory: API\n  - name: Snyk REST API - Apps (OAuth)\n    baseURL: https://api.snyk.io/rest\n\
-  \    tags:\n      - Apps\n      - OAuth\n      - Extensibility\n      - REST API\n    serviceName: Snyk REST API - Apps (OAuth)\n    serviceCategory: API\n  - name: Snyk V1 API (Legacy)\n    baseURL: https://api.snyk.io/v1\n    tags:\n      - V1\n      - Legacy\n      - Test\n      - Monitor\n    serviceName: Snyk V1 API (Legacy)\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://snyk.io/plans/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Snyk\nproviderId: snyk\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n  - Security\n  - DevSecOps\n  - Vulnerability Management\n  - Application Security\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps for Snyk. Snyk's commercial model is per-contributing-developer\n  subscription, where a contributing developer is one who has committed to a\n  Snyk-monitored private repo in the last 90 days. Self-serve Team is $25/dev/month\n  with a 5-developer floor and 10-developer cap. Ignite is $1,260/dev/year for up to 50\n  developers. Enterprise is custom-quoted with optional add-ons (Snyk Learning,\n  Snyk API & Web). Test counts on the Free tier are hard-capped, providing the lever\n  to size up. The API itself is not separately metered - it is included with the tier.\nsources:\n  - https://snyk.io/plans/\n  - https://docs.snyk.io/snyk-api/\n\
+  alignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Snyk Limited\nserviceCategory: Application Security\nbillingModel:\n  pricingCategory: Subscription (Per Contributing Developer)\n  billingFrequency: Monthly or Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\n    - Tax\n    - Credit\nfocusColumns:\n  ServiceName: Snyk\n  ServiceCategory: Application Security\n  ProviderName: Snyk\n  PublisherName: Snyk Limited\n  InvoiceIssuerName: Snyk Limited\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: subscription_fee\n    description: >-\n      Recurring monthly or annual platform subscription fee for the active tier (Team,\n      Ignite, or Enterprise).\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan_tier\n      - billing_cycle\n\
+  \  - name: contributing_developers\n    description: >-\n      Count of contributing developers in the billing period - developers who have\n      committed to a Snyk-monitored private repo in the last 90 days. Drives\n      per-developer subscription totals.\n    unit: developer\n    aggregation: max\n    dimensions:\n      - organization_id\n      - group_id\n  - name: dast_targets\n    description: >-\n      Number of DAST web-application targets registered (10 included on Ignite, custom\n      on Enterprise).\n    unit: target\n    aggregation: max\n    dimensions:\n      - organization_id\n  - name: tests_per_product\n    description: >-\n      Free-tier-only meter; tracks consumed monthly tests against the per-product cap\n      (e.g. open-source, code, container, IaC). Drives upgrade trigger.\n    unit: test\n    aggregation: sum\n    dimensions:\n      - organization_id\n      - product\n  - name: addon_subscription\n    description: >-\n      Subscription line for Enterprise add-ons\
+  \ such as Snyk Learning Management and\n      Snyk API & Web (DAST).\n    unit: month\n    aggregation: sum\n    dimensions:\n      - addon_name\nprinciples:\n  - name: Visibility\n    description: >-\n      Use Snyk Group reporting to track contributing developer counts per organization\n      and project counts per product. The REST Audit Logs and Issues APIs feed\n      attribution into a finops store.\n  - name: Allocation\n    description: >-\n      Map organizations to business units; use group-level governance to enforce the\n      mapping. Tag projects with consuming-team metadata so license and DAST-target\n      consumption can be split.\n  - name: Optimization\n    description: >-\n      Right-size on contributing developers - exclude bot/CI accounts and offboarded\n      developers promptly, cap mono-repo committer sprawl, and consolidate redundant\n      organizations to avoid duplicate fixed costs. Move automation off personal tokens\n      to service accounts to keep tier\
+  \ upgrades predictable.\n  - name: Accountability\n    description: >-\n      Assign a security or platform owner per Snyk group. Review contributing-developer\n      counts each cycle and renegotiate add-on inclusion (Learning, API & Web) at\n      renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/snyk/refs/heads/main/finops/snyk-finops.yml
-sources: []
+sources:
+- https://snyk.io/plans/
+- https://docs.snyk.io/snyk-api/
 specification: FinOps Framework
 tags:
 - Security
 - DevSecOps
 - Vulnerability Management
 - Application Security
-- SCA
-- SAST
-- Container Security
-- IaC
 - FinOps
-- Cost Management
 - FOCUS
 ---

@@ -14,73 +14,71 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/blue-yonder/refs/heads/main/openapi/blue-yonder-warehouse-management-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the blue-yonder API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Enterprise Subscription (Negotiated)
+description: 'FOCUS-aligned FinOps placeholder for Blue Yonder: enterprise supply-chain SaaS billed under a contract-negotiated annual subscription combined with module add-ons (WMS, TMS, OMS, Planning, Workforce) and Blue Yonder Network connectivity.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: blue-yonder
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: blue-yonder
-  PublisherName: blue-yonder
-  ServiceCategory: Developer Tools / API
-  ServiceName: blue-yonder
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Blue Yonder Group, Inc.
+  ProviderName: Blue Yonder
+  PublisherName: Blue Yonder Group, Inc.
+  ServiceCategory: Supply Chain SaaS
+  ServiceName: Blue Yonder
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - tenant
+  - environment
+  name: platform_subscription
+  unit: year
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - module
+  - tenant
+  name: module_subscriptions
+  unit: year
+- aggregation: max
+  dimensions:
+  - tenant
+  - role
+  name: named_users
+  unit: seat
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - partner
+  - document_type
+  name: network_transactions
+  unit: transaction
+- aggregation: sum
+  dimensions:
+  - module
+  name: predictions_consumed
+  unit: prediction
 name: Blue Yonder Finops
 provider_name: blue-yonder
 provider_slug: blue-yonder
-publisher_name: blue-yonder
-service_category: API
+publisher_name: Blue Yonder Group, Inc.
+service_category: Supply Chain SaaS
 slug: blue-yonder-finops
 source_filename: blue-yonder-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: blue-yonder\nproviderId: blue-yonder\npublisherName: blue-yonder\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the blue-yonder API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost\
-  \ can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n     \
-  \ - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: blue-yonder\n  ServiceCategory: Developer Tools / API\n  ProviderName: blue-yonder\n  PublisherName: blue-yonder\n  InvoiceIssuerName: blue-yonder\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n\
-  \  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Blue Yonder Demand Planning API\n    baseURL: https://api.blueyonder.example.com\n    tags:\n      - Demand Planning\n      - Forecasting\n      - REST\n      - Retail\n      - Supply Chain\n    serviceName: Blue Yonder Demand Planning API\n    serviceCategory: API\n  - name: Blue Yonder Warehouse Management API\n    baseURL: https://api.blueyonder.example.com\n    tags:\n      - Logistics\n      - REST\n      - Supply Chain\n      - Warehouse Management\n      - WMS\n    serviceName: Blue Yonder Warehouse Management API\n    serviceCategory: API\n  - name: Blue Yonder Transportation Management API\n    baseURL: https://api.blueyonder.example.com\n    tags:\n      - Logistics\n      - REST\n      - Supply Chain\n      - TMS\n      - Transportation Management\n  \
-  \  serviceName: Blue Yonder Transportation Management API\n    serviceCategory: API\n  - name: Blue Yonder Connect API & Expansion Pack\n    baseURL: https://api.blueyonder.example.com\n    tags:\n      - API Management\n      - EDI\n      - Integration\n      - MuleSoft\n      - REST\n      - Supply Chain\n    serviceName: Blue Yonder Connect API & Expansion Pack\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.blueyonder.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Blue Yonder\nproviderId: blue-yonder\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Supply Chain\n  - SaaS\ndescription: 'FOCUS-aligned FinOps placeholder for Blue Yonder: enterprise supply-chain SaaS billed\n  under a contract-negotiated annual subscription combined with module add-ons (WMS, TMS, OMS,\n  Planning, Workforce) and Blue Yonder Network connectivity.'\nsources:\n  - https://www.blueyonder.com\nnotes: Blue Yonder commercial terms are private; reconcile against the active enterprise contract\n  for actual fee structure.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Blue Yonder Group, Inc.\nserviceCategory: Supply\
+  \ Chain SaaS\nbillingModel:\n  pricingCategory: Enterprise Subscription (Negotiated)\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Blue Yonder\n  ServiceCategory: Supply Chain SaaS\n  ProviderName: Blue Yonder\n  PublisherName: Blue Yonder Group, Inc.\n  InvoiceIssuerName: Blue Yonder Group, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: platform_subscription\n    unit: year\n    aggregation: sum\n    dimensions:\n      - tenant\n      - environment\n  - name: module_subscriptions\n    unit: year\n    aggregation: sum\n    dimensions:\n      - module\n      - tenant\n  - name: named_users\n    unit: seat\n    aggregation: max\n    dimensions:\n      - tenant\n      - role\n  - name: network_transactions\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - partner\n      - document_type\n  - name: predictions_consumed\n    unit: prediction\n\
+  \    aggregation: sum\n    dimensions:\n      - module\nprinciples:\n  - name: Visibility\n    description: Use Blue Yonder Platform tenant administration and customer-success usage reports\n      to track module activation, named-user counts, and Network transaction volume.\n  - name: Allocation\n    description: Map Blue Yonder modules and tenants to consuming business units (planning, retail,\n      logistics) for chargeback against the bundled enterprise invoice.\n  - name: Optimization\n    description: Reclaim unused module activations and seats during annual renewal; consolidate\n      Network connectivity across business units; align AI prediction consumption with business\n      cadence.\n  - name: Accountability\n    description: Designate a Blue Yonder contract owner per legal entity; review utilization and\n      realized supply-chain savings quarterly with the Blue Yonder customer success team.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/blue-yonder/refs/heads/main/finops/blue-yonder-finops.yml
-sources: []
+sources:
+- https://www.blueyonder.com
 specification: FinOps Framework
 tags:
 - FinOps
-- Cost Management
 - FOCUS
+- Supply Chain
+- SaaS
 ---

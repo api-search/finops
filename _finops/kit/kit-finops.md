@@ -7,76 +7,55 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Monthly or Annual
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Kit API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription (tiered by subscriber count)
+description: FOCUS-aligned FinOps profile for Kit's subscriber-tier subscription pricing.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
   InvoiceIssuerName: Kit
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Kit
   PublisherName: Kit
-  ServiceCategory: Developer Tools / API
-  ServiceName: Kit
+  ServiceCategory: Email Marketing
+  ServiceName: Kit Email Marketing
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Active subscribers on the account; pricing tier scales with this number.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - account
+  name: subscriber_count
+  unit: subscribers
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Monthly or annual plan fee.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - plan_tier
+  name: plan_subscription
+  unit: months
 name: Kit Finops
 provider_name: Kit
 provider_slug: kit
 publisher_name: Kit
-service_category: API
+service_category: Email Marketing
 slug: kit-finops
 source_filename: kit-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Kit\nproviderId: kit\npublisherName: Kit\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Email Marketing\n  - Creator Economy\n  - Newsletters\n  - Automation\n  - Subscribers\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Kit API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Kit\n  ServiceCategory: Developer Tools / API\n  ProviderName: Kit\n  PublisherName: Kit\n  InvoiceIssuerName: Kit\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n\
-  \      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Kit API V4\n    baseURL: https://api.kit.com/v4\n    tags:\n      - Email Marketing\n      - Subscribers\n      - Broadcasts\n      - Sequences\n      - Tags\n      - Forms\n      - Webhooks\n    serviceName: Kit API V4\n    serviceCategory: API\n  - name: Kit API V3 (Deprecated)\n    baseURL: https://api.convertkit.com/v3\n    tags:\n      - Email Marketing\n      - Subscribers\n      - Deprecated\n    serviceName: Kit API V3 (Deprecated)\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://kit.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Kit\nproviderId: kit\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- Email Marketing\n- Creator Economy\n- FinOps\n- Cost Management\n- FOCUS\ndescription: FOCUS-aligned FinOps profile for Kit's subscriber-tier subscription pricing.\nnotes: >-\n  Kit charges a subscription fee that scales with active subscriber count. API access is\n  included in the eligible plans rather than metered separately.\nsources:\n- https://kit.com/pricing\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Kit\nserviceCategory: Email Marketing\nbillingModel:\n  pricingCategory: Subscription (tiered by subscriber count)\n  billingFrequency:\
+  \ Monthly or Annual\n  billingCurrency: USD\n  chargeCategories:\n  - Usage\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: Kit Email Marketing\n  ServiceCategory: Email Marketing\n  ProviderName: Kit\n  PublisherName: Kit\n  InvoiceIssuerName: Kit\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n- name: subscriber_count\n  description: Active subscribers on the account; pricing tier scales with this number.\n  unit: subscribers\n  aggregation: max\n  dimensions:\n  - account\n- name: plan_subscription\n  description: Monthly or annual plan fee.\n  unit: months\n  aggregation: sum\n  dimensions:\n  - plan_tier\nprinciples:\n- name: Visibility\n  description: Track subscriber-count growth against pricing-tier breakpoints to forecast plan upgrades.\n- name: Allocation\n  description: Allocate plan cost to the marketing/newsletter cost center.\n- name: Optimization\n  description: Prune unengaged subscribers regularly to stay within the lower price tier.\n- name: Accountability\n\
+  \  description: Assign a marketing-ops owner to review plan tier vs. actual subscriber count quarterly.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/kit/refs/heads/main/finops/kit-finops.yml
-sources: []
+sources:
+- https://kit.com/pricing
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Email Marketing
 - Creator Economy
-- Newsletters
-- Automation
-- Subscribers
 - FinOps
 - Cost Management
 - FOCUS

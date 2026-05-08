@@ -14,79 +14,44 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/varian-medical-systems/refs/heads/main/openapi/varian-aria-fhir-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Contract
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Varian Medical Systems API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Bundled with Clinical-System License
+description: 'FinOps shape for Varian Medical Systems: APIs run on premises inside customer hospital deployments of Aria/Eclipse/Velocity. Cost is bundled into the clinical-system license and maintenance contract rather than billed per API call.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Varian Medical Systems
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Siemens Healthineers
   ProviderName: Varian Medical Systems
-  PublisherName: Varian Medical Systems
-  ServiceCategory: Developer Tools / API
+  PublisherName: Varian Medical Systems (Siemens Healthineers)
+  ServiceCategory: Healthcare
   ServiceName: Varian Medical Systems
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+- aggregation: count
+  description: API access provisioned under the Varian Developer Program; not metered as a developer billing line
+  name: contracted_access
+  unit: varies
 name: Varian Medical Systems Finops
 provider_name: Varian Medical Systems
 provider_slug: varian-medical-systems
-publisher_name: Varian Medical Systems
-service_category: API
+publisher_name: Varian Medical Systems (Siemens Healthineers)
+service_category: Healthcare
 slug: varian-medical-systems-finops
 source_filename: varian-medical-systems-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Varian Medical Systems\nproviderId: varian-medical-systems\npublisherName: Varian Medical Systems\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Healthcare\n  - Oncology\n  - Medical Devices\n  - FHIR\n  - Radiation Therapy\n  - Health IT\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Varian Medical Systems API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  -\
-  \ name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n\
-  \  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Varian Medical Systems\n  ServiceCategory: Developer Tools / API\n  ProviderName: Varian Medical Systems\n  PublisherName: Varian Medical Systems\n  InvoiceIssuerName: Varian Medical Systems\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n\
-  \  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: ARIA FHIR API\n    baseURL: https://varian.dynamicfhir.com/fhir/varian/basepractice/r4\n    tags:\n      - Healthcare\n      - Oncology\n      - FHIR\n      - Health IT\n      - Interoperability\n    serviceName: ARIA FHIR API\n    serviceCategory: API\n  - name: ARIA Access API\n    baseURL: https://localhost:55051/Gateway/Service.svc\n    tags:\n      - Healthcare\n      - Oncology\n      - SOAP\n      - Web Services\n      - Health IT\n    serviceName: ARIA Access API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests\
-  \ / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://cancercare.siemens-healthineers.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Varian Medical Systems\nproviderId: varian-medical-systems\npublisherName: Varian Medical Systems (Siemens Healthineers)\nserviceCategory: Healthcare\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Healthcare\n  - Oncology\n  - Medical Devices\n  - FinOps\n  - FOCUS\ndescription: 'FinOps shape for Varian Medical Systems: APIs run on premises inside customer hospital deployments of Aria/Eclipse/Velocity. Cost is bundled into the clinical-system license and maintenance contract rather than billed per API call.'\nsources:\n  - https://cancercare.siemens-healthineers.com/\nnotes: No public usage-based billing surface for\
+  \ Varian APIs. Costs flow through the Aria/Eclipse license, hardware, and maintenance contracts; FinOps does not apply as a per-call cost model.\nbillingModel:\n  pricingCategory: Bundled with Clinical-System License\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Varian Medical Systems\n  ServiceCategory: Healthcare\n  ProviderName: Varian Medical Systems\n  PublisherName: Varian Medical Systems (Siemens Healthineers)\n  InvoiceIssuerName: Siemens Healthineers\n  BillingCurrency: USD\nmeters:\n  - name: contracted_access\n    description: API access provisioned under the Varian Developer Program; not metered as a developer billing line\n    unit: varies\n    aggregation: count\nprinciples:\n  - name: Visibility\n    description: Usage is observable at the customer's on-prem deployment via Aria/Eclipse logs; Varian does not provide a vendor-side usage dashboard.\n  - name: Allocation\n    description: Cost is\
+  \ allocated through the radiation oncology department's capital and maintenance budget, not via API meters.\n  - name: Optimization\n    description: Optimization happens at the integration design level (HL7/FHIR scope, scheduled batch syncs, on-prem capacity planning) rather than per-call cost.\n  - name: Accountability\n    description: Owned by the hospital's radiation oncology IT team and the integration partner under the Developer Program agreement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/varian-medical-systems/refs/heads/main/finops/varian-medical-systems-finops.yml
-sources: []
+sources:
+- https://cancercare.siemens-healthineers.com/
 specification: FinOps Framework
 tags:
 - Healthcare
 - Oncology
 - Medical Devices
-- FHIR
-- Radiation Therapy
-- Health IT
 - FinOps
-- Cost Management
 - FOCUS
 ---

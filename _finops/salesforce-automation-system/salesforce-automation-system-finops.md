@@ -14,80 +14,66 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/salesforce-automation-system/refs/heads/main/openapi/salesforce-automation-flow-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Monthly or Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Salesforce Automation System API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription / Contact Sales
+description: 'FOCUS-aligned FinOps shape for the Salesforce Automation System: Flow / Process / Approval / Workflow consumption is bundled into the org''s edition subscription. The financial unit is the licensed user; the binding API constraint is the per-org 24-hour request allowance.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Salesforce Automation System
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Salesforce Automation System
-  PublisherName: Salesforce Automation System
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Salesforce, Inc.
+  ProviderName: Salesforce
+  PublisherName: Salesforce, Inc.
+  ServiceCategory: CRM / Automation
   ServiceName: Salesforce Automation System
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - edition
+  - cloud
+  name: licensed_users
+  unit: seat
+- aggregation: sum
+  dimensions:
+  - org
+  - api_family
+  name: api_requests_24h
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - org
+  - flow
+  name: flow_interviews
+  unit: invocation
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - org
+  - class
+  name: apex_executions
+  unit: transaction
 name: Salesforce Automation System Finops
 provider_name: Salesforce Automation System
 provider_slug: salesforce-automation-system
-publisher_name: Salesforce Automation System
-service_category: API
+publisher_name: Salesforce, Inc.
+service_category: CRM / Automation
 slug: salesforce-automation-system-finops
 source_filename: salesforce-automation-system-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Salesforce Automation System\nproviderId: salesforce-automation-system\npublisherName: Salesforce Automation System\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Approval Process\n  - Automation\n  - CRM\n  - Flow\n  - Process Builder\n  - Salesforce\n  - Workflow\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Salesforce Automation System API surface. Provides a\n  FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the\n  provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance\
-  \ teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n\
-  \      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Salesforce Automation System\n  ServiceCategory: Developer Tools / API\n  ProviderName: Salesforce Automation System\n  PublisherName: Salesforce Automation System\n  InvoiceIssuerName: Salesforce Automation System\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n\
-  \      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Salesforce Flow Automation API\n    baseURL: https://{instance}.salesforce.com/services/data/v59.0\n    tags:\n      - Approval Process\n      - Automation\n      - CRM\n      - Flow\n      - Salesforce\n      - Workflow\n    serviceName: Salesforce Flow Automation API\n    serviceCategory: API\n  - name: Salesforce Flow Builder\n    baseURL: ''\n    tags:\n      - Automation\n      - Flow\n      - No-Code\n      - Salesforce\n    serviceName: Salesforce Flow Builder\n    serviceCategory: API\n  - name: Salesforce Approval Processes\n\
-  \    baseURL: ''\n    tags:\n      - Approval\n      - Automation\n      - CRM\n      - Salesforce\n    serviceName: Salesforce Approval Processes\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Salesforce Automation System\nproviderId: salesforce-automation-system\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - CRM\n  - Automation\n  - Salesforce\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps shape for the Salesforce Automation System: Flow / Process / Approval\n  / Workflow consumption is bundled into the org''s edition subscription. The financial unit is the licensed\n  user; the binding API constraint is the per-org 24-hour request allowance.'\nsources:\n  - https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/\n  - https://developer.salesforce.com/docs/atlas.en-us.salesforce_app_limits_cheatsheet.meta/salesforce_app_limits_cheatsheet/salesforce_app_limits_platform_api.htm\nnotes: Per-edition prices and per-edition API allowance numbers were not retrievable for this run. The\n  shape below\
+  \ describes structure, not fabricated dollar values.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Salesforce, Inc.\nserviceCategory: CRM / Automation\nbillingModel:\n  pricingCategory: Subscription / Contact Sales\n  billingFrequency: Monthly or Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Salesforce Automation System\n  ServiceCategory: CRM / Automation\n  ProviderName: Salesforce\n  PublisherName: Salesforce, Inc.\n  InvoiceIssuerName: Salesforce, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: licensed_users\n    unit: seat\n    aggregation: max\n    dimensions:\n      - edition\n      - cloud\n  - name: api_requests_24h\n    unit: request\n    aggregation: sum\n    dimensions:\n      - org\n      - api_family\n  - name: flow_interviews\n   \
+  \ unit: invocation\n    aggregation: sum\n    dimensions:\n      - org\n      - flow\n  - name: apex_executions\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - org\n      - class\nprinciples:\n  - name: Visibility\n    description: Track per-org API consumption via API Usage Last 7 Days, System Overview, and Event Monitoring.\n      Track flow interviews via Flow analytics in Setup; correlate with Apex governor metrics.\n  - name: Allocation\n    description: Allocate seat cost by org / business unit; allocate API headroom and Flow execution cost\n      back to the integrations and automations driving consumption so noisy automations don't crowd out\n      user-facing flows.\n  - name: Optimization\n    description: Migrate Process Builder / Workflow Rules to Flow; bulkify Flow + Apex; collapse per-record\n      callouts; route high-volume data through Bulk API; right-size editions at renewal; retire unused\n      flows.\n  - name: Accountability\n    description:\
+  \ Salesforce CoE / admin owns license + API consumption with finance; integration owners\n      are accountable for their share of the 24-hour bucket. Set internal alerting at 60-70% of allowance.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/salesforce-automation-system/refs/heads/main/finops/salesforce-automation-system-finops.yml
-sources: []
+sources:
+- https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
+- https://developer.salesforce.com/docs/atlas.en-us.salesforce_app_limits_cheatsheet.meta/salesforce_app_limits_cheatsheet/salesforce_app_limits_platform_api.htm
 specification: FinOps Framework
 tags:
-- Approval Process
-- Automation
 - CRM
-- Flow
-- Process Builder
+- Automation
 - Salesforce
-- Workflow
 - FinOps
-- Cost Management
 - FOCUS
 ---

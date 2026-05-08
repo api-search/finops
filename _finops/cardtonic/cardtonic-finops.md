@@ -13,84 +13,68 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/cardtonic/refs/heads/main/openapi/cardtonic-openapi.yml
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: NGN / GHS / USD
+  billingFrequency: Continuous Settlement
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Cardtonic API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  pricingCategory: Take Rate + Custom Merchant Agreement
+description: 'FOCUS-aligned FinOps for Cardtonic: per-transaction take rates on gift cards, bill payments, eSIMs, and virtual dollar cards; merchant API access via waitlist with bilateral pricing.'
 focus_columns:
-  BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Cardtonic
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  BillingCurrency: NGN
+  InvoiceIssuerName: Cardtonic Limited
   ProviderName: Cardtonic
-  PublisherName: Cardtonic
-  ServiceCategory: Developer Tools / API
+  PublisherName: Cardtonic Limited
+  ServiceCategory: Fintech / Gift Cards
   ServiceName: Cardtonic
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - direction
+  - card_brand
+  - country
+  name: gift_card_transactions
+  unit: transaction
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - biller
+  - country
+  name: bill_payments
+  unit: transaction
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - currency
+  name: virtual_card_issuance
+  unit: card
+- aggregation: sum
+  dimensions:
+  - country
+  name: esim_purchases
+  unit: purchase
 name: Cardtonic Finops
 provider_name: Cardtonic
 provider_slug: cardtonic
-publisher_name: Cardtonic
-service_category: API
+publisher_name: Cardtonic Limited
+service_category: Fintech / Gift Cards
 slug: cardtonic-finops
 source_filename: cardtonic-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Cardtonic\nproviderId: cardtonic\npublisherName: Cardtonic\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Africa\n  - Bill Payments\n  - eSIM\n  - Finance\n  - Fintech\n  - Gift Cards\n  - Ghana\n  - Nigeria\n  - Payments\n  - Virtual Dollar Cards\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Cardtonic API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name:\
-  \ Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  -\
-  \ name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Cardtonic\n  ServiceCategory: Developer Tools / API\n  ProviderName: Cardtonic\n  PublisherName: Cardtonic\n  InvoiceIssuerName: Cardtonic\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned\
-  \ over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Cardtonic Gift Card Developer API\n    baseURL: ''\n    tags:\n      - Gift Cards\n      - Fintech\n      - Payments\n    serviceName: Cardtonic Gift Card Developer API\n    serviceCategory: API\n  - name: Cardtonic Virtual Dollar Card\n    baseURL: ''\n    tags:\n      - Cards\n      - Fintech\n      - Virtual Dollar Cards\n    serviceName: Cardtonic Virtual Dollar Card\n    serviceCategory: API\n  - name: Cardtonic Bill Payments\n    baseURL: ''\n    tags:\n      - Bill Payments\n      - Fintech\n      - Payments\n    serviceName: Cardtonic Bill Payments\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n\
-  \    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.cardtonic.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Cardtonic\nproviderId: cardtonic\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Fintech\n  - Gift Cards\n  - Payments\n  - Africa\ndescription: 'FOCUS-aligned FinOps for Cardtonic: per-transaction take rates on gift cards, bill payments,\n  eSIMs, and virtual dollar cards; merchant API access via waitlist with bilateral pricing.'\nnotes: Cardtonic does not publish public API or transaction tariffs. Take rates are quoted in-app at\n  point of sale; reconcile against merchant-onboarding terms when available.\nsources:\n  - https://www.cardtonic.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Cardtonic Limited\nserviceCategory:\
+  \ Fintech / Gift Cards\nbillingModel:\n  pricingCategory: Take Rate + Custom Merchant Agreement\n  billingFrequency: Continuous Settlement\n  billingCurrency: NGN / GHS / USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: Cardtonic\n  ServiceCategory: Fintech / Gift Cards\n  ProviderName: Cardtonic\n  PublisherName: Cardtonic Limited\n  InvoiceIssuerName: Cardtonic Limited\n  BillingCurrency: NGN\nmeters:\n  - name: gift_card_transactions\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - direction\n      - card_brand\n      - country\n  - name: bill_payments\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - biller\n      - country\n  - name: virtual_card_issuance\n    unit: card\n    aggregation: sum\n    dimensions:\n      - currency\n  - name: esim_purchases\n    unit: purchase\n    aggregation: sum\n    dimensions:\n      - country\nprinciples:\n  - name: Visibility\n    description:\
+  \ Visibility into per-transaction take rates is via the in-app quote and merchant settlement\n      reports; the consumer app displays NGN/GHS settlement.\n  - name: Allocation\n    description: Allocate by merchant, country, and product family (gift cards vs bills vs eSIMs).\n  - name: Optimization\n    description: Bulk gift-card ordering and merchant-tier negotiation reduce effective take rates; cache\n      catalog data to avoid redundant inventory calls.\n  - name: Accountability\n    description: Merchant operations team owns the relationship; reconcile NGN/GHS settlement against\n      USD card economics monthly.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cardtonic/refs/heads/main/finops/cardtonic-finops.yml
-sources: []
+sources:
+- https://www.cardtonic.com/
 specification: FinOps Framework
 tags:
-- Africa
-- Bill Payments
-- eSIM
-- Finance
+- FinOps
+- FOCUS
 - Fintech
 - Gift Cards
-- Ghana
-- Nigeria
 - Payments
-- Virtual Dollar Cards
-- FinOps
-- Cost Management
-- FOCUS
+- Africa
 ---

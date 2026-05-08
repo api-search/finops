@@ -20,78 +20,55 @@ api_specs:
   url: https://api.sybase.example.com/iq/v1/openapi.json
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual or Term
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Sybase API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Enterprise License
+description: Sybase (SAP ASE, SQL Anywhere, IQ, Replication Server) is sold under SAP enterprise licensing. This artifact captures publisher and category surface only; meters are placeholders pending an SAP price list. There is no public per-call API meter.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Sybase
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Sybase
-  PublisherName: Sybase
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: SAP SE
+  ProviderName: SAP
+  PublisherName: SAP SE
+  ServiceCategory: Enterprise Database
   ServiceName: Sybase
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: SAP licensing metric used (core, CPU, named user, edition); cost realized through the customer's SAP order
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - product_edition
+  - license_type
+  name: license_metric
+  unit: varies
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: SAP Enterprise Support / maintenance attached to the underlying license
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - product_edition
+  name: maintenance_support
+  unit: year
 name: Sybase Finops
 provider_name: Sybase
 provider_slug: sybase
-publisher_name: Sybase
-service_category: API
+publisher_name: SAP SE
+service_category: Enterprise Database
 slug: sybase-finops
 source_filename: sybase-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sybase\nproviderId: sybase\npublisherName: Sybase\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Database\n  - Enterprise\n  - SAP\n  - SQL\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sybase API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
-  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
-  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sybase\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sybase\n  PublisherName: Sybase\n  InvoiceIssuerName: Sybase\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      -\
-  \ consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Sybase ASE REST API\n    baseURL: https://{server}:{port}/ase/v1\n    tags:\n      - Administration\n      - Backup\n      - Database Management\n      - Monitoring\n      - Performance\n    serviceName: Sybase ASE REST API\n    serviceCategory: API\n  - name: Sybase IQ REST API\n    baseURL: https://api.sybase.example.com/iq/v1\n    tags:\n      - Analytics\n      - Big Data\n      - Data Warehouse\n    serviceName: Sybase IQ REST API\n    serviceCategory: API\n  - name: SAP Mobile Platform API\n    baseURL: https://api.sybase.example.com/mobile/v1\n    tags:\n      - Application Development\n      - Mobile\n      - Synchronization\n    serviceName: SAP Mobile Platform API\n    serviceCategory: API\n  - name: SAP SQL Anywhere HTTP Web Services\n    baseURL:\
-  \ https://{server}:{port}\n    tags:\n      - Database\n      - Embedded Database\n      - OData\n      - Web Services\n    serviceName: SAP SQL Anywhere HTTP Web Services\n    serviceCategory: API\n  - name: SDK for SAP ASE\n    baseURL: https://{server}:{port}\n    tags:\n      - Client Libraries\n      - Database Connectivity\n      - JDBC\n      - ODBC\n      - SDK\n    serviceName: SDK for SAP ASE\n    serviceCategory: API\n  - name: SAP Replication Server\n    baseURL: https://{server}:{port}\n    tags:\n      - Data Synchronization\n      - High Availability\n      - Replication\n    serviceName: SAP Replication Server\n    serviceCategory: API\n  - name: SAP ASE Cockpit\n    baseURL: https://{server}:{port}\n    tags:\n      - Administration\n      - Management Console\n      - Monitoring\n    serviceName: SAP ASE Cockpit\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per\
-  \ Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: https://www.sap.com/products/technology-platform/sybase-ase.html
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sybase\nproviderId: sybase\npublisherName: SAP SE\nserviceCategory: Enterprise Database\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Database\n  - Enterprise\n  - SAP\ndescription: Sybase (SAP ASE, SQL Anywhere, IQ, Replication Server) is sold under SAP enterprise licensing.\n  This artifact captures publisher and category surface only; meters are placeholders pending an SAP\n  price list. There is no public per-call API meter.\nsources:\n  - https://www.sap.com/products/technology-platform/sybase-ase.html\nnotes: 'Reconciliation marked false: SAP/Sybase pricing is not public; sold via SAP sales\
+  \ and partner\n  network under enterprise license metrics (core, named user, term).'\nbillingModel:\n  pricingCategory: Enterprise License\n  billingFrequency: Annual or Term\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Sybase\n  ServiceCategory: Enterprise Database\n  ProviderName: SAP\n  PublisherName: SAP SE\n  InvoiceIssuerName: SAP SE\n  BillingCurrency: USD\nmeters:\n  - name: license_metric\n    description: SAP licensing metric used (core, CPU, named user, edition); cost realized through\n      the customer's SAP order\n    unit: varies\n    aggregation: max\n    dimensions:\n      - product_edition\n      - license_type\n  - name: maintenance_support\n    description: SAP Enterprise Support / maintenance attached to the underlying license\n    unit: year\n    aggregation: sum\n    dimensions:\n      - product_edition\nprinciples:\n  - name: Visibility\n    description: Visibility into Sybase spend is via\
+  \ the SAP order schedule and SAP for Me account\n      view; database server consumption is tracked via the SAP-provided usage measurement tools (LAW,\n      USMM).\n  - name: Allocation\n    description: Allocate by SAP system ID and database; SAP licensing metrics tie directly to deployed\n      cores or named users per system.\n  - name: Optimization\n    description: Optimization levers are right-sizing cores, consolidating non-prod ASE/IQ instances,\n      moving from perpetual to subscription where the workload is contracting, and migrating cold workloads\n      to lower-cost editions.\n  - name: Accountability\n    description: Account ownership rests with the SAP Basis / database administration team and the\n      contract owner negotiating with SAP.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sybase/refs/heads/main/finops/sybase-finops.yml
-sources: []
+sources:
+- https://www.sap.com/products/technology-platform/sybase-ase.html
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
 - Database
 - Enterprise
 - SAP
-- SQL
-- FinOps
-- Cost Management
-- FOCUS
 ---

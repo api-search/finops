@@ -7,79 +7,41 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the AutoNation API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Bilateral Contract
+description: AutoNation does not publish a public API or developer pricing. There is no FinOps surface to align with.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: AutoNation
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: AutoNation, Inc.
   ProviderName: AutoNation
-  PublisherName: AutoNation
-  ServiceCategory: Developer Tools / API
+  PublisherName: AutoNation, Inc.
+  ServiceCategory: Automotive Retail
   ServiceName: AutoNation
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: bilateral_integration
+  unit: varies
 name: Autonation Finops
 provider_name: AutoNation
 provider_slug: autonation
-publisher_name: AutoNation
-service_category: API
+publisher_name: AutoNation, Inc.
+service_category: Automotive Retail
 slug: autonation-finops
 source_filename: autonation-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: AutoNation\nproviderId: autonation\npublisherName: AutoNation\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Automotive Retail\n  - Car Dealership\n  - Vehicle Sales\n  - Auto Finance\n  - Service Scheduling\n  - Used Vehicles\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the AutoNation API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
-  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: AutoNation\n  ServiceCategory: Developer Tools / API\n  ProviderName: AutoNation\n  PublisherName: AutoNation\n  InvoiceIssuerName: AutoNation\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
-  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: AutoNation Digital Retail Platform\n    baseURL: ''\n    tags:\n      - Digital Retail\n      - Vehicle Search\n      - Inventory\n      - Financing\n    serviceName: AutoNation Digital Retail Platform\n    serviceCategory: API\n  - name: AutoNation Service Scheduling\n    baseURL: ''\n    tags:\n      - Service Scheduling\n      - Vehicle Maintenance\n      - Repair\n      - Automotive Service\n    serviceName: AutoNation Service Scheduling\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target:\
-  \ TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.autonation.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: AutoNation\nproviderId: autonation\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nnotes: AutoNation has no public API and no published developer pricing. This FinOps artifact is a\n  shell capturing the absence of a public commercial API surface.\ntags:\n  - FinOps\n  - FOCUS\n  - Automotive\n  - Retail\ndescription: AutoNation does not publish a public API or developer pricing. There is no FinOps surface\n  to align with.\nsources:\n  - https://www.autonation.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: AutoNation, Inc.\nserviceCategory: Automotive Retail\nbillingModel:\n  pricingCategory: Bilateral Contract\n  billingFrequency: Per-Invoice\n  billingCurrency:\
+  \ USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: AutoNation\n  ServiceCategory: Automotive Retail\n  ProviderName: AutoNation\n  PublisherName: AutoNation, Inc.\n  InvoiceIssuerName: AutoNation, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: bilateral_integration\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: There is no public AutoNation usage API. Any reporting comes from the partner DMS or\n      OEM data feed.\n  - name: Allocation\n    description: Allocate via the partner integration contract; AutoNation is not a billed service for\n      most third parties.\n  - name: Optimization\n    description: Optimization, where applicable, is for the consuming integrator, not AutoNation.\n  - name: Accountability\n    description: Owned by the dealer-integration / partnerships team that manages the bilateral\n      agreement.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/autonation/refs/heads/main/finops/autonation-finops.yml
-sources: []
+sources:
+- https://www.autonation.com/
 specification: FinOps Framework
 tags:
-- Automotive Retail
-- Car Dealership
-- Vehicle Sales
-- Auto Finance
-- Service Scheduling
-- Used Vehicles
 - FinOps
-- Cost Management
 - FOCUS
+- Automotive
+- Retail
 ---

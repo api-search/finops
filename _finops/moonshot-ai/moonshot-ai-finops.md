@@ -13,70 +13,77 @@ api_specs:
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/moonshot-ai/refs/heads/main/openapi/moonshot-ai-openapi.json
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: CNY/USD
+  billingFrequency: On-Demand (Recharge)
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Moonshot AI API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Usage Based
+description: FOCUS-aligned FinOps profile for Moonshot AI / Kimi. Billing model is prepaid recharge with pay-as-you-go consumption metered against per-million-token rates per model and per direction (input cache-hit, input cache-miss, output). Batch jobs are billed at 50% of online rates.
 focus_columns:
-  BillingCurrency: USD
+  BillingCurrency: CNY
   ChargeCategory: Usage
   InvoiceIssuerName: Moonshot AI
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Moonshot AI
   PublisherName: Moonshot AI
-  ServiceCategory: Developer Tools / API
-  ServiceName: Moonshot AI
+  ServiceCategory: AI and Machine Learning
+  ServiceName: Moonshot AI Platform
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Input tokens billed when cache miss occurs.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - model
+  - account
+  name: input_tokens_cache_miss
+  unit: tokens
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Discounted input tokens served from prompt cache.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - model
+  - account
+  name: input_tokens_cache_hit
+  unit: tokens
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Generated output tokens.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - model
+  - account
+  name: output_tokens
+  unit: tokens
+- aggregation: sum
+  description: Batch endpoint tokens (50% discount versus online).
+  dimensions:
+  - model
+  - account
+  name: batch_tokens
+  unit: tokens
+- aggregation: sum
+  description: Web search tool invocations.
+  dimensions:
+  - account
+  name: web_search_calls
+  unit: calls
 name: Moonshot Ai Finops
 provider_name: Moonshot AI
 provider_slug: moonshot-ai
 publisher_name: Moonshot AI
-service_category: API
+service_category: AI and Machine Learning
 slug: moonshot-ai-finops
 source_filename: moonshot-ai-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Moonshot AI\nproviderId: moonshot-ai\npublisherName: Moonshot AI\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - LLM\n  - Inference\n  - Long Context\n  - Kimi\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Moonshot AI API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Moonshot AI\n  ServiceCategory: Developer Tools / API\n  ProviderName: Moonshot AI\n  PublisherName: Moonshot AI\n  InvoiceIssuerName: Moonshot AI\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
-  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Moonshot AI Platform API\n    baseURL: https://api.moonshot.ai\n    tags:\n      - AI\n      - LLM\n      - Chat Completions\n      - Embeddings\n      - Files\n      - Batch\n      - Long Context\n      - Kimi\n    serviceName: Moonshot AI Platform API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://platform.kimi.ai/docs/pricing/chat
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Moonshot AI\nproviderId: moonshot-ai\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- AI\n- LLM\n- Inference\n- Long Context\n- Kimi\n- FinOps\n- Cost Management\n- FOCUS\ndescription: >-\n  FOCUS-aligned FinOps profile for Moonshot AI / Kimi. Billing model is prepaid recharge with\n  pay-as-you-go consumption metered against per-million-token rates per model and per direction\n  (input cache-hit, input cache-miss, output). Batch jobs are billed at 50% of online rates.\nnotes: >-\n  Prepaid balance maps to FOCUS Purchase / Adjustment categories; consumption maps to Usage.\n  Document extraction and storage are free at reconciliation; expect them to monetize later.\nsources:\n- https://platform.kimi.ai/docs/pricing/chat\n- https://platform.kimi.ai/docs/pricing/batch\n- https://platform.kimi.ai/docs/pricing/limits\n- https://focus.finops.org/focus-specification/v1-3/\n\
+  alignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Moonshot AI\nserviceCategory: AI and Machine Learning\nbillingModel:\n  pricingCategory: Usage Based\n  billingFrequency: On-Demand (Recharge)\n  billingCurrency: CNY/USD\n  chargeCategories:\n  - Usage\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: Moonshot AI Platform\n  ServiceCategory: AI and Machine Learning\n  ProviderName: Moonshot AI\n  PublisherName: Moonshot AI\n  InvoiceIssuerName: Moonshot AI\n  BillingCurrency: CNY\n  ChargeCategory: Usage\nmeters:\n- name: input_tokens_cache_miss\n  description: Input tokens billed when cache miss occurs.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - model\n  - account\n- name: input_tokens_cache_hit\n  description: Discounted input tokens served from prompt cache.\n  unit: tokens\n  aggregation:\
+  \ sum\n  dimensions:\n  - model\n  - account\n- name: output_tokens\n  description: Generated output tokens.\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - model\n  - account\n- name: batch_tokens\n  description: Batch endpoint tokens (50% discount versus online).\n  unit: tokens\n  aggregation: sum\n  dimensions:\n  - model\n  - account\n- name: web_search_calls\n  description: Web search tool invocations.\n  unit: calls\n  aggregation: sum\n  dimensions:\n  - account\nprinciples:\n- name: Visibility\n  description: Use the Balance API and console usage exports to track recharge balance and consumption.\n- name: Allocation\n  description: Tag API keys per workload/team to attribute model spend.\n- name: Optimization\n  description: Prefer prompt caching, batch endpoints (50% off), shorter contexts, and right-sized models.\n- name: Accountability\n  description: Monitor tier ceiling utilization and renegotiate at $3K/$10K cumulative-recharge tier breaks.\nmaintainers:\n- FN: Kin\
+  \ Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/moonshot-ai/refs/heads/main/finops/moonshot-ai-finops.yml
-sources: []
+sources:
+- https://platform.kimi.ai/docs/pricing/chat
+- https://platform.kimi.ai/docs/pricing/batch
+- https://platform.kimi.ai/docs/pricing/limits
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - AI

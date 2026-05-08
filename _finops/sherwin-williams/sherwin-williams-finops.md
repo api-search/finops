@@ -7,70 +7,39 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Contract
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Sherwin-Williams API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Contract / Procurement
+description: FOCUS-aligned FinOps placeholder for Sherwin-Williams supplier and EDI integrations. No public API pricing or billing surface exists; cost is reflected through procurement contracts and goods/services pricing rather than per-call usage charges.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Sherwin-Williams
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: The Sherwin-Williams Company
   ProviderName: Sherwin-Williams
-  PublisherName: Sherwin-Williams
-  ServiceCategory: Developer Tools / API
+  PublisherName: The Sherwin-Williams Company
+  ServiceCategory: B2B Supply Chain
   ServiceName: Sherwin-Williams
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  description: Volume and cost are governed by the supplier or EDI contract rather than per-API meters.
+  name: contractual_integration
+  unit: varies
 name: Sherwin Williams Finops
 provider_name: Sherwin-Williams
 provider_slug: sherwin-williams
-publisher_name: Sherwin-Williams
-service_category: API
+publisher_name: The Sherwin-Williams Company
+service_category: B2B Supply Chain
 slug: sherwin-williams-finops
 source_filename: sherwin-williams-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Sherwin-Williams\nproviderId: sherwin-williams\npublisherName: Sherwin-Williams\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - B2B\n  - Construction\n  - Fortune 500\n  - Paints\n  - Retail\n  - Supply Chain\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Sherwin-Williams API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
-  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Sherwin-Williams\n  ServiceCategory: Developer Tools / API\n  ProviderName: Sherwin-Williams\n  PublisherName: Sherwin-Williams\n  InvoiceIssuerName: Sherwin-Williams\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over\
-  \ the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Sherwin-Williams Supplier API\n    baseURL: ''\n    tags:\n      - B2B\n      - Paint\n      - Retail\n      - Supply Chain\n    serviceName: Sherwin-Williams Supplier API\n    serviceCategory: API\n  - name: Sherwin-Williams EDI Integration\n    baseURL: ''\n    tags:\n      - B2B\n      - EDI\n      - Integration\n      - Supply Chain\n    serviceName: Sherwin-Williams EDI Integration\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n\
-  \  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.sherwin-williams.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Sherwin-Williams\nproviderId: sherwin-williams\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - B2B\n  - Construction\n  - Fortune 500\n  - Paints\n  - Retail\n  - Supply Chain\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps placeholder for Sherwin-Williams supplier and EDI integrations. No\n  public API pricing or billing surface exists; cost is reflected through procurement contracts and\n  goods/services pricing rather than per-call usage charges.\nsources:\n  - https://www.sherwin-williams.com/\nnotes: Sherwin-Williams does not bill API consumption directly. FinOps treatment is negotiated through\n  supplier contracts; no public billing model, FOCUS exports, or usage telemetry is documented.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n \
+  \ dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: The Sherwin-Williams Company\nserviceCategory: B2B Supply Chain\nbillingModel:\n  pricingCategory: Contract / Procurement\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Sherwin-Williams\n  ServiceCategory: B2B Supply Chain\n  ProviderName: Sherwin-Williams\n  PublisherName: The Sherwin-Williams Company\n  InvoiceIssuerName: The Sherwin-Williams Company\n  BillingCurrency: USD\nmeters:\n  - name: contractual_integration\n    description: Volume and cost are governed by the supplier or EDI contract rather than per-API meters.\n    unit: varies\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Spend visibility for Sherwin-Williams integrations comes from procurement and AP systems\n      receiving the underlying goods/services invoices, not from a usage API.\n  - name: Allocation\n\
+  \    description: Allocate cost via the originating purchase order, supplier ID, and cost center captured\n      in the procurement system; tag EDI traffic with the contract reference.\n  - name: Optimization\n    description: Optimization is contractual — renegotiate supplier terms, consolidate EDI partners,\n      and reduce duplicate integration touchpoints rather than tuning request volume.\n  - name: Accountability\n    description: Procurement and supply-chain leaders own Sherwin-Williams supplier spend; integration\n      teams own technical SLA conformance.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/sherwin-williams/refs/heads/main/finops/sherwin-williams-finops.yml
-sources: []
+sources:
+- https://www.sherwin-williams.com/
 specification: FinOps Framework
 tags:
 - B2B
@@ -80,6 +49,5 @@ tags:
 - Retail
 - Supply Chain
 - FinOps
-- Cost Management
 - FOCUS
 ---

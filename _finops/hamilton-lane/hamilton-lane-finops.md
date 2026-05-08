@@ -7,69 +7,57 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Hamilton Lane API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription
+description: 'FOCUS-aligned FinOps placeholder for Hamilton Lane: institutional Cobalt-based subscription model, no public per-API pricing. Meters describe subscription seats and API utilization for allocation across investment teams.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Hamilton Lane
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Hamilton Lane Incorporated
+  PricingCategory: Subscription
+  PricingUnit: seat
   ProviderName: Hamilton Lane
-  PublisherName: Hamilton Lane
-  ServiceCategory: Developer Tools / API
-  ServiceName: Hamilton Lane
+  PublisherName: Hamilton Lane Incorporated
+  ServiceCategory: Private Markets Data / Analytics
+  ServiceName: Hamilton Lane Cobalt
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Cobalt platform user seats
   dimensions:
-  - api
+  - team
+  - role
+  name: cobalt_seats
+  unit: seat-month
+- aggregation: sum
+  description: Hamilton Lane / Cobalt API request volume (allocation meter)
+  dimensions:
   - endpoint
-  - tier
-  - region
-  - consumer
+  - team
+  - dataset
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Hamilton Lane Finops
 provider_name: Hamilton Lane
 provider_slug: hamilton-lane
-publisher_name: Hamilton Lane
-service_category: API
+publisher_name: Hamilton Lane Incorporated
+service_category: Private Markets Data / Analytics Subscription
 slug: hamilton-lane-finops
 source_filename: hamilton-lane-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Hamilton Lane\nproviderId: hamilton-lane\npublisherName: Hamilton Lane\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Private Markets\n  - Asset Management\n  - Investment\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Hamilton Lane API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Hamilton Lane\n  ServiceCategory: Developer Tools / API\n  ProviderName: Hamilton Lane\n  PublisherName: Hamilton Lane\n  InvoiceIssuerName: Hamilton Lane\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Hamilton Lane API\n    baseURL: https://api.hamiltonlane.com\n    tags:\n      - Private Markets\n      - Asset Management\n      - Investment\n    serviceName: Hamilton Lane API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.hamiltonlane.com/en-us
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Hamilton Lane\nproviderId: hamilton-lane\npublisherName: Hamilton Lane Incorporated\nserviceCategory: Private Markets Data / Analytics Subscription\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Private Markets\n  - Asset Management\n  - Investment\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps placeholder for Hamilton Lane: institutional Cobalt-based\n  subscription model, no public per-API pricing. Meters describe subscription seats and API\n  utilization for allocation across investment teams.'\nnotes: No public commercial model is published. Reconcile against the customer's Cobalt\
+  \ subscription\n  agreement.\nsources:\n  - https://www.hamiltonlane.com/en-us\nprinciples:\n  - name: Visibility\n    description: Track Cobalt seat utilization and API call volume via the Cobalt admin console.\n  - name: Allocation\n    description: Allocate Cobalt subscription cost across investment teams (private equity,\n      private credit, real assets, infrastructure) using seat assignments.\n  - name: Optimization\n    description: Right-size seat counts; consolidate API consumption through a central data team\n      rather than per-analyst direct calls.\n  - name: Accountability\n    description: Designate a Cobalt program owner; review seat utilization and renewal terms\n      annually.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n\
+  \      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Hamilton Lane Cobalt\n  ServiceCategory: Private Markets Data / Analytics\n  ProviderName: Hamilton Lane\n  PublisherName: Hamilton Lane Incorporated\n  InvoiceIssuerName: Hamilton Lane Incorporated\n  PricingCategory: Subscription\n  PricingUnit: seat\n  BillingCurrency: USD\n  ChargeCategory:\
+  \ Purchase\nmeters:\n  - name: cobalt_seats\n    description: Cobalt platform user seats\n    unit: seat-month\n    aggregation: max\n    dimensions:\n      - team\n      - role\n  - name: api_requests\n    description: Hamilton Lane / Cobalt API request volume (allocation meter)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint\n      - team\n      - dataset\napis:\n  - name: Hamilton Lane API\n    baseURL: https://api.hamiltonlane.com\n    tags:\n      - Private Markets\n      - Asset Management\n      - Investment\n    serviceName: Hamilton Lane API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Seat\n    metric: billed_cost / cobalt_seats\n    target: TBD\n  - name: Cost per Active Investment Team\n    metric: billed_cost / active_teams\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/hamilton-lane/refs/heads/main/finops/hamilton-lane-finops.yml
-sources: []
+sources:
+- https://www.hamiltonlane.com/en-us
 specification: FinOps Framework
 tags:
 - Private Markets

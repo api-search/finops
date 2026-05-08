@@ -40,76 +40,61 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the AeroDataBox API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription
+description: 'FOCUS-aligned FinOps for AeroDataBox: marketplace-mediated tiered subscription with monthly quota and overage.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: AeroDataBox
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: RapidAPI / api.market
   ProviderName: AeroDataBox
-  PublisherName: AeroDataBox
-  ServiceCategory: Developer Tools / API
+  PublisherName: RapidAPI / api.market
+  ServiceCategory: Aviation Data
   ServiceName: AeroDataBox
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
+  - endpoint_group
   - tier
-  - region
-  - consumer
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+- aggregation: max
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
   - tier
-  name: compute_seconds
-  unit: second
+  name: monthly_quota
+  unit: request
+- aggregation: sum
+  dimensions:
+  - tier
+  name: overage_requests
+  unit: request
+- aggregation: sum
+  dimensions:
+  - tier
+  name: subscription_fees
+  unit: month
 name: Aerodatabox Finops
 provider_name: AeroDataBox
 provider_slug: aerodatabox
-publisher_name: AeroDataBox
-service_category: API
+publisher_name: API Marketplace (RapidAPI / api.market)
+service_category: Aviation Data
 slug: aerodatabox-finops
 source_filename: aerodatabox-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: AeroDataBox\nproviderId: aerodatabox\npublisherName: AeroDataBox\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Aviation\n  - Flights\n  - Aerospace\n  - Flight Data\n  - Airport Data\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the AeroDataBox API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
-  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
-  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: AeroDataBox\n  ServiceCategory: Developer Tools / API\n  ProviderName: AeroDataBox\n  PublisherName: AeroDataBox\n  InvoiceIssuerName: AeroDataBox\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n\
-  \    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: AeroDataBox Flight API\n    baseURL: https://prod.api.market/api/v1/aedbx/aerodatabox\n    tags:\n      - Flights\n      - Flight Status\n      - FIDS\n      - Real-Time\n      - Aviation\n    serviceName: AeroDataBox Flight API\n    serviceCategory: API\n  - name: AeroDataBox Aircraft API\n    baseURL: https://prod.api.market/api/v1/aedbx/aerodatabox\n    tags:\n      - Aircraft\n      - Tail Numbers\n      - Fleet\n      - Airlines\n      - Aviation\n    serviceName: AeroDataBox Aircraft API\n    serviceCategory: API\n  - name: AeroDataBox Airport API\n    baseURL: https://prod.api.market/api/v1/aedbx/aerodatabox\n    tags:\n      - Airports\n      - Runways\n      - Location\
-  \ Search\n      - Aviation\n    serviceName: AeroDataBox Airport API\n    serviceCategory: API\n  - name: AeroDataBox Statistical API\n    baseURL: https://prod.api.market/api/v1/aedbx/aerodatabox\n    tags:\n      - Delays\n      - Statistics\n      - Routes\n      - Historical Data\n      - Aviation\n    serviceName: AeroDataBox Statistical API\n    serviceCategory: API\n  - name: AeroDataBox Flight Alert API\n    baseURL: https://prod.api.market/api/v1/aedbx/aerodatabox\n    tags:\n      - Webhooks\n      - Alerts\n      - Subscriptions\n      - Real-Time\n      - Aviation\n    serviceName: AeroDataBox Flight Alert API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: API Evangelist\n    url: http://apievangelist.com\n    email: info@apievangelist.com\n"
+source_url: https://rapidapi.com/aedbx-aedbx/api/aerodatabox
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: AeroDataBox\nproviderId: aerodatabox\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\nnotes: AeroDataBox is billed via API marketplaces (RapidAPI, api.market). The marketplace is\n  the publisher/invoice issuer; AeroDataBox is the underlying data provider.\ntags:\n  - FinOps\n  - FOCUS\n  - Aviation\n  - Flights\ndescription: 'FOCUS-aligned FinOps for AeroDataBox: marketplace-mediated tiered subscription with\n  monthly quota and overage.'\nsources:\n  - https://rapidapi.com/aedbx-aedbx/api/aerodatabox\n  - https://prod.api.market/api/v1/aedbx/aerodatabox\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: API Marketplace (RapidAPI / api.market)\nserviceCategory:\
+  \ Aviation Data\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: AeroDataBox\n  ServiceCategory: Aviation Data\n  ProviderName: AeroDataBox\n  PublisherName: RapidAPI / api.market\n  InvoiceIssuerName: RapidAPI / api.market\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - endpoint_group\n      - tier\n  - name: monthly_quota\n    unit: request\n    aggregation: max\n    dimensions:\n      - tier\n  - name: overage_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - tier\n  - name: subscription_fees\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\nprinciples:\n  - name: Visibility\n    description: Use the marketplace dashboard (RapidAPI Hub or api.market) to monitor request\n      counts, quota burn-down, and overage\
+  \ exposure.\n  - name: Allocation\n    description: Issue separate API keys per consuming team/product to attribute usage.\n  - name: Optimization\n    description: Cache static lookups (airports, aircraft); right-size tier monthly; drop unused\n      endpoints from polling loops.\n  - name: Accountability\n    description: Assign a tier-renewal owner; review monthly quota utilization and overage spend.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/aerodatabox/refs/heads/main/finops/aerodatabox-finops.yml
-sources: []
+sources:
+- https://rapidapi.com/aedbx-aedbx/api/aerodatabox
+- https://prod.api.market/api/v1/aedbx/aerodatabox
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
 - Aviation
 - Flights
-- Aerospace
-- Flight Data
-- Airport Data
-- FinOps
-- Cost Management
-- FOCUS
 ---

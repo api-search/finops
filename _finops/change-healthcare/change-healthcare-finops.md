@@ -12,70 +12,65 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Change Healthcare API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Credit
+  pricingCategory: Per-Transaction + Subscription (Contract)
+description: 'FOCUS-aligned FinOps framing for Change Healthcare (Optum): per-transaction EDI/clearinghouse fees plus contracted clinical interoperability subscriptions.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Change Healthcare
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Optum, Inc.
   ProviderName: Change Healthcare
-  PublisherName: Change Healthcare
-  ServiceCategory: Developer Tools / API
+  PublisherName: Optum, Inc.
+  ServiceCategory: Healthcare Data Exchange
   ServiceName: Change Healthcare
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - payer
+  - tradingPartner
+  name: eligibility_transactions
+  unit: transaction
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - payer
+  name: claim_status_transactions
+  unit: transaction
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - payer
+  - claimType
+  name: claims_submitted
+  unit: claim
+- aggregation: sum
+  name: era_remittances
+  unit: remittance
+- aggregation: sum
+  name: prior_auth_transactions
+  unit: transaction
+- aggregation: sum
+  name: clinical_api_subscription
+  unit: month
 name: Change Healthcare Finops
 provider_name: Change Healthcare
 provider_slug: change-healthcare
-publisher_name: Change Healthcare
-service_category: API
+publisher_name: Optum, Inc. (UnitedHealth Group)
+service_category: Healthcare / Data Exchange
 slug: change-healthcare-finops
 source_filename: change-healthcare-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Change Healthcare\nproviderId: change-healthcare\npublisherName: Change Healthcare\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Healthcare\n  - Technology\n  - Analytics\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Change Healthcare API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the\
-  \ consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
-  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Change Healthcare\n  ServiceCategory: Developer Tools / API\n  ProviderName: Change Healthcare\n  PublisherName: Change Healthcare\n  InvoiceIssuerName: Change Healthcare\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
-  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Change Healthcare API\n    baseURL: https://api.changehealthcare.com\n    tags:\n      - Healthcare\n      - Technology\n      - Analytics\n    serviceName: Change Healthcare API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.changehealthcare.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Change Healthcare\nproviderId: change-healthcare\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Healthcare\n  - EDI\ndescription: 'FOCUS-aligned FinOps framing for Change Healthcare (Optum): per-transaction EDI/clearinghouse\n  fees plus contracted clinical interoperability subscriptions.'\nnotes: Pricing is contract-based per-transaction; meters reflect typical EDI billing lines.\nsources:\n  - https://www.changehealthcare.com\n  - https://www.optum.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Optum, Inc. (UnitedHealth Group)\nserviceCategory: Healthcare / Data Exchange\nbillingModel:\n  pricingCategory: Per-Transaction\
+  \ + Subscription (Contract)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Change Healthcare\n  ServiceCategory: Healthcare Data Exchange\n  ProviderName: Change Healthcare\n  PublisherName: Optum, Inc.\n  InvoiceIssuerName: Optum, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: eligibility_transactions\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - payer\n      - tradingPartner\n  - name: claim_status_transactions\n    unit: transaction\n    aggregation: sum\n    dimensions:\n      - payer\n  - name: claims_submitted\n    unit: claim\n    aggregation: sum\n    dimensions:\n      - payer\n      - claimType\n  - name: era_remittances\n    unit: remittance\n    aggregation: sum\n  - name: prior_auth_transactions\n    unit: transaction\n    aggregation: sum\n  - name: clinical_api_subscription\n    unit: month\n    aggregation: sum\nprinciples:\n\
+  \  - name: Visibility\n    description: Use Change Healthcare reporting and EDI 999/277 acknowledgements to track transaction\n      volume; reconcile monthly invoices against transaction counts.\n  - name: Allocation\n    description: Allocate by payer, line of business, and trading partner using EDI metadata.\n  - name: Optimization\n    description: Reduce duplicate eligibility checks via caching, batch claims where supported, and audit\n      rejection rates to lower retransmissions.\n  - name: Accountability\n    description: Revenue cycle / clearinghouse manager owns Change Healthcare invoices; review monthly\n      against payer mix and rejection trends.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/change-healthcare/refs/heads/main/finops/change-healthcare-finops.yml
-sources: []
+sources:
+- https://www.changehealthcare.com
+- https://www.optum.com/
 specification: FinOps Framework
 tags:
-- Healthcare
-- Technology
-- Analytics
 - FinOps
-- Cost Management
 - FOCUS
+- Healthcare
+- EDI
 ---

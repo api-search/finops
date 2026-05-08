@@ -20,83 +20,49 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/spring-security/refs/heads/main/openapi/spring-authorization-server-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Spring Security API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Open Source
+description: Spring Security is open-source self-hosted software with no vendor invoice. FinOps applies only to the cloud infrastructure that hosts the Authorization Server / resource servers and to optional VMware Tanzu Spring / Broadcom commercial support contracts.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Spring Security
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Broadcom
   ProviderName: Spring Security
-  PublisherName: Spring Security
-  ServiceCategory: Developer Tools / API
+  PublisherName: Broadcom
+  ServiceCategory: Identity
   ServiceName: Spring Security
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - contract_tier
+  - cores
+  name: spring_runtime_subscription
+  unit: month
 name: Spring Security Finops
 provider_name: Spring Security
 provider_slug: spring-security
-publisher_name: Spring Security
-service_category: API
+publisher_name: Broadcom (VMware Tanzu)
+service_category: Identity
 slug: spring-security-finops
 source_filename: spring-security-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Spring Security\nproviderId: spring-security\npublisherName: Spring Security\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Authentication\n  - Authorization\n  - Java\n  - JWT\n  - OAuth2\n  - OpenID Connect\n  - SAML\n  - Security\n  - Spring Framework\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Spring Security API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n\
-  \  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and\
-  \ SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Spring Security\n  ServiceCategory: Developer Tools / API\n  ProviderName: Spring Security\n  PublisherName: Spring Security\n  InvoiceIssuerName: Spring Security\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n\
-  \    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Spring Security OAuth2 API\n    baseURL: http://localhost:8080\n    tags:\n      - Authorization Server\n      - JWT\n      - OAuth2\n      - OpenID Connect\n      - Token\n    serviceName: Spring Security OAuth2 API\n    serviceCategory: API\n  - name: Spring Authorization Server API\n    baseURL: http://localhost:9000\n    tags:\n      - Authorization Server\n      - OAuth2\n      - OpenID Connect\n      - Token Issuance\n    serviceName: Spring Authorization Server API\n    serviceCategory: API\n  - name: Spring Security Core\n    baseURL: https://docs.spring.io/spring-security/site/docs/current/api/\n\
-  \    tags:\n      - Authentication\n      - Authorization\n      - Core\n      - Method Security\n    serviceName: Spring Security Core\n    serviceCategory: API\n  - name: Spring Security SAML2\n    baseURL: ''\n    tags:\n      - Enterprise SSO\n      - Federation\n      - SAML\n      - Single Logout\n    serviceName: Spring Security SAML2\n    serviceCategory: API\n  - name: Spring Security LDAP\n    baseURL: ''\n    tags:\n      - Authentication\n      - Directory Services\n      - Enterprise\n      - LDAP\n    serviceName: Spring Security LDAP\n    serviceCategory: API\n  - name: Spring Security WebFlux\n    baseURL: ''\n    tags:\n      - Non-Blocking\n      - Reactive\n      - Security\n      - WebFlux\n    serviceName: Spring Security WebFlux\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\n\
-  maintainers:\n  - FN: Spring Security Team\n    email: spring-security@vmware.com\n    url: https://spring.io/team\n"
+source_url: https://spring.io/projects/spring-security
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Spring Security\nproviderId: spring-security\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Authentication\n  - Authorization\n  - Java\n  - OAuth2\n  - Spring Framework\n  - FinOps\n  - FOCUS\ndescription: Spring Security is open-source self-hosted software with no vendor invoice. FinOps applies only to the cloud infrastructure that hosts the Authorization Server / resource servers and to optional VMware Tanzu Spring / Broadcom commercial support contracts.\nsources:\n  - https://spring.io/projects/spring-security\n  - https://tanzu.vmware.com/spring-runtime\nnotes: No vendor usage meter. Real cost is the compute that runs the Authorization Server plus any Tanzu Spring support contract.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
+  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Broadcom (VMware Tanzu)\nserviceCategory: Identity\nbillingModel:\n  pricingCategory: Open Source\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Spring Security\n  ServiceCategory: Identity\n  ProviderName: Spring Security\n  PublisherName: Broadcom\n  InvoiceIssuerName: Broadcom\n  BillingCurrency: USD\nmeters:\n  - name: spring_runtime_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - contract_tier\n      - cores\nprinciples:\n  - name: Visibility\n    description: Spring Security emits Micrometer counters for authentication outcomes (success, failure, lockout) and OAuth2 token issuance; operators ship these to their SIEM and observability stack. Vendor cost is visible only on the Tanzu Spring invoice.\n  - name: Allocation\n    description: Authorization Server hosting cost is typically a shared\
+  \ platform-org line. Allocate downstream resource-server compute by the consuming product team via cloud provider tags.\n  - name: Optimization\n    description: Cost levers are infrastructure-side - cache JWKs, prefer JWT over opaque token introspection to avoid a round-trip per request, and right-size the token endpoint pods against measured login RPS.\n  - name: Accountability\n    description: Platform/security team owns the Authorization Server budget and any Tanzu Spring support contract; product teams own the cost of their resource servers.\nmaintainers:\n  - name: VMware Tanzu / Broadcom\n    url: https://tanzu.vmware.com/spring-runtime\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/spring-security/refs/heads/main/finops/spring-security-finops.yml
-sources: []
+sources:
+- https://spring.io/projects/spring-security
+- https://tanzu.vmware.com/spring-runtime
 specification: FinOps Framework
 tags:
 - Authentication
 - Authorization
 - Java
-- JWT
 - OAuth2
-- OpenID Connect
-- SAML
-- Security
 - Spring Framework
 - FinOps
-- Cost Management
 - FOCUS
 ---

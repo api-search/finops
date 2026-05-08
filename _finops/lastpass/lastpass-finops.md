@@ -7,70 +7,60 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Monthly or Annual
   chargeCategories:
-  - Usage
   - Purchase
+  - Adjustment
   - Tax
   - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the LastPass API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription (Per User) + Optional Add-Ons
+description: FOCUS-aligned FinOps for LastPass. Cost is dominated by per-user-per-month subscriptions (Teams, Business, MFA, Identity bundles); the Enterprise API and SCIM endpoint themselves are not metered separately. Personal plans bill annually with a small monthly equivalent. Add-ons stack as separate per-user lines (MFA, advanced reporting). Optimization levers are seat hygiene (offboarding inactive users) and bundle selection (Identity vs. Business + MFA add-on).
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: LastPass
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: LastPass US LP
   ProviderName: LastPass
-  PublisherName: LastPass
-  ServiceCategory: Developer Tools / API
+  PublisherName: LastPass US LP
+  ServiceCategory: Identity and Access Management
   ServiceName: LastPass
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Recurring per-user subscription for the active business tier (Teams, Business, Identity bundle) or the personal subscription line (Premium, Families).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - plan_tier
+  - billing_cycle
+  name: subscription_fee_per_user
+  unit: user_month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Per-user-per-month subscription for the MFA add-on layered on top of Teams or Business.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  - plan_tier
+  name: mfa_addon_fee
+  unit: user_month
+- aggregation: max
+  description: Encrypted file storage consumed across vaults; bundled per-user GB included by tier.
+  dimensions:
+  - organization_id
+  name: storage
   unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Lastpass Finops
 provider_name: LastPass
 provider_slug: lastpass
-publisher_name: LastPass
-service_category: API
+publisher_name: LastPass US LP
+service_category: Identity and Access Management
 slug: lastpass-finops
 source_filename: lastpass-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: LastPass\nproviderId: lastpass\npublisherName: LastPass\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Security\n  - Password Manager\n  - Vault\n  - Identity\n  - Enterprise\n  - SSO\n  - MFA\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the LastPass API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
-  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: LastPass\n  ServiceCategory: Developer Tools / API\n  ProviderName: LastPass\n  PublisherName: LastPass\n  InvoiceIssuerName: LastPass\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: LastPass Enterprise API\n    baseURL: https://lastpass.com/enterpriseapi.php\n    tags:\n      - Enterprise API\n      - Provisioning\n      - Reporting\n    serviceName: LastPass Enterprise API\n    serviceCategory: API\n  - name: LastPass Provisioning API\n    baseURL: https://lastpass.com/enterpriseapi.php\n    tags:\n      - Provisioning\n      - Directory Sync\n    serviceName: LastPass Provisioning API\n    serviceCategory: API\n  - name: LastPass SCIM API\n    baseURL: https://scim.lastpass.com/scim/v2\n    tags:\n      - SCIM\n      - Provisioning\n      - Identity\n    serviceName: LastPass SCIM API\n    serviceCategory: API\n  - name: LastPass SAML / SSO Endpoint\n    baseURL: https://identity.lastpass.com/saml\n\
-  \    tags:\n      - SAML\n      - SSO\n      - Identity\n    serviceName: LastPass SAML / SSO Endpoint\n    serviceCategory: API\n  - name: LastPass MFA SDK\n    baseURL: https://identity.lastpass.com\n    tags:\n      - MFA\n      - SDK\n      - Authentication\n    serviceName: LastPass MFA SDK\n    serviceCategory: API\n  - name: LastPass Reporting Commands\n    baseURL: https://lastpass.com/enterpriseapi.php\n    tags:\n      - Reporting\n      - Audit Logs\n      - Compliance\n    serviceName: LastPass Reporting Commands\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.lastpass.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: LastPass\nproviderId: lastpass\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n  - Security\n  - Password Manager\n  - Vault\n  - Identity\n  - Enterprise\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps for LastPass. Cost is dominated by per-user-per-month\n  subscriptions (Teams, Business, MFA, Identity bundles); the Enterprise API and SCIM\n  endpoint themselves are not metered separately. Personal plans bill annually with a\n  small monthly equivalent. Add-ons stack as separate per-user lines (MFA, advanced\n  reporting). Optimization levers are seat hygiene (offboarding inactive users) and\n  bundle selection (Identity vs. Business + MFA add-on).\nsources:\n  - https://www.lastpass.com/pricing\n  - https://support.lastpass.com/help/use-the-lastpass-enterprise-api\nalignedWith:\n  framework: FinOps Foundation Framework\n\
+  \  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: LastPass US LP\nserviceCategory: Identity and Access Management\nbillingModel:\n  pricingCategory: Subscription (Per User) + Optional Add-Ons\n  billingFrequency: Monthly or Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\n    - Tax\n    - Credit\nfocusColumns:\n  ServiceName: LastPass\n  ServiceCategory: Identity and Access Management\n  ProviderName: LastPass\n  PublisherName: LastPass US LP\n  InvoiceIssuerName: LastPass US LP\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: subscription_fee_per_user\n    description: >-\n      Recurring per-user subscription for the active business tier (Teams, Business,\n      Identity bundle) or the personal subscription line (Premium, Families).\n    unit: user_month\n    aggregation: sum\n    dimensions:\n  \
+  \    - plan_tier\n      - billing_cycle\n  - name: mfa_addon_fee\n    description: >-\n      Per-user-per-month subscription for the MFA add-on layered on top of Teams or\n      Business.\n    unit: user_month\n    aggregation: sum\n    dimensions:\n      - plan_tier\n  - name: storage\n    description: >-\n      Encrypted file storage consumed across vaults; bundled per-user GB included by\n      tier.\n    unit: GB\n    aggregation: max\n    dimensions:\n      - organization_id\nprinciples:\n  - name: Visibility\n    description: >-\n      Use the Enterprise API getuserdata, getsfdata, and getreport commands to track\n      user counts and login activity, and feed those into seat reconciliation. Map\n      directory connector / SCIM events to expected on/offboarding cadence.\n  - name: Allocation\n    description: >-\n      Map LastPass groups to business units. Use SCIM groups to enforce the mapping\n      so the per-user bill stays tied to HR truth.\n  - name: Optimization\n    description:\
+  \ >-\n      Disable rather than delete inactive users to free seats while keeping audit\n      history. Compare the Identity bundle price against (Business + MFA add-on) to\n      pick the cheaper assembly. Avoid double-paying when an external IdP already\n      provides MFA.\n  - name: Accountability\n    description: >-\n      Assign an IT or security owner per LastPass company. Review seat utilisation\n      monthly via getuserdata exports and renegotiate add-on inclusion at renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/lastpass/refs/heads/main/finops/lastpass-finops.yml
-sources: []
+sources:
+- https://www.lastpass.com/pricing
+- https://support.lastpass.com/help/use-the-lastpass-enterprise-api
 specification: FinOps Framework
 tags:
 - Security
@@ -78,9 +68,6 @@ tags:
 - Vault
 - Identity
 - Enterprise
-- SSO
-- MFA
 - FinOps
-- Cost Management
 - FOCUS
 ---

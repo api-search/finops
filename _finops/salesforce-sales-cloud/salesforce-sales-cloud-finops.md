@@ -74,81 +74,76 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/salesforce-sales-cloud/refs/heads/main/openapi/salesforce-sales-cloud-apex-rest-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Salesforce Sales Cloud API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Credit
+  pricingCategory: Tiered Subscription
+description: FOCUS-aligned FinOps artifact for Salesforce Sales Cloud. Pricing is gated; meters and principles describe the expected billing surface. Salesforce publishes per-edition pricing on its product pages, but those pages are not retrievable via automated fetch (HTTP 403). All editions are sold via Salesforce Sales; API access is included with the underlying CRM license rather than priced as a discrete API SKU. Treat this artifact as a contact-sales placeholder until pricing pages can be reconciled manually.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Salesforce Sales Cloud
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Salesforce, Inc.
   ProviderName: Salesforce Sales Cloud
-  PublisherName: Salesforce Sales Cloud
-  ServiceCategory: Developer Tools / API
+  PublisherName: Salesforce, Inc.
+  ServiceCategory: CRM
   ServiceName: Salesforce Sales Cloud
+  ServiceSubcategory: Sales Force Automation
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - edition
+  - license_type
+  - org
+  name: user_subscription
+  unit: seat-month
+- aggregation: sum
+  dimensions:
+  - edition
+  - org
+  - named_credential
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+- aggregation: max
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  - org
+  - object
+  name: data_storage
+  unit: GB-month
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - org
+  name: file_storage
+  unit: GB-month
 name: Salesforce Sales Cloud Finops
 provider_name: Salesforce Sales Cloud
 provider_slug: salesforce-sales-cloud
-publisher_name: Salesforce Sales Cloud
-service_category: API
+publisher_name: Salesforce, Inc.
+service_category: CRM
 slug: salesforce-sales-cloud-finops
 source_filename: salesforce-sales-cloud-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Salesforce Sales Cloud\nproviderId: salesforce-sales-cloud\npublisherName: Salesforce Sales Cloud\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud\n  - CRM\n  - Customer Management\n  - Enterprise\n  - Sales\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Salesforce Sales Cloud API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
-  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Salesforce Sales Cloud\n  ServiceCategory: Developer Tools / API\n  ProviderName: Salesforce Sales Cloud\n  PublisherName: Salesforce Sales Cloud\n  InvoiceIssuerName: Salesforce Sales Cloud\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
-  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Salesforce REST API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0\n    tags:\n      - CRUD\n      - Data\n      - Objects\n      - Records\n      - REST\n    serviceName: Salesforce REST API\n    serviceCategory: API\n  - name: Salesforce SOAP API\n    baseURL: https://yourInstance.salesforce.com/services/Soap/u/59.0\n    tags:\n      - Enterprise\n      - Integration\n      - SOAP\n      - XML\n    serviceName: Salesforce SOAP API\n    serviceCategory: API\n  - name: Bulk API 2.0\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/jobs/ingest\n    tags:\n      - Async\n  \
-  \    - Bulk\n      - Data Loading\n      - ETL\n    serviceName: Bulk API 2.0\n    serviceCategory: API\n  - name: Metadata API\n    baseURL: https://yourInstance.salesforce.com/services/Soap/m/59.0\n    tags:\n      - Configuration\n      - Customization\n      - Deployment\n      - Metadata\n    serviceName: Metadata API\n    serviceCategory: API\n  - name: Streaming API\n    baseURL: https://yourInstance.salesforce.com/cometd/59.0\n    tags:\n      - Events\n      - Push Notifications\n      - Real-Time\n      - Streaming\n    serviceName: Streaming API\n    serviceCategory: API\n  - name: Platform Events API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/sobjects\n    tags:\n      - Events\n      - Integration\n      - Messaging\n      - Pub/Sub\n    serviceName: Platform Events API\n    serviceCategory: API\n  - name: Analytics REST API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/analytics\n    tags:\n      - Analytics\n      - Business\
-  \ Intelligence\n      - Dashboards\n      - Reports\n    serviceName: Analytics REST API\n    serviceCategory: API\n  - name: Salesforce Composite API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/composite\n    tags:\n      - Batch\n      - Composite\n      - Integration\n      - Performance\n    serviceName: Salesforce Composite API\n    serviceCategory: API\n  - name: Salesforce GraphQL API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/graphql\n    tags:\n      - Data Access\n      - GraphQL\n      - Query\n      - Schema\n    serviceName: Salesforce GraphQL API\n    serviceCategory: API\n  - name: Salesforce Tooling API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/tooling\n    tags:\n      - Apex\n      - Development\n      - Metadata\n      - Tooling\n    serviceName: Salesforce Tooling API\n    serviceCategory: API\n  - name: Salesforce Pub/Sub API\n    baseURL: https://yourInstance.salesforce.com\n    tags:\n\
-  \      - Events\n      - gRPC\n      - Pub/Sub\n      - Real-Time\n    serviceName: Salesforce Pub/Sub API\n    serviceCategory: API\n  - name: Salesforce Change Data Capture API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0\n    tags:\n      - Change Data Capture\n      - Events\n      - Real-Time\n      - Synchronization\n    serviceName: Salesforce Change Data Capture API\n    serviceCategory: API\n  - name: Salesforce Connect REST API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/connect\n    tags:\n      - Chatter\n      - Collaboration\n      - Connect\n      - Social\n    serviceName: Salesforce Connect REST API\n    serviceCategory: API\n  - name: Salesforce User Interface API\n    baseURL: https://yourInstance.salesforce.com/services/data/v59.0/ui-api\n    tags:\n      - Layouts\n      - Lightning\n      - Records\n      - User Interface\n    serviceName: Salesforce User Interface API\n    serviceCategory: API\n  - name: Salesforce\
-  \ Apex REST API\n    baseURL: https://yourInstance.salesforce.com/services/apexrest\n    tags:\n      - Apex\n      - Custom Endpoints\n      - Development\n      - REST\n    serviceName: Salesforce Apex REST API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers: []\n"
+source_url: https://www.salesforce.com/sales/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Salesforce Sales Cloud\nproviderId: salesforce-sales-cloud\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n- CRM\n- Pipeline\n- Sales Automation\n- Sales Cloud\n- Salesforce\n- FinOps\n- FOCUS\ndescription: FOCUS-aligned FinOps artifact for Salesforce Sales Cloud. Pricing is gated; meters and principles\n  describe the expected billing surface. Salesforce publishes per-edition pricing on its product pages,\n  but those pages are not retrievable via automated fetch (HTTP 403). All editions are sold via Salesforce\n  Sales; API access is included with the underlying CRM license rather than priced as a discrete API SKU.\n  Treat this artifact as a contact-sales placeholder until pricing pages can be reconciled manually.\nsources:\n- https://www.salesforce.com/sales/pricing/\n- https://focus.finops.org/focus-specification/v1-3/\n- https://www.finops.org/framework/\n\
+  alignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Salesforce, Inc.\nserviceCategory: CRM\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n  - Purchase\n  - Usage\n  - Tax\n  - Adjustment\n  - Credit\nfocusColumns:\n  ServiceName: Salesforce Sales Cloud\n  ServiceCategory: CRM\n  ServiceSubcategory: Sales Force Automation\n  ProviderName: Salesforce Sales Cloud\n  PublisherName: Salesforce, Inc.\n  InvoiceIssuerName: Salesforce, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n- name: user_subscription\n  unit: seat-month\n  aggregation: sum\n  dimensions:\n  - edition\n  - license_type\n  - org\n- name: api_requests\n  unit: request\n  aggregation: sum\n  dimensions:\n  - edition\n  - org\n  - named_credential\n\
+  - name: data_storage\n  unit: GB-month\n  aggregation: max\n  dimensions:\n  - org\n  - object\n- name: file_storage\n  unit: GB-month\n  aggregation: max\n  dimensions:\n  - org\nprinciples:\n- name: Visibility\n  description: Monitor Setup > System Overview for licensed users, API requests over the trailing 24 hours,\n    and data/file storage. Use the Event Monitoring (Shield) API for per-user request telemetry where\n    licensed.\n- name: Allocation\n  description: Tag each consuming integration with a Connected App / Named Credential and attribute API\n    consumption by Connected App in Event Monitoring.\n- name: Optimization\n  description: Reduce API consumption by using Composite, SOQL Query, and Bulk API 2.0 instead of per-record\n    REST calls; right-size editions at renewal; archive to Big Objects to reduce data-storage overage.\n- name: Accountability\n  description: CRM platform owner is accountable for per-org consumption and renewal terms; integration\n    owners are\
+  \ accountable for staying within the org-wide 24-hour API quota.\nnotes: Salesforce publishes per-edition pricing on its product pages, but those pages are not retrievable\n  via automated fetch (HTTP 403). All editions are sold via Salesforce Sales; API access is included with\n  the underlying CRM license rather than priced as a discrete API SKU. Treat this artifact as a contact-sales\n  placeholder until pricing pages can be reconciled manually.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/salesforce-sales-cloud/refs/heads/main/finops/salesforce-sales-cloud-finops.yml
-sources: []
+sources:
+- https://www.salesforce.com/sales/pricing/
+- https://focus.finops.org/focus-specification/v1-3/
+- https://www.finops.org/framework/
 specification: FinOps Framework
 tags:
-- Cloud
 - CRM
-- Customer Management
-- Enterprise
-- Sales
+- Pipeline
+- Sales Automation
+- Sales Cloud
+- Salesforce
 - FinOps
-- Cost Management
 - FOCUS
 ---

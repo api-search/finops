@@ -26,79 +26,84 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/dataiku/refs/heads/main/openapi/dataiku-govern-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Dataiku API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription
+description: 'FOCUS-aligned FinOps for Dataiku: enterprise SaaS / on-prem subscription billed primarily by user (seat) tier and node count, with optional Govern and LLM Mesh add-ons. Cloud Trial and Free Edition are no-charge. Commercial pricing is quoted by sales and is not public.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
+  ChargeCategory: Purchase
   InvoiceIssuerName: Dataiku
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  PricingCategory: Subscription
+  PricingUnit: seat
   ProviderName: Dataiku
   PublisherName: Dataiku
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: AI Platform
   ServiceName: Dataiku
+  ServiceSubcategory: Data Science Platform
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  description: Active named-user seats by edition (Discover, Business, Enterprise). Primary billable line.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  - edition
+  - role
+  - tenant
+  name: user_seats
+  unit: seat
+- aggregation: max
+  description: DSS design / automation / API nodes provisioned in the deployment.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - node_type
+  - environment
+  name: dss_nodes
+  unit: node
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Real-time scoring compute consumed by API Node services.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - service
+  - environment
+  name: api_node_compute
+  unit: instance-hour
+- aggregation: max
+  description: Dataiku Govern add-on subscription.
+  dimensions:
+  - tenant
+  name: govern_addon
+  unit: month
+- aggregation: sum
+  description: LLM token consumption routed through advanced LLM Mesh (passthrough to upstream providers; LLM Mesh itself is a feature-add).
+  dimensions:
+  - model
+  - upstream_provider
+  name: llm_mesh_tokens
+  unit: token
 name: Dataiku Finops
 provider_name: Dataiku
 provider_slug: dataiku
 publisher_name: Dataiku
-service_category: API
+service_category: AI Platform
 slug: dataiku-finops
 source_filename: dataiku-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Dataiku\nproviderId: dataiku\npublisherName: Dataiku\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Artificial Intelligence\n  - Data Platform\n  - Data Science\n  - Machine Learning\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Dataiku API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Dataiku\n  ServiceCategory: Developer Tools / API\n  ProviderName: Dataiku\n  PublisherName: Dataiku\n  InvoiceIssuerName: Dataiku\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Dataiku Public API\n    baseURL: https://dss.example.com/public/api\n    tags:\n      - Data Science\n      - Datasets\n      - Projects\n      - Workflows\n    serviceName: Dataiku Public API\n    serviceCategory: API\n  - name: Dataiku Python API\n    baseURL: https://pypi.org/project/dataiku-api-client/\n    tags:\n      - Client Library\n      - Python\n      - Sdk\n    serviceName: Dataiku Python API\n    serviceCategory: API\n  - name: Dataiku Internal API\n    baseURL: ''\n    tags:\n      - Internal\n      - Plugins\n      - Recipes\n    serviceName: Dataiku Internal API\n    serviceCategory: API\n  - name: Dataiku R API\n    baseURL: ''\n    tags:\n      - Client Library\n      - R Language\n\
-  \      - Sdk\n    serviceName: Dataiku R API\n    serviceCategory: API\n  - name: Dataiku JavaScript API\n    baseURL: ''\n    tags:\n      - Javascript\n      - Visualization\n      - Webapps\n    serviceName: Dataiku JavaScript API\n    serviceCategory: API\n  - name: Dataiku Scala API\n    baseURL: ''\n    tags:\n      - Big Data\n      - Scala\n      - Spark\n    serviceName: Dataiku Scala API\n    serviceCategory: API\n  - name: Dataiku API Node Administration API\n    baseURL: ''\n    tags:\n      - Api Node\n      - Deployment\n      - Model Serving\n      - Real-Time\n    serviceName: Dataiku API Node Administration API\n    serviceCategory: API\n  - name: Dataiku Govern API\n    baseURL: ''\n    tags:\n      - Ai Governance\n      - Blueprints\n      - Compliance\n      - Governance\n    serviceName: Dataiku Govern API\n    serviceCategory: API\n  - name: Dataiku Plugin API\n    baseURL: ''\n    tags:\n      - Custom Components\n      - Extensions\n      - Plugins\n    serviceName:\
-  \ Dataiku Plugin API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://www.dataiku.com\n"
+source_url: https://www.dataiku.com/product/get-started/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Dataiku\nproviderId: dataiku\npublisherName: Dataiku\nserviceCategory: AI Platform\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Analytics\n  - Artificial Intelligence\n  - Data Platform\n  - Machine Learning\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Dataiku: enterprise SaaS / on-prem subscription billed\n  primarily by user (seat) tier and node count, with optional Govern and LLM Mesh add-ons. Cloud\n  Trial and Free Edition are no-charge. Commercial pricing is quoted by sales and is not public.'\nsources:\n  - https://www.dataiku.com/product/get-started/\n  - https://www.dataiku.com\nnotes: No\
+  \ public commercial pricing. Meters reflect the typical Dataiku billing shape (seats,\n  nodes, compute) but dollar values are contract-specific.\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\nfocusColumns:\n  ServiceName: Dataiku\n  ServiceCategory: AI Platform\n  ServiceSubcategory: Data Science Platform\n  ProviderName: Dataiku\n  PublisherName: Dataiku\n  InvoiceIssuerName: Dataiku\n  PricingCategory: Subscription\n  PricingUnit: seat\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: user_seats\n    description: Active named-user seats by edition (Discover, Business, Enterprise). Primary\n      billable line.\n    unit: seat\n    aggregation: max\n    dimensions:\n      - edition\n      - role\n      - tenant\n  - name: dss_nodes\n    description: DSS design / automation / API nodes provisioned in the deployment.\n    unit: node\n    aggregation:\
+  \ max\n    dimensions:\n      - node_type\n      - environment\n  - name: api_node_compute\n    description: Real-time scoring compute consumed by API Node services.\n    unit: instance-hour\n    aggregation: sum\n    dimensions:\n      - service\n      - environment\n  - name: govern_addon\n    description: Dataiku Govern add-on subscription.\n    unit: month\n    aggregation: max\n    dimensions:\n      - tenant\n  - name: llm_mesh_tokens\n    description: LLM token consumption routed through advanced LLM Mesh (passthrough to upstream\n      providers; LLM Mesh itself is a feature-add).\n    unit: token\n    aggregation: sum\n    dimensions:\n      - model\n      - upstream_provider\nprinciples:\n  - name: Visibility\n    description: Use the DSS administration UI for active-user counts, node inventory, and project\n      activity. Reconcile against the Dataiku invoice quarterly. For LLM Mesh, attribute upstream\n      provider charges back to the calling project.\n  - name: Allocation\n\
+  \    description: Use Dataiku project ownership and group membership to attribute seats and node\n      hours back to consuming teams. Tag API Node services with environment and team.\n  - name: Optimization\n    description: Reclaim inactive seats during renewal, right-size design vs automation node\n      counts, schedule API Node downscaling for low-traffic windows, and prefer batch scoring for\n      non-real-time workloads.\n  - name: Accountability\n    description: Designate a Dataiku platform owner who reviews seat utilization, node sprawl, and\n      LLM Mesh spend monthly; align renewals with team-level ROI evidence.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://www.dataiku.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/dataiku/refs/heads/main/finops/dataiku-finops.yml
-sources: []
+sources:
+- https://www.dataiku.com/product/get-started/
+- https://www.dataiku.com
 specification: FinOps Framework
 tags:
 - Analytics
 - Artificial Intelligence
 - Data Platform
-- Data Science
 - Machine Learning
 - FinOps
-- Cost Management
 - FOCUS
 ---

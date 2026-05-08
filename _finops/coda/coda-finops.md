@@ -94,69 +94,44 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Coda API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription (Per Seat)
+description: FOCUS-aligned FinOps profile for Coda. Coda bills primarily on a per-Doc-Maker monthly subscription basis. Editors, viewers, and the public API are free across all tiers. There is no metered API surcharge; costs scale with the count of Doc Makers and selected plan tier.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Coda
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Coda Project, Inc.
   ProviderName: Coda
-  PublisherName: Coda
-  ServiceCategory: Developer Tools / API
+  PublisherName: Coda Project, Inc.
+  ServiceCategory: Productivity
   ServiceName: Coda
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Monthly subscription per active Doc Maker. Pro $12/Maker, Team $36/Maker, Enterprise contract.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - workspace
+  - plan
+  name: doc_maker_seats
+  unit: seat
 name: Coda Finops
 provider_name: Coda
 provider_slug: coda
-publisher_name: Coda
-service_category: API
+publisher_name: Coda Project, Inc.
+service_category: Productivity
 slug: coda-finops
 source_filename: coda-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Coda\nproviderId: coda\npublisherName: Coda\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Productivity\n  - Docs\n  - No-Code\n  - Collaboration\n  - Database\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Coda API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Coda\n  ServiceCategory: Developer Tools / API\n  ProviderName: Coda\n  PublisherName: Coda\n  InvoiceIssuerName: Coda\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
-  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Coda Docs API\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Docs\n      - Documents\n    serviceName: Coda Docs API\n    serviceCategory: API\n  - name: Coda Folders API\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Folders\n      - Workspaces\n    serviceName: Coda Folders API\n    serviceCategory: API\n  - name: Coda Pages API\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Pages\n      - Content\n    serviceName: Coda Pages API\n    serviceCategory: API\n  - name: Coda Tables API\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Tables\n      - Database\n    serviceName: Coda Tables API\n    serviceCategory: API\n  - name: Coda Columns API\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Columns\n\
-  \      - Schema\n    serviceName: Coda Columns API\n    serviceCategory: API\n  - name: Coda Rows API\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Rows\n      - Records\n      - CRUD\n    serviceName: Coda Rows API\n    serviceCategory: API\n  - name: Coda Formulas API\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Formulas\n      - Compute\n    serviceName: Coda Formulas API\n    serviceCategory: API\n  - name: Coda Controls API\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Controls\n      - UI\n    serviceName: Coda Controls API\n    serviceCategory: API\n  - name: Coda Automations API\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Automations\n      - Webhooks\n      - Triggers\n    serviceName: Coda Automations API\n    serviceCategory: API\n  - name: Coda Permissions API\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Permissions\n      - Sharing\n      - ACL\n    serviceName: Coda Permissions API\n    serviceCategory: API\n\
-  \  - name: Coda Publishing API\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Publishing\n      - Public Docs\n    serviceName: Coda Publishing API\n    serviceCategory: API\n  - name: Coda Account API\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Account\n      - User\n    serviceName: Coda Account API\n    serviceCategory: API\n  - name: Coda Analytics API\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Analytics\n      - Usage\n    serviceName: Coda Analytics API\n    serviceCategory: API\n  - name: Coda Packs SDK\n    baseURL: https://coda.io/apis/v1\n    tags:\n      - Packs\n      - Extensions\n      - SDK\n    serviceName: Coda Packs SDK\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://coda.io/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Coda\nproviderId: coda\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- Productivity\n- Docs\n- No-Code\n- Collaboration\n- Database\n- FinOps\n- Cost Management\n- FOCUS\ndescription: FOCUS-aligned FinOps profile for Coda. Coda bills primarily on a per-Doc-Maker\n  monthly subscription basis. Editors, viewers, and the public API are free across all\n  tiers. There is no metered API surcharge; costs scale with the count of Doc Makers and\n  selected plan tier.\nsources:\n- https://coda.io/pricing\n- https://coda.io/developers/apis/v1\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Coda Project, Inc.\n\
+  serviceCategory: Productivity\nbillingModel:\n  pricingCategory: Subscription (Per Seat)\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: Coda\n  ServiceCategory: Productivity\n  ProviderName: Coda\n  PublisherName: Coda Project, Inc.\n  InvoiceIssuerName: Coda Project, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n- name: doc_maker_seats\n  description: Monthly subscription per active Doc Maker. Pro $12/Maker, Team $36/Maker,\n    Enterprise contract.\n  unit: seat\n  aggregation: sum\n  dimensions:\n  - workspace\n  - plan\nprinciples:\n- name: Visibility\n  description: Use Coda workspace billing reports to see active Doc Makers and right-size\n    seat counts.\n- name: Allocation\n  description: Allocate seats to teams/cost centers based on Doc Maker membership; editors\n    and viewers are free and need no allocation.\n- name: Optimization\n  description: Encourage editor/viewer\
+  \ usage where doc-creation is not needed; consolidate\n    inactive Doc Makers; pick the lowest tier that meets feature needs.\n- name: Accountability\n  description: Assign each workspace to a budget owner; review monthly Doc Maker counts and\n    plan tier alignment.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/coda/refs/heads/main/finops/coda-finops.yml
-sources: []
+sources:
+- https://coda.io/pricing
+- https://coda.io/developers/apis/v1
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Productivity

@@ -14,78 +14,77 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/mulesoft/refs/heads/main/openapi/mulesoft-anypoint-platform-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the MuleSoft API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Tax
+  pricingCategory: Capacity-Based Subscription + Add-Ons
+description: 'FOCUS-aligned FinOps for MuleSoft Anypoint Platform: capacity-based subscription billing measured in Mule Flow / Mule Message capacity (vCores), with a layered support tier (Gold / Platinum / Titanium) and optional add-on modules. Invoiced by Salesforce Inc. as the publisher; consumption observability comes from the Anypoint Usage Reports.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: MuleSoft
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Salesforce, Inc.
   ProviderName: MuleSoft
-  PublisherName: MuleSoft
-  ServiceCategory: Developer Tools / API
-  ServiceName: MuleSoft
+  PublisherName: Salesforce, Inc.
+  ServiceCategory: Integration Platform / API Management
+  ServiceName: MuleSoft Anypoint Platform
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
+  dimensions:
+  - environment
+  - region
+  - runtime
+  name: vcore_capacity
+  unit: vCore
+- aggregation: max
   dimensions:
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - environment
+  name: mule_flows
+  unit: flow
+- aggregation: sum
+  dimensions:
+  - api
+  - environment
+  - runtime
+  name: mule_messages
+  unit: message
+- aggregation: sum
+  dimensions:
+  - api
+  - environment
+  - client_application
+  name: api_calls
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+- aggregation: max
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - addon
+  name: addon_seats
+  unit: month
 name: Mulesoft Finops
 provider_name: MuleSoft
 provider_slug: mulesoft
-publisher_name: MuleSoft
-service_category: API
+publisher_name: Salesforce, Inc.
+service_category: Integration Platform / API Management
 slug: mulesoft-finops
 source_filename: mulesoft-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: MuleSoft\nproviderId: mulesoft\npublisherName: MuleSoft\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Gateway\n  - API Management\n  - Enterprise\n  - Integration\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the MuleSoft API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: MuleSoft\n  ServiceCategory: Developer Tools / API\n  ProviderName: MuleSoft\n  PublisherName: MuleSoft\n  InvoiceIssuerName: MuleSoft\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: MuleSoft Anypoint Platform\n    baseURL: ''\n    tags:\n      - API Gateway\n      - API Management\n      - Enterprise\n    serviceName: MuleSoft Anypoint Platform\n    serviceCategory: API\n  - name: MuleSoft Anypoint Platform Management API\n    baseURL: https://anypoint.mulesoft.com\n    tags:\n      - Administration\n      - API Management\n      - Enterprise\n      - REST\n    serviceName: MuleSoft Anypoint Platform Management API\n    serviceCategory: API\n  - name: MuleSoft Anypoint Exchange API\n    baseURL: https://anypoint.mulesoft.com/exchange/api/v2\n    tags:\n      - API Catalog\n      - Asset Management\n      - Enterprise\n      - Marketplace\n    serviceName: MuleSoft Anypoint Exchange API\n    serviceCategory:\
-  \ API\n  - name: MuleSoft Anypoint Runtime Manager API\n    baseURL: https://anypoint.mulesoft.com/cloudhub/api\n    tags:\n      - CI/CD\n      - CloudHub\n      - Deployment\n      - Runtime Manager\n    serviceName: MuleSoft Anypoint Runtime Manager API\n    serviceCategory: API\n  - name: MuleSoft Anypoint MQ API\n    baseURL: https://anypoint.mulesoft.com/mq/stats/api/v1\n    tags:\n      - Async\n      - Cloud\n      - Messaging\n      - Queue\n    serviceName: MuleSoft Anypoint MQ API\n    serviceCategory: API\n  - name: MuleSoft Anypoint Design Center API\n    baseURL: https://anypoint.mulesoft.com/designcenter/api-designer\n    tags:\n      - API Design\n      - Design Center\n      - OpenAPI\n      - RAML\n    serviceName: MuleSoft Anypoint Design Center API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n\
-  \    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.mulesoft.com/anypoint-pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: MuleSoft\nproviderId: mulesoft\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - API Management\n  - Integration Platform\n  - Anypoint Platform\ndescription: 'FOCUS-aligned FinOps for MuleSoft Anypoint Platform: capacity-based subscription billing\n  measured in Mule Flow / Mule Message capacity (vCores), with a layered support tier (Gold / Platinum\n  / Titanium) and optional add-on modules. Invoiced by Salesforce Inc. as the publisher; consumption observability\n  comes from the Anypoint Usage Reports.'\nsources:\n  - https://www.mulesoft.com/anypoint-pricing\n  - https://www.salesforce.com/mulesoft/anypoint-platform/pricing/\n  - https://docs.mulesoft.com/general/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
+  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Salesforce, Inc.\nserviceCategory: Integration Platform / API Management\nbillingModel:\n  pricingCategory: Capacity-Based Subscription + Add-Ons\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\n    - Tax\nfocusColumns:\n  ServiceName: MuleSoft Anypoint Platform\n  ServiceCategory: Integration Platform / API Management\n  ProviderName: MuleSoft\n  PublisherName: Salesforce, Inc.\n  InvoiceIssuerName: Salesforce, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: vcore_capacity\n    unit: vCore\n    aggregation: max\n    dimensions:\n      - environment\n      - region\n      - runtime\n  - name: mule_flows\n    unit: flow\n    aggregation: max\n    dimensions:\n      - api\n      - environment\n  - name: mule_messages\n    unit: message\n    aggregation: sum\n    dimensions:\n      - api\n      - environment\n      - runtime\n  - name: api_calls\n\
+  \    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - environment\n      - client_application\n  - name: addon_seats\n    unit: month\n    aggregation: max\n    dimensions:\n      - addon\nprinciples:\n  - name: Visibility\n    description: Use Anypoint Usage Reports for vCore / flow / message consumption against the contracted\n      capacity; expose API Manager X-Ratelimit-* headers to client teams for self-service awareness.\n  - name: Allocation\n    description: Tag APIs and Mule applications with consuming line-of-business, environment, and product\n      owner; aggregate Anypoint Usage Reports by these tags for chargeback.\n  - name: Optimization\n    description: Right-size vCore capacity per environment, prune low-throughput APIs, lean on Flex Gateway\n      replicas before adding capacity, and consolidate add-ons (Monitoring, Security, DataGraph) only\n      where the LOB benefits.\n  - name: Accountability\n    description: The platform owner runs renewal\
+  \ sizing against Anypoint Usage Reports; LOB API owners\n      own their per-API throughput SLAs and Rate-Limiting SLA contract definitions; procurement aligns\n      add-on renewals with the master Salesforce contract.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/mulesoft/refs/heads/main/finops/mulesoft-finops.yml
-sources: []
+sources:
+- https://www.mulesoft.com/anypoint-pricing
+- https://www.salesforce.com/mulesoft/anypoint-platform/pricing/
+- https://docs.mulesoft.com/general/pricing
 specification: FinOps Framework
 tags:
-- API Gateway
-- API Management
-- Enterprise
-- Integration
 - FinOps
-- Cost Management
 - FOCUS
+- API Management
+- Integration Platform
+- Anypoint Platform
 ---

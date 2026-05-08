@@ -20,80 +20,46 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/thermo-fisher-scientific/refs/heads/main/openapi/thermo-fisher-nanodrop-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Thermo Fisher Scientific API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription
+description: FOCUS-aligned FinOps scaffold for Thermo Fisher Scientific. Commercial relationships are a mix of consumables catalog purchasing, instrument capex / services, and digital-science software subscriptions; there is no public usage-based price list to map cleanly to FOCUS columns until the engagement is in place.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Thermo Fisher Scientific
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Thermo Fisher Scientific Inc.
   ProviderName: Thermo Fisher Scientific
-  PublisherName: Thermo Fisher Scientific
-  ServiceCategory: Developer Tools / API
+  PublisherName: Thermo Fisher Scientific Inc.
+  ServiceCategory: Life Sciences
   ServiceName: Thermo Fisher Scientific
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - product_line
+  name: digital_science_subscription
+  unit: varies
 name: Thermo Fisher Scientific Finops
 provider_name: Thermo Fisher Scientific
 provider_slug: thermo-fisher-scientific
-publisher_name: Thermo Fisher Scientific
-service_category: API
+publisher_name: Thermo Fisher Scientific Inc.
+service_category: Life Sciences
 slug: thermo-fisher-scientific-finops
 source_filename: thermo-fisher-scientific-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Thermo Fisher Scientific\nproviderId: thermo-fisher-scientific\npublisherName: Thermo Fisher Scientific\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Life Sciences\n  - Laboratory\n  - Scientific Instruments\n  - LIMS\n  - Diagnostics\n  - Biosciences\n  - Fortune 500\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Thermo Fisher Scientific API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams\
-  \ in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n\
-  \      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Thermo Fisher Scientific\n  ServiceCategory: Developer Tools / API\n  ProviderName: Thermo Fisher Scientific\n  PublisherName: Thermo Fisher Scientific\n  InvoiceIssuerName: Thermo Fisher Scientific\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n\
-  \      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Thermo Fisher SampleManager LIMS REST API\n    baseURL: https://{your-server}:{port}/smpwcfrestvgsm\n    tags:\n      - LIMS\n      - Laboratory\n      - Life Sciences\n      - Sample Management\n      - REST API\n    serviceName: Thermo Fisher SampleManager LIMS REST API\n    serviceCategory: API\n  - name: Thermo Fisher NanoDrop Ultra Web API\n    baseURL: https://{nanodrop-instrument-ip}\n    tags:\n      - Spectrophotometry\n      - Laboratory Instruments\n      - Life Sciences\n      - REST API\n      - UV-Vis\n    serviceName: Thermo Fisher\
-  \ NanoDrop Ultra Web API\n    serviceCategory: API\n  - name: Thermo Fisher Connect Platform OData API\n    baseURL: https://api.thermofisher.com\n    tags:\n      - Platform\n      - OData\n      - Laboratory\n      - Life Sciences\n      - Integration\n    serviceName: Thermo Fisher Connect Platform OData API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.thermofisher.com/us/en/home/digital-science.html
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Thermo Fisher Scientific\nproviderId: thermo-fisher-scientific\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Life Sciences\n  - LIMS\ndescription: >-\n  FOCUS-aligned FinOps scaffold for Thermo Fisher Scientific. Commercial relationships are a mix of consumables\n  catalog purchasing, instrument capex / services, and digital-science software subscriptions; there is\n  no public usage-based price list to map cleanly to FOCUS columns until the engagement is in place.\nsources:\n  - https://www.thermofisher.com/us/en/home/digital-science.html\n  - https://www.thermofisher.com/us/en/home/contact-us.html\n  - https://focus.finops.org/focus-specification/v1-3/\nnotes: >-\n  No public usage-based price list. Reconciliation is engagement-specific.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl:\
+  \ https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Thermo Fisher Scientific Inc.\nserviceCategory: Life Sciences\nbillingModel:\n  pricingCategory: Subscription\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Thermo Fisher Scientific\n  ServiceCategory: Life Sciences\n  ProviderName: Thermo Fisher Scientific\n  PublisherName: Thermo Fisher Scientific Inc.\n  InvoiceIssuerName: Thermo Fisher Scientific Inc.\n  BillingCurrency: USD\nmeters:\n  - name: digital_science_subscription\n    unit: varies\n    aggregation: sum\n    dimensions:\n      - product_line\nprinciples:\n  - name: Visibility\n    description: Visibility surfaces are Thermo Fisher invoices, customer portal order history, and any\n      LIMS / digital-science admin consoles included in the engagement.\n  - name: Allocation\n    description:\
+  \ Allocate spend across labs / programs based on Thermo Fisher PO and invoice line items\n      keyed to lab cost centers.\n  - name: Optimization\n    description: Consolidate purchasing under negotiated agreements, retire unused digital-science modules\n      at renewal, and align reagent reorder cadence with consumption.\n  - name: Accountability\n    description: Lab / program owner inside the customer organization owns Thermo Fisher spend and reviews\n      against contractual baseline at renewal.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/thermo-fisher-scientific/refs/heads/main/finops/thermo-fisher-scientific-finops.yml
-sources: []
+sources:
+- https://www.thermofisher.com/us/en/home/digital-science.html
+- https://www.thermofisher.com/us/en/home/contact-us.html
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
-- Life Sciences
-- Laboratory
-- Scientific Instruments
-- LIMS
-- Diagnostics
-- Biosciences
-- Fortune 500
 - FinOps
-- Cost Management
 - FOCUS
+- Life Sciences
+- LIMS
 ---

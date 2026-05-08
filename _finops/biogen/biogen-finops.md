@@ -14,77 +14,54 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/biogen/refs/heads/main/openapi/biogen-developer-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Contract
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Biogen API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Enterprise / Contract Negotiated
+description: 'FOCUS-aligned FinOps placeholder for Biogen: no public developer pricing surface identified, so spend is modeled as B2B partner / commercial contract activity rather than per-call metered usage.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Biogen
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Biogen Inc.
   ProviderName: Biogen
-  PublisherName: Biogen
-  ServiceCategory: Developer Tools / API
+  PublisherName: Biogen Inc.
+  ServiceCategory: Life Sciences
   ServiceName: Biogen
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: count
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - partner_type
   - region
-  - consumer
-  name: api_requests
+  name: partner_contract
+  unit: contract
+- aggregation: sum
+  dimensions:
+  - partner
+  - dataset
+  name: data_access_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Biogen Finops
 provider_name: Biogen
 provider_slug: biogen
-publisher_name: Biogen
-service_category: API
+publisher_name: Biogen Inc.
+service_category: Life Sciences / Pharmaceuticals
 slug: biogen-finops
 source_filename: biogen-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Biogen\nproviderId: biogen\npublisherName: Biogen\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Biotechnology\n  - Healthcare\n  - Life Sciences\n  - Pharmaceuticals\n  - Neurology\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Biogen API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the\
-  \ consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
-  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Biogen\n  ServiceCategory: Developer Tools / API\n  ProviderName: Biogen\n  PublisherName: Biogen\n  InvoiceIssuerName: Biogen\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Biogen Developer API\n    baseURL: https://developer.biogen.com\n    tags:\n      - Biotechnology\n      - Healthcare\n      - Life Sciences\n      - Pharmaceuticals\n    serviceName: Biogen Developer API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.biogen.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Biogen\nproviderId: biogen\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Biotechnology\n  - Healthcare\n  - Life Sciences\ndescription: 'FOCUS-aligned FinOps placeholder for Biogen: no public developer pricing surface\n  identified, so spend is modeled as B2B partner / commercial contract activity rather than per-call\n  metered usage.'\nsources:\n  - https://www.biogen.com\nnotes: No public Biogen API pricing or billing documentation found; reconcile if/when a developer\n  portal launches.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Biogen Inc.\nserviceCategory: Life Sciences / Pharmaceuticals\nbillingModel:\n  pricingCategory:\
+  \ Enterprise / Contract Negotiated\n  billingFrequency: Per-Contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Biogen\n  ServiceCategory: Life Sciences\n  ProviderName: Biogen\n  PublisherName: Biogen Inc.\n  InvoiceIssuerName: Biogen Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: partner_contract\n    unit: contract\n    aggregation: count\n    dimensions:\n      - partner_type\n      - region\n  - name: data_access_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - partner\n      - dataset\nprinciples:\n  - name: Visibility\n    description: No public usage telemetry; rely on contractual reporting clauses with the Biogen\n      partner contact.\n  - name: Allocation\n    description: Attribute partner agreement spend to the consuming therapeutic area / clinical\n      program through the contract repository.\n  - name: Optimization\n    description: Consolidate partner\
+  \ agreements at the enterprise level to lift volume-tier\n      thresholds where Biogen offers them.\n  - name: Accountability\n    description: Assign a contract owner per Biogen agreement; review quarterly against business\n      outcomes for the program being supported.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/biogen/refs/heads/main/finops/biogen-finops.yml
-sources: []
+sources:
+- https://www.biogen.com
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
 - Biotechnology
 - Healthcare
 - Life Sciences
-- Pharmaceuticals
-- Neurology
-- FinOps
-- Cost Management
-- FOCUS
 ---

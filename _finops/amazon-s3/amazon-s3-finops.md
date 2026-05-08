@@ -33,72 +33,89 @@ billing_model:
   - Tax
   - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Amazon S3 API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Pay-As-You-Go
+description: 'FOCUS-aligned FinOps for Amazon S3: per-GB-month storage by class, per-1,000-request charges by verb and class, tiered egress with a 100 GB/month free pool, plus separately metered features (replication, inventory, retrieval, lifecycle transitions, S3 Tables).'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Amazon S3
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Amazon S3
-  PublisherName: Amazon S3
-  ServiceCategory: Developer Tools / API
-  ServiceName: Amazon S3
+  InvoiceIssuerName: Amazon Web Services, Inc.
+  ProviderName: AWS
+  PublisherName: Amazon Web Services, Inc.
+  ServiceCategory: Storage
+  ServiceName: Amazon Simple Storage Service
+  ServiceSubcategory: Object Storage
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: avg
   dimensions:
-  - api
-  - endpoint
-  - tier
   - region
-  - consumer
-  name: api_requests
+  - bucket
+  - storage_class
+  name: storage_gb_month
+  unit: GB-month
+- aggregation: sum
+  dimensions:
+  - region
+  - bucket
+  - operation
+  - storage_class
+  name: requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
   - region
-  - consumer
-  name: data_egress
+  - direction
+  - destination
+  name: data_transfer_gb
   unit: GB
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - source_region
+  - destination_region
+  name: cross_region_replication_gb
+  unit: GB
+- aggregation: sum
+  dimensions:
+  - region
+  - bucket
+  - source_class
+  - destination_class
+  name: lifecycle_transitions
+  unit: object
+- aggregation: sum
+  dimensions:
+  - region
+  - bucket
+  - retrieval_tier
+  name: glacier_retrieval_gb
+  unit: GB
+- aggregation: sum
+  dimensions:
+  - region
+  - bucket
+  name: inventory_objects
+  unit: object
 name: Amazon S3 Finops
 provider_name: Amazon S3
 provider_slug: amazon-s3
-publisher_name: Amazon S3
-service_category: API
+publisher_name: Amazon Web Services, Inc.
+service_category: Storage / Object Storage
 slug: amazon-s3-finops
 source_filename: amazon-s3-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Amazon S3\nproviderId: amazon-s3\npublisherName: Amazon S3\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Archive\n  - AWS\n  - Backup\n  - Cloud Storage\n  - Data Storage\n  - Object Storage\n  - Scalable Storage\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Amazon S3 API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
-  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Amazon S3\n  ServiceCategory: Developer Tools / API\n  ProviderName: Amazon S3\n  PublisherName: Amazon S3\n  InvoiceIssuerName: Amazon S3\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
-  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Amazon S3 REST API\n    baseURL: https://s3.amazonaws.com\n    tags:\n      - AWS\n      - Cloud Storage\n      - Object Storage\n      - Storage\n    serviceName: Amazon S3 REST API\n    serviceCategory: API\n  - name: Amazon S3 Control API\n    baseURL: https://s3-control.amazonaws.com\n    tags:\n      - Access Control\n      - AWS\n      - Batch Operations\n      - Storage\n    serviceName: Amazon S3 Control API\n    serviceCategory: API\n  - name: Amazon S3 Tables API\n    baseURL: https://s3tables.amazonaws.com\n    tags:\n      - Apache Iceberg\n      - AWS\n      - Data Lake\n      - Storage\n      - Tables\n    serviceName: Amazon S3 Tables API\n    serviceCategory:\
-  \ API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
+source_url: https://aws.amazon.com/s3/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Amazon S3\nproviderId: amazon-s3\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - AWS\n  - Object Storage\n  - S3\n  - Cost Management\ndescription: 'FOCUS-aligned FinOps for Amazon S3: per-GB-month storage by class, per-1,000-request charges\n  by verb and class, tiered egress with a 100 GB/month free pool, plus separately metered features (replication,\n  inventory, retrieval, lifecycle transitions, S3 Tables).'\nsources:\n  - https://aws.amazon.com/s3/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Amazon Web Services, Inc.\nserviceCategory: Storage / Object Storage\nbillingModel:\n  pricingCategory: Pay-As-You-Go\n\
+  \  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\nfocusColumns:\n  ServiceName: Amazon Simple Storage Service\n  ServiceCategory: Storage\n  ServiceSubcategory: Object Storage\n  ProviderName: AWS\n  PublisherName: Amazon Web Services, Inc.\n  InvoiceIssuerName: Amazon Web Services, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: storage_gb_month\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - region\n      - bucket\n      - storage_class\n  - name: requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - region\n      - bucket\n      - operation\n      - storage_class\n  - name: data_transfer_gb\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - region\n      - direction\n      - destination\n  - name: cross_region_replication_gb\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - source_region\n      - destination_region\n\
+  \  - name: lifecycle_transitions\n    unit: object\n    aggregation: sum\n    dimensions:\n      - region\n      - bucket\n      - source_class\n      - destination_class\n  - name: glacier_retrieval_gb\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - region\n      - bucket\n      - retrieval_tier\n  - name: inventory_objects\n    unit: object\n    aggregation: sum\n    dimensions:\n      - region\n      - bucket\nprinciples:\n  - name: Visibility\n    description: Use S3 Storage Lens (free metrics, advanced metrics paid), Cost Explorer with the S3 dimension,\n      bucket-level CloudWatch metrics, and CUR / FOCUS export for object-level cost.\n  - name: Allocation\n    description: Tag buckets with Application, Team, Environment; use cost allocation tags so charges flow\n      through FOCUS columns; use S3 Storage Lens groups for grouping prefixes.\n  - name: Optimization\n    description: Use S3 Intelligent-Tiering for unknown access patterns, lifecycle policies to transition\n\
+  \      cold data to Glacier classes, S3 Storage Lens recommendations to find inefficient prefixes, multi-part\n      upload cleanup, and CloudFront in front of public buckets to reduce egress.\n  - name: Accountability\n    description: Set AWS Budgets per bucket tag, configure anomaly detection on data transfer, and review\n      Storage Lens dashboards monthly with bucket owners.\nmaintainers:\n  - name: Kin Lane\n    email: kin@apievangelist.com\n    url: https://apievangelist.com\n  - name: Amazon Web Services\n    email: support@aws.amazon.com\n    url: https://aws.amazon.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/amazon-s3/refs/heads/main/finops/amazon-s3-finops.yml
-sources: []
+sources:
+- https://aws.amazon.com/s3/pricing/
 specification: FinOps Framework
 tags:
-- Archive
-- Backup
-- Cloud Storage
-- Data Storage
-- Object Storage
-- Scalable Storage
 - FinOps
-- Cost Management
 - FOCUS
+- Object Storage
+- S3
+- Cost Management
 ---

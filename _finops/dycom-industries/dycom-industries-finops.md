@@ -7,75 +7,51 @@ aligned_with:
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Dycom Industries API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Usage
+  pricingCategory: Custom Contract
+description: FOCUS-aligned FinOps shell for Dycom Industries; no public API billing surface, so meters and FOCUS columns describe the expected partner-contract billing pattern only.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Dycom Industries
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Dycom Industries, Inc.
   ProviderName: Dycom Industries
-  PublisherName: Dycom Industries
-  ServiceCategory: Developer Tools / API
-  ServiceName: Dycom Industries
+  PublisherName: Dycom Industries, Inc.
+  ServiceCategory: Specialty Contracting
+  ServiceName: Dycom Industries API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - partner
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - engagement
+  name: project_hours
+  unit: hour
 name: Dycom Industries Finops
 provider_name: Dycom Industries
 provider_slug: dycom-industries
-publisher_name: Dycom Industries
-service_category: API
+publisher_name: Dycom Industries, Inc.
+service_category: Specialty Contracting
 slug: dycom-industries-finops
 source_filename: dycom-industries-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Dycom Industries\nproviderId: dycom-industries\npublisherName: Dycom Industries\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Telecom\n  - Utilities\n  - Construction\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Dycom Industries API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming\
-  \ team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice\
-  \ Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Dycom Industries\n  ServiceCategory: Developer Tools / API\n  ProviderName: Dycom Industries\n  PublisherName: Dycom Industries\n  InvoiceIssuerName: Dycom Industries\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n\
-  \    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Dycom Industries API\n    baseURL: https://api.dycomind.com\n    tags:\n      - Telecom\n      - Utilities\n      - Construction\n    serviceName: Dycom Industries API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.dycomind.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Dycom Industries\nproviderId: dycom-industries\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Telecom\n  - Utilities\n  - Construction\ndescription: 'FOCUS-aligned FinOps shell for Dycom Industries; no public API billing surface, so meters\n  and FOCUS columns describe the expected partner-contract billing pattern only.'\nnotes: Dycom Industries does not publish public API pricing or billing. Reconcile FOCUS columns against\n  actual partner invoices.\nsources:\n  - https://www.dycomind.com\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Dycom Industries, Inc.\nserviceCategory: Specialty Contracting\nbillingModel:\n  pricingCategory:\
+  \ Custom Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: Dycom Industries API\n  ServiceCategory: Specialty Contracting\n  ProviderName: Dycom Industries\n  PublisherName: Dycom Industries, Inc.\n  InvoiceIssuerName: Dycom Industries, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - partner\n  - name: project_hours\n    unit: hour\n    aggregation: sum\n    dimensions:\n      - engagement\nprinciples:\n  - name: Visibility\n    description: Pull partner-invoice line items into FOCUS-formatted tables; no public billing API.\n  - name: Allocation\n    description: Tag any API consumption by engagement / project / business unit.\n  - name: Optimization\n    description: Renegotiate at contract renewal; consolidate volume across business units.\n  - name: Accountability\n    description: Engagement owner reviews invoice;\
+  \ flag deviations.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/dycom-industries/refs/heads/main/finops/dycom-industries-finops.yml
-sources: []
+sources:
+- https://www.dycomind.com
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
 - Telecom
 - Utilities
 - Construction
-- FinOps
-- Cost Management
-- FOCUS
 ---

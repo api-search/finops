@@ -6,75 +6,76 @@ aligned_with:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
 billing_model:
-  billingCurrency: USD
-  billingFrequency: Monthly
+  billingCurrency: USD (settlement varies)
+  billingFrequency: Annual / Per-Device
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Medtronic API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Credit
+  pricingCategory: Bundled with Device / Service Contract
+description: 'FOCUS-aligned FinOps shape for Medtronic: connected medical-device platform where APIs are bundled with device / service contracts. Cost is allocated by program, device line, and reimbursement context rather than per-API-call billing.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Medtronic
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Medtronic, Inc.
   ProviderName: Medtronic
-  PublisherName: Medtronic
-  ServiceCategory: Developer Tools / API
-  ServiceName: Medtronic
+  PublisherName: Medtronic plc
+  ServiceCategory: Medical Devices / Connected Health
+  ServiceName: Medtronic Developer Programs
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: avg
+  description: Devices actively reporting telemetry through Medtronic platforms.
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - device_line
+  - care_setting
   - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  name: connected_devices
+  unit: device-month
+- aggregation: avg
+  description: Distinct patient records integrated under HIPAA / GDPR-permitted scope.
   dimensions:
-  - api
+  - program
   - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  name: patient_records
+  unit: patient-month
+- aggregation: avg
+  description: Clinician users active in CareLink / EHR integration consoles.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - program
+  - care_setting
+  name: clinician_seats
+  unit: seat-month
+- aggregation: sum
+  description: Clinical telemetry events ingested (e.g. CGM readings, pacemaker check-ins).
+  dimensions:
+  - device_line
+  - region
+  name: telemetry_events
+  unit: event
 name: Medtronic Finops
 provider_name: Medtronic
 provider_slug: medtronic
-publisher_name: Medtronic
-service_category: API
+publisher_name: Medtronic plc
+service_category: Medical Devices / Connected Health
 slug: medtronic-finops
 source_filename: medtronic-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Medtronic\nproviderId: medtronic\npublisherName: Medtronic\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Healthcare\n  - Medical Devices\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Medtronic API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application,\
-  \ and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education\
-  \ and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Medtronic\n  ServiceCategory: Developer Tools / API\n  ProviderName: Medtronic\n  PublisherName: Medtronic\n  InvoiceIssuerName: Medtronic\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
-  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Medtronic API\n    baseURL: https://api.medtronic.com\n    tags:\n      - Healthcare\n      - Medical Devices\n    serviceName: Medtronic API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://developer.medtronic.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Medtronic\nproviderId: medtronic\npublisherName: Medtronic plc\nserviceCategory: Medical Devices / Connected Health\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Healthcare\n  - Medical Devices\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps shape for Medtronic: connected medical-device platform where APIs\n  are bundled with device / service contracts. Cost is allocated by program, device line, and reimbursement\n  context rather than per-API-call billing.'\nnotes: |\n  No public per-API pricing. Meters reflect partner-program economic units (active devices, patient\n  records, clinician seats) rather than\
+  \ raw API requests.\nsources:\n  - https://developer.medtronic.com/\n  - https://www.medtronic.com/\nprinciples:\n  - name: Visibility\n    description: Track integration consumption by program (CareLink, diabetes platform, EHR connectivity)\n      via the Medtronic developer portal usage view; reconcile against partner agreements and device\n      service contracts.\n  - name: Allocation\n    description: Allocate by partner program, device line, and care setting (hospital, clinic, home).\n      For payors and ACOs, allocate by attributed patient population.\n  - name: Optimization\n    description: Reduce sync frequency for non-clinically-critical telemetry, cache device metadata, and\n      consolidate integrations per care setting (single connector for cardiac + diabetes where both\n      programs are present).\n  - name: Accountability\n    description: Assign a clinical integration owner per program responsible for compliance with HIPAA /\n      GDPR controls, partner agreement renewals,\
+  \ and clinical workflow validation.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Budgeting\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Workload Optimization\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - Invoicing and Chargeback\n      - Onboarding Workloads\nbillingModel:\n  pricingCategory: Bundled with Device / Service Contract\n  billingFrequency: Annual / Per-Device\n  billingCurrency: USD (settlement varies)\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Medtronic Developer Programs\n  ServiceCategory: Medical Devices / Connected Health\n  ProviderName: Medtronic\n  PublisherName: Medtronic plc\n  InvoiceIssuerName: Medtronic, Inc.\n\
+  \  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: connected_devices\n    description: Devices actively reporting telemetry through Medtronic platforms.\n    unit: device-month\n    aggregation: avg\n    dimensions:\n      - device_line\n      - care_setting\n      - region\n  - name: patient_records\n    description: Distinct patient records integrated under HIPAA / GDPR-permitted scope.\n    unit: patient-month\n    aggregation: avg\n    dimensions:\n      - program\n      - region\n  - name: clinician_seats\n    description: Clinician users active in CareLink / EHR integration consoles.\n    unit: seat-month\n    aggregation: avg\n    dimensions:\n      - program\n      - care_setting\n  - name: telemetry_events\n    description: Clinical telemetry events ingested (e.g. CGM readings, pacemaker check-ins).\n    unit: event\n    aggregation: sum\n    dimensions:\n      - device_line\n      - region\napis:\n  - name: Medtronic API\n    baseURL: https://api.medtronic.com\n\
+  \    tags:\n      - Healthcare\n      - Medical Devices\n    serviceName: Medtronic API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Connected Device\n    metric: program_cost / connected_devices\n    target: TBD\n  - name: Cost per Patient Record\n    metric: program_cost / patient_records\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/medtronic/refs/heads/main/finops/medtronic-finops.yml
-sources: []
+sources:
+- https://developer.medtronic.com/
+- https://www.medtronic.com/
 specification: FinOps Framework
 tags:
 - Healthcare
 - Medical Devices
 - FinOps
-- Cost Management
 - FOCUS
 ---

@@ -11,68 +11,84 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
   pricingCategory: Usage-Based
-description: FinOps framework definition for the Modal API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+description: FinOps view of Modal spend. Modal bills usage-based per-second meters for CPU core-seconds, memory GiB-seconds, GPU-seconds (per GPU class), and storage GiB-months on top of a tiered subscription (Starter / Team / Enterprise). Free monthly credits offset compute up to a tier-specific amount.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
   InvoiceIssuerName: Modal
   PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Modal
   PublisherName: Modal
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: AI and Machine Learning
   ServiceName: Modal
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Physical CPU core-seconds consumed per container, billed at $0.0000131/core-sec.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - workspace
+  - app
+  - function
+  name: cpu_core_seconds
+  unit: core_seconds
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Memory GiB-seconds consumed per container, billed at $0.00000222/GiB-sec.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - workspace
+  - app
+  - function
+  name: memory_gib_seconds
+  unit: gib_seconds
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: GPU-seconds consumed by class (T4 / L4 / A10 / A100-40 / A100-80 / H100 / H200 / B200) at the per-class rate.
   dimensions:
-  - api
-  - endpoint
+  - workspace
+  - app
+  - function
+  - gpu_class
+  name: gpu_seconds
+  unit: gpu_seconds
+- aggregation: sum
+  description: Persistent Volume / NFS storage GiB-months above the 1 TiB/month free allotment, billed at $0.09/GiB-mo.
+  dimensions:
+  - workspace
+  - volume
+  name: storage_gib_months
+  unit: gib_months
+- aggregation: sum
+  description: Workspace tier monthly subscription ($0 Starter / $250 Team / Enterprise contract).
+  dimensions:
+  - workspace
   - tier
-  name: compute_seconds
-  unit: second
+  name: subscription_fee
+  unit: month
+- aggregation: sum
+  description: Tier-bundled monthly credits ($30 Starter / $100 Team) applied first against compute meters.
+  dimensions:
+  - workspace
+  - tier
+  name: included_credits
+  unit: usd
 name: Modal Finops
 provider_name: Modal
 provider_slug: modal
 publisher_name: Modal
-service_category: API
+service_category: AI and Machine Learning
 slug: modal-finops
 source_filename: modal-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Modal\nproviderId: modal\npublisherName: Modal\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - Serverless\n  - Compute\n  - Python\n  - Inference\n  - GPU\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Modal API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Modal\n  ServiceCategory: Developer Tools / API\n  ProviderName: Modal\n  PublisherName: Modal\n  InvoiceIssuerName: Modal\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
-  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Modal Functions API\n    baseURL: https://api.modal.com\n    tags:\n      - Functions\n      - Serverless\n      - Python\n    serviceName: Modal Functions API\n    serviceCategory: API\n  - name: Modal Apps API\n    baseURL: https://api.modal.com\n    tags:\n      - Apps\n      - Deployments\n    serviceName: Modal Apps API\n    serviceCategory: API\n  - name: Modal Sandboxes API\n    baseURL: https://api.modal.com\n    tags:\n      - Sandboxes\n      - Code Execution\n      - Agents\n    serviceName: Modal Sandboxes API\n    serviceCategory: API\n  - name: Modal Images API\n    baseURL: https://api.modal.com\n    tags:\n      - Images\n      - Containers\n      - Build\n    serviceName: Modal Images API\n    serviceCategory: API\n  - name: Modal\
-  \ Volumes API\n    baseURL: https://api.modal.com\n    tags:\n      - Volumes\n      - Storage\n      - Persistent\n    serviceName: Modal Volumes API\n    serviceCategory: API\n  - name: Modal Network File Systems API\n    baseURL: https://api.modal.com\n    tags:\n      - File System\n      - NFS\n      - Storage\n    serviceName: Modal Network File Systems API\n    serviceCategory: API\n  - name: Modal Secrets API\n    baseURL: https://api.modal.com\n    tags:\n      - Secrets\n      - Configuration\n    serviceName: Modal Secrets API\n    serviceCategory: API\n  - name: Modal Web Endpoints API\n    baseURL: https://api.modal.com\n    tags:\n      - HTTP\n      - Web\n      - WSGI\n      - ASGI\n    serviceName: Modal Web Endpoints API\n    serviceCategory: API\n  - name: Modal Cron API\n    baseURL: https://api.modal.com\n    tags:\n      - Cron\n      - Schedules\n    serviceName: Modal Cron API\n    serviceCategory: API\n  - name: Modal Queues API\n    baseURL: https://api.modal.com\n\
-  \    tags:\n      - Queues\n      - Messaging\n    serviceName: Modal Queues API\n    serviceCategory: API\n  - name: Modal Dicts API\n    baseURL: https://api.modal.com\n    tags:\n      - Dicts\n      - Key-Value Store\n    serviceName: Modal Dicts API\n    serviceCategory: API\n  - name: Modal Tunnels API\n    baseURL: https://api.modal.com\n    tags:\n      - Tunnels\n      - Networking\n    serviceName: Modal Tunnels API\n    serviceCategory: API\n  - name: Modal Environments API\n    baseURL: https://api.modal.com\n    tags:\n      - Environments\n      - Workspaces\n    serviceName: Modal Environments API\n    serviceCategory: API\n  - name: Modal Token / Workspace API\n    baseURL: https://api.modal.com\n    tags:\n      - Workspace\n      - Tokens\n      - Auth\n    serviceName: Modal Token / Workspace API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n\
-  \    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://modal.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Modal\nproviderId: modal\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- AI\n- Serverless\n- Compute\n- Python\n- Inference\n- GPU\n- FinOps\n- Cost Management\n- FOCUS\ndescription: >-\n  FinOps view of Modal spend. Modal bills usage-based per-second meters for\n  CPU core-seconds, memory GiB-seconds, GPU-seconds (per GPU class), and\n  storage GiB-months on top of a tiered subscription (Starter / Team /\n  Enterprise). Free monthly credits offset compute up to a tier-specific\n  amount.\nnotes: >-\n  Storage includes 1 TiB/month free; CPU minimum is 0.125 cores per\n  container. Modal does not charge for idle resources - meters tick only\n  while containers are running.\nsources:\n- https://modal.com/pricing\n- https://modal.com/docs\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation\
+  \ Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Modal\nserviceCategory: AI and Machine Learning\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n  - Usage\n  - Purchase\n  - Adjustment\nfocusColumns:\n  ServiceName: Modal\n  ServiceCategory: AI and Machine Learning\n  ProviderName: Modal\n  PublisherName: Modal\n  InvoiceIssuerName: Modal\n  BillingCurrency: USD\n  ChargeCategory: Usage\n  PricingCategory: Usage-Based\nmeters:\n- name: cpu_core_seconds\n  description: Physical CPU core-seconds consumed per container, billed at $0.0000131/core-sec.\n  unit: core_seconds\n  aggregation: sum\n  dimensions:\n  - workspace\n  - app\n  - function\n- name: memory_gib_seconds\n  description: Memory GiB-seconds consumed per container, billed at $0.00000222/GiB-sec.\n  unit: gib_seconds\n\
+  \  aggregation: sum\n  dimensions:\n  - workspace\n  - app\n  - function\n- name: gpu_seconds\n  description: GPU-seconds consumed by class (T4 / L4 / A10 / A100-40 / A100-80 / H100 / H200 / B200) at the per-class rate.\n  unit: gpu_seconds\n  aggregation: sum\n  dimensions:\n  - workspace\n  - app\n  - function\n  - gpu_class\n- name: storage_gib_months\n  description: Persistent Volume / NFS storage GiB-months above the 1 TiB/month free allotment, billed at $0.09/GiB-mo.\n  unit: gib_months\n  aggregation: sum\n  dimensions:\n  - workspace\n  - volume\n- name: subscription_fee\n  description: Workspace tier monthly subscription ($0 Starter / $250 Team / Enterprise contract).\n  unit: month\n  aggregation: sum\n  dimensions:\n  - workspace\n  - tier\n- name: included_credits\n  description: Tier-bundled monthly credits ($30 Starter / $100 Team) applied first against compute meters.\n  unit: usd\n  aggregation: sum\n  dimensions:\n  - workspace\n  - tier\nprinciples:\n- name: Visibility\n\
+  \  description: Pull per-app usage from the Modal dashboard / Modal usage API; export monthly invoices.\n- name: Allocation\n  description: Tag apps and functions per team/workload via environments and labels; map to internal cost centers.\n- name: Optimization\n  description: Right-size CPU/memory and GPU class; use container_idle_timeout to release containers; pick smaller GPUs (T4/L4) when possible; aggregate workloads to amortize cold starts.\n- name: Accountability\n  description: Assign owners per app/environment; review monthly GPU-second burn vs. budget.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/modal/refs/heads/main/finops/modal-finops.yml
-sources: []
+sources:
+- https://modal.com/pricing
+- https://modal.com/docs
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - AI

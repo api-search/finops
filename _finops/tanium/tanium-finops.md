@@ -26,79 +26,44 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/tanium/refs/heads/main/openapi/tanium-connect-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Tanium API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Custom / Contact Sales
+description: FinOps placeholder for Tanium. Subscription is sized by endpoint count and selected modules; no public per-meter rate card is published.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Tanium
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Tanium Inc.
   ProviderName: Tanium
-  PublisherName: Tanium
-  ServiceCategory: Developer Tools / API
+  PublisherName: Tanium Inc.
+  ServiceCategory: Endpoint Management
   ServiceName: Tanium
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - module
+  name: endpoint_subscription
+  unit: endpoint
 name: Tanium Finops
 provider_name: Tanium
 provider_slug: tanium
-publisher_name: Tanium
-service_category: API
+publisher_name: Tanium Inc.
+service_category: Endpoint Management
 slug: tanium-finops
 source_filename: tanium-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Tanium\nproviderId: tanium\npublisherName: Tanium\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Compliance\n  - Endpoint Management\n  - Patch Management\n  - Security\n  - Threat Detection\n  - Unified Endpoint Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Tanium API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description:\
-  \ Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Tanium\n  ServiceCategory: Developer Tools / API\n  ProviderName: Tanium\n  PublisherName: Tanium\n  InvoiceIssuerName: Tanium\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
-  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Tanium API Gateway\n    baseURL: ''\n    tags:\n      - API Gateway\n      - Endpoints\n      - GraphQL\n      - Integration\n      - Queries\n    serviceName: Tanium API Gateway\n    serviceCategory: API\n  - name: Tanium Platform REST API\n    baseURL: ''\n    tags:\n      - Actions\n      - Endpoints\n      - Platform\n      - REST API\n      - Security\n    serviceName: Tanium Platform REST API\n    serviceCategory: API\n  - name: Tanium Threat Response API\n    baseURL: ''\n    tags:\n      - Incident Response\n      - Investigations\n      - Security\n      - Threat Detection\n      - Threat Response\n    serviceName: Tanium Threat Response API\n    serviceCategory: API\n\
-  \  - name: Tanium Connect API\n    baseURL: ''\n    tags:\n      - Connections\n      - Data Delivery\n      - Integration\n      - Syslog\n      - Webhooks\n    serviceName: Tanium Connect API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.tanium.com/products/tanium-platform/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Tanium\nproviderId: tanium\npublisherName: Tanium Inc.\nserviceCategory: Endpoint Management\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Endpoint Management\n  - Security\n  - FinOps\n  - FOCUS\ndescription: FinOps placeholder for Tanium. Subscription is sized by endpoint count and selected\n  modules; no public per-meter rate card is published.\nsources:\n  - https://www.tanium.com/products/tanium-platform/\nnotes: No public billing surface. Meter list reflects the dominant unit of consumption (endpoints)\n  but exact rate is not publicly disclosed.\nbillingModel:\n  pricingCategory: Custom / Contact Sales\n  billingFrequency:\
+  \ Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Tanium\n  ServiceCategory: Endpoint Management\n  ProviderName: Tanium\n  PublisherName: Tanium Inc.\n  InvoiceIssuerName: Tanium Inc.\n  BillingCurrency: USD\nmeters:\n  - name: endpoint_subscription\n    unit: endpoint\n    aggregation: max\n    dimensions:\n      - module\nprinciples:\n  - name: Visibility\n    description: Endpoint and module consumption is visible in the Tanium console; cost-side\n      visibility lives in the customer's procurement records against the Tanium subscription\n      invoice.\n  - name: Allocation\n    description: Allocation is performed by tagging endpoints to business units inside Tanium and\n      reconciling against the subscription line items.\n  - name: Optimization\n    description: Optimization levers include module right-sizing, retiring unused modules at renewal,\n      and consolidating endpoint coverage.\n  - name: Accountability\n    description:\
+  \ Accountability sits with the security or endpoint operations team that owns the\n      Tanium subscription.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tanium/refs/heads/main/finops/tanium-finops.yml
-sources: []
+sources:
+- https://www.tanium.com/products/tanium-platform/
 specification: FinOps Framework
 tags:
-- Compliance
 - Endpoint Management
-- Patch Management
 - Security
-- Threat Detection
-- Unified Endpoint Management
 - FinOps
-- Cost Management
 - FOCUS
 ---

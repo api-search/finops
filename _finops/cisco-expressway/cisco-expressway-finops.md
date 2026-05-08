@@ -20,80 +20,67 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/cisco-expressway/refs/heads/main/openapi/cisco-expressway-status-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Cisco Expressway API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Perpetual License
+description: FOCUS-aligned FinOps shape for Cisco Expressway. Cost is driven by Cisco Smart Licensing entitlements (Webex Suite / Collaboration Flex Plan / UCM CL) plus underlying compute for the VM appliance — not by per-API metering.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Cisco Expressway
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Cisco Expressway
-  PublisherName: Cisco Expressway
-  ServiceCategory: Developer Tools / API
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Cisco Systems, Inc.
+  ProviderName: Cisco
+  PublisherName: Cisco Systems, Inc.
+  ServiceCategory: Unified Communications
   ServiceName: Cisco Expressway
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Cisco Smart Licensing entitlements that authorize Expressway capacity (registrations, MRA users, B2B traversal).
   dimensions:
-  - api
-  - endpoint
+  - sku
   - tier
   - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  name: collaboration_license
+  unit: license
+- aggregation: max
+  description: Concurrent traversal calls (rich-media sessions) supported by the appliance.
   dimensions:
-  - api
+  - appliance_size
   - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  name: traversal_calls
+  unit: concurrent_session
+- aggregation: max
+  description: Registered Mobile and Remote Access users.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - region
+  name: mra_users
+  unit: user
 name: Cisco Expressway Finops
 provider_name: Cisco Expressway
 provider_slug: cisco-expressway
-publisher_name: Cisco Expressway
-service_category: API
+publisher_name: Cisco Systems, Inc.
+service_category: Unified Communications
 slug: cisco-expressway-finops
 source_filename: cisco-expressway-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Cisco Expressway\nproviderId: cisco-expressway\npublisherName: Cisco Expressway\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Collaboration\n  - Firewall Traversal\n  - H.323\n  - Session Border Controller\n  - SIP\n  - Unified Communications\n  - Video Conferencing\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Cisco Expressway API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n\
-  \      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n   \
-  \   - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Cisco Expressway\n  ServiceCategory: Developer Tools / API\n  ProviderName: Cisco Expressway\n  PublisherName: Cisco Expressway\n  InvoiceIssuerName: Cisco Expressway\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n\
-  \  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Cisco Expressway Configuration API\n    baseURL: https://expressway.example.com/api/provisioning\n    tags:\n      - Configuration\n      - Management\n      - Provisioning\n      - REST\n      - Unified Communications\n    serviceName: Cisco Expressway Configuration API\n    serviceCategory: API\n  - name: Cisco Expressway Status API\n    baseURL: https://expressway.example.com/api/status\n    tags:\n      - Alarms\n      - Health Check\n      - Licensing\n      - Monitoring\n      - Status\n    serviceName: Cisco Expressway Status API\n    serviceCategory: API\n  - name: Cisco\
-  \ Expressway SNMP API\n    baseURL: snmp://expressway.example.com:161\n    tags:\n      - Metrics\n      - Monitoring\n      - Network Management\n      - SNMP\n    serviceName: Cisco Expressway SNMP API\n    serviceCategory: API\n  - name: Cisco Expressway XML API\n    baseURL: https://expressway.example.com/xmlapi\n    tags:\n      - Configuration\n      - Legacy\n      - Management\n      - XML\n    serviceName: Cisco Expressway XML API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.cisco.com/c/en/us/products/unified-communications/expressway-series/index.html
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Cisco Expressway\nproviderId: cisco-expressway\npublisherName: Cisco Systems, Inc.\nserviceCategory: Unified Communications\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Collaboration\n  - Unified Communications\n  - Video Conferencing\n  - FinOps\n  - FOCUS\ndescription: FOCUS-aligned FinOps shape for Cisco Expressway. Cost is driven by Cisco Smart Licensing\n  entitlements (Webex Suite / Collaboration Flex Plan / UCM CL) plus underlying compute for the VM\n  appliance — not by per-API metering.\nnotes: Per-API meters below are modeled placeholders; real billing flows through Cisco's collaboration\n  licensing line\
+  \ items, not metered API consumption.\nsources:\n  - https://www.cisco.com/c/en/us/products/unified-communications/expressway-series/index.html\n  - https://www.cisco.com/c/en/us/products/collaboration-endpoints/collaboration-flex-plan/index.html\nbillingModel:\n  pricingCategory: Subscription + Perpetual License\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Cisco Expressway\n  ServiceCategory: Unified Communications\n  ProviderName: Cisco\n  PublisherName: Cisco Systems, Inc.\n  InvoiceIssuerName: Cisco Systems, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: collaboration_license\n    description: Cisco Smart Licensing entitlements that authorize Expressway capacity (registrations,\n      MRA users, B2B traversal).\n    unit: license\n    aggregation: sum\n    dimensions:\n      - sku\n      - tier\n      - region\n  - name: traversal_calls\n\
+  \    description: Concurrent traversal calls (rich-media sessions) supported by the appliance.\n    unit: concurrent_session\n    aggregation: max\n    dimensions:\n      - appliance_size\n      - region\n  - name: mra_users\n    description: Registered Mobile and Remote Access users.\n    unit: user\n    aggregation: max\n    dimensions:\n      - region\nprinciples:\n  - name: Visibility\n    description: Use Cisco Smart Software Manager (CSSM) to observe license consumption; pair with\n      Expressway's built-in usage and call detail reports.\n  - name: Allocation\n    description: Allocate Expressway license cost to the collaboration cost center; tag VM hosting\n      cost by datacenter/region and apply showback to UC service owners.\n  - name: Optimization\n    description: Right-size Expressway VM appliances (Small/Medium/Large), consolidate traversal\n      capacity across regions, and align Smart License count with peak concurrent usage.\n  - name: Accountability\n    description:\
+  \ Collaboration platform owner is accountable for Expressway license forecasting,\n      renewal cadence, and capacity planning against Cisco's True Forward licensing model.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/cisco-expressway/refs/heads/main/finops/cisco-expressway-finops.yml
-sources: []
+sources:
+- https://www.cisco.com/c/en/us/products/unified-communications/expressway-series/index.html
+- https://www.cisco.com/c/en/us/products/collaboration-endpoints/collaboration-flex-plan/index.html
 specification: FinOps Framework
 tags:
 - Collaboration
-- Firewall Traversal
-- H.323
-- Session Border Controller
-- SIP
 - Unified Communications
 - Video Conferencing
 - FinOps
-- Cost Management
 - FOCUS
 ---

@@ -142,80 +142,79 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Front API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Tax
+  pricingCategory: Subscription Per Seat
+description: Front bills per-seat-per-month subscriptions across Starter, Professional, Enterprise tiers, plus AI add-ons, an API rate-limit increase add-on, and pass-through WhatsApp messaging from Meta. Annual commit earns 24% off.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
+  ChargeCategory: Purchase
   InvoiceIssuerName: Front
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Front
   PublisherName: Front
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Customer Support
   ServiceName: Front
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Active Starter / Professional / Enterprise seats.
   dimensions:
-  - api
-  - endpoint
   - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - team
+  - cost_center
+  name: front_seats
+  unit: seat-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Copilot / Smart QA / Smart CSAT / bundle per-seat add-ons.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - addon
+  - team
+  - cost_center
+  name: front_ai_addons
+  unit: addon-seat-month
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: Custom-quoted autonomous AI agent.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - cost_center
+  name: front_autopilot
+  unit: subscription-month
+- aggregation: sum
+  description: $200/month per +100 rpm of additional API capacity.
+  dimensions:
+  - api_token
+  - cost_center
+  name: front_rate_limit_increase
+  unit: rpm-increment-month
+- aggregation: sum
+  description: Meta WhatsApp Business pricing plus 20% Front admin fee.
+  dimensions:
+  - country
+  - channel
+  name: front_whatsapp_passthrough
+  unit: messages
 name: Front Finops
 provider_name: Front
 provider_slug: front
 publisher_name: Front
-service_category: API
+service_category: Customer Support
 slug: front-finops
 source_filename: front-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Front\nproviderId: front\npublisherName: Front\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Customer Support\n  - Email\n  - Inbox\n  - Customer Operations\n  - Collaboration\n  - Omnichannel\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Front API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call\
-  \ with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n    \
-  \  - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Front\n  ServiceCategory: Developer Tools / API\n  ProviderName: Front\n  PublisherName: Front\n  InvoiceIssuerName: Front\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n\
-  \    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Front Conversations API\n    baseURL: ''\n    tags:\n      - Conversations\n      - Tickets\n    serviceName: Front Conversations API\n    serviceCategory: API\n  - name: Front Messages API\n    baseURL: ''\n    tags:\n      - Messages\n      - Replies\n    serviceName: Front Messages API\n    serviceCategory: API\n  - name: Front Drafts API\n    baseURL: ''\n    tags:\n      - Drafts\n    serviceName: Front Drafts API\n    serviceCategory: API\n  - name: Front Channels API\n    baseURL: ''\n    tags:\n      - Channels\n    serviceName: Front Channels API\n    serviceCategory: API\n  - name: Front Inboxes API\n    baseURL: ''\n    tags:\n      - Inboxes\n    serviceName: Front Inboxes API\n    serviceCategory:\
-  \ API\n  - name: Front Contacts API\n    baseURL: ''\n    tags:\n      - Contacts\n      - People\n    serviceName: Front Contacts API\n    serviceCategory: API\n  - name: Front Contact Groups API\n    baseURL: ''\n    tags:\n      - Groups\n      - Segmentation\n    serviceName: Front Contact Groups API\n    serviceCategory: API\n  - name: Front Accounts API\n    baseURL: ''\n    tags:\n      - Accounts\n      - Companies\n    serviceName: Front Accounts API\n    serviceCategory: API\n  - name: Front Teammates API\n    baseURL: ''\n    tags:\n      - Teammates\n      - Users\n    serviceName: Front Teammates API\n    serviceCategory: API\n  - name: Front Teams API\n    baseURL: ''\n    tags:\n      - Teams\n    serviceName: Front Teams API\n    serviceCategory: API\n  - name: Front Comments API\n    baseURL: ''\n    tags:\n      - Comments\n      - Internal Notes\n    serviceName: Front Comments API\n    serviceCategory: API\n  - name: Front Tags API\n    baseURL: ''\n    tags:\n    \
-  \  - Tags\n    serviceName: Front Tags API\n    serviceCategory: API\n  - name: Front Topics API\n    baseURL: ''\n    tags:\n      - Topics\n      - AI\n    serviceName: Front Topics API\n    serviceCategory: API\n  - name: Front Rules API\n    baseURL: ''\n    tags:\n      - Rules\n      - Automation\n    serviceName: Front Rules API\n    serviceCategory: API\n  - name: Front Signatures API\n    baseURL: ''\n    tags:\n      - Signatures\n    serviceName: Front Signatures API\n    serviceCategory: API\n  - name: Front Shifts API\n    baseURL: ''\n    tags:\n      - Shifts\n      - Scheduling\n    serviceName: Front Shifts API\n    serviceCategory: API\n  - name: Front Knowledge Base API\n    baseURL: ''\n    tags:\n      - Knowledge Base\n      - Articles\n    serviceName: Front Knowledge Base API\n    serviceCategory: API\n  - name: Front Analytics API\n    baseURL: ''\n    tags:\n      - Analytics\n      - Reports\n    serviceName: Front Analytics API\n    serviceCategory: API\n  -\
-  \ name: Front Events API\n    baseURL: ''\n    tags:\n      - Events\n      - Audit\n    serviceName: Front Events API\n    serviceCategory: API\n  - name: Front Webhooks API\n    baseURL: ''\n    tags:\n      - Webhooks\n      - Subscriptions\n    serviceName: Front Webhooks API\n    serviceCategory: API\n  - name: Front Channels Platform API\n    baseURL: ''\n    tags:\n      - Channels\n      - Custom\n      - Platform\n    serviceName: Front Channels Platform API\n    serviceCategory: API\n  - name: Front Plugin SDK\n    baseURL: ''\n    tags:\n      - Plugin\n      - Embedded UI\n    serviceName: Front Plugin SDK\n    serviceCategory: API\n  - name: Front Chat Widget\n    baseURL: ''\n    tags:\n      - Chat Widget\n      - Web\n    serviceName: Front Chat Widget\n    serviceCategory: API\n  - name: Front Connectors\n    baseURL: ''\n    tags:\n      - Connectors\n      - Low-Code\n    serviceName: Front Connectors\n    serviceCategory: API\n  - name: Front Links API\n    baseURL:\
-  \ ''\n    tags:\n      - Links\n      - External Resources\n    serviceName: Front Links API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://front.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Front\nproviderId: front\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n  - Customer Support\n  - Customer Operations\n  - FinOps\n  - FOCUS\ndescription: >-\n  Front bills per-seat-per-month subscriptions across Starter, Professional,\n  Enterprise tiers, plus AI add-ons, an API rate-limit increase add-on, and\n  pass-through WhatsApp messaging from Meta. Annual commit earns 24% off.\nsources:\n  - https://front.com/pricing\n  - https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Front\nserviceCategory: Customer Support\nbillingModel:\n  pricingCategory: Subscription Per Seat\n  billingFrequency: Monthly\n\
+  \  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\n    - Tax\nfocusColumns:\n  ServiceName: Front\n  ServiceCategory: Customer Support\n  ProviderName: Front\n  PublisherName: Front\n  InvoiceIssuerName: Front\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: front_seats\n    description: Active Starter / Professional / Enterprise seats.\n    unit: seat-month\n    aggregation: sum\n    dimensions:\n      - tier\n      - team\n      - cost_center\n  - name: front_ai_addons\n    description: Copilot / Smart QA / Smart CSAT / bundle per-seat add-ons.\n    unit: addon-seat-month\n    aggregation: sum\n    dimensions:\n      - addon\n      - team\n      - cost_center\n  - name: front_autopilot\n    description: Custom-quoted autonomous AI agent.\n    unit: subscription-month\n    aggregation: sum\n    dimensions:\n      - cost_center\n  - name: front_rate_limit_increase\n    description: $200/month per +100 rpm of additional API\
+  \ capacity.\n    unit: rpm-increment-month\n    aggregation: sum\n    dimensions:\n      - api_token\n      - cost_center\n  - name: front_whatsapp_passthrough\n    description: Meta WhatsApp Business pricing plus 20% Front admin fee.\n    unit: messages\n    aggregation: sum\n    dimensions:\n      - country\n      - channel\nprinciples:\n  - name: Visibility\n    description: >-\n      Pull monthly Front invoices and AI add-on usage; track API rate-limit\n      headroom alongside seat counts.\n  - name: Allocation\n    description: >-\n      Allocate seats by team / inbox; allocate WhatsApp pass-through to\n      the channel and team driving outbound volume.\n  - name: Optimization\n    description: >-\n      Lock 24% annual discount; consolidate AI add-ons into Enterprise\n      tier when 3 add-ons are active; right-size rate-limit add-ons\n      against actual peak rpm.\n  - name: Accountability\n    description: >-\n      Designate Customer Operations as contract owner; review at\
+  \ renewal\n      against negotiated MSA.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/front/refs/heads/main/finops/front-finops.yml
-sources: []
+sources:
+- https://front.com/pricing
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Customer Support
-- Email
-- Inbox
 - Customer Operations
-- Collaboration
-- Omnichannel
 - FinOps
-- Cost Management
 - FOCUS
 ---

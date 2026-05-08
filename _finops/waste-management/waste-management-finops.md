@@ -16,76 +16,55 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Waste Management API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Service Contract
+description: FinOps view of Waste Management (WM) at the corporate level. WM does not bill API consumption directly; the API surface (account, services, invoices, pickups, ETAs) is a read interface to the existing service contract whose costs are environmental-service charges, not API line items.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Waste Management
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Waste Management, Inc.
   ProviderName: Waste Management
-  PublisherName: Waste Management
-  ServiceCategory: Developer Tools / API
-  ServiceName: Waste Management
+  PublisherName: WM Intellectual Property Holdings, L.L.C.
+  ServiceCategory: Environmental / Waste Services
+  ServiceName: Waste Management Services
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Scheduled waste / recycling pickup events delivered under the WM customer service agreement (the API exposes these events but does not bill them per call).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - account
+  - service_type
+  name: service_pickup
+  unit: pickup
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Ad-hoc on-call pickups, container swaps, and contamination surcharges added to the monthly invoice.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - account
+  - charge_type
+  name: extra_service
+  unit: event
 name: Waste Management Finops
 provider_name: Waste Management
 provider_slug: waste-management
-publisher_name: Waste Management
-service_category: API
+publisher_name: WM Intellectual Property Holdings, L.L.C.
+service_category: Environmental / Waste Services
 slug: waste-management-finops
 source_filename: waste-management-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Waste Management\nproviderId: waste-management\npublisherName: Waste Management\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Environmental Services\n  - Fortune 500\n  - Recycling\n  - Solid Waste\n  - Sustainability\n  - Waste Management\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Waste Management API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name:\
-  \ Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  -\
-  \ name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Waste Management\n  ServiceCategory: Developer Tools / API\n  ProviderName: Waste Management\n  PublisherName: Waste Management\n  InvoiceIssuerName: Waste Management\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n \
-  \   description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Waste Management Customer API\n    baseURL: ''\n    tags:\n      - Customer API\n      - Billing\n      - Services\n      - Pickup Scheduling\n      - REST\n    serviceName: Waste Management Customer API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.wm.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Waste Management\nproviderId: waste-management\npublisherName: WM Intellectual Property Holdings, L.L.C.\nserviceCategory: Environmental / Waste Services\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Waste Management\n  - Environmental Services\n  - FinOps\n  - FOCUS\ndescription: FinOps view of Waste Management (WM) at the corporate level. WM\n  does not bill API consumption directly; the API surface (account, services,\n  invoices, pickups, ETAs) is a read interface to the existing service\n  contract whose costs are environmental-service charges, not API line items.\nsources:\n  - https://www.wm.com\nnotes: No metered API invoice; FOCUS attribution maps\
+  \ onto the underlying WM\n  service contract.\nbillingModel:\n  pricingCategory: Service Contract\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Waste Management Services\n  ServiceCategory: Environmental / Waste Services\n  ProviderName: Waste Management\n  PublisherName: WM Intellectual Property Holdings, L.L.C.\n  InvoiceIssuerName: Waste Management, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: service_pickup\n    description: Scheduled waste / recycling pickup events delivered under\n      the WM customer service agreement (the API exposes these events but\n      does not bill them per call).\n    unit: pickup\n    aggregation: sum\n    dimensions:\n      - account\n      - service_type\n  - name: extra_service\n    description: Ad-hoc on-call pickups, container swaps, and contamination\n      surcharges added to the monthly invoice.\n    unit: event\n\
+  \    aggregation: sum\n    dimensions:\n      - account\n      - charge_type\nprinciples:\n  - name: Visibility\n    description: Use the WM Account / Services / Invoices APIs to pull\n      monthly service consumption and invoice line items; reconcile API-\n      reported events against the customer-portal invoice view.\n  - name: Allocation\n    description: Allocate environmental-service spend to site / property /\n      cost-center using the WM account-id dimension; tag containers and\n      pickup schedules to map them to the consuming team.\n  - name: Optimization\n    description: Use Pickup Schedules and ETAs to right-size pickup cadence\n      and container count; reduce contamination surcharges by improving\n      stream sorting at the source.\n  - name: Accountability\n    description: Facilities / property-management owns the WM contract and\n      per-site allocation; engineering owns API-key / JWT hygiene for the\n      portal integration.\nmaintainers:\n  - FN: Kin Lane\n\
+  \    email: kin@apievangelist.com\n    url: https://apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/waste-management/refs/heads/main/finops/waste-management-finops.yml
-sources: []
+sources:
+- https://www.wm.com
 specification: FinOps Framework
 tags:
-- Environmental Services
-- Fortune 500
-- Recycling
-- Solid Waste
-- Sustainability
 - Waste Management
+- Environmental Services
 - FinOps
-- Cost Management
 - FOCUS
 ---

@@ -20,76 +20,79 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/hp/refs/heads/main/openapi/hp-printos-device-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual / Monthly per HP service contract
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the HP API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Usage
+  pricingCategory: Bundled (Service Contract)
+description: 'FOCUS-aligned FinOps for HP developer APIs: API access is bundled with HP Active Care / Proactive Insights and HP Indigo PrintOS service contracts rather than billed per-call. Cost tracking lives at the device-fleet and PrintOS subscription level rather than per-API-request.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: HP
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: HP Inc.
   ProviderName: HP
-  PublisherName: HP
-  ServiceCategory: Developer Tools / API
-  ServiceName: HP
+  PublisherName: HP Inc.
+  ServiceCategory: Device Management & Industrial Printing
+  ServiceName: HP Developer APIs
 layout: finops
 meters:
+- aggregation: max
+  description: Devices enrolled in HP Active Care / Proactive Insights; the primary cost dimension for the Workforce Solutions Analytics API contract.
+  dimensions:
+  - tenant
+  - device_type
+  - region
+  name: enrolled_devices
+  unit: device
+- aggregation: max
+  description: HP Indigo presses or industrial printers attached to PrintOS.
+  dimensions:
+  - print_shop
+  - press_model
+  name: printos_devices
+  unit: device
+- aggregation: max
+  description: Named-user seats on the HP services contract where applicable.
+  dimensions:
+  - tenant
+  - role
+  name: contract_seats
+  unit: seat
 - aggregation: sum
-  description: Count of billable API requests
+  description: API call volume (Workforce Solutions Analytics + PrintOS Device API). Not directly billed but useful for capacity / fair-use monitoring.
   dimensions:
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - tenant
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Bytes / events emitted per device into PrintOS or Proactive Insights cloud.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - device
+  name: device_telemetry
+  unit: event
 name: Hp Finops
 provider_name: HP
 provider_slug: hp
-publisher_name: HP
-service_category: API
+publisher_name: HP Inc.
+service_category: Device Management & Industrial Printing
 slug: hp-finops
 source_filename: hp-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: HP\nproviderId: hp\npublisherName: HP\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Computer Hardware\n  - Device Management\n  - Printing\n  - Technology\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the HP API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: HP\n  ServiceCategory: Developer Tools / API\n  ProviderName: HP\n  PublisherName: HP\n  InvoiceIssuerName: HP\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n     \
-  \ - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: HP Workforce Solutions Analytics API\n    baseURL: https://daas.api.hp.com\n    tags:\n      - Analytics\n      - Device Management\n      - TechPulse\n      - Workforce\n    serviceName: HP Workforce Solutions Analytics API\n    serviceCategory: API\n  - name: HP PrintOS Device API\n    baseURL: https://printos.api.hp.com\n    tags:\n      - Cloud\n      - Devices\n      - Printing\n      - PrintOS\n    serviceName: HP PrintOS Device API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
+source_url: https://developers.hp.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: HP\nproviderId: hp\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Device Management\n  - Printing\n  - PrintOS\ndescription: 'FOCUS-aligned FinOps for HP developer APIs: API access is bundled with HP Active Care\n  / Proactive Insights and HP Indigo PrintOS service contracts rather than billed per-call. Cost\n  tracking lives at the device-fleet and PrintOS subscription level rather than per-API-request.'\nnotes: HP does not invoice for API consumption directly; all cost flows through the underlying device-management\n  or print-operations service contract.\nsources:\n  - https://developers.hp.com/\n  - https://www.hp.com/us-en/services/active-care.html\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl:\
+  \ https://focus.finops.org/focus-specification/v1-3/\npublisherName: HP Inc.\nserviceCategory: Device Management & Industrial Printing\nbillingModel:\n  pricingCategory: Bundled (Service Contract)\n  billingFrequency: Annual / Monthly per HP service contract\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\nfocusColumns:\n  ServiceName: HP Developer APIs\n  ServiceCategory: Device Management & Industrial Printing\n  ProviderName: HP\n  PublisherName: HP Inc.\n  InvoiceIssuerName: HP Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: enrolled_devices\n    description: Devices enrolled in HP Active Care / Proactive Insights; the primary cost dimension\n      for the Workforce Solutions Analytics API contract.\n    unit: device\n    aggregation: max\n    dimensions:\n      - tenant\n      - device_type\n      - region\n  - name: printos_devices\n    description: HP Indigo presses or industrial printers attached to PrintOS.\n    unit: device\n\
+  \    aggregation: max\n    dimensions:\n      - print_shop\n      - press_model\n  - name: contract_seats\n    description: Named-user seats on the HP services contract where applicable.\n    unit: seat\n    aggregation: max\n    dimensions:\n      - tenant\n      - role\n  - name: api_requests\n    description: API call volume (Workforce Solutions Analytics + PrintOS Device API). Not directly\n      billed but useful for capacity / fair-use monitoring.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - tenant\n  - name: device_telemetry\n    description: Bytes / events emitted per device into PrintOS or Proactive Insights cloud.\n    unit: event\n    aggregation: sum\n    dimensions:\n      - device\nprinciples:\n  - name: Visibility\n    description: Track device-fleet count and PrintOS press count via the HP services portal; reconcile\n      monthly against the HP service contract. API-level visibility comes from your own request logs\n      since HP does\
+  \ not surface per-call billing.\n  - name: Allocation\n    description: Tag devices by business unit, site, and cost center. Allocate the bundled service-contract\n      cost across consuming teams pro-rata to enrolled-device count.\n  - name: Optimization\n    description: Decommission unused devices from Active Care / Proactive Insights enrollment to\n      reduce per-device contract cost. Consolidate PrintOS presses under fewer print shops where\n      operationally viable. Avoid excessive polling that triggers fair-use throttling.\n  - name: Accountability\n    description: Assign a contract owner for each HP service line. Review the renewal each year against\n      actual device-fleet utilization and API consumption volume.\nmaintainers:\n  - FN: Kin Lane\n    email: info@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/hp/refs/heads/main/finops/hp-finops.yml
-sources: []
+sources:
+- https://developers.hp.com/
+- https://www.hp.com/us-en/services/active-care.html
 specification: FinOps Framework
 tags:
-- Computer Hardware
+- FinOps
+- FOCUS
 - Device Management
 - Printing
-- Technology
-- FinOps
-- Cost Management
-- FOCUS
+- PrintOS
 ---

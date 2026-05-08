@@ -25,73 +25,91 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the AWS Redshift API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  - Credit
+  pricingCategory: Pay-As-You-Go + Committed Use
+description: 'FOCUS-aligned FinOps for Amazon Redshift: dual-shape billing — Serverless RPU-hour vs Provisioned per-node-hour — plus separately metered Redshift Managed Storage, Spectrum scans, concurrency scaling, and cross-region transfer. Reserved Instances and Serverless commitments provide committed-use discounts.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: AWS Redshift
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: AWS Redshift
-  PublisherName: AWS Redshift
-  ServiceCategory: Developer Tools / API
-  ServiceName: AWS Redshift
+  InvoiceIssuerName: Amazon Web Services, Inc.
+  ProviderName: AWS
+  PublisherName: Amazon Web Services, Inc.
+  RegionId: varies
+  ServiceCategory: Analytics
+  ServiceName: Amazon Redshift
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  - workgroup
+  - namespace
+  name: serverless_rpu_hours
+  unit: RPU-hour
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
   - region
-  - consumer
-  name: data_egress
+  - cluster_identifier
+  - node_type
+  - billing_mode
+  name: provisioned_node_hours
+  unit: hour
+- aggregation: max
+  dimensions:
+  - region
+  - cluster_or_namespace
+  name: managed_storage
+  unit: GB-month
+- aggregation: sum
+  dimensions:
+  - region
+  - cluster_identifier
+  name: concurrency_scaling_seconds
+  unit: second
+- aggregation: sum
+  dimensions:
+  - region
+  - schema
+  name: spectrum_scanned
+  unit: TB
+- aggregation: max
+  dimensions:
+  - region
+  - cluster_identifier
+  name: backup_storage
+  unit: GB-month
+- aggregation: sum
+  dimensions:
+  - source_region
+  - destination_region
+  name: cross_region_transfer
   unit: GB
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: reserved_node_commitment
+  unit: node-month
 name: Aws Redshift Finops
 provider_name: AWS Redshift
 provider_slug: aws-redshift
-publisher_name: AWS Redshift
-service_category: API
+publisher_name: Amazon Web Services, Inc.
+service_category: Analytics / Data Warehouse
 slug: aws-redshift-finops
 source_filename: aws-redshift-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: AWS Redshift\nproviderId: aws-redshift\npublisherName: AWS Redshift\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - Big Data\n  - Cloud Database\n  - Data Warehouse\n  - SQL\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the AWS Redshift API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
-  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: AWS Redshift\n  ServiceCategory: Developer Tools / API\n  ProviderName: AWS Redshift\n  PublisherName: AWS Redshift\n  InvoiceIssuerName: AWS Redshift\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit:\
-  \ GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Amazon Redshift API\n    baseURL: https://redshift.{region}.amazonaws.com\n    tags:\n      - Clusters\n      - Data Warehouse\n      - Snapshots\n    serviceName: Amazon Redshift API\n    serviceCategory: API\n  - name: Amazon Redshift Data API\n    baseURL: https://redshift-data.{region}.amazonaws.com\n    tags:\n      - Data Access\n      - Serverless\n      - SQL\n    serviceName: Amazon Redshift Data API\n    serviceCategory: API\n  - name: Amazon Redshift Serverless API\n    baseURL: https://redshift-serverless.{region}.amazonaws.com\n    tags:\n      - Analytics\n      - Auto-Scaling\n      - Serverless\n    serviceName: Amazon Redshift Serverless API\n    serviceCategory:\
-  \ API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://aws.amazon.com/redshift/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: AWS Redshift\nproviderId: aws-redshift\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Data Warehouse\n  - Analytics\n  - AWS\ndescription: 'FOCUS-aligned FinOps for Amazon Redshift: dual-shape billing — Serverless RPU-hour vs\n  Provisioned per-node-hour — plus separately metered Redshift Managed Storage, Spectrum scans,\n  concurrency scaling, and cross-region transfer. Reserved Instances and Serverless commitments\n  provide committed-use discounts.'\nsources:\n  - https://aws.amazon.com/redshift/pricing/\n  - https://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName:\
+  \ Amazon Web Services, Inc.\nserviceCategory: Analytics / Data Warehouse\nbillingModel:\n  pricingCategory: Pay-As-You-Go + Committed Use\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Refund\n    - Credit\nfocusColumns:\n  ServiceName: Amazon Redshift\n  ServiceCategory: Analytics\n  ProviderName: AWS\n  PublisherName: Amazon Web Services, Inc.\n  InvoiceIssuerName: Amazon Web Services, Inc.\n  BillingCurrency: USD\n  RegionId: varies\nmeters:\n  - name: serverless_rpu_hours\n    unit: RPU-hour\n    aggregation: sum\n    dimensions:\n      - region\n      - workgroup\n      - namespace\n  - name: provisioned_node_hours\n    unit: hour\n    aggregation: sum\n    dimensions:\n      - region\n      - cluster_identifier\n      - node_type\n      - billing_mode\n  - name: managed_storage\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - region\n      - cluster_or_namespace\n  - name:\
+  \ concurrency_scaling_seconds\n    unit: second\n    aggregation: sum\n    dimensions:\n      - region\n      - cluster_identifier\n  - name: spectrum_scanned\n    unit: TB\n    aggregation: sum\n    dimensions:\n      - region\n      - schema\n  - name: backup_storage\n    unit: GB-month\n    aggregation: max\n    dimensions:\n      - region\n      - cluster_identifier\n  - name: cross_region_transfer\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - source_region\n      - destination_region\n  - name: reserved_node_commitment\n    unit: node-month\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Use SVL_ / STL_ system tables (e.g. SVL_QUERY_REPORT, STL_USAGE_CONTROL) for\n      per-query/per-user spend signal; in CUR / Cost Explorer split by UsageType (NodeUsage,\n      ServerlessUsage:RPUUsage, RMS:StorageUsage, ConcurrencyScaling:NodeUsage, RedshiftSpectrum). The\n      Redshift console also shows Serverless RPU consumption and concurrency-scaling\
+  \ credits.\n  - name: Allocation\n    description: Tag clusters and Serverless namespaces with team / product cost-allocation tags. For\n      shared clusters, attribute via database / schema ownership and per-user query-cost reports.\n  - name: Optimization\n    description: 'Major levers: (1) right-size — RA3 + RMS so storage scales independently of compute;\n      (2) buy Reserved Instances for steady-state provisioned clusters (up to ~75% savings); (3) use\n      Concurrency Scaling rather than oversize the base cluster; (4) WLM tuning to keep ETL out of the\n      interactive queue; (5) Spectrum / data lake offload for rarely scanned cold data; (6) for\n      Serverless, tune base RPU floor and use query monitoring to cap runaway scans.'\n  - name: Accountability\n    description: Data platform team owns Redshift estate and reservation strategy; consuming teams are\n      accountable for query efficiency, predicate pushdown, and table design (sort/dist keys).\nmaintainers:\n  - FN:\
+  \ Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/aws-redshift/refs/heads/main/finops/aws-redshift-finops.yml
-sources: []
+sources:
+- https://aws.amazon.com/redshift/pricing/
+- https://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html
 specification: FinOps Framework
 tags:
-- Analytics
-- Big Data
-- Cloud Database
-- Data Warehouse
-- SQL
 - FinOps
-- Cost Management
 - FOCUS
+- Data Warehouse
+- Analytics
 ---

@@ -34,79 +34,80 @@ billing_model:
   - Credit
   - Adjustment
   chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Customer.io API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription + Usage Overage
+description: 'FOCUS-aligned FinOps for Customer.io: tiered platform subscription with quotas on profiles and monthly emails, plus per-profile, per-1K-email, and per-100K-AI-credit overages.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Customer.io
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Peaberry Software, Inc.
+  PricingCategory: Subscription
+  PricingUnit: workspace-month
   ProviderName: Customer.io
-  PublisherName: Customer.io
-  ServiceCategory: Developer Tools / API
+  PublisherName: Peaberry Software, Inc.
+  ServiceCategory: Marketing Automation
   ServiceName: Customer.io
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Monthly platform fee per workspace tied to plan tier
+  dimensions:
+  - plan
+  - workspace
+  name: platform_subscription
+  unit: month
+- aggregation: max
+  description: People + objects stored in the workspace
+  dimensions:
+  - workspace
+  - object_type
+  name: profiles
+  unit: profile
+- aggregation: sum
+  description: Outbound email sends across campaigns, broadcasts, and transactional sends
+  dimensions:
+  - workspace
+  - campaign
+  - channel
+  name: emails_sent
+  unit: email
+- aggregation: sum
+  description: AI Agent credits consumed
+  dimensions:
+  - workspace
+  - skill
+  name: ai_credits
+  unit: credit
+- aggregation: sum
+  description: API calls against Track / App / Pipelines (not separately billed; observed for capacity)
   dimensions:
   - api
   - endpoint
-  - tier
-  - region
-  - consumer
+  - workspace
   name: api_requests
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Customer Io Finops
 provider_name: Customer.io
 provider_slug: customer-io
-publisher_name: Customer.io
-service_category: API
+publisher_name: Peaberry Software, Inc.
+service_category: Marketing Automation
 slug: customer-io-finops
 source_filename: customer-io-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Customer.io\nproviderId: customer-io\npublisherName: Customer.io\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Behavioral Data\n  - Broadcasts\n  - Campaigns\n  - CDP\n  - Customer Data\n  - Customer Data Platform\n  - Data Ingestion\n  - Email\n  - Event Tracking\n  - Marketing Automation\n  - Messaging\n  - Push Notifications\n  - Segments\n  - SMS\n  - Transactional Email\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Customer.io API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n\
-  \    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting\
-  \ for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Customer.io\n  ServiceCategory: Developer Tools / API\n  ProviderName: Customer.io\n  PublisherName: Customer.io\n  InvoiceIssuerName: Customer.io\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n\
-  \      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Customer.io Track API\n    baseURL: https://track.customer.io\n    tags:\n      - Behavioral Data\n      - Customer Data\n      - Event Tracking\n      - Marketing Automation\n      - Messaging\n    serviceName: Customer.io Track API\n    serviceCategory: API\n  - name: Customer.io App API\n    baseURL: https://api.customer.io\n    tags:\n      - Broadcasts\n      - Campaigns\n      - Marketing Automation\n      - Messaging\n      - Segments\n      - Transactional Email\n    serviceName: Customer.io\
-  \ App API\n    serviceCategory: API\n  - name: Customer.io Pipelines API\n    baseURL: https://cdp.customer.io\n    tags:\n      - CDP\n      - Customer Data Platform\n      - Data Ingestion\n      - Marketing Automation\n      - Messaging\n    serviceName: Customer.io Pipelines API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://customer.io/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Customer.io\nproviderId: customer-io\npublisherName: Peaberry Software, Inc.\nserviceCategory: Marketing Automation\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Customer Data Platform\n  - Marketing Automation\n  - Messaging\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Customer.io: tiered platform subscription with quotas on profiles\n  and monthly emails, plus per-profile, per-1K-email, and per-100K-AI-credit overages.'\nsources:\n  - https://customer.io/pricing/\n  - https://docs.customer.io/api/\nprinciples:\n  - name: Visibility\n    description: Use the Customer.io workspace\
+  \ usage dashboard, billing screen, and Pipelines audit log\n      to track profile counts, sent emails, and AI credit consumption against plan quotas.\n  - name: Allocation\n    description: Use workspaces, segments, and campaign tags to attribute messaging spend to product\n      lines, geographies, and lifecycle stages.\n  - name: Optimization\n    description: Suppress dormant profiles to stay under the 5,000-profile Essentials cap; use Pipelines\n      / CDP to dedupe before identify; route low-value sends through cheaper channels rather than email\n      overage; right-size AI credit packs.\n  - name: Accountability\n    description: Marketing-ops owns the monthly true-up against profile and email quotas; engineering\n      owns ingestion correctness so overage is real consumption rather than duplicate identify calls.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n\
+  \  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Workload Optimization\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - Invoicing and Chargeback\n      - Onboarding Workloads\nbillingModel:\n  pricingCategory: Tiered Subscription + Usage Overage\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Customer.io\n  ServiceCategory: Marketing Automation\n  ProviderName: Customer.io\n  PublisherName: Peaberry Software, Inc.\n  InvoiceIssuerName: Peaberry Software, Inc.\n  PricingCategory: Subscription\n  PricingUnit: workspace-month\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: platform_subscription\n    description:\
+  \ Monthly platform fee per workspace tied to plan tier\n    unit: month\n    aggregation: sum\n    dimensions:\n      - plan\n      - workspace\n  - name: profiles\n    description: People + objects stored in the workspace\n    unit: profile\n    aggregation: max\n    dimensions:\n      - workspace\n      - object_type\n  - name: emails_sent\n    description: Outbound email sends across campaigns, broadcasts, and transactional sends\n    unit: email\n    aggregation: sum\n    dimensions:\n      - workspace\n      - campaign\n      - channel\n  - name: ai_credits\n    description: AI Agent credits consumed\n    unit: credit\n    aggregation: sum\n    dimensions:\n      - workspace\n      - skill\n  - name: api_requests\n    description: API calls against Track / App / Pipelines (not separately billed; observed for capacity)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - workspace\napis:\n  - name: Customer.io Track API\n    baseURL: https://track.customer.io\n\
+  \    tags:\n      - Behavioral Data\n      - Customer Data\n      - Event Tracking\n      - Marketing Automation\n      - Messaging\n    serviceName: Customer.io Track API\n    serviceCategory: API\n  - name: Customer.io App API\n    baseURL: https://api.customer.io\n    tags:\n      - Broadcasts\n      - Campaigns\n      - Marketing Automation\n      - Messaging\n      - Segments\n      - Transactional Email\n    serviceName: Customer.io App API\n    serviceCategory: API\n  - name: Customer.io Pipelines API\n    baseURL: https://cdp.customer.io\n    tags:\n      - CDP\n      - Customer Data Platform\n      - Data Ingestion\n      - Marketing Automation\n      - Messaging\n    serviceName: Customer.io Pipelines API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per Profile\n    metric: billed_cost / profiles\n    target: TBD\n  - name: Cost per 1K Emails\n    metric: billed_cost / (emails_sent / 1000)\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/customer-io/refs/heads/main/finops/customer-io-finops.yml
-sources: []
+sources:
+- https://customer.io/pricing/
+- https://docs.customer.io/api/
 specification: FinOps Framework
 tags:
-- Behavioral Data
-- Broadcasts
-- Campaigns
-- CDP
-- Customer Data
 - Customer Data Platform
-- Data Ingestion
-- Email
-- Event Tracking
 - Marketing Automation
 - Messaging
-- Push Notifications
-- Segments
-- SMS
-- Transactional Email
 - FinOps
 - Cost Management
 - FOCUS

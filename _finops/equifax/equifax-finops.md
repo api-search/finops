@@ -11,73 +11,66 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Equifax API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Pay-Per-Inquiry / Custom Contract
+description: 'FOCUS-aligned FinOps for Equifax: per-pull / per-inquiry billing on contracted unit prices, invoiced monthly. Pricing is custom and not publicly listed; meters reflect typical bureau billing lines.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Equifax
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Equifax Inc.
   ProviderName: Equifax
-  PublisherName: Equifax
-  ServiceCategory: Developer Tools / API
+  PublisherName: Equifax Inc.
+  ServiceCategory: Credit Bureau / Identity Data
   ServiceName: Equifax
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - product
+  - permissible_purpose
+  - subscriber_code
+  name: credit_inquiries
+  unit: inquiry
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - product
+  name: identity_checks
+  unit: check
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - product
+  name: verification_pulls
+  unit: pull
+- aggregation: sum
+  dimensions:
+  - audience
+  name: marketing_records
+  unit: record
+- aggregation: sum
+  dimensions:
+  - product
+  name: subscription_fees
+  unit: month
 name: Equifax Finops
 provider_name: Equifax
 provider_slug: equifax
-publisher_name: Equifax
-service_category: API
+publisher_name: Equifax Inc.
+service_category: Credit Bureau / Identity Data
 slug: equifax-finops
 source_filename: equifax-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Equifax\nproviderId: equifax\npublisherName: Equifax\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Credit\n  - Credit History\n  - Credit Reporting\n  - Identity\n  - Fraud Detection\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Equifax API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with\
-  \ the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps\
-  \ Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Equifax\n  ServiceCategory: Developer Tools / API\n  ProviderName: Equifax\n  PublisherName: Equifax\n  InvoiceIssuerName: Equifax\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n  \
-  \  dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Equifax API\n    baseURL: ''\n    tags:\n      - Credit\n      - Credit History\n      - Credit Reporting\n      - Identity\n      - Fraud Detection\n    serviceName: Equifax API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://developer.equifax.com/products
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Equifax\nproviderId: equifax\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Credit Bureau\n  - Identity\n  - Verification\ndescription: 'FOCUS-aligned FinOps for Equifax: per-pull / per-inquiry billing on contracted unit prices,\n  invoiced monthly. Pricing is custom and not publicly listed; meters reflect typical bureau billing\n  lines.'\nsources:\n  - https://developer.equifax.com/products\n  - https://www.equifax.com\nnotes: No public pricing; meter unit prices must be reconciled with your Equifax contract.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Equifax Inc.\nserviceCategory: Credit Bureau / Identity Data\nbillingModel:\n\
+  \  pricingCategory: Pay-Per-Inquiry / Custom Contract\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Equifax\n  ServiceCategory: Credit Bureau / Identity Data\n  ProviderName: Equifax\n  PublisherName: Equifax Inc.\n  InvoiceIssuerName: Equifax Inc.\n  BillingCurrency: USD\nmeters:\n  - name: credit_inquiries\n    unit: inquiry\n    aggregation: sum\n    dimensions:\n      - product\n      - permissible_purpose\n      - subscriber_code\n  - name: identity_checks\n    unit: check\n    aggregation: sum\n    dimensions:\n      - product\n  - name: verification_pulls\n    unit: pull\n    aggregation: sum\n    dimensions:\n      - product\n  - name: marketing_records\n    unit: record\n    aggregation: sum\n    dimensions:\n      - audience\n  - name: subscription_fees\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\nprinciples:\n  - name: Visibility\n    description:\
+  \ Reconcile monthly Equifax invoices against your subscriber-code-level usage logs; instrument\n      every API call with the permissible-purpose and product code.\n  - name: Allocation\n    description: Tag inquiries with consuming business unit and decision context (origination, account\n      management, marketing) so cost is allocable.\n  - name: Optimization\n    description: Use prescreen / batch services for marketing rather than individual pulls; cache where\n      FCRA permits; renegotiate unit prices at volume tier inflection points.\n  - name: Accountability\n    description: Compliance and finance jointly own bureau spend; risk owners must justify pull volume\n      against business outcomes.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/equifax/refs/heads/main/finops/equifax-finops.yml
-sources: []
+sources:
+- https://developer.equifax.com/products
+- https://www.equifax.com
 specification: FinOps Framework
 tags:
-- Credit
-- Credit History
-- Credit Reporting
-- Identity
-- Fraud Detection
 - FinOps
-- Cost Management
 - FOCUS
+- Credit Bureau
+- Identity
+- Verification
 ---

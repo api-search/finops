@@ -88,88 +88,76 @@ billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
+  - Usage
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the API Snap API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  - Credit
+  pricingCategory: Tiered Subscription
+description: FOCUS-aligned FinOps for API Snap - flat tiered subscription (Free / Hobby / Pro / Business) with a single monthly request quota that covers all 13+ utility endpoints under one API key. No per-endpoint billing or per-call overage charges are published; consumption telemetry surfaces via the X-RateLimit-* response headers and the in-product API usage dashboard offered on Hobby and above. reconciled is false because the public-facing FinOps surface (overage handling, invoice line items) is not documented separately from the pricing page.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
+  ChargeCategory: Purchase
   InvoiceIssuerName: API Snap
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  PricingCategory: Tiered Subscription
+  PricingUnit: month
   ProviderName: API Snap
   PublisherName: API Snap
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Developer Utilities
   ServiceName: API Snap
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: count
+  description: Monthly subscription line for the active plan tier (Hobby / Pro / Business). Free tier has no plan_month line.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - plan
+  name: plan_month
+  unit: month
+- aggregation: max
+  description: Plan-tier monthly request quota (100 / 5,000 / 50,000 / 500,000) covering all 13+ endpoints under one API key.
+  dimensions:
+  - plan
+  - api_key
+  name: monthly_request_quota
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Actual request count made against the API key, drawn from the monthly quota. Surfaced via X-RateLimit-Limit and X-RateLimit-Remaining response headers and the in-product API usage dashboard.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
+  - api_key
   - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - status_code
+  name: requests_consumed
+  unit: request
+- aggregation: sum
+  description: Count of HTTP 429 responses returned to the client; signals that the monthly quota or plan rate ceiling is being hit. Each 429 body includes usage, limit, and an upgrade_url.
+  dimensions:
+  - api_key
+  - endpoint
+  name: rate_throttle_events
+  unit: event
 name: Api Snap Finops
 provider_name: API Snap
 provider_slug: api-snap
 publisher_name: API Snap
-service_category: API
+service_category: Developer Utilities
 slug: api-snap-finops
 source_filename: api-snap-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: API Snap\nproviderId: api-snap\npublisherName: API Snap\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - API Utilities\n  - Developer Tools\n  - QR Codes\n  - Screenshots\n  - Image Processing\n  - PDF Generation\n  - Markdown\n  - URL Metadata\n  - Hashing\n  - JWT\n  - Base64\n  - UUID\n  - Color Conversion\n  - Lorem Ipsum\n  - Placeholder Images\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the API Snap API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption\
-  \ costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n\
-  \      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: API Snap\n  ServiceCategory: Developer Tools / API\n  ProviderName: API Snap\n  PublisherName: API Snap\n  InvoiceIssuerName: API Snap\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n\
-  \      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: QR Code API\n    baseURL: https://api-snap.com/api\n    tags:\n      - QR Codes\n      - Image Generation\n      - Encoding\n    serviceName: QR Code API\n    serviceCategory: API\n  - name: Screenshot API\n    baseURL: https://api-snap.com/api\n    tags:\n      - Screenshots\n      - Browser Automation\n      - Web Capture\n    serviceName: Screenshot API\n    serviceCategory: API\n  - name: Image Resize API\n    baseURL: https://api-snap.com/api\n    tags:\n      - Image Processing\n      - Image Resize\n      - Format Conversion\n    serviceName:\
-  \ Image Resize API\n    serviceCategory: API\n  - name: PDF API\n    baseURL: https://api-snap.com/api\n    tags:\n      - PDF\n      - Document Generation\n      - HTML to PDF\n    serviceName: PDF API\n    serviceCategory: API\n  - name: Markdown API\n    baseURL: https://api-snap.com/api\n    tags:\n      - Markdown\n      - HTML\n      - Content Conversion\n    serviceName: Markdown API\n    serviceCategory: API\n  - name: URL Metadata API\n    baseURL: https://api-snap.com/api\n    tags:\n      - URL Metadata\n      - Open Graph\n      - Link Preview\n    serviceName: URL Metadata API\n    serviceCategory: API\n  - name: Hash API\n    baseURL: https://api-snap.com/api\n    tags:\n      - Hashing\n      - Cryptography\n      - Security\n    serviceName: Hash API\n    serviceCategory: API\n  - name: JWT Decode API\n    baseURL: https://api-snap.com/api\n    tags:\n      - JWT\n      - Tokens\n      - Security\n    serviceName: JWT Decode API\n    serviceCategory: API\n  - name: Base64\
-  \ API\n    baseURL: https://api-snap.com/api\n    tags:\n      - Base64\n      - Encoding\n      - Decoding\n    serviceName: Base64 API\n    serviceCategory: API\n  - name: UUID API\n    baseURL: https://api-snap.com/api\n    tags:\n      - UUID\n      - Identifiers\n      - ID Generation\n    serviceName: UUID API\n    serviceCategory: API\n  - name: Color API\n    baseURL: https://api-snap.com/api\n    tags:\n      - Color\n      - Color Conversion\n      - Design Utilities\n    serviceName: Color API\n    serviceCategory: API\n  - name: Lorem Ipsum API\n    baseURL: https://api-snap.com/api\n    tags:\n      - Lorem Ipsum\n      - Placeholder Text\n      - Content Generation\n    serviceName: Lorem Ipsum API\n    serviceCategory: API\n  - name: Placeholder Image API\n    baseURL: https://api-snap.com/api\n    tags:\n      - Placeholder Images\n      - SVG\n      - Design Utilities\n    serviceName: Placeholder Image API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per\
-  \ 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://api-snap.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: API Snap\nproviderId: api-snap\ncreated: '2026-05-06'\nmodified: '2026-05-06'\nreconciled: false\ntags:\n  - Developer Utilities\n  - API Subscription\n  - FinOps\n  - FOCUS\ndescription: >-\n  FOCUS-aligned FinOps for API Snap - flat tiered subscription (Free / Hobby /\n  Pro / Business) with a single monthly request quota that covers all 13+\n  utility endpoints under one API key. No per-endpoint billing or per-call\n  overage charges are published; consumption telemetry surfaces via the\n  X-RateLimit-* response headers and the in-product API usage dashboard offered\n  on Hobby and above. reconciled is false because the public-facing FinOps\n  surface (overage handling, invoice line items) is not documented separately\n  from the pricing page.\nsources:\n  - https://api-snap.com/pricing\n  - https://api-snap.com/\n  - https://focus.finops.org/focus-specification/v1-3/\n\
+  alignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: API Snap\nserviceCategory: Developer Utilities\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Adjustment\n    - Refund\n    - Credit\nfocusColumns:\n  ServiceName: API Snap\n  ServiceCategory: Developer Utilities\n  ProviderName: API Snap\n  PublisherName: API Snap\n  InvoiceIssuerName: API Snap\n  BillingCurrency: USD\n  ChargeCategory: Purchase\n  PricingCategory: Tiered Subscription\n  PricingUnit: month\nmeters:\n  - name: plan_month\n    description: Monthly subscription line for the active plan tier (Hobby / Pro / Business). Free tier has no plan_month line.\n    unit: month\n    aggregation: count\n    dimensions:\n      - plan\n  -\
+  \ name: monthly_request_quota\n    description: Plan-tier monthly request quota (100 / 5,000 / 50,000 / 500,000) covering all 13+ endpoints under one API key.\n    unit: request\n    aggregation: max\n    dimensions:\n      - plan\n      - api_key\n  - name: requests_consumed\n    description: Actual request count made against the API key, drawn from the monthly quota. Surfaced via X-RateLimit-Limit and X-RateLimit-Remaining response headers and the in-product API usage dashboard.\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api_key\n      - endpoint\n      - status_code\n  - name: rate_throttle_events\n    description: Count of HTTP 429 responses returned to the client; signals that the monthly quota or plan rate ceiling is being hit. Each 429 body includes usage, limit, and an upgrade_url.\n    unit: event\n    aggregation: sum\n    dimensions:\n      - api_key\n      - endpoint\nprinciples:\n  - name: Visibility\n    description: >-\n      Read X-RateLimit-Limit\
+  \ and X-RateLimit-Remaining headers on every\n      response; on Hobby and above, watch the in-product API usage dashboard\n      to track consumption against the monthly quota. The 429 body returns\n      `usage`, `limit`, and an `upgrade_url` for in-product upgrade prompts.\n  - name: Allocation\n    description: >-\n      API Snap issues a single key per account; for multi-product attribution\n      tag outbound requests with a per-service correlation header on the\n      caller side and aggregate by `endpoint` dimension in the meter.\n  - name: Optimization\n    description: >-\n      Cache image, screenshot, PDF, and metadata responses aggressively at\n      the consumer side - many of these endpoints produce deterministic or\n      slowly-changing outputs. Right-size the plan tier monthly: 100 free\n      calls, 5,000 hobby, 50,000 pro, 500,000 business. Negotiate custom\n      rate limits at the Business tier when burst patterns require them.\n  - name: Accountability\n    description:\
+  \ >-\n      Engineering owns the API key and caching layer; the consuming product\n      team owns the monthly request budget. The owner of the API Snap\n      account holds the upgrade decision when the in-product upgrade_url\n      surfaces in 429 responses.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/api-snap/refs/heads/main/finops/api-snap-finops.yml
-sources: []
+sources:
+- https://api-snap.com/pricing
+- https://api-snap.com/
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
-- API Utilities
-- Developer Tools
-- QR Codes
-- Screenshots
-- Image Processing
-- PDF Generation
-- Markdown
-- URL Metadata
-- Hashing
-- JWT
-- Base64
-- UUID
-- Color Conversion
-- Lorem Ipsum
-- Placeholder Images
+- Developer Utilities
+- API Subscription
 - FinOps
-- Cost Management
 - FOCUS
 ---

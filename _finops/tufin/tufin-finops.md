@@ -20,83 +20,45 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/tufin/refs/heads/main/openapi/tufin-securechange-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Tufin API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Contract
+description: Tufin sells enterprise network-security policy software via direct sales; no public pricing, metered usage API, or FOCUS-aligned billing export is published. FinOps surface is the contracted product-license line.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Tufin
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  InvoiceIssuerName: Tufin Software Technologies
   ProviderName: Tufin
-  PublisherName: Tufin
-  ServiceCategory: Developer Tools / API
+  PublisherName: Tufin Software Technologies
+  ServiceCategory: Network Security Policy Management
   ServiceName: Tufin
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Tufin product license / subscription line (SecureTrack+, SecureChange+, Tufin Enterprise, etc.).
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - product
+  name: product_license
+  unit: month
 name: Tufin Finops
 provider_name: Tufin
 provider_slug: tufin
-publisher_name: Tufin
-service_category: API
+publisher_name: Tufin Software Technologies
+service_category: Network Security Policy Management
 slug: tufin-finops
 source_filename: tufin-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Tufin\nproviderId: tufin\npublisherName: Tufin\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud Security\n  - Compliance\n  - Firewall Management\n  - Network Security\n  - Network Topology\n  - Policy Orchestration\n  - Risk Management\n  - Security Policy Management\n  - Zero Trust\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Tufin API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams\
-  \ in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n\
-  \      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Tufin\n  ServiceCategory: Developer Tools / API\n  ProviderName: Tufin\n  PublisherName: Tufin\n  InvoiceIssuerName: Tufin\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description:\
-  \ Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Tufin SecureTrack API\n    baseURL: https://{tos_host}/securetrack/api\n    tags:\n      - Compliance\n      - Firewall Rules\n      - Network Devices\n      - Network Topology\n      - Policy Analysis\n      - Risk Analysis\n    serviceName: Tufin SecureTrack API\n    serviceCategory: API\n  - name: Tufin SecureChange API\n    baseURL: https://{tos_host}/securechangeworkflow/api\n    tags:\n      - Approvals\n      - Change Management\n      - ITSM Integration\n      - Policy Changes\n      - Ticketing\n      - Workflow Automation\n    serviceName: Tufin SecureChange API\n    serviceCategory: API\n  - name: Tufin\
-  \ SecureApp API\n    baseURL: https://{tos_host}/securechangeworkflow/api\n    tags:\n      - Application Security\n      - Micro-Segmentation\n      - Policy Management\n      - Zero Trust\n    serviceName: Tufin SecureApp API\n    serviceCategory: API\n  - name: Tufin SecureTrack GraphQL API\n    baseURL: https://{tos_ip}/v2/api/sync/graphql\n    tags:\n      - GraphQL\n      - Network Topology\n      - OAuth2\n      - Policy Analysis\n      - Security Data\n    serviceName: Tufin SecureTrack GraphQL API\n    serviceCategory: API\n  - name: Tufin SecureCloud API\n    baseURL: https://{account}.securecloud.tufin.io/api/v1\n    tags:\n      - Cloud Security\n      - CSPM\n      - Kubernetes\n      - Multi-Cloud\n      - Policy Management\n    serviceName: Tufin SecureCloud API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n\
-  \    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.tufin.com/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Tufin\nproviderId: tufin\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Network Security\n  - Firewall\n  - FinOps\n  - FOCUS\ndescription: Tufin sells enterprise network-security policy software via direct sales; no public pricing,\n  metered usage API, or FOCUS-aligned billing export is published. FinOps surface is the contracted product-license\n  line.\nsources:\n  - https://www.tufin.com/\nnotes: No public pricing or usage telemetry. Trimmed to Contact Sales shape.\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Tufin Software Technologies\nserviceCategory: Network Security Policy Management\nbillingModel:\n  pricingCategory: Contract\n  billingFrequency:\
+  \ Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\nfocusColumns:\n  ServiceName: Tufin\n  ServiceCategory: Network Security Policy Management\n  ProviderName: Tufin\n  PublisherName: Tufin Software Technologies\n  InvoiceIssuerName: Tufin Software Technologies\n  BillingCurrency: USD\nmeters:\n  - name: product_license\n    description: Tufin product license / subscription line (SecureTrack+, SecureChange+, Tufin Enterprise,\n      etc.).\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\nprinciples:\n  - name: Visibility\n    description: Visibility is limited to the contracted license invoice; usage telemetry stays inside\n      the customer-managed Tufin deployment and is not exposed as a public cost API.\n  - name: Allocation\n    description: Allocate Tufin spend to the network-security / SecOps function that owns firewall and\n      policy automation; sub-allocate by product (SecureTrack vs SecureChange vs AKIPS) where multiple\n      lines\
+  \ are licensed.\n  - name: Optimization\n    description: Optimization happens at renewal — review the active product mix against actual policy\n      and change-automation usage, and decide whether modules like AKIPS or TOS Discovery are pulling\n      their weight before resigning.\n  - name: Accountability\n    description: A SecOps / network engineering owner manages the Tufin relationship and renewal; finance\n      approves the annual contract.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/tufin/refs/heads/main/finops/tufin-finops.yml
-sources: []
+sources:
+- https://www.tufin.com/
 specification: FinOps Framework
 tags:
-- Cloud Security
-- Compliance
-- Firewall Management
 - Network Security
-- Network Topology
-- Policy Orchestration
-- Risk Management
-- Security Policy Management
-- Zero Trust
+- Firewall
 - FinOps
-- Cost Management
 - FOCUS
 ---

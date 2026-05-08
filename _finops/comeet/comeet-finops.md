@@ -14,80 +14,60 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/comeet/refs/heads/main/openapi/comeet-careers-api-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Comeet API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Refund
+  pricingCategory: Tiered Subscription
+description: 'FOCUS-aligned FinOps for Comeet (Spark Hire Recruit): annual ATS subscription scaled by employee count, with included annual AI resume-review allotments per tier. API access is bundled, not metered.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Comeet
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Comeet
-  PublisherName: Comeet
-  ServiceCategory: Developer Tools / API
-  ServiceName: Comeet
+  InvoiceIssuerName: Spark Hire, Inc.
+  ProviderName: Spark Hire
+  PublisherName: Spark Hire, Inc.
+  ServiceCategory: HR Software
+  ServiceName: Comeet (Spark Hire Recruit)
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
   - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
+  - employee_band
+  name: ats_subscription
+  unit: month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
   - tier
-  name: compute_seconds
-  unit: second
+  name: ai_resume_reviews
+  unit: review
+- aggregation: sum
+  name: video_interview_addon
+  unit: month
+- aggregation: sum
+  name: behavioral_assessment_addon
+  unit: month
 name: Comeet Finops
 provider_name: Comeet
 provider_slug: comeet
-publisher_name: Comeet
-service_category: API
+publisher_name: Spark Hire, Inc.
+service_category: HR Software
 slug: comeet-finops
 source_filename: comeet-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Comeet\nproviderId: comeet\npublisherName: Comeet\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - ATS\n  - Candidates\n  - Careers\n  - Interviews\n  - Jobs\n  - Recruiting\n  - Talent Acquisition\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Comeet API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API\
-  \ call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Comeet\n  ServiceCategory: Developer Tools / API\n  ProviderName: Comeet\n  PublisherName: Comeet\n  InvoiceIssuerName: Comeet\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation:\
-  \ sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Comeet Careers API\n    baseURL: https://www.comeet.co/careers-api/2.0\n    tags:\n      - Careers\n      - Jobs\n      - Recruiting\n    serviceName: Comeet Careers API\n    serviceCategory: API\n  - name: Comeet Recruiting API\n    baseURL: ''\n    tags:\n      - ATS\n      - Candidates\n      - Pipeline\n      - Recruiting\n    serviceName: Comeet Recruiting API\n    serviceCategory: API\n  - name: Comeet Hires API\n    baseURL: ''\n    tags:\n      - HRIS\n      - Hiring\n      - Onboarding\n    serviceName: Comeet Hires API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n\
-  \    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.sparkhire.com/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Comeet\nproviderId: comeet\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - HR Tech\n  - Recruiting\ndescription: 'FOCUS-aligned FinOps for Comeet (Spark Hire Recruit): annual ATS subscription scaled by\n  employee count, with included annual AI resume-review allotments per tier. API access is bundled, not\n  metered.'\nsources:\n  - https://www.sparkhire.com/pricing\n  - https://developers.comeet.com/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Spark Hire, Inc.\nserviceCategory: HR Software\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    -\
+  \ Purchase\n    - Tax\n    - Adjustment\n    - Refund\nfocusColumns:\n  ServiceName: Comeet (Spark Hire Recruit)\n  ServiceCategory: HR Software\n  ProviderName: Spark Hire\n  PublisherName: Spark Hire, Inc.\n  InvoiceIssuerName: Spark Hire, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: ats_subscription\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\n      - employee_band\n  - name: ai_resume_reviews\n    unit: review\n    aggregation: sum\n    dimensions:\n      - tier\n  - name: video_interview_addon\n    unit: month\n    aggregation: sum\n  - name: behavioral_assessment_addon\n    unit: month\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Track AI-resume-review consumption against the annual allotment in the Spark Hire admin\n      console; monitor active hiring seats and pipeline volume.\n  - name: Allocation\n    description: Tag requisitions and hires by department/cost center to attribute ATS spend.\n  - name: Optimization\n\
+  \    description: Right-size tier at annual renewal based on employee count and reviewer volume; bundle\n      video-interview/assessment add-ons only where used.\n  - name: Accountability\n    description: Talent acquisition leadership owns ATS license; finance owns annual renewal and add-on\n      spend.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/comeet/refs/heads/main/finops/comeet-finops.yml
-sources: []
+sources:
+- https://www.sparkhire.com/pricing
+- https://developers.comeet.com/
 specification: FinOps Framework
 tags:
-- ATS
-- Candidates
-- Careers
-- Interviews
-- Jobs
-- Recruiting
-- Talent Acquisition
 - FinOps
-- Cost Management
 - FOCUS
+- HR Tech
+- Recruiting
 ---

@@ -33,71 +33,99 @@ billing_model:
   - Tax
   - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the NATS API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Tiered Subscription + Add-ons
+description: 'FOCUS-aligned FinOps for NATS: open-source server is free; commercial billing flows through Synadia Cloud as a tiered subscription with quota-based add-ons (connections, leaf nodes, storage, HA storage).'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: NATS
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: NATS
-  PublisherName: NATS
-  ServiceCategory: Developer Tools / API
-  ServiceName: NATS
+  InvoiceIssuerName: Synadia Communications, Inc.
+  PricingCategory: Subscription
+  PricingUnit: month
+  ProviderName: Synadia
+  PublisherName: Synadia Communications, Inc.
+  ServiceCategory: Messaging
+  ServiceName: NATS / Synadia Cloud
+  ServiceSubcategory: Pub-Sub Streaming
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Monthly Synadia Cloud Team subscription (Personal/Starter/Pro/Premium/Enterprise).
   dimensions:
-  - api
-  - endpoint
   - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  - team
+  name: team_subscription
+  unit: month
+- aggregation: max
+  description: Concurrent NATS client connections; capped per tier.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  - team
+  - account
+  name: connections
+  unit: connection
+- aggregation: max
+  description: Active subject subscriptions; capped per tier.
+  dimensions:
+  - team
+  - account
+  name: subscriptions
+  unit: subscription
+- aggregation: sum
+  description: Outbound message bytes counted against tier network-data quota.
+  dimensions:
+  - team
+  - account
+  name: network_data
   unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+- aggregation: avg
+  description: JetStream standard storage consumed.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - team
+  - account
+  - stream
+  name: storage_gb_month
+  unit: GB-month
+- aggregation: avg
+  description: JetStream high-availability (replicated) storage consumed.
+  dimensions:
+  - team
+  - account
+  - stream
+  name: ha_storage_gb_month
+  unit: GB-month
+- aggregation: max
+  description: Active leaf-node connections; charged per extra leaf node beyond tier inclusion.
+  dimensions:
+  - team
+  name: leaf_nodes
+  unit: leaf_node
+- aggregation: sum
+  description: 10-connection add-on packs.
+  dimensions:
+  - team
+  name: connectivity_packs
+  unit: pack
 name: Nats Finops
 provider_name: NATS
 provider_slug: nats
-publisher_name: NATS
-service_category: API
+publisher_name: Synadia Communications, Inc.
+service_category: Messaging + Streaming
 slug: nats-finops
 source_filename: nats-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: NATS\nproviderId: nats\npublisherName: NATS\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Cloud Native\n  - IoT\n  - Message Broker\n  - Microservices\n  - Pub Sub\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the NATS API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: NATS\n  ServiceCategory: Developer Tools / API\n  ProviderName: NATS\n  PublisherName: NATS\n  InvoiceIssuerName: NATS\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n\
-  \      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: NATS Monitoring API\n    baseURL: http://localhost:8222\n    tags:\n      - Health\n      - Metrics\n      - Monitoring\n    serviceName: NATS Monitoring API\n    serviceCategory: API\n  - name: NATS Messaging API\n    baseURL: ''\n    tags:\n      - JetStream\n      - Messaging\n      - Pub Sub\n      - Streaming\n    serviceName: NATS Messaging API\n    serviceCategory: API\n  - name: NATS JetStream Management API\n    baseURL: ''\n    tags:\n      - JetStream\n      - Management\n      - Streaming\n    serviceName: NATS JetStream Management API\n    serviceCategory: API\n  - name: NATS Key-Value Store API\n    baseURL: ''\n    tags:\n      - JetStream\n      - Key-Value\n      - Storage\n    serviceName: NATS Key-Value Store API\n    serviceCategory:\
-  \ API\n  - name: NATS Object Store API\n    baseURL: ''\n    tags:\n      - JetStream\n      - Object Store\n      - Storage\n    serviceName: NATS Object Store API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.synadia.com/cloud
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: NATS\nproviderId: nats\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - Message Broker\n  - Streaming\n  - Cost Management\ndescription: 'FOCUS-aligned FinOps for NATS: open-source server is free; commercial billing flows through\n  Synadia Cloud as a tiered subscription with quota-based add-ons (connections, leaf nodes, storage, HA\n  storage).'\nsources:\n  - https://www.synadia.com/cloud\n  - https://docs.synadia.com/cloud/pricing\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Synadia Communications, Inc.\nserviceCategory: Messaging + Streaming\nbillingModel:\n  pricingCategory: Tiered Subscription + Add-ons\n  billingFrequency:\
+  \ Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\nfocusColumns:\n  ServiceName: NATS / Synadia Cloud\n  ServiceCategory: Messaging\n  ServiceSubcategory: Pub-Sub Streaming\n  ProviderName: Synadia\n  PublisherName: Synadia Communications, Inc.\n  InvoiceIssuerName: Synadia Communications, Inc.\n  BillingCurrency: USD\n  PricingCategory: Subscription\n  PricingUnit: month\nmeters:\n  - name: team_subscription\n    description: Monthly Synadia Cloud Team subscription (Personal/Starter/Pro/Premium/Enterprise).\n    unit: month\n    aggregation: sum\n    dimensions:\n      - tier\n      - team\n  - name: connections\n    description: Concurrent NATS client connections; capped per tier.\n    unit: connection\n    aggregation: max\n    dimensions:\n      - team\n      - account\n  - name: subscriptions\n    description: Active subject subscriptions; capped per tier.\n    unit: subscription\n    aggregation: max\n \
+  \   dimensions:\n      - team\n      - account\n  - name: network_data\n    description: Outbound message bytes counted against tier network-data quota.\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - team\n      - account\n  - name: storage_gb_month\n    description: JetStream standard storage consumed.\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - team\n      - account\n      - stream\n  - name: ha_storage_gb_month\n    description: JetStream high-availability (replicated) storage consumed.\n    unit: GB-month\n    aggregation: avg\n    dimensions:\n      - team\n      - account\n      - stream\n  - name: leaf_nodes\n    description: Active leaf-node connections; charged per extra leaf node beyond tier inclusion.\n    unit: leaf_node\n    aggregation: max\n    dimensions:\n      - team\n  - name: connectivity_packs\n    description: 10-connection add-on packs.\n    unit: pack\n    aggregation: sum\n    dimensions:\n      - team\nprinciples:\n  - name:\
+  \ Visibility\n    description: Use the Synadia Control Plane dashboard and `nsc describe` plus the NATS monitoring HTTP\n      endpoints (varz, accountz, jsz) to attribute connections, subscriptions, and JetStream storage by\n      account and stream.\n  - name: Allocation\n    description: Map Synadia Teams and NATS Accounts to internal cost centers; tag streams and KV buckets\n      with team metadata so JetStream storage rolls up correctly.\n  - name: Optimization\n    description: Right-size tier (Starter vs Pro vs Premium) based on actual concurrent connection peak;\n      consolidate low-volume accounts to share quota; prefer standard storage over HA where consistency\n      requirements allow; consider self-hosting OSS NATS for predictable, high-volume workloads.\n  - name: Accountability\n    description: Set monthly Synadia Cloud spend ceilings per Team; alert on connection or network-data\n      utilization above 80% of tier quota to avoid quota-exceeded incidents and unplanned\
+  \ upgrades.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/nats/refs/heads/main/finops/nats-finops.yml
-sources: []
+sources:
+- https://www.synadia.com/cloud
+- https://docs.synadia.com/cloud/pricing
 specification: FinOps Framework
 tags:
-- Cloud Native
-- IoT
-- Message Broker
-- Microservices
-- Pub Sub
 - FinOps
-- Cost Management
 - FOCUS
+- Message Broker
+- Streaming
+- Cost Management
 ---

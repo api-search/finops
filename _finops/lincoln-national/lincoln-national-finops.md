@@ -26,79 +26,59 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/lincoln-national/refs/heads/main/openapi/lincoln-national-openapi.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Per-Invoice
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Lincoln National API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Custom Contract
+description: 'FOCUS-aligned FinOps scaffold for Lincoln Financial / Lincoln National: partner-only LincSmart API access with no public per-call pricing. Consumer-side telemetry tracks against the LincSmart partner agreement, not metered API invoices.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Lincoln National
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Lincoln National
-  PublisherName: Lincoln National
-  ServiceCategory: Developer Tools / API
-  ServiceName: Lincoln National
+  InvoiceIssuerName: Lincoln National Corporation
+  ProviderName: Lincoln Financial
+  PublisherName: Lincoln National Corporation
+  ServiceCategory: Insurance / Retirement / API
+  ServiceName: Lincoln Financial LincSmart API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
+  - environment
+  - partner
   name: api_requests
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - employer
+  - product
+  name: enrollment_events
+  unit: event
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: eoi_decisions
+  unit: decision
 name: Lincoln National Finops
 provider_name: Lincoln National
 provider_slug: lincoln-national
-publisher_name: Lincoln National
-service_category: API
+publisher_name: Lincoln National Corporation
+service_category: Insurance / Retirement / API
 slug: lincoln-national-finops
 source_filename: lincoln-national-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Lincoln National\nproviderId: lincoln-national\npublisherName: Lincoln National\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Annuities\n  - Benefits\n  - Enrollment\n  - HR\n  - Insurance\n  - Retirement\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Lincoln National API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag\
-  \ every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n\
-  \    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Lincoln National\n  ServiceCategory: Developer Tools / API\n  ProviderName: Lincoln National\n  PublisherName: Lincoln National\n  InvoiceIssuerName: Lincoln National\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over\
-  \ the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Lincoln Financial LincSmart Enrollment API\n    baseURL: https://www.lincolnfinancial.com\n    tags:\n      - Benefits\n      - Enrollment\n      - HR\n      - Insurance\n    serviceName: Lincoln Financial LincSmart Enrollment API\n    serviceCategory: API\n  - name: Lincoln Financial LincSmart EOI Solution API\n    baseURL: https://www.lincolnfinancial.com\n    tags:\n      - Benefits\n      - Evidence of Insurability\n      - HR\n      - Insurance\n    serviceName: Lincoln Financial LincSmart EOI Solution API\n    serviceCategory: API\n  - name: Lincoln Financial LincSmart Plan Design API\n    baseURL: https://www.lincolnfinancial.com\n\
-  \    tags:\n      - Benefits\n      - HR\n      - Insurance\n      - Plan Design\n    serviceName: Lincoln Financial LincSmart Plan Design API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.lincolnfinancial.com/public/static/digitalbrochure/gp/lincsmart/index.html
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Lincoln National\nproviderId: lincoln-national\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - FinOps\n  - FOCUS\n  - Annuities\n  - Benefits\n  - Insurance\n  - Retirement\ndescription: 'FOCUS-aligned FinOps scaffold for Lincoln Financial / Lincoln National: partner-only LincSmart\n  API access with no public per-call pricing. Consumer-side telemetry tracks against the LincSmart partner\n  agreement, not metered API invoices.'\nnotes: Pricing is partner-contract driven. Meters describe the consumer-side observation surface.\nsources:\n  - https://www.lincolnfinancial.com/public/static/digitalbrochure/gp/lincsmart/index.html\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\n\
+  publisherName: Lincoln National Corporation\nserviceCategory: Insurance / Retirement / API\nbillingModel:\n  pricingCategory: Custom Contract\n  billingFrequency: Per-Invoice\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Lincoln Financial LincSmart API\n  ServiceCategory: Insurance / Retirement / API\n  ProviderName: Lincoln Financial\n  PublisherName: Lincoln National Corporation\n  InvoiceIssuerName: Lincoln National Corporation\n  BillingCurrency: USD\nmeters:\n  - name: api_requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - environment\n      - partner\n  - name: enrollment_events\n    unit: event\n    aggregation: sum\n    dimensions:\n      - employer\n      - product\n  - name: eoi_decisions\n    unit: decision\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Use the LincSmart real-time sync events plus your own observability stack to track\
+  \ enrollment,\n      EOI, and leave activity volumes; Lincoln does not expose a public usage API.\n  - name: Allocation\n    description: Tag calls by employer group, product (life, disability, retirement), and benefits platform\n      partner so the LincSmart contract draw can be allocated correctly.\n  - name: Optimization\n    description: Replace weekly batch files with LincSmart real-time sync; throttle annual-enrollment\n      bursts via partner-coordinated windows.\n  - name: Accountability\n    description: Assign a LincSmart partner owner who reviews enrollment-event throughput and contract\n      consumption against quarterly benefit cycles.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/lincoln-national/refs/heads/main/finops/lincoln-national-finops.yml
-sources: []
+sources:
+- https://www.lincolnfinancial.com/public/static/digitalbrochure/gp/lincsmart/index.html
 specification: FinOps Framework
 tags:
+- FinOps
+- FOCUS
 - Annuities
 - Benefits
-- Enrollment
-- HR
 - Insurance
 - Retirement
-- FinOps
-- Cost Management
-- FOCUS
 ---

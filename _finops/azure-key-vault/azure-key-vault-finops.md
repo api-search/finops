@@ -23,76 +23,94 @@ billing_model:
   billingFrequency: Monthly
   chargeCategories:
   - Usage
-  - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Azure Key Vault API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Pay-As-You-Go
+description: 'FOCUS-aligned FinOps for Azure Key Vault: per-10K-transaction usage metering for secrets, software keys, HSM-protected keys, and certificates, plus partition-hour billing for Managed HSM. Charges flow into the standard Azure invoice.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Azure Key Vault
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Azure Key Vault
-  PublisherName: Azure Key Vault
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Microsoft Corporation
+  PricingCategory: Pay-As-You-Go
+  ProviderName: Microsoft
+  PublisherName: Microsoft Corporation
+  ServiceCategory: Security
   ServiceName: Azure Key Vault
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Get/set/list secret operations
   dimensions:
-  - api
-  - endpoint
-  - tier
+  - vault
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  - operation_type
+  name: secret_operations
+  unit: operation
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Software-protected key crypto operations
   dimensions:
-  - api
+  - vault
   - region
-  - consumer
-  name: data_egress
-  unit: GB
+  - key_type
+  - key_size
+  name: software_key_operations
+  unit: operation
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
+  description: HSM-protected key crypto operations (Premium / Managed HSM)
   dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - vault
+  - region
+  - key_type
+  - key_size
+  name: hsm_key_operations
+  unit: operation
+- aggregation: avg
+  description: HSM-protected keys stored in Premium vault per month
+  dimensions:
+  - vault
+  - region
+  name: hsm_key_storage
+  unit: key-month
+- aggregation: sum
+  description: Certificate create / get / renew operations
+  dimensions:
+  - vault
+  - region
+  name: certificate_operations
+  unit: operation
+- aggregation: sum
+  description: Auto-renew issuances; metered separately from create
+  name: certificate_renewals
+  unit: renewal
+- aggregation: sum
+  description: Single-tenant Managed HSM partition active hours
+  dimensions:
+  - hsm_pool
+  - region
+  name: managed_hsm_partition_hours
+  unit: partition-hour
 name: Azure Key Vault Finops
 provider_name: Azure Key Vault
 provider_slug: azure-key-vault
-publisher_name: Azure Key Vault
-service_category: API
+publisher_name: Microsoft Corporation
+service_category: Security
 slug: azure-key-vault-finops
 source_filename: azure-key-vault-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Azure Key Vault\nproviderId: azure-key-vault\npublisherName: Azure Key Vault\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Certificates\n  - Cloud Security\n  - Cryptography\n  - Key Management\n  - Secrets Management\n  - Security\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Azure Key Vault API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Azure Key Vault\n  ServiceCategory: Developer Tools / API\n  ProviderName: Azure Key Vault\n  PublisherName: Azure Key Vault\n  InvoiceIssuerName: Azure Key Vault\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes\
-  \ returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Azure Key Vault API\n    baseURL: https://management.azure.com\n    tags:\n      - Certificates\n      - Keys\n      - Secrets\n      - Vaults\n    serviceName: Azure Key Vault API\n    serviceCategory: API\n  - name: Azure Key Vault Data Plane API\n    baseURL: https://{vault-name}.vault.azure.net\n    tags:\n      - Certificate Operations\n      - Cryptographic Operations\n      - Key Operations\n      - Secret Operations\n    serviceName: Azure Key Vault Data Plane API\n    serviceCategory: API\n  - name: Azure Key Vault Keys API\n    baseURL: https://{vault-name}.vault.azure.net\n    tags:\n      - Cryptographic Operations\n\
-  \      - Encryption\n      - HSM\n      - Keys\n      - Signing\n    serviceName: Azure Key Vault Keys API\n    serviceCategory: API\n  - name: Azure Key Vault Secrets API\n    baseURL: https://{vault-name}.vault.azure.net\n    tags:\n      - Connection Strings\n      - Passwords\n      - Secrets\n      - Secure Storage\n    serviceName: Azure Key Vault Secrets API\n    serviceCategory: API\n  - name: Azure Key Vault Certificates API\n    baseURL: https://{vault-name}.vault.azure.net\n    tags:\n      - Certificate Authorities\n      - Certificate Management\n      - Certificates\n      - SSL\n      - TLS\n    serviceName: Azure Key Vault Certificates API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://azure.microsoft.com/en-us/pricing/details/key-vault/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Azure Key Vault\nproviderId: azure-key-vault\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Security\n  - Secrets Management\n  - HSM\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Azure Key Vault: per-10K-transaction usage metering for secrets,\n  software keys, HSM-protected keys, and certificates, plus partition-hour billing for Managed HSM. Charges\n  flow into the standard Azure invoice.'\nsources:\n  - https://azure.microsoft.com/en-us/pricing/details/key-vault/\n  - https://learn.microsoft.com/en-us/azure/key-vault/general/service-limits\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Microsoft Corporation\nserviceCategory: Security\n\
+  billingModel:\n  pricingCategory: Pay-As-You-Go\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Azure Key Vault\n  ServiceCategory: Security\n  ProviderName: Microsoft\n  PublisherName: Microsoft Corporation\n  InvoiceIssuerName: Microsoft Corporation\n  PricingCategory: Pay-As-You-Go\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: secret_operations\n    description: Get/set/list secret operations\n    unit: operation\n    aggregation: sum\n    dimensions:\n      - vault\n      - region\n      - operation_type\n  - name: software_key_operations\n    description: Software-protected key crypto operations\n    unit: operation\n    aggregation: sum\n    dimensions:\n      - vault\n      - region\n      - key_type\n      - key_size\n  - name: hsm_key_operations\n    description: HSM-protected key crypto operations (Premium / Managed HSM)\n    unit: operation\n    aggregation:\
+  \ sum\n    dimensions:\n      - vault\n      - region\n      - key_type\n      - key_size\n  - name: hsm_key_storage\n    description: HSM-protected keys stored in Premium vault per month\n    unit: key-month\n    aggregation: avg\n    dimensions:\n      - vault\n      - region\n  - name: certificate_operations\n    description: Certificate create / get / renew operations\n    unit: operation\n    aggregation: sum\n    dimensions:\n      - vault\n      - region\n  - name: certificate_renewals\n    description: Auto-renew issuances; metered separately from create\n    unit: renewal\n    aggregation: sum\n  - name: managed_hsm_partition_hours\n    description: Single-tenant Managed HSM partition active hours\n    unit: partition-hour\n    aggregation: sum\n    dimensions:\n      - hsm_pool\n      - region\nprinciples:\n  - name: Visibility\n    description: Use Azure Monitor diagnostic logs and Log Analytics to track per-vault transaction volume\n      by operation type; correlate with Cost\
+  \ Management cost-per-operation roll-ups.\n  - name: Allocation\n    description: Tag vaults by application / team; use one vault per workload to keep cost attribution\n      clean and respect throttling boundaries.\n  - name: Optimization\n    description: Cache secrets at the application tier; consolidate low-volume vaults; use software-protected\n      keys instead of HSM where compliance allows; size Managed HSM partitions to actual demand to avoid\n      idle hours.\n  - name: Accountability\n    description: Assign vault owners through Azure RBAC; review high-transaction vaults monthly; alert\n      on unusual operation volume which may signal cost or security incidents.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/azure-key-vault/refs/heads/main/finops/azure-key-vault-finops.yml
-sources: []
+sources:
+- https://azure.microsoft.com/en-us/pricing/details/key-vault/
+- https://learn.microsoft.com/en-us/azure/key-vault/general/service-limits
 specification: FinOps Framework
 tags:
-- Certificates
-- Cloud Security
-- Cryptography
-- Key Management
-- Secrets Management
 - Security
+- Secrets Management
+- HSM
 - FinOps
-- Cost Management
 - FOCUS
 ---

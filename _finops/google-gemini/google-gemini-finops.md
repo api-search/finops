@@ -19,80 +19,99 @@ billing_model:
   - Usage
   - Purchase
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Google Gemini API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  - Credit
+  pricingCategory: Token-Based Usage
+description: 'FOCUS-aligned FinOps for Gemini API: per-model token-based pay-as-you-go pricing with separate input vs output rates and multimodal-vs-audio bands; long-context price tiers above 200K-token prompts; Batch API offering 50% off; optional Google Search grounding meter; Enterprise via Vertex AI with provisioned throughput. Spend rolls into the standard Google Cloud Billing pipeline.'
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: Google Gemini
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Google Gemini
-  PublisherName: Google Gemini
-  ServiceCategory: Developer Tools / API
-  ServiceName: Google Gemini
+  InvoiceIssuerName: Google LLC
+  ProviderName: Google Cloud
+  PublisherName: Google LLC
+  ServiceCategory: AI Infrastructure
+  ServiceName: Gemini API
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Input tokens billed per model and modality band
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - model
+  - modality
+  - prompt_length_band
+  - project
+  name: tokens_input
+  unit: token
+- aggregation: sum
+  description: Output tokens billed per model and band
+  dimensions:
+  - model
+  - prompt_length_band
+  - project
+  name: tokens_output
+  unit: token
+- aggregation: sum
+  description: Tokens served from context cache (lower rate than fresh input)
+  dimensions:
+  - model
+  - cache_id
+  - project
+  name: tokens_cached
+  unit: token
+- aggregation: sum
+  description: Input tokens billed via the Batch API (50% discount)
+  dimensions:
+  - model
+  - project
+  name: batch_tokens_input
+  unit: token
+- aggregation: sum
+  description: Output tokens billed via the Batch API (50% discount)
+  dimensions:
+  - model
+  - project
+  name: batch_tokens_output
+  unit: token
+- aggregation: sum
+  description: Google Search grounding queries (free up to 5K/month, then $14/1K)
+  dimensions:
+  - model
+  - project
+  name: search_grounding_queries
   unit: request
 - aggregation: sum
-  description: Bytes returned over the network in API responses
+  description: Reserved Gemini capacity hours via Vertex AI Enterprise
   dimensions:
-  - api
+  - model
   - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - project
+  name: provisioned_throughput
+  unit: hour
 name: Google Gemini Finops
 provider_name: Google Gemini
 provider_slug: google-gemini
-publisher_name: Google Gemini
-service_category: API
+publisher_name: Google LLC
+service_category: AI Infrastructure / LLM
 slug: google-gemini-finops
 source_filename: google-gemini-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Gemini\nproviderId: google-gemini\npublisherName: Google Gemini\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Agentic AI\n  - Artificial Intelligence\n  - Code Generation\n  - Embeddings\n  - Generative AI\n  - Image Generation\n  - LLM\n  - Machine Learning\n  - Multimodal\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Google Gemini API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams\
-  \ in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n\
-  \      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Google Gemini\n  ServiceCategory: Developer Tools / API\n  ProviderName: Google Gemini\n  PublisherName: Google Gemini\n  InvoiceIssuerName: Google Gemini\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name:\
-  \ data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Gemini API\n    baseURL: https://generativelanguage.googleapis.com\n    tags:\n      - Audio Understanding\n      - Chat\n      - Image Understanding\n      - Multimodal\n      - Structured Output\n      - Text Generation\n      - Video Understanding\n    serviceName: Gemini API\n    serviceCategory: API\n  - name: Gemini Pro API\n    baseURL: https://generativelanguage.googleapis.com/v1beta/models/gemini-pro\n    tags:\n      - Reasoning\n      - Text Generation\n    serviceName: Gemini Pro API\n    serviceCategory: API\n  - name: Gemini Pro Vision API\n    baseURL: https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision\n\
-  \    tags:\n      - Image Understanding\n      - Multimodal\n      - Vision\n    serviceName: Gemini Pro Vision API\n    serviceCategory: API\n  - name: Gemini Ultra API\n    baseURL: https://generativelanguage.googleapis.com/v1beta/models/gemini-ultra\n    tags:\n      - Advanced AI\n      - Complex Tasks\n    serviceName: Gemini Ultra API\n    serviceCategory: API\n  - name: Gemini Embedding API\n    baseURL: https://generativelanguage.googleapis.com\n    tags:\n      - Embeddings\n      - Retrieval\n      - Semantic Search\n      - Text Similarity\n    serviceName: Gemini Embedding API\n    serviceCategory: API\n  - name: Gemini Live API\n    baseURL: https://generativelanguage.googleapis.com\n    tags:\n      - Multimodal\n      - Real-Time\n      - Streaming\n      - Video\n      - Voice\n      - WebSockets\n    serviceName: Gemini Live API\n    serviceCategory: API\n  - name: Gemini Context Caching API\n    baseURL: https://generativelanguage.googleapis.com\n    tags:\n      - Caching\n\
-  \      - Cost Optimization\n      - Performance\n    serviceName: Gemini Context Caching API\n    serviceCategory: API\n  - name: Gemini Fine-Tuning API\n    baseURL: https://generativelanguage.googleapis.com\n    tags:\n      - Fine-Tuning\n      - Model Customization\n      - Supervised Learning\n    serviceName: Gemini Fine-Tuning API\n    serviceCategory: API\n  - name: Gemini Interactions API\n    baseURL: https://generativelanguage.googleapis.com\n    tags:\n      - Agents\n      - Interactions\n      - Multi-Turn\n      - Tool Use\n    serviceName: Gemini Interactions API\n    serviceCategory: API\n  - name: Vertex AI Gemini API\n    baseURL: https://aiplatform.googleapis.com\n    tags:\n      - Enterprise\n      - Generative AI\n      - Google Cloud\n      - Vertex AI\n    serviceName: Vertex AI Gemini API\n    serviceCategory: API\n  - name: Vertex AI Imagen API\n    baseURL: https://aiplatform.googleapis.com\n    tags:\n      - Google Cloud\n      - Image Generation\n      -\
-  \ Imagen\n      - Text-To-Image\n    serviceName: Vertex AI Imagen API\n    serviceCategory: API\n  - name: Vertex AI Gemini Live API\n    baseURL: https://aiplatform.googleapis.com\n    tags:\n      - Enterprise\n      - Real-Time\n      - Streaming\n      - Vertex AI\n      - Video\n      - Voice\n    serviceName: Vertex AI Gemini Live API\n    serviceCategory: API\n  - name: Vertex AI Text Embeddings API\n    baseURL: https://aiplatform.googleapis.com\n    tags:\n      - Embeddings\n      - Semantic Search\n      - Text Similarity\n      - Vertex AI\n    serviceName: Vertex AI Text Embeddings API\n    serviceCategory: API\n  - name: Firebase AI Logic API\n    baseURL: https://firebaseml.googleapis.com\n    tags:\n      - Client-Side\n      - Firebase\n      - Mobile\n      - Web\n    serviceName: Firebase AI Logic API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active\
-  \ Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://ai.google.dev/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Google Gemini\nproviderId: google-gemini\npublisherName: Google LLC\nserviceCategory: AI Infrastructure / LLM\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - Generative AI\n  - LLM\n  - AI Infrastructure\n  - Google\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Gemini API: per-model token-based pay-as-you-go pricing with separate\n  input vs output rates and multimodal-vs-audio bands; long-context price tiers above 200K-token prompts;\n  Batch API offering 50% off; optional Google Search grounding meter; Enterprise via Vertex AI with provisioned\n  throughput. Spend rolls into the standard Google Cloud\
+  \ Billing pipeline.'\nsources:\n  - https://ai.google.dev/pricing\n  - https://ai.google.dev/gemini-api/docs/rate-limits\n  - https://cloud.google.com/vertex-ai/generative-ai/pricing\nbillingModel:\n  pricingCategory: Token-Based Usage\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Gemini API\n  ServiceCategory: AI Infrastructure\n  ProviderName: Google Cloud\n  PublisherName: Google LLC\n  InvoiceIssuerName: Google LLC\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: tokens_input\n    description: Input tokens billed per model and modality band\n    unit: token\n    aggregation: sum\n    dimensions:\n      - model\n      - modality\n      - prompt_length_band\n      - project\n  - name: tokens_output\n    description: Output tokens billed per model and band\n    unit: token\n    aggregation: sum\n    dimensions:\n      - model\n      - prompt_length_band\n\
+  \      - project\n  - name: tokens_cached\n    description: Tokens served from context cache (lower rate than fresh input)\n    unit: token\n    aggregation: sum\n    dimensions:\n      - model\n      - cache_id\n      - project\n  - name: batch_tokens_input\n    description: Input tokens billed via the Batch API (50% discount)\n    unit: token\n    aggregation: sum\n    dimensions:\n      - model\n      - project\n  - name: batch_tokens_output\n    description: Output tokens billed via the Batch API (50% discount)\n    unit: token\n    aggregation: sum\n    dimensions:\n      - model\n      - project\n  - name: search_grounding_queries\n    description: Google Search grounding queries (free up to 5K/month, then $14/1K)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - model\n      - project\n  - name: provisioned_throughput\n    description: Reserved Gemini capacity hours via Vertex AI Enterprise\n    unit: hour\n    aggregation: sum\n    dimensions:\n      - model\n\
+  \      - region\n      - project\napis:\n  - name: Gemini API (AI Studio)\n    baseURL: https://generativelanguage.googleapis.com\n    serviceName: Gemini API\n    serviceCategory: AI Infrastructure\n  - name: Gemini via Vertex AI\n    baseURL: https://aiplatform.googleapis.com\n    serviceName: Vertex AI Generative AI\n    serviceCategory: AI Infrastructure\nprinciples:\n  - name: Visibility\n    description: Enable Cloud Billing detailed export to BigQuery filtered to the Gemini API SKU; surface\n      per-call token counts via the response usage metadata and your application logs for per-feature\n      attribution.\n  - name: Allocation\n    description: Tag Gemini calls with team/feature labels; use separate API keys (or Cloud projects)\n      per team for first-class cost allocation; for Vertex AI usage, tag the Vertex AI endpoint with org\n      labels.\n  - name: Optimization\n    description: Choose the smallest model that meets quality (Flash-Lite for routine traffic, Flash for\n\
+  \      mixed workloads, Pro only for high-stakes prompts); enable context caching for repeated long-system-prompt\n      patterns; route async/non-latency-sensitive workloads through the Batch API for 50% discount; trim\n      prompts to stay under the 200K-token long-context band; share the 5K free Search grounding allowance\n      across teams.\n  - name: Accountability\n    description: Set per-project Cloud Billing budgets aligned with Gemini API tier caps ($250/$2,000/$20,000+);\n      designate a model owner per feature; review monthly token burn vs business value (cost-per-resolved-ticket,\n      cost-per-classification, etc.).\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/google-gemini/refs/heads/main/finops/google-gemini-finops.yml
-sources: []
+sources:
+- https://ai.google.dev/pricing
+- https://ai.google.dev/gemini-api/docs/rate-limits
+- https://cloud.google.com/vertex-ai/generative-ai/pricing
 specification: FinOps Framework
 tags:
-- Agentic AI
-- Artificial Intelligence
-- Code Generation
-- Embeddings
 - Generative AI
-- Image Generation
 - LLM
-- Machine Learning
-- Multimodal
+- AI Infrastructure
+- Google
 - FinOps
-- Cost Management
 - FOCUS
 ---

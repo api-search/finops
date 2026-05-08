@@ -32,70 +32,53 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/alaska-air/refs/heads/main/openapi/alaska-air-mileage-plan-openapi.yaml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual
   chargeCategories:
-  - Usage
   - Purchase
-  - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Alaska Airlines API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription
+description: 'FOCUS-aligned FinOps shell for Alaska Airlines APIs: no public commercial surface - cost is determined by partner / GDS / NDC / cargo / loyalty contracts. Reconcile against the specific commercial agreement covering each integration.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Alaska Airlines
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ChargeCategory: Purchase
+  InvoiceIssuerName: Alaska Airlines, Inc.
   ProviderName: Alaska Airlines
-  PublisherName: Alaska Airlines
-  ServiceCategory: Developer Tools / API
-  ServiceName: Alaska Airlines
+  PublisherName: Alaska Airlines, Inc.
+  ServiceCategory: Travel & Transportation
+  ServiceName: Alaska Airlines APIs
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: Annual partner agreement value for API channel access
+  dimensions:
+  - channel
+  - product
+  name: partner_contract
+  unit: contract-year
+- aggregation: sum
+  description: API call volume across distribution / cargo / loyalty endpoints (where contractually metered)
   dimensions:
   - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
+  - channel
+  name: api_calls
   unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
 name: Alaska Air Finops
 provider_name: Alaska Airlines
 provider_slug: alaska-air
-publisher_name: Alaska Airlines
-service_category: API
+publisher_name: Alaska Airlines, Inc.
+service_category: Travel & Transportation
 slug: alaska-air-finops
 source_filename: alaska-air-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Alaska Airlines\nproviderId: alaska-air\npublisherName: Alaska Airlines\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Airlines\n  - Aviation\n  - Travel\n  - Cargo\n  - Loyalty\n  - Flight Status\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Alaska Airlines API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable\
-  \ API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n\
-  \      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Alaska Airlines\n  ServiceCategory: Developer Tools / API\n  ProviderName: Alaska Airlines\n  PublisherName: Alaska Airlines\n  InvoiceIssuerName: Alaska Airlines\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n\
-  \    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Alaska Airlines Flight Status API\n    baseURL: https://api.alaskaair.com\n    tags:\n      - Flight Status\n      - Aviation\n      - Real-Time Data\n    serviceName: Alaska Airlines Flight Status API\n    serviceCategory: API\n  - name: Alaska Airlines Flight Schedules API\n    baseURL: https://api.alaskaair.com\n    tags:\n      - Schedules\n      - Aviation\n      - Itinerary\n    serviceName: Alaska Airlines Flight Schedules API\n    serviceCategory: API\n  - name: Alaska Air Cargo API\n    baseURL: https://api.alaskacargo.com\n    tags:\n      - Cargo\n      - Freight\n      - Shipping\n      - Tracking\n    serviceName: Alaska Air Cargo API\n    serviceCategory:\
-  \ API\n  - name: Alaska Airlines Mileage Plan API\n    baseURL: https://api.alaskaair.com\n    tags:\n      - Loyalty\n      - Mileage Plan\n      - Rewards\n      - Partners\n    serviceName: Alaska Airlines Mileage Plan API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.alaskaair.com
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Alaska Airlines\nproviderId: alaska-air\npublisherName: Alaska Airlines, Inc.\nserviceCategory: Travel & Transportation\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: false\ntags:\n  - Airlines\n  - Aviation\n  - Travel\n  - Cargo\n  - Loyalty\n  - Flight Status\n  - FinOps\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps shell for Alaska Airlines APIs: no public commercial surface - cost\n  is determined by partner / GDS / NDC / cargo / loyalty contracts. Reconcile against the specific commercial\n  agreement covering each integration.'\nsources:\n  - https://www.alaskaair.com\n  - https://www.alaskacargo.com\n  - https://focus.finops.org/focus-specification/v1-3/\n\
+  billingModel:\n  pricingCategory: Subscription\n  billingFrequency: Annual\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\nfocusColumns:\n  ServiceName: Alaska Airlines APIs\n  ServiceCategory: Travel & Transportation\n  ProviderName: Alaska Airlines\n  PublisherName: Alaska Airlines, Inc.\n  InvoiceIssuerName: Alaska Airlines, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: partner_contract\n    description: Annual partner agreement value for API channel access\n    unit: contract-year\n    aggregation: sum\n    dimensions:\n      - channel\n      - product\n  - name: api_calls\n    description: API call volume across distribution / cargo / loyalty endpoints (where contractually\n      metered)\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - channel\nprinciples:\n  - name: Visibility\n    description: Track Alaska partner-channel costs through the partner-management billing relationship;\n   \
+  \   no public usage telemetry is available.\n  - name: Allocation\n    description: Allocate channel contract costs to the consuming product line (corporate booking, GDS\n      distribution, cargo, loyalty integration).\n  - name: Optimization\n    description: Right-size partner integrations during annual renewals; deprecate unused channels; consolidate\n      where possible.\n  - name: Accountability\n    description: Owned by the partner-integration / distribution leads on the consuming side; reviewed\n      against fare / cargo revenue contribution.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/alaska-air/refs/heads/main/finops/alaska-air-finops.yml
-sources: []
+sources:
+- https://www.alaskaair.com
+- https://www.alaskacargo.com
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - Airlines
@@ -105,6 +88,5 @@ tags:
 - Loyalty
 - Flight Status
 - FinOps
-- Cost Management
 - FOCUS
 ---

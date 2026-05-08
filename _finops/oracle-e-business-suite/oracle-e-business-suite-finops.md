@@ -44,78 +44,77 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/oracle-e-business-suite/refs/heads/main/openapi/ecommerce-gateway-api.yml
 billing_model:
   billingCurrency: USD
-  billingFrequency: Monthly
+  billingFrequency: Annual (license/support); Monthly (cloud)
   chargeCategories:
-  - Usage
   - Purchase
+  - Usage
   - Tax
-  - Credit
   - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Oracle E-Business Suite API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Perpetual License + Support + Pay-As-You-Go (cloud infra)
+description: 'FOCUS-aligned FinOps for Oracle E-Business Suite: per-named-user (per module) or custom-suite perpetual licenses with 22% annual support, plus underlying Oracle Database, Application Server, and (for cloud-deployed estates) OCI compute / storage / network. Total contracts commonly span $100K–$1M+/year for mid-to-large enterprises.'
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Oracle E-Business Suite
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: Oracle E-Business Suite
-  PublisherName: Oracle E-Business Suite
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Oracle America, Inc.
+  ProviderName: Oracle
+  PublisherName: Oracle Corporation
+  ServiceCategory: ERP / Business Applications
   ServiceName: Oracle E-Business Suite
 layout: finops
 meters:
-- aggregation: sum
-  description: Count of billable API requests
+- aggregation: max
   dimensions:
-  - api
-  - endpoint
+  - module
+  - environment
+  name: application_user_licenses
+  unit: named_user
+- aggregation: max
+  dimensions:
+  - bundle
+  name: custom_suite_licenses
+  unit: processor or named_user
+- aggregation: sum
+  dimensions:
+  - contract
+  - module
+  name: annual_support
+  unit: USD-year
+- aggregation: sum
+  dimensions:
   - tier
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  name: oci_compute_for_ebs
+  unit: OCPU-hour
 - aggregation: sum
-  description: Bytes returned over the network in API responses
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
   - tier
-  name: compute_seconds
-  unit: second
+  name: database_for_ebs
+  unit: OCPU-hour or processor-year
+- aggregation: sum
+  dimensions:
+  - tier
+  name: storage_for_ebs
+  unit: GB-month
 name: Oracle E Business Suite Finops
 provider_name: Oracle E-Business Suite
 provider_slug: oracle-e-business-suite
-publisher_name: Oracle E-Business Suite
-service_category: API
+publisher_name: Oracle Corporation
+service_category: ERP / Business Applications
 slug: oracle-e-business-suite-finops
 source_filename: oracle-e-business-suite-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Oracle E-Business Suite\nproviderId: oracle-e-business-suite\npublisherName: Oracle E-Business Suite\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Business Applications\n  - E-Business Suite\n  - Enterprise\n  - ERP\n  - Oracle\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Oracle E-Business Suite API surface. Provides a FOCUS-aligned\n  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n\
-  \    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage\
-  \ the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Oracle E-Business Suite\n  ServiceCategory: Developer Tools / API\n  ProviderName: Oracle E-Business Suite\n  PublisherName: Oracle E-Business Suite\n  InvoiceIssuerName: Oracle E-Business Suite\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name:\
-  \ data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Oracle EBS Integrated SOA Gateway REST API\n    baseURL: https://{instance}.oracle.com/webservices/rest/\n    tags:\n      - Enterprise\n      - Integration\n      - Rest Services\n      - Soa Gateway\n    serviceName: Oracle EBS Integrated SOA Gateway REST API\n    serviceCategory: API\n  - name: Oracle EBS Integrated SOA Gateway SOAP Web Services\n    baseURL: https://{instance}.oracle.com/webservices/SOAProvider/\n    tags:\n      - Integration\n      - Soa Gateway\n      - Soap Services\n      - Web Services\n    serviceName: Oracle EBS Integrated SOA Gateway SOAP Web Services\n  \
-  \  serviceCategory: API\n  - name: Oracle EBS Financial Services API\n    baseURL: https://{instance}.oracle.com/webservices/rest/\n    tags:\n      - Accounting\n      - Accounts Payable\n      - Financials\n      - General Ledger\n    serviceName: Oracle EBS Financial Services API\n    serviceCategory: API\n  - name: Oracle EBS Supply Chain Management API\n    baseURL: https://{instance}.oracle.com/webservices/rest/\n    tags:\n      - Inventory\n      - Order Management\n      - Purchasing\n      - Supply Chain\n    serviceName: Oracle EBS Supply Chain Management API\n    serviceCategory: API\n  - name: Oracle EBS Human Resources API\n    baseURL: https://{instance}.oracle.com/webservices/rest/\n    tags:\n      - Human Capital\n      - Human Resources\n      - Payroll\n      - Workforce Management\n    serviceName: Oracle EBS Human Resources API\n    serviceCategory: API\n  - name: Oracle EBS Manufacturing API\n    baseURL: https://{instance}.oracle.com/webservices/rest/\n    tags:\n\
-  \      - Bills of Material\n      - Manufacturing\n      - Production\n      - Work Orders\n    serviceName: Oracle EBS Manufacturing API\n    serviceCategory: API\n  - name: Oracle EBS e-Commerce Gateway API\n    baseURL: https://{instance}.oracle.com/\n    tags:\n      - Data Interchange\n      - E-Commerce\n      - Edi\n      - Trading Partners\n    serviceName: Oracle EBS e-Commerce Gateway API\n    serviceCategory: API\n  - name: Oracle EBS PL/SQL API Framework\n    baseURL: https://{instance}.oracle.com/\n    tags:\n      - Database Api\n      - Development Framework\n      - Pl/Sql\n      - Stored Procedures\n    serviceName: Oracle EBS PL/SQL API Framework\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.oracle.com/applications/ebusiness/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Oracle E-Business Suite\nproviderId: oracle-e-business-suite\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - ERP\n  - Business Applications\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: 'FOCUS-aligned FinOps for Oracle E-Business Suite: per-named-user (per module) or custom-suite\n  perpetual licenses with 22% annual support, plus underlying Oracle Database, Application Server, and\n  (for cloud-deployed estates) OCI compute / storage / network. Total contracts commonly span $100K–$1M+/year\n  for mid-to-large enterprises.'\nsources:\n  - https://www.oracle.com/applications/ebusiness/\n  - https://www.oracle.com/nl/a/ocom/docs/corporate/pricing/applications-price-list-070574.pdf\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion:\
+  \ '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Oracle Corporation\nserviceCategory: ERP / Business Applications\nbillingModel:\n  pricingCategory: Perpetual License + Support + Pay-As-You-Go (cloud infra)\n  billingFrequency: Annual (license/support); Monthly (cloud)\n  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Usage\n    - Tax\n    - Adjustment\nfocusColumns:\n  ServiceName: Oracle E-Business Suite\n  ServiceCategory: ERP / Business Applications\n  ProviderName: Oracle\n  PublisherName: Oracle Corporation\n  InvoiceIssuerName: Oracle America, Inc.\n  BillingCurrency: USD\nmeters:\n  - name: application_user_licenses\n    unit: named_user\n    aggregation: max\n    dimensions:\n      - module\n      - environment\n  - name: custom_suite_licenses\n    unit: processor or named_user\n    aggregation: max\n    dimensions:\n      - bundle\n  - name: annual_support\n    unit: USD-year\n    aggregation: sum\n    dimensions:\n\
+  \      - contract\n      - module\n  - name: oci_compute_for_ebs\n    unit: OCPU-hour\n    aggregation: sum\n    dimensions:\n      - tier\n      - region\n  - name: database_for_ebs\n    unit: OCPU-hour or processor-year\n    aggregation: sum\n    dimensions:\n      - tier\n  - name: storage_for_ebs\n    unit: GB-month\n    aggregation: sum\n    dimensions:\n      - tier\nprinciples:\n  - name: Visibility\n    description: Maintain a per-module user count register; reconcile against Oracle LMS audits annually.\n      For cloud-deployed EBS, use OCI Cost Analysis to track infrastructure separately from license cost.\n  - name: Allocation\n    description: Allocate license cost by module to the consuming business unit (Finance, HR, Procurement,\n      etc.); allocate cloud infra by environment (Prod, Test, DR).\n  - name: Optimization\n    description: Reclaim inactive user accounts before each true-up; consolidate non-prod environments;\n      use BYOL on OCI for the EBS-supporting Database;\
+  \ consider Oracle Fusion Cloud as a long-term replacement\n      where the modernization business case fits.\n  - name: Accountability\n    description: A named EBS license owner reconciles the user catalog; CFO / IT Finance own the annual\n      Oracle support renewal and license true-up.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/oracle-e-business-suite/refs/heads/main/finops/oracle-e-business-suite-finops.yml
-sources: []
+sources:
+- https://www.oracle.com/applications/ebusiness/
+- https://www.oracle.com/nl/a/ocom/docs/corporate/pricing/applications-price-list-070574.pdf
 specification: FinOps Framework
 tags:
-- Business Applications
-- E-Business Suite
-- Enterprise
 - ERP
-- Oracle
+- Business Applications
 - FinOps
 - Cost Management
 - FOCUS

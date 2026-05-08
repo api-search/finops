@@ -81,92 +81,49 @@ api_specs:
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
-  chargeCategories:
-  - Usage
-  - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the Couchbase API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Per-Node-Hour
+description: FOCUS-aligned FinOps for Couchbase.
 focus_columns:
   BillingCurrency: USD
-  ChargeCategory: Usage
-  InvoiceIssuerName: Couchbase
-  PricingCategory: Usage-Based
-  PricingUnit: request
   ProviderName: Couchbase
   PublisherName: Couchbase
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: NoSQL DBaaS
   ServiceName: Couchbase
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
   dimensions:
-  - api
-  - endpoint
   - tier
   - region
-  - consumer
-  name: api_requests
-  unit: request
+  - cloud
+  name: node_hours
+  unit: node-hour
+- aggregation: max
+  name: backup_storage
+  unit: GB-month
 - aggregation: sum
-  description: Bytes returned over the network in API responses
-  dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
+  name: data_transfer
   unit: GB
 - aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  name: app_services_hours
+  unit: hour
 name: Couchbase Finops
 provider_name: Couchbase
 provider_slug: couchbase
 publisher_name: Couchbase
-service_category: API
+service_category: NoSQL DBaaS
 slug: couchbase-finops
 source_filename: couchbase-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Couchbase\nproviderId: couchbase\npublisherName: Couchbase\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - Analytics\n  - App Services\n  - Backup\n  - Capella\n  - Cloud\n  - Database\n  - DBaaS\n  - Eventing\n  - Full-Text Search\n  - Gateway\n  - JSON\n  - Mobile\n  - NoSQL\n  - Replication\n  - SQL++\n  - Sync\n  - Vector Search\n  - XDCR\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the Couchbase API surface. Provides a FOCUS-aligned mapping\n  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption\
-  \ costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment, application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n\
-  \      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      - FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: Couchbase\n  ServiceCategory: Developer Tools / API\n  ProviderName: Couchbase\n  PublisherName: Couchbase\n  InvoiceIssuerName: Couchbase\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n\
-  \      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n      - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: Couchbase Server REST API\n    baseURL: https://localhost:8091\n    tags:\n      - Administration\n      - Buckets\n      - Clusters\n      - Database\n      - NoSQL\n    serviceName: Couchbase Server REST API\n    serviceCategory: API\n  - name: Couchbase Query Service REST API\n    baseURL: https://localhost:8093\n    tags:\n      - Database\n      - N1QL\n      - NoSQL\n      - Query\n      - SQL++\n    serviceName: Couchbase Query Service REST API\n    serviceCategory: API\n  - name: Couchbase Analytics Service REST API\n    baseURL: https://localhost:8095\n\
-  \    tags:\n      - Analytics\n      - Database\n      - NoSQL\n      - SQL++\n    serviceName: Couchbase Analytics Service REST API\n    serviceCategory: API\n  - name: Couchbase Search Service REST API\n    baseURL: https://localhost:8094\n    tags:\n      - Database\n      - Full-Text Search\n      - Indexing\n      - NoSQL\n      - Vector Search\n    serviceName: Couchbase Search Service REST API\n    serviceCategory: API\n  - name: Couchbase Eventing Service REST API\n    baseURL: https://localhost:8096\n    tags:\n      - Database\n      - Eventing\n      - NoSQL\n      - Serverless Functions\n    serviceName: Couchbase Eventing Service REST API\n    serviceCategory: API\n  - name: Couchbase Backup Service REST API\n    baseURL: https://localhost:8097\n    tags:\n      - Backup\n      - Database\n      - Disaster Recovery\n      - NoSQL\n    serviceName: Couchbase Backup Service REST API\n    serviceCategory: API\n  - name: Couchbase XDCR REST API\n    baseURL: https://localhost:8091\n\
-  \    tags:\n      - Cross Data Center\n      - Database\n      - NoSQL\n      - Replication\n    serviceName: Couchbase XDCR REST API\n    serviceCategory: API\n  - name: Couchbase Capella Management API\n    baseURL: https://cloudapi.cloud.couchbase.com\n    tags:\n      - Capella\n      - Cloud\n      - Database\n      - DBaaS\n      - Management\n      - NoSQL\n    serviceName: Couchbase Capella Management API\n    serviceCategory: API\n  - name: Couchbase Capella App Services Public API\n    baseURL: ''\n    tags:\n      - App Services\n      - Capella\n      - Cloud\n      - Mobile\n      - NoSQL\n      - Sync\n    serviceName: Couchbase Capella App Services Public API\n    serviceCategory: API\n  - name: Couchbase Capella App Services Admin API\n    baseURL: ''\n    tags:\n      - Administration\n      - App Services\n      - Capella\n      - Cloud\n      - Mobile\n      - NoSQL\n    serviceName: Couchbase Capella App Services Admin API\n    serviceCategory: API\n  - name: Couchbase\
-  \ Sync Gateway Public REST API\n    baseURL: https://localhost:4984\n    tags:\n      - Database\n      - Gateway\n      - Mobile\n      - NoSQL\n      - Sync\n    serviceName: Couchbase Sync Gateway Public REST API\n    serviceCategory: API\n  - name: Couchbase Sync Gateway Admin REST API\n    baseURL: https://localhost:4985\n    tags:\n      - Administration\n      - Database\n      - Mobile\n      - NoSQL\n      - Sync\n    serviceName: Couchbase Sync Gateway Admin REST API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://www.couchbase.com/pricing/
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: Couchbase\nproviderId: couchbase\ncreated: '2026-05-04'\nmodified: '2026-05-04'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - NoSQL DBaaS\ndescription: FOCUS-aligned FinOps for Couchbase.\nsources:\n  - https://www.couchbase.com/pricing/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Couchbase\nserviceCategory: NoSQL DBaaS\nbillingModel:\n  pricingCategory: Per-Node-Hour\n  billingFrequency: Monthly\n  billingCurrency: USD\nfocusColumns:\n  ServiceName: Couchbase\n  ServiceCategory: NoSQL DBaaS\n  ProviderName: Couchbase\n  PublisherName: Couchbase\n  BillingCurrency: USD\nmeters:\n  - name: node_hours\n    unit: node-hour\n    aggregation: sum\n    dimensions:\n      -\
+  \ tier\n      - region\n      - cloud\n  - name: backup_storage\n    unit: GB-month\n    aggregation: max\n  - name: data_transfer\n    unit: GB\n    aggregation: sum\n  - name: app_services_hours\n    unit: hour\n    aggregation: sum\nprinciples:\n  - name: Visibility\n    description: Track Couchbase consumption monthly.\n  - name: Allocation\n    description: Tag usage to teams/cost centers.\n  - name: Optimization\n    description: Right-size; reclaim unused entitlements.\n  - name: Accountability\n    description: Set spend alerts; quarterly review.\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/couchbase/refs/heads/main/finops/couchbase-finops.yml
-sources: []
+sources:
+- https://www.couchbase.com/pricing/
 specification: FinOps Framework
 tags:
-- Analytics
-- App Services
-- Backup
-- Capella
-- Cloud
-- Database
-- DBaaS
-- Eventing
-- Full-Text Search
-- Gateway
-- JSON
-- Mobile
-- NoSQL
-- Replication
-- SQL++
-- Sync
-- Vector Search
-- XDCR
 - FinOps
-- Cost Management
 - FOCUS
+- NoSQL DBaaS
 ---

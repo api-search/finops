@@ -18,73 +18,54 @@ billing_model:
   chargeCategories:
   - Usage
   - Purchase
-  - Tax
-  - Credit
-  - Adjustment
-  chargeFrequency: Recurring
-  pricingCategory: Usage-Based
-description: FinOps framework definition for the v0 API surface. Provides a FOCUS-aligned mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+  pricingCategory: Subscription + Usage
+description: v0 is metered as subscription + monthly credits. FinOps levers center on credit consumption per chat/deployment and per-seat scaling on Team plans.
 focus_columns:
   BillingCurrency: USD
   ChargeCategory: Usage
-  InvoiceIssuerName: v0
-  PricingCategory: Usage-Based
-  PricingUnit: request
-  ProviderName: v0
-  PublisherName: v0
-  ServiceCategory: Developer Tools / API
+  InvoiceIssuerName: Vercel
+  ProviderName: Vercel
+  PublisherName: Vercel
+  ServiceCategory: AI
   ServiceName: v0
 layout: finops
 meters:
 - aggregation: sum
-  description: Count of billable API requests
+  description: v0 credits consumed by chat generations, deployments, and other Platform API operations.
   dimensions:
-  - api
-  - endpoint
-  - tier
-  - region
-  - consumer
-  name: api_requests
-  unit: request
-- aggregation: sum
-  description: Bytes returned over the network in API responses
+  - account
+  - workspace
+  - api_key
+  name: credits
+  unit: credit
+- aggregation: max
+  description: Active seats on Team plans.
   dimensions:
-  - api
-  - region
-  - consumer
-  name: data_egress
-  unit: GB
-- aggregation: sum
-  description: Server-side compute consumed by the request, where applicable
-  dimensions:
-  - api
-  - endpoint
-  - tier
-  name: compute_seconds
-  unit: second
+  - workspace
+  name: seats
+  unit: seat
 name: V0 Finops
 provider_name: v0
 provider_slug: v0
-publisher_name: v0
-service_category: API
+publisher_name: Vercel Inc.
+service_category: AI
 slug: v0-finops
 source_filename: v0-finops.yml
 source_heading: FinOps Profile
-source_url: ''
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: v0\nproviderId: v0\npublisherName: v0\nserviceCategory: API\ncreated: '2026-05-08'\nmodified: '2026-05-08'\ntags:\n  - AI\n  - App Builder\n  - Vercel\n  - Code Generation\n  - Platform API\n  - FinOps\n  - Cost Management\n  - FOCUS\ndescription: FinOps framework definition for the v0 API surface. Provides a FOCUS-aligned mapping for\n  cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.\nprinciples:\n  - name: Visibility\n    description: Make API consumption costs visible to engineering, product, and finance teams in near\n      real-time.\n  - name: Allocation\n    description: Tag every chargeable API call with the consuming team, environment,\
-  \ application, and\n      feature so cost can be allocated.\n  - name: Optimization\n    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce\n      cost per useful unit of work.\n  - name: Accountability\n    description: Establish budget owners and chargeback or showback flows for each consuming team.\ndomains:\n  - name: Understand Usage and Cost\n    capabilities:\n      - Data Ingestion\n      - Allocation\n      - Reporting and Analytics\n      - Anomaly Management\n  - name: Quantify Business Value\n    capabilities:\n      - Planning and Estimating\n      - Forecasting\n      - Budgeting\n      - Benchmarking\n      - Unit Economics\n  - name: Optimize Usage and Cost\n    capabilities:\n      - Architecting for Cloud\n      - Rate Optimization\n      - Workload Optimization\n      - Cloud Sustainability\n      - Licensing and SaaS\n  - name: Manage the FinOps Practice\n    capabilities:\n      - FinOps Practice Operations\n      -\
-  \ FinOps Education and Enablement\n      - Invoicing and Chargeback\n      - Onboarding Workloads\n      - Intersecting Disciplines\nbillingModel:\n  pricingCategory: Usage-Based\n  billingFrequency: Monthly\n  billingCurrency: USD\n  chargeCategories:\n    - Usage\n    - Purchase\n    - Tax\n    - Credit\n    - Adjustment\n  chargeFrequency: Recurring\nfocusColumns:\n  ServiceName: v0\n  ServiceCategory: Developer Tools / API\n  ProviderName: v0\n  PublisherName: v0\n  InvoiceIssuerName: v0\n  PricingCategory: Usage-Based\n  PricingUnit: request\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n  - name: api_requests\n    description: Count of billable API requests\n    unit: request\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\n      - region\n      - consumer\n  - name: data_egress\n    description: Bytes returned over the network in API responses\n    unit: GB\n    aggregation: sum\n    dimensions:\n      - api\n      - region\n     \
-  \ - consumer\n  - name: compute_seconds\n    description: Server-side compute consumed by the request, where applicable\n    unit: second\n    aggregation: sum\n    dimensions:\n      - api\n      - endpoint\n      - tier\napis:\n  - name: v0 Platform API\n    baseURL: https://api.v0.dev/v1\n    tags:\n      - AI\n      - Platform\n      - Chats\n      - Projects\n      - Deployments\n    serviceName: v0 Platform API\n    serviceCategory: API\nunitEconomics:\n  - name: Cost per 1K Requests\n    metric: billed_cost / (api_requests / 1000)\n    target: TBD\n  - name: Cost per Active Consumer\n    metric: billed_cost / active_consumers\n    target: TBD\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+source_url: https://v0.app/pricing
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nprovider: v0\nproviderId: v0\ncreated: '2026-05-08'\nmodified: '2026-05-08'\nreconciled: true\ntags:\n- AI\n- App Builder\n- Vercel\n- FinOps\n- FOCUS\ndescription: v0 is metered as subscription + monthly credits. FinOps levers center on credit consumption per chat/deployment and per-seat scaling on Team plans.\nnotes: Credits are consumed by chat generations and deployments. Invoiced via Vercel.\nsources:\n- https://v0.app/pricing\n- https://vercel.com/docs/v0/api\n- https://focus.finops.org/focus-specification/v1-3/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\npublisherName: Vercel Inc.\nserviceCategory: AI\nbillingModel:\n  pricingCategory: Subscription + Usage\n  billingFrequency: Monthly\n  billingCurrency:\
+  \ USD\n  chargeCategories:\n  - Usage\n  - Purchase\nfocusColumns:\n  ServiceName: v0\n  ServiceCategory: AI\n  ProviderName: Vercel\n  PublisherName: Vercel\n  InvoiceIssuerName: Vercel\n  BillingCurrency: USD\n  ChargeCategory: Usage\nmeters:\n- name: credits\n  description: v0 credits consumed by chat generations, deployments, and other Platform API operations.\n  unit: credit\n  aggregation: sum\n  dimensions:\n  - account\n  - workspace\n  - api_key\n- name: seats\n  description: Active seats on Team plans.\n  unit: seat\n  aggregation: max\n  dimensions:\n  - workspace\nprinciples:\n- name: Visibility\n  description: Use the Platform API rate-limits / usage endpoints and Vercel invoices to track credit burn.\n- name: Allocation\n  description: Allocate by API key or workspace to attribute spend to internal teams.\n- name: Optimization\n  description: Cache prompts, scope generations narrowly, prefer chat reuse over new chats.\n- name: Accountability\n  description: Designate workspace\
+  \ owners to monitor monthly credit consumption.\nmaintainers:\n- FN: Kin Lane\n  email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/v0/refs/heads/main/finops/v0-finops.yml
-sources: []
+sources:
+- https://v0.app/pricing
+- https://vercel.com/docs/v0/api
+- https://focus.finops.org/focus-specification/v1-3/
 specification: FinOps Framework
 tags:
 - AI
 - App Builder
 - Vercel
-- Code Generation
-- Platform API
 - FinOps
-- Cost Management
 - FOCUS
 ---
