@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Profiler API
-  slug: ''
+  slug: google-cloud-profiler-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-profiler/refs/heads/main/openapi/openapi.yml
 billing_model:

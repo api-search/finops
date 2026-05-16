@@ -9,7 +9,7 @@ api_specs:
 - filename: grafana-api.yml
   format: yaml
   label: Grafana HTTP API
-  slug: ''
+  slug: grafana-http-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/grafana/refs/heads/main/openapi/grafana-api.yml
 billing_model:

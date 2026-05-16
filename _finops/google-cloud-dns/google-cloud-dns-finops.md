@@ -9,7 +9,7 @@ api_specs:
 - filename: dns-openapi.yml
   format: yaml
   label: Google Cloud DNS API
-  slug: ''
+  slug: google-cloud-dns-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-dns/refs/heads/main/openapi/dns-openapi.yml
 billing_model:

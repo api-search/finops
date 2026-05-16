@@ -9,19 +9,19 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: Kong Gateway Admin API
-  slug: ''
+  slug: kong-gateway-admin-api
   spec_type: OpenAPI
   url: https://docs.konghq.com/gateway/latest/admin-api/
 - filename: x-tyk-gateway.json
   format: json
   label: Tyk API Management API
-  slug: ''
+  slug: tyk-api-management-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/TykTechnologies/tyk/master/apidef/oas/schema/x-tyk-gateway.json
 - filename: api-spec.json
   format: json
   label: Grafana API
-  slug: ''
+  slug: grafana-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/grafana/grafana/main/public/api-spec.json
 billing_model:

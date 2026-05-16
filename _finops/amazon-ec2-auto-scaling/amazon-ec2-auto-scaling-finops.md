@@ -9,7 +9,7 @@ api_specs:
 - filename: amazon-ec2-auto-scaling-openapi.yaml
   format: yaml
   label: Amazon EC2 Auto Scaling API
-  slug: ''
+  slug: amazon-ec2-auto-scaling-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/amazon-ec2-auto-scaling/refs/heads/main/openapi/amazon-ec2-auto-scaling-openapi.yaml
 billing_model:

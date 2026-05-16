@@ -9,7 +9,7 @@ api_specs:
 - filename: swagger.json
   format: json
   label: Everbridge Suite API
-  slug: ''
+  slug: everbridge-suite-api
   spec_type: OpenAPI
   url: https://api.everbridge.net/rest/swagger.json
 billing_model:

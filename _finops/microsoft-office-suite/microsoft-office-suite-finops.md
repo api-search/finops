@@ -9,7 +9,7 @@ api_specs:
 - filename: overview
   format: yaml
   label: Microsoft Graph API
-  slug: ''
+  slug: microsoft-graph-api
   spec_type: OpenAPI
   url: https://learn.microsoft.com/en-us/graph/api/overview
 billing_model:

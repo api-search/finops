@@ -9,7 +9,7 @@ api_specs:
 - filename: Reporting.yaml
   format: yaml
   label: Workday Report as a Service (RaaS)
-  slug: ''
+  slug: workday-report-as-a-service-raas
   spec_type: OpenAPI
   url: https://community.workday.com/sites/default/files/file-hosting/productionapi/Reporting/v1/Reporting.yaml
 billing_model:

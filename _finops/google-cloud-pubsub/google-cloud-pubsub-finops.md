@@ -9,7 +9,7 @@ api_specs:
 - filename: google-cloud-pubsub-openapi.yml
   format: yaml
   label: Google Cloud Pub/Sub API
-  slug: ''
+  slug: google-cloud-pubsub-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-pubsub/refs/heads/main/openapi/google-cloud-pubsub-openapi.yml
 billing_model:

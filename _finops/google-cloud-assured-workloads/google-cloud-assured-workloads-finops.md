@@ -9,7 +9,7 @@ api_specs:
 - filename: assured-workloads-api-openapi.yml
   format: yaml
   label: Assured Workloads API
-  slug: ''
+  slug: assured-workloads-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-assured-workloads/refs/heads/main/openapi/assured-workloads-api-openapi.yml
 billing_model:

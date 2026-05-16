@@ -9,13 +9,13 @@ api_specs:
 - filename: oracle-retail-merchandising-openapi.yml
   format: yaml
   label: Oracle Retail Merchandising Foundation Cloud Service API
-  slug: ''
+  slug: oracle-retail-merchandising-foundation-cloud-service-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/oracle-retail/refs/heads/main/openapi/oracle-retail-merchandising-openapi.yml
 - filename: oracle-retail-order-management-openapi.yml
   format: yaml
   label: Oracle Retail Order Management Suite Cloud Service API
-  slug: ''
+  slug: oracle-retail-order-management-suite-cloud-service-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/oracle-retail/refs/heads/main/openapi/oracle-retail-order-management-openapi.yml
 billing_model:

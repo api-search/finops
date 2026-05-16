@@ -9,37 +9,37 @@ api_specs:
 - filename: montran-global-payments-hub-openapi.yml
   format: yaml
   label: Montran Global Payments Hub
-  slug: ''
+  slug: montran-global-payments-hub
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/montran/refs/heads/main/openapi/montran-global-payments-hub-openapi.yml
 - filename: montran-instant-payments-gateway-openapi.yml
   format: yaml
   label: Montran Instant Payments Gateway
-  slug: ''
+  slug: montran-instant-payments-gateway
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/montran/refs/heads/main/openapi/montran-instant-payments-gateway-openapi.yml
 - filename: montran-payments-connectivity-openapi.yml
   format: yaml
   label: Montran Payments Connectivity
-  slug: ''
+  slug: montran-payments-connectivity
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/montran/refs/heads/main/openapi/montran-payments-connectivity-openapi.yml
 - filename: montran-corporate-payments-portal-openapi.yml
   format: yaml
   label: Montran Corporate Payments Portal
-  slug: ''
+  slug: montran-corporate-payments-portal
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/montran/refs/heads/main/openapi/montran-corporate-payments-portal-openapi.yml
 - filename: montran-virtual-accounts-openapi.yml
   format: yaml
   label: Montran Virtual Accounts
-  slug: ''
+  slug: montran-virtual-accounts
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/montran/refs/heads/main/openapi/montran-virtual-accounts-openapi.yml
 - filename: montran-sanctions-screening-openapi.yml
   format: yaml
   label: Montran Sanctions Screening
-  slug: ''
+  slug: montran-sanctions-screening
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/montran/refs/heads/main/openapi/montran-sanctions-screening-openapi.yml
 billing_model:

@@ -9,13 +9,13 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: Amazon ECS API (Fargate)
-  slug: ''
+  slug: amazon-ecs-api-fargate
   spec_type: OpenAPI
   url: https://api.apis.guru/v2/specs/amazonaws.com/ecs/2014-11-13/openapi.yaml
 - filename: openapi.yaml
   format: yaml
   label: Amazon EKS API (Fargate)
-  slug: ''
+  slug: amazon-eks-api-fargate
   spec_type: OpenAPI
   url: https://api.apis.guru/v2/specs/amazonaws.com/eks/2017-11-01/openapi.yaml
 billing_model:

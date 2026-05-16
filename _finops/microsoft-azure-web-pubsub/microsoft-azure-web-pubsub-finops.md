@@ -9,13 +9,13 @@ api_specs:
 - filename: webpubsub.json
   format: json
   label: Azure Web PubSub Service REST API
-  slug: ''
+  slug: azure-web-pubsub-service-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/webpubsub/data-plane/WebPubSub/stable/2024-01-01/webpubsub.json
 - filename: webpubsub.json
   format: json
   label: Azure Web PubSub Management REST API
-  slug: ''
+  slug: azure-web-pubsub-management-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/webpubsub/resource-manager/Microsoft.SignalRService/stable/2024-03-01/webpubsub.json
 billing_model:

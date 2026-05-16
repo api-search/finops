@@ -9,7 +9,7 @@ api_specs:
 - filename: amazon-step-functions.yaml
   format: yaml
   label: Amazon Step Functions API
-  slug: ''
+  slug: amazon-step-functions-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/amazon-step-functions/refs/heads/main/openapi/amazon-step-functions.yaml
 billing_model:

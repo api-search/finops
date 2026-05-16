@@ -9,7 +9,7 @@ api_specs:
 - filename: trafficmanager.json
   format: json
   label: Azure Traffic Manager Profiles REST API
-  slug: ''
+  slug: azure-traffic-manager-profiles-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/trafficmanager/resource-manager/Microsoft.Network/stable/2022-04-01/trafficmanager.json
 billing_model:

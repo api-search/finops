@@ -9,7 +9,7 @@ api_specs:
 - filename: tasks.yml
   format: yaml
   label: Google Tasks API v1
-  slug: ''
+  slug: google-tasks-api-v1
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-tasks/refs/heads/main/openapi/tasks.yml
 billing_model:

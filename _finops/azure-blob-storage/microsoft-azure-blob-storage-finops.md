@@ -9,13 +9,13 @@ api_specs:
 - filename: blob.json
   format: json
   label: Azure Blob Storage REST API
-  slug: ''
+  slug: azure-blob-storage-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/storage/data-plane/Microsoft.BlobStorage/stable/2021-12-02/blob.json
 - filename: storage.json
   format: json
   label: Azure Storage Resource Provider REST API
-  slug: ''
+  slug: azure-storage-resource-provider-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/storage/resource-manager/Microsoft.Storage/stable/2023-05-01/storage.json
 billing_model:

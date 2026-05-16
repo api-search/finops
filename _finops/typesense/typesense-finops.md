@@ -9,31 +9,31 @@ api_specs:
 - filename: typesense-search-api-openapi.yml
   format: yaml
   label: Typesense Search API
-  slug: ''
+  slug: typesense-search-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/typesense/refs/heads/main/openapi/typesense-search-api-openapi.yml
 - filename: typesense-vector-search-api-openapi.yml
   format: yaml
   label: Typesense Vector Search API
-  slug: ''
+  slug: typesense-vector-search-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/typesense/refs/heads/main/openapi/typesense-vector-search-api-openapi.yml
 - filename: typesense-conversational-search-api-openapi.yml
   format: yaml
   label: Typesense Conversational Search API
-  slug: ''
+  slug: typesense-conversational-search-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/typesense/refs/heads/main/openapi/typesense-conversational-search-api-openapi.yml
 - filename: typesense-analytics-api-openapi.yml
   format: yaml
   label: Typesense Analytics API
-  slug: ''
+  slug: typesense-analytics-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/typesense/refs/heads/main/openapi/typesense-analytics-api-openapi.yml
 - filename: typesense-cloud-management-api-openapi.yml
   format: yaml
   label: Typesense Cloud Management API
-  slug: ''
+  slug: typesense-cloud-management-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/typesense/refs/heads/main/openapi/typesense-cloud-management-api-openapi.yml
 billing_model:

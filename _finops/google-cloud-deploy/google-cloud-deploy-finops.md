@@ -9,7 +9,7 @@ api_specs:
 - filename: cloud-deploy-api-openapi.yml
   format: yaml
   label: Cloud Deploy API
-  slug: ''
+  slug: cloud-deploy-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-deploy/refs/heads/main/openapi/cloud-deploy-api-openapi.yml
 billing_model:

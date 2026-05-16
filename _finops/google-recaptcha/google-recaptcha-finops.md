@@ -9,7 +9,7 @@ api_specs:
 - filename: recaptcha-enterprise-openapi.yml
   format: yaml
   label: reCAPTCHA Enterprise API
-  slug: ''
+  slug: recaptcha-enterprise-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-recaptcha/refs/heads/main/openapi/recaptcha-enterprise-openapi.yml
 billing_model:

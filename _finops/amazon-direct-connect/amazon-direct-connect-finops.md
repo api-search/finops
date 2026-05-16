@@ -9,7 +9,7 @@ api_specs:
 - filename: amazon-direct-connect-openapi.yaml
   format: yaml
   label: Amazon Direct Connect API
-  slug: ''
+  slug: amazon-direct-connect-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/amazon-direct-connect/refs/heads/main/openapi/amazon-direct-connect-openapi.yaml
 billing_model:

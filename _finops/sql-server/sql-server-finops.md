@@ -9,13 +9,13 @@ api_specs:
 - filename: sql.json
   format: json
   label: SQL Server REST API
-  slug: ''
+  slug: sql-server-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/sql/resource-manager/Microsoft.Sql/stable/2021-11-01/sql.json
 - filename: databases.json
   format: json
   label: Azure SQL Database REST API
-  slug: ''
+  slug: azure-sql-database-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/sql/resource-manager/Microsoft.Sql/stable/2021-11-01/databases.json
 billing_model:

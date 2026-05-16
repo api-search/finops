@@ -9,7 +9,7 @@ api_specs:
 - filename: pact_broker.json
   format: json
   label: Pact Broker API
-  slug: ''
+  slug: pact-broker-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/pact-foundation/pact_broker/master/lib/pact_broker/api/pact_broker.json
 billing_model:

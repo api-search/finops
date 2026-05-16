@@ -9,7 +9,7 @@ api_specs:
 - filename: microsoft-azure-logic-apps-openapi.yml
   format: yaml
   label: Azure Logic Apps REST API
-  slug: ''
+  slug: azure-logic-apps-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-logic-apps/refs/heads/main/openapi/microsoft-azure-logic-apps-openapi.yml
 billing_model:

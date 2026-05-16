@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.json
   format: json
   label: Veritas Volume Manager REST API
-  slug: ''
+  slug: veritas-volume-manager-rest-api
   spec_type: OpenAPI
   url: https://api.veritas.com/vvm/v1/openapi.json
 billing_model:

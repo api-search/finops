@@ -9,49 +9,49 @@ api_specs:
 - filename: assistant-v2.json
   format: json
   label: IBM Watson Assistant
-  slug: ''
+  slug: ibm-watson-assistant
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/watson-developer-cloud/api-spec/master/assistant/assistant-v2.json
 - filename: natural-language-understanding.json
   format: json
   label: IBM Watson Natural Language Understanding
-  slug: ''
+  slug: ibm-watson-natural-language-understanding
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/watson-developer-cloud/api-spec/master/natural-language-understanding/natural-language-understanding.json
 - filename: language-translator.json
   format: json
   label: IBM Watson Language Translator
-  slug: ''
+  slug: ibm-watson-language-translator
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/watson-developer-cloud/api-spec/master/language-translator/language-translator.json
 - filename: speech-to-text.json
   format: json
   label: IBM Watson Speech to Text
-  slug: ''
+  slug: ibm-watson-speech-to-text
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/watson-developer-cloud/api-spec/master/speech-to-text/speech-to-text.json
 - filename: text-to-speech.json
   format: json
   label: IBM Watson Text to Speech
-  slug: ''
+  slug: ibm-watson-text-to-speech
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/watson-developer-cloud/api-spec/master/text-to-speech/text-to-speech.json
 - filename: ibm-cloud-iam.yml
   format: yaml
   label: IBM Cloud IAM Identity Services
-  slug: ''
+  slug: ibm-cloud-iam-identity-services
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/ibm/refs/heads/main/openapi/ibm-cloud-iam.yml
 - filename: ibm-cloud-iam.yml
   format: yaml
   label: IBM IAM Policy Management
-  slug: ''
+  slug: ibm-iam-policy-management
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/ibm/refs/heads/main/openapi/ibm-cloud-iam.yml
 - filename: ibm-cloud-iam.yml
   format: yaml
   label: IBM IAM Access Groups
-  slug: ''
+  slug: ibm-iam-access-groups
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/ibm/refs/heads/main/openapi/ibm-cloud-iam.yml
 billing_model:

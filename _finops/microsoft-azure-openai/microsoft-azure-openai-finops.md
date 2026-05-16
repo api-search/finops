@@ -9,7 +9,7 @@ api_specs:
 - filename: microsoft-azure-openai-openapi.yml
   format: yaml
   label: Azure OpenAI Service API
-  slug: ''
+  slug: azure-openai-service-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-openai/refs/heads/main/openapi/microsoft-azure-openai-openapi.yml
 billing_model:

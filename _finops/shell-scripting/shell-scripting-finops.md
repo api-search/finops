@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.json
   format: json
   label: ShellCheck API
-  slug: ''
+  slug: shellcheck-api
   spec_type: OpenAPI
   url: https://api.shellcheck.net/v1/openapi.json
 billing_model:

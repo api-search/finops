@@ -9,13 +9,13 @@ api_specs:
 - filename: microsoft-bicep-deployments-openapi.yml
   format: yaml
   label: Bicep Deployments REST API
-  slug: ''
+  slug: bicep-deployments-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-bicep/refs/heads/main/openapi/microsoft-bicep-deployments-openapi.yml
 - filename: microsoft-bicep-template-specs-openapi.yml
   format: yaml
   label: Bicep Template Specs REST API
-  slug: ''
+  slug: bicep-template-specs-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-bicep/refs/heads/main/openapi/microsoft-bicep-template-specs-openapi.yml
 billing_model:

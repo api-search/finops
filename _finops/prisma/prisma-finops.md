@@ -9,37 +9,37 @@ api_specs:
 - filename: openapi.json
   format: json
   label: Prisma Data Platform API
-  slug: ''
+  slug: prisma-data-platform-api
   spec_type: OpenAPI
   url: https://api.cloud.prisma.io/openapi.json
 - filename: prisma-accelerate-openapi.yml
   format: yaml
   label: Prisma Accelerate API
-  slug: ''
+  slug: prisma-accelerate-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/prisma/refs/heads/main/openapi/prisma-accelerate-openapi.yml
 - filename: prisma-pulse-openapi.yml
   format: yaml
   label: Prisma Pulse API
-  slug: ''
+  slug: prisma-pulse-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/prisma/refs/heads/main/openapi/prisma-pulse-openapi.yml
 - filename: prisma-postgres-management-openapi.yml
   format: yaml
   label: Prisma Postgres Management API
-  slug: ''
+  slug: prisma-postgres-management-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/prisma/refs/heads/main/openapi/prisma-postgres-management-openapi.yml
 - filename: prisma-client-openapi.yml
   format: yaml
   label: Prisma Client API
-  slug: ''
+  slug: prisma-client-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/prisma/refs/heads/main/openapi/prisma-client-openapi.yml
 - filename: prisma-optimize-openapi.yml
   format: yaml
   label: Prisma Optimize API
-  slug: ''
+  slug: prisma-optimize-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/prisma/refs/heads/main/openapi/prisma-optimize-openapi.yml
 billing_model:

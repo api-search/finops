@@ -9,43 +9,43 @@ api_specs:
 - filename: api-rest-api.html
   format: yaml
   label: Oracle Fusion ERP REST API
-  slug: ''
+  slug: oracle-fusion-erp-rest-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/financials/22r3/farfa/api-rest-api.html
 - filename: api-rest-api.html
   format: yaml
   label: Oracle Fusion HCM REST API
-  slug: ''
+  slug: oracle-fusion-hcm-rest-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/human-resources/22r3/farws/api-rest-api.html
 - filename: api-rest-api.html
   format: yaml
   label: Oracle Fusion SCM REST API
-  slug: ''
+  slug: oracle-fusion-scm-rest-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/supply-chain-management/22r3/fasrs/api-rest-api.html
 - filename: rest-api.html
   format: yaml
   label: Oracle Fusion CX Sales and Fusion Service REST API
-  slug: ''
+  slug: oracle-fusion-cx-sales-and-fusion-service-rest-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/cx-sales/rest-api.html
 - filename: oracle-fusion-common-openapi.yml
   format: yaml
   label: Oracle Fusion Common Features REST API
-  slug: ''
+  slug: oracle-fusion-common-features-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/oracle-fusion/refs/heads/main/openapi/oracle-fusion-common-openapi.yml
 - filename: oracle-fusion-project-management-openapi.yml
   format: yaml
   label: Oracle Fusion Project Management REST API
-  slug: ''
+  slug: oracle-fusion-project-management-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/oracle-fusion/refs/heads/main/openapi/oracle-fusion-project-management-openapi.yml
 - filename: oracle-fusion-epm-openapi.yml
   format: yaml
   label: Oracle Fusion EPM REST API
-  slug: ''
+  slug: oracle-fusion-epm-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/oracle-fusion/refs/heads/main/openapi/oracle-fusion-epm-openapi.yml
 billing_model:

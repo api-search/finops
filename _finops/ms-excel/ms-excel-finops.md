@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: Microsoft Graph Excel API
-  slug: ''
+  slug: microsoft-graph-excel-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/v1.0/openapi.yaml
 billing_model:

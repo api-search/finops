@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Vision API
-  slug: ''
+  slug: google-cloud-vision-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-vision/refs/heads/main/openapi/openapi.yml
 billing_model:

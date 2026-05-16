@@ -9,7 +9,7 @@ api_specs:
 - filename: cloud-build-api-openapi.yml
   format: yaml
   label: Cloud Build API
-  slug: ''
+  slug: cloud-build-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-build/refs/heads/main/openapi/cloud-build-api-openapi.yml
 billing_model:

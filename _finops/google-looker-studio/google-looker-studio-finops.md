@@ -9,7 +9,7 @@ api_specs:
 - filename: rest
   format: yaml
   label: Google Looker Studio API
-  slug: ''
+  slug: google-looker-studio-api
   spec_type: OpenAPI
   url: https://lookerstudio.googleapis.com/$discovery/rest
 billing_model:

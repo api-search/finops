@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: Google Cloud Logging API
-  slug: ''
+  slug: google-cloud-logging-api
   spec_type: OpenAPI
   url: https://api.apis.guru/v2/specs/googleapis.com/logging/v2/openapi.yaml
 billing_model:

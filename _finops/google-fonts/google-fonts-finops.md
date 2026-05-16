@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Fonts Developer API
-  slug: ''
+  slug: google-fonts-developer-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-fonts/refs/heads/main/openapi/openapi.yml
 billing_model:

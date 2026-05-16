@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google News RSS API
-  slug: ''
+  slug: google-news-rss-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-news/refs/heads/main/openapi/openapi.yml
 billing_model:

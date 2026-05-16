@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Speech-to-Text API
-  slug: ''
+  slug: google-cloud-speech-to-text-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-speech-to-text/refs/heads/main/openapi/openapi.yml
 billing_model:

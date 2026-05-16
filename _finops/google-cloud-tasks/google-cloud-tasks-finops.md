@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Tasks API
-  slug: ''
+  slug: google-cloud-tasks-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-tasks/refs/heads/main/openapi/openapi.yml
 billing_model:

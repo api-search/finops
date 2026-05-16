@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Document AI API
-  slug: ''
+  slug: google-cloud-document-ai-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-document-ai/refs/heads/main/openapi/openapi.yml
 billing_model:

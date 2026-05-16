@@ -9,7 +9,7 @@ api_specs:
 - filename: virtualMachines.json
   format: json
   label: Azure Virtual Machines REST API
-  slug: ''
+  slug: azure-virtual-machines-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/compute/resource-manager/Microsoft.Compute/ComputeRP/stable/2023-09-01/virtualMachines.json
 billing_model:

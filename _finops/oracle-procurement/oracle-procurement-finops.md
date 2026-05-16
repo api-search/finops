@@ -9,7 +9,7 @@ api_specs:
 - filename: api-procurement.html
   format: yaml
   label: Oracle Procurement REST API
-  slug: ''
+  slug: oracle-procurement-rest-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/procurement/23d/fapra/api-procurement.html
 billing_model:

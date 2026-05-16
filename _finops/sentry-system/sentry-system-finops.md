@@ -9,127 +9,127 @@ api_specs:
 - filename: openapi-derefed.json
   format: json
   label: Sentry API
-  slug: ''
+  slug: sentry-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Events and Issues API
-  slug: ''
+  slug: sentry-events-and-issues-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Organizations API
-  slug: ''
+  slug: sentry-organizations-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Projects API
-  slug: ''
+  slug: sentry-projects-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Teams API
-  slug: ''
+  slug: sentry-teams-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Releases API
-  slug: ''
+  slug: sentry-releases-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Alerts API
-  slug: ''
+  slug: sentry-alerts-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Crons API
-  slug: ''
+  slug: sentry-crons-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Dashboards API
-  slug: ''
+  slug: sentry-dashboards-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Discover API
-  slug: ''
+  slug: sentry-discover-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Environments API
-  slug: ''
+  slug: sentry-environments-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Explore API
-  slug: ''
+  slug: sentry-explore-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Integration Platform API
-  slug: ''
+  slug: sentry-integration-platform-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Integrations API
-  slug: ''
+  slug: sentry-integrations-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Mobile Builds API
-  slug: ''
+  slug: sentry-mobile-builds-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Monitors API
-  slug: ''
+  slug: sentry-monitors-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Prevent API
-  slug: ''
+  slug: sentry-prevent-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Replays API
-  slug: ''
+  slug: sentry-replays-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry SCIM API
-  slug: ''
+  slug: sentry-scim-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Seer API
-  slug: ''
+  slug: sentry-seer-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 - filename: openapi-derefed.json
   format: json
   label: Sentry Users API
-  slug: ''
+  slug: sentry-users-api
   spec_type: OpenAPI
   url: https://github.com/getsentry/sentry-api-schema/blob/main/openapi-derefed.json
 billing_model:

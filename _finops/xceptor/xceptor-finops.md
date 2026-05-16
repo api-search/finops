@@ -9,15 +9,21 @@ api_specs:
 - filename: openapi.json
   format: json
   label: Xceptor REST API
-  slug: ''
+  slug: xceptor-rest-api
   spec_type: OpenAPI
   url: https://api.xceptor.com/v1/openapi.json
 - filename: workflows
   format: yaml
   label: Xceptor Workflow API
-  slug: ''
+  slug: xceptor-workflow-api
   spec_type: Postman
   url: https://www.postman.com/xceptor/workspace/workflows
+- filename: xceptor-document-upload-api-openapi.yml
+  format: yaml
+  label: Xceptor Document Upload API
+  slug: xceptor-document-upload-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/xceptor/refs/heads/main/openapi/xceptor-document-upload-api-openapi.yml
 billing_model:
   billingCurrency: USD
   billingFrequency: Annual

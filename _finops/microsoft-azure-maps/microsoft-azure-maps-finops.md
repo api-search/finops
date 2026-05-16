@@ -9,7 +9,7 @@ api_specs:
 - filename: microsoft-azure-maps-openapi.yml
   format: yaml
   label: Azure Maps Search API
-  slug: ''
+  slug: azure-maps-search-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-maps/refs/heads/main/openapi/microsoft-azure-maps-openapi.yml
 billing_model:

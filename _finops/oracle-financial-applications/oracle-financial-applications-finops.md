@@ -9,7 +9,7 @@ api_specs:
 - filename: op-version-latest-get.html
   format: yaml
   label: Oracle ERP Cloud REST API
-  slug: ''
+  slug: oracle-erp-cloud-rest-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/financials/24d/farfa/op-version-latest-get.html
 billing_model:

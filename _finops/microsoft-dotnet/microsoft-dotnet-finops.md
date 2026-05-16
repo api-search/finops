@@ -9,7 +9,7 @@ api_specs:
 - filename: overview
   format: yaml
   label: ASP.NET Core Web API
-  slug: ''
+  slug: aspnet-core-web-api
   spec_type: OpenAPI
   url: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/overview
 billing_model:

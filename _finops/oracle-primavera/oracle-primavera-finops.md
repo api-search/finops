@@ -9,7 +9,7 @@ api_specs:
 - filename: oracle-primavera-p6-eppm-openapi.yml
   format: yaml
   label: Oracle Primavera P6 EPPM REST API
-  slug: ''
+  slug: oracle-primavera-p6-eppm-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/oracle-primavera/refs/heads/main/openapi/oracle-primavera-p6-eppm-openapi.yml
 billing_model:

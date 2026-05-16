@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Custom Search JSON API
-  slug: ''
+  slug: google-custom-search-json-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-custom-search/refs/heads/main/openapi/openapi.yml
 billing_model:

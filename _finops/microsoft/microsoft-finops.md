@@ -9,103 +9,103 @@ api_specs:
 - filename: overview
   format: yaml
   label: Microsoft Graph API
-  slug: ''
+  slug: microsoft-graph-api
   spec_type: OpenAPI
   url: https://learn.microsoft.com/en-us/graph/api/overview
 - filename: microsoft-azure-rest-openapi.yml
   format: yaml
   label: Azure REST API
-  slug: ''
+  slug: azure-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-azure-rest-openapi.yml
 - filename: microsoft-azure-openai-openapi.yml
   format: yaml
   label: Azure OpenAI Service API
-  slug: ''
+  slug: azure-openai-service-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-azure-openai-openapi.yml
 - filename: microsoft-azure-cognitive-services-openapi.yml
   format: yaml
   label: Azure Cognitive Services API
-  slug: ''
+  slug: azure-cognitive-services-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-azure-cognitive-services-openapi.yml
 - filename: microsoft-teams-openapi.yml
   format: yaml
   label: Microsoft Teams API
-  slug: ''
+  slug: microsoft-teams-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-teams-openapi.yml
 - filename: microsoft-onedrive-openapi.yml
   format: yaml
   label: OneDrive API
-  slug: ''
+  slug: onedrive-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-onedrive-openapi.yml
 - filename: microsoft-power-platform-openapi.yml
   format: yaml
   label: Power Platform API
-  slug: ''
+  slug: power-platform-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-power-platform-openapi.yml
 - filename: microsoft-bing-search-openapi.yml
   format: yaml
   label: Bing Search APIs
-  slug: ''
+  slug: bing-search-apis
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-bing-search-openapi.yml
 - filename: microsoft-sharepoint-openapi.yml
   format: yaml
   label: SharePoint REST API
-  slug: ''
+  slug: sharepoint-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-sharepoint-openapi.yml
 - filename: microsoft-power-bi-openapi.yml
   format: yaml
   label: Power BI REST API
-  slug: ''
+  slug: power-bi-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-power-bi-openapi.yml
 - filename: microsoft-azure-devops-openapi.yml
   format: yaml
   label: Azure DevOps REST API
-  slug: ''
+  slug: azure-devops-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-azure-devops-openapi.yml
 - filename: microsoft-dynamics-365-openapi.yml
   format: yaml
   label: Dynamics 365 REST API
-  slug: ''
+  slug: dynamics-365-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-dynamics-365-openapi.yml
 - filename: microsoft-linkedin-openapi.yml
   format: yaml
   label: LinkedIn API
-  slug: ''
+  slug: linkedin-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-linkedin-openapi.yml
 - filename: microsoft-azure-communication-services-openapi.yml
   format: yaml
   label: Azure Communication Services API
-  slug: ''
+  slug: azure-communication-services-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-azure-communication-services-openapi.yml
 - filename: microsoft-entra-id-openapi.yml
   format: yaml
   label: Microsoft Entra ID API
-  slug: ''
+  slug: microsoft-entra-id-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-entra-id-openapi.yml
 - filename: microsoft-outlook-openapi.yml
   format: yaml
   label: Microsoft Outlook API
-  slug: ''
+  slug: microsoft-outlook-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-outlook-openapi.yml
 - filename: microsoft-intune-openapi.yml
   format: yaml
   label: Microsoft Intune API
-  slug: ''
+  slug: microsoft-intune-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft/refs/heads/main/openapi/microsoft-intune-openapi.yml
 billing_model:

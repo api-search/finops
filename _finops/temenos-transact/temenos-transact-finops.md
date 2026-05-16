@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.json
   format: json
   label: Temenos Transact Core Banking API
-  slug: ''
+  slug: temenos-transact-core-banking-api
   spec_type: OpenAPI
   url: https://developer.temenos.com/transact/openapi.json
 billing_model:

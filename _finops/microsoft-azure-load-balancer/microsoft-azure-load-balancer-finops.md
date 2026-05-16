@@ -9,7 +9,7 @@ api_specs:
 - filename: microsoft-azure-load-balancer-openapi.yml
   format: yaml
   label: Azure Load Balancer REST API
-  slug: ''
+  slug: azure-load-balancer-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-load-balancer/refs/heads/main/openapi/microsoft-azure-load-balancer-openapi.yml
 billing_model:

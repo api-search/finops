@@ -9,13 +9,13 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: Oracle Database REST API - Partitioning
-  slug: ''
+  slug: oracle-database-rest-api-partitioning
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/database/oracle/oracle-rest-data-services/
 - filename: database.json
   format: json
   label: Oracle Cloud Infrastructure Database API - Partitioning
-  slug: ''
+  slug: oracle-cloud-infrastructure-database-api-partitioning
   spec_type: OpenAPI
   url: https://docs.oracle.com/en-us/iaas/api/swagger/database.json
 billing_model:

@@ -9,13 +9,13 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: Power Apps REST API
-  slug: ''
+  slug: power-apps-rest-api
   spec_type: OpenAPI
   url: https://learn.microsoft.com/en-us/connectors/powerappsforappmakers/
 - filename: openapi
   format: yaml
   label: Microsoft Dataverse Web API
-  slug: ''
+  slug: microsoft-dataverse-web-api
   spec_type: OpenAPI
   url: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/openapi
 billing_model:

@@ -9,19 +9,19 @@ api_specs:
 - filename: 34965-8158-rest-api.html
   format: yaml
   label: Checkmarx SAST API
-  slug: ''
+  slug: checkmarx-sast-api
   spec_type: OpenAPI
   url: https://checkmarx.com/resource/documents/en/34965-8158-rest-api.html
 - filename: checkmarx-sca-openapi.yml
   format: yaml
   label: Checkmarx SCA API
-  slug: ''
+  slug: checkmarx-sca-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/checkmarx/refs/heads/main/openapi/checkmarx-sca-openapi.yml
 - filename: checkmarx-one-openapi.yml
   format: yaml
   label: Checkmarx One API
-  slug: ''
+  slug: checkmarx-one-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/checkmarx/refs/heads/main/openapi/checkmarx-one-openapi.yml
 billing_model:

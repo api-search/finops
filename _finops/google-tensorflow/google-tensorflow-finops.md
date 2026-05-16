@@ -9,7 +9,7 @@ api_specs:
 - filename: tensorflow-serving-openapi.yml
   format: yaml
   label: TensorFlow Serving REST API
-  slug: ''
+  slug: tensorflow-serving-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-tensorflow/refs/heads/main/openapi/tensorflow-serving-openapi.yml
 billing_model:

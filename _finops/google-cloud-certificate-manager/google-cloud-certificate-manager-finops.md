@@ -9,7 +9,7 @@ api_specs:
 - filename: certificate-manager-api-openapi.yml
   format: yaml
   label: Certificate Manager API
-  slug: ''
+  slug: certificate-manager-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-certificate-manager/refs/heads/main/openapi/certificate-manager-api-openapi.yml
 billing_model:

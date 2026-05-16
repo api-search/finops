@@ -9,49 +9,49 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: AWS EC2 API
-  slug: ''
+  slug: aws-ec2-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/APIs-guru/openapi-directory/main/APIs/amazonaws.com/ec2/2016-11-15/openapi.yaml
 - filename: openapi.yaml
   format: yaml
   label: AWS VPC API
-  slug: ''
+  slug: aws-vpc-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/APIs-guru/openapi-directory/main/APIs/amazonaws.com/ec2/2016-11-15/openapi.yaml
 - filename: openapi.yaml
   format: yaml
   label: AWS EKS API
-  slug: ''
+  slug: aws-eks-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/APIs-guru/openapi-directory/main/APIs/amazonaws.com/eks/2018-08-23/openapi.yaml
 - filename: openapi.yaml
   format: yaml
   label: Google Compute Engine API
-  slug: ''
+  slug: google-compute-engine-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/APIs-guru/openapi-directory/main/APIs/googleapis.com/compute/v1/openapi.yaml
 - filename: openapi.yaml
   format: yaml
   label: Google Kubernetes Engine API
-  slug: ''
+  slug: google-kubernetes-engine-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/APIs-guru/openapi-directory/main/APIs/googleapis.com/container/v1/openapi.yaml
 - filename: resources.json
   format: json
   label: Azure Resource Manager API
-  slug: ''
+  slug: azure-resource-manager-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/resources/resource-manager/Microsoft.Resources/stable/2023-07-01/resources.json
 - filename: managedClusters.json
   format: json
   label: Azure AKS API
-  slug: ''
+  slug: azure-aks-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/containerservice/resource-manager/Microsoft.ContainerService/aks/stable/2024-01-01/managedClusters.json
 - filename: DigitalOcean-public.v2.yaml
   format: yaml
   label: DigitalOcean API
-  slug: ''
+  slug: digitalocean-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/digitalocean/openapi/main/specification/DigitalOcean-public.v2.yaml
 billing_model:

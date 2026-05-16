@@ -9,43 +9,43 @@ api_specs:
 - filename: openapi-general-ledger.yaml
   format: yaml
   label: Oracle Financials General Ledger API
-  slug: ''
+  slug: oracle-financials-general-ledger-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/financials/23r3/farfa/openapi-general-ledger.yaml
 - filename: openapi-payables.yaml
   format: yaml
   label: Oracle Financials Accounts Payable API
-  slug: ''
+  slug: oracle-financials-accounts-payable-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/financials/23r3/farfa/openapi-payables.yaml
 - filename: openapi-receivables.yaml
   format: yaml
   label: Oracle Financials Accounts Receivable API
-  slug: ''
+  slug: oracle-financials-accounts-receivable-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/financials/23r3/farfa/openapi-receivables.yaml
 - filename: openapi-cash-management.yaml
   format: yaml
   label: Oracle Financials Cash Management API
-  slug: ''
+  slug: oracle-financials-cash-management-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/financials/23r3/farfa/openapi-cash-management.yaml
 - filename: openapi-expenses.yaml
   format: yaml
   label: Oracle Financials Expense Management API
-  slug: ''
+  slug: oracle-financials-expense-management-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/financials/23r3/farfa/openapi-expenses.yaml
 - filename: openapi-fixed-assets.yaml
   format: yaml
   label: Oracle Financials Fixed Assets API
-  slug: ''
+  slug: oracle-financials-fixed-assets-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/financials/23r3/farfa/openapi-fixed-assets.yaml
 - filename: openapi-reporting.yaml
   format: yaml
   label: Oracle Financial Reporting API
-  slug: ''
+  slug: oracle-financial-reporting-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/financials/23r3/farfa/openapi-reporting.yaml
 billing_model:

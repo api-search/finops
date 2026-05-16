@@ -9,55 +9,55 @@ api_specs:
 - filename: paradox-api-openapi.yml
   format: yaml
   label: Paradox Conversational AI API
-  slug: ''
+  slug: paradox-conversational-ai-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/paradox/refs/heads/main/openapi/paradox-api-openapi.yml
 - filename: paradox-api-openapi.yml
   format: yaml
   label: Paradox Company API
-  slug: ''
+  slug: paradox-company-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/paradox/refs/heads/main/openapi/paradox-api-openapi.yml
 - filename: paradox-api-openapi.yml
   format: yaml
   label: Paradox Candidates API
-  slug: ''
+  slug: paradox-candidates-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/paradox/refs/heads/main/openapi/paradox-api-openapi.yml
 - filename: paradox-api-openapi.yml
   format: yaml
   label: Paradox Users API
-  slug: ''
+  slug: paradox-users-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/paradox/refs/heads/main/openapi/paradox-api-openapi.yml
 - filename: paradox-api-openapi.yml
   format: yaml
   label: Paradox Scheduling API
-  slug: ''
+  slug: paradox-scheduling-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/paradox/refs/heads/main/openapi/paradox-api-openapi.yml
 - filename: paradox-api-openapi.yml
   format: yaml
   label: Paradox Locations API
-  slug: ''
+  slug: paradox-locations-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/paradox/refs/heads/main/openapi/paradox-api-openapi.yml
 - filename: paradox-api-openapi.yml
   format: yaml
   label: Paradox Reporting API
-  slug: ''
+  slug: paradox-reporting-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/paradox/refs/heads/main/openapi/paradox-api-openapi.yml
 - filename: paradox-api-openapi.yml
   format: yaml
   label: Paradox Candidate Attributes API
-  slug: ''
+  slug: paradox-candidate-attributes-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/paradox/refs/heads/main/openapi/paradox-api-openapi.yml
 - filename: paradox-api-openapi.yml
   format: yaml
   label: Paradox User Permissions API
-  slug: ''
+  slug: paradox-user-permissions-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/paradox/refs/heads/main/openapi/paradox-api-openapi.yml
 billing_model:

@@ -9,7 +9,7 @@ api_specs:
 - filename: google-cloud-datastream-openapi.yml
   format: yaml
   label: Google Cloud Datastream API
-  slug: ''
+  slug: google-cloud-datastream-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-datastream/refs/heads/main/openapi/google-cloud-datastream-openapi.yml
 billing_model:

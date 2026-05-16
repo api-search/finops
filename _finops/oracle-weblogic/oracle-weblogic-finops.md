@@ -9,19 +9,19 @@ api_specs:
 - filename: oracle-weblogic-management-openapi.yml
   format: yaml
   label: WebLogic RESTful Management Services API
-  slug: ''
+  slug: weblogic-restful-management-services-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/oracle-weblogic/refs/heads/main/openapi/oracle-weblogic-management-openapi.yml
 - filename: oracle-weblogic-monitoring-openapi.yml
   format: yaml
   label: WebLogic Monitoring and Diagnostics API
-  slug: ''
+  slug: weblogic-monitoring-and-diagnostics-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/oracle-weblogic/refs/heads/main/openapi/oracle-weblogic-monitoring-openapi.yml
 - filename: oracle-weblogic-deployment-openapi.yml
   format: yaml
   label: WebLogic Deployment API
-  slug: ''
+  slug: weblogic-deployment-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/oracle-weblogic/refs/heads/main/openapi/oracle-weblogic-deployment-openapi.yml
 billing_model:

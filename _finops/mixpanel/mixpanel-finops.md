@@ -9,61 +9,61 @@ api_specs:
 - filename: openapi
   format: yaml
   label: Mixpanel Ingestion API
-  slug: ''
+  slug: mixpanel-ingestion-api
   spec_type: OpenAPI
   url: https://developer.mixpanel.com/reference/openapi
 - filename: openapi
   format: yaml
   label: Mixpanel Query API
-  slug: ''
+  slug: mixpanel-query-api
   spec_type: OpenAPI
   url: https://developer.mixpanel.com/reference/openapi
 - filename: openapi
   format: yaml
   label: Mixpanel Data Pipelines API
-  slug: ''
+  slug: mixpanel-data-pipelines-api
   spec_type: OpenAPI
   url: https://developer.mixpanel.com/reference/openapi
 - filename: mixpanel-identity-openapi.yml
   format: yaml
   label: Mixpanel Identity API
-  slug: ''
+  slug: mixpanel-identity-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/mixpanel/refs/heads/main/openapi/mixpanel-identity-openapi.yml
 - filename: mixpanel-event-export-openapi.yml
   format: yaml
   label: Mixpanel Event Export API
-  slug: ''
+  slug: mixpanel-event-export-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/mixpanel/refs/heads/main/openapi/mixpanel-event-export-openapi.yml
 - filename: mixpanel-lexicon-schemas-openapi.yml
   format: yaml
   label: Mixpanel Lexicon Schemas API
-  slug: ''
+  slug: mixpanel-lexicon-schemas-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/mixpanel/refs/heads/main/openapi/mixpanel-lexicon-schemas-openapi.yml
 - filename: mixpanel-service-accounts-openapi.yml
   format: yaml
   label: Mixpanel Service Accounts API
-  slug: ''
+  slug: mixpanel-service-accounts-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/mixpanel/refs/heads/main/openapi/mixpanel-service-accounts-openapi.yml
 - filename: mixpanel-annotations-openapi.yml
   format: yaml
   label: Mixpanel Annotations API
-  slug: ''
+  slug: mixpanel-annotations-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/mixpanel/refs/heads/main/openapi/mixpanel-annotations-openapi.yml
 - filename: mixpanel-gdpr-ccpa-openapi.yml
   format: yaml
   label: Mixpanel GDPR and CCPA API
-  slug: ''
+  slug: mixpanel-gdpr-and-ccpa-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/mixpanel/refs/heads/main/openapi/mixpanel-gdpr-ccpa-openapi.yml
 - filename: mixpanel-warehouse-connectors-openapi.yml
   format: yaml
   label: Mixpanel Warehouse Connectors API
-  slug: ''
+  slug: mixpanel-warehouse-connectors-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/mixpanel/refs/heads/main/openapi/mixpanel-warehouse-connectors-openapi.yml
 billing_model:

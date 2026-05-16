@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi-productionserver
   format: yaml
   label: MATLAB Production Server RESTful API
-  slug: ''
+  slug: matlab-production-server-restful-api
   spec_type: OpenAPI
   url: https://github.com/mathworks-ref-arch/openapi-productionserver
 billing_model:

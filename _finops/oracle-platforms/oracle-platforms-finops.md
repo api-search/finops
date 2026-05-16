@@ -9,31 +9,31 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: Oracle Cloud Infrastructure (OCI) REST API
-  slug: ''
+  slug: oracle-cloud-infrastructure-oci-rest-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en-us/iaas/api/#/en/iaas/latest/
 - filename: openapi.yaml
   format: yaml
   label: Oracle Autonomous Database API
-  slug: ''
+  slug: oracle-autonomous-database-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en-us/iaas/api/#/en/database/latest/
 - filename: api-integration-cloud.html
   format: yaml
   label: Oracle Integration Cloud API
-  slug: ''
+  slug: oracle-integration-cloud-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/paas/integration-cloud/rest-api/api-integration-cloud.html
 - filename: api-rest.html
   format: yaml
   label: Oracle Analytics Cloud API
-  slug: ''
+  slug: oracle-analytics-cloud-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/paas/analytics-cloud/acapi/api-rest.html
 - filename: openapi.yaml
   format: yaml
   label: Oracle Cloud Infrastructure Data Science API
-  slug: ''
+  slug: oracle-cloud-infrastructure-data-science-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en-us/iaas/api/#/en/data-science/latest/
 billing_model:

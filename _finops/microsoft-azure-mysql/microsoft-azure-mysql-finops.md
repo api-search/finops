@@ -9,7 +9,7 @@ api_specs:
 - filename: microsoft-azure-mysql-openapi.yml
   format: yaml
   label: Azure Database for MySQL Flexible Servers API
-  slug: ''
+  slug: azure-database-for-mysql-flexible-servers-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-mysql/refs/heads/main/openapi/microsoft-azure-mysql-openapi.yml
 billing_model:

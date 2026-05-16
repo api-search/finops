@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.json
   format: json
   label: Service Cloud REST API
-  slug: ''
+  slug: service-cloud-rest-api
   spec_type: OpenAPI
   url: https://api.salesforce.com/service-cloud/openapi.json
 billing_model:

@@ -9,37 +9,37 @@ api_specs:
 - filename: api-explorer
   format: yaml
   label: Junos Space API
-  slug: ''
+  slug: junos-space-api
   spec_type: OpenAPI
   url: https://[space-server]/api/space/api-explorer
 - filename: juniper-apstra-openapi.yml
   format: yaml
   label: Juniper Apstra API
-  slug: ''
+  slug: juniper-apstra-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/juniper/refs/heads/main/openapi/juniper-apstra-openapi.yml
 - filename: juniper-junos-rest-api-openapi.yml
   format: yaml
   label: Junos REST API
-  slug: ''
+  slug: junos-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/juniper/refs/heads/main/openapi/juniper-junos-rest-api-openapi.yml
 - filename: juniper-mist-openapi.yml
   format: yaml
   label: Juniper Mist API
-  slug: ''
+  slug: juniper-mist-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/juniper/refs/heads/main/openapi/juniper-mist-openapi.yml
 - filename: juniper-contrail-openapi.yml
   format: yaml
   label: Contrail Networking API
-  slug: ''
+  slug: contrail-networking-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/juniper/refs/heads/main/openapi/juniper-contrail-openapi.yml
 - filename: juniper-atp-cloud-openapi.yml
   format: yaml
   label: Juniper ATP Cloud API
-  slug: ''
+  slug: juniper-atp-cloud-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/juniper/refs/heads/main/openapi/juniper-atp-cloud-openapi.yml
 billing_model:

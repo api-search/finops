@@ -9,13 +9,13 @@ api_specs:
 - filename: swagger.v3.json
   format: json
   label: Jira Software API
-  slug: ''
+  slug: jira-software-api
   spec_type: OpenAPI
   url: https://dac-static.atlassian.com/cloud/jira/software/swagger.v3.json
 - filename: vsts-rest-api-specs
   format: yaml
   label: Azure DevOps Test Plans API
-  slug: ''
+  slug: azure-devops-test-plans-api
   spec_type: OpenAPI
   url: https://github.com/MicrosoftDocs/vsts-rest-api-specs
 billing_model:

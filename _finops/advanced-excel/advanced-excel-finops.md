@@ -9,7 +9,7 @@ api_specs:
 - filename: microsoft-graph-excel-api-openapi.yml
   format: yaml
   label: Microsoft Graph Excel API
-  slug: ''
+  slug: microsoft-graph-excel-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/advanced-excel/refs/heads/main/openapi/microsoft-graph-excel-api-openapi.yml
 billing_model:

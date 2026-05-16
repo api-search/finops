@@ -9,7 +9,7 @@ api_specs:
 - filename: amazon-sqs-openapi.yml
   format: yaml
   label: Amazon SQS API
-  slug: ''
+  slug: amazon-sqs-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/amazon-sqs/refs/heads/main/openapi/amazon-sqs-openapi.yml
 billing_model:

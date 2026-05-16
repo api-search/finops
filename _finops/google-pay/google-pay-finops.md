@@ -9,13 +9,13 @@ api_specs:
 - filename: rest
   format: yaml
   label: Google Pay API
-  slug: ''
+  slug: google-pay-api
   spec_type: OpenAPI
   url: https://developers.google.com/pay/api/web/reference/rest
 - filename: v1
   format: yaml
   label: Google Wallet API
-  slug: ''
+  slug: google-wallet-api
   spec_type: OpenAPI
   url: https://developers.google.com/wallet/generic/rest/v1
 billing_model:

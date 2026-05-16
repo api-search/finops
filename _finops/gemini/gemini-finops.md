@@ -9,7 +9,7 @@ api_specs:
 - filename: rest
   format: yaml
   label: Gemini REST API
-  slug: ''
+  slug: gemini-rest-api
   spec_type: OpenAPI
   url: https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=YOUR_API_KEY
 billing_model:

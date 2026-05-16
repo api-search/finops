@@ -9,25 +9,25 @@ api_specs:
 - filename: modern-treasury-openapi.yml
   format: yaml
   label: Modern Treasury Payments API
-  slug: ''
+  slug: modern-treasury-payments-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/modern-treasury/refs/heads/main/openapi/modern-treasury-openapi.yml
 - filename: modern-treasury-openapi.yml
   format: yaml
   label: Modern Treasury Ledgers API
-  slug: ''
+  slug: modern-treasury-ledgers-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/modern-treasury/refs/heads/main/openapi/modern-treasury-openapi.yml
 - filename: modern-treasury-openapi.yml
   format: yaml
   label: Modern Treasury Counterparties API
-  slug: ''
+  slug: modern-treasury-counterparties-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/modern-treasury/refs/heads/main/openapi/modern-treasury-openapi.yml
 - filename: modern-treasury-openapi.yml
   format: yaml
   label: Modern Treasury Connections & Webhooks API
-  slug: ''
+  slug: modern-treasury-connections-webhooks-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/modern-treasury/refs/heads/main/openapi/modern-treasury-openapi.yml
 billing_model:

@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Calendar API
-  slug: ''
+  slug: google-calendar-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-calendar/refs/heads/main/openapi/openapi.yml
 billing_model:

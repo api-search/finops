@@ -9,7 +9,7 @@ api_specs:
 - filename: api
   format: yaml
   label: Azure Pipelines REST API
-  slug: ''
+  slug: azure-pipelines-rest-api
   spec_type: OpenAPI
   url: https://dev.azure.com/{organization}/_apis/public/api
 billing_model:

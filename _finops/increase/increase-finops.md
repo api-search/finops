@@ -9,37 +9,37 @@ api_specs:
 - filename: increase-openapi.json
   format: json
   label: Increase ACH API
-  slug: ''
+  slug: increase-ach-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/increase/refs/heads/main/openapi/increase-openapi.json
 - filename: increase-openapi.json
   format: json
   label: Increase Wire Transfers API
-  slug: ''
+  slug: increase-wire-transfers-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/increase/refs/heads/main/openapi/increase-openapi.json
 - filename: increase-openapi.json
   format: json
   label: Increase Real-Time Payments API
-  slug: ''
+  slug: increase-real-time-payments-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/increase/refs/heads/main/openapi/increase-openapi.json
 - filename: increase-openapi.json
   format: json
   label: Increase Check API
-  slug: ''
+  slug: increase-check-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/increase/refs/heads/main/openapi/increase-openapi.json
 - filename: increase-openapi.json
   format: json
   label: Increase Cards API
-  slug: ''
+  slug: increase-cards-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/increase/refs/heads/main/openapi/increase-openapi.json
 - filename: increase-openapi.json
   format: json
   label: Increase Accounts API
-  slug: ''
+  slug: increase-accounts-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/increase/refs/heads/main/openapi/increase-openapi.json
 billing_model:

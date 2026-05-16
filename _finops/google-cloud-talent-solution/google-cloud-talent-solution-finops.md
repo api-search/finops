@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Talent Solution API
-  slug: ''
+  slug: google-cloud-talent-solution-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-talent-solution/refs/heads/main/openapi/openapi.yml
 billing_model:

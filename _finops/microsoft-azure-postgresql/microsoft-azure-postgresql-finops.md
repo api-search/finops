@@ -9,7 +9,7 @@ api_specs:
 - filename: microsoft-azure-postgresql-openapi.yml
   format: yaml
   label: Azure Database for PostgreSQL REST API
-  slug: ''
+  slug: azure-database-for-postgresql-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-postgresql/refs/heads/main/openapi/microsoft-azure-postgresql-openapi.yml
 billing_model:

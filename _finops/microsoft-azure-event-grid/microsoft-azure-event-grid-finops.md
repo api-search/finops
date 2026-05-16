@@ -9,7 +9,7 @@ api_specs:
 - filename: microsoft-azure-event-grid-openapi.yml
   format: yaml
   label: Azure Event Grid API
-  slug: ''
+  slug: azure-event-grid-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-event-grid/refs/heads/main/openapi/microsoft-azure-event-grid-openapi.yml
 billing_model:

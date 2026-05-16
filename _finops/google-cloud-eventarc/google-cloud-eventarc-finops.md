@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Eventarc API
-  slug: ''
+  slug: google-cloud-eventarc-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-eventarc/refs/heads/main/openapi/openapi.yml
 billing_model:

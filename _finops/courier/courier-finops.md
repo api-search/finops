@@ -9,37 +9,37 @@ api_specs:
 - filename: courier-openapi.yml
   format: yaml
   label: Courier Send API
-  slug: ''
+  slug: courier-send-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/courier/refs/heads/main/openapi/courier-openapi.yml
 - filename: courier-openapi.yml
   format: yaml
   label: Courier User Profiles API
-  slug: ''
+  slug: courier-user-profiles-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/courier/refs/heads/main/openapi/courier-openapi.yml
 - filename: courier-openapi.yml
   format: yaml
   label: Courier Lists API
-  slug: ''
+  slug: courier-lists-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/courier/refs/heads/main/openapi/courier-openapi.yml
 - filename: courier-openapi.yml
   format: yaml
   label: Courier Events API
-  slug: ''
+  slug: courier-events-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/courier/refs/heads/main/openapi/courier-openapi.yml
 - filename: courier-openapi.yml
   format: yaml
   label: Courier Brands API
-  slug: ''
+  slug: courier-brands-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/courier/refs/heads/main/openapi/courier-openapi.yml
 - filename: courier-openapi.yml
   format: yaml
   label: Courier Authentication API
-  slug: ''
+  slug: courier-authentication-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/courier/refs/heads/main/openapi/courier-openapi.yml
 billing_model:

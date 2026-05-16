@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.json
   format: json
   label: Windows Runtime (WinRT) API
-  slug: ''
+  slug: windows-runtime-winrt-api
   spec_type: OpenAPI
   url: https://api.windows.com/openapi.json
 billing_model:

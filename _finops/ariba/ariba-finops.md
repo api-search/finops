@@ -9,37 +9,37 @@ api_specs:
 - filename: openapi.json
   format: json
   label: Ariba Network API
-  slug: ''
+  slug: ariba-network-api
   spec_type: OpenAPI
   url: https://developer.ariba.com/api/network/openapi.json
 - filename: openapi.json
   format: json
   label: Ariba Procurement API
-  slug: ''
+  slug: ariba-procurement-api
   spec_type: OpenAPI
   url: https://developer.ariba.com/api/procurement/openapi.json
 - filename: openapi.json
   format: json
   label: Ariba Sourcing API
-  slug: ''
+  slug: ariba-sourcing-api
   spec_type: OpenAPI
   url: https://developer.ariba.com/api/sourcing/openapi.json
 - filename: openapi.json
   format: json
   label: Ariba Contracts API
-  slug: ''
+  slug: ariba-contracts-api
   spec_type: OpenAPI
   url: https://developer.ariba.com/api/contracts/openapi.json
 - filename: openapi.json
   format: json
   label: Ariba Supplier API
-  slug: ''
+  slug: ariba-supplier-api
   spec_type: OpenAPI
   url: https://developer.ariba.com/api/supplier/openapi.json
 - filename: openapi.json
   format: json
   label: Ariba Analytics API
-  slug: ''
+  slug: ariba-analytics-api
   spec_type: OpenAPI
   url: https://developer.ariba.com/api/analytics/openapi.json
 billing_model:

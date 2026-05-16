@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Gmail API
-  slug: ''
+  slug: google-gmail-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-gmail/refs/heads/main/openapi/openapi.yml
 billing_model:

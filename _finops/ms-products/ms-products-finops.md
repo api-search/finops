@@ -9,7 +9,7 @@ api_specs:
 - filename: ms-products-openapi.yml
   format: yaml
   label: Microsoft Graph API
-  slug: ''
+  slug: microsoft-graph-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/ms-products/refs/heads/main/openapi/ms-products-openapi.yml
 billing_model:

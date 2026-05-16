@@ -9,103 +9,103 @@ api_specs:
 - filename: microsoft-windows-10-winrt-openapi.yml
   format: yaml
   label: Windows Runtime (WinRT) API
-  slug: ''
+  slug: windows-runtime-winrt-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-winrt-openapi.yml
 - filename: microsoft-windows-10-win32-openapi.yml
   format: yaml
   label: Win32 API
-  slug: ''
+  slug: win32-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-win32-openapi.yml
 - filename: microsoft-windows-10-notifications-openapi.yml
   format: yaml
   label: Windows Notifications API
-  slug: ''
+  slug: windows-notifications-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-notifications-openapi.yml
 - filename: microsoft-windows-10-ml-openapi.yml
   format: yaml
   label: Windows ML API
-  slug: ''
+  slug: windows-ml-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-ml-openapi.yml
 - filename: microsoft-windows-10-storage-openapi.yml
   format: yaml
   label: Windows Storage API
-  slug: ''
+  slug: windows-storage-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-storage-openapi.yml
 - filename: microsoft-windows-10-cortana-openapi.yml
   format: yaml
   label: Windows Cortana API
-  slug: ''
+  slug: windows-cortana-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-cortana-openapi.yml
 - filename: microsoft-windows-10-ink-openapi.yml
   format: yaml
   label: Windows Ink API
-  slug: ''
+  slug: windows-ink-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-ink-openapi.yml
 - filename: microsoft-windows-10-composition-openapi.yml
   format: yaml
   label: Windows Composition API
-  slug: ''
+  slug: windows-composition-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-composition-openapi.yml
 - filename: microsoft-windows-10-directx-openapi.yml
   format: yaml
   label: DirectX Graphics API
-  slug: ''
+  slug: directx-graphics-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-directx-openapi.yml
 - filename: microsoft-windows-10-media-capture-openapi.yml
   format: yaml
   label: Windows Media Capture API
-  slug: ''
+  slug: windows-media-capture-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-media-capture-openapi.yml
 - filename: microsoft-windows-10-networking-openapi.yml
   format: yaml
   label: Windows Networking API
-  slug: ''
+  slug: windows-networking-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-networking-openapi.yml
 - filename: microsoft-windows-10-bluetooth-openapi.yml
   format: yaml
   label: Windows Bluetooth API
-  slug: ''
+  slug: windows-bluetooth-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-bluetooth-openapi.yml
 - filename: microsoft-windows-10-geolocation-openapi.yml
   format: yaml
   label: Windows Geolocation API
-  slug: ''
+  slug: windows-geolocation-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-geolocation-openapi.yml
 - filename: microsoft-windows-10-sensors-openapi.yml
   format: yaml
   label: Windows Sensors API
-  slug: ''
+  slug: windows-sensors-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-sensors-openapi.yml
 - filename: microsoft-windows-10-hello-openapi.yml
   format: yaml
   label: Windows Hello Authentication API
-  slug: ''
+  slug: windows-hello-authentication-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-hello-openapi.yml
 - filename: microsoft-windows-10-winui-openapi.yml
   format: yaml
   label: WinUI API
-  slug: ''
+  slug: winui-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-winui-openapi.yml
 - filename: microsoft-windows-10-background-tasks-openapi.yml
   format: yaml
   label: Windows Background Tasks API
-  slug: ''
+  slug: windows-background-tasks-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-windows-10/refs/heads/main/openapi/microsoft-windows-10-background-tasks-openapi.yml
 billing_model:

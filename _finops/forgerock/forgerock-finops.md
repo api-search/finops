@@ -9,43 +9,43 @@ api_specs:
 - filename: forgerock-identity-cloud-openapi.yml
   format: yaml
   label: ForgeRock Identity Cloud REST API
-  slug: ''
+  slug: forgerock-identity-cloud-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/forgerock/refs/heads/main/openapi/forgerock-identity-cloud-openapi.yml
 - filename: forgerock-access-management-openapi.yml
   format: yaml
   label: ForgeRock Access Management API
-  slug: ''
+  slug: forgerock-access-management-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/forgerock/refs/heads/main/openapi/forgerock-access-management-openapi.yml
 - filename: forgerock-identity-management-openapi.yml
   format: yaml
   label: ForgeRock Identity Management API
-  slug: ''
+  slug: forgerock-identity-management-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/forgerock/refs/heads/main/openapi/forgerock-identity-management-openapi.yml
 - filename: forgerock-identity-gateway-openapi.yml
   format: yaml
   label: ForgeRock Identity Gateway API
-  slug: ''
+  slug: forgerock-identity-gateway-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/forgerock/refs/heads/main/openapi/forgerock-identity-gateway-openapi.yml
 - filename: forgerock-directory-services-openapi.yml
   format: yaml
   label: ForgeRock Directory Services API
-  slug: ''
+  slug: forgerock-directory-services-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/forgerock/refs/heads/main/openapi/forgerock-directory-services-openapi.yml
 - filename: forgerock-identity-governance-openapi.yml
   format: yaml
   label: ForgeRock Identity Governance API
-  slug: ''
+  slug: forgerock-identity-governance-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/forgerock/refs/heads/main/openapi/forgerock-identity-governance-openapi.yml
 - filename: forgerock-autonomous-identity-openapi.yml
   format: yaml
   label: ForgeRock Autonomous Identity API
-  slug: ''
+  slug: forgerock-autonomous-identity-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/forgerock/refs/heads/main/openapi/forgerock-autonomous-identity-openapi.yml
 billing_model:

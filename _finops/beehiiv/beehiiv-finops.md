@@ -9,61 +9,61 @@ api_specs:
 - filename: beehiiv-openapi.yml
   format: yaml
   label: beehiiv Publications API
-  slug: ''
+  slug: beehiiv-publications-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/beehiiv/refs/heads/main/openapi/beehiiv-openapi.yml
 - filename: beehiiv-openapi.yml
   format: yaml
   label: beehiiv Subscriptions API
-  slug: ''
+  slug: beehiiv-subscriptions-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/beehiiv/refs/heads/main/openapi/beehiiv-openapi.yml
 - filename: beehiiv-openapi.yml
   format: yaml
   label: beehiiv Posts API
-  slug: ''
+  slug: beehiiv-posts-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/beehiiv/refs/heads/main/openapi/beehiiv-openapi.yml
 - filename: beehiiv-openapi.yml
   format: yaml
   label: beehiiv Automations API
-  slug: ''
+  slug: beehiiv-automations-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/beehiiv/refs/heads/main/openapi/beehiiv-openapi.yml
 - filename: beehiiv-openapi.yml
   format: yaml
   label: beehiiv Custom Fields API
-  slug: ''
+  slug: beehiiv-custom-fields-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/beehiiv/refs/heads/main/openapi/beehiiv-openapi.yml
 - filename: beehiiv-openapi.yml
   format: yaml
   label: beehiiv Segments API
-  slug: ''
+  slug: beehiiv-segments-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/beehiiv/refs/heads/main/openapi/beehiiv-openapi.yml
 - filename: beehiiv-openapi.yml
   format: yaml
   label: beehiiv Tiers API
-  slug: ''
+  slug: beehiiv-tiers-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/beehiiv/refs/heads/main/openapi/beehiiv-openapi.yml
 - filename: beehiiv-openapi.yml
   format: yaml
   label: beehiiv Polls API
-  slug: ''
+  slug: beehiiv-polls-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/beehiiv/refs/heads/main/openapi/beehiiv-openapi.yml
 - filename: beehiiv-openapi.yml
   format: yaml
   label: beehiiv Webhooks API
-  slug: ''
+  slug: beehiiv-webhooks-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/beehiiv/refs/heads/main/openapi/beehiiv-openapi.yml
 - filename: beehiiv-openapi.yml
   format: yaml
   label: beehiiv OAuth2 API
-  slug: ''
+  slug: beehiiv-oauth2-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/beehiiv/refs/heads/main/openapi/beehiiv-openapi.yml
 billing_model:

@@ -9,31 +9,31 @@ api_specs:
 - filename: Authentication_OpenAPI.json
   format: json
   label: Workday Authentication API
-  slug: ''
+  slug: workday-authentication-api
   spec_type: OpenAPI
   url: https://community.workday.com/sites/default/files/file-hosting/productionapi/Security/v44.0/Authentication_OpenAPI.json
 - filename: Identity_Management_OpenAPI.json
   format: json
   label: Workday Identity Management API
-  slug: ''
+  slug: workday-identity-management-api
   spec_type: OpenAPI
   url: https://community.workday.com/sites/default/files/file-hosting/productionapi/Security/v44.0/Identity_Management_OpenAPI.json
 - filename: Security_Groups_OpenAPI.json
   format: json
   label: Workday Security Groups API
-  slug: ''
+  slug: workday-security-groups-api
   spec_type: OpenAPI
   url: https://community.workday.com/sites/default/files/file-hosting/productionapi/Security/v44.0/Security_Groups_OpenAPI.json
 - filename: Audit_OpenAPI.json
   format: json
   label: Workday Audit and Compliance API
-  slug: ''
+  slug: workday-audit-and-compliance-api
   spec_type: OpenAPI
   url: https://community.workday.com/sites/default/files/file-hosting/productionapi/Security/v44.0/Audit_OpenAPI.json
 - filename: Privacy_OpenAPI.json
   format: json
   label: Workday Privacy API
-  slug: ''
+  slug: workday-privacy-api
   spec_type: OpenAPI
   url: https://community.workday.com/sites/default/files/file-hosting/productionapi/Security/v44.0/Privacy_OpenAPI.json
 billing_model:

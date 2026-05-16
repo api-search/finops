@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Scheduler API
-  slug: ''
+  slug: google-cloud-scheduler-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-scheduler/refs/heads/main/openapi/openapi.yml
 billing_model:

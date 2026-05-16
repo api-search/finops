@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: QlikView Server API
-  slug: ''
+  slug: qlikview-server-api
   spec_type: OpenAPI
   url: https://help.qlik.com/en-US/qlikview-developer/APIs/
 billing_model:

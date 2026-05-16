@@ -9,7 +9,7 @@ api_specs:
 - filename: flutter-pub-dev-openapi.yml
   format: yaml
   label: Pub.dev API
-  slug: ''
+  slug: pubdev-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-flutter/refs/heads/main/openapi/flutter-pub-dev-openapi.yml
 billing_model:

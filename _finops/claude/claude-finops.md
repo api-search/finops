@@ -9,7 +9,7 @@ api_specs:
 - filename: claude-messages-api.yml
   format: yaml
   label: Claude Messages API
-  slug: ''
+  slug: claude-messages-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/claude/refs/heads/main/openapi/claude-messages-api.yml
 billing_model:

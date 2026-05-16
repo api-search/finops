@@ -9,25 +9,25 @@ api_specs:
 - filename: hvault-system-backend-openapi.yml
   format: yaml
   label: Vault System Backend API
-  slug: ''
+  slug: vault-system-backend-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/hvault/refs/heads/main/openapi/hvault-system-backend-openapi.yml
 - filename: hvault-secrets-engines-openapi.yml
   format: yaml
   label: Vault Secrets Engines API
-  slug: ''
+  slug: vault-secrets-engines-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/hvault/refs/heads/main/openapi/hvault-secrets-engines-openapi.yml
 - filename: hvault-auth-methods-openapi.yml
   format: yaml
   label: Vault Auth Methods API
-  slug: ''
+  slug: vault-auth-methods-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/hvault/refs/heads/main/openapi/hvault-auth-methods-openapi.yml
 - filename: hvault-identity-openapi.yml
   format: yaml
   label: Vault Identity API
-  slug: ''
+  slug: vault-identity-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/hvault/refs/heads/main/openapi/hvault-identity-openapi.yml
 billing_model:

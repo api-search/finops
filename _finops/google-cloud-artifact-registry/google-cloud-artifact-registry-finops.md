@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Artifact Registry API
-  slug: ''
+  slug: google-cloud-artifact-registry-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-artifact-registry/refs/heads/main/openapi/openapi.yml
 billing_model:

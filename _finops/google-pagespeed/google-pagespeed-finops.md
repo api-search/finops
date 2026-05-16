@@ -9,7 +9,7 @@ api_specs:
 - filename: pagespeed-insights-openapi.yml
   format: yaml
   label: PageSpeed Insights API
-  slug: ''
+  slug: pagespeed-insights-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-pagespeed/refs/heads/main/openapi/pagespeed-insights-openapi.yml
 billing_model:

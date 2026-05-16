@@ -9,19 +9,19 @@ api_specs:
 - filename: workday-report-writer-raas-openapi.yml
   format: yaml
   label: Workday Report-as-a-Service (RaaS) REST API
-  slug: ''
+  slug: workday-report-as-a-service-raas-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/workday-report-writer/refs/heads/main/openapi/workday-report-writer-raas-openapi.yml
 - filename: workday-report-writer-wql-openapi.yml
   format: yaml
   label: Workday WQL API
-  slug: ''
+  slug: workday-wql-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/workday-report-writer/refs/heads/main/openapi/workday-report-writer-wql-openapi.yml
 - filename: workday-report-writer-prism-analytics-openapi.yml
   format: yaml
   label: Workday Prism Analytics API
-  slug: ''
+  slug: workday-prism-analytics-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/workday-report-writer/refs/heads/main/openapi/workday-report-writer-prism-analytics-openapi.yml
 billing_model:

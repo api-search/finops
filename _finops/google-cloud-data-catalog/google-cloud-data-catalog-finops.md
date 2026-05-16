@@ -9,7 +9,7 @@ api_specs:
 - filename: google-cloud-data-catalog-openapi.yml
   format: yaml
   label: Google Cloud Data Catalog API
-  slug: ''
+  slug: google-cloud-data-catalog-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-data-catalog/refs/heads/main/openapi/google-cloud-data-catalog-openapi.yml
 billing_model:

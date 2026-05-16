@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Operations Suite API
-  slug: ''
+  slug: google-cloud-operations-suite-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-operations-suite/refs/heads/main/openapi/openapi.yml
 billing_model:

@@ -9,7 +9,7 @@ api_specs:
 - filename: aruba-central-api.yml
   format: yaml
   label: Aruba Central API
-  slug: ''
+  slug: aruba-central-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/aruba/refs/heads/main/openapi/aruba-central-api.yml
 billing_model:

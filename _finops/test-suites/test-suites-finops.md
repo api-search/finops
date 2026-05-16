@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: Postman Collections API
-  slug: ''
+  slug: postman-collections-api
   spec_type: OpenAPI
   url: https://www.postman.com/postman/postman-public-workspace/
 billing_model:

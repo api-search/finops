@@ -9,19 +9,19 @@ api_specs:
 - filename: gl-api.json
   format: json
   label: Oracle General Ledger API
-  slug: ''
+  slug: oracle-general-ledger-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/financials/openapi/gl-api.json
 - filename: ap-api.json
   format: json
   label: Oracle Accounts Payable API
-  slug: ''
+  slug: oracle-accounts-payable-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/financials/openapi/ap-api.json
 - filename: ar-api.json
   format: json
   label: Oracle Accounts Receivable API
-  slug: ''
+  slug: oracle-accounts-receivable-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/financials/openapi/ar-api.json
 billing_model:

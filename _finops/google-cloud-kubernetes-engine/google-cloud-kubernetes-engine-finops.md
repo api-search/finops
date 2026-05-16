@@ -9,7 +9,7 @@ api_specs:
 - filename: gke-openapi.yml
   format: yaml
   label: Google Kubernetes Engine API
-  slug: ''
+  slug: google-kubernetes-engine-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-kubernetes-engine/refs/heads/main/openapi/gke-openapi.yml
 billing_model:

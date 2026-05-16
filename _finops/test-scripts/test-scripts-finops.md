@@ -9,13 +9,13 @@ api_specs:
 - filename: 72a32ca1-f3a2-4a5e-91f2-token
   format: yaml
   label: Postman API
-  slug: ''
+  slug: postman-api
   spec_type: OpenAPI
   url: https://www.postman.com/postman/postman-public-workspace/api/72a32ca1-f3a2-4a5e-91f2-token
 - filename: openapi.yaml
   format: yaml
   label: k6 Performance Testing
-  slug: ''
+  slug: k6-performance-testing
   spec_type: OpenAPI
   url: https://grafana.com/docs/k6/latest/misc/k6-rest-api/
 billing_model:

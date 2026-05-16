@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Load Balancing API
-  slug: ''
+  slug: google-cloud-load-balancing-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-load-balancing/refs/heads/main/openapi/openapi.yml
 billing_model:

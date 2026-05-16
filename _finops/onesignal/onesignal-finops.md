@@ -9,31 +9,31 @@ api_specs:
 - filename: onesignal-openapi.yml
   format: yaml
   label: OneSignal Messages API
-  slug: ''
+  slug: onesignal-messages-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/onesignal/refs/heads/main/openapi/onesignal-openapi.yml
 - filename: onesignal-openapi.yml
   format: yaml
   label: OneSignal Users & Subscriptions API
-  slug: ''
+  slug: onesignal-users-subscriptions-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/onesignal/refs/heads/main/openapi/onesignal-openapi.yml
 - filename: onesignal-openapi.yml
   format: yaml
   label: OneSignal Segments API
-  slug: ''
+  slug: onesignal-segments-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/onesignal/refs/heads/main/openapi/onesignal-openapi.yml
 - filename: onesignal-openapi.yml
   format: yaml
   label: OneSignal Apps & Keys API
-  slug: ''
+  slug: onesignal-apps-keys-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/onesignal/refs/heads/main/openapi/onesignal-openapi.yml
 - filename: onesignal-openapi.yml
   format: yaml
   label: OneSignal Exports & Analytics API
-  slug: ''
+  slug: onesignal-exports-analytics-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/onesignal/refs/heads/main/openapi/onesignal-openapi.yml
 billing_model:

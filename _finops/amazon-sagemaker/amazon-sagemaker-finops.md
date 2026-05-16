@@ -9,7 +9,7 @@ api_specs:
 - filename: amazon-sagemaker-openapi.yml
   format: yaml
   label: Amazon SageMaker API
-  slug: ''
+  slug: amazon-sagemaker-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/amazon-sagemaker/refs/heads/main/openapi/amazon-sagemaker-openapi.yml
 billing_model:

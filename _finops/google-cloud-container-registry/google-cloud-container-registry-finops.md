@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Container Registry API
-  slug: ''
+  slug: google-cloud-container-registry-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-container-registry/refs/heads/main/openapi/openapi.yml
 billing_model:

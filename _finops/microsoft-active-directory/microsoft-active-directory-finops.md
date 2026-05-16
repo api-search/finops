@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: Microsoft Graph API (Azure AD)
-  slug: ''
+  slug: microsoft-graph-api-azure-ad
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/microsoftgraph/microsoft-graph-openapi/master/openapi/v1.0/openapi.yaml
 billing_model:

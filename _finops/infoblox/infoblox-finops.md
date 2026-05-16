@@ -9,13 +9,13 @@ api_specs:
 - filename: infoblox-wapi-openapi.yml
   format: yaml
   label: Infoblox WAPI (Web API)
-  slug: ''
+  slug: infoblox-wapi-web-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/infoblox/refs/heads/main/openapi/infoblox-wapi-openapi.yml
 - filename: openapi.yaml
   format: yaml
   label: Infoblox BloxOne API
-  slug: ''
+  slug: infoblox-bloxone-api
   spec_type: OpenAPI
   url: https://csp.infoblox.com/apidoc/
 billing_model:

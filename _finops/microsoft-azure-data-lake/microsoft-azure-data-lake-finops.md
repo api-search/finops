@@ -9,7 +9,7 @@ api_specs:
 - filename: microsoft-azure-data-lake-openapi.yml
   format: yaml
   label: Azure Data Lake Storage REST API
-  slug: ''
+  slug: azure-data-lake-storage-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-data-lake/refs/heads/main/openapi/microsoft-azure-data-lake-openapi.yml
 billing_model:

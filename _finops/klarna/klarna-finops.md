@@ -5,6 +5,25 @@ aligned_with:
   dataSpecVersion: '1.3'
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
+api_specs:
+- filename: klarna-payments-api-openapi.yml
+  format: yaml
+  label: Klarna Payments API
+  slug: klarna-payments-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/klarna/refs/heads/main/openapi/klarna-payments-api-openapi.yml
+- filename: klarna-customer-token-api-openapi.yml
+  format: yaml
+  label: Klarna Customer Token API
+  slug: klarna-customer-token-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/klarna/refs/heads/main/openapi/klarna-customer-token-api-openapi.yml
+- filename: klarna-settlements-api-openapi.yml
+  format: yaml
+  label: Klarna Settlements API
+  slug: klarna-settlements-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/klarna/refs/heads/main/openapi/klarna-settlements-api-openapi.yml
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly

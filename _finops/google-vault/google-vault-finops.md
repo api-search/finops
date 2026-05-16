@@ -9,7 +9,7 @@ api_specs:
 - filename: rest
   format: yaml
   label: Google Vault API
-  slug: ''
+  slug: google-vault-api
   spec_type: OpenAPI
   url: https://vault.googleapis.com/$discovery/rest?version=v1
 billing_model:

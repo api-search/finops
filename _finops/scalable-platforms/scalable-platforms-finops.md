@@ -9,43 +9,43 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: Vercel REST API
-  slug: ''
+  slug: vercel-rest-api
   spec_type: OpenAPI
   url: https://openapi.vercel.sh/
 - filename: openapi.yaml
   format: yaml
   label: Netlify API
-  slug: ''
+  slug: netlify-api
   spec_type: OpenAPI
   url: https://open-api.netlify.com/
 - filename: openapi.yaml
   format: yaml
   label: Cloudflare API
-  slug: ''
+  slug: cloudflare-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/cloudflare/api-schemas/main/openapi.yaml
 - filename: api-docs
   format: yaml
   label: Heroku Platform API
-  slug: ''
+  slug: heroku-platform-api
   spec_type: OpenAPI
   url: https://devcenter.heroku.com/api-docs
 - filename: openapi.yaml
   format: yaml
   label: Fly.io Machines API
-  slug: ''
+  slug: flyio-machines-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/superfly/fly-openapi/refs/heads/main/openapi.yaml
 - filename: openapi.yaml
   format: yaml
   label: Render API
-  slug: ''
+  slug: render-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/renderinc/openapi-specs/main/openapi.yaml
 - filename: openapi.json
   format: json
   label: Northflank API
-  slug: ''
+  slug: northflank-api
   spec_type: OpenAPI
   url: https://api.northflank.com/v1/openapi.json
 billing_model:

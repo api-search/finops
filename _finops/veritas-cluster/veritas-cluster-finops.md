@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.json
   format: json
   label: Veritas Cluster Server REST API
-  slug: ''
+  slug: veritas-cluster-server-rest-api
   spec_type: OpenAPI
   url: https://vcs-server:14150/api/docs/openapi.json
 billing_model:

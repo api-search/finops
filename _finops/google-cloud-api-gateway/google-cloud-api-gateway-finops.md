@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud API Gateway API
-  slug: ''
+  slug: google-cloud-api-gateway-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-api-gateway/refs/heads/main/openapi/openapi.yml
 billing_model:

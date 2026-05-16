@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Natural Language API
-  slug: ''
+  slug: google-cloud-natural-language-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-natural-language/refs/heads/main/openapi/openapi.yml
 billing_model:

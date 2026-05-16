@@ -9,7 +9,7 @@ api_specs:
 - filename: mongodb-atlas-openapi.yaml
   format: yaml
   label: MongoDB Atlas Administration API
-  slug: ''
+  slug: mongodb-atlas-administration-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/mongodb/refs/heads/main/openapi/mongodb-atlas-openapi.yaml
 billing_model:

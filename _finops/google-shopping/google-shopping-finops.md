@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Content API for Shopping
-  slug: ''
+  slug: google-content-api-for-shopping
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-shopping/refs/heads/main/openapi/openapi.yml
 billing_model:

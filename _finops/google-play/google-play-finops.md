@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Play Developer API
-  slug: ''
+  slug: google-play-developer-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-play/refs/heads/main/openapi/openapi.yml
 billing_model:

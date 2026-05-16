@@ -9,37 +9,37 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: KEDA (Kubernetes Event-Driven Autoscaling) API
-  slug: ''
+  slug: keda-kubernetes-event-driven-autoscaling-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/kedacore/keda/main/apis/keda/v1alpha1/
 - filename: openapi.yaml
   format: yaml
   label: AWS Auto Scaling API
-  slug: ''
+  slug: aws-auto-scaling-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/APIs-guru/openapi-directory/main/APIs/amazonaws.com/autoscaling/2011-01-01/openapi.yaml
 - filename: openapi.yaml
   format: yaml
   label: Google Cloud Compute Engine Autoscaler API
-  slug: ''
+  slug: google-cloud-compute-engine-autoscaler-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/APIs-guru/openapi-directory/main/APIs/googleapis.com/compute/v1/openapi.yaml
 - filename: autoScale_API.json
   format: json
   label: Azure Autoscale REST API
-  slug: ''
+  slug: azure-autoscale-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/monitor/resource-manager/Microsoft.Insights/stable/2022-10-01/autoScale_API.json
 - filename: openapi.yaml
   format: yaml
   label: CloudWatch Application Signals API
-  slug: ''
+  slug: cloudwatch-application-signals-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/APIs-guru/openapi-directory/main/APIs/amazonaws.com/monitoring/2010-08-01/openapi.yaml
 - filename: api.go
   format: yaml
   label: Prometheus HTTP API
-  slug: ''
+  slug: prometheus-http-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/prometheus/prometheus/main/web/api/v1/api.go
 billing_model:

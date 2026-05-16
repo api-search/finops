@@ -9,49 +9,49 @@ api_specs:
 - filename: knock-openapi.json
   format: json
   label: Knock Workflows API
-  slug: ''
+  slug: knock-workflows-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/knock/refs/heads/main/openapi/knock-openapi.json
 - filename: knock-openapi.json
   format: json
   label: Knock Messages API
-  slug: ''
+  slug: knock-messages-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/knock/refs/heads/main/openapi/knock-openapi.json
 - filename: knock-openapi.json
   format: json
   label: Knock Users API
-  slug: ''
+  slug: knock-users-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/knock/refs/heads/main/openapi/knock-openapi.json
 - filename: knock-openapi.json
   format: json
   label: Knock Objects API
-  slug: ''
+  slug: knock-objects-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/knock/refs/heads/main/openapi/knock-openapi.json
 - filename: knock-openapi.json
   format: json
   label: Knock Feeds API
-  slug: ''
+  slug: knock-feeds-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/knock/refs/heads/main/openapi/knock-openapi.json
 - filename: knock-openapi.json
   format: json
   label: Knock Guides API
-  slug: ''
+  slug: knock-guides-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/knock/refs/heads/main/openapi/knock-openapi.json
 - filename: knock-openapi.json
   format: json
   label: Knock Schedules API
-  slug: ''
+  slug: knock-schedules-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/knock/refs/heads/main/openapi/knock-openapi.json
 - filename: knock-openapi.json
   format: json
   label: Knock Preferences API
-  slug: ''
+  slug: knock-preferences-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/knock/refs/heads/main/openapi/knock-openapi.json
 billing_model:

@@ -9,37 +9,37 @@ api_specs:
 - filename: virtual_service.proto
   format: yaml
   label: Istio Service Mesh API
-  slug: ''
+  slug: istio-service-mesh-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/istio/api/master/networking/v1alpha3/virtual_service.proto
 - filename: api
   format: yaml
   label: Envoy Proxy Admin API
-  slug: ''
+  slug: envoy-proxy-admin-api
   spec_type: OpenAPI
   url: https://www.envoyproxy.io/docs/envoy/latest/api-v3/api
 - filename: openapi.yaml
   format: yaml
   label: Apache Kafka REST Proxy API
-  slug: ''
+  slug: apache-kafka-rest-proxy-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/confluentinc/kafka-rest/master/api/v3/openapi.yaml
 - filename: index.json
   format: json
   label: RabbitMQ Management HTTP API
-  slug: ''
+  slug: rabbitmq-management-http-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/rabbitmq/rabbitmq-server/main/deps/rabbitmq_management/priv/www/api/index.json
 - filename: swagger.json
   format: json
   label: Kubernetes API
-  slug: ''
+  slug: kubernetes-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json
 - filename: swagger.json
   format: json
   label: Argo Workflows API
-  slug: ''
+  slug: argo-workflows-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/argoproj/argo-workflows/main/api/openapi-spec/swagger.json
 billing_model:

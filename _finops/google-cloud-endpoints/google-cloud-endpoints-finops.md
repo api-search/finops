@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud Service Management API
-  slug: ''
+  slug: google-cloud-service-management-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-endpoints/refs/heads/main/openapi/openapi.yml
 billing_model:

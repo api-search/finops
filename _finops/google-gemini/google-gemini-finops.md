@@ -9,7 +9,7 @@ api_specs:
 - filename: google-gemini-api-openapi.yml
   format: yaml
   label: Gemini API
-  slug: ''
+  slug: gemini-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-gemini/refs/heads/main/openapi/google-gemini-api-openapi.yml
 billing_model:

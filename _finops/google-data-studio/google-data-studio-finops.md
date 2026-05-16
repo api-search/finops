@@ -9,13 +9,13 @@ api_specs:
 - filename: google-data-studio-api-openapi.yml
   format: yaml
   label: Google Data Studio API
-  slug: ''
+  slug: google-data-studio-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-data-studio/refs/heads/main/openapi/google-data-studio-api-openapi.yml
 - filename: google-data-studio-linking-api-openapi.yml
   format: yaml
   label: Looker Studio Linking API
-  slug: ''
+  slug: looker-studio-linking-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-data-studio/refs/heads/main/openapi/google-data-studio-linking-api-openapi.yml
 billing_model:

@@ -9,13 +9,13 @@ api_specs:
 - filename: rest
   format: yaml
   label: Dialogflow API
-  slug: ''
+  slug: dialogflow-api
   spec_type: OpenAPI
   url: https://dialogflow.googleapis.com/$discovery/rest?version=v2
 - filename: rest
   format: yaml
   label: Dialogflow CX API
-  slug: ''
+  slug: dialogflow-cx-api
   spec_type: OpenAPI
   url: https://dialogflow.googleapis.com/$discovery/rest?version=v3
 billing_model:

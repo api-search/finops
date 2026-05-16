@@ -9,7 +9,7 @@ api_specs:
 - filename: oracle-database-19c-ords-openapi.yml
   format: yaml
   label: Oracle REST Data Services (ORDS)
-  slug: ''
+  slug: oracle-rest-data-services-ords
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/oracle-database-19c/refs/heads/main/openapi/oracle-database-19c-ords-openapi.yml
 billing_model:

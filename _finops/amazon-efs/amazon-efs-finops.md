@@ -9,7 +9,7 @@ api_specs:
 - filename: amazon-efs-openapi.yml
   format: yaml
   label: Amazon EFS API
-  slug: ''
+  slug: amazon-efs-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/amazon-efs/refs/heads/main/openapi/amazon-efs-openapi.yml
 billing_model:

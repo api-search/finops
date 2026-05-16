@@ -9,7 +9,7 @@ api_specs:
 - filename: Welcome.html
   format: yaml
   label: Amazon OpenSearch Service API
-  slug: ''
+  slug: amazon-opensearch-service-api
   spec_type: OpenAPI
   url: https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html
 billing_model:

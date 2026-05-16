@@ -9,91 +9,91 @@ api_specs:
 - filename: jfrog-artifactory-openapi.yml
   format: yaml
   label: JFrog Artifactory REST API
-  slug: ''
+  slug: jfrog-artifactory-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-artifactory-openapi.yml
 - filename: jfrog-artifactory-openapi.yml
   format: yaml
   label: JFrog Artifactory REST API V2
-  slug: ''
+  slug: jfrog-artifactory-rest-api-v2
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-artifactory-openapi.yml
 - filename: jfrog-xray-openapi.yml
   format: yaml
   label: JFrog Xray REST API
-  slug: ''
+  slug: jfrog-xray-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-xray-openapi.yml
 - filename: jfrog-distribution-openapi.yml
   format: yaml
   label: JFrog Distribution REST API
-  slug: ''
+  slug: jfrog-distribution-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-distribution-openapi.yml
 - filename: jfrog-pipelines-openapi.yml
   format: yaml
   label: JFrog Pipelines REST API
-  slug: ''
+  slug: jfrog-pipelines-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-pipelines-openapi.yml
 - filename: jfrog-platform-openapi.yml
   format: yaml
   label: JFrog Platform REST API
-  slug: ''
+  slug: jfrog-platform-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-platform-openapi.yml
 - filename: jfrog-access-openapi.yml
   format: yaml
   label: JFrog Access REST API
-  slug: ''
+  slug: jfrog-access-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-access-openapi.yml
 - filename: jfrog-curation-openapi.yml
   format: yaml
   label: JFrog Curation REST API
-  slug: ''
+  slug: jfrog-curation-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-curation-openapi.yml
 - filename: jfrog-mission-control-openapi.yml
   format: yaml
   label: JFrog Mission Control REST API
-  slug: ''
+  slug: jfrog-mission-control-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-mission-control-openapi.yml
 - filename: jfrog-release-lifecycle-openapi.yml
   format: yaml
   label: JFrog Release Lifecycle Management REST API
-  slug: ''
+  slug: jfrog-release-lifecycle-management-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-release-lifecycle-openapi.yml
 - filename: jfrog-workers-openapi.yml
   format: yaml
   label: JFrog Workers REST API
-  slug: ''
+  slug: jfrog-workers-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-workers-openapi.yml
 - filename: jfrog-ml-openapi.yml
   format: yaml
   label: JFrog ML REST API
-  slug: ''
+  slug: jfrog-ml-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-ml-openapi.yml
 - filename: jfrog-connect-openapi.yml
   format: yaml
   label: JFrog Connect REST API
-  slug: ''
+  slug: jfrog-connect-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-connect-openapi.yml
 - filename: jfrog-catalog-openapi.yml
   format: yaml
   label: JFrog Catalog REST API
-  slug: ''
+  slug: jfrog-catalog-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-catalog-openapi.yml
 - filename: jfrog-evidence-openapi.yml
   format: yaml
   label: JFrog Evidence REST API
-  slug: ''
+  slug: jfrog-evidence-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/jfrog/refs/heads/main/openapi/jfrog-evidence-openapi.yml
 billing_model:

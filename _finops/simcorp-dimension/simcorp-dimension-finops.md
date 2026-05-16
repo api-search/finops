@@ -9,19 +9,19 @@ api_specs:
 - filename: openapi.json
   format: json
   label: SimCorp Dimension Data API
-  slug: ''
+  slug: simcorp-dimension-data-api
   spec_type: OpenAPI
   url: https://api.simcorp.com/dimension/v1/openapi.json
 - filename: openapi.json
   format: json
   label: SimCorp Dimension Integration API
-  slug: ''
+  slug: simcorp-dimension-integration-api
   spec_type: OpenAPI
   url: https://api.simcorp.com/dimension/integration/v1/openapi.json
 - filename: openapi.json
   format: json
   label: SimCorp Dimension Analytics API
-  slug: ''
+  slug: simcorp-dimension-analytics-api
   spec_type: OpenAPI
   url: https://api.simcorp.com/dimension/analytics/v1/openapi.json
 billing_model:

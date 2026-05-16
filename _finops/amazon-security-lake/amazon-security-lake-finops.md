@@ -9,7 +9,7 @@ api_specs:
 - filename: amazon-security-lake-openapi.yml
   format: yaml
   label: Amazon Security Lake API
-  slug: ''
+  slug: amazon-security-lake-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/amazon-security-lake/refs/heads/main/openapi/amazon-security-lake-openapi.yml
 billing_model:

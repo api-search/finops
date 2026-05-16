@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Play Developer Reporting API
-  slug: ''
+  slug: google-play-developer-reporting-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-play-console/refs/heads/main/openapi/openapi.yml
 billing_model:

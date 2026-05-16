@@ -9,25 +9,25 @@ api_specs:
 - filename: microsoft-endpoint-configuration-management-configmgr-rest-api-openapi.yml
   format: yaml
   label: Configuration Manager REST API
-  slug: ''
+  slug: configuration-manager-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-endpoint-configuration-management/refs/heads/main/openapi/microsoft-endpoint-configuration-management-configmgr-rest-api-openapi.yml
 - filename: microsoft-endpoint-configuration-management-intune-graph-api-openapi.yml
   format: yaml
   label: Microsoft Intune Graph API
-  slug: ''
+  slug: microsoft-intune-graph-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-endpoint-configuration-management/refs/heads/main/openapi/microsoft-endpoint-configuration-management-intune-graph-api-openapi.yml
 - filename: microsoft-endpoint-configuration-management-intune-data-warehouse-api-openapi.yml
   format: yaml
   label: Intune Data Warehouse API
-  slug: ''
+  slug: intune-data-warehouse-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-endpoint-configuration-management/refs/heads/main/openapi/microsoft-endpoint-configuration-management-intune-data-warehouse-api-openapi.yml
 - filename: microsoft-endpoint-configuration-management-intune-reporting-export-api-openapi.yml
   format: yaml
   label: Intune Reporting Export API
-  slug: ''
+  slug: intune-reporting-export-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-endpoint-configuration-management/refs/heads/main/openapi/microsoft-endpoint-configuration-management-intune-reporting-export-api-openapi.yml
 billing_model:

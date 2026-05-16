@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.json
   format: json
   label: Oracle Planning REST API
-  slug: ''
+  slug: oracle-planning-rest-api
   spec_type: OpenAPI
   url: https://docs.oracle.com/en/cloud/saas/planning-budgeting-cloud/rest/openapi.json
 billing_model:

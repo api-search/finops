@@ -9,13 +9,13 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: Microsoft Graph API
-  slug: ''
+  slug: microsoft-graph-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/v1.0/openapi.yaml
 - filename: azure-rest-api-specs
   format: yaml
   label: Azure REST API
-  slug: ''
+  slug: azure-rest-api
   spec_type: OpenAPI
   url: https://github.com/Azure/azure-rest-api-specs
 billing_model:

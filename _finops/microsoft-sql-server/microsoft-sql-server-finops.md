@@ -9,19 +9,19 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: SQL Server Database Engine API
-  slug: ''
+  slug: sql-server-database-engine-api
   spec_type: OpenAPI
   url: https://docs.microsoft.com/sql/connect/
 - filename: sql
   format: yaml
   label: Azure SQL Database REST API
-  slug: ''
+  slug: azure-sql-database-rest-api
   spec_type: OpenAPI
   url: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/sql
 - filename: '2.0'
   format: yaml
   label: SQL Server Reporting Services (SSRS) API
-  slug: ''
+  slug: sql-server-reporting-services-ssrs-api
   spec_type: OpenAPI
   url: https://app.swaggerhub.com/apis/microsoft-rs/SSRS/2.0
 billing_model:

@@ -9,7 +9,7 @@ api_specs:
 - filename: api_docs
   format: yaml
   label: Coupa Core API
-  slug: ''
+  slug: coupa-core-api
   spec_type: OpenAPI
   url: https://compass.coupa.com/en-us/api_docs
 billing_model:

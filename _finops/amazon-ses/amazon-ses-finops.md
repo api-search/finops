@@ -5,6 +5,13 @@ aligned_with:
   dataSpecVersion: '1.3'
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
+api_specs:
+- filename: amazon-ses-openapi.yml
+  format: yaml
+  label: Amazon SES OpenAPI
+  slug: amazon-ses-openapi
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/amazon-ses/refs/heads/main/openapi/amazon-ses-openapi.yml
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly

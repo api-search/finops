@@ -9,7 +9,7 @@ api_specs:
 - filename: colab-drive-openapi.yml
   format: yaml
   label: Colab API via Google Drive API
-  slug: ''
+  slug: colab-api-via-google-drive-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-colab/refs/heads/main/openapi/colab-drive-openapi.yml
 billing_model:

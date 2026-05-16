@@ -9,7 +9,7 @@ api_specs:
 - filename: cloud-firestore-openapi.yml
   format: yaml
   label: Cloud Firestore API
-  slug: ''
+  slug: cloud-firestore-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-firestore/refs/heads/main/openapi/cloud-firestore-openapi.yml
 billing_model:

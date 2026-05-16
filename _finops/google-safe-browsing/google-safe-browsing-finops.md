@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Safe Browsing API
-  slug: ''
+  slug: google-safe-browsing-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-safe-browsing/refs/heads/main/openapi/openapi.yml
 billing_model:

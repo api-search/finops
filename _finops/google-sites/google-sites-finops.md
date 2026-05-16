@@ -9,7 +9,7 @@ api_specs:
 - filename: rest
   format: yaml
   label: Google Sites API
-  slug: ''
+  slug: google-sites-api
   spec_type: OpenAPI
   url: https://sites.googleapis.com/$discovery/rest?version=v1
 billing_model:

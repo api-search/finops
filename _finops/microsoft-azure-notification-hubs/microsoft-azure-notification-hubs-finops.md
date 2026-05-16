@@ -9,7 +9,7 @@ api_specs:
 - filename: microsoft-azure-notification-hubs-openapi.yml
   format: yaml
   label: Azure Notification Hubs REST API
-  slug: ''
+  slug: azure-notification-hubs-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-notification-hubs/refs/heads/main/openapi/microsoft-azure-notification-hubs-openapi.yml
 billing_model:

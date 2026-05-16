@@ -9,7 +9,7 @@ api_specs:
 - filename: amazon-pinpoint-openapi.yml
   format: yaml
   label: Amazon Pinpoint API
-  slug: ''
+  slug: amazon-pinpoint-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/amazon-pinpoint/refs/heads/main/openapi/amazon-pinpoint-openapi.yml
 billing_model:

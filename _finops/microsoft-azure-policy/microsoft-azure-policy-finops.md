@@ -9,7 +9,7 @@ api_specs:
 - filename: microsoft-azure-policy-openapi.yml
   format: yaml
   label: Azure Policy REST API
-  slug: ''
+  slug: azure-policy-rest-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/microsoft-azure-policy/refs/heads/main/openapi/microsoft-azure-policy-openapi.yml
 billing_model:

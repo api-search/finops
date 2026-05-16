@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Cloud VPC API
-  slug: ''
+  slug: google-cloud-vpc-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-vpc/refs/heads/main/openapi/openapi.yml
 billing_model:

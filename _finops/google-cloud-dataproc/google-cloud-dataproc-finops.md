@@ -9,7 +9,7 @@ api_specs:
 - filename: cloud-dataproc-openapi.yml
   format: yaml
   label: Cloud Dataproc API
-  slug: ''
+  slug: cloud-dataproc-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-cloud-dataproc/refs/heads/main/openapi/cloud-dataproc-openapi.yml
 billing_model:

@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Classroom API
-  slug: ''
+  slug: google-classroom-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-classroom/refs/heads/main/openapi/openapi.yml
 billing_model:

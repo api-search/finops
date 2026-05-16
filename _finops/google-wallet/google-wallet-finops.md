@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Wallet API
-  slug: ''
+  slug: google-wallet-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-wallet/refs/heads/main/openapi/openapi.yml
 billing_model:

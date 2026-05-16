@@ -9,31 +9,31 @@ api_specs:
 - filename: openapi.yaml
   format: yaml
   label: Adobe Photoshop API
-  slug: ''
+  slug: adobe-photoshop-api
   spec_type: OpenAPI
   url: https://developer.adobe.com/photoshop/api/openapi/
 - filename: openapi.yaml
   format: yaml
   label: Adobe Lightroom API
-  slug: ''
+  slug: adobe-lightroom-api
   spec_type: OpenAPI
   url: https://developer.adobe.com/lightroom/api/openapi/
 - filename: openapi.yaml
   format: yaml
   label: Adobe PDF Services API
-  slug: ''
+  slug: adobe-pdf-services-api
   spec_type: OpenAPI
   url: https://developer.adobe.com/document-services/docs/apis/
 - filename: openapi.yaml
   format: yaml
   label: Adobe PDF Extract API
-  slug: ''
+  slug: adobe-pdf-extract-api
   spec_type: OpenAPI
   url: https://developer.adobe.com/document-services/docs/apis/
 - filename: openapi.yaml
   format: yaml
   label: Adobe PDF Accessibility Auto-Tag API
-  slug: ''
+  slug: adobe-pdf-accessibility-auto-tag-api
   spec_type: OpenAPI
   url: https://developer.adobe.com/document-services/docs/apis/
 billing_model:

@@ -9,7 +9,7 @@ api_specs:
 - filename: openapi.yml
   format: yaml
   label: Google Vertex AI API
-  slug: ''
+  slug: google-vertex-ai-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-vertex-ai/refs/heads/main/openapi/openapi.yml
 billing_model:

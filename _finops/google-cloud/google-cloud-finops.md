@@ -9,49 +9,49 @@ api_specs:
 - filename: rest
   format: yaml
   label: Google Compute Engine API
-  slug: ''
+  slug: google-compute-engine-api
   spec_type: OpenAPI
   url: https://compute.googleapis.com/$discovery/rest?version=v1
 - filename: rest
   format: yaml
   label: Google Cloud Storage API
-  slug: ''
+  slug: google-cloud-storage-api
   spec_type: OpenAPI
   url: https://storage.googleapis.com/$discovery/rest?version=v1
 - filename: rest
   format: yaml
   label: Google Kubernetes Engine API
-  slug: ''
+  slug: google-kubernetes-engine-api
   spec_type: OpenAPI
   url: https://container.googleapis.com/$discovery/rest?version=v1
 - filename: rest
   format: yaml
   label: Google Cloud Functions API
-  slug: ''
+  slug: google-cloud-functions-api
   spec_type: OpenAPI
   url: https://cloudfunctions.googleapis.com/$discovery/rest?version=v1
 - filename: rest
   format: yaml
   label: Google BigQuery API
-  slug: ''
+  slug: google-bigquery-api
   spec_type: OpenAPI
   url: https://bigquery.googleapis.com/$discovery/rest?version=v2
 - filename: rest
   format: yaml
   label: Google Cloud Pub/Sub API
-  slug: ''
+  slug: google-cloud-pubsub-api
   spec_type: OpenAPI
   url: https://pubsub.googleapis.com/$discovery/rest?version=v1
 - filename: rest
   format: yaml
   label: Google Cloud Vision API
-  slug: ''
+  slug: google-cloud-vision-api
   spec_type: OpenAPI
   url: https://vision.googleapis.com/$discovery/rest?version=v1
 - filename: rest
   format: yaml
   label: Google Cloud SQL Admin API
-  slug: ''
+  slug: google-cloud-sql-admin-api
   spec_type: OpenAPI
   url: https://sqladmin.googleapis.com/$discovery/rest?version=v1
 billing_model:

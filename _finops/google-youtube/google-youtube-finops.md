@@ -9,7 +9,7 @@ api_specs:
 - filename: youtube.yml
   format: yaml
   label: YouTube Data API v3
-  slug: ''
+  slug: youtube-data-api-v3
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/google-youtube/refs/heads/main/openapi/youtube.yml
 billing_model:
