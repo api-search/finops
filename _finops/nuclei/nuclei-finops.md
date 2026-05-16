@@ -8,6 +8,12 @@ aligned_with:
 api_specs:
 - filename: nuclei-openapi.yml
   format: yaml
+  label: Nuclei
+  slug: nuclei
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/nuclei/refs/heads/main/openapi/nuclei-openapi.yml
+- filename: nuclei-openapi.yml
+  format: yaml
   label: ProjectDiscovery Cloud Platform API
   slug: projectdiscovery-cloud-api
   spec_type: OpenAPI

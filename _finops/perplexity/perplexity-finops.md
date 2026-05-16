@@ -8,6 +8,12 @@ aligned_with:
 api_specs:
 - filename: perplexity-openapi.json
   format: json
+  label: Perplexity
+  slug: perplexity
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/perplexity/refs/heads/main/openapi/perplexity-openapi.json
+- filename: perplexity-openapi.json
+  format: json
   label: Perplexity Sonar API
   slug: sonar-api
   spec_type: OpenAPI

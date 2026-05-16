@@ -12,6 +12,12 @@ api_specs:
   slug: ollama-api
   spec_type: OpenAPI
   url: https://docs.ollama.com/openapi.yaml
+- filename: ollama-openai-compatibility-api-openapi.yml
+  format: yaml
+  label: Ollama OpenAI Compatibility API
+  slug: ollama-openai-compatibility-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/ollama/refs/heads/main/openapi/ollama-openai-compatibility-api-openapi.yml
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly or Annual

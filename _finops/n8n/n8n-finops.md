@@ -8,6 +8,12 @@ aligned_with:
 api_specs:
 - filename: n8n-openapi.yml
   format: yaml
+  label: N8n
+  slug: n8n
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/n8n/refs/heads/main/openapi/n8n-openapi.yml
+- filename: n8n-openapi.yml
+  format: yaml
   label: N8n REST API
   slug: n8n-rest-api
   spec_type: OpenAPI

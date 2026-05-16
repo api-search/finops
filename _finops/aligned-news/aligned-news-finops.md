@@ -8,6 +8,12 @@ aligned_with:
 api_specs:
 - filename: aligned-news-openapi.yml
   format: yaml
+  label: Aligned News
+  slug: aligned-news
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/aligned-news/refs/heads/main/openapi/aligned-news-openapi.yml
+- filename: aligned-news-openapi.yml
+  format: yaml
   label: Aligned News REST API
   slug: aligned-news-rest-api
   spec_type: OpenAPI

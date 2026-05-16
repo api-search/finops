@@ -44,7 +44,7 @@ api_specs:
   url: https://raw.githubusercontent.com/api-evangelist/postman/refs/heads/main/openapi/postman-monitors-api-openapi.yml
 - filename: postman-apis-api-openapi.yml
   format: yaml
-  label: Postman APIs API
+  label: Postman APIs / Spec Hub API
   slug: apis-api
   spec_type: OpenAPI
   url: https://raw.githubusercontent.com/api-evangelist/postman/refs/heads/main/openapi/postman-apis-api-openapi.yml

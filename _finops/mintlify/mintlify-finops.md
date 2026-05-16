@@ -8,6 +8,12 @@ aligned_with:
 api_specs:
 - filename: mintlify-openapi.yml
   format: yaml
+  label: Mintlify
+  slug: mintlify
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/mintlify/refs/heads/main/openapi/mintlify-openapi.yml
+- filename: mintlify-openapi.yml
+  format: yaml
   label: Mintlify Update API
   slug: update-api
   spec_type: OpenAPI

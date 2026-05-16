@@ -5,6 +5,19 @@ aligned_with:
   dataSpecVersion: '1.3'
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
+api_specs:
+- filename: ghost-admin-api-openapi.yml
+  format: yaml
+  label: Ghost Admin API
+  slug: ghost-admin-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/ghost/refs/heads/main/openapi/ghost-admin-api-openapi.yml
+- filename: ghost-content-api-openapi.yml
+  format: yaml
+  label: Ghost Content API
+  slug: ghost-content-api
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/ghost/refs/heads/main/openapi/ghost-content-api-openapi.yml
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly or Annual

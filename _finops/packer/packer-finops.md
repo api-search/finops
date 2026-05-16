@@ -8,6 +8,12 @@ aligned_with:
 api_specs:
 - filename: packer-openapi.yml
   format: yaml
+  label: Packer
+  slug: packer
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/packer/refs/heads/main/openapi/packer-openapi.yml
+- filename: packer-openapi.yml
+  format: yaml
   label: HCP Packer Artifact Registry API
   slug: hcp-packer-artifact-registry
   spec_type: OpenAPI

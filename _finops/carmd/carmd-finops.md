@@ -5,6 +5,13 @@ aligned_with:
   dataSpecVersion: '1.3'
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
+api_specs:
+- filename: carmd-openapi.yml
+  format: yaml
+  label: CarMD Vehicle API
+  slug: carmd
+  spec_type: OpenAPI
+  url: https://raw.githubusercontent.com/api-evangelist/carmd/refs/heads/main/openapi/carmd-openapi.yml
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly

@@ -6,18 +6,18 @@ aligned_with:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
 api_specs:
-- filename: gravitee-management-api-openapi.yml
+- filename: gravitee-apim-openapi.yml
   format: yaml
-  label: Gravitee Management API
-  slug: gravitee-management-api
+  label: Gravitee API Management
+  slug: gravitee-api-management
   spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gravitee/refs/heads/main/openapi/gravitee-management-api-openapi.yml
-- filename: gravitee-access-management-api-openapi.yml
+  url: https://raw.githubusercontent.com/api-evangelist/gravitee/refs/heads/main/openapi/gravitee-apim-openapi.yml
+- filename: gravitee-am-openapi.yml
   format: yaml
-  label: Gravitee Access Management API
-  slug: gravitee-access-management-api
+  label: Gravitee Access Management
+  slug: gravitee-access-management
   spec_type: OpenAPI
-  url: https://raw.githubusercontent.com/api-evangelist/gravitee/refs/heads/main/openapi/gravitee-access-management-api-openapi.yml
+  url: https://raw.githubusercontent.com/api-evangelist/gravitee/refs/heads/main/openapi/gravitee-am-openapi.yml
 billing_model:
   billingCurrency: USD
   billingFrequency: Monthly
@@ -67,6 +67,25 @@ meters:
   description: APIs managed in the platform (operational metric — unlimited per subscription)
   name: managed_apis
   unit: api
+- aggregation: sum
+  description: Aggregate API and event throughput across all gateways (operational; not directly billed but tracked for tier-fit)
+  dimensions:
+  - gateway
+  - environment
+  name: throughput_calls
+  unit: calls
+- aggregation: sum
+  description: LLM input / output tokens proxied through the AI Gateway (Agent Management add-on), used for internal showback even though pricing is flat-rate
+  dimensions:
+  - model
+  - consumer
+  - route
+  name: ai_tokens
+  unit: token
+- aggregation: max
+  description: Console / portal seats consumed against the unlimited-users entitlement (operational)
+  name: seats
+  unit: seat
 name: Gravitee Finops
 provider_name: Gravitee
 provider_slug: gravitee
@@ -76,10 +95,10 @@ slug: gravitee-finops
 source_filename: gravitee-finops.yml
 source_heading: FinOps Profile
 source_url: https://www.gravitee.io/pricing
-source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Gravitee\nproviderId: gravitee\npublisherName: Gravitee.io, Inc.\nserviceCategory: API Management\ncreated: '2026-05-04'\nmodified: '2026-05-05'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - API Management\n  - API Gateway\n  - Event Streaming\ndescription: 'FOCUS-aligned FinOps for Gravitee: flat-rate monthly subscription per platform tier\n  (with included gateways, brokers, and unlimited API calls / events) plus optional add-on packages.\n  Cost grows with platform tier and add-ons, not with per-call traffic.'\nsources:\n  - https://www.gravitee.io/pricing\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n\
+source_yaml: "specification: FinOps Framework\nspecificationVersion: '1.0'\nschema: https://www.finops.org/framework/\nalignedWith:\n  framework: FinOps Foundation Framework\n  frameworkUrl: https://www.finops.org/framework/\n  dataSpec: FOCUS\n  dataSpecVersion: '1.3'\n  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/\nprovider: Gravitee\nproviderId: gravitee\npublisherName: Gravitee.io, Inc.\nserviceCategory: API Management\ncreated: '2026-05-04'\nmodified: '2026-05-15'\nreconciled: true\ntags:\n  - FinOps\n  - FOCUS\n  - API Management\n  - API Gateway\n  - Event Streaming\ndescription: 'FOCUS-aligned FinOps for Gravitee: flat-rate monthly subscription per platform tier\n  (with included gateways, brokers, and unlimited API calls / events) plus optional add-on packages.\n  Cost grows with platform tier and add-ons, not with per-call traffic.'\nsources:\n  - https://www.gravitee.io/pricing\nbillingModel:\n  pricingCategory: Tiered Subscription\n  billingFrequency: Monthly\n\
   \  billingCurrency: USD\n  chargeCategories:\n    - Purchase\n    - Adjustment\n    - Credit\nfocusColumns:\n  ServiceName: Gravitee\n  ServiceCategory: API Management\n  ProviderName: Gravitee\n  PublisherName: Gravitee.io, Inc.\n  InvoiceIssuerName: Gravitee.io, Inc.\n  BillingCurrency: USD\n  ChargeCategory: Purchase\nmeters:\n  - name: platform_subscription\n    description: Monthly Gravitee platform subscription fee per tier\n    unit: month\n    aggregation: sum\n    dimensions:\n      - product\n      - tier\n  - name: production_gateways\n    description: Production gateway count consumed per subscription\n    unit: gateway\n    aggregation: max\n    dimensions:\n      - product\n      - tier\n  - name: federated_brokers\n    description: Third-party federated event brokers consumed (Event Management tiers)\n    unit: broker\n    aggregation: max\n    dimensions:\n      - tier\n  - name: addon_packages\n    description: Optional Agent Management / Enterprise Auth add-on packages\n\
-  \    unit: package\n    aggregation: max\n    dimensions:\n      - addon_name\n  - name: managed_apis\n    description: APIs managed in the platform (operational metric — unlimited per subscription)\n    unit: api\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Use Gravitee's Analytics / Monitoring views and the Management API to track gateway\n      utilization, API call volume, and consumer growth even though calls are not directly billed.\n  - name: Allocation\n    description: Map Gravitee environments / organizations to consuming business units; allocate the\n      flat subscription fee proportionally based on managed-API count or gateway-traffic share.\n  - name: Optimization\n    description: Right-size the subscription tier (Planet vs Galaxy vs Universe) to gateway and\n      broker need; consolidate dev / test environments into a single non-prod tier; defer\n      Agent / Enterprise Auth add-ons until adoption justifies them.\n  - name: Accountability\n\
-  \    description: Designate a platform owner for the Gravitee contract and review tier-fit annually\n      against actual gateway / broker usage and feature consumption.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
+  \    unit: package\n    aggregation: max\n    dimensions:\n      - addon_name\n  - name: managed_apis\n    description: APIs managed in the platform (operational metric — unlimited per subscription)\n    unit: api\n    aggregation: max\n  - name: throughput_calls\n    description: Aggregate API and event throughput across all gateways (operational; not directly billed but tracked for tier-fit)\n    unit: calls\n    aggregation: sum\n    dimensions:\n      - gateway\n      - environment\n  - name: ai_tokens\n    description: LLM input / output tokens proxied through the AI Gateway (Agent Management add-on), used for internal showback even though pricing is flat-rate\n    unit: token\n    aggregation: sum\n    dimensions:\n      - model\n      - consumer\n      - route\n  - name: seats\n    description: Console / portal seats consumed against the unlimited-users entitlement (operational)\n    unit: seat\n    aggregation: max\nprinciples:\n  - name: Visibility\n    description: Use Gravitee's\
+  \ Analytics / Monitoring views and the Management API to track gateway\n      utilization, API call volume, and consumer growth even though calls are not directly billed.\n  - name: Allocation\n    description: Map Gravitee environments / organizations to consuming business units; allocate the\n      flat subscription fee proportionally based on managed-API count or gateway-traffic share.\n  - name: Optimization\n    description: Right-size the subscription tier (Planet vs Galaxy vs Universe) to gateway and\n      broker need; consolidate dev / test environments into a single non-prod tier; defer\n      Agent / Enterprise Auth add-ons until adoption justifies them.\n  - name: Accountability\n    description: Designate a platform owner for the Gravitee contract and review tier-fit annually\n      against actual gateway / broker usage and feature consumption.\nmaintainers:\n  - FN: Kin Lane\n    email: kin@apievangelist.com\n"
 source_yaml_url: https://raw.githubusercontent.com/api-evangelist/gravitee/refs/heads/main/finops/gravitee-finops.yml
 sources:
 - https://www.gravitee.io/pricing
